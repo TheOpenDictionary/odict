@@ -1,0 +1,28 @@
+namespace schema;
+
+enum POS:byte {
+    verb = 0,
+    noun,
+    adj,
+    pronoun,
+    adv,
+    prep,
+    conj,
+    intj
+}
+
+table Usage {
+    pos:string;
+    definitions:[string];
+}
+
+table Entry {
+    term:string (key);
+    usages:[Usage];
+}
+
+table Dictionary {
+    entries:[Entry];
+}
+
+root_type Dictionary;
