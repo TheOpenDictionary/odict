@@ -28,6 +28,7 @@ private:
     FlatBufferBuilder builder;
     Offset<Vector<Offset<Entry>>> get_entries(xml_node<>*);
     Offset<Vector<Offset<Usage>>> get_usages(xml_node<>*);
+    Offset<Vector<Offset<Group>>> get_groups(xml_node<>*);
     Offset<Vector<Offset<String>>> get_definitions(xml_node<>*);
     bool output_compressed_buffer(uint8_t*, int, const char*);
 };

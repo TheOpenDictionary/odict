@@ -8,6 +8,8 @@
 
 namespace schema {
 
+struct Group;
+
 struct Usage;
 
 struct Entry;
@@ -23,11 +25,14 @@ enum POS {
   POS_prep = 5,
   POS_conj = 6,
   POS_intj = 7,
+  POS_prefix = 8,
+  POS_suffix = 9,
+  POS_particle = 10,
   POS_MIN = POS_verb,
-  POS_MAX = POS_intj
+  POS_MAX = POS_particle
 };
 
-inline POS (&EnumValuesPOS())[8] {
+inline POS (&EnumValuesPOS())[11] {
   static POS values[] = {
     POS_verb,
     POS_noun,
@@ -36,7 +41,10 @@ inline POS (&EnumValuesPOS())[8] {
     POS_adv,
     POS_prep,
     POS_conj,
-    POS_intj
+    POS_intj,
+    POS_prefix,
+    POS_suffix,
+    POS_particle
   };
   return values;
 }
@@ -51,6 +59,9 @@ inline const char **EnumNamesPOS() {
     "prep",
     "conj",
     "intj",
+    "prefix",
+    "suffix",
+    "particle",
     nullptr
   };
   return names;
@@ -61,16 +72,83 @@ inline const char *EnumNamePOS(POS e) {
   return EnumNamesPOS()[index];
 }
 
+struct Group FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_DESCRIPTION = 4,
+    VT_DEFINITIONS = 6
+  };
+  const flatbuffers::String *description() const {
+    return GetPointer<const flatbuffers::String *>(VT_DESCRIPTION);
+  }
+  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *definitions() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *>(VT_DEFINITIONS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_DESCRIPTION) &&
+           verifier.Verify(description()) &&
+           VerifyOffset(verifier, VT_DEFINITIONS) &&
+           verifier.Verify(definitions()) &&
+           verifier.VerifyVectorOfStrings(definitions()) &&
+           verifier.EndTable();
+  }
+};
+
+struct GroupBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_description(flatbuffers::Offset<flatbuffers::String> description) {
+    fbb_.AddOffset(Group::VT_DESCRIPTION, description);
+  }
+  void add_definitions(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions) {
+    fbb_.AddOffset(Group::VT_DEFINITIONS, definitions);
+  }
+  GroupBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  GroupBuilder &operator=(const GroupBuilder &);
+  flatbuffers::Offset<Group> Finish() {
+    const auto end = fbb_.EndTable(start_, 2);
+    auto o = flatbuffers::Offset<Group>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Group> CreateGroup(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> description = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0) {
+  GroupBuilder builder_(_fbb);
+  builder_.add_definitions(definitions);
+  builder_.add_description(description);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<Group> CreateGroupDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *description = nullptr,
+    const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr) {
+  return schema::CreateGroup(
+      _fbb,
+      description ? _fbb.CreateString(description) : 0,
+      definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0);
+}
+
 struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_POS = 4,
-    VT_DEFINITIONS = 6
+    VT_DEFINITIONS = 6,
+    VT_GROUPS = 8
   };
   const flatbuffers::String *pos() const {
     return GetPointer<const flatbuffers::String *>(VT_POS);
   }
   const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *definitions() const {
     return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *>(VT_DEFINITIONS);
+  }
+  const flatbuffers::Vector<flatbuffers::Offset<Group>> *groups() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<Group>> *>(VT_GROUPS);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -79,6 +157,9 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyOffset(verifier, VT_DEFINITIONS) &&
            verifier.Verify(definitions()) &&
            verifier.VerifyVectorOfStrings(definitions()) &&
+           VerifyOffset(verifier, VT_GROUPS) &&
+           verifier.Verify(groups()) &&
+           verifier.VerifyVectorOfTables(groups()) &&
            verifier.EndTable();
   }
 };
@@ -92,13 +173,16 @@ struct UsageBuilder {
   void add_definitions(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions) {
     fbb_.AddOffset(Usage::VT_DEFINITIONS, definitions);
   }
+  void add_groups(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Group>>> groups) {
+    fbb_.AddOffset(Usage::VT_GROUPS, groups);
+  }
   UsageBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
   UsageBuilder &operator=(const UsageBuilder &);
   flatbuffers::Offset<Usage> Finish() {
-    const auto end = fbb_.EndTable(start_, 2);
+    const auto end = fbb_.EndTable(start_, 3);
     auto o = flatbuffers::Offset<Usage>(end);
     return o;
   }
@@ -107,8 +191,10 @@ struct UsageBuilder {
 inline flatbuffers::Offset<Usage> CreateUsage(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> pos = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0) {
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Group>>> groups = 0) {
   UsageBuilder builder_(_fbb);
+  builder_.add_groups(groups);
   builder_.add_definitions(definitions);
   builder_.add_pos(pos);
   return builder_.Finish();
@@ -117,11 +203,13 @@ inline flatbuffers::Offset<Usage> CreateUsage(
 inline flatbuffers::Offset<Usage> CreateUsageDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *pos = nullptr,
-    const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr) {
+    const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr,
+    const std::vector<flatbuffers::Offset<Group>> *groups = nullptr) {
   return schema::CreateUsage(
       _fbb,
       pos ? _fbb.CreateString(pos) : 0,
-      definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0);
+      definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0,
+      groups ? _fbb.CreateVector<flatbuffers::Offset<Group>>(*groups) : 0);
 }
 
 struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {

@@ -8,12 +8,21 @@ enum POS:byte {
     adv,
     prep,
     conj,
-    intj
+    intj,
+    prefix,
+    suffix,
+    particle
+}
+
+table Group {
+    description:string;
+    definitions:[string];
 }
 
 table Usage {
     pos:string;
     definitions:[string];
+    groups:[Group];
 }
 
 table Entry {

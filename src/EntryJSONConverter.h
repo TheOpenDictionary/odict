@@ -14,6 +14,7 @@ class EntryJSONConverter {
 public:
     EntryJSONConverter();
     string add_definitions(const Vector<Offset<String>> *definitions);
+    string add_groups(const Vector<Offset<Group>> *groups);
     string add_usages(const Vector<Offset<Usage>> *usages);
     string convert(const Entry *entry);
 };

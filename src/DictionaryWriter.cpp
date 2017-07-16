@@ -7,8 +7,8 @@ DictionaryWriter::DictionaryWriter() {}
  * @param usage_node
  * @return
  */
-Offset<Vector<Offset<String>>> DictionaryWriter::get_definitions(xml_node<> *usage_node) {
-    xml_node<> *current_def = usage_node->first_node(NODE_DEFINITION);
+Offset<Vector<Offset<String>>> DictionaryWriter::get_definitions(xml_node<> *node) {
+    xml_node<> *current_def = node->first_node(NODE_DEFINITION);
     vector<Offset<String>> definitions = vector<Offset<String>>();
 
     while (current_def != 0) {
@@ -18,6 +18,30 @@ Offset<Vector<Offset<String>>> DictionaryWriter::get_definitions(xml_node<> *usa
     }
 
     return builder.CreateVector(definitions);
+}
+
+/**
+ * Gets all of the definitions in a group node and returns them as a FlatBuffer object
+ * @param usage_node
+ * @return
+ */
+Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_node) {
+    xml_node<> *current_group = usage_node->first_node(NODE_GROUP);
+    vector<Offset<Group>> groups = vector<Offset<Group>>();
+
+    while (current_group != 0) {
+        string description(current_group->first_attribute(ATTR_DESCRIPTION)->value());
+
+        groups.push_back(CreateGroup(
+                builder,
+                builder.CreateString(description),
+                this->get_definitions(current_group)
+        ));
+
+        current_group = current_group->next_sibling(NODE_DEFINITION);
+    }
+
+    return builder.CreateVector(groups);
 }
 
 /**
@@ -32,11 +56,13 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *entry_nod
     while (current_usage != 0) {
         string part_of_speech(current_usage->first_attribute(ATTR_PART_OF_SPEECH)->value());
         auto definitions = this->get_definitions(current_usage);
+        auto groups = this->get_groups(current_usage);
 
         usages.push_back(CreateUsage(
                 builder,
                 builder.CreateString(part_of_speech),
-                definitions
+                definitions,
+                groups
         ));
 
         current_usage = current_usage->next_sibling(NODE_USAGE);
