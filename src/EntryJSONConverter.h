@@ -11,11 +11,13 @@ using namespace schema;
 using namespace flatbuffers;
 
 class EntryJSONConverter {
-public:
-    EntryJSONConverter();
+private:
     string add_definitions(const Vector<Offset<String>> *definitions);
     string add_groups(const Vector<Offset<Group>> *groups);
     string add_usages(const Vector<Offset<Usage>> *usages);
+    string add_etymologies(const Vector<Offset<Etymology>> *etymologies);
+public:
+    EntryJSONConverter();
     string convert(const Entry *entry);
 };
 

@@ -27,6 +27,7 @@ public:
 private:
     FlatBufferBuilder builder;
     Offset<Vector<Offset<Entry>>> get_entries(xml_node<>*);
+    Offset<Vector<Offset<Etymology>>> get_etymologies(xml_node<>*);
     Offset<Vector<Offset<Usage>>> get_usages(xml_node<>*);
     Offset<Vector<Offset<Group>>> get_groups(xml_node<>*);
     Offset<Vector<Offset<String>>> get_definitions(xml_node<>*);

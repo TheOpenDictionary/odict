@@ -14,7 +14,13 @@ enum POS:byte {
     particle
 }
 
+table Etymology {
+    description:string;
+    usages:[Usage];
+}
+
 table Group {
+    id:string;
     description:string;
     definitions:[string];
 }
@@ -27,7 +33,7 @@ table Usage {
 
 table Entry {
     term:string (key);
-    usages:[Usage];
+    etymologies:[Etymology];
 }
 
 table Dictionary {

@@ -1,5 +1,15 @@
 #include "DictionaryWriter.h"
 
+string getAttributeIfExists(xml_node<> *node, const char *attribute) {
+    auto first_attr = node->first_attribute(attribute);
+
+    if (first_attr == 0) return "";
+    else {
+        string attr(first_attr->value());
+        return attr;
+    }
+}
+
 DictionaryWriter::DictionaryWriter() {}
 
 /**
@@ -30,10 +40,12 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
     vector<Offset<Group>> groups = vector<Offset<Group>>();
 
     while (current_group != 0) {
-        string description(current_group->first_attribute(ATTR_DESCRIPTION)->value());
+        string id = getAttributeIfExists(current_group, ATTR_ID);
+        string description = getAttributeIfExists(current_group, ATTR_DESCRIPTION);
 
         groups.push_back(CreateGroup(
                 builder,
+                builder.CreateString(id),
                 builder.CreateString(description),
                 this->get_definitions(current_group)
         ));
@@ -44,17 +56,37 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
     return builder.CreateVector(groups);
 }
 
+Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<>* entry_node) {
+    xml_node<> *current_ety = entry_node->first_node(NODE_ETY);
+    vector<Offset<Etymology>> etymologies = vector<Offset<Etymology>>();
+
+    while (current_ety != 0) {
+        string description = getAttributeIfExists(current_ety, ATTR_DESCRIPTION);
+        auto usages = this->get_usages(current_ety);
+
+        etymologies.push_back(CreateEtymology(
+                builder,
+                builder.CreateString(description),
+                usages
+        ));
+
+        current_ety = current_ety->next_sibling(NODE_USAGE);
+    }
+
+    return builder.CreateVector(etymologies);
+}
+
 /**
  * Gets all of the usages in an entry node and returns them as a FlatBuffer object
  * @param entry_node
  * @return
  */
-Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *entry_node) {
-    xml_node<> *current_usage = entry_node->first_node(NODE_USAGE);
+Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node) {
+    xml_node<> *current_usage = ety_node->first_node(NODE_USAGE);
     vector<Offset<Usage>> usages = vector<Offset<Usage>>();
 
     while (current_usage != 0) {
-        string part_of_speech(current_usage->first_attribute(ATTR_PART_OF_SPEECH)->value());
+        string part_of_speech = getAttributeIfExists(current_usage, ATTR_PART_OF_SPEECH);
         auto definitions = this->get_definitions(current_usage);
         auto groups = this->get_groups(current_usage);
 
@@ -81,10 +113,10 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
     vector<Offset<Entry>> entries = vector<Offset<Entry>>();
 
     while (current_entry != 0) {
-        string term = current_entry->first_attribute(ATTR_TERM)->value();
-        auto usages = this->get_usages(current_entry);
+        string term = getAttributeIfExists(current_entry, ATTR_TERM);
+        auto etymologies = this->get_etymologies(current_entry);
 
-        entries.push_back(CreateEntry(builder, builder.CreateString(term), usages));
+        entries.push_back(CreateEntry(builder, builder.CreateString(term), etymologies));
         current_entry = current_entry->next_sibling(NODE_ENTRY);
     }
 
