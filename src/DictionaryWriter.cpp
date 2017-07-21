@@ -139,7 +139,9 @@ bool DictionaryWriter::output_compressed_buffer(uint8_t *buf, int size, const ch
     unsigned long compressed_size = compressed_str.size();
 
     ofstream output(output_file, ios::out | ios::binary);
-    output.write(reinterpret_cast<const char *>(&compressed_size), sizeof(compressed_size));
+    output.write(reinterpret_cast<char *>(&ODICT_SIGNATURE), sizeof(ODICT_SIGNATURE));
+    output.write(reinterpret_cast<char *>(&ODICT_VERSION), sizeof(ODICT_VERSION));
+    output.write(reinterpret_cast<char *>(&compressed_size), sizeof(compressed_size));
     output.write(compressed, compressed_size);
     output.close();
 

@@ -20,6 +20,8 @@ using namespace flatbuffers;
 using namespace schema;
 using namespace snappy;
 
+#import "constants.h"
+
 class DictionaryWriter {
 public:
     DictionaryWriter();

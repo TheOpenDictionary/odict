@@ -8,6 +8,7 @@
 
 #include "schema_generated.h"
 #include "timer.h"
+#include "constants.h"
 
 using namespace std;
 using namespace schema;

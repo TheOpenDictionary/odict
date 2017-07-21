@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
-set(LIB_VERSION "0.0.1")
+set(LIB_VERSION "1.0")
 
 add_compile_options(-std=c++0x)
 

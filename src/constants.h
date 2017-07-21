@@ -3,6 +3,9 @@
 
 #include <string>
 
+static char ODICT_SIGNATURE[6] = "ODICT";
+static int ODICT_VERSION = 1;
+
 static const char* NODE_ETY = "ety";
 static const char* NODE_ENTRY = "entry";
 static const char* NODE_USAGE = "usage";
