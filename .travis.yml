@@ -23,4 +23,4 @@ install:
 
 # Build steps
 script:
-  - ./build.sh buildExec
+  - ./init

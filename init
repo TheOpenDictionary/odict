@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+function dependencies() {
+    mkdir -p lib && cd lib
+    curl -L https://github.com/google/snappy/archive/1.1.6.tar.gz | tar -zx
+    curl -L https://github.com/google/flatbuffers/archive/v1.7.1.tar.gz | tar -zx
+    curl -L https://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-1.13.zip -o rapidxml.zip && unzip -o rapidxml.zip && rm -rf rapidxml.zip
+    cd snappy-1.1.6 && mkdir -p build && cd build && cmake ../ && make && cd ../../../
+}
+
+function build() {
+    mkdir -p build/bin && cd build && cmake .. && make
+}
+
+function schema() {
+    flatc -c -o src src/schema.fbs
+}
+
+if [ "$#" -eq "0" ]
+    then
+        dependencies
+        build
+    else
+        $1
+fi
