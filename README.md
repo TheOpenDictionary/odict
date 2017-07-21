@@ -10,40 +10,24 @@ The Open Dictionary Project (ODict for short), is an open-source alternative to 
   (fastest serialization). Entries are searched in log(*n*) time, [un-coincidentally the time complexity of an ordered map 
    lookup](https://google.github.io/flatbuffers/flatbuffers_guide_use_cpp.html).
    
-## Schema
-ODict schemas are standard XML, however, the features describe below will most likely expand in the future. An example
-of a working schema can be found in `example.xml`.
+## Schema / Specification
+For detailed information on the raw XML schema ODict uses, or the specification of its compiled file
+format, see [here](spec/SCHEMA.md) and [here](spec/SPEC.md).
 
-### The Dictionary Node
-The base node of the schema is `<dictionary>`, which ODict will base all of its queries on. All other notes and subnodes 
-should be contained in this node.
-
-### The Entry Node
-The `<entry>` denotes a dictionary entry for a word. Words are used as ordered keys, so there should only be one entry per
-word. If there is not, ODict will prefer the most recently defined entry of the word. `<entry>` nodes can have the following
-attributes:
-- **term (required)**: the word described in the entry
-
-### The Usage Node
-`<usage>` nodes are children of entry nodes and denote a manner in which a term is used, usually grouped by
-part of speech. 
-
-For example, according to Wikitionary, the English word "run" can be used as a verb, but as a verb it can
-mean "to move swiftly" or "to carry out a social activity". These are definitions of a given *usage* of the word. 
-
-Usage nodes can take the following attributes:
-- **pos (currently required)**: the part of speech associated with the word usage
-
-### The Definition Nodes
-`<definition>` nodes just contain raw definition text, and should appear in usage nodes only.
- 
 ## Building
 *Please note that you must have CMake and `flatc` installed and should preferably be using a UNIX system*
 
 Building is super simple due to a handy little build script. Just run:
   
 ```bash
-$ ./build.sh
+$ ./init
+```
+
+This will automatically download all required dependencies and start the build.
+To just rebuild the project, run:
+
+```bash
+$ ./init build
 ```
 
 The output library and executable should be found in `build/bin`.
