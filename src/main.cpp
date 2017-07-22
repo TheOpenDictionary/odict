@@ -1,5 +1,6 @@
 #include "DictionaryWriter.h"
 #include "DictionaryReader.h"
+#include "endian.h"
 
 static const char *CMD_GENERATE = "generate";
 static const char *CMD_READ = "lookup";
@@ -34,6 +35,9 @@ string get_filename_from_path(string path) {
 }
 
 int main(int argv, char *args[]) {
+    auto ed = new EndianTypes();
+    ed->init();
+//    cout << little_short(1) << endl;
     if (argv < 3) show_usage();
     else {
         string input_file(args[2]);

@@ -3,6 +3,7 @@
 
 #include "DictionaryReader.h"
 #include "EntryJSONConverter.h"
+#include "endian.h"
 
 bool file_exists(const char *path) {
     struct stat buffer;
@@ -26,13 +27,13 @@ const uint8_t *DictionaryReader::read_buffer(const char *path) {
 
     // Prep data to be read in
     char *signature = new char[sizeof(ODICT_SIGNATURE)]();
-    unsigned int version = 0U;
+    unsigned short version = 0U;
     unsigned long compressed_size = 0UL;
     string decompressed = string();
 
     // Calculate data sizes based on OS
     int size_of_sig = sizeof(ODICT_SIGNATURE);
-    int size_of_int = sizeof(unsigned int);
+    int size_of_short = sizeof(unsigned short);
     int size_of_long = sizeof(unsigned long);
     int file_size = input.tellg();
 
@@ -44,14 +45,16 @@ const uint8_t *DictionaryReader::read_buffer(const char *path) {
 
     // Read the file version
     input.seekg(size_of_sig);
-    input.read(reinterpret_cast<char *>(&version), size_of_int);
+    input.read(reinterpret_cast<char *>(&version), size_of_short);
+    version = little_short(version);
 
     // Read the length of the compressed data
-    input.seekg(size_of_sig + size_of_int);
+    input.seekg(size_of_sig + size_of_short);
     input.read(reinterpret_cast<char *>(&compressed_size), size_of_long);
+    compressed_size = little_long(compressed_size);
 
     // Make varying assertions to ensure file is valid
-    int header_length = size_of_long + size_of_sig + size_of_int;
+    int header_length = size_of_long + size_of_sig + size_of_short;
 
     assert(strcmp(signature, ODICT_SIGNATURE) == 0);
     assert((compressed_size + header_length) == file_size);
