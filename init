@@ -16,9 +16,14 @@ function schema() {
     flatc -c -o src src/schema.fbs
 }
 
+function clean() {
+    rm -rf build
+}
+
 if [ "$#" -eq "0" ]
     then
         dependencies
+        clean
         build
     else
         $1
