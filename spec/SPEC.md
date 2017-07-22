@@ -8,7 +8,7 @@ Compiled odict files are relatively straightforward, as they utilize the
  
  | Name         | Type          | Size     | Description                                                                                                 |
  |--------------|---------------|----------|-------------------------------------------------------------------------------------------------------------|
- | Signature    | `CHAR[6]`     | 6        | Signature for the ODict format. Assertions fail if this signature is missing. Should always be `ODICT`.     |
+ | Signature    | `CHAR[6]`     | 5        | Signature for the ODict format. Assertions fail if this signature is missing. Should always be `ODICT`.     |
  | Version      | `UINT`        | 4        | Represents the major version of ODict with which the file was created.                                      |
  | Content-Size | `ULONG`       | 4 or 8   | Size (in bytes) of the compressed content to read. Used in assertions to validate file length.              |
  | Content      | `CONST CHAR*` | Variable | Snappy compressed FlatBuffer object. Must be decompressed and converted to `uint8_t` before it can be used. |
