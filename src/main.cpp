@@ -9,7 +9,7 @@ static const string OUTPUT_EXT = "odict";
  * Shows CLI usage info
  */
 void show_usage() {
-    cout << "Usage: odict [generate|lookup] [..args]\n";
+    cout << "Usage: odict [generate|lookup] [..args]" << endl;
 }
 
 /**
@@ -34,18 +34,18 @@ string get_filename_from_path(string path) {
 }
 
 int main(int argv, char *args[]) {
-    if (argv < 2) show_usage();
+    if (argv < 3) show_usage();
     else {
         string input_file(args[2]);
         string output_full_path = get_filename_from_path(input_file);
 
-        if (!strcmp(args[1], CMD_GENERATE)) {
+        if (strcmp(args[1], CMD_GENERATE) == 0) {
             if (argv < 3) cout << "Usage: odict generate [xml file]" << endl;
             else {
                 DictionaryWriter *generator = new DictionaryWriter();
                 generator->generate(input_file.c_str(), output_full_path.c_str());
             }
-        } else if (!strcmp(args[1], CMD_READ)) {
+        } else if (strcmp(args[1], CMD_READ) == 0) {
             if (argv < 4) cout << "Usage: odict lookup [word] [odict file]" << endl;
             else {
                 DictionaryReader *reader = new DictionaryReader();

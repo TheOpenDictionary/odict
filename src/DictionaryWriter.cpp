@@ -131,27 +131,33 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
  * @return
  */
 bool DictionaryWriter::output_compressed_buffer(uint8_t *buf, int size, const char* output_file) {
-    string compressed_str;
+    Verifier verifier = Verifier(buf, size);
+    if (VerifyDictionaryBuffer(verifier)) {
+        string compressed_str;
 
-    Compress((char*)buf, size, &compressed_str);
+        Compress((char*)buf, size, &compressed_str);
 
-    const char* compressed = compressed_str.c_str();
-    unsigned long compressed_size = compressed_str.size();
+        const char* compressed = compressed_str.c_str();
+        unsigned long compressed_size = compressed_str.size();
 
-    ofstream output(output_file, ios::out | ios::binary);
-    output.write(reinterpret_cast<char *>(&ODICT_SIGNATURE), sizeof(ODICT_SIGNATURE));
-    output.write(reinterpret_cast<char *>(&ODICT_VERSION), sizeof(ODICT_VERSION));
-    output.write(reinterpret_cast<char *>(&compressed_size), sizeof(compressed_size));
-    output.write(compressed, compressed_size);
-    output.close();
+        ofstream output(output_file, ios::out | ios::binary);
+        output.write(reinterpret_cast<char *>(&ODICT_SIGNATURE), sizeof(ODICT_SIGNATURE));
+        output.write(reinterpret_cast<char *>(&ODICT_VERSION), sizeof(ODICT_VERSION));
+        output.write(reinterpret_cast<char *>(&compressed_size), sizeof(compressed_size));
+        output.write(compressed, compressed_size);
+        output.close();
 
-    printf("Wrote %lu bytes (compressed from %d) to %s\n",
-           compressed_size + sizeof(compressed_size),
-           size,
-           output_file
-    );
+        printf("Wrote %lu bytes (compressed from %d) to %s\n",
+               compressed_size + sizeof(compressed_size),
+               size,
+               output_file
+        );
 
-    return true;
+        return true;
+    } else {
+        cout << "Data produced invalid ODict dictionary.";
+        exit(0);
+    }
 }
 
 /**
