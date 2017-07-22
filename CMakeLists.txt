@@ -20,7 +20,7 @@ include_directories(
 file(GLOB sources "src/*.cpp")
 file(GLOB libraries "lib/snappy-1.1.6/build/*.dylib" "lib/snappy-1.1.6/build/*.so" "lib/snappy-1.1.6/build/*.dll")
 
-add_library(-odict-${LIB_VERSION} STATIC ${sources})
+add_library(odict-${LIB_VERSION} STATIC ${sources})
 add_executable(odict ${sources})
 
 target_link_libraries(odict ${libraries})
