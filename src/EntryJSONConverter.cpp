@@ -19,7 +19,7 @@ string EntryJSONConverter::add_definitions(const Vector<Offset<String>> *definit
     string output = "\"definitions\":[";
     int length = definitions->Length();
 
-    for (int i = 0;  i < length; i++) {
+    for (int i = 0; i < length; i++) {
         const String *definition = definitions->Get(i);
         output += "\"" + definition->str() + "\"";
         if (i != length - 1) output += ",";
@@ -34,22 +34,24 @@ string EntryJSONConverter::add_groups(const Vector<Offset<Group>> *groups) {
     string output = "\"groups\":[";
     int length = groups->Length();
 
-    for (int i = 0;  i < length; i++) {
+    for (int i = 0; i < length; i++) {
         const Group *group = groups->Get(i);
         const Vector<Offset<String>> *definitions = group->definitions();
+        vector<string> properties = vector<string>();
 
         output += "{";
 
         if (group->id()->str().length() > 0)
-            output += "id:\"" + group->id()->str() + "\",";
+            properties.push_back("id:\"" + group->id()->str() + "\",");
 
         if (group->description()->str().length() > 0)
-            output += "\"description\":\"" + group->description()->str() + "\",";
+            properties.push_back("\"description\":\"" + group->description()->str() + "\",");
 
         if (definitions->Length() > 0) {
-            output += this->add_definitions(definitions);
+            properties.push_back(this->add_definitions(definitions));
         }
 
+        output += propertiesToJSON(properties);
         output += "}";
 
         if (i != length - 1) output += ",";
@@ -64,7 +66,7 @@ string EntryJSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
     string output = "\"usages\":[";
     int length = usages->Length();
 
-    for (int i = 0;  i < length; i++) {
+    for (int i = 0; i < length; i++) {
         const Usage *usage = usages->Get(i);
         const Vector<Offset<Group>> *groups = usage->groups();
         const Vector<Offset<String>> *definitions = usage->definitions();
@@ -73,7 +75,7 @@ string EntryJSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
         output += "{";
 
         if (usage->pos()->str().length() > 0)
-            properties.push_back("\"pos\":\"" + usage->pos()->str());
+            properties.push_back("\"pos\":\"" + usage->pos()->str() + "\"");
 
         if (groups->Length() > 0)
             properties.push_back(this->add_groups(groups));
@@ -96,7 +98,7 @@ string EntryJSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etym
     string output = "\"etymologies\":[";
     int length = etymologies->Length();
 
-    for (int i = 0;  i < length; i++) {
+    for (int i = 0; i < length; i++) {
         const Etymology *etymology = etymologies->Get(i);
         const Vector<Offset<Usage>> *usages = etymology->usages();
 
@@ -107,6 +109,8 @@ string EntryJSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etym
 
         if (usages->Length() > 0)
             output += this->add_usages(usages);
+
+        // TODO: require at least one usage before writing
 
         output += "}";
 

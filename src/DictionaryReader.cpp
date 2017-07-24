@@ -32,7 +32,7 @@ const uint8_t *DictionaryReader::read_buffer(const char *path) {
     string decompressed = string();
 
     // Calculate data sizes based on OS
-    int size_of_sig = sizeof(ODICT_SIGNATURE);
+    int size_of_sig = sizeof(ODICT_SIGNATURE) - 1; // -1 for terminating character
     int size_of_short = sizeof(unsigned short);
     int size_of_long = sizeof(unsigned long);
     int file_size = input.tellg();
