@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 
+# You have to update these version numbers manually in CMakeLists.txt
+SNAPPY_VERSION=1.1.7
+FLATBUFFERS_VERSION=1.7.1
+RAPIDXML_VERSION=1.13
+
 function dependencies() {
     mkdir -p lib && cd lib
-    curl -L https://github.com/google/snappy/archive/1.1.6.tar.gz | tar -zx
-    curl -L https://github.com/google/flatbuffers/archive/v1.7.1.tar.gz | tar -zx
-    curl -L https://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-1.13.zip -o rapidxml.zip && unzip -o rapidxml.zip && rm -rf rapidxml.zip
-    cd snappy-1.1.6 && mkdir -p build && cd build && cmake ../ && make && cd ../../../
+    curl -L https://github.com/google/snappy/archive/${SNAPPY_VERSION}.tar.gz | tar -zx
+    curl -L https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_VERSION}.tar.gz | tar -zx
+    curl -L https://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-${RAPIDXML_VERSION}.zip -o rapidxml.zip && unzip -o rapidxml.zip && rm -rf rapidxml.zip
+    cd snappy-${SNAPPY_VERSION} && mkdir -p build && cd build && cmake ../ && make && cd ../../../
 }
 
 function build() {

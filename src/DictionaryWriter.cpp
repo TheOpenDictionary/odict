@@ -50,7 +50,7 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
                 this->get_definitions(current_group)
         ));
 
-        current_group = current_group->next_sibling(NODE_DEFINITION);
+        current_group = current_group->next_sibling(NODE_GROUP);
     }
 
     return builder.CreateVector(groups);
@@ -70,7 +70,7 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<>* 
                 usages
         ));
 
-        current_ety = current_ety->next_sibling(NODE_USAGE);
+        current_ety = current_ety->next_sibling(NODE_ETY);
     }
 
     return builder.CreateVector(etymologies);
