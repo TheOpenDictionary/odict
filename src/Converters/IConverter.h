@@ -9,7 +9,8 @@ using namespace schema;
 using namespace std;
 
 class IConverter {
-    virtual string convert(const Entry *entry) = 0;
+public:
+    virtual const char *convert(const Entry *entry) = 0;
 };
 
 #endif //ODICT_ICONVERTER_H

@@ -27,7 +27,7 @@ private:
     void add_etymologies(pt::ptree *, const Vector<Offset<Etymology>> *etymologies);
 public:
     JSONConverter();
-    string convert(const Entry *entry);
+    const char* convert(const Entry *entry);
 };
 
 #endif //ODICT_JSONCONVERTER_H

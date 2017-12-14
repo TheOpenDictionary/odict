@@ -16,7 +16,7 @@ bool file_exists(const char *path) {
  * @param path
  * @return
  */
-const uint8_t *DictionaryReader::read_buffer(const char *path) {
+const uint8_t *DictionaryReader::GetBuffer(const char *path) {
     ifstream input(path, ios::in | ios::binary | ios::ate);
 
     if (!file_exists(path)) {
@@ -84,32 +84,25 @@ const uint8_t *DictionaryReader::read_buffer(const char *path) {
 }
 
 /**
- * Looks up a word in the dictionary and returns the proper JSON
- * @param word
+ * Loads a dictionary into memory as a raw buffer
  * @param dictionary_path
  * @return
  */
-string DictionaryReader::lookup(const char *word, const char *dictionary_path) {
-    Timer *timer = new Timer();
-    timer->start();
-
-    auto *buf = this->read_buffer(dictionary_path);
-
+const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path) {
+    const uint8_t *buf = this->GetBuffer(dictionary_path);
     if (buf == 0) {
         cout << "Data is corrupted. Cannot read dictionary.\n" << endl;
         exit(0);
-    } else {
-        auto dict = GetDictionary(buf);
-        auto entries = dict->entries();
-        auto result = entries->LookupByKey(word);
-
-        if (result != nullptr) {
-            printf("Completed in %f seconds\n", timer->stop());
-            return (new JSONConverter())->convert(result);
-        } else {
-            printf("Could not find dictionary entry \"%s\" in file %s", word, dictionary_path);
-        }
     }
 
-    return "{}";
+    return buf;
+}
+
+/**
+ * Loads a dictionary as a Flatbuffers Dictionary object
+ * @param dictionary_path
+ * @return
+ */
+inline const Dictionary *DictionaryReader::ReadAsDictionary(const char *dictionary_path) {
+    return GetDictionary(this->ReadAsBuffer(dictionary_path));
 }

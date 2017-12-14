@@ -6,21 +6,30 @@
 #include <string>
 #include <snappy.h>
 
+<<<<<<< HEAD
 #include "../schema_generated.h"
 #include "../Util/Timer.h"
 #include "../Util/Constants.h"
+=======
+#include "ODIndexBuilder.h"
+#include "schema_generated.h"
+#include "Util/Timer.h"
+#include "Util/Constants.h"
+>>>>>>> Began implementation of Apache Lucy
 
 using namespace std;
 using namespace schema;
 using namespace snappy;
 using namespace flatbuffers;
+using namespace odc;
 
 class DictionaryReader {
 private:
     FlatBufferBuilder builder;
-    const uint8_t *read_buffer(const char* path);
+    const uint8_t *GetBuffer(const char* path);
 public:
-    string lookup(const char* word, const char* dictionary_path);
+    const uint8_t *ReadAsBuffer(const char* dictionary_path);
+    const Dictionary *ReadAsDictionary(const char* dictionary_path);
 };
 
 

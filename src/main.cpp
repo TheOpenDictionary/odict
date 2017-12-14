@@ -1,6 +1,5 @@
 #include "Dictionary/DictionaryWriter.h"
-#include "Dictionary/DictionaryReader.h"
-#include "Util/EndianTypes.h"
+#include "Dictionary/DictionarySearch.h"
 
 static const char *CMD_GENERATE = "generate";
 static const char *CMD_READ = "lookup";
@@ -37,7 +36,6 @@ string get_filename_from_path(string path) {
 int main(int argv, char *args[]) {
     auto ed = new EndianTypes();
     ed->init();
-//    cout << little_short(1) << endl;
     if (argv < 3) show_usage();
     else {
         string input_file(args[2]);
@@ -52,12 +50,13 @@ int main(int argv, char *args[]) {
         } else if (strcmp(args[1], CMD_READ) == 0) {
             if (argv < 4) cout << "Usage: odict lookup [word] [odict file]" << endl;
             else {
-                DictionaryReader *reader = new DictionaryReader();
-                string output = reader->lookup(args[2], args[3]);
+                DictionarySearch *search = new DictionarySearch(args[3]);
+                const char* output = search->searchByEntry(args[2]);
                 cout << endl << output << endl;
             }
         } else {
             show_usage();
         }
     }
+//    search();
 }

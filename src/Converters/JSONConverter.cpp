@@ -98,7 +98,7 @@ void JSONConverter::add_etymologies(pt::ptree *root, const Vector<Offset<Etymolo
     root->add_child("etymologies", list);
 }
 
-string JSONConverter::convert(const Entry *entry) {
+const char* JSONConverter::convert(const Entry *entry) {
     pt::ptree root;
     stringstream ss;
 
@@ -106,5 +106,5 @@ string JSONConverter::convert(const Entry *entry) {
 
     pt::write_json(ss, root);
 
-    return ss.str();
+    return ss.str().c_str();
 }
