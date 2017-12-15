@@ -11,9 +11,9 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/random_generator.hpp>
 
+#include "snappy.h"
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
-#include "snappy.h"
 
 #include "schema_generated.h"
 

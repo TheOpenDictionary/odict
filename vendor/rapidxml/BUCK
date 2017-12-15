@@ -1,0 +1,14 @@
+remote_file(
+    name = 'fetch',
+    url = 'https://github.com/odict/rapidxml/archive/v1.13.zip',
+    sha1 = '963d7782580d081d9fa5966cdca4a6d89ae0285a',
+    type = 'exploded_zip'
+)
+
+# RapidXML
+prebuilt_cxx_library(
+    name = 'rapidxml',
+    header_only = True,
+    include_dirs = ['$(location :fetch)/rapidxml-1.13'],
+    visibility = ['PUBLIC']
+)

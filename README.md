@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="350" />

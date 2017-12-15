@@ -164,5 +164,9 @@ fabric.properties
 build
 # End of https://www.gitignore.io/api/osx,c++,cmake,linux,windows
 
-lib
-schema_generated.h
+# Buck
+/buck-out/
+/.buckd/
+/buckaroo/
+BUCKAROO_DEPS
+.buckconfig.local
