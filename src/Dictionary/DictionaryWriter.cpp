@@ -13,6 +13,18 @@ string getAttributeIfExists(xml_node<> *node, const char *attribute) {
 DictionaryWriter::DictionaryWriter() {}
 
 /**
+ * Returns a builder UUID string
+ * @return
+ */#include <boost/lexical_cast.hpp>
+Offset<String> DictionaryWriter::get_uuid_string() {
+    boost::uuids::random_generator gen;
+    boost::uuids::uuid id = gen();
+
+    return builder.CreateString(boost::lexical_cast<std::string>(id));
+}
+
+
+/**
  * Gets all of the definitions in a usage node and returns them as a FlatBuffer object
  * @param usage_node
  * @return
@@ -40,12 +52,11 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
     vector<Offset<Group>> groups = vector<Offset<Group>>();
 
     while (current_group != 0) {
-        string id = getAttributeIfExists(current_group, ATTR_ID);
         string description = getAttributeIfExists(current_group, ATTR_DESCRIPTION);
 
         groups.push_back(CreateGroup(
                 builder,
-                builder.CreateString(id),
+                this->get_uuid_string(),
                 builder.CreateString(description),
                 this->get_definitions(current_group)
         ));
@@ -56,7 +67,7 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
     return builder.CreateVector(groups);
 }
 
-Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<>* entry_node) {
+Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *entry_node) {
     xml_node<> *current_ety = entry_node->first_node(NODE_ETY);
     vector<Offset<Etymology>> etymologies = vector<Offset<Etymology>>();
 
@@ -66,6 +77,7 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<>* 
 
         etymologies.push_back(CreateEtymology(
                 builder,
+                this->get_uuid_string(),
                 builder.CreateString(description),
                 usages
         ));
@@ -92,6 +104,7 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node)
 
         usages.push_back(CreateUsage(
                 builder,
+                this->get_uuid_string(),
                 builder.CreateString(part_of_speech),
                 definitions,
                 groups
@@ -116,7 +129,7 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
         string term = getAttributeIfExists(current_entry, ATTR_TERM);
         auto etymologies = this->get_etymologies(current_entry);
 
-        entries.push_back(CreateEntry(builder, builder.CreateString(term), etymologies));
+        entries.push_back(CreateEntry(builder, this->get_uuid_string(), builder.CreateString(term), etymologies));
         current_entry = current_entry->next_sibling(NODE_ENTRY);
     }
 
@@ -130,14 +143,14 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
  * @param path
  * @return
  */
-bool DictionaryWriter::output_compressed_buffer(uint8_t *buf, int size, const char* output_file) {
+bool DictionaryWriter::output_compressed_buffer(uint8_t *buf, int size, const char *output_file) {
     Verifier verifier = Verifier(buf, size);
     if (VerifyDictionaryBuffer(verifier)) {
         string compressed_str;
 
-        Compress((char*)buf, size, &compressed_str);
+        Compress((char *) buf, size, &compressed_str);
 
-        const char* compressed = compressed_str.c_str();
+        const char *compressed = compressed_str.c_str();
         unsigned long compressed_size = little_long(compressed_str.size());
         short version = little_short(ODICT_VERSION);
 
@@ -183,7 +196,7 @@ void DictionaryWriter::generate(const char *input_file, const char *output_file)
     if (dictionary_node != 0) {
         // 4) Get all of the entries (and children) from the dictionary root
         auto entries = this->get_entries(dictionary_node);
-        auto dictionary = CreateDictionary(builder, entries);
+        auto dictionary = CreateDictionary(builder, this->get_uuid_string(), entries);
 
         // 5) Make the dictionary and store it in a buffer
         FinishDictionaryBuffer(builder, dictionary);

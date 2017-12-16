@@ -2,68 +2,50 @@
 
 JSONConverter::JSONConverter() {}
 
-string propertiesToJSON(vector<string> properties) {
-    string output = "";
-
-    for (int i = 0; i < properties.size(); i++) {
-        output += properties.at(i);
-
-        if (i != properties.size() - 1) output += ",";
-    }
-
-    return output;
-}
-
-string JSONConverter::add_definitions(const Vector<Offset<String>> *definitions) {
-    string output = "\"definitions\":[";
+void JSONConverter::add_definitions(pt::ptree *root, const Vector<Offset<String>> *definitions) {
     int length = definitions->Length();
 
+    pt::ptree list;
+
     for (int i = 0; i < length; i++) {
-        const String *definition = definitions->Get(i);
-        output += "\"" + definition->str() + "\"";
-        if (i != length - 1) output += ",";
+        pt::ptree def_node;
+        def_node.put("", definitions->Get(i)->str());
+        list.push_back(make_pair("", def_node));
     }
 
-    output += "]";
-
-    return output;
+    root->add_child("definitions", list);
 }
 
-string JSONConverter::add_groups(const Vector<Offset<Group>> *groups) {
-    string output = "\"groups\":[";
+void JSONConverter::add_groups(pt::ptree *root, const Vector<Offset<Group>> *groups) {
     int length = groups->Length();
+
+    pt::ptree list;
 
     for (int i = 0; i < length; i++) {
         const Group *group = groups->Get(i);
         const Vector<Offset<String>> *definitions = group->definitions();
         vector<string> properties = vector<string>();
 
-        output += "{";
+        pt::ptree group_node;
 
-        if (group->id()->str().length() > 0)
-            properties.push_back("id:\"" + group->id()->str() + "\",");
+        group_node.put("id", group->id()->str());
 
         if (group->description()->str().length() > 0)
-            properties.push_back("\"description\":\"" + group->description()->str() + "\",");
+            group_node.put("description", group->description()->str());
 
-        if (definitions->Length() > 0) {
-            properties.push_back(this->add_definitions(definitions));
-        }
+        if (definitions->Length() > 0)
+            this->add_definitions(&group_node, definitions);
 
-        output += propertiesToJSON(properties);
-        output += "}";
-
-        if (i != length - 1) output += ",";
+        list.push_back(make_pair("", group_node));
     }
 
-    output += "]";
-
-    return output;
+    root->add_child("groups", list);
 }
 
-string JSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
-    string output = "\"usages\":[";
+void JSONConverter::add_usages(pt::ptree *root, const Vector<Offset<Usage>> *usages) {
     int length = usages->Length();
+
+    pt::ptree list;
 
     for (int i = 0; i < length; i++) {
         const Usage *usage = usages->Get(i);
@@ -71,61 +53,58 @@ string JSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
         const Vector<Offset<String>> *definitions = usage->definitions();
         vector<string> properties = vector<string>();
 
-        output += "{";
+        pt::ptree usage_node;
+
+        usage_node.put("id", usage->id()->str());
 
         if (usage->pos()->str().length() > 0)
-            properties.push_back("\"pos\":\"" + usage->pos()->str() + "\"");
+            usage_node.put("pos", usage->pos()->str());
 
         if (groups->Length() > 0)
-            properties.push_back(this->add_groups(groups));
+            this->add_groups(&usage_node, groups);
 
         if (definitions->Length() > 0)
-            properties.push_back(this->add_definitions(definitions));
+            this->add_definitions(&usage_node, definitions);
 
-        output += propertiesToJSON(properties);
-        output += "}";
-
-        if (i != length - 1) output += ",";
+        list.push_back(make_pair("", usage_node));
     }
 
-    output += "]";
-
-    return output;
+    root->add_child("usages", list);
 }
 
-string JSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etymologies) {
-    string output = "\"etymologies\":[";
+void JSONConverter::add_etymologies(pt::ptree *root, const Vector<Offset<Etymology>> *etymologies) {
     int length = etymologies->Length();
+
+    pt::ptree list;
 
     for (int i = 0; i < length; i++) {
         const Etymology *etymology = etymologies->Get(i);
         const Vector<Offset<Usage>> *usages = etymology->usages();
 
-        output += "{";
+        pt::ptree ety_node;
+
+        ety_node.put("id", etymology->id()->str());
 
         if (etymology->description()->str().length() > 0)
-            output += "\"description\":\"" + etymology->description()->str() + "\",";
+            ety_node.put("description", etymology->description()->str());
 
         if (usages->Length() > 0)
-            output += this->add_usages(usages);
+            this->add_usages(&ety_node, usages);
 
         // TODO: require at least one usage before writing
-
-        output += "}";
-
-        if (i != length - 1) output += ",";
+        list.push_back(std::make_pair("", ety_node));
     }
 
-    output += "]";
-
-    return output;
+    root->add_child("etymologies", list);
 }
 
 string JSONConverter::convert(const Entry *entry) {
-    string output = "{";
+    pt::ptree root;
+    stringstream ss;
 
-    output += this->add_etymologies(entry->etymologies());
-    output += "}";
+    this->add_etymologies(&root, entry->etymologies());
 
-    return output;
+    pt::write_json(ss, root);
+
+    return ss.str();
 }

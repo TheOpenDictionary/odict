@@ -6,20 +6,24 @@
 #include <string>
 #include <iostream>
 
-#include "schema_generated.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
+#include "schema_generated.h"
 #include "IConverter.h"
 
 using namespace std;
 using namespace schema;
 using namespace flatbuffers;
 
+namespace pt = boost::property_tree;
+
 class JSONConverter : public IConverter {
 private:
-    string add_definitions(const Vector<Offset<String>> *definitions);
-    string add_groups(const Vector<Offset<Group>> *groups);
-    string add_usages(const Vector<Offset<Usage>> *usages);
-    string add_etymologies(const Vector<Offset<Etymology>> *etymologies);
+    void add_definitions(pt::ptree *, const Vector<Offset<String>> *definitions);
+    void add_groups(pt::ptree *, const Vector<Offset<Group>> *groups);
+    void add_usages(pt::ptree *, const Vector<Offset<Usage>> *usages);
+    void add_etymologies(pt::ptree *, const Vector<Offset<Etymology>> *etymologies);
 public:
     JSONConverter();
     string convert(const Entry *entry);

@@ -6,6 +6,11 @@
 #include <iostream>
 #include <string>
 
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/random_generator.hpp>
+
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
 #include "snappy.h"
@@ -28,6 +33,7 @@ public:
     void generate(const char*, const char*);
 private:
     FlatBufferBuilder builder;
+    Offset<String> get_uuid_string();
     Offset<Vector<Offset<Entry>>> get_entries(xml_node<>*);
     Offset<Vector<Offset<Etymology>>> get_etymologies(xml_node<>*);
     Offset<Vector<Offset<Usage>>> get_usages(xml_node<>*);

@@ -10,6 +10,7 @@ set(LIB_VERSION "1.0")
 add_compile_options(-std=c++14)
 
 include_directories(
+        ${PROJECT_SOURCE_DIR}/lib/boost_1_65_1
         ${PROJECT_SOURCE_DIR}/lib/rapidxml-1.13
         ${PROJECT_SOURCE_DIR}/lib/snappy-1.1.7
         ${PROJECT_SOURCE_DIR}/lib/snappy-1.1.7/build
@@ -21,7 +22,12 @@ include_directories(
 )
 
 file(GLOB sources "src/**/*.cpp" "src/*.cpp")
-file(GLOB libraries "lib/snappy-1.1.7/build/*.dylib" "lib/snappy-1.1.7/build/*.so" "lib/snappy-1.1.7/build/*.a" "lib/snappy-1.1.7/build/*.dll")
+file(GLOB libraries
+        "lib/snappy-1.1.7/build/*.dylib"
+        "lib/snappy-1.1.7/build/*.so"
+        "lib/snappy-1.1.7/build/*.a"
+        "lib/snappy-1.1.7/build/*.dll"
+)
 
 add_library(odict-${LIB_VERSION} STATIC ${sources})
 add_executable(odict ${sources})

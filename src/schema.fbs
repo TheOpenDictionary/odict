@@ -15,6 +15,7 @@ enum POS:byte {
 }
 
 table Etymology {
+    id:string;
     description:string;
     usages:[Usage];
 }
@@ -26,17 +27,20 @@ table Group {
 }
 
 table Usage {
+    id:string;
     pos:string;
     definitions:[string];
     groups:[Group];
 }
 
 table Entry {
+    id:string;
     term:string (key);
     etymologies:[Etymology];
 }
 
 table Dictionary {
+    name:string;
     entries:[Entry];
 }
 
