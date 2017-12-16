@@ -1,6 +1,6 @@
-#include "DictionaryWriter.h"
-#include "DictionaryReader.h"
-#include "endian.h"
+#include "Dictionary/DictionaryWriter.h"
+#include "Dictionary/DictionaryReader.h"
+#include "Util/EndianTypes.h"
 
 static const char *CMD_GENERATE = "generate";
 static const char *CMD_READ = "lookup";

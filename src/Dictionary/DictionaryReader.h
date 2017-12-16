@@ -7,8 +7,8 @@
 #include <snappy.h>
 
 #include "schema_generated.h"
-#include "timer.h"
-#include "constants.h"
+#include "Util/Timer.h"
+#include "Util/Constants.h"
 
 using namespace std;
 using namespace schema;

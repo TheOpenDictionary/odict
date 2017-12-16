@@ -2,8 +2,8 @@
 #include <sys/stat.h>
 
 #include "DictionaryReader.h"
-#include "EntryJSONConverter.h"
-#include "endian.h"
+#include "Converters/JSONConverter.h"
+#include "Util/EndianTypes.h"
 
 bool file_exists(const char *path) {
     struct stat buffer;
@@ -104,7 +104,7 @@ string DictionaryReader::lookup(const char *word, const char *dictionary_path) {
 
         if (result != nullptr) {
             printf("Completed in %f seconds\n", timer->stop());
-            return (new EntryJSONConverter())->convert(result);
+            return (new JSONConverter())->convert(result);
         } else {
             printf("Could not find dictionary entry \"%s\" in file %s", word, dictionary_path);
         }

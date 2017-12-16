@@ -2,7 +2,7 @@
 
 # You have to update these version numbers manually in CMakeLists.txt
 SNAPPY_VERSION=1.1.7
-FLATBUFFERS_VERSION=1.7.1
+FLATBUFFERS_VERSION=1.8.0
 RAPIDXML_VERSION=1.13
 
 function dependencies() {
@@ -28,6 +28,7 @@ function clean() {
 if [ "$#" -eq "0" ]
     then
         dependencies
+        schema
         clean
         build
     else

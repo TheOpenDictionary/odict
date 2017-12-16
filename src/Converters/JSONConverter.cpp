@@ -1,7 +1,6 @@
-#include <iostream>
-#include "EntryJSONConverter.h"
+#include "JSONConverter.h"
 
-EntryJSONConverter::EntryJSONConverter() {}
+JSONConverter::JSONConverter() {}
 
 string propertiesToJSON(vector<string> properties) {
     string output = "";
@@ -15,7 +14,7 @@ string propertiesToJSON(vector<string> properties) {
     return output;
 }
 
-string EntryJSONConverter::add_definitions(const Vector<Offset<String>> *definitions) {
+string JSONConverter::add_definitions(const Vector<Offset<String>> *definitions) {
     string output = "\"definitions\":[";
     int length = definitions->Length();
 
@@ -30,7 +29,7 @@ string EntryJSONConverter::add_definitions(const Vector<Offset<String>> *definit
     return output;
 }
 
-string EntryJSONConverter::add_groups(const Vector<Offset<Group>> *groups) {
+string JSONConverter::add_groups(const Vector<Offset<Group>> *groups) {
     string output = "\"groups\":[";
     int length = groups->Length();
 
@@ -62,7 +61,7 @@ string EntryJSONConverter::add_groups(const Vector<Offset<Group>> *groups) {
     return output;
 }
 
-string EntryJSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
+string JSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
     string output = "\"usages\":[";
     int length = usages->Length();
 
@@ -94,7 +93,7 @@ string EntryJSONConverter::add_usages(const Vector<Offset<Usage>> *usages) {
     return output;
 }
 
-string EntryJSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etymologies) {
+string JSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etymologies) {
     string output = "\"etymologies\":[";
     int length = etymologies->Length();
 
@@ -122,7 +121,7 @@ string EntryJSONConverter::add_etymologies(const Vector<Offset<Etymology>> *etym
     return output;
 }
 
-string EntryJSONConverter::convert(const Entry *entry) {
+string JSONConverter::convert(const Entry *entry) {
     string output = "{";
 
     output += this->add_etymologies(entry->etymologies());

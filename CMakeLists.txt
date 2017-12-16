@@ -7,17 +7,20 @@ set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
 set(LIB_VERSION "1.0")
 
-add_compile_options(-std=c++0x)
+add_compile_options(-std=c++14)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/lib/rapidxml-1.13
         ${PROJECT_SOURCE_DIR}/lib/snappy-1.1.7
         ${PROJECT_SOURCE_DIR}/lib/snappy-1.1.7/build
-        ${PROJECT_SOURCE_DIR}/lib/flatbuffers-1.7.1/include
-        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/lib/flatbuffers-1.8.0/include
+        ${PROJECT_SOURCE_DIR}/src/Converters
+        ${PROJECT_SOURCE_DIR}/src/Dictionary
+        ${PROJECT_SOURCE_DIR}/src/Util
+        ${PROJECT_SOURCE_DIR}/src/
 )
 
-file(GLOB sources "src/*.cpp")
+file(GLOB sources "src/**/*.cpp" "src/*.cpp")
 file(GLOB libraries "lib/snappy-1.1.7/build/*.dylib" "lib/snappy-1.1.7/build/*.so" "lib/snappy-1.1.7/build/*.a" "lib/snappy-1.1.7/build/*.dll")
 
 add_library(odict-${LIB_VERSION} STATIC ${sources})

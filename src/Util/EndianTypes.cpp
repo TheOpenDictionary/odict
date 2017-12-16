@@ -1,5 +1,5 @@
 #include <cstdint>
-#include "endian.h"
+#include "EndianTypes.h"
 
 /**
  * Code taken from

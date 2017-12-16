@@ -10,9 +10,9 @@
 #include "rapidxml_utils.hpp"
 #include "snappy.h"
 
-#include "constants.h"
+#include "Util/Constants.h"
 #include "schema_generated.h"
-#include "timer.h"
+#include "Util/Timer.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -20,7 +20,7 @@ using namespace flatbuffers;
 using namespace schema;
 using namespace snappy;
 
-#import "constants.h"
+#import "Util/Constants.h"
 
 class DictionaryWriter {
 public:

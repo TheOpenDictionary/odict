@@ -165,3 +165,4 @@ build
 # End of https://www.gitignore.io/api/osx,c++,cmake,linux,windows
 
 lib
+schema_generated.h

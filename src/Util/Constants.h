@@ -2,7 +2,7 @@
 #define ODICT_CONSTANTS_H_H
 
 #include <string>
-#include "endian.h"
+#include "Util/EndianTypes.h"
 
 static char ODICT_SIGNATURE[6] = "ODICT";
 static short ODICT_VERSION = 1;
