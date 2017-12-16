@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.7)
 project(odict)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/bin")
 set(LIB_VERSION "1.0")
 
-add_compile_options(-std=c++14)
+add_compile_options(-std=c++11)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/lib/boost_1_65_1
