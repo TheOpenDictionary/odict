@@ -1,5 +1,11 @@
-# The Open Dictionary Project
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="350" />
+<br/><br/>
+
 ![Travis CI](https://img.shields.io/travis/odict/odict.svg)
+
+</div>
 
 The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats such
  as [Babylon](http://www.babylon-software.com/free-dictionaries/) and 
