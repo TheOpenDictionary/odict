@@ -11,18 +11,20 @@ function dependencies() {
     mkdir -p lib && cd lib
 
     echo "2. 📝 Getting Flatbuffers..."
-    curl -s -L https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_VERSION}.tar.gz | tar -zx > /dev/null
+    curl -s -L https://github.com/google/flatbuffers/archive/v${FLATBUFFERS_VERSION}.tar.gz | tar -zx
 
     echo "3. 💨 Getting RapidXML..."
-    curl -s -L https://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-${RAPIDXML_VERSION}.zip -o rapidxml.zip && unzip -o rapidxml.zip && rm -rf rapidxml.zip > /dev/null
+    curl -s -L https://downloads.sourceforge.net/project/rapidxml/rapidxml/rapidxml%201.13/rapidxml-${RAPIDXML_VERSION}.zip -o rapidxml.zip && unzip -o rapidxml.zip && rm -rf rapidxml.zip
 
     echo "4. 👌 Getting and building Snappy..."
-    curl -s -L https://github.com/google/snappy/archive/${SNAPPY_VERSION}.tar.gz | tar -zx > /dev/null
-    cd snappy-${SNAPPY_VERSION} && mkdir -p build && cd build && cmake ../ && make && cd ../../../
+    curl -s -L https://github.com/google/snappy/archive/${SNAPPY_VERSION}.tar.gz | tar -zx
+    cd snappy-${SNAPPY_VERSION} && mkdir -p build && cd build && cmake ../ && make && cd ../../
 
     echo "5. 🚀 Getting Boost..."
-    curl -s -L https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION//\./_}.tar.gz | tar -zx > /dev/null
+    curl -s -L https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION//\./_}.tar.gz | tar -zx
 
+    ls -al
+    cd ..
     printf "\n✨ All done!\n"
 }
 
