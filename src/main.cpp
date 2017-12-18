@@ -2,7 +2,9 @@
 #include "Dictionary/DictionarySearch.h"
 
 static const char *CMD_GENERATE = "generate";
-static const char *CMD_READ = "lookup";
+static const char *CMD_LOOKUP = "lookup";
+static const char *CMD_SEARCH = "search";
+
 static const string OUTPUT_EXT = "odict";
 
 /**
@@ -33,6 +35,10 @@ string get_filename_from_path(string path) {
     return "./" + filename + "." + OUTPUT_EXT;
 }
 
+// TODO: namespace everything
+// TODO: enforce naming conventions
+// TODO: replace all const char* with strings
+
 int main(int argv, char *args[]) {
     auto ed = new EndianTypes();
     ed->init();
@@ -47,16 +53,24 @@ int main(int argv, char *args[]) {
                 DictionaryWriter *generator = new DictionaryWriter();
                 generator->generate(input_file.c_str(), output_full_path.c_str());
             }
-        } else if (strcmp(args[1], CMD_READ) == 0) {
-            if (argv < 4) cout << "Usage: odict lookup [word] [odict file]" << endl;
+        } else if (strcmp(args[1], CMD_LOOKUP) == 0) {
+            if (argv < 4) cout << "Usage: odict lookup [odict file] [word]" << endl;
             else {
-                DictionarySearch *search = new DictionarySearch(args[3]);
-                const char* output = search->searchByEntry(args[2]);
+                DictionarySearch *search = new DictionarySearch(args[2]);
+                const char* output = search->searchByEntry(args[3]);
                 cout << endl << output << endl;
+                delete search;
+            }
+        } else if (strcmp(args[1], CMD_SEARCH) == 0) {
+            if (argv < 4) cout << "Usage: odict search [odict file] [word]" << endl;
+            else {
+                DictionarySearch *search = new DictionarySearch(args[2]);
+                const char* output = search->searchByContents(args[3]);
+                cout << endl << output << endl;
+                delete search;
             }
         } else {
             show_usage();
         }
     }
-//    search();
 }

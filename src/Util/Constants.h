@@ -15,6 +15,7 @@ namespace odc {
     static const char* NODE_DEFINITION = "definition";
 
     static const char* ATTR_ID = "id";
+    static const char* ATTR_NAME = "name";
     static const char* ATTR_DESCRIPTION = "description";
     static const char* ATTR_PART_OF_SPEECH = "pos";
     static const char* ATTR_TERM = "term";

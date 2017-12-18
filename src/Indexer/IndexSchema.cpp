@@ -1,6 +1,9 @@
-#include "ODIndexSchema.h"
-
+#include "IndexSchema.h"
+#include <iostream>
+using namespace std;
 lucy_Schema *create_schema() {
+    lucy_bootstrap_parcel();
+
     // Create a new schema.
     lucy_Schema *schema = lucy_Schema_new();
 
@@ -18,8 +21,14 @@ lucy_Schema *create_schema() {
     }
 
     {
-        cfish_String *field_str = cfish_Str_newf("content");
+        cfish_String *field_str = cfish_Str_newf("tokens");
         LUCY_Schema_Spec_Field(schema, field_str, (lucy_FieldType *) type);
+        CFISH_DECREF(field_str);
+    }
+
+    {
+        cfish_String *field_str = cfish_Str_newf("content");
+        LUCY_Schema_Spec_Field(schema, field_str, (lucy_FieldType *) lucy_BlobType_new(true));
         CFISH_DECREF(field_str);
     }
 
@@ -30,9 +39,9 @@ lucy_Schema *create_schema() {
     return schema;
 }
 
-lucy_Schema* ODIndexSchema::instance = 0;
+lucy_Schema* IndexSchema::instance = 0;
 
-lucy_Schema* ODIndexSchema::getInstance() {
+lucy_Schema* IndexSchema::getInstance() {
     if (instance == 0)
         instance = create_schema();
     return instance;

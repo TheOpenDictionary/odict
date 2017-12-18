@@ -6,6 +6,11 @@
 
 #include "DictionaryReader.h"
 
+/**
+ * Checks for file existance
+ * @param path path to file
+ * @return
+ */
 bool file_exists(const char *path) {
     struct stat buffer;
     return (stat(path, &buffer) == 0);
@@ -30,7 +35,6 @@ const uint8_t *DictionaryReader::GetBuffer(const char *path) {
     char *signature = new char[sizeof(ODICT_SIGNATURE)]();
     unsigned short version = 0U;
     unsigned long compressed_size = 0UL;
-    string decompressed = string();
 
     // Calculate data sizes based on OS
     int size_of_sig = sizeof(ODICT_SIGNATURE) - 1; // -1 for terminating character
@@ -63,8 +67,10 @@ const uint8_t *DictionaryReader::GetBuffer(const char *path) {
     // Read in compressed data
     const char *compressed = new char[compressed_size]();
     input.seekg(header_length);
-    input.read((char*)compressed, compressed_size);
+    input.read((char *) compressed, compressed_size);
     input.close();
+
+    string decompressed = string();
 
     // Decompress the buffer and return it
     if (Uncompress(compressed, compressed_size, &decompressed)) {
@@ -83,19 +89,85 @@ const uint8_t *DictionaryReader::GetBuffer(const char *path) {
     }
 }
 
+const void DictionaryReader::generateIndex(const Dictionary* dict) {
+    IndexBuilder *builder = new IndexBuilder(dict->id()->c_str());
+    auto entries = dict->entries();
+    auto entry = entries->begin();
+
+    while(entry != entries->end()) {
+        auto etymologies = entry->etymologies();
+        auto ety = etymologies->begin();
+
+        string keyword_block = "";
+
+        while (ety != etymologies->end()) {
+            auto usages = ety->usages();
+            auto usage = usages->begin();
+
+            while (usage != usages->end()) {
+                auto groups = usage->groups();
+                auto group = groups->begin();
+
+                auto definitions = usage->definitions();
+                auto definition = definitions->begin();
+
+                while(group != groups->end()) {
+                    auto definitions = group->definitions();
+                    auto definition = definitions->begin();
+
+                    while(definition != definitions->end()) {
+                        keyword_block += definition->str() + " ";
+                        definition++;
+                    }
+
+                    group++;
+                }
+
+                while(definition != definitions->end()) {
+                    keyword_block += definition->str() + " ";
+                    definition++;
+                }
+                usage++;
+            }
+            ety++;
+        }
+        builder->addDocument(entry->term()->c_str(), keyword_block.c_str(), new uint8_t[1024]);
+        entry++;
+    }
+    builder->build();
+}
+
+const void DictionaryReader::generateIndex(const uint8_t *buffer) {
+    auto dict = GetDictionary(buffer);
+    this->generateIndex(dict);
+}
+
+/**
+ * Loads a dictionary into memory as a raw buffer
+ * @param dictionary_path
+ * @return
+ */
+const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path, bool buildIndex) {
+    const uint8_t *buf = this->GetBuffer(dictionary_path);
+
+    if (buf == 0) {
+        cout << "Data is corrupted. Cannot read dictionary.\n" << endl;
+        exit(0);
+    }
+
+    if (buildIndex)
+        generateIndex(buf);
+
+    return buf;
+}
+
 /**
  * Loads a dictionary into memory as a raw buffer
  * @param dictionary_path
  * @return
  */
 const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path) {
-    const uint8_t *buf = this->GetBuffer(dictionary_path);
-    if (buf == 0) {
-        cout << "Data is corrupted. Cannot read dictionary.\n" << endl;
-        exit(0);
-    }
-
-    return buf;
+    return this->ReadAsBuffer(dictionary_path, true);
 }
 
 /**
@@ -103,6 +175,8 @@ const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path) {
  * @param dictionary_path
  * @return
  */
-inline const Dictionary *DictionaryReader::ReadAsDictionary(const char *dictionary_path) {
-    return GetDictionary(this->ReadAsBuffer(dictionary_path));
+const Dictionary *DictionaryReader::ReadAsDictionary(const char *dictionary_path) {
+    const Dictionary *dict = GetDictionary(this->ReadAsBuffer(dictionary_path, false));
+    this->generateIndex(dict);
+    return dict;
 }

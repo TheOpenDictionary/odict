@@ -4,17 +4,14 @@
 #include <fstream>
 #include <ios>
 #include <string>
-#include <snappy.h>
 
-<<<<<<< HEAD
+#include "snappy.h"
+#include "flatbuffers/flatbuffers.h"
+
 #include "../schema_generated.h"
 #include "../Util/Timer.h"
 #include "../Util/Constants.h"
-=======
-#include "ODIndexBuilder.h"
-#include "schema_generated.h"
-#include "Util/Timer.h"
-#include "Util/Constants.h"
+#include "../Indexer/IndexBuilder.h"
 >>>>>>> Began implementation of Apache Lucy
 
 using namespace std;
@@ -26,10 +23,13 @@ using namespace odc;
 class DictionaryReader {
 private:
     FlatBufferBuilder builder;
-    const uint8_t *GetBuffer(const char* path);
+    const uint8_t *GetBuffer(const char*);
+    const void generateIndex(const Dictionary*);
+    const void generateIndex(const uint8_t*);
 public:
-    const uint8_t *ReadAsBuffer(const char* dictionary_path);
-    const Dictionary *ReadAsDictionary(const char* dictionary_path);
+    const uint8_t *ReadAsBuffer(const char*);
+    const uint8_t *ReadAsBuffer(const char*, bool);
+    const Dictionary *ReadAsDictionary(const char*);
 };
 
 

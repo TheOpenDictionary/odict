@@ -106,5 +106,10 @@ const char* JSONConverter::convert(const Entry *entry) {
 
     pt::write_json(ss, root);
 
-    return ss.str().c_str();
+    // We have to copy the string out of local memory so we don't lose it
+    string output = ss.str();
+    char * str = new char[output.length() + 1];
+    strcpy(str, output.c_str());
+
+    return str;
 }
