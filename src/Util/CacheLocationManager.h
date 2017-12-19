@@ -1,7 +1,9 @@
 #ifndef ODICT_CACHELOCATIONMANAGER_H
 #define ODICT_CACHELOCATIONMANAGER_H
 
+#include <cstring>
 #include <iostream>
+#include <stdio.h>
 #include <string>
 #include <assert.h>
 

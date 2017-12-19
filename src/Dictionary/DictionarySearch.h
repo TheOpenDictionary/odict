@@ -1,8 +1,8 @@
 #ifndef ODICT_DICTIONARYSEARCH_H
 #define ODICT_DICTIONARYSEARCH_H
 
-#import <iostream>
-#import <string>
+#include <iostream>
+#include <string>
 
 #include "schema_generated.h"
 

@@ -20,7 +20,7 @@ function dependencies() {
 
     echo "4. 🚀  Downloading and building Boost (this may take awhile)..."
     curl -s -L https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/boost_${BOOST_VERSION//\./_}.tar.gz | tar -zx
-    cd ${BOOST_VERSION//\./_} && ./bootstrap.sh --prefix=./ && ./b2 install && cd ..
+    cd boost_${BOOST_VERSION//\./_} && ./bootstrap.sh --prefix=./ && ./b2 install link=static && cd ..
 
     echo "5. 👌  Downloading and building Snappy..."
     curl -s -L https://github.com/google/snappy/archive/${SNAPPY_VERSION}.tar.gz | tar -zx
