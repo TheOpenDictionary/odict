@@ -10,6 +10,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include "../schema_generated.h"
+#include "../Util/SearchResult.h"
 
 #include "IConverter.h"
 
@@ -27,7 +28,8 @@ private:
     void add_etymologies(pt::ptree *, const Vector<Offset<Etymology>> *etymologies);
 public:
     JSONConverter();
-    const char* convert(const Entry *entry);
+    const char* convert(odict::SearchResult *searchResult);
+    const char* convert(Entry *entry);
 };
 
 #endif //ODICT_JSONCONVERTER_H

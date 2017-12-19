@@ -11,6 +11,7 @@
 #include "ConverterResolver.h"
 #include "DictionaryReader.h"
 #include "CacheLocationManager.h"
+#include "SearchResult.h"
 
 using namespace std;
 using namespace schema;
@@ -21,6 +22,7 @@ class DictionarySearch {
 private:
     const Dictionary* dict;
     const char *format;
+    FlatBufferBuilder builder;
 
 public:
     DictionarySearch(const char *, const char *);

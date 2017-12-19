@@ -21,7 +21,7 @@ private:
 
 public:
     IndexBuilder(const char*);
-    IndexBuilder* addDocument(const char*, const char*, const uint8_t*);
+    IndexBuilder* addDocument(const char*, const char*);
     void build();
 };
 

@@ -131,7 +131,7 @@ const void DictionaryReader::generateIndex(const Dictionary* dict) {
             }
             ety++;
         }
-        builder->addDocument(entry->term()->c_str(), keyword_block.c_str(), new uint8_t[1024]);
+        builder->addDocument(entry->term()->c_str(), keyword_block.c_str());
         entry++;
     }
     builder->build();

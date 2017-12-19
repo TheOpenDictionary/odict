@@ -26,12 +26,6 @@ lucy_Schema *create_schema() {
         CFISH_DECREF(field_str);
     }
 
-    {
-        cfish_String *field_str = cfish_Str_newf("content");
-        LUCY_Schema_Spec_Field(schema, field_str, (lucy_FieldType *) lucy_BlobType_new(true));
-        CFISH_DECREF(field_str);
-    }
-
     CFISH_DECREF(type);
     CFISH_DECREF(analyzer);
     CFISH_DECREF(language);

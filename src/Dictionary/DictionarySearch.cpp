@@ -1,7 +1,7 @@
 #include "DictionarySearch.h"
 
-DictionarySearch::DictionarySearch(const uint8_t *buffer, const char *format2) : dict(GetDictionary(buffer)),
-                                                                                 format(format2) {
+DictionarySearch::DictionarySearch(const uint8_t *buffer, const char *format) : dict(GetDictionary(buffer)),
+                                                                                 format(format) {
     if (buffer == 0) {
         cout << "Data is corrupted. Cannot read dictionary.\n" << endl;
         exit(0);
@@ -17,16 +17,15 @@ DictionarySearch::DictionarySearch(const char *filename, const char *format) : D
         format
 ) {}
 
-
 const char *DictionarySearch::searchByEntry(const char *word) {
     auto entries = this->dict->entries();
     auto result = entries->LookupByKey(word);
     auto converter = ConverterResolver::resolve(this->format);
 
-    if (converter == nullptr) {
+    if (converter == NULL) {
         printf("\nError: could not find resolver for format '%s'\n", this->format);
         exit(0);
-    } else return converter->convert(result);
+    } else return converter->convert((Entry*)result);
 }
 
 const char *DictionarySearch::searchByContents(const char *str) {
@@ -42,9 +41,13 @@ const char *DictionarySearch::searchByContents(const char *str) {
 
     cfish_String *title_str = cfish_Str_newf("title");
     cfish_String *tokens_str = cfish_Str_newf("tokens");
-    cfish_String *content_str = cfish_Str_newf("content");
     lucy_HitDoc *hit;
     int i = 1;
+
+    vector<Offset<Entry>> results = vector<Offset<Entry>>();
+    odict::SearchResult *sr = new odict::SearchResult();
+
+    sr->setQuery(str);
 
     // Loop over search results.
     while (NULL != (hit = LUCY_Hits_Next(hits))) {
@@ -54,9 +57,9 @@ const char *DictionarySearch::searchByContents(const char *str) {
         cfish_String *tokens = (cfish_String *) LUCY_HitDoc_Extract(hit, tokens_str);
         char *tokens_c = CFISH_Str_To_Utf8(tokens);
 
-        cfish_Blob *content = (cfish_Blob *) LUCY_HitDoc_Extract(hit, content_str);
-        uint8_t *content_b = (uint8_t *) CFISH_Blob_Get_Buf(content);
-        printf("Result %d: %s %d (%s)\n", i, title_c, sizeof(content_b), tokens_c);
+        auto entry = this->dict->entries()->LookupByKey(title_c);
+
+        sr->addResult((Entry*)entry);
 
         free(tokens_c);
         free(title_c);
@@ -67,12 +70,11 @@ const char *DictionarySearch::searchByContents(const char *str) {
     }
 
     CFISH_DECREF(tokens_str);
-    CFISH_DECREF(content_str);
     CFISH_DECREF(title_str);
     CFISH_DECREF(hits);
     CFISH_DECREF(query_str);
     CFISH_DECREF(searcher);
     CFISH_DECREF(folder);
 
-    return "";
+    return ConverterResolver::resolve(this->format)->convert(sr);
 }
