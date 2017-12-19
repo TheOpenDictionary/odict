@@ -1,14 +1,20 @@
 remote_file(
-    name = 'fetch',
+    name = 'get',
     url = 'https://github.com/google/flatbuffers/archive/v1.8.0.zip',
     sha1 = 'ab03443a63bda19954dee6c72ac38d3af5b4579a',
     type = 'exploded_zip',
 )
 
-# Flatbuffers
+genrule(
+    name = 'get-headers',
+    srcs = [':get'],
+    cmd = 'cp -r $SRCS/flatbuffers-1.8.0/include/* $OUT',
+    out = '.'
+)
+
 prebuilt_cxx_library(
     name = 'flatbuffers',
     header_only = True,
-    header_dirs = ['$(location //:fetch)/fetch/flatbuffers-1.8.0'],
+    header_dirs = [':get-headers'],
     visibility = ['PUBLIC']
 )

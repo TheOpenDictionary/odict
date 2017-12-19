@@ -10,7 +10,11 @@ cxx_library(
   srcs = glob([
     'src/**/*.cpp',
   ]),
-  deps = ['//vendor/flatbuffers:flatbuffers'],
+  deps = [
+    '//vendor/flatbuffers:flatbuffers',
+    '//vendor/snappy:snappy',
+    '//vendor/rapidxml:rapidxml'
+  ],
   visibility = ['PUBLIC']
 )
 
