@@ -15,10 +15,9 @@
 #include "rapidxml.hpp"
 #include "rapidxml_utils.hpp"
 
-#include "schema_generated.h"
-
-#include "Util/Constants.h"
-#include "Util/Timer.h"
+#include "../schema_generated.h"
+#include "../Util/Constants.h"
+#include "../Util/Timer.h"
 
 using namespace std;
 using namespace rapidxml;

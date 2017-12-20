@@ -1,11 +1,10 @@
-SNAPPY_VERSION = '1.1.7'
-
 # The ODict Library
 cxx_library(
   name = 'libodict',
   header_namespace = 'odict',
-  headers = subdir_glob([
-    ('src', '**/*.h'),
+  headers = glob([
+    'src/*.h',
+    'src/**/*.h'
   ]),
   srcs = glob([
     'src/**/*.cpp',

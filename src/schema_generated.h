@@ -76,9 +76,13 @@ inline const char *EnumNamePOS(POS e) {
 
 struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
-    VT_DESCRIPTION = 4,
-    VT_USAGES = 6
+    VT_ID = 4,
+    VT_DESCRIPTION = 6,
+    VT_USAGES = 8
   };
+  const flatbuffers::String *id() const {
+    return GetPointer<const flatbuffers::String *>(VT_ID);
+  }
   const flatbuffers::String *description() const {
     return GetPointer<const flatbuffers::String *>(VT_DESCRIPTION);
   }
@@ -87,6 +91,8 @@ struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_ID) &&
+           verifier.Verify(id()) &&
            VerifyOffset(verifier, VT_DESCRIPTION) &&
            verifier.Verify(description()) &&
            VerifyOffset(verifier, VT_USAGES) &&
@@ -99,6 +105,9 @@ struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct EtymologyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
+    fbb_.AddOffset(Etymology::VT_ID, id);
+  }
   void add_description(flatbuffers::Offset<flatbuffers::String> description) {
     fbb_.AddOffset(Etymology::VT_DESCRIPTION, description);
   }
@@ -119,20 +128,24 @@ struct EtymologyBuilder {
 
 inline flatbuffers::Offset<Etymology> CreateEtymology(
     flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> id = 0,
     flatbuffers::Offset<flatbuffers::String> description = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Usage>>> usages = 0) {
   EtymologyBuilder builder_(_fbb);
   builder_.add_usages(usages);
   builder_.add_description(description);
+  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Etymology> CreateEtymologyDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
+    const char *id = nullptr,
     const char *description = nullptr,
     const std::vector<flatbuffers::Offset<Usage>> *usages = nullptr) {
   return schema::CreateEtymology(
       _fbb,
+      id ? _fbb.CreateString(id) : 0,
       description ? _fbb.CreateString(description) : 0,
       usages ? _fbb.CreateVector<flatbuffers::Offset<Usage>>(*usages) : 0);
 }
@@ -215,10 +228,14 @@ inline flatbuffers::Offset<Group> CreateGroupDirect(
 
 struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
-    VT_POS = 4,
-    VT_DEFINITIONS = 6,
-    VT_GROUPS = 8
+    VT_ID = 4,
+    VT_POS = 6,
+    VT_DEFINITIONS = 8,
+    VT_GROUPS = 10
   };
+  const flatbuffers::String *id() const {
+    return GetPointer<const flatbuffers::String *>(VT_ID);
+  }
   const flatbuffers::String *pos() const {
     return GetPointer<const flatbuffers::String *>(VT_POS);
   }
@@ -230,6 +247,8 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_ID) &&
+           verifier.Verify(id()) &&
            VerifyOffset(verifier, VT_POS) &&
            verifier.Verify(pos()) &&
            VerifyOffset(verifier, VT_DEFINITIONS) &&
@@ -245,6 +264,9 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct UsageBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
+    fbb_.AddOffset(Usage::VT_ID, id);
+  }
   void add_pos(flatbuffers::Offset<flatbuffers::String> pos) {
     fbb_.AddOffset(Usage::VT_POS, pos);
   }
@@ -268,6 +290,7 @@ struct UsageBuilder {
 
 inline flatbuffers::Offset<Usage> CreateUsage(
     flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> id = 0,
     flatbuffers::Offset<flatbuffers::String> pos = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Group>>> groups = 0) {
@@ -275,16 +298,19 @@ inline flatbuffers::Offset<Usage> CreateUsage(
   builder_.add_groups(groups);
   builder_.add_definitions(definitions);
   builder_.add_pos(pos);
+  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Usage> CreateUsageDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
+    const char *id = nullptr,
     const char *pos = nullptr,
     const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr,
     const std::vector<flatbuffers::Offset<Group>> *groups = nullptr) {
   return schema::CreateUsage(
       _fbb,
+      id ? _fbb.CreateString(id) : 0,
       pos ? _fbb.CreateString(pos) : 0,
       definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0,
       groups ? _fbb.CreateVector<flatbuffers::Offset<Group>>(*groups) : 0);
@@ -292,9 +318,13 @@ inline flatbuffers::Offset<Usage> CreateUsageDirect(
 
 struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
-    VT_TERM = 4,
-    VT_ETYMOLOGIES = 6
+    VT_ID = 4,
+    VT_TERM = 6,
+    VT_ETYMOLOGIES = 8
   };
+  const flatbuffers::String *id() const {
+    return GetPointer<const flatbuffers::String *>(VT_ID);
+  }
   const flatbuffers::String *term() const {
     return GetPointer<const flatbuffers::String *>(VT_TERM);
   }
@@ -309,6 +339,8 @@ struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_ID) &&
+           verifier.Verify(id()) &&
            VerifyOffsetRequired(verifier, VT_TERM) &&
            verifier.Verify(term()) &&
            VerifyOffset(verifier, VT_ETYMOLOGIES) &&
@@ -321,6 +353,9 @@ struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct EntryBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
+    fbb_.AddOffset(Entry::VT_ID, id);
+  }
   void add_term(flatbuffers::Offset<flatbuffers::String> term) {
     fbb_.AddOffset(Entry::VT_TERM, term);
   }
@@ -342,33 +377,43 @@ struct EntryBuilder {
 
 inline flatbuffers::Offset<Entry> CreateEntry(
     flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> id = 0,
     flatbuffers::Offset<flatbuffers::String> term = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Etymology>>> etymologies = 0) {
   EntryBuilder builder_(_fbb);
   builder_.add_etymologies(etymologies);
   builder_.add_term(term);
+  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Entry> CreateEntryDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
+    const char *id = nullptr,
     const char *term = nullptr,
     const std::vector<flatbuffers::Offset<Etymology>> *etymologies = nullptr) {
   return schema::CreateEntry(
       _fbb,
+      id ? _fbb.CreateString(id) : 0,
       term ? _fbb.CreateString(term) : 0,
       etymologies ? _fbb.CreateVector<flatbuffers::Offset<Etymology>>(*etymologies) : 0);
 }
 
 struct Dictionary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
-    VT_ENTRIES = 4
+    VT_NAME = 4,
+    VT_ENTRIES = 6
   };
+  const flatbuffers::String *name() const {
+    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  }
   const flatbuffers::Vector<flatbuffers::Offset<Entry>> *entries() const {
     return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<Entry>> *>(VT_ENTRIES);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.Verify(name()) &&
            VerifyOffset(verifier, VT_ENTRIES) &&
            verifier.Verify(entries()) &&
            verifier.VerifyVectorOfTables(entries()) &&
@@ -379,6 +424,9 @@ struct Dictionary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct DictionaryBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Dictionary::VT_NAME, name);
+  }
   void add_entries(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Entry>>> entries) {
     fbb_.AddOffset(Dictionary::VT_ENTRIES, entries);
   }
@@ -396,17 +444,21 @@ struct DictionaryBuilder {
 
 inline flatbuffers::Offset<Dictionary> CreateDictionary(
     flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Entry>>> entries = 0) {
   DictionaryBuilder builder_(_fbb);
   builder_.add_entries(entries);
+  builder_.add_name(name);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Dictionary> CreateDictionaryDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
+    const char *name = nullptr,
     const std::vector<flatbuffers::Offset<Entry>> *entries = nullptr) {
   return schema::CreateDictionary(
       _fbb,
+      name ? _fbb.CreateString(name) : 0,
       entries ? _fbb.CreateVector<flatbuffers::Offset<Entry>>(*entries) : 0);
 }
 
