@@ -9,7 +9,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-#include "schema_generated.h"
+#include "../schema_generated.h"
+
 #include "IConverter.h"
 
 using namespace std;

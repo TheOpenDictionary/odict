@@ -1,9 +1,10 @@
 #include <iostream>
 #include <sys/stat.h>
 
+#include "../Converters/JSONConverter.h"
+#include "../Util/EndianTypes.h"
+
 #include "DictionaryReader.h"
-#include "Converters/JSONConverter.h"
-#include "Util/EndianTypes.h"
 
 bool file_exists(const char *path) {
     struct stat buffer;

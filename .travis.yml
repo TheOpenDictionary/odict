@@ -1,36 +1,20 @@
 sudo: required
-
-# Enable C++ support
-language: cpp
-
-# Compiler selection
-compiler:
-  - g++
-
-install:
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
-
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="https://cmake.org/files/v3.9/cmake-3.9.0-Linux-x86_64.tar.gz"
-      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    fi
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      git clone https://github.com/google/flatbuffers.git
-      cd flatbuffers
-      cmake -G "Unix Makefiles"
-      make
-      ./flattests
-      export PATH=${DEPS_DIR}/flatbuffers:${PATH}
-      cd ..
-    fi
-
-  # Go to the Root directory
-  - cd ..
-
-# Build steps
+dist: trusty
+language: generic
+before_install:
+  # Install Linuxbrew
+  - test -d $HOME/.linuxbrew/bin || git clone https://github.com/Linuxbrew/brew.git $HOME/.linuxbrew
+  - PATH="$HOME/.linuxbrew/bin:$PATH"
+  - echo 'export PATH="$HOME/.linuxbrew/bin:$PATH"' >>~/.bash_profile
+  - export MANPATH="$(brew --prefix)/share/man:$MANPATH"
+  - export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
+  - brew --version
+  # Install Buck
+  - brew tap facebook/fb
+  - travis_wait brew install buck
+  - buck --version
 script:
-  - ./init
+  - travis_wait buck build :odict
+cache:
+  directories:
+    - $HOME/.linuxbrew/

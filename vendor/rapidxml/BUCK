@@ -1,0 +1,15 @@
+remote_file(
+    name = 'get',
+    url = 'https://github.com/odict/rapidxml/archive/v1.13.zip',
+    sha1 = '963d7782580d081d9fa5966cdca4a6d89ae0285a',
+    type = 'exploded_zip',
+    visibility = ['//vendor:rapidxml']
+)
+
+genrule(
+    name = 'get-headers',
+    srcs = [':get'],
+    cmd = 'cp -r $SRCS/rapidxml-1.13/* $OUT',
+    out = '.',
+    visibility = ['//vendor:rapidxml']
+)

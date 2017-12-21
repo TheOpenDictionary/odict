@@ -1,0 +1,6 @@
+[cxx]
+    cxxflags = -std=c++14
+    enable_deprecated_prebuilt_cxx_library_api = true
+
+[download]
+    in_build = true

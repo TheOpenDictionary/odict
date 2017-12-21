@@ -1,0 +1,31 @@
+remote_file(
+    name = 'get',
+    url = 'https://github.com/google/snappy/archive/1.1.7.zip',
+    sha1 = '43d6626c62c961171b301eb934fd05fc26ae28a8',
+    type = 'exploded_zip',
+    visibility = ['//vendor:snappy']
+)
+
+genrule(
+    name = 'build',
+    srcs = [':get'],
+    cmd = 'cd $SRCS/snappy-1.1.7 && mkdir -p build && cd build && cmake ../ && make && cd .. && cp -r ./build/* $OUT',
+    out = '.',
+    visibility = ['//vendor:snappy']
+)
+
+genrule(
+    name = 'get-headers',
+    srcs = [':build', ':get'],
+    cmd = 'find $SRCS -name *.h | xargs -I FILE cp FILE $OUT',
+    out = '.',
+    visibility = ['//vendor:snappy']
+)
+
+genrule(
+    name = 'get-lib',
+    srcs = [':build'],
+    cmd = 'cp $SRCS/libsnappy.a $OUT',
+    out = 'libsnappy.a',
+    visibility = ['//vendor:snappy']
+)
