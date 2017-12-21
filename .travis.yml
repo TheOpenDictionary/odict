@@ -1,21 +1,9 @@
 sudo: required
 dist: trusty
-language: cpp
-compiler: g++
-install: export CXX="g++-5"
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-5
+language: generic
 before_install:
-    # C++14
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
-  - travis_wait sudo apt-get update -qq
   # Install Linuxbrew
-  - git clone https://github.com/Linuxbrew/brew.git $HOME/.linuxbrew
+  - test -d $HOME/.linuxbrew/bin || git clone https://github.com/Linuxbrew/brew.git $HOME/.linuxbrew
   - PATH="$HOME/.linuxbrew/bin:$PATH"
   - echo 'export PATH="$HOME/.linuxbrew/bin:$PATH"' >>~/.bash_profile
   - export MANPATH="$(brew --prefix)/share/man:$MANPATH"
@@ -25,9 +13,8 @@ before_install:
   - brew tap facebook/fb
   - travis_wait brew install buck
   - buck --version
-install:
-  # C++14
-  - sudo apt-get install -qq g++-6
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90
 script:
   - travis_wait buck build :odict
+cache:
+  directories:
+    - $HOME/.linuxbrew/
