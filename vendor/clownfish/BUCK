@@ -1,0 +1,27 @@
+remote_file(
+    name = 'get',
+    url = 'https://github.com/odict/lucy-clownfish/archive/rel/v0.6.2.zip',
+    sha1 = 'c71da58ec77705a465202621f6686bf829ebfde5',
+    type = 'exploded_zip',
+    visibility = ['//vendor:clownfish']
+)
+
+genrule(
+    name = 'build',
+    srcs = [':get'],
+    cmd = 'cp -r $SRCS/* $OUT && ' \
+            'cd $OUT/lucy-clownfish-rel-v0.6.2/compiler/c && ' \
+            './configure && make && make test && '
+            'cd ../../runtime/c && ' \
+            './configure && make && make test',
+    out = '.',
+    visibility = ['//vendor:clownfish', '//vendor/lucy:build']
+)
+
+genrule(
+    name = 'get-lib',
+    srcs = [':build'],
+    cmd = 'cp $SRCS/lucy-clownfish-rel-v0.6.2/runtime/c/libclownfish.0.6.2.dylib $OUT',
+    out = 'libclownfish.dylib',
+    visibility = ['//vendor:clownfish']
+)

@@ -10,9 +10,12 @@ cxx_library(
     'src/**/*.cpp',
   ]),
   deps = [
-    '//vendor/flatbuffers:flatbuffers',
-    '//vendor/snappy:snappy',
-    '//vendor/rapidxml:rapidxml'
+    '//vendor:flatbuffers',
+    '//vendor:snappy',
+    '//vendor:rapidxml',
+    '//vendor:boost',
+    '//vendor:clownfish',
+    '//vendor:lucy'
   ],
   visibility = ['PUBLIC']
 )

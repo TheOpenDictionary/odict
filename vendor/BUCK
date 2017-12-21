@@ -1,0 +1,39 @@
+prebuilt_cxx_library_group(
+    name = 'boost',
+    static_libs = ['//vendor/boost:get-lib'],
+    exported_deps = ['//vendor/boost:boost-headers'],
+    visibility = ['PUBLIC']
+)
+
+prebuilt_cxx_library(
+    name = 'flatbuffers',
+    header_only = True,
+    header_dirs = ['//vendor/flatbuffers:get-headers'],
+    visibility = ['PUBLIC']
+)
+
+prebuilt_cxx_library(
+    name = 'snappy',
+    header_dirs = ['//vendor/snappy:get-headers'],
+    static_lib = '//vendor/snappy:get-lib',
+    visibility = ['PUBLIC']
+)
+
+prebuilt_cxx_library(
+    name = 'rapidxml',
+    header_only = True,
+    header_dirs = ['//vendor/rapidxml:get-headers'],
+    visibility = ['PUBLIC']
+)
+
+prebuilt_cxx_library(
+    name = 'clownfish',
+    static_lib = '//vendor/clownfish:get-lib',
+    visibility = ['PUBLIC']
+)
+
+prebuilt_cxx_library(
+    name = 'lucy',
+    static_lib = '//vendor/lucy:get-lib',
+    visibility = ['PUBLIC']
+)
