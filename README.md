@@ -16,48 +16,9 @@ The Open Dictionary Project (ODict for short), is an open-source alternative to 
   (fastest serialization). Entries are searched in log(*n*) time, [un-coincidentally the time complexity of an ordered map 
    lookup](https://google.github.io/flatbuffers/flatbuffers_guide_use_cpp.html).
    
-## Schema / Specification
-For detailed information on the raw XML schema ODict uses, or the specification of its compiled file
-format, see [here](spec/SCHEMA.md) and [here](spec/SPEC.md).
+### Documentation
 
-## Building
-*Please note that you must have CMake and `flatc` installed and should preferably be using a UNIX system*
-
-Building is super simple due to a handy little build script. Just run:
-  
-```bash
-$ ./init
-```
-
-This will automatically download all required dependencies and start the build.
-To just rebuild the project, run:
-
-```bash
-$ ./init build
-```
-
-The output library and executable should be found in `build/bin`.
-
-## CLI Usage
-The CLI offers two commands: `generate` and `lookup`. `generate` takes an XML file and outputs an ODict dictionary.
-  `lookup` takes a term and a dictionary file and looks up the entry for the word, printing the result in JSON. Examples
-  of these functions are as follows: 
-  
-```bash
-$ ./odict generate ./mydict.xml                                                                                                                                             [00:35:40]
-Wrote 739 bytes (compressed from 880) to ./mydict.odict
-Completed in 0.000522 seconds
-
-$ ./odict lookup "elephant" mydict.odict                                                                                                                                       [00:35:57]
-Decompressed dictionary from 731 bytes to 880
-Completed in 0.000195 seconds
-
-{"usages":[{"pos":"noun","definitions":["an elp...
-```
-
-## API Usage
-This is still being worked out. Check back soon!
-
-## Known Issues / Roadmap
-Currently, ODict does little to validate the input it's given, so it might throw some weird error if you give 
-it weird input. Just play by the rules for now and you should be good :)
+1. [The ODXML Markup](docs/Schema.md)
+2. [File Format Specification](docs/Specification.md)
+3. [Using the CLI](docs/CLI.md)
+4. [Building ODict](docs/Building.md)

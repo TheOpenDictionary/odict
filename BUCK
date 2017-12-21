@@ -1,6 +1,7 @@
 # The ODict Library
 cxx_library(
   name = 'libodict',
+  soname = 'odict',
   header_namespace = 'odict',
   headers = glob([
     'src/*.h',
