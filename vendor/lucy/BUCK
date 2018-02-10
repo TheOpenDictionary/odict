@@ -18,6 +18,14 @@ genrule(
 )
 
 genrule(
+    name = 'get-headers',
+    srcs = [':build'],
+    cmd = 'cp -r $SRCS/get/lucy-rel-v0.6.1/c/autogen/include/* $OUT',
+    out = '.',
+    visibility = ['//vendor:lucy']
+)
+
+genrule(
     name = 'get-lib',
     srcs = [':build'],
     cmd = 'cp $SRCS/get/lucy-rel-v0.6.1/c/liblucy.0.6.1.dylib $OUT',

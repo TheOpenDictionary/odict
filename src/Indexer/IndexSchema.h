@@ -1,7 +1,7 @@
 #ifndef ODICT_INDEXSCHEMA_H
 #define ODICT_INDEXSCHEMA_H
 
-#include "lucy.h"
+#include "../lucy.h"
 
 class IndexSchema {
 private:

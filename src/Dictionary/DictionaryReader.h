@@ -12,7 +12,6 @@
 #include "../Util/Timer.h"
 #include "../Util/Constants.h"
 #include "../Indexer/IndexBuilder.h"
->>>>>>> Began implementation of Apache Lucy
 
 using namespace std;
 using namespace schema;

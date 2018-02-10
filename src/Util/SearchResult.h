@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "schema_generated.h"
+#include "../schema_generated.h"
 
 using namespace std;
 using namespace flatbuffers;

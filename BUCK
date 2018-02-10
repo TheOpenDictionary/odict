@@ -11,10 +11,10 @@ cxx_library(
     'src/**/*.cpp',
   ]),
   deps = [
+    '//vendor:boost',
     '//vendor:flatbuffers',
     '//vendor:snappy',
     '//vendor:rapidxml',
-    '//vendor:boost',
     '//vendor:clownfish',
     '//vendor:lucy'
   ],

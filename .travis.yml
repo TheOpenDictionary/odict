@@ -1,5 +1,4 @@
 sudo: required
-<<<<<<< HEAD
 dist: trusty
 language: generic
 before_install:

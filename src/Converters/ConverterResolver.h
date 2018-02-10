@@ -1,8 +1,9 @@
 #ifndef ODICT_CONVERTERRESOLVER_H
 #define ODICT_CONVERTERRESOLVER_H
 
+#include "../Util/Constants.h"
+
 #include "IConverter.h"
-#include "Constants.h"
 #include "JSONConverter.h"
 
 using namespace odc;

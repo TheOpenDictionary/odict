@@ -7,9 +7,10 @@
 
 #include <boost/filesystem.hpp>
 
-#include "lucy.h"
+#include "../lucy.h"
+#include "../Util/CacheLocationManager.h"
+
 #include "IndexSchema.h"
-#include "CacheLocationManager.h"
 
 using namespace std;
 

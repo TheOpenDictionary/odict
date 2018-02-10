@@ -5,7 +5,7 @@
 
 #include "../schema_generated.h"
 
-#include "SearchResult.h"
+#include "../Util/SearchResult.h"
 
 using namespace schema;
 using namespace std;

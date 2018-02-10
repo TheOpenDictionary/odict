@@ -4,14 +4,15 @@
 #include <iostream>
 #include <string>
 
-#include "schema_generated.h"
+#include "../schema_generated.h"
 
-#include "JSONConverter.h"
-#include "Constants.h"
-#include "ConverterResolver.h"
+#include "../Converters/JSONConverter.h"
+#include "../Converters/ConverterResolver.h"
+#include "../Util/Constants.h"
+#include "../Util/CacheLocationManager.h"
+#include "../Util/SearchResult.h"
+
 #include "DictionaryReader.h"
-#include "CacheLocationManager.h"
-#include "SearchResult.h"
 
 using namespace std;
 using namespace schema;
