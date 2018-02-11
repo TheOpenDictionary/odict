@@ -3,5 +3,5 @@ genrule(
     srcs = ['//vendor/boost/common:build'],
     cmd = 'cp $SRCS/boost_1_66_0/lib/libboost_system.a $OUT',
     out = 'libboost_system.a',
-    visibility = ['//vendor:boost']
+    visibility = ['PUBLIC']
 )

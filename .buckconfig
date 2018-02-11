@@ -2,5 +2,8 @@
     cxxflags = -std=c++14
     enable_deprecated_prebuilt_cxx_library_api = true
 
+[httpserver]
+    port = 0
+
 [download]
     in_build = true

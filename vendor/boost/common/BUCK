@@ -26,14 +26,6 @@ genrule(
     visibility = ['//vendor:boost']
 )
 
-genrule(
-    name = 'get-lib',
-    srcs = [':build'],
-    cmd = 'cp $SRCS/boost_1_66_0/lib/libboost_filesystem.a $OUT',
-    out = 'libboost_filesystem.a',
-    visibility = ['//vendor:boost']
-)
-
 prebuilt_cxx_library(
     name = 'boost-headers',
     header_only = True,

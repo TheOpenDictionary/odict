@@ -1,14 +1,33 @@
-prebuilt_cxx_library_group(
-    name = 'boost',
-    static_libs = [
-        '//vendor/boost/filesystem:get-lib',
-        '//vendor/boost/system:get-lib'
-    ],
-#     exported_deps = [
-#         '//vendor/boost:boost-headers'
+# prebuilt_cxx_library_group(
+#     name = 'boost',
+#     static_libs = [
+#         '//vendor/boost/filesystem:get-lib',
+#         '//vendor/boost/system:get-lib'
 #     ],
+#     exported_deps = [
+#         '//vendor/boost/common:boost-headers'
+#     ],
+#     visibility = ['PUBLIC']
+# )
+
+prebuilt_cxx_library(
+    name = 'boost-filesystem',
+    static_lib = '//vendor/boost/filesystem:get-lib',
     visibility = ['PUBLIC']
 )
+
+prebuilt_cxx_library(
+    name = 'boost-system',
+    static_lib = '//vendor/boost/system:get-lib',
+    visibility = ['PUBLIC']
+)
+
+# prebuilt_cxx_library(
+#     name = 'flatbuffers',
+#     header_only = True,
+#     header_dirs = ['//vendor/flatbuffers:get-headers'],
+#     visibility = ['PUBLIC']
+# )
 
 prebuilt_cxx_library(
     name = 'flatbuffers',
