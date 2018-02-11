@@ -15,7 +15,7 @@ DictionaryWriter::DictionaryWriter() {}
 /**
  * Returns a builder UUID string
  * @return
- */#include <boost/lexical_cast.hpp>
+ */
 Offset<String> DictionaryWriter::get_uuid_string() {
     boost::uuids::random_generator gen;
     boost::uuids::uuid id = gen();
@@ -145,6 +145,7 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
  */
 bool DictionaryWriter::output_compressed_buffer(uint8_t *buf, int size, const char *output_file) {
     Verifier verifier = Verifier(buf, size);
+
     if (VerifyDictionaryBuffer(verifier)) {
         string compressed_str;
 
@@ -196,7 +197,12 @@ void DictionaryWriter::generate(const char *input_file, const char *output_file)
     if (dictionary_node != 0) {
         // 4) Get all of the entries (and children) from the dictionary root
         auto entries = this->get_entries(dictionary_node);
-        auto dictionary = CreateDictionary(builder, this->get_uuid_string(), entries);
+        auto dictionary = CreateDictionary(
+                builder,
+                this->get_uuid_string(),
+                builder.CreateString(getAttributeIfExists(dictionary_node, "name")),
+                entries
+        );
 
         // 5) Make the dictionary and store it in a buffer
         FinishDictionaryBuffer(builder, dictionary);

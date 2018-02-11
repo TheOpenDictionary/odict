@@ -98,7 +98,44 @@ void JSONConverter::add_etymologies(pt::ptree *root, const Vector<Offset<Etymolo
     root->add_child("etymologies", list);
 }
 
-string JSONConverter::convert(const Entry *entry) {
+const char* JSONConverter::convert(odict::SearchResult *searchResult) {
+    pt::ptree root;
+    stringstream ss;
+
+    root.put("query", searchResult->getQuery());
+
+    auto results = searchResult->getResults();
+    auto result = results.begin();
+
+    pt::ptree list;
+
+    while (result != results.end()) {
+        pt::ptree entry_node;
+
+        entry_node.put("id", (*result)->id()->str());
+        entry_node.put("term", (*result)->term()->str());
+
+        this->add_etymologies(&entry_node, (*result)->etymologies());
+
+        list.push_back(std::make_pair("", entry_node));
+
+        result++;
+    }
+
+    root.add_child("results", list);
+
+    pt::write_json(ss, root);
+
+    // We have to copy the string out of local memory so we don't lose it
+    string output = ss.str();
+    char * str = new char[output.length() + 1];
+    strcpy(str, output.c_str());
+
+    return str;
+}
+
+
+const char* JSONConverter::convert(Entry *entry) {
     pt::ptree root;
     stringstream ss;
 
@@ -106,5 +143,10 @@ string JSONConverter::convert(const Entry *entry) {
 
     pt::write_json(ss, root);
 
-    return ss.str();
+    // We have to copy the string out of local memory so we don't lose it
+    string output = ss.str();
+    char * str = new char[output.length() + 1];
+    strcpy(str, output.c_str());
+
+    return str;
 }

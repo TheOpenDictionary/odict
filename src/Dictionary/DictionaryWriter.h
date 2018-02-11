@@ -24,6 +24,7 @@ using namespace rapidxml;
 using namespace flatbuffers;
 using namespace schema;
 using namespace snappy;
+using namespace odc;
 
 class DictionaryWriter {
 public:

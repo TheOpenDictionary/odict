@@ -11,7 +11,11 @@ genrule(
     srcs = [':get'],
     cmd = 'cp -r $SRCS/* $OUT && cd $OUT/boost_1_66_0 && ./bootstrap.sh --prefix=./ && ./b2 install link=static',
     out = '.',
-    visibility = ['//vendor:boost']
+    visibility = [
+        '//vendor:boost',
+        '//vendor/boost/filesystem:get-lib',
+        '//vendor/boost/system:get-lib'
+    ]
 )
 
 genrule(
@@ -22,18 +26,9 @@ genrule(
     visibility = ['//vendor:boost']
 )
 
-genrule(
-    name = 'get-lib',
-    srcs = [':build'],
-    cmd = 'find $SRCS/boost_1_66_0/include -name *.a | xargs -I FILE cp FILE $OUT',
-    out = '.',
-    visibility = ['//vendor:boost']
-)
-
 prebuilt_cxx_library(
     name = 'boost-headers',
     header_only = True,
     header_dirs = [':get-headers'],
     visibility = ['//vendor:boost']
 )
-

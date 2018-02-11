@@ -19,6 +19,14 @@ genrule(
 )
 
 genrule(
+    name = 'get-headers',
+    srcs = [':build'],
+    cmd = 'cp -r $SRCS/lucy-clownfish-rel-v0.6.2/runtime/c/autogen/include/* $OUT',
+    out = '.',
+    visibility = ['//vendor:clownfish']
+)
+
+genrule(
     name = 'get-lib',
     srcs = [':build'],
     cmd = 'cp $SRCS/lucy-clownfish-rel-v0.6.2/runtime/c/libclownfish.0.6.2.dylib $OUT',

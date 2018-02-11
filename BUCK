@@ -14,7 +14,8 @@ cxx_library(
     '//vendor:flatbuffers',
     '//vendor:snappy',
     '//vendor:rapidxml',
-    '//vendor:boost',
+    '//vendor:boost-filesystem',
+    '//vendor:boost-system',
     '//vendor:clownfish',
     '//vendor:lucy'
   ],

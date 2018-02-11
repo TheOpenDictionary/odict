@@ -5,11 +5,15 @@
 
 #include "../schema_generated.h"
 
+#include "../Util/SearchResult.h"
+
 using namespace schema;
 using namespace std;
 
 class IConverter {
-    virtual string convert(const Entry *entry) = 0;
+public:
+    virtual const char *convert(Entry *entry) = 0;
+    virtual const char *convert(odict::SearchResult *searchResult) = 0;
 };
 
 #endif //ODICT_ICONVERTER_H

@@ -1,9 +1,10 @@
 #include "Dictionary/DictionaryWriter.h"
-#include "Dictionary/DictionaryReader.h"
-#include "Util/EndianTypes.h"
+#include "Dictionary/DictionarySearch.h"
 
 static const char *CMD_GENERATE = "generate";
-static const char *CMD_READ = "lookup";
+static const char *CMD_LOOKUP = "lookup";
+static const char *CMD_SEARCH = "search";
+
 static const string OUTPUT_EXT = "odict";
 
 /**
@@ -34,10 +35,13 @@ string get_filename_from_path(string path) {
     return "./" + filename + "." + OUTPUT_EXT;
 }
 
+// TODO: namespace everything
+// TODO: enforce naming conventions
+// TODO: replace all const char* with strings
+
 int main(int argv, char *args[]) {
     auto ed = new EndianTypes();
     ed->init();
-//    cout << little_short(1) << endl;
     if (argv < 3) show_usage();
     else {
         string input_file(args[2]);
@@ -49,12 +53,21 @@ int main(int argv, char *args[]) {
                 DictionaryWriter *generator = new DictionaryWriter();
                 generator->generate(input_file.c_str(), output_full_path.c_str());
             }
-        } else if (strcmp(args[1], CMD_READ) == 0) {
-            if (argv < 4) cout << "Usage: odict lookup [word] [odict file]" << endl;
+        } else if (strcmp(args[1], CMD_LOOKUP) == 0) {
+            if (argv < 4) cout << "Usage: odict lookup [odict file] [word]" << endl;
             else {
-                DictionaryReader *reader = new DictionaryReader();
-                string output = reader->lookup(args[2], args[3]);
+                DictionarySearch *search = new DictionarySearch(args[2]);
+                const char* output = search->searchByEntry(args[3]);
                 cout << endl << output << endl;
+                delete search;
+            }
+        } else if (strcmp(args[1], CMD_SEARCH) == 0) {
+            if (argv < 4) cout << "Usage: odict search [odict file] [word]" << endl;
+            else {
+                DictionarySearch *search = new DictionarySearch(args[2]);
+                const char* output = search->searchByContents(args[3]);
+                cout << endl << output << endl;
+                delete search;
             }
         } else {
             show_usage();
