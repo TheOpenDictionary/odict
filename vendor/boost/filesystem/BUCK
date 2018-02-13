@@ -1,7 +1,0 @@
-genrule(
-    name = 'get-lib',
-    srcs = ['//vendor/boost/common:build'],
-    cmd = 'cp $SRCS/boost_1_66_0/lib/libboost_filesystem.a $OUT',
-    out = 'libboost_filesystem.a',
-    visibility = ['PUBLIC']
-)

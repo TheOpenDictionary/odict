@@ -1,3 +1,5 @@
+include_defs('//DEFS')
+
 # The ODict Library
 cxx_library(
   name = 'libodict',
@@ -10,15 +12,7 @@ cxx_library(
   srcs = glob([
     'src/**/*.cpp',
   ]),
-  deps = [
-    '//vendor:flatbuffers',
-    '//vendor:snappy',
-    '//vendor:rapidxml',
-    '//vendor:boost-filesystem',
-    '//vendor:boost-system',
-    '//vendor:clownfish',
-    '//vendor:lucy'
-  ],
+  deps = generate_deps(),
   visibility = ['PUBLIC']
 )
 
