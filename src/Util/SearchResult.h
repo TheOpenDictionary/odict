@@ -16,10 +16,10 @@ namespace odict {
         vector<Entry*> results;
     public:
         SearchResult();
-        void addResult(Entry*);
-        vector<Entry*> getResults();
-        string getQuery();
-        void setQuery(string query);
+        void add_result(Entry*);
+        vector<Entry*> get_results();
+        string get_query();
+        void set_query(string query);
     };
 
 }

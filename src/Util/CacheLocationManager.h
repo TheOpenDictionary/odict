@@ -15,9 +15,9 @@ private:
     const char* location;
     CacheLocationManager();
 public:
-    static CacheLocationManager* getInstance();
-    void setLocation(const char*);
-    const char* getLocation();
+    static CacheLocationManager* get_instance();
+    void set_location(const char*);
+    const char* get_location();
 };
 
 

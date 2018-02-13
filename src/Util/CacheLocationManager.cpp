@@ -34,7 +34,7 @@ CacheLocationManager::CacheLocationManager() : location(expand_user("~/.odict"))
  * Returns the singleton instance
  * @return
  */
-CacheLocationManager *CacheLocationManager::getInstance() {
+CacheLocationManager *CacheLocationManager::get_instance() {
     if (instance == 0)
         instance = new CacheLocationManager();
     return instance;
@@ -44,7 +44,7 @@ CacheLocationManager *CacheLocationManager::getInstance() {
  * Sets the cache location path
  * @param location
  */
-void CacheLocationManager::setLocation(const char* path) {
+void CacheLocationManager::set_location(const char* path) {
     this->location = expand_user(string(path) + "/.odict");
 }
 
@@ -52,6 +52,6 @@ void CacheLocationManager::setLocation(const char* path) {
  * Gets the cache location path
  * @return
  */
-const char* CacheLocationManager::getLocation() {
+const char* CacheLocationManager::get_location() {
     return this->location;
 }

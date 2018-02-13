@@ -22,13 +22,13 @@ using namespace odc;
 class DictionaryReader {
 private:
     FlatBufferBuilder builder;
-    const uint8_t *GetBuffer(const char*);
-    const void generateIndex(const Dictionary*);
-    const void generateIndex(const uint8_t*);
+    const uint8_t *get_buffer(const char*);
+    const void generate_index(const Dictionary*);
+    const void generate_index(const uint8_t*);
 public:
-    const uint8_t *ReadAsBuffer(const char*);
-    const uint8_t *ReadAsBuffer(const char*, bool);
-    const Dictionary *ReadAsDictionary(const char*);
+    const uint8_t *read_as_buffer(const char*);
+    const uint8_t *read_as_buffer(const char*, bool);
+    const Dictionary *read_as_dictionary(const char*);
 };
 
 

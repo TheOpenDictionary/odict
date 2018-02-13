@@ -102,9 +102,9 @@ const char* JSONConverter::convert(odict::SearchResult *searchResult) {
     pt::ptree root;
     stringstream ss;
 
-    root.put("query", searchResult->getQuery());
+    root.put("query", searchResult->get_query());
 
-    auto results = searchResult->getResults();
+    auto results = searchResult->get_results();
     auto result = results.begin();
 
     pt::ptree list;

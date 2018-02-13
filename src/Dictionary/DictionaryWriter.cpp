@@ -1,6 +1,6 @@
 #include "DictionaryWriter.h"
 
-string getAttributeIfExists(xml_node<> *node, const char *attribute) {
+string get_attribute_if_exists(xml_node<> *node, const char *attribute) {
     auto first_attr = node->first_attribute(attribute);
 
     if (first_attr == 0) return "";
@@ -52,7 +52,7 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
     vector<Offset<Group>> groups = vector<Offset<Group>>();
 
     while (current_group != 0) {
-        string description = getAttributeIfExists(current_group, ATTR_DESCRIPTION);
+        string description = get_attribute_if_exists(current_group, ATTR_DESCRIPTION);
 
         groups.push_back(CreateGroup(
                 builder,
@@ -72,7 +72,7 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *
     vector<Offset<Etymology>> etymologies = vector<Offset<Etymology>>();
 
     while (current_ety != 0) {
-        string description = getAttributeIfExists(current_ety, ATTR_DESCRIPTION);
+        string description = get_attribute_if_exists(current_ety, ATTR_DESCRIPTION);
         auto usages = this->get_usages(current_ety);
 
         etymologies.push_back(CreateEtymology(
@@ -98,7 +98,7 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node)
     vector<Offset<Usage>> usages = vector<Offset<Usage>>();
 
     while (current_usage != 0) {
-        string part_of_speech = getAttributeIfExists(current_usage, ATTR_PART_OF_SPEECH);
+        string part_of_speech = get_attribute_if_exists(current_usage, ATTR_PART_OF_SPEECH);
         auto definitions = this->get_definitions(current_usage);
         auto groups = this->get_groups(current_usage);
 
@@ -126,7 +126,7 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
     vector<Offset<Entry>> entries = vector<Offset<Entry>>();
 
     while (current_entry != 0) {
-        string term = getAttributeIfExists(current_entry, ATTR_TERM);
+        string term = get_attribute_if_exists(current_entry, ATTR_TERM);
         auto etymologies = this->get_etymologies(current_entry);
 
         entries.push_back(CreateEntry(builder, this->get_uuid_string(), builder.CreateString(term), etymologies));
@@ -200,7 +200,7 @@ void DictionaryWriter::generate(const char *input_file, const char *output_file)
         auto dictionary = CreateDictionary(
                 builder,
                 this->get_uuid_string(),
-                builder.CreateString(getAttributeIfExists(dictionary_node, "name")),
+                builder.CreateString(get_attribute_if_exists(dictionary_node, "name")),
                 entries
         );
 

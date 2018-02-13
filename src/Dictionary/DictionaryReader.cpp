@@ -21,7 +21,7 @@ bool file_exists(const char *path) {
  * @param path
  * @return
  */
-const uint8_t *DictionaryReader::GetBuffer(const char *path) {
+const uint8_t *DictionaryReader::get_buffer(const char *path) {
     ifstream input(path, ios::in | ios::binary | ios::ate);
 
     if (!file_exists(path)) {
@@ -89,7 +89,7 @@ const uint8_t *DictionaryReader::GetBuffer(const char *path) {
     }
 }
 
-const void DictionaryReader::generateIndex(const Dictionary* dict) {
+const void DictionaryReader::generate_index(const Dictionary* dict) {
     IndexBuilder *builder = new IndexBuilder(dict->id()->c_str());
     auto entries = dict->entries();
     auto entry = entries->begin();
@@ -131,15 +131,15 @@ const void DictionaryReader::generateIndex(const Dictionary* dict) {
             }
             ety++;
         }
-        builder->addDocument(entry->term()->c_str(), keyword_block.c_str());
+        builder->add_document(entry->term()->c_str(), keyword_block.c_str());
         entry++;
     }
     builder->build();
 }
 
-const void DictionaryReader::generateIndex(const uint8_t *buffer) {
+const void DictionaryReader::generate_index(const uint8_t *buffer) {
     auto dict = GetDictionary(buffer);
-    this->generateIndex(dict);
+    this->generate_index(dict);
 }
 
 /**
@@ -147,8 +147,8 @@ const void DictionaryReader::generateIndex(const uint8_t *buffer) {
  * @param dictionary_path
  * @return
  */
-const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path, bool buildIndex) {
-    const uint8_t *buf = this->GetBuffer(dictionary_path);
+const uint8_t *DictionaryReader::read_as_buffer(const char *dictionary_path, bool buildIndex) {
+    const uint8_t *buf = this->get_buffer(dictionary_path);
 
     if (buf == 0) {
         cout << "Data is corrupted. Cannot read dictionary.\n" << endl;
@@ -156,7 +156,7 @@ const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path, bool 
     }
 
     if (buildIndex)
-        generateIndex(buf);
+        generate_index(buf);
 
     return buf;
 }
@@ -166,8 +166,8 @@ const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path, bool 
  * @param dictionary_path
  * @return
  */
-const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path) {
-    return this->ReadAsBuffer(dictionary_path, true);
+const uint8_t *DictionaryReader::read_as_buffer(const char *dictionary_path) {
+    return this->read_as_buffer(dictionary_path, true);
 }
 
 /**
@@ -175,8 +175,8 @@ const uint8_t *DictionaryReader::ReadAsBuffer(const char *dictionary_path) {
  * @param dictionary_path
  * @return
  */
-const Dictionary *DictionaryReader::ReadAsDictionary(const char *dictionary_path) {
-    const Dictionary *dict = GetDictionary(this->ReadAsBuffer(dictionary_path, false));
-    this->generateIndex(dict);
+const Dictionary *DictionaryReader::read_as_dictionary(const char *dictionary_path) {
+    const Dictionary *dict = GetDictionary(this->read_as_buffer(dictionary_path, false));
+    this->generate_index(dict);
     return dict;
 }

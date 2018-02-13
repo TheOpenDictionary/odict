@@ -22,7 +22,7 @@ private:
 
 public:
     IndexBuilder(const char*);
-    IndexBuilder* addDocument(const char*, const char*);
+    IndexBuilder* add_document(const char*, const char*);
     void build();
 };
 

@@ -57,7 +57,7 @@ int main(int argv, char *args[]) {
             if (argv < 4) cout << "Usage: odict lookup [odict file] [word]" << endl;
             else {
                 DictionarySearch *search = new DictionarySearch(args[2]);
-                const char* output = search->searchByEntry(args[3]);
+                const char* output = search->search_by_entry(args[3]);
                 cout << endl << output << endl;
                 delete search;
             }
@@ -65,7 +65,7 @@ int main(int argv, char *args[]) {
             if (argv < 4) cout << "Usage: odict search [odict file] [word]" << endl;
             else {
                 DictionarySearch *search = new DictionarySearch(args[2]);
-                const char* output = search->searchByContents(args[3]);
+                const char* output = search->search_by_contents(args[3]);
                 cout << endl << output << endl;
                 delete search;
             }

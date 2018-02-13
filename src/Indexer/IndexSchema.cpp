@@ -35,7 +35,7 @@ lucy_Schema *create_schema() {
 
 lucy_Schema* IndexSchema::instance = 0;
 
-lucy_Schema* IndexSchema::getInstance() {
+lucy_Schema* IndexSchema::get_instance() {
     if (instance == 0)
         instance = create_schema();
     return instance;

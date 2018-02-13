@@ -9,7 +9,7 @@ private:
     IndexSchema();
 
 public:
-    static lucy_Schema* getInstance();
+    static lucy_Schema* get_instance();
 };
 
 

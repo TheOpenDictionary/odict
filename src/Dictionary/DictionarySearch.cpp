@@ -13,11 +13,11 @@ DictionarySearch::DictionarySearch(const char *filename) : DictionarySearch(file
 DictionarySearch::DictionarySearch(const uint8_t *buffer) : DictionarySearch(buffer, FORMAT_JSON) {}
 
 DictionarySearch::DictionarySearch(const char *filename, const char *format) : DictionarySearch(
-        (new DictionaryReader())->ReadAsBuffer(filename),
+        (new DictionaryReader())->read_as_buffer(filename),
         format
 ) {}
 
-const char *DictionarySearch::searchByEntry(const char *word) {
+const char *DictionarySearch::search_by_entry(const char *word) {
     auto entries = this->dict->entries();
     auto result = entries->LookupByKey(word);
     auto converter = ConverterResolver::resolve(this->format);
@@ -28,11 +28,11 @@ const char *DictionarySearch::searchByEntry(const char *word) {
     } else return converter->convert((Entry*)result);
 }
 
-const char *DictionarySearch::searchByContents(const char *str) {
+const char *DictionarySearch::search_by_contents(const char *str) {
     lucy_bootstrap_parcel();
 
     const char *id = this->dict->id()->c_str();
-    const char *base = CacheLocationManager::getInstance()->getLocation();
+    const char *base = CacheLocationManager::get_instance()->get_location();
     cfish_String *folder = cfish_Str_newf("%s/%s", base, id);
     lucy_IndexSearcher *searcher = lucy_IxSearcher_new((cfish_Obj *) folder);
 
@@ -47,7 +47,7 @@ const char *DictionarySearch::searchByContents(const char *str) {
     vector<Offset<Entry>> results = vector<Offset<Entry>>();
     odict::SearchResult *sr = new odict::SearchResult();
 
-    sr->setQuery(str);
+    sr->set_query(str);
 
     // Loop over search results.
     while (NULL != (hit = LUCY_Hits_Next(hits))) {
@@ -59,7 +59,7 @@ const char *DictionarySearch::searchByContents(const char *str) {
 
         auto entry = this->dict->entries()->LookupByKey(title_c);
 
-        sr->addResult((Entry*)entry);
+        sr->add_result((Entry*)entry);
 
         free(tokens_c);
         free(title_c);

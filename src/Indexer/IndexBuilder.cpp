@@ -1,7 +1,7 @@
 #include "IndexBuilder.h"
 
 void create_output_dir(const char* name) {
-    string path = string(CacheLocationManager::getInstance()->getLocation()) + "/" + string(name);
+    string path = string(CacheLocationManager::get_instance()->get_location()) + "/" + string(name);
 
     if (!boost::filesystem::exists(path)) {
         if (!boost::filesystem::create_directories(path)) {
@@ -12,14 +12,14 @@ void create_output_dir(const char* name) {
 }
 
 IndexBuilder::IndexBuilder(const char *name) :
-        schema(IndexSchema::getInstance()),
-        folder((create_output_dir(name), cfish_Str_newf("%s/%s", CacheLocationManager::getInstance()->getLocation(),
+        schema(IndexSchema::get_instance()),
+        folder((create_output_dir(name), cfish_Str_newf("%s/%s", CacheLocationManager::get_instance()->get_location(),
                                                     name))),
         indexer((lucy_bootstrap_parcel(), lucy_Indexer_new(schema, (cfish_Obj *) folder, NULL,
                                                            lucy_Indexer_CREATE | lucy_Indexer_TRUNCATE))) {
 }
 
-IndexBuilder *IndexBuilder::addDocument(const char *title, const char *tokens) {
+IndexBuilder *IndexBuilder::add_document(const char *title, const char *tokens) {
     lucy_Doc *doc = lucy_Doc_new(NULL, 0);
 
     {
