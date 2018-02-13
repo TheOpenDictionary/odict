@@ -1,5 +1,11 @@
 #include "DictionaryWriter.h"
 
+/**
+ * Returns an XML node attribute if it exists on the node
+ * @param node
+ * @param attribute
+ * @return
+ */
 string get_attribute_if_exists(xml_node<> *node, const char *attribute) {
     auto first_attr = node->first_attribute(attribute);
 
@@ -10,6 +16,30 @@ string get_attribute_if_exists(xml_node<> *node, const char *attribute) {
     }
 }
 
+
+/**
+ * Gets all of the entries in a dictionary node and returns them as a FlatBuffer object
+ * @param dictionary_node
+ * @return
+ */
+int entry_count(xml_node<> *dictionary_node) {
+    xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
+    vector<Offset<Entry>> entries = vector<Offset<Entry>>();
+    int count;
+
+    while (current_entry != 0) {
+        count++;
+        current_entry = current_entry->next_sibling(NODE_ENTRY);
+    }
+
+    return count;
+}
+
+/**
+ * Counts the number of digits in a number
+ * @param x
+ * @return
+ */
 int num_digits(int32_t x)
 {
     if (x == INT_MIN) return 10 + 1;
@@ -147,25 +177,6 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node)
     return builder.CreateVector(usages);
 }
 
-
-/**
- * Gets all of the entries in a dictionary node and returns them as a FlatBuffer object
- * @param dictionary_node
- * @return
- */
-int entry_count(xml_node<> *dictionary_node) {
-    xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
-    vector<Offset<Entry>> entries = vector<Offset<Entry>>();
-    int count;
-
-    while (current_entry != 0) {
-        count++;
-        current_entry = current_entry->next_sibling(NODE_ENTRY);
-    }
-
-    return count;
-}
-
 /**
  * Gets all of the entries in a dictionary node and returns them as a FlatBuffer object
  * @param dictionary_node
@@ -175,14 +186,14 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
     xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
     vector<Offset<Entry>> entries = vector<Offset<Entry>>();
 
-    int count = 0;
+    unsigned long count = 0;
     int total = entry_count(dictionary_node);
     int total_d = num_digits(total);
 
     while (current_entry != 0) {
         string term = get_attribute_if_exists(current_entry, ATTR_TERM);
         auto etymologies = this->get_etymologies(current_entry);
-        entries.push_back(CreateEntry(builder, this->get_uuid_string(), builder.CreateString(term), etymologies));
+        entries.push_back(CreateEntry(builder, count, builder.CreateString(term), etymologies));
         count++;
         current_entry = current_entry->next_sibling(NODE_ENTRY);
         cout << "\r" << setw(total_d) << right << count << " / " << setw(total_d) << left << total << " words processed" << flush;

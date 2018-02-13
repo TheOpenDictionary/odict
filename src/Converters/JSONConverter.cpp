@@ -112,7 +112,7 @@ const char* JSONConverter::convert(odict::SearchResult *searchResult) {
     while (result != results.end()) {
         pt::ptree entry_node;
 
-        entry_node.put("id", (*result)->id()->str());
+        entry_node.put("id", (*result)->id());
         entry_node.put("term", (*result)->term()->str());
 
         this->add_etymologies(&entry_node, (*result)->etymologies());
