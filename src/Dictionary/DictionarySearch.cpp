@@ -20,12 +20,18 @@ DictionarySearch::DictionarySearch(const char *filename, const char *format) : D
 const char *DictionarySearch::search_by_entry(const char *word) {
     auto entries = this->dict->entries();
     auto result = entries->LookupByKey(word);
-    auto converter = ConverterResolver::resolve(this->format);
 
-    if (converter == NULL) {
-        printf("\nError: could not find resolver for format '%s'\n", this->format);
-        exit(0);
-    } else return converter->convert((Entry*)result);
+    if (result != NULL) {
+        auto converter = ConverterResolver::resolve(this->format);
+
+        if (converter == NULL) {
+            printf("\nError: could not find resolver for format '%s'\n", this->format);
+            exit(0);
+        } else return converter->convert((Entry*)result);
+    } else {
+        cout << "Entry " << word << " not found";
+        return NULL;
+    }
 }
 
 const char *DictionarySearch::search_by_contents(const char *str) {

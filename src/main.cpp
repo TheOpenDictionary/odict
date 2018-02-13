@@ -58,7 +58,10 @@ int main(int argv, char *args[]) {
             else {
                 DictionarySearch *search = new DictionarySearch(args[2]);
                 const char* output = search->search_by_entry(args[3]);
-                cout << endl << output << endl;
+
+                if (output != NULL) cout << endl << output << endl;
+                else cout << endl;
+
                 delete search;
             }
         } else if (strcmp(args[1], CMD_SEARCH) == 0) {
