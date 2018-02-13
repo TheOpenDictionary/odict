@@ -138,4 +138,7 @@ fabric.properties
 BUCKAROO_DEPS
 .buckconfig.local
 
+# Custom
 bin
+*.log
+*.odict
