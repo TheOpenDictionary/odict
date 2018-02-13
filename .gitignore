@@ -142,3 +142,4 @@ BUCKAROO_DEPS
 bin
 *.log
 *.odict
+*.xml

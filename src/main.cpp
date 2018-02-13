@@ -11,7 +11,7 @@ static const string OUTPUT_EXT = "odict";
  * Shows CLI usage info
  */
 void show_usage() {
-    cout << "Usage: odict [generate|lookup] [..args]" << endl;
+    cout << "Usage: odict [generate|lookup|search] [..args]" << endl;
 }
 
 /**

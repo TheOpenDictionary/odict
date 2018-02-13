@@ -5,6 +5,8 @@
 #include <ios>
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <climits>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
