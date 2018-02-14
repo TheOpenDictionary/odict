@@ -111,17 +111,18 @@ Offset<Vector<Offset<String>>> DictionaryWriter::get_definitions(xml_node<> *nod
 Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_node) {
     xml_node<> *current_group = usage_node->first_node(NODE_GROUP);
     vector<Offset<Group>> groups = vector<Offset<Group>>();
-
+    unsigned long count = 0;
     while (current_group != 0) {
         string description = get_attribute_if_exists(current_group, ATTR_DESCRIPTION);
 
         groups.push_back(CreateGroup(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(description),
                 this->get_definitions(current_group)
         ));
 
+        count++;
         current_group = current_group->next_sibling(NODE_GROUP);
     }
 
@@ -131,6 +132,7 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
 Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *entry_node) {
     xml_node<> *current_ety = entry_node->first_node(NODE_ETY);
     vector<Offset<Etymology>> etymologies = vector<Offset<Etymology>>();
+    unsigned int count = 0;
 
     while (current_ety != 0) {
         string description = get_attribute_if_exists(current_ety, ATTR_DESCRIPTION);
@@ -138,11 +140,12 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *
 
         etymologies.push_back(CreateEtymology(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(description),
                 usages
         ));
 
+        count++;
         current_ety = current_ety->next_sibling(NODE_ETY);
     }
 
@@ -157,6 +160,7 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *
 Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node) {
     xml_node<> *current_usage = ety_node->first_node(NODE_USAGE);
     vector<Offset<Usage>> usages = vector<Offset<Usage>>();
+    unsigned long count = 0;
 
     while (current_usage != 0) {
         string part_of_speech = get_attribute_if_exists(current_usage, ATTR_PART_OF_SPEECH);
@@ -165,12 +169,13 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node)
 
         usages.push_back(CreateUsage(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(part_of_speech),
                 definitions,
                 groups
         ));
 
+        count++;
         current_usage = current_usage->next_sibling(NODE_USAGE);
     }
 

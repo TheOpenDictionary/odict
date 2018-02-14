@@ -40,7 +40,7 @@ table Entry {
 }
 
 table Dictionary {
-    id:ulong;
+    id:string;
     name:string;
     entries:[Entry];
 }

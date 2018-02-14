@@ -401,8 +401,8 @@ struct Dictionary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_NAME = 6,
     VT_ENTRIES = 8
   };
-  uint64_t id() const {
-    return GetField<uint64_t>(VT_ID, 0);
+  const flatbuffers::String *id() const {
+    return GetPointer<const flatbuffers::String *>(VT_ID);
   }
   const flatbuffers::String *name() const {
     return GetPointer<const flatbuffers::String *>(VT_NAME);
@@ -412,7 +412,8 @@ struct Dictionary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<uint64_t>(verifier, VT_ID) &&
+           VerifyOffset(verifier, VT_ID) &&
+           verifier.Verify(id()) &&
            VerifyOffset(verifier, VT_NAME) &&
            verifier.Verify(name()) &&
            VerifyOffset(verifier, VT_ENTRIES) &&
@@ -425,8 +426,8 @@ struct Dictionary FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct DictionaryBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_id(uint64_t id) {
-    fbb_.AddElement<uint64_t>(Dictionary::VT_ID, id, 0);
+  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
+    fbb_.AddOffset(Dictionary::VT_ID, id);
   }
   void add_name(flatbuffers::Offset<flatbuffers::String> name) {
     fbb_.AddOffset(Dictionary::VT_NAME, name);
@@ -448,24 +449,24 @@ struct DictionaryBuilder {
 
 inline flatbuffers::Offset<Dictionary> CreateDictionary(
     flatbuffers::FlatBufferBuilder &_fbb,
-    uint64_t id = 0,
+    flatbuffers::Offset<flatbuffers::String> id = 0,
     flatbuffers::Offset<flatbuffers::String> name = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Entry>>> entries = 0) {
   DictionaryBuilder builder_(_fbb);
-  builder_.add_id(id);
   builder_.add_entries(entries);
   builder_.add_name(name);
+  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Dictionary> CreateDictionaryDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    uint64_t id = 0,
+    const char *id = nullptr,
     const char *name = nullptr,
     const std::vector<flatbuffers::Offset<Entry>> *entries = nullptr) {
   return schema::CreateDictionary(
       _fbb,
-      id,
+      id ? _fbb.CreateString(id) : 0,
       name ? _fbb.CreateString(name) : 0,
       entries ? _fbb.CreateVector<flatbuffers::Offset<Entry>>(*entries) : 0);
 }
