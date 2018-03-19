@@ -80,8 +80,8 @@ struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_DESCRIPTION = 6,
     VT_USAGES = 8
   };
-  const flatbuffers::String *id() const {
-    return GetPointer<const flatbuffers::String *>(VT_ID);
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
   }
   const flatbuffers::String *description() const {
     return GetPointer<const flatbuffers::String *>(VT_DESCRIPTION);
@@ -91,8 +91,7 @@ struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_ID) &&
-           verifier.Verify(id()) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyOffset(verifier, VT_DESCRIPTION) &&
            verifier.Verify(description()) &&
            VerifyOffset(verifier, VT_USAGES) &&
@@ -105,8 +104,8 @@ struct Etymology FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct EtymologyBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
-    fbb_.AddOffset(Etymology::VT_ID, id);
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(Etymology::VT_ID, id, 0);
   }
   void add_description(flatbuffers::Offset<flatbuffers::String> description) {
     fbb_.AddOffset(Etymology::VT_DESCRIPTION, description);
@@ -128,24 +127,24 @@ struct EtymologyBuilder {
 
 inline flatbuffers::Offset<Etymology> CreateEtymology(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> id = 0,
+    uint64_t id = 0,
     flatbuffers::Offset<flatbuffers::String> description = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Usage>>> usages = 0) {
   EtymologyBuilder builder_(_fbb);
+  builder_.add_id(id);
   builder_.add_usages(usages);
   builder_.add_description(description);
-  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Etymology> CreateEtymologyDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const char *id = nullptr,
+    uint64_t id = 0,
     const char *description = nullptr,
     const std::vector<flatbuffers::Offset<Usage>> *usages = nullptr) {
   return schema::CreateEtymology(
       _fbb,
-      id ? _fbb.CreateString(id) : 0,
+      id,
       description ? _fbb.CreateString(description) : 0,
       usages ? _fbb.CreateVector<flatbuffers::Offset<Usage>>(*usages) : 0);
 }
@@ -156,8 +155,8 @@ struct Group FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_DESCRIPTION = 6,
     VT_DEFINITIONS = 8
   };
-  const flatbuffers::String *id() const {
-    return GetPointer<const flatbuffers::String *>(VT_ID);
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
   }
   const flatbuffers::String *description() const {
     return GetPointer<const flatbuffers::String *>(VT_DESCRIPTION);
@@ -167,8 +166,7 @@ struct Group FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_ID) &&
-           verifier.Verify(id()) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyOffset(verifier, VT_DESCRIPTION) &&
            verifier.Verify(description()) &&
            VerifyOffset(verifier, VT_DEFINITIONS) &&
@@ -181,8 +179,8 @@ struct Group FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct GroupBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
-    fbb_.AddOffset(Group::VT_ID, id);
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(Group::VT_ID, id, 0);
   }
   void add_description(flatbuffers::Offset<flatbuffers::String> description) {
     fbb_.AddOffset(Group::VT_DESCRIPTION, description);
@@ -204,24 +202,24 @@ struct GroupBuilder {
 
 inline flatbuffers::Offset<Group> CreateGroup(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> id = 0,
+    uint64_t id = 0,
     flatbuffers::Offset<flatbuffers::String> description = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0) {
   GroupBuilder builder_(_fbb);
+  builder_.add_id(id);
   builder_.add_definitions(definitions);
   builder_.add_description(description);
-  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Group> CreateGroupDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const char *id = nullptr,
+    uint64_t id = 0,
     const char *description = nullptr,
     const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr) {
   return schema::CreateGroup(
       _fbb,
-      id ? _fbb.CreateString(id) : 0,
+      id,
       description ? _fbb.CreateString(description) : 0,
       definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0);
 }
@@ -233,8 +231,8 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_DEFINITIONS = 8,
     VT_GROUPS = 10
   };
-  const flatbuffers::String *id() const {
-    return GetPointer<const flatbuffers::String *>(VT_ID);
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
   }
   const flatbuffers::String *pos() const {
     return GetPointer<const flatbuffers::String *>(VT_POS);
@@ -247,8 +245,7 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_ID) &&
-           verifier.Verify(id()) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyOffset(verifier, VT_POS) &&
            verifier.Verify(pos()) &&
            VerifyOffset(verifier, VT_DEFINITIONS) &&
@@ -264,8 +261,8 @@ struct Usage FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct UsageBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
-    fbb_.AddOffset(Usage::VT_ID, id);
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(Usage::VT_ID, id, 0);
   }
   void add_pos(flatbuffers::Offset<flatbuffers::String> pos) {
     fbb_.AddOffset(Usage::VT_POS, pos);
@@ -290,27 +287,27 @@ struct UsageBuilder {
 
 inline flatbuffers::Offset<Usage> CreateUsage(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> id = 0,
+    uint64_t id = 0,
     flatbuffers::Offset<flatbuffers::String> pos = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> definitions = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Group>>> groups = 0) {
   UsageBuilder builder_(_fbb);
+  builder_.add_id(id);
   builder_.add_groups(groups);
   builder_.add_definitions(definitions);
   builder_.add_pos(pos);
-  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Usage> CreateUsageDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const char *id = nullptr,
+    uint64_t id = 0,
     const char *pos = nullptr,
     const std::vector<flatbuffers::Offset<flatbuffers::String>> *definitions = nullptr,
     const std::vector<flatbuffers::Offset<Group>> *groups = nullptr) {
   return schema::CreateUsage(
       _fbb,
-      id ? _fbb.CreateString(id) : 0,
+      id,
       pos ? _fbb.CreateString(pos) : 0,
       definitions ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*definitions) : 0,
       groups ? _fbb.CreateVector<flatbuffers::Offset<Group>>(*groups) : 0);
@@ -322,8 +319,8 @@ struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_TERM = 6,
     VT_ETYMOLOGIES = 8
   };
-  const flatbuffers::String *id() const {
-    return GetPointer<const flatbuffers::String *>(VT_ID);
+  uint64_t id() const {
+    return GetField<uint64_t>(VT_ID, 0);
   }
   const flatbuffers::String *term() const {
     return GetPointer<const flatbuffers::String *>(VT_TERM);
@@ -339,8 +336,7 @@ struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_ID) &&
-           verifier.Verify(id()) &&
+           VerifyField<uint64_t>(verifier, VT_ID) &&
            VerifyOffsetRequired(verifier, VT_TERM) &&
            verifier.Verify(term()) &&
            VerifyOffset(verifier, VT_ETYMOLOGIES) &&
@@ -353,8 +349,8 @@ struct Entry FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct EntryBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_id(flatbuffers::Offset<flatbuffers::String> id) {
-    fbb_.AddOffset(Entry::VT_ID, id);
+  void add_id(uint64_t id) {
+    fbb_.AddElement<uint64_t>(Entry::VT_ID, id, 0);
   }
   void add_term(flatbuffers::Offset<flatbuffers::String> term) {
     fbb_.AddOffset(Entry::VT_TERM, term);
@@ -377,24 +373,24 @@ struct EntryBuilder {
 
 inline flatbuffers::Offset<Entry> CreateEntry(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> id = 0,
+    uint64_t id = 0,
     flatbuffers::Offset<flatbuffers::String> term = 0,
     flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<Etymology>>> etymologies = 0) {
   EntryBuilder builder_(_fbb);
+  builder_.add_id(id);
   builder_.add_etymologies(etymologies);
   builder_.add_term(term);
-  builder_.add_id(id);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Entry> CreateEntryDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const char *id = nullptr,
+    uint64_t id = 0,
     const char *term = nullptr,
     const std::vector<flatbuffers::Offset<Etymology>> *etymologies = nullptr) {
   return schema::CreateEntry(
       _fbb,
-      id ? _fbb.CreateString(id) : 0,
+      id,
       term ? _fbb.CreateString(term) : 0,
       etymologies ? _fbb.CreateVector<flatbuffers::Offset<Etymology>>(*etymologies) : 0);
 }

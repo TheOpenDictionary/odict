@@ -1,5 +1,11 @@
 #include "DictionaryWriter.h"
 
+/**
+ * Returns an XML node attribute if it exists on the node
+ * @param node
+ * @param attribute
+ * @return
+ */
 string get_attribute_if_exists(xml_node<> *node, const char *attribute) {
     auto first_attr = node->first_attribute(attribute);
 
@@ -10,6 +16,30 @@ string get_attribute_if_exists(xml_node<> *node, const char *attribute) {
     }
 }
 
+
+/**
+ * Gets all of the entries in a dictionary node and returns them as a FlatBuffer object
+ * @param dictionary_node
+ * @return
+ */
+int entry_count(xml_node<> *dictionary_node) {
+    xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
+    vector<Offset<Entry>> entries = vector<Offset<Entry>>();
+    int count;
+
+    while (current_entry != 0) {
+        count++;
+        current_entry = current_entry->next_sibling(NODE_ENTRY);
+    }
+
+    return count;
+}
+
+/**
+ * Counts the number of digits in a number
+ * @param x
+ * @return
+ */
 int num_digits(int32_t x)
 {
     if (x == INT_MIN) return 10 + 1;
@@ -81,17 +111,18 @@ Offset<Vector<Offset<String>>> DictionaryWriter::get_definitions(xml_node<> *nod
 Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_node) {
     xml_node<> *current_group = usage_node->first_node(NODE_GROUP);
     vector<Offset<Group>> groups = vector<Offset<Group>>();
-
+    unsigned long count = 0;
     while (current_group != 0) {
         string description = get_attribute_if_exists(current_group, ATTR_DESCRIPTION);
 
         groups.push_back(CreateGroup(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(description),
                 this->get_definitions(current_group)
         ));
 
+        count++;
         current_group = current_group->next_sibling(NODE_GROUP);
     }
 
@@ -101,6 +132,7 @@ Offset<Vector<Offset<Group>>> DictionaryWriter::get_groups(xml_node<> *usage_nod
 Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *entry_node) {
     xml_node<> *current_ety = entry_node->first_node(NODE_ETY);
     vector<Offset<Etymology>> etymologies = vector<Offset<Etymology>>();
+    unsigned int count = 0;
 
     while (current_ety != 0) {
         string description = get_attribute_if_exists(current_ety, ATTR_DESCRIPTION);
@@ -108,11 +140,12 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *
 
         etymologies.push_back(CreateEtymology(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(description),
                 usages
         ));
 
+        count++;
         current_ety = current_ety->next_sibling(NODE_ETY);
     }
 
@@ -127,6 +160,7 @@ Offset<Vector<Offset<Etymology>>> DictionaryWriter::get_etymologies(xml_node<> *
 Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node) {
     xml_node<> *current_usage = ety_node->first_node(NODE_USAGE);
     vector<Offset<Usage>> usages = vector<Offset<Usage>>();
+    unsigned long count = 0;
 
     while (current_usage != 0) {
         string part_of_speech = get_attribute_if_exists(current_usage, ATTR_PART_OF_SPEECH);
@@ -135,35 +169,17 @@ Offset<Vector<Offset<Usage>>> DictionaryWriter::get_usages(xml_node<> *ety_node)
 
         usages.push_back(CreateUsage(
                 builder,
-                this->get_uuid_string(),
+                count,
                 builder.CreateString(part_of_speech),
                 definitions,
                 groups
         ));
 
+        count++;
         current_usage = current_usage->next_sibling(NODE_USAGE);
     }
 
     return builder.CreateVector(usages);
-}
-
-
-/**
- * Gets all of the entries in a dictionary node and returns them as a FlatBuffer object
- * @param dictionary_node
- * @return
- */
-int entry_count(xml_node<> *dictionary_node) {
-    xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
-    vector<Offset<Entry>> entries = vector<Offset<Entry>>();
-    int count;
-
-    while (current_entry != 0) {
-        count++;
-        current_entry = current_entry->next_sibling(NODE_ENTRY);
-    }
-
-    return count;
 }
 
 /**
@@ -175,14 +191,14 @@ Offset<Vector<Offset<Entry>>> DictionaryWriter::get_entries(xml_node<> *dictiona
     xml_node<> *current_entry = dictionary_node->first_node(NODE_ENTRY);
     vector<Offset<Entry>> entries = vector<Offset<Entry>>();
 
-    int count = 0;
+    unsigned long count = 0;
     int total = entry_count(dictionary_node);
     int total_d = num_digits(total);
 
     while (current_entry != 0) {
         string term = get_attribute_if_exists(current_entry, ATTR_TERM);
         auto etymologies = this->get_etymologies(current_entry);
-        entries.push_back(CreateEntry(builder, this->get_uuid_string(), builder.CreateString(term), etymologies));
+        entries.push_back(CreateEntry(builder, count, builder.CreateString(term), etymologies));
         count++;
         current_entry = current_entry->next_sibling(NODE_ENTRY);
         cout << "\r" << setw(total_d) << right << count << " / " << setw(total_d) << left << total << " words processed" << flush;

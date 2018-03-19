@@ -28,7 +28,7 @@ void JSONConverter::add_groups(pt::ptree *root, const Vector<Offset<Group>> *gro
 
         pt::ptree group_node;
 
-        group_node.put("id", group->id()->str());
+        group_node.put("id", group->id());
 
         if (group->description()->str().length() > 0)
             group_node.put("description", group->description()->str());
@@ -55,7 +55,7 @@ void JSONConverter::add_usages(pt::ptree *root, const Vector<Offset<Usage>> *usa
 
         pt::ptree usage_node;
 
-        usage_node.put("id", usage->id()->str());
+        usage_node.put("id", usage->id());
 
         if (usage->pos()->str().length() > 0)
             usage_node.put("pos", usage->pos()->str());
@@ -83,7 +83,7 @@ void JSONConverter::add_etymologies(pt::ptree *root, const Vector<Offset<Etymolo
 
         pt::ptree ety_node;
 
-        ety_node.put("id", etymology->id()->str());
+        ety_node.put("id", etymology->id());
 
         if (etymology->description()->str().length() > 0)
             ety_node.put("description", etymology->description()->str());
@@ -112,7 +112,7 @@ const char* JSONConverter::convert(odict::SearchResult *searchResult) {
     while (result != results.end()) {
         pt::ptree entry_node;
 
-        entry_node.put("id", (*result)->id()->str());
+        entry_node.put("id", (*result)->id());
         entry_node.put("term", (*result)->term()->str());
 
         this->add_etymologies(&entry_node, (*result)->etymologies());
@@ -138,6 +138,9 @@ const char* JSONConverter::convert(odict::SearchResult *searchResult) {
 const char* JSONConverter::convert(Entry *entry) {
     pt::ptree root;
     stringstream ss;
+
+    root.put("id", entry->id());
+    root.put("term", entry->term()->str());
 
     this->add_etymologies(&root, entry->etymologies());
 
