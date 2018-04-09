@@ -8,5 +8,9 @@
 [httpserver]
     port = 0
 
+[parser]
+    polyglot_parsing_enabled = true
+    default_build_file_syntax = SKYLARK
+
 [download]
     in_build = true

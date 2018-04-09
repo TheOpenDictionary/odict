@@ -1,4 +1,4 @@
-include_defs('//DEFS')
+load('//:definitions.bzl', 'generate_deps')
 
 # The ODict Library
 cxx_library(

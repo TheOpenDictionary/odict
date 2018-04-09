@@ -1,21 +1,21 @@
-include_defs('//DEPS')
+load('//:dependencies.bzl', 'deps')
 
 def remote_headers(name, url, hash, headers_srcs, headers_dir = ""):
-    remote_file(
+    native.remote_file(
         name = 'get-' + name,
         url = url,
         sha1 = hash,
         type = 'exploded_zip'
     )
 
-    genrule(
+    native.genrule(
         name = 'headers-' + name,
         srcs = headers_srcs,
         cmd = 'find $SRCS/' + headers_dir + ' -name *.h -o -name *.hpp | xargs -I FILE cp FILE $OUT',
         out = '.'
     )
 
-    prebuilt_cxx_library(
+    native.prebuilt_cxx_library(
         name = name,
         header_only = True,
         header_dirs = ['//:headers-' + name],
@@ -33,21 +33,21 @@ def remote_library(name, payload):
     build_srcs=payload["build"].get("srcs") or []
     build_cmd=" && ".join(payload["build"]["cmd"])
 
-    remote_file(
+    native.remote_file(
         name = 'get-' + name,
         url = url,
         sha1 = hash,
         type = 'exploded_zip'
     )
 
-    genrule(
+    native.genrule(
         name = 'build-' + name,
         srcs = ["//:get-" + name] if len(build_srcs) == 0 else build_srcs,
         cmd = build_cmd,
         out = '.'
     )
 
-    genrule(
+    native.genrule(
         name = 'headers-' + name,
         srcs = headers_srcs,
         cmd = 'cp -r $SRCS/' + headers_dir + '/* $OUT' if headers_direct_copy else 'find $SRCS/' + headers_dir + ' -name *.h -o -name *.hpp | xargs -I FILE cp FILE $OUT',
@@ -58,14 +58,14 @@ def remote_library(name, payload):
         lib_dir=lib.get("dir") or ''
         lib_name=lib.get("name")
 
-        genrule(
+        native.genrule(
             name = 'lib-' + name + str(idx),
             srcs = [':build-' + name],
             cmd = 'cp $SRCS/' + lib_dir + '/' + lib_name + ' $OUT',
             out = lib_name
         )
 
-        prebuilt_cxx_library(
+        native.prebuilt_cxx_library(
             name = name + str(idx),
             header_dirs = ['//:headers-' + name],
             static_lib = '//:lib-' + name + str(idx),
