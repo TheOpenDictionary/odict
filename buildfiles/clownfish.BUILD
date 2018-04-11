@@ -1,15 +1,22 @@
+genrule(
+    name = "build",
+    srcs = glob(["compiler/c/**/*"]) + glob(["runtime/c/**/*"]),
+    cmd = " && ".join([
+        "cp -a $(SRCS) .",
+        "cd compiler/c",
+        "./configure",
+        "make",
+        "make test",
+        "cd ../../runtime/c",
+        "./configure",
+        "make",
+        "make test"
+    ]),
+    outs = ["libclownfish.0.6.2.dylib"]
+)
+
 cc_library(
     name = "main",
-    hdrs = [
-        "include/flatbuffers/base.h",
-        "include/flatbuffers/flatbuffers.h",
-        "include/flatbuffers/flexbuffers.h",
-        "include/flatbuffers/hash.h",
-        "include/flatbuffers/idl.h",
-        "include/flatbuffers/reflection.h",
-        "include/flatbuffers/stl_emulation.h",
-        "include/flatbuffers/util.h",
-    ],
-    includes = ["./include/"],
+    srcs = [":build"],
     visibility = ["//visibility:public"]
 )
