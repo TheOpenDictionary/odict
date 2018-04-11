@@ -1,9 +1,13 @@
 genrule(
     name = "build",
-    srcs = glob(["compiler/c/**/*"]) + glob(["runtime/c/**/*"]),
+    srcs = glob(["compiler/c/**/*"]) +
+           glob(["compiler/common/**/*"]) +
+           glob(["compiler/include/**/*"]) +
+           glob(["compiler/src/**/*"]) +
+           glob(["runtime/c/**/*"]) +
+           glob(["runtime/core/**/*"]),
     cmd = " && ".join([
-        "cp -a $(SRCS) .",
-        "cd compiler/c",
+        "cd external/clownfish/compiler/c && echo $$PWD",
         "./configure",
         "make",
         "make test",
