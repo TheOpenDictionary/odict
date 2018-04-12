@@ -23,7 +23,7 @@ new_http_archive(
 ############################
 new_http_archive(
     name = "clownfish",
-    url = "https://github.com/odict/lucy-clownfish/archive/rel/v0.6.2.zip",
+    url = "https://github.com/apache/lucy-clownfish/archive/rel/v0.6.2.zip",
     strip_prefix = "lucy-clownfish-rel-v0.6.2",
     build_file = "buildfiles/clownfish.BUILD"
 )

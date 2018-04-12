@@ -1,5 +1,7 @@
+alias(name = "it", actual = ":odict")
+
 cc_library(
-    name = "libodict",
+    name = "odict",
     # include_prefix = "odict",
     hdrs = glob([
         "src/*.h",
@@ -14,9 +16,9 @@ cc_library(
         "@boost//:property_tree",
         "@boost//:uuid",
         "@boost//:system",
-        "@clownfish//:main",
         "@flatbuffers//:main",
         "@rapidxml//:main",
         "@snappy//:main",
+        "@clownfish//:clownfish"
     ]
 )
