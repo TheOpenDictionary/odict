@@ -32,7 +32,7 @@ public:
     DictionarySearch(const char *);
 
     const char * search_by_entry(const char *);
-    const char * search_by_contents(const char *);
+    // const char * search_by_contents(const char *);
 };
 
 

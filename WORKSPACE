@@ -1,3 +1,5 @@
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 #########################
 #     Google Snappy     #
 #########################
@@ -26,6 +28,16 @@ new_http_archive(
     url = "https://github.com/apache/lucy-clownfish/archive/rel/v0.6.2.zip",
     strip_prefix = "lucy-clownfish-rel-v0.6.2",
     build_file = "buildfiles/clownfish.BUILD"
+)
+
+#######################
+#     Apache Lucy     #
+#######################
+new_http_archive(
+    name = "lucy",
+    url = "https://github.com/odict/lucy/archive/rel/v0.6.1.zip",
+    strip_prefix = "lucy-rel-v0.6.1",
+    build_file = "buildfiles/lucy.BUILD"
 )
 
 #################

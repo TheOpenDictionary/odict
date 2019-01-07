@@ -1,7 +1,7 @@
 alias(name = "it", actual = ":odict")
 
 cc_library(
-    name = "odict",
+    name = "odict_lib",
     # include_prefix = "odict",
     hdrs = glob([
         "src/*.h",
@@ -19,6 +19,14 @@ cc_library(
         "@flatbuffers//:main",
         "@rapidxml//:main",
         "@snappy//:main",
-        "@clownfish//:clownfish"
+        # "@clownfish//:clownfish",
+        # "@lucy//:lucy"
+    ]
+)
+
+cc_binary(
+    name = "odict",
+    deps = [
+        ":odict_lib"
     ]
 )

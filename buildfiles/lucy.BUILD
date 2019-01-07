@@ -1,37 +1,44 @@
+
+
 config_setting(name = "windows")
 config_setting(name = "osx")
 config_setting(name = "linux")
 
 steps = [
+    # "ls $(SRCS)"
     "cd external/clownfish/compiler/c",
     "./configure",
     "make",
     "make test",
+    "mkdir -p bin",
+    "cp cfc ./bin/cfc",
     "cd ../../runtime/c",
     "./configure",
     "make",
     "make test",
-    "cd ../../",
-    "cp ./runtime/c/libclownfish.0.6.2.dylib ../../$(@D)/",
-    "cp ./runtime/c/libtestcfish.0.6.2.dylib ../../$(@D)/",
-    "cp -r runtime/c/autogen/include ../../$(@D)/"
+    "cd ../../devel",
+    "source bin/setup_env.sh ../",
+    # "ls external/clownfish/compiler",
+    "pwd",
+    "cd ../../lucy/c",
+    "./configure --clownfish-prefix=../../clownfish/compiler/c",
+    "make",
+    "make test"
+    # "cd $OUT/get-lucy/lucy-rel-v0.6.1/c",
+    # "./configure",
+    # "make",
+    # "make test"
 ]
-
-filegroup(
-    name = "source", 
-    srcs = glob(["**/*"]), 
-    visibility = ["//visibility:public"]
-)
 
 genrule(
     name = "build",
-    srcs = ["runtime"],
+    srcs = ["@clownfish//:source", "."],
     cmd = " && ".join(steps),
     local = 1,
     outs = [
-        "libclownfish.0.6.2.dylib",
-        "libtestcfish.0.6.2.dylib",
-        "include",
+        "libclownfish.0.6.1.dylib",
+        "libtestcfish.0.6.1.dylib",
+        "include"
     ]
 )
 
@@ -49,7 +56,7 @@ genrule(
 )
 
 cc_library(
-    name = "clownfish",
+    name = "lucy",
     srcs = [":build"],
     textual_hdrs = [":headers"],
     visibility = ["//visibility:public"]

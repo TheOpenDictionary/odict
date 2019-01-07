@@ -89,58 +89,58 @@ const uint8_t *DictionaryReader::get_buffer(const char *path) {
     }
 }
 
-const void DictionaryReader::generate_index(const Dictionary* dict) {
-    IndexBuilder *builder = new IndexBuilder(dict->id()->c_str());
-    auto entries = dict->entries();
-    auto entry = entries->begin();
+// const void DictionaryReader::generate_index(const Dictionary* dict) {
+//     IndexBuilder *builder = new IndexBuilder(dict->id()->c_str());
+//     auto entries = dict->entries();
+//     auto entry = entries->begin();
 
-    while(entry != entries->end()) {
-        auto etymologies = entry->etymologies();
-        auto ety = etymologies->begin();
+//     while(entry != entries->end()) {
+//         auto etymologies = entry->etymologies();
+//         auto ety = etymologies->begin();
 
-        string keyword_block = "";
+//         string keyword_block = "";
 
-        while (ety != etymologies->end()) {
-            auto usages = ety->usages();
-            auto usage = usages->begin();
+//         while (ety != etymologies->end()) {
+//             auto usages = ety->usages();
+//             auto usage = usages->begin();
 
-            while (usage != usages->end()) {
-                auto groups = usage->groups();
-                auto group = groups->begin();
+//             while (usage != usages->end()) {
+//                 auto groups = usage->groups();
+//                 auto group = groups->begin();
 
-                auto definitions = usage->definitions();
-                auto definition = definitions->begin();
+//                 auto definitions = usage->definitions();
+//                 auto definition = definitions->begin();
 
-                while(group != groups->end()) {
-                    auto definitions = group->definitions();
-                    auto definition = definitions->begin();
+//                 while(group != groups->end()) {
+//                     auto definitions = group->definitions();
+//                     auto definition = definitions->begin();
 
-                    while(definition != definitions->end()) {
-                        keyword_block += definition->str() + " ";
-                        definition++;
-                    }
+//                     while(definition != definitions->end()) {
+//                         keyword_block += definition->str() + " ";
+//                         definition++;
+//                     }
 
-                    group++;
-                }
+//                     group++;
+//                 }
 
-                while(definition != definitions->end()) {
-                    keyword_block += definition->str() + " ";
-                    definition++;
-                }
-                usage++;
-            }
-            ety++;
-        }
-        builder->add_document(entry->term()->c_str(), keyword_block.c_str());
-        entry++;
-    }
-    builder->build();
-}
+//                 while(definition != definitions->end()) {
+//                     keyword_block += definition->str() + " ";
+//                     definition++;
+//                 }
+//                 usage++;
+//             }
+//             ety++;
+//         }
+//         builder->add_document(entry->term()->c_str(), keyword_block.c_str());
+//         entry++;
+//     }
+//     builder->build();
+// }
 
-const void DictionaryReader::generate_index(const uint8_t *buffer) {
-    auto dict = GetDictionary(buffer);
-    this->generate_index(dict);
-}
+// const void DictionaryReader::generate_index(const uint8_t *buffer) {
+//     auto dict = GetDictionary(buffer);
+//     this->generate_index(dict);
+// }
 
 /**
  * Loads a dictionary into memory as a raw buffer
@@ -155,8 +155,8 @@ const uint8_t *DictionaryReader::read_as_buffer(const char *dictionary_path, boo
         exit(0);
     }
 
-    if (buildIndex)
-        generate_index(buf);
+    // if (buildIndex)
+    //     generate_index(buf);
 
     return buf;
 }
@@ -177,6 +177,6 @@ const uint8_t *DictionaryReader::read_as_buffer(const char *dictionary_path) {
  */
 const Dictionary *DictionaryReader::read_as_dictionary(const char *dictionary_path) {
     const Dictionary *dict = GetDictionary(this->read_as_buffer(dictionary_path, false));
-    this->generate_index(dict);
+    // this->generate_index(dict);
     return dict;
 }
