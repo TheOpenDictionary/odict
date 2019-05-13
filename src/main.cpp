@@ -53,7 +53,8 @@ int main(int argv, char *args[]) {
                 DictionaryWriter *generator = new DictionaryWriter();
                 generator->generate(input_file.c_str(), output_full_path.c_str());
             }
-        } else if (strcmp(args[1], CMD_LOOKUP) == 0) {
+        } 
+        else if (strcmp(args[1], CMD_LOOKUP) == 0) {
             if (argv < 4) cout << "Usage: odict lookup [odict file] [word]" << endl;
             else {
                 DictionarySearch *search = new DictionarySearch(args[2]);
@@ -64,15 +65,17 @@ int main(int argv, char *args[]) {
 
                 delete search;
             }
-        } else if (strcmp(args[1], CMD_SEARCH) == 0) {
-            if (argv < 4) cout << "Usage: odict search [odict file] [word]" << endl;
-            else {
-                DictionarySearch *search = new DictionarySearch(args[2]);
-                const char* output = search->search_by_contents(args[3]);
-                cout << endl << output << endl;
-                delete search;
-            }
-        } else {
+        } 
+        // else if (strcmp(args[1], CMD_SEARCH) == 0) {
+        //     if (argv < 4) cout << "Usage: odict search [odict file] [word]" << endl;
+        //     else {
+        //         DictionarySearch *search = new DictionarySearch(args[2]);
+        //         const char* output = search->search_by_contents(args[3]);
+        //         cout << endl << output << endl;
+        //         delete search;
+        //     }
+        // } 
+        else {
             show_usage();
         }
     }

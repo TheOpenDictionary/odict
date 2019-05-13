@@ -1,47 +1,72 @@
-### C++ ###
-# Prerequisites
-*.d
+### Bazel ###
+/bazel-*
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+### CLion ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# Precompiled Headers
-*.gch
-*.pch
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Sensitive or high-churn files:
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
 
-# Fortran module files
-*.mod
-*.smod
+# Gradle:
+.idea/**/gradle.xml
+.idea/**/libraries
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+# CMake
+cmake-build-debug/
 
-# Executables
-*.exe
-*.out
-*.app
+# Mongo Explorer plugin:
+.idea/**/mongoSettings.xml
 
-### CMake ###
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
+## File-based project format:
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+.idea/replstate.xml
+
+# Ruby plugin and RubyMine
+/.rakeTasks
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+### CLion Patch ###
+# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
+# *.iml
+# modules.xml
+# .idea/misc.xml
+# *.ipr
+
+# Sonarlint plugin
+.idea/sonarlint
+
+#!! ERROR: cpp is undefined. Use list command to see defined gitignore types !!#
 
 ### Linux ###
 *~
@@ -106,40 +131,17 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-### CLion ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
-# User-specific stuff:
-.idea
-
-# IntelliJ
-/out/
-
-# mpeltonen/sbt-idea plugin
-.idea_modules/
-
-# JIRA plugin
-atlassian-ide-plugin.xml
-
-# Cursive Clojure plugin
-.idea/replstate.xml
-
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
-# Buck
-/buck-out/
-/.buckd/
-/buckaroo/
-BUCKAROO_DEPS
-.buckconfig.local
-
-# Custom
-bin
-*.log
 *.odict
-*.xml
+
+# Created by https://www.gitignore.io/api/bazel
+# Edit at https://www.gitignore.io/?templates=bazel
+
+### Bazel ###
+# gitignore template for Bazel build system
+# website: https://bazel.build/
+
+# Ignore all bazel-* symlinks. There is no full list since this can change
+# based on the name of the directory bazel is cloned into.
+/bazel-*
+
+# End of https://www.gitignore.io/api/bazel

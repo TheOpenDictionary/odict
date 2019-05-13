@@ -1,16 +1,16 @@
-#ifndef ODICT_INDEXSCHEMA_H
-#define ODICT_INDEXSCHEMA_H
+// #ifndef ODICT_INDEXSCHEMA_H
+// #define ODICT_INDEXSCHEMA_H
 
-#include "../lucy.h"
+// #include "../lucy.h"
 
-class IndexSchema {
-private:
-    static lucy_Schema *instance;
-    IndexSchema();
+// class IndexSchema {
+// private:
+//     static lucy_Schema *instance;
+//     IndexSchema();
 
-public:
-    static lucy_Schema* get_instance();
-};
+// public:
+//     static lucy_Schema* get_instance();
+// };
 
 
-#endif //ODICT_INDEXSCHEMA_H
+// #endif //ODICT_INDEXSCHEMA_H

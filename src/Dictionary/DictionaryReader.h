@@ -23,8 +23,8 @@ class DictionaryReader {
 private:
     FlatBufferBuilder builder;
     const uint8_t *get_buffer(const char*);
-    const void generate_index(const Dictionary*);
-    const void generate_index(const uint8_t*);
+    // const void generate_index(const Dictionary*);
+    // const void generate_index(const uint8_t*);
 public:
     const uint8_t *read_as_buffer(const char*);
     const uint8_t *read_as_buffer(const char*, bool);

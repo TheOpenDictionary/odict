@@ -34,53 +34,53 @@ const char *DictionarySearch::search_by_entry(const char *word) {
     }
 }
 
-const char *DictionarySearch::search_by_contents(const char *str) {
-    lucy_bootstrap_parcel();
+// const char *DictionarySearch::search_by_contents(const char *str) {
+//     lucy_bootstrap_parcel();
 
-    const char *id = this->dict->id()->c_str();
-    const char *base = CacheLocationManager::get_instance()->get_location();
-    cfish_String *folder = cfish_Str_newf("%s/%s", base, id);
-    lucy_IndexSearcher *searcher = lucy_IxSearcher_new((cfish_Obj *) folder);
+//     const char *id = this->dict->id()->c_str();
+//     const char *base = CacheLocationManager::get_instance()->get_location();
+//     cfish_String *folder = cfish_Str_newf("%s/%s", base, id);
+//     lucy_IndexSearcher *searcher = lucy_IxSearcher_new((cfish_Obj *) folder);
 
-    cfish_String *query_str = cfish_Str_newf("%s", str);
-    lucy_Hits *hits = LUCY_IxSearcher_Hits(searcher, (cfish_Obj *) query_str, 0, 10, NULL);
+//     cfish_String *query_str = cfish_Str_newf("%s", str);
+//     lucy_Hits *hits = LUCY_IxSearcher_Hits(searcher, (cfish_Obj *) query_str, 0, 10, NULL);
 
-    cfish_String *title_str = cfish_Str_newf("title");
-    cfish_String *tokens_str = cfish_Str_newf("tokens");
-    lucy_HitDoc *hit;
-    int i = 1;
+//     cfish_String *title_str = cfish_Str_newf("title");
+//     cfish_String *tokens_str = cfish_Str_newf("tokens");
+//     lucy_HitDoc *hit;
+//     int i = 1;
 
-    vector<Offset<Entry>> results = vector<Offset<Entry>>();
-    odict::SearchResult *sr = new odict::SearchResult();
+//     vector<Offset<Entry>> results = vector<Offset<Entry>>();
+//     odict::SearchResult *sr = new odict::SearchResult();
 
-    sr->set_query(str);
+//     sr->set_query(str);
 
-    // Loop over search results.
-    while (NULL != (hit = LUCY_Hits_Next(hits))) {
-        cfish_String *title = (cfish_String *) LUCY_HitDoc_Extract(hit, title_str);
-        char *title_c = CFISH_Str_To_Utf8(title);
+//     // Loop over search results.
+//     while (NULL != (hit = LUCY_Hits_Next(hits))) {
+//         cfish_String *title = (cfish_String *) LUCY_HitDoc_Extract(hit, title_str);
+//         char *title_c = CFISH_Str_To_Utf8(title);
 
-        cfish_String *tokens = (cfish_String *) LUCY_HitDoc_Extract(hit, tokens_str);
-        char *tokens_c = CFISH_Str_To_Utf8(tokens);
+//         cfish_String *tokens = (cfish_String *) LUCY_HitDoc_Extract(hit, tokens_str);
+//         char *tokens_c = CFISH_Str_To_Utf8(tokens);
 
-        auto entry = this->dict->entries()->LookupByKey(title_c);
+//         auto entry = this->dict->entries()->LookupByKey(title_c);
 
-        sr->add_result((Entry*)entry);
+//         sr->add_result((Entry*)entry);
 
-        free(tokens_c);
-        free(title_c);
-        CFISH_DECREF(tokens);
-        CFISH_DECREF(title);
-        CFISH_DECREF(hit);
-        i++;
-    }
+//         free(tokens_c);
+//         free(title_c);
+//         CFISH_DECREF(tokens);
+//         CFISH_DECREF(title);
+//         CFISH_DECREF(hit);
+//         i++;
+//     }
 
-    CFISH_DECREF(tokens_str);
-    CFISH_DECREF(title_str);
-    CFISH_DECREF(hits);
-    CFISH_DECREF(query_str);
-    CFISH_DECREF(searcher);
-    CFISH_DECREF(folder);
+//     CFISH_DECREF(tokens_str);
+//     CFISH_DECREF(title_str);
+//     CFISH_DECREF(hits);
+//     CFISH_DECREF(query_str);
+//     CFISH_DECREF(searcher);
+//     CFISH_DECREF(folder);
 
-    return ConverterResolver::resolve(this->format)->convert(sr);
-}
+//     return ConverterResolver::resolve(this->format)->convert(sr);
+// }
