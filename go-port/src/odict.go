@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	dictionary.GenerateDictionary("example.xml", "example.odict")
+	dictionary.WriteDictionary("example.xml", "example.odict")
 }

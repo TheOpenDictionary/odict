@@ -3,13 +3,12 @@ package dictionary
 import (
 	"encoding/xml"
 	"fmt"
+	flatbuffers "github.com/google/flatbuffers/go"
 	"io/ioutil"
 	"odict/schema"
 	"os"
 	"strconv"
 	"time"
-
-	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type DefinitionGroup struct {
@@ -50,8 +49,6 @@ func readFile(path string) *os.File {
 		fmt.Println(err)
 	}
 
-	defer file.Close()
-
 	return file
 }
 
@@ -64,27 +61,17 @@ func xmlToDictionary(file *os.File) Dictionary {
 	return dictionary
 }
 
-func dictionaryToBuffer(dictionary Dictionary) {
+func dictionaryToBytes(dictionary Dictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString("id") // TODO: replace
 	name := builder.CreateString(dictionary.Name)
 
-	weaponTwo := builder.CreateString("Axe")
-
-	schema.DictionaryStart(builder)
-	schema.DictionaryAddId(builder, id)
-	schema.DictionaryAddName(builder, name)
-
 	var entryBuffer []flatbuffers.UOffsetT
 
 	for entryIdx, entry := range dictionary.Entries {
-		entryId := schema.CreateString(entryIdx) // TODO: add prefix
-		entryTerm := schema.CreateString(entry.Term)
-
-		schema.EntryStart(builder)
-		schema.EntryAddId(builder, entryId)
-		schema.EntryAddTerm(builder, entryTerm)
+		entryID := builder.CreateString(strconv.Itoa(entryIdx)) // TODO: add prefix
+		entryTerm := builder.CreateString(entry.Term)
 
 		var etyBuffer []flatbuffers.UOffsetT
 
@@ -92,16 +79,15 @@ func dictionaryToBuffer(dictionary Dictionary) {
 			etyID := builder.CreateString(strconv.Itoa(etyIdx))
 			etyDescription := builder.CreateString(ety.Description)
 
-			schema.EtymologyStart(builder)
-			schema.EtymologyAddId(builder, etyID)
-			schema.EtymologyAddDescription(builder, etyDescription)
-
 			var usageBuffer []flatbuffers.UOffsetT
 
 			for usageIdx, usage := range ety.Usages {
+				usageID := builder.CreateString(strconv.Itoa(usageIdx))
+				usagePOS := builder.CreateString(usage.POS)
+
 				schema.UsageStart(builder)
-				schema.UsageAddId(builder, usageIdx)
-				schema.UsageAddPos(builder, usage.POS)
+				schema.UsageAddId(builder, usageID)
+				schema.UsageAddPos(builder, usagePOS)
 
 				// var groupBuffer []byte
 
@@ -111,16 +97,29 @@ func dictionaryToBuffer(dictionary Dictionary) {
 				// 	schema.GroupAddDescription(builder, group.Description)
 				// }
 
-				append(usageBuffer, schema.UsageEnd(builder))
+				usageBuffer = append(usageBuffer, schema.UsageEnd(builder))
 			}
 
-			append(etyBuffer, schema.EtymologyEnd(builder))
+			schema.EtymologyStart(builder)
+			schema.EtymologyAddId(builder, etyID)
+			schema.EtymologyAddDescription(builder, etyDescription)
+			schema.pre
+			schema.EtymologyAddUsages(builder, usageBuffer)
+			etyBuffer = append(etyBuffer, schema.EtymologyEnd(builder))
 		}
 
-		append(entryBuffer, schema.EntryEnd(builder))
+		schema.EntryStart(builder)
+		schema.EntryAddId(builder, entryID)
+		schema.EntryAddTerm(builder, entryTerm)
+
+		entryBuffer = append(entryBuffer, schema.EntryEnd(builder))
 	}
 
-	println(entryBuffer)
+	schema.DictionaryStart(builder)
+	schema.DictionaryAddId(builder, id)
+	schema.DictionaryAddName(builder, name)
+
+	finishedDictionary := schema.DictionaryEnd(builder)
 
 	// schema.DictionaryStartEntriesVector(builder)
 
@@ -129,17 +128,26 @@ func dictionaryToBuffer(dictionary Dictionary) {
 	// 	schema.EntryStart
 	// )
 
-	return builder.Finish()
+	builder.Finish(finishedDictionary)
+
+	return builder.FinishedBytes()
 }
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WrtieDictionary(inputPath, outputPath string) {
+func WriteDictionary(inputPath, outputPath string) {
 	start := time.Now()
 
 	xmlFile := readFile(inputPath)
-	dictionary := xmlToDictionary(xmlFile)
 
+	dictionary := xmlToDictionary(xmlFile)
+	dictionaryBytes := dictionaryToBytes(dictionary)
+
+	defer xmlFile.Close()
+
+	println(dictionaryBytes)
+
+	// println(dictionaryBytes)
 	elapsed := time.Since(start)
 
 	fmt.Printf("Completed in %f seconds\n", elapsed.Seconds())

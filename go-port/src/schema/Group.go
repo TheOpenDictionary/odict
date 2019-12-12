@@ -26,16 +26,12 @@ func (rcv *Group) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Group) Id() uint64 {
+func (rcv *Group) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetUint64(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return 0
-}
-
-func (rcv *Group) MutateId(n uint64) bool {
-	return rcv._tab.MutateUint64Slot(4, n)
+	return nil
 }
 
 func (rcv *Group) Description() []byte {
@@ -66,8 +62,8 @@ func (rcv *Group) DefinitionsLength() int {
 func GroupStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func GroupAddId(builder *flatbuffers.Builder, id uint64) {
-	builder.PrependUint64Slot(0, id, 0)
+func GroupAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func GroupAddDescription(builder *flatbuffers.Builder, description flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(description), 0)
