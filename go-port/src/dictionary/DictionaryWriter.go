@@ -1,10 +1,11 @@
 package dictionary
 
 import (
+	"bufio"
+	"encoding/binary"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"odict/schema"
 	"os"
 	"strconv"
@@ -243,6 +244,73 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func assert(condition bool, errorMessage string) {
+	if !condition {
+		panic("Assertion failed: " + errorMessage)
+	}
+}
+
+func uint16ToBytes(n uint16) []byte {
+	bytes := make([]byte, 2)
+
+	// TODO: normalize
+	binary.LittleEndian.PutUint16(bytes, uint16(n))
+
+	return bytes
+}
+
+func uint32ToBytes(n uint32) []byte {
+	bytes := make([]byte, 4)
+
+	// TODO: normalize
+	binary.LittleEndian.PutUint32(bytes, uint32(n))
+
+	return bytes
+}
+
+func createODictFile(outputPath string, dictionary Dictionary) {
+	dictionaryBytes := dictionaryToBytes(dictionary)
+	compressed := snappy.Encode(nil, dictionaryBytes)
+	file, err := os.Create(outputPath)
+
+	check(err)
+
+	defer file.Close()
+
+	signature := []byte("ODICT")
+	version := uint16ToBytes(2)
+	compressedSize := uint32(len(compressed))
+	compressedBytes := uint32ToBytes(compressedSize)
+
+	writer := bufio.NewWriter(file)
+
+	sigBytes, sigErr := writer.Write(signature)
+	versionBytes, versionErr := writer.Write(version)
+	contentCountBytes, contentCountErr := writer.Write(compressedBytes)
+	contentBytes, contentErr := writer.Write(compressed)
+	total := sigBytes + versionBytes + contentCountBytes + contentBytes
+
+	check(sigErr)
+	check(versionErr)
+	check(contentCountErr)
+	check(contentErr)
+
+	assert(sigBytes == 5, "Signature bytes do not equal 5")
+	assert(versionBytes == 2, "Version bytes do not equal 2")
+	assert(contentCountBytes == 4 || contentCountBytes == 8, "Content byte count does not equal 4 or 8")
+	assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
+
+	writer.Flush()
+
+	fmt.Printf("Wrote %d bytes to path: %s\n", total, outputPath)
+}
+
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionary(inputPath, outputPath string) {
@@ -251,17 +319,7 @@ func WriteDictionary(inputPath, outputPath string) {
 
 	defer xmlFile.Close()
 
-	dictionary := xmlToDictionary(xmlFile)
-	dictionaryBytes := dictionaryToBytes(dictionary)
-	compressed := snappy.Encode(nil, dictionaryBytes)
-
-	decoded, err := snappy.Decode(nil, compressed)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(string(decoded)) // ABCCCCCCCCCCCCCCCCCCC
+	createODictFile(outputPath, xmlToDictionary(xmlFile))
 
 	elapsed := time.Since(start)
 
