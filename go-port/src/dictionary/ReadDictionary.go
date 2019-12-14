@@ -34,13 +34,13 @@ func ReadDictionary(inputPath string) {
 	utils.Check(versionError)
 
 	// Read the compressed content size in bytes
-	file.Seek(2, 1)
+	file.Seek(7, 0)
 
 	contentSizeBytes := make([]byte, 4)
 	_, contentSizeError := file.Read(contentSizeBytes)
 
 	utils.Check(contentSizeError)
-	file.Seek(4, 1)
+	file.Seek(11, 0)
 
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
@@ -56,7 +56,6 @@ func ReadDictionary(inputPath string) {
 	_, contentError := file.Read(contentBytes)
 
 	utils.Check(contentError)
-	println(contentSize)
 
 	fmt.Printf("ODict Version %d\n", version)
 
