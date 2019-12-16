@@ -1,4 +1,4 @@
-package odict
+package utils
 
 import "encoding/binary"
 
