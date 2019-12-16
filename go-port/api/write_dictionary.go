@@ -1,4 +1,4 @@
-package odict
+package api
 
 import (
 	"bufio"
@@ -15,35 +15,35 @@ import (
 	"github.com/odict/odict/utils"
 )
 
-type DefinitionGroup struct {
+type xmlDefinitionGroup struct {
 	XMLName     xml.Name `xml:"group"`
 	Definitions []string `xml:"definition"`
 	Description string   `xml:"description,attr"`
 }
 
-type Usage struct {
-	XMLName          xml.Name          `xml:"usage"`
-	POS              string            `xml:"pos,attr"`
-	DefinitionGroups []DefinitionGroup `xml:"group"`
-	Definitions      []string          `xml:"definition"`
+type xmlUsage struct {
+	XMLName          xml.Name             `xml:"usage"`
+	POS              string               `xml:"pos,attr"`
+	DefinitionGroups []xmlDefinitionGroup `xml:"group"`
+	Definitions      []string             `xml:"definition"`
 }
 
-type Etymology struct {
-	XMLName     xml.Name `xml:"ety"`
-	Description string   `xml:"description,attr"`
-	Usages      []Usage  `xml:"usage"`
+type xmlEtymology struct {
+	XMLName     xml.Name   `xml:"ety"`
+	Description string     `xml:"description,attr"`
+	Usages      []xmlUsage `xml:"usage"`
 }
 
-type Entry struct {
-	XMLName     xml.Name    `xml:"entry"`
-	Term        string      `xml:"term,attr"`
-	Etymologies []Etymology `xml:"ety"`
+type xmlEntry struct {
+	XMLName     xml.Name       `xml:"entry"`
+	Term        string         `xml:"term,attr"`
+	Etymologies []xmlEtymology `xml:"ety"`
 }
 
-type Dictionary struct {
-	XMLName xml.Name `xml:"dictionary"`
-	Name    string   `xml:"name,attr"`
-	Entries []Entry  `xml:"entry"`
+type xmlDictionary struct {
+	XMLName xml.Name   `xml:"dictionary"`
+	Name    string     `xml:"name,attr"`
+	Entries []xmlEntry `xml:"entry"`
 }
 
 func readFile(path string) *os.File {
@@ -56,8 +56,8 @@ func readFile(path string) *os.File {
 	return file
 }
 
-func xmlToDictionary(file *os.File) Dictionary {
-	var dictionary Dictionary
+func xmlToDictionary(file *os.File) xmlDictionary {
+	var dictionary xmlDictionary
 
 	byteValue, _ := ioutil.ReadAll(file)
 	xml.Unmarshal(byteValue, &dictionary)
@@ -65,7 +65,7 @@ func xmlToDictionary(file *os.File) Dictionary {
 	return dictionary
 }
 
-func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage Usage) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
 	definitions := usage.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -85,7 +85,7 @@ func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage Usage) fl
 	return builder.EndVector(defCount)
 }
 
-func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group DefinitionGroup) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group xmlDefinitionGroup) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -105,7 +105,7 @@ func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group Definitio
 	return builder.EndVector(defCount)
 }
 
-func getGroupsVector(builder *flatbuffers.Builder, usage Usage) flatbuffers.UOffsetT {
+func getGroupsVector(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
 	groups := usage.DefinitionGroups
 
 	var groupBuffer []flatbuffers.UOffsetT
@@ -135,7 +135,7 @@ func getGroupsVector(builder *flatbuffers.Builder, usage Usage) flatbuffers.UOff
 	return builder.EndVector(groupCount)
 }
 
-func getUsagesVector(builder *flatbuffers.Builder, ety Etymology) flatbuffers.UOffsetT {
+func getUsagesVector(builder *flatbuffers.Builder, ety xmlEtymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
 	var usageBuffer []flatbuffers.UOffsetT
@@ -167,7 +167,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety Etymology) flatbuffers.UO
 	return builder.EndVector(usageCount)
 }
 
-func getEtymologiesVector(builder *flatbuffers.Builder, entry Entry) flatbuffers.UOffsetT {
+func getEtymologiesVector(builder *flatbuffers.Builder, entry xmlEntry) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 
 	var etyBuffer []flatbuffers.UOffsetT
@@ -197,7 +197,7 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry Entry) flatbuffers
 	return builder.EndVector(etyCount)
 }
 
-func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatbuffers.UOffsetT {
+func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
 	var entryBuffer []flatbuffers.UOffsetT
@@ -227,7 +227,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatb
 	return builder.EndVector(entryCount)
 }
 
-func dictionaryToBytes(dictionary Dictionary) []byte {
+func dictionaryToBytes(dictionary xmlDictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString("id") // TODO: replace
@@ -244,7 +244,7 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary Dictionary) {
+func createODictFile(outputPath string, dictionary xmlDictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)

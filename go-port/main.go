@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/odict/odict"
+	odict "github.com/odict/odict/api"
 )
 
 func main() {

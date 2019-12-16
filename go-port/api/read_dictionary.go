@@ -1,4 +1,4 @@
-package odict
+package api
 
 import (
 	"encoding/binary"
@@ -12,7 +12,7 @@ import (
 )
 
 // ReadDictionary can go fuck itself
-func ReadDictionary(inputPath string) {
+func ReadDictionary(inputPath string) *schema.Dictionary {
 	// Read input file
 	file, err := os.Open(inputPath)
 
@@ -65,5 +65,6 @@ func ReadDictionary(inputPath string) {
 	utils.Check(decodedError)
 
 	dictionary := schema.GetRootAsDictionary(decoded, 0)
-	print(dictionary.Entries)
+
+	return dictionary
 }
