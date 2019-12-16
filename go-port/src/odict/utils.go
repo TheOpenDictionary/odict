@@ -1,6 +1,18 @@
-package utils
+package odict
 
 import "encoding/binary"
+
+func Check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func Assert(condition bool, errorMessage string) {
+	if !condition {
+		panic("Assertion failed: " + errorMessage)
+	}
+}
 
 func Uint16ToBytes(n uint16) []byte {
 	bytes := make([]byte, 2)

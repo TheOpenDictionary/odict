@@ -1,10 +1,9 @@
-package dictionary
+package odict
 
 import (
 	"encoding/binary"
 	"fmt"
-	"odict/schema"
-	"odict/utils"
+	"github.com/odict/odict/schema"
 	"os"
 
 	"github.com/golang/snappy"
@@ -15,7 +14,7 @@ func ReadDictionary(inputPath string) {
 	// Read input file
 	file, err := os.Open(inputPath)
 
-	utils.Check(err)
+	Check(err)
 
 	defer file.Close()
 
@@ -23,7 +22,7 @@ func ReadDictionary(inputPath string) {
 	sigBytes := make([]byte, 5)
 	_, sigErr := file.Read(sigBytes)
 
-	utils.Check(sigErr)
+	Check(sigErr)
 
 	// Read ODict version as bytes
 	file.Seek(5, 0)
@@ -31,7 +30,7 @@ func ReadDictionary(inputPath string) {
 	versionBytes := make([]byte, 2)
 	_, versionError := file.Read(versionBytes)
 
-	utils.Check(versionError)
+	Check(versionError)
 
 	// Read the compressed content size in bytes
 	file.Seek(7, 0)
@@ -39,7 +38,7 @@ func ReadDictionary(inputPath string) {
 	contentSizeBytes := make([]byte, 4)
 	_, contentSizeError := file.Read(contentSizeBytes)
 
-	utils.Check(contentSizeError)
+	Check(contentSizeError)
 	file.Seek(11, 0)
 
 	// Decode bytes for signature, version, and contentSize
@@ -48,20 +47,20 @@ func ReadDictionary(inputPath string) {
 	contentSize := binary.LittleEndian.Uint32(contentSizeBytes)
 
 	// Assert signature
-	utils.Assert(signature == "ODICT", "Invalid file signature")
+	Assert(signature == "ODICT", "Invalid file signature")
 
 	// Read compressed buffer content as bytes
 	contentBytes := make([]byte, contentSize)
 
 	_, contentError := file.Read(contentBytes)
 
-	utils.Check(contentError)
+	Check(contentError)
 
 	fmt.Printf("ODict Version %d\n", version)
 
 	decoded, decodedError := snappy.Decode(nil, contentBytes)
 
-	utils.Check(decodedError)
+	Check(decodedError)
 
 	dictionary := schema.GetRootAsDictionary(decoded, 0)
 	print(dictionary.Entries)

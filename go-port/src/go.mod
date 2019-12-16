@@ -1,4 +1,4 @@
-module odict
+module github.com/odict/odict
 
 go 1.13
 

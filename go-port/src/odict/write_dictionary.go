@@ -1,4 +1,4 @@
-package dictionary
+package odict
 
 import (
 	"bufio"
@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"odict/schema"
-	"odict/utils"
 	"os"
 	"strconv"
 	"time"
@@ -249,14 +248,14 @@ func createODictFile(outputPath string, dictionary Dictionary) {
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
 
-	utils.Check(err)
+	Check(err)
 
 	defer file.Close()
 
 	signature := []byte("ODICT")
-	version := utils.Uint16ToBytes(2)
+	version := Uint16ToBytes(2)
 	compressedSize := uint32(len(compressed))
-	compressedSizeBytes := utils.Uint32ToBytes(compressedSize)
+	compressedSizeBytes := Uint32ToBytes(compressedSize)
 
 	writer := bufio.NewWriter(file)
 
@@ -268,15 +267,15 @@ func createODictFile(outputPath string, dictionary Dictionary) {
 	total := sigBytes + versionBytes + contentSizeBytes + contentBytes
 	println(total)
 
-	utils.Check(sigErr)
-	utils.Check(versionErr)
-	utils.Check(contentCountErr)
-	utils.Check(contentErr)
+	Check(sigErr)
+	Check(versionErr)
+	Check(contentCountErr)
+	Check(contentErr)
 
-	utils.Assert(sigBytes == 5, "Signature bytes do not equal 5")
-	utils.Assert(versionBytes == 2, "Version bytes do not equal 2")
-	utils.Assert(contentSizeBytes == 4, "Content byte count does not equal 4")
-	utils.Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
+	Assert(sigBytes == 5, "Signature bytes do not equal 5")
+	Assert(versionBytes == 2, "Version bytes do not equal 2")
+	Assert(contentSizeBytes == 4, "Content byte count does not equal 4")
+	Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
 
 	writer.Flush()
 
