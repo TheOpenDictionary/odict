@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
 	odict "github.com/odict/odict/api"
@@ -9,19 +8,10 @@ import (
 
 func main() {
 	odict.WriteDictionary("example.xml", "example.odict")
-	odict.ReadDictionary("example.odict")
+	dict := odict.LoadDictionary("example.odict")
 
-	dd := map[string]int{
-		"rsc": 3711,
-		"r":   2138,
-		"gri": 1908,
-		"adg": 912,
-	}
+	fmt.Printf("ODict Version %d\n", dict.Version)
 
-	data, err := json.Marshal(dd)
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("--------\n", string(data))
-	}
+	println(dict.Entries[1].Term)
+	// println(dict.AsJSON())
 }
