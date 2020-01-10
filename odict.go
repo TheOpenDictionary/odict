@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	odict "github.com/Linguistic/odict/go"
+	cli "github.com/urfave/cli/v2"
 )
 
 func getFileName(path string) string {
@@ -21,21 +23,35 @@ func createDictionary(inputPath string) {
 }
 
 func main() {
-	start := time.Now()
+	app := &cli.App{
+		Name:  "odict",
+		Usage: "make an explosive entrance",
+		Action: func(c *cli.Context) error {
+			fmt.Println("boom! I say!")
+			return nil
+		},
+	}
 
-	createDictionary("example.xml")
+	err := app.Run(os.Args)
 
-	dict := odict.LoadDictionary("example.odict")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// start := time.Now()
 
-	res := odict.SearchDictionary(dict, "run")
+	// createDictionary("example.xml")
 
-	println(res)
+	// dict := odict.LoadDictionary("example.odict")
 
-	fmt.Printf("File version: %.1f\n", float64(dict.Version))
+	// res := odict.SearchDictionary(dict, "run")
 
-	elapsed := time.Since(start)
+	// println(res)
 
-	fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
+	// fmt.Printf("File version: %.1f\n", float64(dict.Version))
+
+	// elapsed := time.Since(start)
+
+	// fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
 
 	// println(dict.AsJSON())
 }
