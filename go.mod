@@ -14,5 +14,5 @@ require (
 	github.com/google/flatbuffers v1.11.0
 	github.com/google/uuid v1.1.1
 	github.com/steveyen/gtreap v0.0.0-20150807155958-0abe01ef9be2 // indirect
-	github.com/urfave/cli/v2 v2.1.1 // indirect
+	github.com/urfave/cli/v2 v2.1.1
 )
