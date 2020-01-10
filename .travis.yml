@@ -11,12 +11,10 @@ before_install:
   - export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
   - brew update
   - brew --version
-  # Install Buck
-  - brew tap facebook/fb
-  - travis_wait brew install buck
-  - buck --version
+  # Install Go
+  - travis_wait brew install go
 script:
-  - travis_wait buck build :odict
+  - travis_wait go build odict.go
 cache:
   directories:
     - $HOME/.linuxbrew/
