@@ -13,17 +13,17 @@ func getIndexPath(dictionary OpenDictionary) string {
 
 func createIndex(dictionary OpenDictionary) string {
 	indexPath := fmt.Sprintf(".%s.idx", dictionary.ID)
-	_, err := os.Stat(indexPath)
+	_, statErr := os.Stat(indexPath)
 
-	if os.IsNotExist(err) {
+	if os.IsNotExist(statErr) {
 		mapping := bleve.NewIndexMapping()
-		index, err := bleve.New(indexPath, mapping)
+		index, indexErr := bleve.New(indexPath, mapping)
 
-		Check(err)
+		Check(indexErr)
 
 		for entryIdx := range dictionary.Entries {
 			entry := dictionary.Entries[entryIdx]
-			err = index.Index(entry.ID, entry)
+			err := index.Index(entry.ID, entry)
 			Check(err)
 		}
 	}

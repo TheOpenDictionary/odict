@@ -27,12 +27,15 @@ func main() {
 
 	dict := odict.LoadDictionary("example.odict")
 
+	res := odict.SearchDictionary(dict, "run")
+
+	println(res)
+
 	fmt.Printf("File version: %.1f\n", float64(dict.Version))
 
 	elapsed := time.Since(start)
 
 	fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
 
-	println(dict.Entries[0].Term)
 	// println(dict.AsJSON())
 }
