@@ -46,16 +46,6 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func readFile(path string) *os.File {
-	file, err := os.Open(path)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return file
-}
-
 func xmlToDictionary(file *os.File) xmlDictionary {
 	var dictionary xmlDictionary
 
@@ -284,7 +274,14 @@ func createODictFile(outputPath string, dictionary xmlDictionary) {
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionary(inputPath, outputPath string) {
-	xmlFile := readFile(inputPath)
+	xmlFile, err := os.Open(inputPath)
+
 	defer xmlFile.Close()
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	createODictFile(outputPath, xmlToDictionary(xmlFile))
 }
