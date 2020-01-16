@@ -48,7 +48,7 @@ func main() {
 
 	res := odict.SearchDictionary(dict, "to move swiftly")
 
-	bytes, err := json.Marshal(res[0])
+	bytes, err := json.Marshal(res)
 	odict.Check(err)
 	println(string(bytes))
 

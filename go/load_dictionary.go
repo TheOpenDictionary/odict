@@ -10,7 +10,7 @@ import (
 )
 
 func getODDefinitionsFromUsage(usage schema.Usage) []string {
-	var definitions []string
+	definitions := []string{}
 
 	for f := 0; f < usage.DefinitionsLength(); f++ {
 		definitions = append(definitions, string(usage.Definitions(f)))
@@ -20,7 +20,7 @@ func getODDefinitionsFromUsage(usage schema.Usage) []string {
 }
 
 func getODDefinitionsFromGroup(group schema.Group) []string {
-	var definitions []string
+	definitions := []string{}
 
 	for e := 0; e < group.DefinitionsLength(); e++ {
 		definitions = append(definitions, string(group.Definitions(e)))
@@ -31,7 +31,8 @@ func getODDefinitionsFromGroup(group schema.Group) []string {
 
 func getODDefinitionGroups(usage schema.Usage) []OpenDictionaryDefinitionGroup {
 	var definitionGroup schema.Group
-	var definitionGroups []OpenDictionaryDefinitionGroup
+	
+	definitionGroups := []OpenDictionaryDefinitionGroup{}
 
 	for d := 0; d < usage.GroupsLength(); d++ {
 		usage.Groups(&definitionGroup, d)
@@ -55,6 +56,7 @@ func getODUsages(etymology schema.Etymology) []OpenDictionaryUsage {
 		etymology.Usages(&usage, c)
 
 		odUsage := OpenDictionaryUsage{
+			ID: 							string(usage.Id()),
 			POS:              string(usage.Pos()),
 			DefinitionGroups: getODDefinitionGroups(usage),
 			Definitions:      getODDefinitionsFromUsage(usage),
