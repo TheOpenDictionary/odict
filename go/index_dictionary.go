@@ -27,6 +27,6 @@ func createIndex(dictionary OpenDictionary) string {
 			Check(err)
 		}
 	}
-
+	
 	return indexPath
 }
