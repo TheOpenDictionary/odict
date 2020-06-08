@@ -1,0 +1,48 @@
+namespace schema;
+
+enum POS:byte {
+    verb = 0,
+    noun,
+    adj,
+    pronoun,
+    adv,
+    prep,
+    conj,
+    intj,
+    prefix,
+    suffix,
+    particle
+}
+
+table Etymology {
+    id:string;
+    description:string;
+    usages:[Usage];
+}
+
+table Group {
+    id:string;
+    description:string;
+    definitions:[string];
+}
+
+table Usage {
+    id:string;
+    pos:string;
+    definitions:[string];
+    groups:[Group];
+}
+
+table Entry {
+    id:string;
+    term:string (key);
+    etymologies:[Etymology];
+}
+
+table Dictionary {
+    id:string;
+    name:string;
+    entries:[Entry];
+}
+
+root_type Dictionary;
