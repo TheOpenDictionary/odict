@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -63,7 +64,14 @@ func main() {
 
 					start := time.Now()
 
-					odict.LoadDictionary(inputFile)
+					dict := odict.LoadDictionary(inputFile)
+					results := odict.SearchDictionary(dict, "run")
+
+					b, err := json.MarshalIndent(results, "", " ")
+
+					odict.Check(err)
+
+					println(string(b))
 
 					elapsed := time.Since(start)
 

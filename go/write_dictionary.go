@@ -2,7 +2,6 @@ package odict
 
 import (
 	"bufio"
-	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -220,7 +219,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) fl
 func dictionaryToBytes(dictionary xmlDictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
-	id := builder.CreateString(base64.StdEncoding.EncodeToString([]byte(uuid.New().String())))
+	id := builder.CreateString(uuid.New().String())
 	name := builder.CreateString(dictionary.Name)
 	entries := getEntriesVector(builder, dictionary)
 

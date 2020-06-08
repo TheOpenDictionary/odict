@@ -1,6 +1,7 @@
 package odict
 
 import (
+	"encoding/json"
 	"os"
 
 	"github.com/blevesearch/bleve"
@@ -22,28 +23,27 @@ func SearchDictionary(dictionary OpenDictionary, queryStr string) []OpenDictiona
 
 	query := bleve.NewMatchQuery(queryStr)
 	search := bleve.NewSearchRequest(query)
+	search.Fields = []string{"*"}
 	searchResults, searchErr := index.Search(search)
 
 	Check(searchErr)
 
 	hits := searchResults.Hits
-	hitIDs := make([]string, len(hits))
+	entries := make([]OpenDictionaryEntry, len(hits))
 
 	for i := range hits {
-		hitIDs[i] = hits[i].ID
-	}
+		entry := &OpenDictionaryEntry{}
+		hitID := hits[i].ID
+		b, err := index.GetInternal([]byte(hitID))
 
-	results := make([]OpenDictionaryEntry, 0)
-
-	// PLEASE tell me there's a better way
-	for _, entry := range dictionary.Entries {
-		for _, id := range hitIDs {
-			if id == entry.ID {
-				results = append(results, entry)
-				break
-			}
+		if err != nil {
+			panic(err)
 		}
+
+		json.Unmarshal(b, &entry)
+
+		entries[i] = *entry
 	}
 
-	return results
+	return entries
 }

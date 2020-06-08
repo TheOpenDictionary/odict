@@ -31,7 +31,7 @@ func getODDefinitionsFromGroup(group schema.Group) []string {
 
 func getODDefinitionGroups(usage schema.Usage) []OpenDictionaryDefinitionGroup {
 	var definitionGroup schema.Group
-	
+
 	definitionGroups := []OpenDictionaryDefinitionGroup{}
 
 	for d := 0; d < usage.GroupsLength(); d++ {
@@ -56,7 +56,7 @@ func getODUsages(etymology schema.Etymology) []OpenDictionaryUsage {
 		etymology.Usages(&usage, c)
 
 		odUsage := OpenDictionaryUsage{
-			ID: 							string(usage.Id()),
+			ID:               string(usage.Id()),
 			POS:              string(usage.Pos()),
 			DefinitionGroups: getODDefinitionGroups(usage),
 			Definitions:      getODDefinitionsFromUsage(usage),
