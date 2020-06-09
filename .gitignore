@@ -146,4 +146,6 @@ $RECYCLE.BIN/
 odict 
 *.odict
 *.bleve
+*.so
+*.h
 # End of https://www.gitignore.io/api/bazel

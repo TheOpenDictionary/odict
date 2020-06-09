@@ -22,10 +22,11 @@ func getFileName(path string) string {
 }
 
 //export CreateDictionaryFromPath
-func CreateDictionaryFromPath(inputPath string) {
-	name := getFileName(inputPath)
-	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(inputPath), name)
-	xmlFile, err := os.Open(inputPath)
+func CreateDictionaryFromPath(inputPath *C.char) {
+	path := C.GoString(inputPath)
+	name := getFileName(path)
+	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(path), name)
+	xmlFile, err := os.Open(path)
 
 	defer xmlFile.Close()
 
@@ -38,8 +39,8 @@ func CreateDictionaryFromPath(inputPath string) {
 }
 
 //export CreateDictionaryFromXML
-func CreateDictionaryFromXML(xmlStr, outputPath string) {
-	odict.WriteDictionary(xmlStr, outputPath)
+func CreateDictionaryFromXML(xmlStr, outputPath *C.char) {
+	odict.WriteDictionary(C.GoString(xmlStr), C.GoString(outputPath))
 }
 
 func main() {
@@ -60,7 +61,7 @@ func main() {
 
 					start := time.Now()
 
-					CreateDictionaryFromPath(inputFile)
+					CreateDictionaryFromPath(C.CString(inputFile))
 
 					elapsed := time.Since(start)
 
