@@ -16,9 +16,4 @@ The Open Dictionary Project (ODict for short), is an open-source alternative to 
   (fastest serialization). Entries are searched in log(*n*) time, [un-coincidentally the time complexity of an ordered map 
    lookup](https://google.github.io/flatbuffers/flatbuffers_guide_use_cpp.html).
    
-### Documentation
-
-1. [The ODXML Markup](docs/Schema.md)
-2. [File Format Specification](docs/Specification.md)
-3. [Using the CLI](docs/CLI.md)
-4. [Building ODict](docs/Building.md)
+Full documentation available at https://odict.org.
