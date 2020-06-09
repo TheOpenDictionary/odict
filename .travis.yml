@@ -1,8 +1,0 @@
-sudo: required
-dist: trusty
-language: go
-script:
-  - env GO111MODULE=on travis_wait go build odict.go
-cache:
-  directories:
-    - $HOME/.linuxbrew/
