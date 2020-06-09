@@ -106,7 +106,7 @@ func getODEntries(dictionary *schema.Dictionary) []OpenDictionaryEntry {
 }
 
 // LoadDictionary can go fuck itself
-func LoadDictionary(inputPath string) OpenDictionary {
+func LoadDictionary(inputPath string, newIndex bool) OpenDictionary {
 	// Read input file
 	file, err := os.Open(inputPath)
 
@@ -164,7 +164,7 @@ func LoadDictionary(inputPath string) OpenDictionary {
 		Entries: getODEntries(buffer),
 	}
 
-	createIndex(dictionary)
+	createIndex(dictionary, newIndex)
 
 	return dictionary
 }

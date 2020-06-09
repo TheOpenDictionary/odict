@@ -12,11 +12,12 @@ func getIndexPath(dictionary OpenDictionary) string {
 	return fmt.Sprintf("%sodict--%s", os.TempDir(), dictionary.ID)
 }
 
-func createIndex(dictionary OpenDictionary) string {
+func createIndex(dictionary OpenDictionary, force bool) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
+		println("Indexing dictionary (this might take some time)...")
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.New(indexPath, mapping)
 
@@ -36,6 +37,12 @@ func createIndex(dictionary OpenDictionary) string {
 			index.SetInternal([]byte(entry.ID), b)
 
 			Check(err)
+		}
+	} else {
+		if force {
+			println("Purging existing index...")
+			os.RemoveAll(indexPath)
+			return createIndex(dictionary, false)
 		}
 	}
 

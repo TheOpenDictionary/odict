@@ -71,6 +71,28 @@ func main() {
 				},
 			},
 			{
+				Name:    "index",
+				Aliases: []string{"i"},
+				Usage:   "index a compiled dictionary",
+				Action: func(c *cli.Context) error {
+					inputFile := c.Args().Get(0)
+
+					if len(inputFile) == 0 {
+						return fmt.Errorf("missing input file")
+					}
+
+					start := time.Now()
+
+					odict.LoadDictionary(inputFile, true)
+
+					elapsed := time.Since(start)
+
+					fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
+
+					return nil
+				},
+			},
+			{
 				Name:    "search",
 				Aliases: []string{"s"},
 				Usage:   "search a compiled dictionary",
@@ -88,7 +110,7 @@ func main() {
 
 					start := time.Now()
 
-					dict := odict.LoadDictionary(inputFile)
+					dict := odict.LoadDictionary(inputFile, false)
 					results := odict.SearchDictionary(dict, searchTerm)
 
 					b, err := json.MarshalIndent(results, "", " ")
