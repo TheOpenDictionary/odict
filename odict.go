@@ -1,15 +1,18 @@
 package main
 
+import "C"
+
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
-	odict "github.com/Linguistic/odict/go"
+	odict "github.com/odict/odict/go"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -18,10 +21,25 @@ func getFileName(path string) string {
 	return strings.TrimSuffix(base, filepath.Ext(base))
 }
 
-func createDictionary(inputPath string) {
+//export CreateDictionaryFromPath
+func CreateDictionaryFromPath(inputPath string) {
 	name := getFileName(inputPath)
 	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(inputPath), name)
-	odict.WriteDictionary(inputPath, outputPath)
+	xmlFile, err := os.Open(inputPath)
+
+	defer xmlFile.Close()
+
+	odict.Check(err)
+
+	xmlStr, err := ioutil.ReadAll(xmlFile)
+
+	odict.Check(err)
+	odict.WriteDictionary(string(xmlStr), outputPath)
+}
+
+//export CreateDictionaryFromXML
+func CreateDictionaryFromXML(xmlStr, outputPath string) {
+	odict.WriteDictionary(xmlStr, outputPath)
 }
 
 func main() {
@@ -42,7 +60,7 @@ func main() {
 
 					start := time.Now()
 
-					createDictionary(inputFile)
+					CreateDictionaryFromPath(inputFile)
 
 					elapsed := time.Since(start)
 
@@ -88,20 +106,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// createDictionary("example.xml")
-
-	// dict := odict.LoadDictionary("example.odict")
-
-	// println(dict.ID)
-
-	// res := odict.SearchDictionary(dict, "to move swiftly")
-
-	// bytes, err := json.Marshal(res)
-	// odict.Check(err)
-	// println(string(bytes))
-
-	// fmt.Printf("File version: %.1f\n", float64(dict.Version))
-
-	// println(dict.AsJSON())
 }

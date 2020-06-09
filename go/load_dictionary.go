@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"os"
 
-	schema "github.com/Linguistic/odict/go/.schema"
+	schema "github.com/odict/odict/go/.schema"
 
 	"github.com/golang/snappy"
 )

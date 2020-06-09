@@ -1,4 +1,4 @@
-module github.com/Linguistic/odict
+module github.com/odict/odict
 
 go 1.13
 
@@ -15,6 +15,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/steveyen/gtreap v0.0.0-20150807155958-0abe01ef9be2 // indirect
+	github.com/urfave/cli v1.22.4 // indirect
 	github.com/urfave/cli/v2 v2.1.1
 	github.com/wolfeidau/unflatten v1.1.0
 )

@@ -9,7 +9,7 @@ import (
 )
 
 func getIndexPath(dictionary OpenDictionary) string {
-	return fmt.Sprintf("%s.bleve", dictionary.ID)
+	return fmt.Sprintf("%s/odict--%s", os.TempDir(), dictionary.ID)
 }
 
 func createIndex(dictionary OpenDictionary) string {

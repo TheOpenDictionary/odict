@@ -4,14 +4,13 @@ import (
 	"bufio"
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 
-	schema "github.com/Linguistic/odict/go/.schema"
 	"github.com/golang/snappy"
 	flatbuffers "github.com/google/flatbuffers/go"
 	uuid "github.com/google/uuid"
+	schema "github.com/odict/odict/go/.schema"
 )
 
 type xmlDefinitionGroup struct {
@@ -45,11 +44,10 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func xmlToDictionary(file *os.File) xmlDictionary {
+func xmlToDictionary(xmlStr string) xmlDictionary {
 	var dictionary xmlDictionary
 
-	byteValue, _ := ioutil.ReadAll(file)
-	xml.Unmarshal(byteValue, &dictionary)
+	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
 	return dictionary
 }
@@ -272,15 +270,7 @@ func createODictFile(outputPath string, dictionary xmlDictionary) {
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionary(inputPath, outputPath string) {
-	xmlFile, err := os.Open(inputPath)
-
-	defer xmlFile.Close()
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	createODictFile(outputPath, xmlToDictionary(xmlFile))
+func WriteDictionary(xmlStr, outputPath string) {
+	println(outputPath)
+	createODictFile(outputPath, xmlToDictionary(xmlStr))
 }
