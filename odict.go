@@ -76,15 +76,20 @@ func main() {
 				Usage:   "search a compiled dictionary",
 				Action: func(c *cli.Context) error {
 					inputFile := c.Args().Get(0)
+					searchTerm := c.Args().Get(1)
 
 					if len(inputFile) == 0 {
 						return fmt.Errorf("missing input file")
 					}
 
+					if len(searchTerm) == 0 {
+						return fmt.Errorf("missing search term")
+					}
+
 					start := time.Now()
 
 					dict := odict.LoadDictionary(inputFile)
-					results := odict.SearchDictionary(dict, "run")
+					results := odict.SearchDictionary(dict, searchTerm)
 
 					b, err := json.MarshalIndent(results, "", " ")
 

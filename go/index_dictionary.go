@@ -15,7 +15,7 @@ func getIndexPath(dictionary OpenDictionary) string {
 func createIndex(dictionary OpenDictionary) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
-	println(indexPath)
+
 	if os.IsNotExist(statErr) {
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.New(indexPath, mapping)
@@ -29,7 +29,6 @@ func createIndex(dictionary OpenDictionary) string {
 			err := index.Index(entry.ID, entry)
 			b, err := json.Marshal(entry)
 
-			println(entry.Term)
 			if err != nil {
 				panic(err)
 			}

@@ -23,7 +23,6 @@ func SearchDictionary(dictionary OpenDictionary, queryStr string) []OpenDictiona
 
 	query := bleve.NewMatchQuery(queryStr)
 	search := bleve.NewSearchRequest(query)
-	search.Fields = []string{"*"}
 	searchResults, searchErr := index.Search(search)
 
 	Check(searchErr)
