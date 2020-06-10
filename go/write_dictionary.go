@@ -10,7 +10,7 @@ import (
 	"github.com/golang/snappy"
 	flatbuffers "github.com/google/flatbuffers/go"
 	uuid "github.com/google/uuid"
-	schema "github.com/odict/odict/go/.schema"
+	schema "github.com/odict/odict/go/schema"
 )
 
 type xmlDefinitionGroup struct {
