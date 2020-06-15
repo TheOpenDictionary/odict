@@ -48,9 +48,10 @@ func getODDefinitionGroups(usage schema.Usage) []OpenDictionaryDefinitionGroup {
 	return definitionGroups
 }
 
-func getODUsages(etymology schema.Etymology) []OpenDictionaryUsage {
+func getODUsages(etymology schema.Etymology) map[string]OpenDictionaryUsage {
 	var usage schema.Usage
-	var usages []OpenDictionaryUsage
+
+	usages := make(map[string]OpenDictionaryUsage)
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)
@@ -62,7 +63,7 @@ func getODUsages(etymology schema.Etymology) []OpenDictionaryUsage {
 			Definitions:      getODDefinitionsFromUsage(usage),
 		}
 
-		usages = append(usages, odUsage)
+		usages[odUsage.POS] = odUsage
 	}
 
 	return usages
@@ -86,9 +87,10 @@ func getODEtymologies(entry schema.Entry) []OpenDictionaryEtymology {
 	return etymologies
 }
 
-func getODEntries(dictionary *schema.Dictionary) []OpenDictionaryEntry {
+func getODEntries(dictionary *schema.Dictionary) map[string]OpenDictionaryEntry {
 	var entry schema.Entry
-	var entries []OpenDictionaryEntry
+
+	entries := make(map[string]OpenDictionaryEntry)
 
 	for a := 0; a < dictionary.EntriesLength(); a++ {
 		dictionary.Entries(&entry, a)
@@ -99,7 +101,7 @@ func getODEntries(dictionary *schema.Dictionary) []OpenDictionaryEntry {
 			Etymologies: getODEtymologies(entry),
 		}
 
-		entries = append(entries, odEntry)
+		entries[odEntry.Term] = odEntry
 	}
 
 	return entries

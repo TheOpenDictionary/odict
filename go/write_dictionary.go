@@ -271,6 +271,5 @@ func createODictFile(outputPath string, dictionary xmlDictionary) {
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionary(xmlStr, outputPath string) {
-	println(outputPath)
 	createODictFile(outputPath, xmlToDictionary(xmlStr))
 }

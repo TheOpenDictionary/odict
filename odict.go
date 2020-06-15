@@ -3,6 +3,7 @@ package main
 import "C"
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -118,6 +119,82 @@ func main() {
 					odict.Check(err)
 
 					println(string(b))
+
+					elapsed := time.Since(start)
+
+					fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
+
+					return nil
+				},
+			},
+			{
+				Name:    "dump",
+				Aliases: []string{"d"},
+				Usage:   "dumps a previously compiled dictionary to its original ODXML",
+				Action: func(c *cli.Context) error {
+					inputFile := c.Args().Get(0)
+					outputFile := c.Args().Get(1)
+
+					if len(inputFile) == 0 {
+						return fmt.Errorf("missing input file")
+					}
+
+					if len(outputFile) == 0 {
+						return fmt.Errorf("missing output file")
+					}
+
+					start := time.Now()
+
+					dict := odict.LoadDictionary(inputFile, false)
+					dumped := odict.DumpDictionary(dict)
+					file, err := os.Create(outputFile)
+
+					odict.Check(err)
+
+					defer file.Close()
+
+					writer := bufio.NewWriter(file)
+
+					writer.Write([]byte(dumped))
+
+					writer.Flush()
+
+					elapsed := time.Since(start)
+
+					fmt.Printf("Completed in %.4f seconds\n", elapsed.Seconds())
+
+					return nil
+				},
+			},
+			{
+				Name:    "merge",
+				Aliases: []string{"m"},
+				Usage:   "merge two dictionaries",
+				Action: func(c *cli.Context) error {
+					inputFile1 := c.Args().Get(0)
+					inputFile2 := c.Args().Get(1)
+
+					if len(inputFile1) == 0 {
+						return fmt.Errorf("missing first input file")
+					}
+
+					if len(inputFile2) == 0 {
+						return fmt.Errorf("missing second input file")
+					}
+
+					start := time.Now()
+
+					dict1 := odict.LoadDictionary(inputFile1, false)
+					dict2 := odict.LoadDictionary(inputFile2, false)
+					result := odict.MergeDictionaries(dict1, dict2)
+
+					println(odict.DumpDictionary(result))
+
+					// b, err := json.MarshalIndent(results, "", " ")
+
+					// odict.Check(err)
+
+					// println(string(b))
 
 					elapsed := time.Since(start)
 

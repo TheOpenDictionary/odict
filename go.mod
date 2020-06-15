@@ -13,6 +13,7 @@ require (
 	github.com/golang/snappy v0.0.1
 	github.com/google/flatbuffers v1.11.0
 	github.com/google/uuid v1.1.1
+	github.com/imdario/mergo v0.3.9
 	github.com/mitchellh/mapstructure v1.3.2
 	github.com/steveyen/gtreap v0.0.0-20150807155958-0abe01ef9be2 // indirect
 	github.com/urfave/cli v1.22.4 // indirect
