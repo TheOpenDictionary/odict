@@ -9,5 +9,5 @@ type Dictionary struct {
 	Name    string             `json:"name" xml:"name,attr,omitempty"`
 	Entries DictionaryEntryMap `json:"entries" xml:"entry"`
 	Version uint16             `json:"version" xml:"-"`
-	XMLName xml.Name           `xml:"dictionary"`
+	XMLName xml.Name           `json:"-" xml:"dictionary"`
 }

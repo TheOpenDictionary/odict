@@ -26,24 +26,20 @@ func (rcv *Usage) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Usage) Id() []byte {
+func (rcv *Usage) Pos() POS {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+		return rcv._tab.GetInt8(o + rcv._tab.Pos)
 	}
-	return nil
+	return 0
 }
 
-func (rcv *Usage) Pos() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
+func (rcv *Usage) MutatePos(n POS) bool {
+	return rcv._tab.MutateInt8Slot(4, n)
 }
 
 func (rcv *Usage) Definitions(j int) []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
 		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
@@ -52,7 +48,7 @@ func (rcv *Usage) Definitions(j int) []byte {
 }
 
 func (rcv *Usage) DefinitionsLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -60,7 +56,7 @@ func (rcv *Usage) DefinitionsLength() int {
 }
 
 func (rcv *Usage) Groups(obj *Group, j int) bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		x += flatbuffers.UOffsetT(j) * 4
@@ -72,7 +68,7 @@ func (rcv *Usage) Groups(obj *Group, j int) bool {
 }
 
 func (rcv *Usage) GroupsLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -80,22 +76,19 @@ func (rcv *Usage) GroupsLength() int {
 }
 
 func UsageStart(builder *flatbuffers.Builder) {
-	builder.StartObject(4)
+	builder.StartObject(3)
 }
-func UsageAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
-}
-func UsageAddPos(builder *flatbuffers.Builder, pos flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(pos), 0)
+func UsageAddPos(builder *flatbuffers.Builder, pos int8) {
+	builder.PrependInt8Slot(0, pos, 0)
 }
 func UsageAddDefinitions(builder *flatbuffers.Builder, definitions flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(definitions), 0)
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(definitions), 0)
 }
 func UsageStartDefinitionsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func UsageAddGroups(builder *flatbuffers.Builder, groups flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(groups), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(groups), 0)
 }
 func UsageStartGroupsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)

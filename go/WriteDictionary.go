@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/golang/snappy"
 	flatbuffers "github.com/google/flatbuffers/go"
 	uuid "github.com/google/uuid"
-	schema "github.com/odict/odict/go/schema"
+	"github.com/odict/odict/go/schema"
 )
 
 type xmlDefinitionGroup struct {
@@ -122,6 +123,43 @@ func getGroupsVector(builder *flatbuffers.Builder, usage DictionaryUsage) flatbu
 	return builder.EndVector(groupCount)
 }
 
+func resolvePOS(posStr string) int8 {
+	posMap := map[string]int8{
+		"adjective":    schema.POSadj,
+		"adj":          schema.POSadj,
+		"adverb":       schema.POSadv,
+		"adv":          schema.POSadv,
+		"verb":         schema.POSverb,
+		"v":            schema.POSverb,
+		"noun":         schema.POSnoun,
+		"pronoun":      schema.POSpronoun,
+		"pn":           schema.POSpronoun,
+		"prep":         schema.POSprep,
+		"preposition":  schema.POSprep,
+		"conj":         schema.POSconj,
+		"conjugation":  schema.POSconj,
+		"intj":         schema.POSintj,
+		"interjection": schema.POSintj,
+		"prefix":       schema.POSprefix,
+		"pre":          schema.POSprefix,
+		"suffix":       schema.POSsuffix,
+		"suf":          schema.POSsuffix,
+		"particle":     schema.POSparticle,
+		"part":         schema.POSparticle,
+		"article":      schema.POSarticle,
+		"art":          schema.POSarticle,
+		"unknown":      schema.POSunknown,
+	}
+
+	if val, ok := posMap[posStr]; ok {
+		return val
+	} else if len(strings.TrimSpace(posStr)) == 0 {
+		return schema.POSunknown
+	} else {
+		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", posStr))
+	}
+}
+
 func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
@@ -129,13 +167,11 @@ func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flat
 
 	for key := range usages.Iterable {
 		usage := usages.Get(key)
-		usageID := builder.CreateString(strconv.Itoa(0))
-		usagePOS := builder.CreateString(usage.POS)
+		usagePOS := resolvePOS(usage.POS)
 		usageDefinitionGroups := getGroupsVector(builder, usage)
 		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
 
 		schema.UsageStart(builder)
-		schema.UsageAddId(builder, usageID)
 		schema.UsageAddPos(builder, usagePOS)
 		schema.UsageAddGroups(builder, usageDefinitionGroups)
 		schema.UsageAddDefinitions(builder, usageDefinitions)
@@ -191,12 +227,10 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatb
 
 	for key := range entries.Iterable {
 		entry := entries.Get(key)
-		entryID := builder.CreateString(strconv.Itoa(0)) // TODO: add prefix
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
 
 		schema.EntryStart(builder)
-		schema.EntryAddId(builder, entryID)
 		schema.EntryAddTerm(builder, entryTerm)
 		schema.EntryAddEtymologies(builder, entryEtymologies)
 

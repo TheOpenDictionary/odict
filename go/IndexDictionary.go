@@ -27,9 +27,8 @@ func createIndex(dictionary Dictionary, force bool) string {
 
 		for key := range dictionary.Entries.Iterable {
 			entry := dictionary.Entries.Get(key)
-			println(entry.Term)
 
-			idxErr := index.Index(entry.ID, entry)
+			idxErr := index.Index(entry.Term, entry)
 
 			Check(idxErr)
 
@@ -37,7 +36,7 @@ func createIndex(dictionary Dictionary, force bool) string {
 
 			Check(err)
 
-			index.SetInternal([]byte(entry.ID), b)
+			index.SetInternal([]byte(entry.Term), b)
 		}
 	} else {
 		if force {

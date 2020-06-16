@@ -15,6 +15,8 @@ const (
 	POSprefix POS = 8
 	POSsuffix POS = 9
 	POSparticle POS = 10
+	POSarticle POS = 11
+	POSunknown POS = 12
 )
 
 var EnumNamesPOS = map[POS]string{
@@ -29,5 +31,7 @@ var EnumNamesPOS = map[POS]string{
 	POSprefix:"prefix",
 	POSsuffix:"suffix",
 	POSparticle:"particle",
+	POSarticle:"article",
+	POSunknown:"unknown",
 }
 

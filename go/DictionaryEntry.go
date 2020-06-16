@@ -17,6 +17,13 @@ func (m *DictionaryEntryMap) Get(key string) DictionaryEntry {
 	return m.Iterable[key]
 }
 
+func (m DictionaryEntryMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	for key := range m.Iterable {
+		e.Encode(m.Get(key))
+	}
+	return nil
+}
+
 func (m *DictionaryEntryMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var entry DictionaryEntry
 
@@ -41,8 +48,7 @@ func (m *DictionaryEntryMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 }
 
 type DictionaryEntry struct {
-	ID          string                `json:"id" xml:"id,attr"`
 	Term        string                `json:"term" xml:"term,attr"`
 	Etymologies []DictionaryEtymology `json:"etymologies" xml:"ety"`
-	XMLName     xml.Name              `xml:"entry"`
+	XMLName     xml.Name              `json:"-" xml:"entry"`
 }

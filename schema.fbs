@@ -11,7 +11,9 @@ enum POS:byte {
     intj,
     prefix,
     suffix,
-    particle
+    particle,
+    article,
+    unknown
 }
 
 table Etymology {
@@ -27,14 +29,12 @@ table Group {
 }
 
 table Usage {
-    id:string;
-    pos:string;
+    pos:POS (key);
     definitions:[string];
     groups:[Group];
 }
 
 table Entry {
-    id:string;
     term:string (key);
     etymologies:[Etymology];
 }

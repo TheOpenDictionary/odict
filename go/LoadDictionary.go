@@ -57,7 +57,6 @@ func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
 		etymology.Usages(&usage, c)
 
 		odUsage := DictionaryUsage{
-			ID:               string(usage.Id()),
 			POS:              string(usage.Pos()),
 			DefinitionGroups: getODDefinitionGroups(usage),
 			Definitions:      getODDefinitionsFromUsage(usage),
@@ -96,7 +95,6 @@ func getODEntries(dictionary *schema.Dictionary) DictionaryEntryMap {
 		dictionary.Entries(&entry, a)
 
 		odEntry := DictionaryEntry{
-			ID:          string(entry.Id()),
 			Term:        string(entry.Term()),
 			Etymologies: getODEtymologies(entry),
 		}

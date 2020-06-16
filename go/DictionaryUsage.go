@@ -1,16 +1,16 @@
 package odict
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"io"
 )
 
 type DictionaryUsage struct {
-	ID               string                      `json:"id" xml:"id,attr"`
 	POS              string                      `json:"pos" xml:"pos,attr,omitempty"`
 	Definitions      []string                    `json:"definitions" xml:"definition"`
 	DefinitionGroups []DictionaryDefinitionGroup `json:"groups" xml:"group"`
-	XMLName          xml.Name                    `xml:"usage"`
+	XMLName          xml.Name                    `json:"-" xml:"usage"`
 }
 
 type DictionaryUsageMap struct {
@@ -23,6 +23,17 @@ func (m *DictionaryUsageMap) Set(key string, value DictionaryUsage) {
 
 func (m *DictionaryUsageMap) Get(key string) DictionaryUsage {
 	return m.Iterable[key]
+}
+
+func (m DictionaryUsageMap) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.Iterable)
+}
+
+func (m DictionaryUsageMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	for key := range m.Iterable {
+		e.Encode(m.Get(key))
+	}
+	return nil
 }
 
 func (m *DictionaryUsageMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
