@@ -27,17 +27,17 @@ func createIndex(dictionary Dictionary, force bool) string {
 
 		for key := range dictionary.Entries.Iterable {
 			entry := dictionary.Entries.Get(key)
-			print(len(entry.Etymologies[0].Usages.Iterable))
-			err := index.Index(entry.ID, entry)
+			println(entry.Term)
+
+			idxErr := index.Index(entry.ID, entry)
+
+			Check(idxErr)
+
 			b, err := json.Marshal(entry)
 
-			if err != nil {
-				panic(err)
-			}
+			Check(err)
 
 			index.SetInternal([]byte(entry.ID), b)
-
-			Check(err)
 		}
 	} else {
 		if force {

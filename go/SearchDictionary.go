@@ -28,6 +28,7 @@ func SearchDictionary(dictionary Dictionary, queryStr string) []DictionaryEntry 
 	Check(searchErr)
 
 	hits := searchResults.Hits
+
 	entries := make([]DictionaryEntry, len(hits))
 
 	for i := range hits {
