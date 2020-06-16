@@ -1,7 +1,7 @@
-<dictionary id="84dd3b02-e870-4891-8773-55fd6ff46fca" name="Example Dictionary 1">
- <entry id="跑步" term="跑步">
+<dictionary id="68b4ab76-afaa-44aa-b48c-6b0f7e8efc80" name="Example Dictionary 1">
+ <entry term="run">
   <ety id="0">
-   <usage id="verb" pos="verb">
+   <usage pos="�">
     <group id="" description="A number of verb usages">
      <definition>(vertebrates) To move swiftly.</definition>
      <definition>(fluids) To flow.</definition>
@@ -11,7 +11,7 @@
      <definition>(transitive) To execute or carry out a plan, procedure or program.</definition>
     </group>
    </usage>
-   <usage id="noun" pos="noun">
+   <usage pos="�">
     <definition>Act or instance of running, of moving rapidly using the feet.</definition>
     <definition>Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.</definition>
     <definition>A pleasure trip.</definition>
@@ -21,9 +21,9 @@
    </usage>
   </ety>
  </entry>
- <entry id="run" term="run">
+ <entry term="跑步">
   <ety id="0">
-   <usage id="verb" pos="verb">
+   <usage pos="�">
     <group id="" description="A number of verb usages">
      <definition>(vertebrates) To move swiftly.</definition>
      <definition>(fluids) To flow.</definition>
@@ -33,7 +33,7 @@
      <definition>(transitive) To execute or carry out a plan, procedure or program.</definition>
     </group>
    </usage>
-   <usage id="noun" pos="noun">
+   <usage pos="�">
     <definition>Act or instance of running, of moving rapidly using the feet.</definition>
     <definition>Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.</definition>
     <definition>A pleasure trip.</definition>

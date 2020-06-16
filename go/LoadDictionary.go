@@ -51,7 +51,7 @@ func getODDefinitionGroups(usage schema.Usage) []DictionaryDefinitionGroup {
 func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
 	var usage schema.Usage
 
-	usages := DictionaryUsageMap{make(map[string]DictionaryUsage)}
+	usages := DictionaryUsageMap{make(map[DictionaryPartOfSpeech]DictionaryUsage)}
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)

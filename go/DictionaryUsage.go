@@ -7,21 +7,21 @@ import (
 )
 
 type DictionaryUsage struct {
-	POS              string                      `json:"pos" xml:"pos,attr,omitempty"`
+	POS              DictionaryPartOfSpeech      `json:"pos" xml:"pos,attr"`
 	Definitions      []string                    `json:"definitions" xml:"definition"`
 	DefinitionGroups []DictionaryDefinitionGroup `json:"groups" xml:"group"`
 	XMLName          xml.Name                    `json:"-" xml:"usage"`
 }
 
 type DictionaryUsageMap struct {
-	Iterable map[string]DictionaryUsage
+	Iterable map[DictionaryPartOfSpeech]DictionaryUsage
 }
 
-func (m *DictionaryUsageMap) Set(key string, value DictionaryUsage) {
+func (m *DictionaryUsageMap) Set(key DictionaryPartOfSpeech, value DictionaryUsage) {
 	m.Iterable[key] = value
 }
 
-func (m *DictionaryUsageMap) Get(key string) DictionaryUsage {
+func (m *DictionaryUsageMap) Get(key DictionaryPartOfSpeech) DictionaryUsage {
 	return m.Iterable[key]
 }
 
@@ -42,7 +42,7 @@ func (m *DictionaryUsageMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 	d.DecodeElement(&usage, &start)
 
 	if m.Iterable == nil {
-		m.Iterable = make(map[string]DictionaryUsage)
+		m.Iterable = make(map[DictionaryPartOfSpeech]DictionaryUsage)
 	}
 
 	m.Set(usage.POS, usage)
