@@ -8,11 +8,11 @@ import (
 	"github.com/blevesearch/bleve"
 )
 
-func getIndexPath(dictionary OpenDictionary) string {
+func getIndexPath(dictionary Dictionary) string {
 	return fmt.Sprintf("%sodict--%s", os.TempDir(), dictionary.ID)
 }
 
-func createIndex(dictionary OpenDictionary, force bool) string {
+func createIndex(dictionary Dictionary, force bool) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
 
@@ -25,8 +25,9 @@ func createIndex(dictionary OpenDictionary, force bool) string {
 
 		Check(indexErr)
 
-		for entryIdx := range dictionary.Entries {
-			entry := dictionary.Entries[entryIdx]
+		for key := range dictionary.Entries.Iterable {
+			entry := dictionary.Entries.Get(key)
+			print(len(entry.Etymologies[0].Usages.Iterable))
 			err := index.Index(entry.ID, entry)
 			b, err := json.Marshal(entry)
 

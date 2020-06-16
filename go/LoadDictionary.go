@@ -29,15 +29,15 @@ func getODDefinitionsFromGroup(group schema.Group) []string {
 	return definitions
 }
 
-func getODDefinitionGroups(usage schema.Usage) []OpenDictionaryDefinitionGroup {
+func getODDefinitionGroups(usage schema.Usage) []DictionaryDefinitionGroup {
 	var definitionGroup schema.Group
 
-	definitionGroups := []OpenDictionaryDefinitionGroup{}
+	definitionGroups := []DictionaryDefinitionGroup{}
 
 	for d := 0; d < usage.GroupsLength(); d++ {
 		usage.Groups(&definitionGroup, d)
 
-		odGroup := OpenDictionaryDefinitionGroup{
+		odGroup := DictionaryDefinitionGroup{
 			Description: string(definitionGroup.Description()),
 			Definitions: getODDefinitionsFromGroup(definitionGroup),
 		}
@@ -48,35 +48,35 @@ func getODDefinitionGroups(usage schema.Usage) []OpenDictionaryDefinitionGroup {
 	return definitionGroups
 }
 
-func getODUsages(etymology schema.Etymology) map[string]OpenDictionaryUsage {
+func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
 	var usage schema.Usage
 
-	usages := make(map[string]OpenDictionaryUsage)
+	usages := DictionaryUsageMap{make(map[string]DictionaryUsage)}
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)
 
-		odUsage := OpenDictionaryUsage{
+		odUsage := DictionaryUsage{
 			ID:               string(usage.Id()),
 			POS:              string(usage.Pos()),
 			DefinitionGroups: getODDefinitionGroups(usage),
 			Definitions:      getODDefinitionsFromUsage(usage),
 		}
 
-		usages[odUsage.POS] = odUsage
+		usages.Set(odUsage.POS, odUsage)
 	}
 
 	return usages
 }
 
-func getODEtymologies(entry schema.Entry) []OpenDictionaryEtymology {
+func getODEtymologies(entry schema.Entry) []DictionaryEtymology {
 	var ety schema.Etymology
-	var etymologies []OpenDictionaryEtymology
+	var etymologies []DictionaryEtymology
 
 	for b := 0; b < entry.EtymologiesLength(); b++ {
 		entry.Etymologies(&ety, b)
 
-		odEty := OpenDictionaryEtymology{
+		odEty := DictionaryEtymology{
 			ID:     string(ety.Id()),
 			Usages: getODUsages(ety),
 		}
@@ -87,28 +87,33 @@ func getODEtymologies(entry schema.Entry) []OpenDictionaryEtymology {
 	return etymologies
 }
 
-func getODEntries(dictionary *schema.Dictionary) map[string]OpenDictionaryEntry {
+func getODEntries(dictionary *schema.Dictionary) DictionaryEntryMap {
 	var entry schema.Entry
 
-	entries := make(map[string]OpenDictionaryEntry)
+	entries := DictionaryEntryMap{make(map[string]DictionaryEntry)}
 
 	for a := 0; a < dictionary.EntriesLength(); a++ {
 		dictionary.Entries(&entry, a)
 
-		odEntry := OpenDictionaryEntry{
+		odEntry := DictionaryEntry{
 			ID:          string(entry.Id()),
 			Term:        string(entry.Term()),
 			Etymologies: getODEtymologies(entry),
 		}
 
-		entries[odEntry.Term] = odEntry
+		entries.Set(odEntry.Term, odEntry)
 	}
 
 	return entries
 }
 
+// ReadDictionary converts an ODXML string to an Dictionary struct
+func ReadDictionary(xml string) {
+
+}
+
 // LoadDictionary can go fuck itself
-func LoadDictionary(inputPath string, newIndex bool) OpenDictionary {
+func LoadDictionary(inputPath string, newIndex bool) Dictionary {
 	// Read input file
 	file, err := os.Open(inputPath)
 
@@ -159,7 +164,7 @@ func LoadDictionary(inputPath string, newIndex bool) OpenDictionary {
 	Check(decodedError)
 
 	buffer := schema.GetRootAsDictionary(decoded, 0)
-	dictionary := OpenDictionary{
+	dictionary := Dictionary{
 		ID:      string(buffer.Id()),
 		Name:    string(buffer.Name()),
 		Version: version,

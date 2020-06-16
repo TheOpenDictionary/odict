@@ -44,15 +44,15 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func xmlToDictionary(xmlStr string) xmlDictionary {
-	var dictionary xmlDictionary
+func xmlToDictionary(xmlStr string) Dictionary {
+	var dictionary Dictionary
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
 	return dictionary
 }
 
-func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage DictionaryUsage) flatbuffers.UOffsetT {
 	definitions := usage.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -72,7 +72,7 @@ func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage xmlUsage)
 	return builder.EndVector(defCount)
 }
 
-func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group xmlDefinitionGroup) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group DictionaryDefinitionGroup) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -92,7 +92,7 @@ func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group xmlDefini
 	return builder.EndVector(defCount)
 }
 
-func getGroupsVector(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
+func getGroupsVector(builder *flatbuffers.Builder, usage DictionaryUsage) flatbuffers.UOffsetT {
 	groups := usage.DefinitionGroups
 
 	var groupBuffer []flatbuffers.UOffsetT
@@ -122,14 +122,14 @@ func getGroupsVector(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.U
 	return builder.EndVector(groupCount)
 }
 
-func getUsagesVector(builder *flatbuffers.Builder, ety xmlEtymology) flatbuffers.UOffsetT {
+func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
 	var usageBuffer []flatbuffers.UOffsetT
 
-	for idx := range usages {
-		usage := usages[idx]
-		usageID := builder.CreateString(strconv.Itoa(idx))
+	for key := range usages.Iterable {
+		usage := usages.Get(key)
+		usageID := builder.CreateString(strconv.Itoa(0))
 		usagePOS := builder.CreateString(usage.POS)
 		usageDefinitionGroups := getGroupsVector(builder, usage)
 		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
@@ -154,7 +154,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety xmlEtymology) flatbuffers
 	return builder.EndVector(usageCount)
 }
 
-func getEtymologiesVector(builder *flatbuffers.Builder, entry xmlEntry) flatbuffers.UOffsetT {
+func getEtymologiesVector(builder *flatbuffers.Builder, entry DictionaryEntry) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 
 	var etyBuffer []flatbuffers.UOffsetT
@@ -184,14 +184,14 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry xmlEntry) flatbuff
 	return builder.EndVector(etyCount)
 }
 
-func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) flatbuffers.UOffsetT {
+func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
 	var entryBuffer []flatbuffers.UOffsetT
 
-	for idx := range entries {
-		entry := entries[idx]
-		entryID := builder.CreateString(strconv.Itoa(idx)) // TODO: add prefix
+	for key := range entries.Iterable {
+		entry := entries.Get(key)
+		entryID := builder.CreateString(strconv.Itoa(0)) // TODO: add prefix
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
 
@@ -214,7 +214,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) fl
 	return builder.EndVector(entryCount)
 }
 
-func dictionaryToBytes(dictionary xmlDictionary) []byte {
+func dictionaryToBytes(dictionary Dictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString(uuid.New().String())
@@ -231,7 +231,7 @@ func dictionaryToBytes(dictionary xmlDictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary xmlDictionary) {
+func createODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)

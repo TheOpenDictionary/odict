@@ -7,7 +7,7 @@ import (
 // type entryTransformer struct{}
 
 // func (e entryTransformer) Transformer(typ reflect.Type) func(dst, src reflect.Value) error {
-// 	if typ == reflect.TypeOf(OpenDictionaryEntry{}) {
+// 	if typ == reflect.TypeOf(DictionaryEntry{}) {
 // 		return func(dst, src reflect.Value) error {
 // 			term := dst.FieldByName("Term")
 
@@ -24,7 +24,7 @@ import (
 // 	return nil
 // }
 
-func MergeDictionaries(dest OpenDictionary, srcs ...OpenDictionary) OpenDictionary {
+func MergeDictionaries(dest Dictionary, srcs ...Dictionary) Dictionary {
 	dst := dest
 
 	for i := range srcs {

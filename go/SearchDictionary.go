@@ -7,7 +7,7 @@ import (
 	"github.com/blevesearch/bleve"
 )
 
-func SearchDictionary(dictionary OpenDictionary, queryStr string) []OpenDictionaryEntry {
+func SearchDictionary(dictionary Dictionary, queryStr string) []DictionaryEntry {
 	indexPath := getIndexPath(dictionary)
 	_, err := os.Stat(indexPath)
 
@@ -28,10 +28,10 @@ func SearchDictionary(dictionary OpenDictionary, queryStr string) []OpenDictiona
 	Check(searchErr)
 
 	hits := searchResults.Hits
-	entries := make([]OpenDictionaryEntry, len(hits))
+	entries := make([]DictionaryEntry, len(hits))
 
 	for i := range hits {
-		entry := &OpenDictionaryEntry{}
+		entry := &DictionaryEntry{}
 		hitID := hits[i].ID
 		b, err := index.GetInternal([]byte(hitID))
 
