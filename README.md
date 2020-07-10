@@ -3,7 +3,7 @@
 <img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="350" />
 <br/><br/>
 
-![Travis CI](https://img.shields.io/travis/odict/odict.svg)
+![Go](https://github.com/odict/odict/workflows/Go/badge.svg?branch=master)
 
 </div>
 
