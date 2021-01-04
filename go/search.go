@@ -8,6 +8,7 @@ import (
 	"github.com/odict/odict/go/models"
 )
 
+// SearchDictionary searches a dictionary model using Bleve
 func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.Entry {
 	indexPath := getIndexPath(dictionary)
 	_, err := os.Stat(indexPath)

@@ -107,7 +107,9 @@ func getODEntries(dictionary *schema.Dictionary) models.EntryMap {
 	return entries
 }
 
-// LoadDictionary can go fuck itself
+// LoadDictionary loads a compiled ODict dictionary from the provided
+// path and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
 func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	// Read input file
 	file, err := os.Open(inputPath)

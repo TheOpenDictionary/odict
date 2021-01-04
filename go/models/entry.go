@@ -17,6 +17,10 @@ func (m *EntryMap) Get(key string) Entry {
 	return m.Iterable[key]
 }
 
+func (m *EntryMap) Size() int {
+	return len(m.Iterable)
+}
+
 func (m EntryMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	for key := range m.Iterable {
 		e.Encode(m.Get(key))
