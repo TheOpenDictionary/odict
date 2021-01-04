@@ -8,12 +8,11 @@
 </div>
 
 The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats such
- as [Babylon](http://www.babylon-software.com/free-dictionaries/) and 
- [Apple Dictionaries](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/DictionaryServicesProgGuide/Introduction/Introduction.html). 
-  Similar to Apple dictionaries, Open Dictionary files are converted from XML (currently in a draft specification described
-  below) to compressed, serialized, bite-sized files. ODict is built on some of the fastest technologies to ensure maximum
-  speed when performing lookups: Google Snappy (fastest compression), RapidXML (fastest XML parsing), and Flatbuffers 
-  (fastest serialization). Entries are searched in log(*n*) time, [un-coincidentally the time complexity of an ordered map 
-   lookup](https://google.github.io/flatbuffers/flatbuffers_guide_use_cpp.html).
-   
+as [Babylon](http://www.babylon-software.com/free-dictionaries/) and
+[Apple Dictionaries](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/DictionaryServicesProgGuide/Introduction/Introduction.html).
+
+Similar to Apple dictionaries, Open Dictionary files are converted from XML (sometimes referred to as ODXML) to compressed, serialized, bite-sized files. Originally written in C++, ODict has since been ported to Go for portability and maintainability purposes. Each compiled dictionary consists some basic header information, as well as a [Snappy](https://github.com/google/snappy)-compressed [Flatbuffers](https://github.com/google/flatbuffers) schema that contains all of the dictionary's entries and definitions.
+
+The ODict CLI uses [Bleve](https://github.com/blevesearch/bleve) to perform ad-hoc indexing on the local file system for rapid full-text searching of entries. ODict has a number of sister repos of varying completeness. As of this writing, there is a pretty comprehensive [Java port](https://github.com/odict/odict-java) of the project as well as an example of how to use the ODict CGo extension [in Python](https://github.com/odict/freedict/blob/master/odictlib.py).
+
 Full documentation available at https://odict.org.
