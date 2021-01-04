@@ -139,7 +139,6 @@ func EtymologyStartUsagesVector(builder *flatbuffers.Builder, numElems int) flat
 func EtymologyEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
-
 type Group struct {
 	_tab flatbuffers.Table
 }
@@ -211,7 +210,6 @@ func GroupStartDefinitionsVector(builder *flatbuffers.Builder, numElems int) fla
 func GroupEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
-
 type Usage struct {
 	_tab flatbuffers.Table
 }
@@ -302,7 +300,6 @@ func UsageStartGroupsVector(builder *flatbuffers.Builder, numElems int) flatbuff
 func UsageEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
-
 type Entry struct {
 	_tab flatbuffers.Table
 }
@@ -366,7 +363,6 @@ func EntryStartEtymologiesVector(builder *flatbuffers.Builder, numElems int) fla
 func EntryEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
-
 type Dictionary struct {
 	_tab flatbuffers.Table
 }
