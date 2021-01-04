@@ -24,7 +24,10 @@ func getFileName(path string) string {
 
 //export CreateDictionaryFromPath
 func CreateDictionaryFromPath(inputPath *C.char) {
-	path := C.GoString(inputPath)
+	createDictionaryFromPath(C.GoString(inputPath))
+}
+
+func createDictionaryFromPath(path string) {
 	name := getFileName(path)
 	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(path), name)
 	xmlFile, err := os.Open(path)
@@ -41,7 +44,11 @@ func CreateDictionaryFromPath(inputPath *C.char) {
 
 //export CreateDictionaryFromXML
 func CreateDictionaryFromXML(xmlStr, outputPath *C.char) {
-	odict.WriteDictionary(C.GoString(xmlStr), C.GoString(outputPath))
+	createDictionaryFromXML(C.GoString(xmlStr), C.GoString(outputPath))
+}
+
+func createDictionaryFromXML(xmlStr, outputPath string) {
+	odict.WriteDictionary(xmlStr, outputPath)
 }
 
 func main() {

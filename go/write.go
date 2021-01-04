@@ -132,6 +132,7 @@ func resolveSchemaPOS(pos models.PartOfSpeech) schema.POS {
 		"adv":          schema.POSadv,
 		"verb":         schema.POSverb,
 		"v":            schema.POSverb,
+		"n":            schema.POSnoun,
 		"noun":         schema.POSnoun,
 		"pronoun":      schema.POSpronoun,
 		"pn":           schema.POSpronoun,
