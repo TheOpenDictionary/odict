@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/golang/snappy"
 	flatbuffers "github.com/google/flatbuffers/go"
-	uuid "github.com/google/uuid"
-	schema "github.com/odict/odict/go/schema"
+	"github.com/google/uuid"
+	"github.com/odict/odict/go/models"
+	"github.com/odict/odict/go/schema"
 )
 
 type xmlDefinitionGroup struct {
@@ -44,15 +46,15 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func xmlToDictionary(xmlStr string) xmlDictionary {
-	var dictionary xmlDictionary
+func xmlToDictionary(xmlStr string) models.Dictionary {
+	var dictionary models.Dictionary
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
 	return dictionary
 }
 
-func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
 	definitions := usage.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -72,7 +74,7 @@ func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage xmlUsage)
 	return builder.EndVector(defCount)
 }
 
-func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group xmlDefinitionGroup) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group models.Group) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -92,8 +94,8 @@ func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group xmlDefini
 	return builder.EndVector(defCount)
 }
 
-func getGroupsVector(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.UOffsetT {
-	groups := usage.DefinitionGroups
+func getGroupsVector(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
+	groups := usage.Groups
 
 	var groupBuffer []flatbuffers.UOffsetT
 
@@ -122,20 +124,55 @@ func getGroupsVector(builder *flatbuffers.Builder, usage xmlUsage) flatbuffers.U
 	return builder.EndVector(groupCount)
 }
 
-func getUsagesVector(builder *flatbuffers.Builder, ety xmlEtymology) flatbuffers.UOffsetT {
+func resolveSchemaPOS(pos models.PartOfSpeech) schema.POS {
+	posMap := map[models.PartOfSpeech]schema.POS{
+		"adjective":    schema.POSadj,
+		"adj":          schema.POSadj,
+		"adverb":       schema.POSadv,
+		"adv":          schema.POSadv,
+		"verb":         schema.POSverb,
+		"v":            schema.POSverb,
+		"noun":         schema.POSnoun,
+		"pronoun":      schema.POSpronoun,
+		"pn":           schema.POSpronoun,
+		"prep":         schema.POSprep,
+		"preposition":  schema.POSprep,
+		"conj":         schema.POSconj,
+		"conjugation":  schema.POSconj,
+		"intj":         schema.POSintj,
+		"interjection": schema.POSintj,
+		"prefix":       schema.POSprefix,
+		"pre":          schema.POSprefix,
+		"suffix":       schema.POSsuffix,
+		"suf":          schema.POSsuffix,
+		"particle":     schema.POSparticle,
+		"part":         schema.POSparticle,
+		"article":      schema.POSarticle,
+		"art":          schema.POSarticle,
+		"unknown":      schema.POSunknown,
+	}
+
+	if val, ok := posMap[pos]; ok {
+		return val
+	} else if len(strings.TrimSpace(string(pos))) == 0 {
+		return schema.POSunknown
+	} else {
+		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
+	}
+}
+
+func getUsagesVector(builder *flatbuffers.Builder, ety models.Etymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
 	var usageBuffer []flatbuffers.UOffsetT
 
-	for idx := range usages {
-		usage := usages[idx]
-		usageID := builder.CreateString(strconv.Itoa(idx))
-		usagePOS := builder.CreateString(usage.POS)
+	for key := range usages.Iterable {
+		usage := usages.Get(key)
+		usagePOS := resolveSchemaPOS(usage.POS)
 		usageDefinitionGroups := getGroupsVector(builder, usage)
 		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
 
 		schema.UsageStart(builder)
-		schema.UsageAddId(builder, usageID)
 		schema.UsageAddPos(builder, usagePOS)
 		schema.UsageAddGroups(builder, usageDefinitionGroups)
 		schema.UsageAddDefinitions(builder, usageDefinitions)
@@ -154,7 +191,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety xmlEtymology) flatbuffers
 	return builder.EndVector(usageCount)
 }
 
-func getEtymologiesVector(builder *flatbuffers.Builder, entry xmlEntry) flatbuffers.UOffsetT {
+func getEtymologiesVector(builder *flatbuffers.Builder, entry models.Entry) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 
 	var etyBuffer []flatbuffers.UOffsetT
@@ -184,19 +221,17 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry xmlEntry) flatbuff
 	return builder.EndVector(etyCount)
 }
 
-func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) flatbuffers.UOffsetT {
+func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
 	var entryBuffer []flatbuffers.UOffsetT
 
-	for idx := range entries {
-		entry := entries[idx]
-		entryID := builder.CreateString(strconv.Itoa(idx)) // TODO: add prefix
+	for key := range entries.Iterable {
+		entry := entries.Get(key)
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
 
 		schema.EntryStart(builder)
-		schema.EntryAddId(builder, entryID)
 		schema.EntryAddTerm(builder, entryTerm)
 		schema.EntryAddEtymologies(builder, entryEtymologies)
 
@@ -214,7 +249,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary xmlDictionary) fl
 	return builder.EndVector(entryCount)
 }
 
-func dictionaryToBytes(dictionary xmlDictionary) []byte {
+func dictionaryToBytes(dictionary models.Dictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString(uuid.New().String())
@@ -231,7 +266,7 @@ func dictionaryToBytes(dictionary xmlDictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary xmlDictionary) {
+func createODictFile(outputPath string, dictionary models.Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
@@ -271,6 +306,5 @@ func createODictFile(outputPath string, dictionary xmlDictionary) {
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionary(xmlStr, outputPath string) {
-	println(outputPath)
 	createODictFile(outputPath, xmlToDictionary(xmlStr))
 }

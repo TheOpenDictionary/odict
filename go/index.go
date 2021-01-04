@@ -6,13 +6,14 @@ import (
 	"os"
 
 	"github.com/blevesearch/bleve"
+	"github.com/odict/odict/go/models"
 )
 
-func getIndexPath(dictionary OpenDictionary) string {
+func getIndexPath(dictionary models.Dictionary) string {
 	return fmt.Sprintf("%sodict--%s", os.TempDir(), dictionary.ID)
 }
 
-func createIndex(dictionary OpenDictionary, force bool) string {
+func createIndex(dictionary models.Dictionary, force bool) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
 
@@ -25,18 +26,18 @@ func createIndex(dictionary OpenDictionary, force bool) string {
 
 		Check(indexErr)
 
-		for entryIdx := range dictionary.Entries {
-			entry := dictionary.Entries[entryIdx]
-			err := index.Index(entry.ID, entry)
+		for key := range dictionary.Entries.Iterable {
+			entry := dictionary.Entries.Get(key)
+
+			idxErr := index.Index(entry.Term, entry)
+
+			Check(idxErr)
+
 			b, err := json.Marshal(entry)
 
-			if err != nil {
-				panic(err)
-			}
-
-			index.SetInternal([]byte(entry.ID), b)
-
 			Check(err)
+
+			index.SetInternal([]byte(entry.Term), b)
 		}
 	} else {
 		if force {
