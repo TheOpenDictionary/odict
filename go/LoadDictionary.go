@@ -2,6 +2,7 @@ package odict
 
 import (
 	"encoding/binary"
+	"fmt"
 	"os"
 
 	schema "github.com/odict/odict/go/schema"
@@ -57,7 +58,7 @@ func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
 		etymology.Usages(&usage, c)
 
 		odUsage := DictionaryUsage{
-			POS:              string(usage.Pos()),
+			POS:              resolvePOS(usage.Pos()),
 			DefinitionGroups: getODDefinitionGroups(usage),
 			Definitions:      getODDefinitionsFromUsage(usage),
 		}
@@ -172,4 +173,28 @@ func LoadDictionary(inputPath string, newIndex bool) Dictionary {
 	createIndex(dictionary, newIndex)
 
 	return dictionary
+}
+
+func resolvePOS(pos int8) DictionaryPartOfSpeech {
+	posMap := map[int8]DictionaryPartOfSpeech{
+		schema.POSadj:      Adjective,
+		schema.POSadv:      Adverb,
+		schema.POSverb:     Verb,
+		schema.POSnoun:     Noun,
+		schema.POSpronoun:  Pronoun,
+		schema.POSprep:     Preposition,
+		schema.POSconj:     Conjugation,
+		schema.POSintj:     Interjection,
+		schema.POSprefix:   Prefix,
+		schema.POSsuffix:   Suffix,
+		schema.POSparticle: Particle,
+		schema.POSarticle:  Article,
+		schema.POSunknown:  Unknown,
+	}
+
+	if val, ok := posMap[pos]; ok {
+		return val
+	} else {
+		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
+	}
 }

@@ -123,8 +123,8 @@ func getGroupsVector(builder *flatbuffers.Builder, usage DictionaryUsage) flatbu
 	return builder.EndVector(groupCount)
 }
 
-func resolvePOS(posStr string) int8 {
-	posMap := map[string]int8{
+func resolveSchemaPOS(pos DictionaryPartOfSpeech) int8 {
+	posMap := map[DictionaryPartOfSpeech]int8{
 		"adjective":    schema.POSadj,
 		"adj":          schema.POSadj,
 		"adverb":       schema.POSadv,
@@ -151,12 +151,12 @@ func resolvePOS(posStr string) int8 {
 		"unknown":      schema.POSunknown,
 	}
 
-	if val, ok := posMap[posStr]; ok {
+	if val, ok := posMap[pos]; ok {
 		return val
-	} else if len(strings.TrimSpace(posStr)) == 0 {
+	} else if len(strings.TrimSpace(string(pos))) == 0 {
 		return schema.POSunknown
 	} else {
-		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", posStr))
+		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
 	}
 }
 
@@ -167,7 +167,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flat
 
 	for key := range usages.Iterable {
 		usage := usages.Get(key)
-		usagePOS := resolvePOS(usage.POS)
+		usagePOS := resolveSchemaPOS(usage.POS)
 		usageDefinitionGroups := getGroupsVector(builder, usage)
 		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
 
