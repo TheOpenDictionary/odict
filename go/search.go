@@ -5,9 +5,10 @@ import (
 	"os"
 
 	"github.com/blevesearch/bleve"
+	"github.com/odict/odict/go/models"
 )
 
-func SearchDictionary(dictionary Dictionary, queryStr string) []DictionaryEntry {
+func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.Entry {
 	indexPath := getIndexPath(dictionary)
 	_, err := os.Stat(indexPath)
 
@@ -29,10 +30,10 @@ func SearchDictionary(dictionary Dictionary, queryStr string) []DictionaryEntry 
 
 	hits := searchResults.Hits
 
-	entries := make([]DictionaryEntry, len(hits))
+	entries := make([]models.Entry, len(hits))
 
 	for i := range hits {
-		entry := &DictionaryEntry{}
+		entry := &models.Entry{}
 		hitID := hits[i].ID
 		b, err := index.GetInternal([]byte(hitID))
 

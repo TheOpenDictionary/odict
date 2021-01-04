@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	schema "github.com/odict/odict/go/schema"
+	"github.com/odict/odict/go/models"
+	"github.com/odict/odict/go/schema"
 
 	"github.com/golang/snappy"
 )
@@ -30,15 +31,15 @@ func getODDefinitionsFromGroup(group schema.Group) []string {
 	return definitions
 }
 
-func getODDefinitionGroups(usage schema.Usage) []DictionaryDefinitionGroup {
+func getODDefinitionGroups(usage schema.Usage) []models.Group {
 	var definitionGroup schema.Group
 
-	definitionGroups := []DictionaryDefinitionGroup{}
+	definitionGroups := []models.Group{}
 
 	for d := 0; d < usage.GroupsLength(); d++ {
 		usage.Groups(&definitionGroup, d)
 
-		odGroup := DictionaryDefinitionGroup{
+		odGroup := models.Group{
 			Description: string(definitionGroup.Description()),
 			Definitions: getODDefinitionsFromGroup(definitionGroup),
 		}
@@ -49,18 +50,18 @@ func getODDefinitionGroups(usage schema.Usage) []DictionaryDefinitionGroup {
 	return definitionGroups
 }
 
-func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
+func getODUsages(etymology schema.Etymology) models.UsageMap {
 	var usage schema.Usage
 
-	usages := DictionaryUsageMap{make(map[DictionaryPartOfSpeech]DictionaryUsage)}
+	usages := models.UsageMap{make(map[models.PartOfSpeech]models.Usage)}
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)
 
-		odUsage := DictionaryUsage{
-			POS:              resolvePOS(usage.Pos()),
-			DefinitionGroups: getODDefinitionGroups(usage),
-			Definitions:      getODDefinitionsFromUsage(usage),
+		odUsage := models.Usage{
+			POS:         resolvePOS(usage.Pos()),
+			Groups:      getODDefinitionGroups(usage),
+			Definitions: getODDefinitionsFromUsage(usage),
 		}
 
 		usages.Set(odUsage.POS, odUsage)
@@ -69,14 +70,14 @@ func getODUsages(etymology schema.Etymology) DictionaryUsageMap {
 	return usages
 }
 
-func getODEtymologies(entry schema.Entry) []DictionaryEtymology {
+func getODEtymologies(entry schema.Entry) []models.Etymology {
 	var ety schema.Etymology
-	var etymologies []DictionaryEtymology
+	var etymologies []models.Etymology
 
 	for b := 0; b < entry.EtymologiesLength(); b++ {
 		entry.Etymologies(&ety, b)
 
-		odEty := DictionaryEtymology{
+		odEty := models.Etymology{
 			ID:     string(ety.Id()),
 			Usages: getODUsages(ety),
 		}
@@ -87,15 +88,15 @@ func getODEtymologies(entry schema.Entry) []DictionaryEtymology {
 	return etymologies
 }
 
-func getODEntries(dictionary *schema.Dictionary) DictionaryEntryMap {
+func getODEntries(dictionary *schema.Dictionary) models.EntryMap {
 	var entry schema.Entry
 
-	entries := DictionaryEntryMap{make(map[string]DictionaryEntry)}
+	entries := models.EntryMap{make(map[string]models.Entry)}
 
 	for a := 0; a < dictionary.EntriesLength(); a++ {
 		dictionary.Entries(&entry, a)
 
-		odEntry := DictionaryEntry{
+		odEntry := models.Entry{
 			Term:        string(entry.Term()),
 			Etymologies: getODEtymologies(entry),
 		}
@@ -106,13 +107,8 @@ func getODEntries(dictionary *schema.Dictionary) DictionaryEntryMap {
 	return entries
 }
 
-// ReadDictionary converts an ODXML string to an Dictionary struct
-func ReadDictionary(xml string) {
-
-}
-
 // LoadDictionary can go fuck itself
-func LoadDictionary(inputPath string, newIndex bool) Dictionary {
+func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	// Read input file
 	file, err := os.Open(inputPath)
 
@@ -163,7 +159,7 @@ func LoadDictionary(inputPath string, newIndex bool) Dictionary {
 	Check(decodedError)
 
 	buffer := schema.GetRootAsDictionary(decoded, 0)
-	dictionary := Dictionary{
+	dictionary := models.Dictionary{
 		ID:      string(buffer.Id()),
 		Name:    string(buffer.Name()),
 		Version: version,
@@ -175,21 +171,21 @@ func LoadDictionary(inputPath string, newIndex bool) Dictionary {
 	return dictionary
 }
 
-func resolvePOS(pos int8) DictionaryPartOfSpeech {
-	posMap := map[int8]DictionaryPartOfSpeech{
-		schema.POSadj:      Adjective,
-		schema.POSadv:      Adverb,
-		schema.POSverb:     Verb,
-		schema.POSnoun:     Noun,
-		schema.POSpronoun:  Pronoun,
-		schema.POSprep:     Preposition,
-		schema.POSconj:     Conjugation,
-		schema.POSintj:     Interjection,
-		schema.POSprefix:   Prefix,
-		schema.POSsuffix:   Suffix,
-		schema.POSparticle: Particle,
-		schema.POSarticle:  Article,
-		schema.POSunknown:  Unknown,
+func resolvePOS(pos schema.POS) models.PartOfSpeech {
+	posMap := map[schema.POS]models.PartOfSpeech{
+		schema.POSadj:      models.Adjective,
+		schema.POSadv:      models.Adverb,
+		schema.POSverb:     models.Verb,
+		schema.POSnoun:     models.Noun,
+		schema.POSpronoun:  models.Pronoun,
+		schema.POSprep:     models.Preposition,
+		schema.POSconj:     models.Conjugation,
+		schema.POSintj:     models.Interjection,
+		schema.POSprefix:   models.Prefix,
+		schema.POSsuffix:   models.Suffix,
+		schema.POSparticle: models.Particle,
+		schema.POSarticle:  models.Article,
+		schema.POSunknown:  models.Unknown,
 	}
 
 	if val, ok := posMap[pos]; ok {

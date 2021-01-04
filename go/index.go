@@ -6,13 +6,14 @@ import (
 	"os"
 
 	"github.com/blevesearch/bleve"
+	"github.com/odict/odict/go/models"
 )
 
-func getIndexPath(dictionary Dictionary) string {
+func getIndexPath(dictionary models.Dictionary) string {
 	return fmt.Sprintf("%sodict--%s", os.TempDir(), dictionary.ID)
 }
 
-func createIndex(dictionary Dictionary, force bool) string {
+func createIndex(dictionary models.Dictionary, force bool) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
 

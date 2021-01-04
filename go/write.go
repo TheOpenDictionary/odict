@@ -10,7 +10,8 @@ import (
 
 	"github.com/golang/snappy"
 	flatbuffers "github.com/google/flatbuffers/go"
-	uuid "github.com/google/uuid"
+	"github.com/google/uuid"
+	"github.com/odict/odict/go/models"
 	"github.com/odict/odict/go/schema"
 )
 
@@ -45,15 +46,15 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func xmlToDictionary(xmlStr string) Dictionary {
-	var dictionary Dictionary
+func xmlToDictionary(xmlStr string) models.Dictionary {
+	var dictionary models.Dictionary
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
 	return dictionary
 }
 
-func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage DictionaryUsage) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
 	definitions := usage.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -73,7 +74,7 @@ func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage Dictionar
 	return builder.EndVector(defCount)
 }
 
-func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group DictionaryDefinitionGroup) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group models.Group) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -93,8 +94,8 @@ func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group Dictionar
 	return builder.EndVector(defCount)
 }
 
-func getGroupsVector(builder *flatbuffers.Builder, usage DictionaryUsage) flatbuffers.UOffsetT {
-	groups := usage.DefinitionGroups
+func getGroupsVector(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
+	groups := usage.Groups
 
 	var groupBuffer []flatbuffers.UOffsetT
 
@@ -123,8 +124,8 @@ func getGroupsVector(builder *flatbuffers.Builder, usage DictionaryUsage) flatbu
 	return builder.EndVector(groupCount)
 }
 
-func resolveSchemaPOS(pos DictionaryPartOfSpeech) int8 {
-	posMap := map[DictionaryPartOfSpeech]int8{
+func resolveSchemaPOS(pos models.PartOfSpeech) schema.POS {
+	posMap := map[models.PartOfSpeech]schema.POS{
 		"adjective":    schema.POSadj,
 		"adj":          schema.POSadj,
 		"adverb":       schema.POSadv,
@@ -160,7 +161,7 @@ func resolveSchemaPOS(pos DictionaryPartOfSpeech) int8 {
 	}
 }
 
-func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flatbuffers.UOffsetT {
+func getUsagesVector(builder *flatbuffers.Builder, ety models.Etymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
 	var usageBuffer []flatbuffers.UOffsetT
@@ -190,7 +191,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety DictionaryEtymology) flat
 	return builder.EndVector(usageCount)
 }
 
-func getEtymologiesVector(builder *flatbuffers.Builder, entry DictionaryEntry) flatbuffers.UOffsetT {
+func getEtymologiesVector(builder *flatbuffers.Builder, entry models.Entry) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 
 	var etyBuffer []flatbuffers.UOffsetT
@@ -220,7 +221,7 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry DictionaryEntry) f
 	return builder.EndVector(etyCount)
 }
 
-func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatbuffers.UOffsetT {
+func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
 	var entryBuffer []flatbuffers.UOffsetT
@@ -248,7 +249,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatb
 	return builder.EndVector(entryCount)
 }
 
-func dictionaryToBytes(dictionary Dictionary) []byte {
+func dictionaryToBytes(dictionary models.Dictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString(uuid.New().String())
@@ -265,7 +266,7 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary Dictionary) {
+func createODictFile(outputPath string, dictionary models.Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
