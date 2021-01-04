@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/blevesearch/bleve"
 	"github.com/odict/odict/go/models"
 )
 
 func getIndexPath(dictionary models.Dictionary) string {
-	return fmt.Sprintf("%sodict--%s", os.TempDir(), dictionary.ID)
+	return filepath.Join(os.TempDir(), fmt.Sprintf("odict--%s", dictionary.ID))
 }
 
 func createIndex(dictionary models.Dictionary, force bool) string {
