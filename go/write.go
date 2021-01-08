@@ -278,8 +278,8 @@ func createODictFile(outputPath string, dictionary models.Dictionary) {
 
 	signature := []byte("ODICT")
 	version := Uint16ToBytes(2)
-	compressedSize := uint32(len(compressed))
-	compressedSizeBytes := Uint32ToBytes(compressedSize)
+	compressedSize := uint64(len(compressed))
+	compressedSizeBytes := Uint64ToBytes(compressedSize)
 
 	writer := bufio.NewWriter(file)
 
@@ -296,7 +296,7 @@ func createODictFile(outputPath string, dictionary models.Dictionary) {
 
 	Assert(sigBytes == 5, "Signature bytes do not equal 5")
 	Assert(versionBytes == 2, "Version bytes do not equal 2")
-	Assert(contentSizeBytes == 4, "Content byte count does not equal 4")
+	Assert(contentSizeBytes == 8, "Content byte count does not equal 8")
 	Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
 
 	writer.Flush()

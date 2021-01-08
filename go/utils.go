@@ -26,12 +26,12 @@ func Uint16ToBytes(n uint16) []byte {
 	return bytes
 }
 
-// Uint32ToBytes converts a uint32 type to a byte array
-func Uint32ToBytes(n uint32) []byte {
-	bytes := make([]byte, 4)
+// Uint64ToBytes converts a uint64 type to a byte array
+func Uint64ToBytes(n uint64) []byte {
+	bytes := make([]byte, 8)
 
 	// TODO: normalize
-	binary.LittleEndian.PutUint32(bytes, uint32(n))
+	binary.LittleEndian.PutUint64(bytes, uint64(n))
 
 	return bytes
 }

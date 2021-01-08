@@ -135,16 +135,16 @@ func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	// Read the compressed content size in bytes
 	file.Seek(7, 0)
 
-	contentSizeBytes := make([]byte, 4)
+	contentSizeBytes := make([]byte, 8)
 	_, contentSizeError := file.Read(contentSizeBytes)
 
 	Check(contentSizeError)
-	file.Seek(11, 0)
+	file.Seek(15, 0)
 
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
 	version := binary.LittleEndian.Uint16(versionBytes)
-	contentSize := binary.LittleEndian.Uint32(contentSizeBytes)
+	contentSize := binary.LittleEndian.Uint64(contentSizeBytes)
 
 	// Assert signature
 	Assert(signature == "ODICT", "Invalid file signature")
