@@ -51,6 +51,14 @@ func xmlToDictionary(xmlStr string) models.Dictionary {
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
+	// expectedEntries := strings.Count(xmlStr, "<entry")
+	// actualEntries := dictionary.Entries.Size()
+
+	// Assert(
+	// 	expectedEntries == actualEntries,
+	// 	fmt.Sprintf("The dictionary that was read into memory from XML is missing entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid?", actualEntries, expectedEntries),
+	// )
+
 	return dictionary
 }
 
@@ -231,6 +239,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary
 		entry := entries.Get(key)
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
+		fmt.Println(entry.Term)
 
 		schema.EntryStart(builder)
 		schema.EntryAddTerm(builder, entryTerm)

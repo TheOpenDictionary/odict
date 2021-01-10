@@ -1,6 +1,9 @@
 package odict
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"log"
+)
 
 // Check panics the program if an error exists
 func Check(e error) {
@@ -12,7 +15,8 @@ func Check(e error) {
 // Assert panics the program if a condition is not met
 func Assert(condition bool, errorMessage string) {
 	if !condition {
-		panic("Assertion failed: " + errorMessage)
+		log.SetFlags(0)
+		log.Fatalln(errorMessage)
 	}
 }
 

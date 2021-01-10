@@ -1,7 +1,8 @@
 package odict
 
 import (
-	"encoding/json"
+	"bytes"
+	"encoding/gob"
 	"os"
 
 	"github.com/blevesearch/bleve"
@@ -34,7 +35,6 @@ func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.En
 	entries := make([]models.Entry, len(hits))
 
 	for i := range hits {
-		entry := &models.Entry{}
 		hitID := hits[i].ID
 		b, err := index.GetInternal([]byte(hitID))
 
@@ -42,9 +42,17 @@ func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.En
 			panic(err)
 		}
 
-		json.Unmarshal(b, &entry)
+		var entry models.Entry
 
-		entries[i] = *entry
+		buffer := bytes.NewBuffer(b)
+		dec := gob.NewDecoder(buffer)
+		decodingErr := dec.Decode(&entry)
+
+		if decodingErr != nil {
+			panic(err)
+		}
+
+		entries[i] = entry
 	}
 
 	return entries

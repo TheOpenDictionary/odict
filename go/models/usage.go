@@ -7,9 +7,9 @@ import (
 )
 
 type Usage struct {
-	POS         PartOfSpeech `json:"pos" xml:"pos,attr"`
-	Definitions []string     `json:"definitions" xml:"definition"`
-	Groups      []Group      `json:"groups" xml:"group"`
+	POS         PartOfSpeech `json:"pos,omitempty" xml:"pos,attr"`
+	Definitions []string     `json:"definitions,omitempty" xml:"definition"`
+	Groups      []Group      `json:"groups,omitempty" xml:"group"`
 	XMLName     xml.Name     `json:"-" xml:"usage"`
 }
 
@@ -23,6 +23,10 @@ func (m *UsageMap) Set(key PartOfSpeech, value Usage) {
 
 func (m *UsageMap) Get(key PartOfSpeech) Usage {
 	return m.Iterable[key]
+}
+
+func (m *UsageMap) Size() int {
+	return len(m.Iterable)
 }
 
 func (m UsageMap) MarshalJSON() ([]byte, error) {

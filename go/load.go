@@ -139,6 +139,7 @@ func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	_, contentSizeError := file.Read(contentSizeBytes)
 
 	Check(contentSizeError)
+
 	file.Seek(15, 0)
 
 	// Decode bytes for signature, version, and contentSize

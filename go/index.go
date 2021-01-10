@@ -1,7 +1,8 @@
 package odict
 
 import (
-	"encoding/json"
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,7 +12,7 @@ import (
 )
 
 func getIndexPath(dictionary models.Dictionary) string {
-	return filepath.Join(os.TempDir(), fmt.Sprintf("odict--%s", dictionary.ID))
+	return filepath.Join(os.TempDir(), "odict", "idx", dictionary.ID)
 }
 
 func createIndex(dictionary models.Dictionary, force bool) string {
@@ -19,7 +20,7 @@ func createIndex(dictionary models.Dictionary, force bool) string {
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
-		println("Indexing dictionary (this might take some time)...")
+		fmt.Println("Indexing dictionary (this might take some time)...")
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.New(indexPath, mapping)
 
@@ -34,11 +35,14 @@ func createIndex(dictionary models.Dictionary, force bool) string {
 
 			Check(idxErr)
 
-			b, err := json.Marshal(entry)
+			var buffer bytes.Buffer
+
+			enc := gob.NewEncoder(&buffer)
+			err := enc.Encode(entry)
 
 			Check(err)
 
-			index.SetInternal([]byte(entry.Term), b)
+			index.SetInternal([]byte(entry.Term), buffer.Bytes())
 		}
 	} else {
 		if force {
