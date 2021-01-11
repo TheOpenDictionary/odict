@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/golang/snappy"
+
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/google/uuid"
-	"github.com/odict/odict/go/models"
-	"github.com/odict/odict/go/schema"
+	"github.com/odict/odict/schema"
 )
 
 type xmlDefinitionGroup struct {
@@ -46,23 +46,23 @@ type xmlDictionary struct {
 	Entries []xmlEntry `xml:"entry"`
 }
 
-func xmlToDictionary(xmlStr string) models.Dictionary {
-	var dictionary models.Dictionary
+func xmlToDictionary(xmlStr string) Dictionary {
+	var dictionary Dictionary
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
-	// expectedEntries := strings.Count(xmlStr, "<entry")
-	// actualEntries := dictionary.Entries.Size()
+	expectedEntries := strings.Count(xmlStr, "<entry")
+	actualEntries := dictionary.Entries.Size()
 
-	// Assert(
-	// 	expectedEntries == actualEntries,
-	// 	fmt.Sprintf("The dictionary that was read into memory from XML is missing entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid?", actualEntries, expectedEntries),
-	// )
+	Assert(
+		expectedEntries == actualEntries,
+		fmt.Sprintf("The dictionary that was read into memory from XML is missing Entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid?", actualEntries, expectedEntries),
+	)
 
 	return dictionary
 }
 
-func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage Usage) flatbuffers.UOffsetT {
 	definitions := usage.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -82,7 +82,7 @@ func getDefinitionsVectorFromUsage(builder *flatbuffers.Builder, usage models.Us
 	return builder.EndVector(defCount)
 }
 
-func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group models.Group) flatbuffers.UOffsetT {
+func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group Group) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 
 	var defBuffer []flatbuffers.UOffsetT
@@ -102,7 +102,7 @@ func getDefinitionsVectorFromGroup(builder *flatbuffers.Builder, group models.Gr
 	return builder.EndVector(defCount)
 }
 
-func getGroupsVector(builder *flatbuffers.Builder, usage models.Usage) flatbuffers.UOffsetT {
+func getGroupsVector(builder *flatbuffers.Builder, usage Usage) flatbuffers.UOffsetT {
 	groups := usage.Groups
 
 	var groupBuffer []flatbuffers.UOffsetT
@@ -132,8 +132,8 @@ func getGroupsVector(builder *flatbuffers.Builder, usage models.Usage) flatbuffe
 	return builder.EndVector(groupCount)
 }
 
-func resolveSchemaPOS(pos models.PartOfSpeech) schema.POS {
-	posMap := map[models.PartOfSpeech]schema.POS{
+func resolveSchemaPOS(pos PartOfSpeech) schema.POS {
+	posMap := map[PartOfSpeech]schema.POS{
 		"adjective":    schema.POSadj,
 		"adj":          schema.POSadj,
 		"adverb":       schema.POSadv,
@@ -170,7 +170,7 @@ func resolveSchemaPOS(pos models.PartOfSpeech) schema.POS {
 	}
 }
 
-func getUsagesVector(builder *flatbuffers.Builder, ety models.Etymology) flatbuffers.UOffsetT {
+func getUsagesVector(builder *flatbuffers.Builder, ety Etymology) flatbuffers.UOffsetT {
 	usages := ety.Usages
 
 	var usageBuffer []flatbuffers.UOffsetT
@@ -178,8 +178,8 @@ func getUsagesVector(builder *flatbuffers.Builder, ety models.Etymology) flatbuf
 	for key := range usages.Iterable {
 		usage := usages.Get(key)
 		usagePOS := resolveSchemaPOS(usage.POS)
-		usageDefinitionGroups := getGroupsVector(builder, usage)
-		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
+		usageDefinitionGroups := getGroupsVector(builder, *usage)
+		usageDefinitions := getDefinitionsVectorFromUsage(builder, *usage)
 
 		schema.UsageStart(builder)
 		schema.UsageAddPos(builder, usagePOS)
@@ -200,7 +200,7 @@ func getUsagesVector(builder *flatbuffers.Builder, ety models.Etymology) flatbuf
 	return builder.EndVector(usageCount)
 }
 
-func getEtymologiesVector(builder *flatbuffers.Builder, entry models.Entry) flatbuffers.UOffsetT {
+func getEtymologiesVector(builder *flatbuffers.Builder, entry Entry) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 
 	var etyBuffer []flatbuffers.UOffsetT
@@ -230,7 +230,7 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry models.Entry) flat
 	return builder.EndVector(etyCount)
 }
 
-func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary) flatbuffers.UOffsetT {
+func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
 	var entryBuffer []flatbuffers.UOffsetT
@@ -239,7 +239,6 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary
 		entry := entries.Get(key)
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
-		fmt.Println(entry.Term)
 
 		schema.EntryStart(builder)
 		schema.EntryAddTerm(builder, entryTerm)
@@ -259,7 +258,7 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary models.Dictionary
 	return builder.EndVector(entryCount)
 }
 
-func dictionaryToBytes(dictionary models.Dictionary) []byte {
+func dictionaryToBytes(dictionary Dictionary) []byte {
 	builder := flatbuffers.NewBuilder(1024)
 
 	id := builder.CreateString(uuid.New().String())
@@ -276,7 +275,7 @@ func dictionaryToBytes(dictionary models.Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary models.Dictionary) {
+func createODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)

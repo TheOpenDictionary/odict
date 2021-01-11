@@ -11,7 +11,7 @@ import (
 )
 
 func cleanup() {
-	dirname := "./examples"
+	dirname := "../examples"
 
 	d, err := os.Open(dirname)
 
@@ -40,9 +40,10 @@ func cleanup() {
 }
 
 func TestReadWriteSearch(t *testing.T) {
-	createDictionaryFromPath("examples/example1.xml")
+	createDictionaryFromPath("../examples/example1.xml")
 
-	dict := odict.LoadDictionary("examples/example1.odict", true)
+	dict := odict.ReadDictionary("../examples/example1.odict")
+	odict.IndexDictionary(dict, true)
 	entries := odict.SearchDictionary(dict, "run")
 
 	assert.NotEmpty(t, entries)
@@ -51,11 +52,11 @@ func TestReadWriteSearch(t *testing.T) {
 }
 
 func TestMerge(t *testing.T) {
-	createDictionaryFromPath("examples/example1.xml")
-	createDictionaryFromPath("examples/example2.xml")
+	createDictionaryFromPath("../examples/example1.xml")
+	createDictionaryFromPath("../examples/example2.xml")
 
-	dict1 := odict.LoadDictionary("examples/example1.odict", true)
-	dict2 := odict.LoadDictionary("examples/example2.odict", true)
+	dict1 := odict.ReadDictionary("../examples/example1.odict")
+	dict2 := odict.ReadDictionary("../examples/example2.odict")
 
 	assert.Equal(t, dict1.Entries.Size(), 2)
 	assert.Equal(t, dict2.Entries.Size(), 1)
@@ -70,14 +71,14 @@ func TestMerge(t *testing.T) {
 }
 
 func TestDump(t *testing.T) {
-	createDictionaryFromPath("examples/example1.xml")
+	createDictionaryFromPath("../examples/example1.xml")
 
-	dict := odict.LoadDictionary("examples/example1.odict", true)
+	dict := odict.ReadDictionary("../examples/example1.odict")
 	dump := odict.DumpDictionary(dict)
 
-	odict.WriteDictionary(dump, "examples/example1_generated.odict")
+	odict.WriteDictionary(dump, "../examples/example1_generated.odict")
 
-	newdict := odict.LoadDictionary("examples/example1_generated.odict", true)
+	newdict := odict.ReadDictionary("../examples/example1_generated.odict")
 
 	// We need the IDs to match seeing they will definitely be different
 	// due to dictionary regeneration

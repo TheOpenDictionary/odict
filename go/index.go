@@ -8,14 +8,13 @@ import (
 	"path/filepath"
 
 	"github.com/blevesearch/bleve"
-	"github.com/odict/odict/go/models"
 )
 
-func getIndexPath(dictionary models.Dictionary) string {
+func getIndexPath(dictionary Dictionary) string {
 	return filepath.Join(os.TempDir(), "odict", "idx", dictionary.ID)
 }
 
-func createIndex(dictionary models.Dictionary, force bool) string {
+func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 	indexPath := getIndexPath(dictionary)
 	_, statErr := os.Stat(indexPath)
 
@@ -45,10 +44,10 @@ func createIndex(dictionary models.Dictionary, force bool) string {
 			index.SetInternal([]byte(entry.Term), buffer.Bytes())
 		}
 	} else {
-		if force {
+		if overwrite {
 			println("Purging existing index...")
 			os.RemoveAll(indexPath)
-			return createIndex(dictionary, false)
+			return IndexDictionary(dictionary, false)
 		}
 	}
 

@@ -1,4 +1,4 @@
-package models
+package odict
 
 import (
 	"encoding/xml"

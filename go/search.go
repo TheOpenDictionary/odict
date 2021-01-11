@@ -6,16 +6,15 @@ import (
 	"os"
 
 	"github.com/blevesearch/bleve"
-	"github.com/odict/odict/go/models"
 )
 
 // SearchDictionary searches a dictionary model using Bleve
-func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.Entry {
+func SearchDictionary(dictionary Dictionary, queryStr string) []Entry {
 	indexPath := getIndexPath(dictionary)
 	_, err := os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
-		panic("Index path does not exist. Did you call LoadDictionary() first?")
+		panic("Index path does not exist. Did you call IndexDictionary() first?")
 	}
 
 	index, openErr := bleve.Open(indexPath)
@@ -32,7 +31,7 @@ func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.En
 
 	hits := searchResults.Hits
 
-	entries := make([]models.Entry, len(hits))
+	entries := make([]Entry, len(hits))
 
 	for i := range hits {
 		hitID := hits[i].ID
@@ -42,7 +41,7 @@ func SearchDictionary(dictionary models.Dictionary, queryStr string) []models.En
 			panic(err)
 		}
 
-		var entry models.Entry
+		var entry Entry
 
 		buffer := bytes.NewBuffer(b)
 		dec := gob.NewDecoder(buffer)

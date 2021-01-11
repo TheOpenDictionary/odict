@@ -1,4 +1,4 @@
-package models
+package odict
 
 import (
 	"encoding/json"
@@ -14,14 +14,14 @@ type Usage struct {
 }
 
 type UsageMap struct {
-	Iterable map[PartOfSpeech]Usage
+	Iterable map[PartOfSpeech]*Usage
 }
 
-func (m *UsageMap) Set(key PartOfSpeech, value Usage) {
+func (m *UsageMap) Set(key PartOfSpeech, value *Usage) {
 	m.Iterable[key] = value
 }
 
-func (m *UsageMap) Get(key PartOfSpeech) Usage {
+func (m *UsageMap) Get(key PartOfSpeech) *Usage {
 	return m.Iterable[key]
 }
 
@@ -41,12 +41,12 @@ func (m UsageMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 }
 
 func (m *UsageMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var usage Usage
+	var usage *Usage
 
 	d.DecodeElement(&usage, &start)
 
 	if m.Iterable == nil {
-		m.Iterable = make(map[PartOfSpeech]Usage)
+		m.Iterable = make(map[PartOfSpeech]*Usage)
 	}
 
 	m.Set(usage.POS, usage)
