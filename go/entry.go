@@ -1,8 +1,10 @@
-package models
+package odict
 
 import (
 	"encoding/xml"
 	"io"
+
+	"github.com/imdario/mergo"
 )
 
 type EntryMap struct {
@@ -17,6 +19,11 @@ func (m *EntryMap) Get(key string) Entry {
 	return m.Iterable[key]
 }
 
+func (m *EntryMap) Has(key string) bool {
+	_, ok := m.Iterable[key]
+	return ok
+}
+
 func (m *EntryMap) Size() int {
 	return len(m.Iterable)
 }
@@ -25,6 +32,7 @@ func (m EntryMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	for key := range m.Iterable {
 		e.Encode(m.Get(key))
 	}
+
 	return nil
 }
 
@@ -35,6 +43,12 @@ func (m *EntryMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 
 	if m.Iterable == nil {
 		m.Iterable = make(map[string]Entry)
+	}
+
+	if m.Has(entry.Term) {
+		if err := mergo.Merge(&entry, m.Get(entry.Term), mergo.WithAppendSlice); err != nil {
+			Check(err)
+		}
 	}
 
 	m.Set(entry.Term, entry)

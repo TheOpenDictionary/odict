@@ -1,4 +1,4 @@
-package models
+package odict
 
 type PartOfSpeech string
 

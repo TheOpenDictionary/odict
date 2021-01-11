@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/odict/odict/go/models"
-	"github.com/odict/odict/go/schema"
-
 	"github.com/golang/snappy"
+	"github.com/odict/odict/schema"
 )
 
-func getODDefinitionsFromUsage(usage schema.Usage) []string {
+func getDefinitionsFromUsage(usage schema.Usage) []string {
 	definitions := []string{}
 
 	for f := 0; f < usage.DefinitionsLength(); f++ {
@@ -21,7 +19,7 @@ func getODDefinitionsFromUsage(usage schema.Usage) []string {
 	return definitions
 }
 
-func getODDefinitionsFromGroup(group schema.Group) []string {
+func getDefinitionsFromGroup(group schema.Group) []string {
 	definitions := []string{}
 
 	for e := 0; e < group.DefinitionsLength(); e++ {
@@ -31,17 +29,17 @@ func getODDefinitionsFromGroup(group schema.Group) []string {
 	return definitions
 }
 
-func getODDefinitionGroups(usage schema.Usage) []models.Group {
+func getDefinitionGroupModels(usage schema.Usage) []Group {
 	var definitionGroup schema.Group
 
-	definitionGroups := []models.Group{}
+	definitionGroups := []Group{}
 
 	for d := 0; d < usage.GroupsLength(); d++ {
 		usage.Groups(&definitionGroup, d)
 
-		odGroup := models.Group{
+		odGroup := Group{
 			Description: string(definitionGroup.Description()),
-			Definitions: getODDefinitionsFromGroup(definitionGroup),
+			Definitions: getDefinitionsFromGroup(definitionGroup),
 		}
 
 		definitionGroups = append(definitionGroups, odGroup)
@@ -50,18 +48,18 @@ func getODDefinitionGroups(usage schema.Usage) []models.Group {
 	return definitionGroups
 }
 
-func getODUsages(etymology schema.Etymology) models.UsageMap {
+func getUsageMap(etymology schema.Etymology) UsageMap {
 	var usage schema.Usage
 
-	usages := models.UsageMap{make(map[models.PartOfSpeech]models.Usage)}
+	usages := UsageMap{make(map[PartOfSpeech]Usage)}
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)
 
-		odUsage := models.Usage{
+		odUsage := Usage{
 			POS:         resolvePOS(usage.Pos()),
-			Groups:      getODDefinitionGroups(usage),
-			Definitions: getODDefinitionsFromUsage(usage),
+			Groups:      getDefinitionGroupModels(usage),
+			Definitions: getDefinitionsFromUsage(usage),
 		}
 
 		usages.Set(odUsage.POS, odUsage)
@@ -70,16 +68,16 @@ func getODUsages(etymology schema.Etymology) models.UsageMap {
 	return usages
 }
 
-func getODEtymologies(entry schema.Entry) []models.Etymology {
+func getEtymologyModels(entry schema.Entry) []Etymology {
 	var ety schema.Etymology
-	var etymologies []models.Etymology
+	var etymologies []Etymology
 
 	for b := 0; b < entry.EtymologiesLength(); b++ {
 		entry.Etymologies(&ety, b)
 
-		odEty := models.Etymology{
+		odEty := Etymology{
 			ID:     string(ety.Id()),
-			Usages: getODUsages(ety),
+			Usages: getUsageMap(ety),
 		}
 
 		etymologies = append(etymologies, odEty)
@@ -88,17 +86,17 @@ func getODEtymologies(entry schema.Entry) []models.Etymology {
 	return etymologies
 }
 
-func getODEntries(dictionary *schema.Dictionary) models.EntryMap {
+func getEntryModels(dictionary *schema.Dictionary) EntryMap {
 	var entry schema.Entry
 
-	entries := models.EntryMap{make(map[string]models.Entry)}
+	entries := EntryMap{make(map[string]Entry)}
 
 	for a := 0; a < dictionary.EntriesLength(); a++ {
 		dictionary.Entries(&entry, a)
 
-		odEntry := models.Entry{
+		odEntry := Entry{
 			Term:        string(entry.Term()),
-			Etymologies: getODEtymologies(entry),
+			Etymologies: getEtymologyModels(entry),
 		}
 
 		entries.Set(odEntry.Term, odEntry)
@@ -107,12 +105,36 @@ func getODEntries(dictionary *schema.Dictionary) models.EntryMap {
 	return entries
 }
 
-// LoadDictionary loads a compiled ODict dictionary from the provided
+func resolvePOS(pos schema.POS) PartOfSpeech {
+	posMap := map[schema.POS]PartOfSpeech{
+		schema.POSadj:      Adjective,
+		schema.POSadv:      Adverb,
+		schema.POSverb:     Verb,
+		schema.POSnoun:     Noun,
+		schema.POSpronoun:  Pronoun,
+		schema.POSprep:     Preposition,
+		schema.POSconj:     Conjugation,
+		schema.POSintj:     Interjection,
+		schema.POSprefix:   Prefix,
+		schema.POSsuffix:   Suffix,
+		schema.POSparticle: Particle,
+		schema.POSarticle:  Article,
+		schema.POSunknown:  Unknown,
+	}
+
+	if val, ok := posMap[pos]; ok {
+		return val
+	} else {
+		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
+	}
+}
+
+// ReadDictionary loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
+func ReadDictionary(path string) Dictionary {
 	// Read input file
-	file, err := os.Open(inputPath)
+	file, err := os.Open(path)
 
 	Check(err)
 
@@ -139,6 +161,7 @@ func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	_, contentSizeError := file.Read(contentSizeBytes)
 
 	Check(contentSizeError)
+
 	file.Seek(15, 0)
 
 	// Decode bytes for signature, version, and contentSize
@@ -161,38 +184,13 @@ func LoadDictionary(inputPath string, newIndex bool) models.Dictionary {
 	Check(decodedError)
 
 	buffer := schema.GetRootAsDictionary(decoded, 0)
-	dictionary := models.Dictionary{
+
+	dictionary := Dictionary{
 		ID:      string(buffer.Id()),
 		Name:    string(buffer.Name()),
 		Version: version,
-		Entries: getODEntries(buffer),
+		Entries: getEntryModels(buffer),
 	}
-
-	createIndex(dictionary, newIndex)
 
 	return dictionary
-}
-
-func resolvePOS(pos schema.POS) models.PartOfSpeech {
-	posMap := map[schema.POS]models.PartOfSpeech{
-		schema.POSadj:      models.Adjective,
-		schema.POSadv:      models.Adverb,
-		schema.POSverb:     models.Verb,
-		schema.POSnoun:     models.Noun,
-		schema.POSpronoun:  models.Pronoun,
-		schema.POSprep:     models.Preposition,
-		schema.POSconj:     models.Conjugation,
-		schema.POSintj:     models.Interjection,
-		schema.POSprefix:   models.Prefix,
-		schema.POSsuffix:   models.Suffix,
-		schema.POSparticle: models.Particle,
-		schema.POSarticle:  models.Article,
-		schema.POSunknown:  models.Unknown,
-	}
-
-	if val, ok := posMap[pos]; ok {
-		return val
-	} else {
-		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
-	}
 }

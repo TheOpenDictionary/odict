@@ -1,4 +1,4 @@
-package models
+package odict
 
 type Group struct {
 	ID          string   `json:"id" xml:"id,attr"`
