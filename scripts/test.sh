@@ -1,2 +1,1 @@
-cd cli
-go test -v
+cd cli && go test -v

@@ -3,6 +3,7 @@ package odict
 import (
 	"encoding/xml"
 	"io"
+	"strings"
 
 	"github.com/imdario/mergo"
 )
@@ -12,15 +13,15 @@ type EntryMap struct {
 }
 
 func (m *EntryMap) Set(key string, value Entry) {
-	m.Iterable[key] = value
+	m.Iterable[strings.ToLower(key)] = value
 }
 
 func (m *EntryMap) Get(key string) Entry {
-	return m.Iterable[key]
+	return m.Iterable[strings.ToLower(key)]
 }
 
 func (m *EntryMap) Has(key string) bool {
-	_, ok := m.Iterable[key]
+	_, ok := m.Iterable[strings.ToLower(key)]
 	return ok
 }
 

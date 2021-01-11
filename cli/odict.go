@@ -42,6 +42,12 @@ func main() {
 				Action:  index,
 			},
 			{
+				Name:    "lookup",
+				Aliases: []string{"l"},
+				Usage:   "looks up an entry in a compiled dictionary without indexing",
+				Action:  lookup,
+			},
+			{
 				Name:    "search",
 				Aliases: []string{"s"},
 				Usage:   "search a compiled dictionary",
