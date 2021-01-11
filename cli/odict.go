@@ -50,8 +50,16 @@ func main() {
 			{
 				Name:    "search",
 				Aliases: []string{"s"},
-				Usage:   "search a compiled dictionary",
-				Action:  search,
+				Flags: []cli.Flag{
+					&cli.BoolFlag{
+						Name:    "index",
+						Aliases: []string{"i"},
+						Usage:   "Forcibly creates a new index if one already exists",
+						Value:   false,
+					},
+				},
+				Usage:  "search a compiled dictionary",
+				Action: search,
 			},
 			{
 				Name:    "dump",
