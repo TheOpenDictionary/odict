@@ -11,7 +11,9 @@ func MergeDictionaries(dest Dictionary, srcs ...Dictionary) Dictionary {
 	dst := dest
 
 	for i := range srcs {
-		mergo.Map(&dst, srcs[i], mergo.WithAppendSlice)
+		if err := mergo.Map(&dst, srcs[i], mergo.WithAppendSlice); err != nil {
+			Check(err)
+		}
 	}
 
 	return dst

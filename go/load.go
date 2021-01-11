@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/golang/snappy"
-	"github.com/imdario/mergo"
 	"github.com/odict/odict/schema"
 )
 
@@ -52,7 +51,7 @@ func getDefinitionGroupModels(usage schema.Usage) []Group {
 func getUsageMap(etymology schema.Etymology) UsageMap {
 	var usage schema.Usage
 
-	usages := UsageMap{make(map[PartOfSpeech]*Usage)}
+	usages := UsageMap{make(map[PartOfSpeech]Usage)}
 
 	for c := 0; c < etymology.UsagesLength(); c++ {
 		etymology.Usages(&usage, c)
@@ -63,15 +62,7 @@ func getUsageMap(etymology schema.Etymology) UsageMap {
 			Definitions: getDefinitionsFromUsage(usage),
 		}
 
-		existingUsage := usages.Get((odUsage.POS))
-
-		if existingUsage != nil {
-			mergo.Merge(&existingUsage, odUsage)
-		} else {
-			existingUsage = &odUsage
-		}
-
-		usages.Set(odUsage.POS, existingUsage)
+		usages.Set(odUsage.POS, odUsage)
 	}
 
 	return usages

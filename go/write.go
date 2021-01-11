@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"encoding/xml"
 	"fmt"
+	"html"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -15,49 +17,28 @@ import (
 	"github.com/odict/odict/schema"
 )
 
-type xmlDefinitionGroup struct {
-	XMLName     xml.Name `xml:"group"`
-	Definitions []string `xml:"definition"`
-	Description string   `xml:"description,attr"`
-}
-
-type xmlUsage struct {
-	XMLName          xml.Name             `xml:"usage"`
-	POS              string               `xml:"pos,attr"`
-	DefinitionGroups []xmlDefinitionGroup `xml:"group"`
-	Definitions      []string             `xml:"definition"`
-}
-
-type xmlEtymology struct {
-	XMLName     xml.Name   `xml:"ety"`
-	Description string     `xml:"description,attr"`
-	Usages      []xmlUsage `xml:"usage"`
-}
-
-type xmlEntry struct {
-	XMLName     xml.Name       `xml:"entry"`
-	Term        string         `xml:"term,attr"`
-	Etymologies []xmlEtymology `xml:"ety"`
-}
-
-type xmlDictionary struct {
-	XMLName xml.Name   `xml:"dictionary"`
-	Name    string     `xml:"name,attr"`
-	Entries []xmlEntry `xml:"entry"`
-}
-
 func xmlToDictionary(xmlStr string) Dictionary {
 	var dictionary Dictionary
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
-	expectedEntries := strings.Count(xmlStr, "<entry")
+	r := regexp.MustCompile("<entry.*?term=\"(.*?)\">")
+	entries := r.FindAllStringSubmatch(xmlStr, -1)
+	expectedEntries := len(entries)
 	actualEntries := dictionary.Entries.Size()
 
-	Assert(
-		expectedEntries == actualEntries,
-		fmt.Sprintf("The dictionary that was read into memory from XML is missing Entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid?", actualEntries, expectedEntries),
-	)
+	if expectedEntries != actualEntries {
+
+		fmt.Printf("WARNING: The dictionary that was read into memory from XML is missing entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid and there are no duplicate entries?\n", actualEntries, expectedEntries)
+
+		for _, entry := range entries {
+			v := html.UnescapeString(entry[1])
+
+			if !dictionary.Entries.Has(v) {
+				fmt.Printf("- %s\n", v)
+			}
+		}
+	}
 
 	return dictionary
 }
@@ -178,8 +159,8 @@ func getUsagesVector(builder *flatbuffers.Builder, ety Etymology) flatbuffers.UO
 	for key := range usages.Iterable {
 		usage := usages.Get(key)
 		usagePOS := resolveSchemaPOS(usage.POS)
-		usageDefinitionGroups := getGroupsVector(builder, *usage)
-		usageDefinitions := getDefinitionsVectorFromUsage(builder, *usage)
+		usageDefinitionGroups := getGroupsVector(builder, usage)
+		usageDefinitions := getDefinitionsVectorFromUsage(builder, usage)
 
 		schema.UsageStart(builder)
 		schema.UsageAddPos(builder, usagePOS)
