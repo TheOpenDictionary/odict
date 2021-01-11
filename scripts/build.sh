@@ -1,3 +1,4 @@
 mkdir -p bin
-go build -o bin/odict
-go build -o bin/odict.so -buildmode=c-shared
+cd cli
+go build -o ../bin/odict -v
+go build -o ../bin/odict.so -buildmode=c-shared -v
