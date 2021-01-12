@@ -2,8 +2,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 cc_library(
     name = "odict-lib",
-    srcs = ["odict.cc"],
-    hdrs = ["odict.h"],
+    srcs = ["odict.cpp"],
     visibility = ["//visibility:public"],
     deps = ["//tools/jni:copy_jni_hdr_lib", "//shared:shared.cc"],
     alwayslink = True,
