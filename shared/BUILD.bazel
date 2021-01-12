@@ -3,20 +3,15 @@ load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 go_library(
     name = "shared_lib",
     srcs = ["odict.go"],
-    cgo = True,
     importpath = "github.com/odict/odict/shared",
     visibility = ["//visibility:private"],
     deps = ["//go"],
 )
 
 go_binary(
-    name = "odict",
+    name = "shared",
+    cgo = True,
     embed = [":shared_lib"],
     linkmode = "c-shared",
     visibility = ["//visibility:public"],
-)
-
-alias(
-    name = "shared",
-    actual = ":odict",
 )

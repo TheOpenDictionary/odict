@@ -1,0 +1,4 @@
+alias(
+    name = "java",
+    actual = "//java/main/java/org/odict",
+)

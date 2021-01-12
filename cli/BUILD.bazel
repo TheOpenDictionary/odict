@@ -16,7 +16,7 @@ go_library(
     importpath = "github.com/example/project/cli",
     visibility = ["//visibility:private"],
     deps = [
-        "@com_github_odict_odict//go:go_default_library",
+        "@//go",
         "@com_github_urfave_cli_v2//:cli",
     ],
 )
@@ -33,7 +33,7 @@ go_test(
     srcs = ["odict_test.go"],
     embed = [":cli_lib"],
     deps = [
-        "@com_github_odict_odict//go:go_default_library",
+        "@//go",
         "@com_github_stretchr_testify//assert",
     ],
 )
