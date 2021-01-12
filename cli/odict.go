@@ -10,16 +10,6 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
-//export CreateDictionaryFromPath
-func CreateDictionaryFromPath(inputPath *C.char) {
-	createDictionaryFromPath(C.GoString(inputPath))
-}
-
-//export CreateDictionaryFromXML
-func CreateDictionaryFromXML(xmlStr, outputPath *C.char) {
-	odict.WriteDictionary(C.GoString(xmlStr), C.GoString(outputPath))
-}
-
 func createDictionaryFromXML(xmlStr, outputPath string) {
 	odict.WriteDictionary(xmlStr, outputPath)
 }

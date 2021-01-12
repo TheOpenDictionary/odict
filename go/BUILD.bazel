@@ -1,0 +1,16 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go",
+    srcs = glob(["*.go"]),
+    importpath = "github.com/odict/odict/go",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//schema",
+        "@com_github_blevesearch_bleve//:bleve",
+        "@com_github_golang_snappy//:snappy",
+        "@com_github_google_flatbuffers//go",
+        "@com_github_google_uuid//:uuid",
+        "@com_github_imdario_mergo//:mergo",
+    ],
+)
