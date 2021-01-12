@@ -1,0 +1,17 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+cc_library(
+    name = "odict-lib",
+    srcs = ["odict.cc"],
+    hdrs = ["odict.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//tools/jni:copy_jni_hdr_lib", "//shared:shared.cc"],
+    alwayslink = True,
+)
+
+cc_binary(
+    name = "libodict.so",
+    linkshared = True,
+    visibility = ["//java:__subpackages__"],
+    deps = [":odict-lib"],
+)
