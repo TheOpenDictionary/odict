@@ -1,0 +1,9 @@
+<dictionary name="Example Dictionary 2">
+	<entry term="run">
+		<ety description="Latin root">
+			<usage pos="verb">
+				<definition>An additional definition</definition>
+			</usage>
+		</ety>
+	</entry>
+</dictionary>

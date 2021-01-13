@@ -1,17 +1,17 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "shared_lib",
-    srcs = ["odict.go"],
+    name = "bridging_lib",
+    srcs = ["odict-bridging-lib.go"],
     importpath = "github.com/odict/odict/shared",
     visibility = ["//visibility:private"],
     deps = ["//go"],
 )
 
 go_binary(
-    name = "shared",
+    name = "bridge",
     cgo = True,
-    embed = [":shared_lib"],
+    embed = [":bridging_lib"],
     linkmode = "c-shared",
     visibility = ["//visibility:public"],
 )

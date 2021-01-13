@@ -4,7 +4,7 @@ cc_library(
     name = "odict-lib",
     srcs = ["odict.cpp"],
     visibility = ["//visibility:public"],
-    deps = ["//tools/jni:copy_jni_hdr_lib", "//shared:shared.cc"],
+    deps = ["//tools/jni:copy_jni_hdr_lib", "//bridge:bridge.cc"],
     alwayslink = True,
 )
 

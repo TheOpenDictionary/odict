@@ -1,4 +1,11 @@
 alias(
     name = "java",
     actual = "//java/main/java/org/odict",
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "tests",
+    tests = ["//java/test/java/org/odict:lookup_entry"],
+    visibility = ["//java:__pkg__"],
 )
