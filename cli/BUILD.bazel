@@ -29,9 +29,11 @@ go_binary(
 )
 
 go_test(
-    name = "cli_test",
+    name = "tests",
     srcs = ["odict_test.go"],
+    data = ["//examples"],
     embed = [":cli_lib"],
+    visibility = ["//visibility:public"],
     deps = [
         "@//go",
         "@com_github_stretchr_testify//assert",

@@ -40,7 +40,7 @@ func cleanup() {
 }
 
 func TestReadWriteSearch(t *testing.T) {
-	createDictionaryFromPath("../examples/example1.xml")
+	odict.CompileDictionary("../examples/example1.xml")
 
 	dict := odict.ReadDictionary("../examples/example1.odict")
 	odict.IndexDictionary(dict, true)
@@ -52,8 +52,8 @@ func TestReadWriteSearch(t *testing.T) {
 }
 
 func TestMerge(t *testing.T) {
-	createDictionaryFromPath("../examples/example1.xml")
-	createDictionaryFromPath("../examples/example2.xml")
+	odict.CompileDictionary("../examples/example1.xml")
+	odict.CompileDictionary("../examples/example2.xml")
 
 	dict1 := odict.ReadDictionary("../examples/example1.odict")
 	dict2 := odict.ReadDictionary("../examples/example2.odict")
@@ -71,7 +71,7 @@ func TestMerge(t *testing.T) {
 }
 
 func TestDump(t *testing.T) {
-	createDictionaryFromPath("../examples/example1.xml")
+	odict.CompileDictionary("../examples/example1.xml")
 
 	dict := odict.ReadDictionary("../examples/example1.odict")
 	dump := odict.DumpDictionary(dict)
