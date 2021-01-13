@@ -1,0 +1,14 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "odict",
+    srcs = ["odict.py"],
+    data = [
+        "//bridge",
+    ],
+)
+
+alias(
+    name = "python",
+    actual = ":odict",
+)
