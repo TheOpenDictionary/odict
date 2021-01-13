@@ -1,7 +1,7 @@
 import sys
 
 from ctypes import *
-from os import path
+from os import path, getcwd
 
 
 def __library_name():
@@ -13,4 +13,4 @@ def __library_name():
 
 
 odict = cdll.LoadLibrary(path.abspath(
-    path.join(path.dirname(__file__), "..", "bridge", "bridge_", __library_name())))
+    path.join(path.dirname(getcwd()), "__main__", "bridge", "bridge_", __library_name())))

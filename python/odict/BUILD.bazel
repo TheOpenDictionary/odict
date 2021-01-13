@@ -1,0 +1,10 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "odict",
+    srcs = ["odict.py"],
+    data = [
+        "//bridge",
+    ],
+    visibility = ["//python:__pkg__"],
+)
