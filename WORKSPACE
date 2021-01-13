@@ -18,13 +18,18 @@ http_archive(
     ],
 )
 
-# gazelle:go_generate_proto false
-
 http_archive(
     name = "com_google_protobuf",
     sha256 = "9748c0d90e54ea09e5e75fb7fac16edce15d2028d4356f32211cfa3c0e956564",
     strip_prefix = "protobuf-3.11.4",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.11.4.zip"],
+)
+
+http_archive(
+    name = "com_github_google_flatbuffers",
+    sha256 = "62f2223fb9181d1d6338451375628975775f7522185266cd5296571ac152bc45",
+    strip_prefix = "flatbuffers-1.12.0",
+    urls = ["https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz"],
 )
 
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
@@ -44,13 +49,6 @@ go_repository(
     importpath = "github.com/golang/snappy",
     sum = "h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=",
     version = "v0.0.1",
-)
-
-go_repository(
-    name = "com_github_google_flatbuffers",
-    importpath = "github.com/google/flatbuffers",
-    sum = "h1:O7CEyB8Cb3/DmtxODGtLHcEvpr81Jm5qLg/hsHnxA2A=",
-    version = "v1.11.0",
 )
 
 go_repository(
