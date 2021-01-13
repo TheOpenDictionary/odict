@@ -5,7 +5,9 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -297,4 +299,21 @@ func createODictFile(outputPath string, dictionary Dictionary) {
 // a ODXML input file path
 func WriteDictionary(xmlStr, outputPath string) {
 	createODictFile(outputPath, xmlToDictionary(xmlStr))
+}
+
+// CompileDictionary compiles an XML file into an ODict binary
+func CompileDictionary(xmlPath string) {
+	base := filepath.Base(xmlPath)
+	name := strings.TrimSuffix(base, filepath.Ext(base))
+	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(xmlPath), name)
+	xmlFile, err := os.Open(xmlPath)
+
+	defer xmlFile.Close()
+
+	Check(err)
+
+	xmlStr, err := ioutil.ReadAll(xmlFile)
+
+	Check(err)
+	WriteDictionary(string(xmlStr), outputPath)
 }

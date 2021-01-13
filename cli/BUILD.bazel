@@ -1,0 +1,41 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "cli_lib",
+    srcs = [
+        "compile.go",
+        "dump.go",
+        "index.go",
+        "lookup.go",
+        "merge.go",
+        "odict.go",
+        "search.go",
+        "t.go",
+    ],
+    cgo = True,
+    importpath = "github.com/example/project/cli",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@//go",
+        "@com_github_urfave_cli_v2//:cli",
+    ],
+)
+
+go_binary(
+    name = "cli",
+    out = "odict",
+    embed = [":cli_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "tests",
+    srcs = ["odict_test.go"],
+    data = ["//examples"],
+    embed = [":cli_lib"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@//go",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
