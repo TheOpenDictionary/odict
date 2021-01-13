@@ -1,0 +1,24 @@
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
+
+alias(
+    name = "python",
+    actual = "odict",
+)
+
+py_library(
+    name = "odict",
+    srcs = [
+        "odict.py",
+    ],
+    data = [
+        "//bridge",
+    ],
+)
+
+py_test(
+    name = "tests",
+    srcs = ["odict_tests.py"],
+    data = ["//examples"],
+    main = "odict_tests.py",
+    deps = [":odict"],
+)
