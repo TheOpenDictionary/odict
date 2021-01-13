@@ -12,7 +12,7 @@ Java_org_odict_ODict_lookupEntry(JNIEnv *env, jobject, jstring query, jstring pa
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
   const char *entry_term = env->GetStringUTFChars(query, 0);
-  return env->NewStringUTF(LookupEntry((char *)dictionary_path, (char *)entry_term));
+  return env->NewStringUTF(LookupEntry((char *)entry_term, (char *)dictionary_path));
 }
 
 extern "C" JNIEXPORT void JNICALL

@@ -8,5 +8,6 @@ test_suite(
     tests = [
         "//cli:tests",
         "//java:tests",
+        "//python:tests",
     ],
 )
