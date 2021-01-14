@@ -1,7 +1,7 @@
 import sys
 
 from ctypes import *
-from os import path, getcwd
+from os import path
 
 
 def __library_name():
@@ -12,8 +12,7 @@ def __library_name():
     return names.get(sys.platform, "libbridge.so")
 
 
-lib = cdll.LoadLibrary(path.abspath(
-    path.join(path.dirname(getcwd()), "__main__", "bridge", "bridge_", __library_name())))
+lib = cdll.LoadLibrary(path.join("bridge", "bridge_", __library_name()))
 
 lib.SearchDictionary.restype = c_char_p
 lib.LookupEntry.restype = c_char_p
