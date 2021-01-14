@@ -12,7 +12,21 @@ def __library_name():
     return names.get(sys.platform, "libbridge.so")
 
 
-lib = cdll.LoadLibrary(path.join("bridge", "bridge_", __library_name()))
+def __find_library():
+    # Workaround for for https://github.com/bazelbuild/rules_python/issues/382
+
+    opt1 = path.abspath(path.join(path.dirname(__file__),
+                                  "..", "bridge", "bridge_", __library_name()))
+
+    opt2 = path.abspath(path.join("bridge", "bridge_", __library_name()))
+
+    if path.isfile(opt2):
+        return opt2
+    else:
+        return opt1
+
+
+lib = cdll.LoadLibrary(__find_library())
 
 lib.SearchDictionary.restype = c_char_p
 lib.LookupEntry.restype = c_char_p
