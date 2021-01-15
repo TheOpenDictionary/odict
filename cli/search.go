@@ -23,7 +23,7 @@ func search(c *cli.Context) error {
 
 		odict.IndexDictionary(dict, force)
 
-		results := odict.SearchDictionary(dict, searchTerm)
+		results := odict.SearchDictionary(dict.ID, searchTerm)
 
 		b, err := json.MarshalIndent(results, "", " ")
 

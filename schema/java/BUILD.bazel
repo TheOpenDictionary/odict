@@ -5,11 +5,11 @@ flatbuffer_library_public(
     name = "java_srcs",
     srcs = ["//schema:file"],
     outs = [
+        "schema/Dictionary.java",
         "schema/Entry.java",
         "schema/Etymology.java",
-    ],
-    flatc_args = [
-        "--gen-generated",
+        "schema/Group.java",
+        "schema/Usage.java",
     ],
     language_flag = "-j",
 )

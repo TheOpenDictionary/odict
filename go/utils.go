@@ -1,9 +1,65 @@
 package odict
 
 import (
+	"bytes"
+	"encoding/gob"
 	"encoding/binary"
 	"log"
 )
+
+// EncodeDictionary encodes a dictionary struct 
+// into a byte array
+func EncodeDictionary(dictionary Dictionary) []byte {
+	var buffer bytes.Buffer
+
+	enc := gob.NewEncoder(&buffer)
+	err := enc.Encode(dictionary)
+
+	Check(err)
+
+	return buffer.Bytes()
+}
+
+// DecodeDictionary decodes a byte array into 
+// a dictionary object
+func DecodeDictionary(b []byte) Dictionary {
+	var dict Dictionary 
+	
+	buffer := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buffer)
+	err := dec.Decode(&dict)
+
+	Check(err)
+	
+	return dict
+}
+
+// EncodeDictionary encodes an entry struct 
+// into a byte array
+func EncodeEntry(entry Entry) []byte {
+	var buffer bytes.Buffer
+
+	enc := gob.NewEncoder(&buffer)
+	err := enc.Encode(entry)
+
+	Check(err)
+
+	return buffer.Bytes()
+}
+
+// DecodeDictionary decodes a byte array into 
+// an entry object
+func DecodeEntry(b []byte) Entry {
+	var entry Entry 
+
+	buffer := bytes.NewBuffer(b)
+	dec := gob.NewDecoder(buffer)
+	err := dec.Decode(&entry)
+
+	Check(err)
+	
+	return entry
+}
 
 // Check panics the program if an error exists
 func Check(e error) {

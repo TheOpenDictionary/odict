@@ -1,14 +1,16 @@
 #include <jni.h>
 #include <stdio.h>
-
+#include <iostream>
 #include "bridge/bridge.h"
+
+using namespace std;
 
 #ifndef CGO_EXPORT_BRIDGE_EXISTS
 #error bridging header not found
 #endif
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_ODict_lookupEntry(JNIEnv *env, jobject, jstring query, jstring path)
+Java_org_odict_Dictionary_lookupEntry(JNIEnv *env, jobject, jstring query, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
   const char *entry_term = env->GetStringUTFChars(query, 0);
@@ -16,34 +18,56 @@ Java_org_odict_ODict_lookupEntry(JNIEnv *env, jobject, jstring query, jstring pa
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_ODict_indexDictionary(JNIEnv *env, jobject, jstring path)
+Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jbyteArray bytes)
 {
-  const char *dictionary_path = env->GetStringUTFChars(path, 0);
-  IndexDictionary((char *)dictionary_path);
+  jsize len = env->GetArrayLength(bytes);
+
+  char *buf = new char[len];
+
+  cout << strlen(buf);
+  env->GetByteArrayRegion(bytes, 0, len, reinterpret_cast<jbyte *>(buf));
+  cout << len;
+  cout << strlen(buf) << endl;
+  cout << strln(jbyteArray) << endl;
+  IndexDictionary(buf);
+
+  // if (isCopy)
+  // {
+  //   env->ReleaseByteArrayElements(bytes, b, 0);
+  // }
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_ODict_searchDictionary(JNIEnv *env, jobject, jstring query, jstring path)
+Java_org_odict_Dictionary_search(JNIEnv *env, jobject, jstring query, jbyteArray bytes)
 {
-  const char *dictionary_path = env->GetStringUTFChars(path, 0);
+  jboolean isCopy;
+  jbyte *b = env->GetByteArrayElements(bytes, &isCopy);
+
   const char *q = env->GetStringUTFChars(query, 0);
-  return env->NewStringUTF(SearchDictionary((char *)q, (char *)dictionary_path));
+  const char *result = SearchDictionary((char *)q, (char *)b);
+
+  if (isCopy)
+  {
+    env->ReleaseByteArrayElements(bytes, b, 0);
+  }
+
+  return env->NewStringUTF(result);
 }
 
 extern "C" JNIEXPORT jbyteArray JNICALL
-Java_org_odict_ODict_readDictionaryBuffer(JNIEnv *env, jobject, jstring path)
+Java_org_odict_Dictionary_read(JNIEnv *env, jobject, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
-  ReadDictionaryBuffer_return vec = ReadDictionaryBuffer((char *)dictionary_path);
+  ReadDictionary_return vec = ReadDictionary((char *)dictionary_path);
   jbyteArray bytes = env->NewByteArray(vec.r0);
 
-  env->SetByteArrayRegion(bytes, 0, vec.r0, &(vec.r1));
+  env->SetByteArrayRegion(bytes, 0, vec.r0, reinterpret_cast<jbyte *>(vec.r1));
 
-  return bytes
+  return bytes;
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_ODict_writeDictionary(JNIEnv *env, jobject, jstring xml, jstring path)
+Java_org_odict_Dictionary_write(JNIEnv *env, jobject, jstring xml, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
   const char *content = env->GetStringUTFChars(xml, 0);
@@ -51,7 +75,7 @@ Java_org_odict_ODict_writeDictionary(JNIEnv *env, jobject, jstring xml, jstring 
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_ODict_compileDictionary(JNIEnv *env, jobject, jstring path)
+Java_org_odict_Dictionary_compile(JNIEnv *env, jobject, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
   CompileDictionary((char *)dictionary_path);

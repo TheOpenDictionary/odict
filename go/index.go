@@ -1,8 +1,6 @@
 package odict
 
 import (
-	"bytes"
-	"encoding/gob"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,12 +8,12 @@ import (
 	"github.com/blevesearch/bleve"
 )
 
-func getIndexPath(dictionary Dictionary) string {
-	return filepath.Join(os.TempDir(), "odict", "idx", dictionary.ID)
+func getIndexPath(dictionaryID string) string {
+	return filepath.Join(os.TempDir(), "odict", "idx", dictionaryID)
 }
 
 func IndexDictionary(dictionary Dictionary, overwrite bool) string {
-	indexPath := getIndexPath(dictionary)
+	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
@@ -34,14 +32,7 @@ func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 
 			Check(idxErr)
 
-			var buffer bytes.Buffer
-
-			enc := gob.NewEncoder(&buffer)
-			err := enc.Encode(entry)
-
-			Check(err)
-
-			index.SetInternal([]byte(entry.Term), buffer.Bytes())
+			index.SetInternal([]byte(entry.Term), EncodeEntry(entry))
 		}
 	} else {
 		if overwrite {

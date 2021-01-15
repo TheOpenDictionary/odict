@@ -5,10 +5,13 @@ import "C"
 
 import (
 	"encoding/json"
-	"unsafe"
 
 	odict "github.com/odict/odict/go"
 )
+
+func getDictionaryFromBuffer(buffer *C.char) odict.Dictionary {
+	return odict.DecodeDictionary([]byte(C.GoString(buffer)))
+}
 
 //export CompileDictionary
 func CompileDictionary(xmlFilePath *C.char) {
@@ -20,19 +23,20 @@ func WriteDictionary(xmlStr, outputPath *C.char) {
 	odict.WriteDictionary(C.GoString(xmlStr), C.GoString(outputPath))
 }
 
-//export ReadDictionaryBuffer
-func ReadDictionaryBuffer(path *C.char) (int, unsafe.Pointer) {
-	_, _, buffer := odict.ReadODictFile(C.GoString(path))
-	return C.int(len(buffer)), unsafe.Pointer(&buffer[0])
+//export ReadDictionary
+func ReadDictionary(path *C.char) (C.int, *C.char) {
+	dict := odict.ReadDictionary(C.GoString(path))
+	buffer := odict.EncodeDictionary(dict)
+	print(len(string(buffer)))
+	print("|")
+	return C.int(len(buffer)), C.CString(string(buffer))
 }
 
 //export SearchDictionary
-func SearchDictionary(query, dictionaryPath *C.char) *C.char {
-	path := C.GoString(dictionaryPath)
+func SearchDictionary(query, dictionaryBuffer *C.char) *C.char {
 	q := C.GoString(query)
-	dict := odict.ReadDictionary(path)
-	result := odict.SearchDictionary(dict, q)
-
+	dict := getDictionaryFromBuffer(dictionaryBuffer)
+	result := odict.SearchDictionary(dict.ID, q)
 	b, err := json.Marshal(&result)
 
 	odict.Check(err)
@@ -41,8 +45,10 @@ func SearchDictionary(query, dictionaryPath *C.char) *C.char {
 }
 
 //export IndexDictionary
-func IndexDictionary(dictionaryPath *C.char) {
-	dict := odict.ReadDictionary(C.GoString(dictionaryPath))
+func IndexDictionary(dictionaryBuffer *C.char) {
+	print(len(C.GoString(dictionaryBuffer)))
+	print("|")
+	dict := getDictionaryFromBuffer(dictionaryBuffer)
 	odict.IndexDictionary(dict, true)
 }
 
