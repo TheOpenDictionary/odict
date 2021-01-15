@@ -5,6 +5,7 @@ import "C"
 
 import (
 	"encoding/json"
+	"unsafe"
 
 	odict "github.com/odict/odict/go"
 )
@@ -17,6 +18,12 @@ func CompileDictionary(xmlFilePath *C.char) {
 //export WriteDictionary
 func WriteDictionary(xmlStr, outputPath *C.char) {
 	odict.WriteDictionary(C.GoString(xmlStr), C.GoString(outputPath))
+}
+
+//export ReadDictionaryBuffer
+func ReadDictionaryBuffer(path *C.char) (int, unsafe.Pointer) {
+	_, _, buffer := odict.ReadODictFile(C.GoString(path))
+	return C.int(len(buffer)), unsafe.Pointer(&buffer[0])
 }
 
 //export SearchDictionary

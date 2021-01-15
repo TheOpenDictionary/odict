@@ -30,6 +30,18 @@ Java_org_odict_ODict_searchDictionary(JNIEnv *env, jobject, jstring query, jstri
   return env->NewStringUTF(SearchDictionary((char *)q, (char *)dictionary_path));
 }
 
+extern "C" JNIEXPORT jbyteArray JNICALL
+Java_org_odict_ODict_readDictionaryBuffer(JNIEnv *env, jobject, jstring path)
+{
+  const char *dictionary_path = env->GetStringUTFChars(path, 0);
+  ReadDictionaryBuffer_return vec = ReadDictionaryBuffer((char *)dictionary_path);
+  jbyteArray bytes = env->NewByteArray(vec.r0);
+
+  env->SetByteArrayRegion(bytes, 0, vec.r0, &(vec.r1));
+
+  return bytes
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_org_odict_ODict_writeDictionary(JNIEnv *env, jobject, jstring xml, jstring path)
 {
