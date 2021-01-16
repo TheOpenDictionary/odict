@@ -64,6 +64,8 @@
   "java.configuration.updateBuildConfiguration": "automatic",
   "files.associations": {
     "algorithm": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "filesystem": "cpp",
+    "iostream": "cpp"
   }
 }

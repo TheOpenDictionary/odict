@@ -40,21 +40,27 @@ def __decode(str):
     return str.decode('utf-8')
 
 
-def compile_dictionary(path):
-    lib.CompileDictionary(__encode(path))
+class Dictionary:
 
+    def __init__(self, path, should_index=False):
+        self.__encoded_dict = lib.ReadDictionary(__encode(path))
 
-def search_dictionary(query, path):
-    return __decode(lib.SearchDictionary(__encode(query), __encode(path)))
+        if should_index:
+            self.index()
 
+    @staticmethod
+    def compile(path):
+        lib.CompileDictionary(path.encode('utf-8'))
 
-def index_dictionary(path):
-    return lib.IndexDictionary(__encode(path))
+    @staticmethod
+    def write(xml, path):
+        lib.WriteDictionary(xml.encode('utf-8'), path.encode('utf-8'))
 
+    def search(self, query):
+        return __decode(lib.SearchDictionary(__encode(query), self.__encoded_dict))
 
-def lookup_entry(term, path):
-    return __decode(lib.LookupEntry(__encode(term), __encode(path)))
+    def index(self):
+        lib.IndexDictionary(self.__encoded_dict)
 
-
-def write_dictionary(xml, path):
-    lib.WriteDictionary(__encode(xml), __encode(path))
+    def lookup_entry(self, term):
+        return __decode(lib.LookupEntry(__encode(term), self.__encoded_dict))

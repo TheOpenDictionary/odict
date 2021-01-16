@@ -19,37 +19,37 @@ public class Dictionary {
 
   public native static void write(String xml, String outputPath);
 
-  private native String lookupEntry(String term, String dictionaryPath);
+  private native String lookup(String term, String dictionary);
 
-  private native String search(String query, byte[] bytes);
+  private native String search(String query, String dictionary);
 
-  private native void index(byte[] bytes);
+  private native void index(String dictionary);
 
-  private native byte[] read(String path);
+  private native String read(String path);
 
-  private byte[] bytes;
+  private String encodedDictionary;
 
   public Dictionary(String path) {
     this(path, false);
   }
 
   public Dictionary(String path, Boolean shouldIndex) {
-    this.bytes = this.read(path);
+    this.encodedDictionary = this.read(path);
 
     if (shouldIndex) {
-      this.index(this.bytes);
+      this.index();
     }
   }
 
-  // public String lookup(String term) {
-
-  // }
+  public String lookup(String term) {
+    return this.lookup(term, this.encodedDictionary);
+  }
 
   public void index() {
-    this.index(this.bytes);
+    this.index(this.encodedDictionary);
   }
 
   public String search(String query) {
-    return this.search(query, this.bytes);
+    return this.search(query, this.encodedDictionary);
   }
 }

@@ -4,13 +4,27 @@ package main
 import "C"
 
 import (
+	"encoding/base64"
 	"encoding/json"
 
 	odict "github.com/odict/odict/go"
 )
 
-func getDictionaryFromBuffer(buffer *C.char) odict.Dictionary {
-	return odict.DecodeDictionary([]byte(C.GoString(buffer)))
+func getDictionaryFromBuffer(db *C.char) odict.Dictionary {
+	b, err := base64.StdEncoding.DecodeString(C.GoString(db))
+
+	odict.Check(err)
+
+	return odict.DecodeDictionary(b)
+}
+
+// We're sadly left to pass the dictionary around as a base64-encoded string
+// because passing pointers from Go doesn't always work as intended
+func convertDictionaryToBuffer(dict odict.Dictionary) *C.char {
+	d := odict.EncodeDictionary(dict)
+	s := base64.StdEncoding.EncodeToString(d)
+
+	return C.CString(s)
 }
 
 //export CompileDictionary
@@ -24,19 +38,15 @@ func WriteDictionary(xmlStr, outputPath *C.char) {
 }
 
 //export ReadDictionary
-func ReadDictionary(path *C.char) (C.int, *C.char) {
-	dict := odict.ReadDictionary(C.GoString(path))
-	buffer := odict.EncodeDictionary(dict)
-	print(len(string(buffer)))
-	print("|")
-	return C.int(len(buffer)), C.CString(string(buffer))
+func ReadDictionary(path *C.char) *C.char {
+	return convertDictionaryToBuffer(odict.ReadDictionary(C.GoString(path)))
 }
 
 //export SearchDictionary
-func SearchDictionary(query, dictionaryBuffer *C.char) *C.char {
+func SearchDictionary(query, dict *C.char) *C.char {
 	q := C.GoString(query)
-	dict := getDictionaryFromBuffer(dictionaryBuffer)
-	result := odict.SearchDictionary(dict.ID, q)
+	d := getDictionaryFromBuffer(dict)
+	result := odict.SearchDictionary(d.ID, q)
 	b, err := json.Marshal(&result)
 
 	odict.Check(err)
@@ -45,16 +55,14 @@ func SearchDictionary(query, dictionaryBuffer *C.char) *C.char {
 }
 
 //export IndexDictionary
-func IndexDictionary(dictionaryBuffer *C.char) {
-	print(len(C.GoString(dictionaryBuffer)))
-	print("|")
-	dict := getDictionaryFromBuffer(dictionaryBuffer)
-	odict.IndexDictionary(dict, true)
+func IndexDictionary(dict *C.char) {
+	d := getDictionaryFromBuffer(dict)
+	odict.IndexDictionary(d, true)
 }
 
 //export LookupEntry
-func LookupEntry(term, dictionaryPath *C.char) *C.char {
-	dict := odict.ReadDictionary(C.GoString(dictionaryPath))
+func LookupEntry(term, dictionary *C.char) *C.char {
+	dict := getDictionaryFromBuffer(dictionary)
 	query := C.GoString(term)
 
 	if dict.Entries.Has(query) {

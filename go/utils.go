@@ -2,12 +2,12 @@ package odict
 
 import (
 	"bytes"
-	"encoding/gob"
 	"encoding/binary"
+	"encoding/gob"
 	"log"
 )
 
-// EncodeDictionary encodes a dictionary struct 
+// EncodeDictionary encodes a dictionary struct
 // into a byte array
 func EncodeDictionary(dictionary Dictionary) []byte {
 	var buffer bytes.Buffer
@@ -20,21 +20,21 @@ func EncodeDictionary(dictionary Dictionary) []byte {
 	return buffer.Bytes()
 }
 
-// DecodeDictionary decodes a byte array into 
+// DecodeDictionary decodes a byte array into
 // a dictionary object
 func DecodeDictionary(b []byte) Dictionary {
-	var dict Dictionary 
-	
+	var dict Dictionary
+
 	buffer := bytes.NewBuffer(b)
 	dec := gob.NewDecoder(buffer)
 	err := dec.Decode(&dict)
 
 	Check(err)
-	
+
 	return dict
 }
 
-// EncodeDictionary encodes an entry struct 
+// EncodeDictionary encodes an entry struct
 // into a byte array
 func EncodeEntry(entry Entry) []byte {
 	var buffer bytes.Buffer
@@ -47,17 +47,17 @@ func EncodeEntry(entry Entry) []byte {
 	return buffer.Bytes()
 }
 
-// DecodeDictionary decodes a byte array into 
+// DecodeDictionary decodes a byte array into
 // an entry object
 func DecodeEntry(b []byte) Entry {
-	var entry Entry 
+	var entry Entry
 
 	buffer := bytes.NewBuffer(b)
 	dec := gob.NewDecoder(buffer)
 	err := dec.Decode(&entry)
 
 	Check(err)
-	
+
 	return entry
 }
 

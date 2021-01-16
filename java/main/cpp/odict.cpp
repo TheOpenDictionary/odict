@@ -10,60 +10,35 @@ using namespace std;
 #endif
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_Dictionary_lookupEntry(JNIEnv *env, jobject, jstring query, jstring path)
+Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring dict)
 {
-  const char *dictionary_path = env->GetStringUTFChars(path, 0);
+  const char *dictionary = env->GetStringUTFChars(dict, 0);
   const char *entry_term = env->GetStringUTFChars(query, 0);
-  return env->NewStringUTF(LookupEntry((char *)entry_term, (char *)dictionary_path));
+  return env->NewStringUTF(LookupEntry((char *)entry_term, (char *)dictionary));
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jbyteArray bytes)
+Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring encoded)
 {
-  jsize len = env->GetArrayLength(bytes);
-
-  char *buf = new char[len];
-
-  cout << strlen(buf);
-  env->GetByteArrayRegion(bytes, 0, len, reinterpret_cast<jbyte *>(buf));
-  cout << len;
-  cout << strlen(buf) << endl;
-  cout << strln(jbyteArray) << endl;
-  IndexDictionary(buf);
-
-  // if (isCopy)
-  // {
-  //   env->ReleaseByteArrayElements(bytes, b, 0);
-  // }
+  IndexDictionary((char *)env->GetStringUTFChars(encoded, 0));
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_Dictionary_search(JNIEnv *env, jobject, jstring query, jbyteArray bytes)
+Java_org_odict_Dictionary_search(JNIEnv *env, jobject, jstring query, jstring encoded)
 {
-  jboolean isCopy;
-  jbyte *b = env->GetByteArrayElements(bytes, &isCopy);
-
   const char *q = env->GetStringUTFChars(query, 0);
-  const char *result = SearchDictionary((char *)q, (char *)b);
-
-  if (isCopy)
-  {
-    env->ReleaseByteArrayElements(bytes, b, 0);
-  }
+  const char *result = SearchDictionary((char *)q, (char *)env->GetStringUTFChars(encoded, 0));
 
   return env->NewStringUTF(result);
 }
 
-extern "C" JNIEXPORT jbyteArray JNICALL
+extern "C" JNIEXPORT jstring JNICALL
 Java_org_odict_Dictionary_read(JNIEnv *env, jobject, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
-  ReadDictionary_return vec = ReadDictionary((char *)dictionary_path);
-  jbyteArray bytes = env->NewByteArray(vec.r0);
+  char *encoded = ReadDictionary((char *)dictionary_path);
 
-  env->SetByteArrayRegion(bytes, 0, vec.r0, reinterpret_cast<jbyte *>(vec.r1));
-
-  return bytes;
+  return env->NewStringUTF(encoded);
 }
 
 extern "C" JNIEXPORT void JNICALL
