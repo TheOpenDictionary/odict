@@ -32,18 +32,10 @@ lib.SearchDictionary.restype = c_char_p
 lib.LookupEntry.restype = c_char_p
 
 
-def __encode(str):
-    return str.encode('utf-8')
-
-
-def __decode(str):
-    return str.decode('utf-8')
-
-
 class Dictionary:
 
     def __init__(self, path, should_index=False):
-        self.__encoded_dict = lib.ReadDictionary(__encode(path))
+        self.__encoded_dict = lib.ReadDictionary(path.encode('utf-8'))
 
         if should_index:
             self.index()
@@ -57,10 +49,16 @@ class Dictionary:
         lib.WriteDictionary(xml.encode('utf-8'), path.encode('utf-8'))
 
     def search(self, query):
-        return __decode(lib.SearchDictionary(__encode(query), self.__encoded_dict))
+        return self.__decode(lib.SearchDictionary(self.__encode(query), self.__encoded_dict))
 
     def index(self):
         lib.IndexDictionary(self.__encoded_dict)
 
-    def lookup_entry(self, term):
-        return __decode(lib.LookupEntry(__encode(term), self.__encoded_dict))
+    def lookup(self, term):
+        return self.__decode(lib.LookupEntry(self.__encode(term), self.__encoded_dict))
+
+    def __encode(self, str):
+        return str.encode('utf-8')
+
+    def __decode(self, str):
+        return str.decode('utf-8')

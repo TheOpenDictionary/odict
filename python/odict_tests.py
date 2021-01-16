@@ -4,7 +4,7 @@ from odict import Dictionary
 def test_lookup_entry():
     Dictionary.compile("examples/example1.xml")
 
-    dict = Dictionary("examples/example.odict")
+    dict = Dictionary("examples/example1.odict")
 
     json = dict.lookup("run")
 
