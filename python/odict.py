@@ -30,13 +30,15 @@ lib = cdll.LoadLibrary(__find_library())
 
 lib.SearchDictionary.restype = c_char_p
 lib.LookupEntry.restype = c_char_p
+lib.ReadDictionary.restype = c_char_p
 
 
 class Dictionary:
 
     def __init__(self, path, should_index=False):
         self.__encoded_dict = lib.ReadDictionary(path.encode('utf-8'))
-
+        print("hello")
+        print(self.__encoded_dict)
         if should_index:
             self.index()
 
@@ -55,6 +57,7 @@ class Dictionary:
         lib.IndexDictionary(self.__encoded_dict)
 
     def lookup(self, term):
+        print(self.__encoded_dict)
         return self.__decode(lib.LookupEntry(self.__encode(term), self.__encoded_dict))
 
     def __encode(self, str):
