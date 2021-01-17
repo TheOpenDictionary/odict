@@ -32,6 +32,15 @@ def odict_deps():
 
     maybe(
         http_archive,
+        name = "native_utils",
+        sha256 = "8387afc2d09fb8ee35aff74d2b755632679fe3127caa946ec1263dc23ec68079",
+        strip_prefix = "native-utils-master",
+        urls = ["https://github.com/TheOpenDictionary/native-utils/archive/master.tar.gz"],
+        build_file = "//third_party:native_utils.bazel",
+    )
+
+    maybe(
+        http_archive,
         name = "com_github_google_flatbuffers",
         sha256 = "62f2223fb9181d1d6338451375628975775f7522185266cd5296571ac152bc45",
         strip_prefix = "flatbuffers-1.12.0",

@@ -9,7 +9,15 @@ go_library(
 )
 
 go_binary(
-    name = "bridge",
+    name = "archive",
+    cgo = True,
+    embed = [":bridging_lib"],
+    linkmode = "c-archive",
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "shared",
     cgo = True,
     embed = [":bridging_lib"],
     linkmode = "c-shared",

@@ -3,16 +3,16 @@ package org.odict;
 import java.io.File;
 import java.nio.file.Paths;
 import java.nio.ByteBuffer;
+import java.io.IOException;
+import cz.adamh.utils.NativeUtils;
 
 public class Dictionary {
   static {
-    // Can't use loadLibrary() due to this dumb bug:
-    // https://github.com/bazelbuild/bazel/issues/11082
-    // so we're using a hardcoded filename (contents NOT guaranteed to be an actual
-    // .so file)
-    String libPath = Paths.get(System.getProperty("user.dir"), "java", "main", "cpp", "libodict.so").toAbsolutePath()
-        .toString();
-    System.load(libPath);
+    try {
+      NativeUtils.loadLibraryFromJar("/main/cpp/libodict.so");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public native static void compile(String path);

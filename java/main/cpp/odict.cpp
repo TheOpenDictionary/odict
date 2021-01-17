@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <stdio.h>
 #include <iostream>
-#include "bridge/bridge.h"
+#include "bridge/archive.h"
 
 using namespace std;
 

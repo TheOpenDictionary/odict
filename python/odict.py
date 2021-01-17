@@ -6,19 +6,19 @@ from os import path
 
 def __library_name():
     names = {
-        "win32": "bridge.dll",
-        "darwin": "libbridge.dylib",
+        "win32": "shared.dll",
+        "darwin": "libshared.dylib",
     }
-    return names.get(sys.platform, "libbridge.so")
+    return names.get(sys.platform, "libshared.so")
 
 
 def __find_library():
     # Workaround for for https://github.com/bazelbuild/rules_python/issues/382
 
     opt1 = path.abspath(path.join(path.dirname(__file__),
-                                  "..", "bridge", "bridge_", __library_name()))
+                                  "..", "bridge", "shared_", __library_name()))
 
-    opt2 = path.abspath(path.join("bridge", "bridge_", __library_name()))
+    opt2 = path.abspath(path.join("bridge", "shared_", __library_name()))
 
     if path.isfile(opt2):
         return opt2

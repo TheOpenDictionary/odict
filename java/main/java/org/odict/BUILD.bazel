@@ -3,8 +3,9 @@ load("@rules_java//java:defs.bzl", "java_library")
 java_library(
     name = "odict",
     srcs = glob(["*.java"]),
+    resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
     deps = [
-        "//java/main/cpp:libodict.so",
+        "@native_utils",
     ],
 )
