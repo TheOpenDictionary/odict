@@ -15,4 +15,12 @@ Similar to Apple dictionaries, Open Dictionary files are converted from XML (som
 
 The ODict CLI uses [Bleve](https://github.com/blevesearch/bleve) to perform ad-hoc indexing on the local file system for rapid full-text searching of entries. ODict has a number of sister repos of varying completeness. As of this writing, there is a pretty comprehensive [Java port](https://github.com/TheOpenDictionary/odict-java) of the project as well as an example of how to use the ODict CGo extension [in Python](https://github.com/TheOpenDictionary/freedict/blob/master/odictlib.py).
 
-Full documentation available at https://odict.org.
+## Documentation
+
+- :wave: [Introduction](docs/introduction.md)
+- :rocket: [Quick Start](docs/quick-start.md)
+- :floppy_disk: [File Format](docs/format.md)
+- :computer: [CLI](docs/cli.md)
+- :runner: [Usage in Go](docs/go.md)
+- :coffee: [Usage in Java](docs/java.md)
+- :snake: [Usage in Python](docs/python.md)
