@@ -61,5 +61,11 @@
     "bazel-odict/bazel-out/darwin-fastbuild-ST-e3ad8d6c9df0/bin/external/io_bazel_rules_go/stdlib_/src/cmd/vendor/github.com/ianlancetaylor/demangle/**/core": true,
     "bazel-odict/bazel-out/darwin-fastbuild-ST-e3ad8d6c9df0/bin/external/io_bazel_rules_go/stdlib_/src/cmd/vendor/github.com/ianlancetaylor/demangle/**/demangle.test": true
   },
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "files.associations": {
+    "algorithm": "cpp",
+    "ostream": "cpp",
+    "filesystem": "cpp",
+    "iostream": "cpp"
+  }
 }

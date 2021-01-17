@@ -129,10 +129,12 @@ func resolvePOS(pos schema.POS) PartOfSpeech {
 	}
 }
 
-// ReadDictionary loads a compiled ODict dictionary from the provided
-// path and returns a Dictionary model, with the ability to forcibly re-index
-// the dictionary when it loads
-func ReadDictionary(path string) Dictionary {
+// ReadDictionaryBuffer reads the Flatbuffers buffer
+// from a filepath. This is heavily used by non-Go
+// languages because Go can't export its structs, so
+// we need to use language-specific Flatbuffer libraries
+// to decode the buffer.
+func ReadODictFile(path string) (string, uint16, []byte) {
 	// Read input file
 	file, err := os.Open(path)
 
@@ -183,7 +185,16 @@ func ReadDictionary(path string) Dictionary {
 
 	Check(decodedError)
 
-	buffer := schema.GetRootAsDictionary(decoded, 0)
+	return signature, version, decoded
+}
+
+// ReadDictionary loads a compiled ODict dictionary from the provided
+// path and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
+func ReadDictionary(path string) Dictionary {
+	_, version, bytes := ReadODictFile(path)
+
+	buffer := schema.GetRootAsDictionary(bytes, 0)
 
 	dictionary := Dictionary{
 		ID:      string(buffer.Id()),

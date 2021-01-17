@@ -1,16 +1,15 @@
 package odict
 
 import (
-	"bytes"
-	"encoding/gob"
 	"os"
 
 	"github.com/blevesearch/bleve"
 )
 
-// SearchDictionary searches a dictionary model using Bleve
-func SearchDictionary(dictionary Dictionary, queryStr string) []Entry {
-	indexPath := getIndexPath(dictionary)
+// SearchDictionary searches a dictionary model using Bleve using
+// it's unique dictionary ID
+func SearchDictionary(dictionaryID string, queryStr string) []Entry {
+	indexPath := getIndexPath(dictionaryID)
 	_, err := os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
@@ -41,17 +40,7 @@ func SearchDictionary(dictionary Dictionary, queryStr string) []Entry {
 			panic(err)
 		}
 
-		var entry Entry
-
-		buffer := bytes.NewBuffer(b)
-		dec := gob.NewDecoder(buffer)
-		decodingErr := dec.Decode(&entry)
-
-		if decodingErr != nil {
-			panic(err)
-		}
-
-		entries[i] = entry
+		entries[i] = DecodeEntry(b)
 	}
 
 	return entries

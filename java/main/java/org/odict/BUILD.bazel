@@ -5,5 +5,8 @@ java_binary(
     srcs = glob(["*.java"]),
     main_class = "org.odict.Main",
     visibility = ["//java:__pkg__"],
-    deps = ["//java/main/cpp:libodict.so"],
+    deps = [
+        "//java/main/cpp:libodict.so",
+        "//schema:java",
+    ],
 )

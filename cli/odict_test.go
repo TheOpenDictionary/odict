@@ -44,7 +44,7 @@ func TestReadWriteSearch(t *testing.T) {
 
 	dict := odict.ReadDictionary("../examples/example1.odict")
 	odict.IndexDictionary(dict, true)
-	entries := odict.SearchDictionary(dict, "run")
+	entries := odict.SearchDictionary(dict.ID, "run")
 
 	assert.NotEmpty(t, entries)
 

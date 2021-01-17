@@ -30,31 +30,38 @@ lib = cdll.LoadLibrary(__find_library())
 
 lib.SearchDictionary.restype = c_char_p
 lib.LookupEntry.restype = c_char_p
+lib.ReadDictionary.restype = c_char_p
 
 
-def __encode(str):
-    return str.encode('utf-8')
+class Dictionary:
 
+    def __init__(self, path, should_index=False):
+        self.__encoded_dict = lib.ReadDictionary(path.encode('utf-8'))
+        print("hello")
+        print(self.__encoded_dict)
+        if should_index:
+            self.index()
 
-def __decode(str):
-    return str.decode('utf-8')
+    @staticmethod
+    def compile(path):
+        lib.CompileDictionary(path.encode('utf-8'))
 
+    @staticmethod
+    def write(xml, path):
+        lib.WriteDictionary(xml.encode('utf-8'), path.encode('utf-8'))
 
-def compile_dictionary(path):
-    lib.CompileDictionary(__encode(path))
+    def search(self, query):
+        return self.__decode(lib.SearchDictionary(self.__encode(query), self.__encoded_dict))
 
+    def index(self):
+        lib.IndexDictionary(self.__encoded_dict)
 
-def search_dictionary(query, path):
-    return __decode(lib.SearchDictionary(__encode(query), __encode(path)))
+    def lookup(self, term):
+        print(self.__encoded_dict)
+        return self.__decode(lib.LookupEntry(self.__encode(term), self.__encoded_dict))
 
+    def __encode(self, str):
+        return str.encode('utf-8')
 
-def index_dictionary(path):
-    return lib.IndexDictionary(__encode(path))
-
-
-def lookup_entry(term, path):
-    return __decode(lib.LookupEntry(__encode(term), __encode(path)))
-
-
-def write_dictionary(xml, path):
-    lib.WriteDictionary(__encode(xml), __encode(path))
+    def __decode(self, str):
+        return str.decode('utf-8')

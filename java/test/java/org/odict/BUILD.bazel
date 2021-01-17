@@ -2,11 +2,12 @@ load("@rules_java//java:defs.bzl", "java_test")
 
 java_test(
     name = "odict",
-    srcs = ["TestODict.java"],
+    srcs = ["TestDictionary.java"],
     data = ["//examples"],
-    test_class = "org.odict.TestODict",
+    test_class = "org.odict.TestDictionary",
     visibility = ["//java:__pkg__"],
     deps = [
         "//java",
+        "//schema:java",
     ],
 )
