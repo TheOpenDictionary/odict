@@ -21,6 +21,4 @@ The ODict CLI uses [Bleve](https://github.com/blevesearch/bleve) to perform ad-h
 - :rocket: [Quick Start](docs/quick-start.md)
 - :floppy_disk: [File Format](docs/format.md)
 - :computer: [CLI](docs/cli.md)
-- :runner: [Usage in Go](docs/go.md)
-- :coffee: [Usage in Java](docs/java.md)
-- :snake: [Usage in Python](docs/python.md)
+- :man_technologist: [API](docs/api.md)
