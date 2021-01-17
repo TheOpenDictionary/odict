@@ -36,8 +36,4 @@ def odict_deps():
         sha256 = "62f2223fb9181d1d6338451375628975775f7522185266cd5296571ac152bc45",
         strip_prefix = "flatbuffers-1.12.0",
         urls = ["https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz"],
-        patch_args = ["-p1"],
-        patches = [
-            "//bazel:flatbuffers_1_12_0.patch",
-        ],
     )

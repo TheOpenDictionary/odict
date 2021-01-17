@@ -7,6 +7,5 @@ java_binary(
     visibility = ["//java:__pkg__"],
     deps = [
         "//java/main/cpp:libodict.so",
-        "//schema:java",
     ],
 )

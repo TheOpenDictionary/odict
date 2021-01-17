@@ -8,6 +8,5 @@ java_test(
     visibility = ["//java:__pkg__"],
     deps = [
         "//java",
-        "//schema:java",
     ],
 )
