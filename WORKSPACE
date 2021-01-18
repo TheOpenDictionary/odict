@@ -1,3 +1,5 @@
+workspace(name = "odict")
+
 load("//bazel:odict_deps.bzl", "odict_deps")
 
 odict_deps()

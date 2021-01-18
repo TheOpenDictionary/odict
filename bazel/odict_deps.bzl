@@ -36,7 +36,7 @@ def odict_deps():
         sha256 = "8387afc2d09fb8ee35aff74d2b755632679fe3127caa946ec1263dc23ec68079",
         strip_prefix = "native-utils-master",
         urls = ["https://github.com/TheOpenDictionary/native-utils/archive/master.tar.gz"],
-        build_file = "//third_party:native_utils.bazel",
+        build_file = "@odict//third_party:native_utils.bazel",
     )
 
     maybe(
