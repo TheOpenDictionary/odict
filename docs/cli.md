@@ -57,7 +57,7 @@ If you omit this flag, ODict will automatically use the correct index for the pr
 
 ## Dumping Dictionaries
 
-Often times while developing an ODict application, it may be helpful to understand the underlying structure of the dictionary at hand without picking through code. As a result, the ODict CLI has a `dump` command which can be used to convert a compiled binary back into a rough estimation of its original XML. I say rough estimation because the library might add back certain XML attributes or ID fields that were not present in the original document used to create the file.
+Often times while developing an ODict application, it may be helpful to understand the underlying structure of the dictionary at hand without picking through code. As a result, the ODict CLI has a `dump` command which can be used to convert a compiled binary back into a rough estimation of its [original XML](ODXML.md). I say rough estimation because the library might add back certain XML attributes or ID fields that were not present in the original document used to create the file.
 
 Using `dump` is easy:
 
