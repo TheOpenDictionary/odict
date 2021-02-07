@@ -28,37 +28,59 @@ def __find_library():
 
 lib = cdll.LoadLibrary(__find_library())
 
-lib.SearchDictionary.restype = c_char_p
-lib.LookupEntry.restype = c_char_p
-lib.ReadDictionary.restype = c_char_p
+lib.SearchDictionary.restype = c_void_p
+lib.LookupEntry.restype = c_void_p
+lib.ReadDictionary.restype = c_void_p
+lib.Free.argtypes = [c_void_p]
+lib.Free.restype = None
 
 
 class Dictionary:
 
     def __init__(self, path, should_index=False):
-        self.__encoded_dict = lib.ReadDictionary(path.encode('utf-8'))
-        print("hello")
-        print(self.__encoded_dict)
+        p = path.encode('utf-8')
+        self.__encoded_dict = lib.ReadDictionary(p)
+
         if should_index:
             self.index()
 
+    def __del__(self):
+        lib.Free(self.__encoded_dict)
+
     @staticmethod
     def compile(path):
-        lib.CompileDictionary(path.encode('utf-8'))
+        p = path.encode('utf-8')
+        lib.CompileDictionary(p)
 
     @staticmethod
     def write(xml, path):
-        lib.WriteDictionary(xml.encode('utf-8'), path.encode('utf-8'))
+        try:
+            lib.WriteDictionary(xml.encode('utf-8'), path.encode('utf-8'))
+        except:
+            print("An exception occurred")
+
+    def __get_dictionary(self):
+        return cast(self.__encoded_dict, c_char_p).value
 
     def search(self, query):
-        return self.__decode(lib.SearchDictionary(self.__encode(query), self.__encoded_dict))
+        v = lib.SearchDictionary(self.__encode(query), self.__get_dictionary())
+        d = self.__decode(cast(v, c_char_p).value)
+
+        lib.Free(v)
+
+        return d
 
     def index(self):
-        lib.IndexDictionary(self.__encoded_dict)
+        lib.IndexDictionary(self.__get_dictionary())
 
     def lookup(self, term):
-        print(self.__encoded_dict)
-        return self.__decode(lib.LookupEntry(self.__encode(term), self.__encoded_dict))
+        e = self.__encode(term)
+        v = lib.LookupEntry(e, self.__get_dictionary())
+        d = self.__decode(cast(v, c_char_p).value)
+
+        lib.Free(v)
+
+        return d
 
     def __encode(self, str):
         return str.encode('utf-8')
