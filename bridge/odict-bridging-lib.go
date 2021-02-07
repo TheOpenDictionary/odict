@@ -1,11 +1,13 @@
 package main
 
 // #define CGO_EXPORT_BRIDGE_EXISTS
+// #include <stdlib.h>
 import "C"
 
 import (
 	"encoding/base64"
 	"encoding/json"
+	"unsafe"
 
 	odict "github.com/odict/odict/go"
 )
@@ -52,6 +54,11 @@ func SearchDictionary(query, dict *C.char) *C.char {
 	odict.Check(err)
 
 	return C.CString(string(b))
+}
+
+//export Free
+func Free(res *C.char) {
+	C.free(unsafe.Pointer(res))
 }
 
 //export IndexDictionary
