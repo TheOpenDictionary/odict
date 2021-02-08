@@ -1,27 +1,5 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-load("@com_github_google_flatbuffers//:build_defs.bzl", "flatbuffer_library_public")
-
 filegroup(
     name = "file",
     srcs = ["schema.fbs"],
     visibility = ["//schema:__subpackages__"],
-)
-
-flatbuffer_library_public(
-    name = "go_srcs",
-    srcs = ["//schema:file"],
-    outs = ["schema_generated.go"],
-    flatc_args = [
-        "--gen-onefile",
-        "--go-namespace schema",
-    ],
-    language_flag = "-g",
-)
-
-go_library(
-    name = "schema",
-    srcs = [":go_srcs"],
-    importpath = "github.com/odict/odict/schema",
-    visibility = ["//visibility:public"],
-    deps = ["@com_github_google_flatbuffers//go"],
 )

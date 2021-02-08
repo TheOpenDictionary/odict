@@ -2,7 +2,6 @@ package odict
 
 import (
 	"encoding/binary"
-	"fmt"
 	"os"
 
 	"github.com/golang/snappy"
@@ -57,7 +56,7 @@ func getUsageMap(etymology schema.Etymology) UsageMap {
 		etymology.Usages(&usage, c)
 
 		odUsage := Usage{
-			POS:         resolvePOS(usage.Pos()),
+			POS:         PartOfSpeech(usage.Pos().String()),
 			Groups:      getDefinitionGroupModels(usage),
 			Definitions: getDefinitionsFromUsage(usage),
 		}
@@ -103,30 +102,6 @@ func getEntryModels(dictionary *schema.Dictionary) EntryMap {
 	}
 
 	return entries
-}
-
-func resolvePOS(pos schema.POS) PartOfSpeech {
-	posMap := map[schema.POS]PartOfSpeech{
-		schema.POSadj:      Adjective,
-		schema.POSadv:      Adverb,
-		schema.POSverb:     Verb,
-		schema.POSnoun:     Noun,
-		schema.POSpronoun:  Pronoun,
-		schema.POSprep:     Preposition,
-		schema.POSconj:     Conjugation,
-		schema.POSintj:     Interjection,
-		schema.POSprefix:   Prefix,
-		schema.POSsuffix:   Suffix,
-		schema.POSparticle: Particle,
-		schema.POSarticle:  Article,
-		schema.POSunknown:  Unknown,
-	}
-
-	if val, ok := posMap[pos]; ok {
-		return val
-	} else {
-		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
-	}
 }
 
 // ReadDictionaryBuffer reads the Flatbuffers buffer

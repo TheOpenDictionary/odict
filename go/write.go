@@ -121,33 +121,34 @@ func resolveSchemaPOS(pos PartOfSpeech) schema.POS {
 		"adj":          schema.POSadj,
 		"adverb":       schema.POSadv,
 		"adv":          schema.POSadv,
-		"verb":         schema.POSverb,
-		"v":            schema.POSverb,
-		"n":            schema.POSnoun,
-		"noun":         schema.POSnoun,
-		"pronoun":      schema.POSpronoun,
-		"pn":           schema.POSpronoun,
+		"verb":         schema.POSv,
+		"v":            schema.POSv,
+		"n":            schema.POSn,
+		"noun":         schema.POSn,
+		"pronoun":      schema.POSpro,
+		"pn":           schema.POSpro,
 		"prep":         schema.POSprep,
 		"preposition":  schema.POSprep,
 		"conj":         schema.POSconj,
 		"conjugation":  schema.POSconj,
 		"intj":         schema.POSintj,
 		"interjection": schema.POSintj,
-		"prefix":       schema.POSprefix,
-		"pre":          schema.POSprefix,
-		"suffix":       schema.POSsuffix,
-		"suf":          schema.POSsuffix,
-		"particle":     schema.POSparticle,
-		"part":         schema.POSparticle,
-		"article":      schema.POSarticle,
-		"art":          schema.POSarticle,
-		"unknown":      schema.POSunknown,
+		"prefix":       schema.POSpref,
+		"pre":          schema.POSpref,
+		"suffix":       schema.POSsuff,
+		"suf":          schema.POSsuff,
+		"particle":     schema.POSpart,
+		"part":         schema.POSpart,
+		"article":      schema.POSart,
+		"art":          schema.POSart,
+		"un":           schema.POSun,
+		"unknown":      schema.POSun,
 	}
 
 	if val, ok := posMap[pos]; ok {
 		return val
 	} else if len(strings.TrimSpace(string(pos))) == 0 {
-		return schema.POSunknown
+		return schema.POSun
 	} else {
 		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
 	}

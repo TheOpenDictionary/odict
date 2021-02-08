@@ -19,18 +19,18 @@ public class TestDictionary {
     assertEquals(expected, json);
   }
 
-  @Test
-  public void testSearch() throws Exception {
-    Dictionary.compile("examples/example1.xml");
+  // @Test
+  // public void testSearch() throws Exception {
+  // Dictionary.compile("examples/example1.xml");
 
-    Dictionary dict = new Dictionary("examples/example1.odict");
+  // Dictionary dict = new Dictionary("examples/example1.odict");
 
-    dict.index();
+  // dict.index();
 
-    String json = dict.search("run");
+  // String json = dict.search("run");
 
-    assertTrue(json.length() > 2);
-  }
+  // assertTrue(json.length() > 2);
+  // }
 
   @Test
   public void testWrite() throws Exception {
