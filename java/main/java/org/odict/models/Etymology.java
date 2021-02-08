@@ -3,14 +3,14 @@ package org.odict.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Etymology {
 
   private String id;
 
-  private List<Usage> usages;
+  private HashMap<String, ArrayList<Usage>> usages;
 
   private String description;
 
@@ -19,14 +19,19 @@ public class Etymology {
 
     this.description = buffer.description().trim();
 
-    this.usages = new ArrayList<>();
+    this.usages = new HashMap<>();
 
     for (int i = 0; i < buffer.usagesLength(); i++) {
-      this.usages.add(new Usage(buffer.usages(i)));
+      Usage usage = new Usage(buffer.usages(i));
+      this.usages.computeIfAbsent(usage.getPOS(), k -> new ArrayList<>()).add(usage);
     }
   }
 
-  public List<Usage> getUsages() {
+  public String getId() {
+    return id;
+  }
+
+  public HashMap<String, ArrayList<Usage>> getUsages() {
     return usages;
   }
 
