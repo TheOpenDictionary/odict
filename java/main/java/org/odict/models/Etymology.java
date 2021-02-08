@@ -1,16 +1,17 @@
 package org.odict.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.MapSerializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Etymology {
 
   private String id;
 
-  private HashMap<String, ArrayList<Usage>> usages;
+  private Map<String, List<Usage>> usages;
 
   private String description;
 
@@ -31,7 +32,7 @@ public class Etymology {
     return id;
   }
 
-  public HashMap<String, ArrayList<Usage>> getUsages() {
+  public Map<String, List<Usage>> getUsages() {
     return usages;
   }
 

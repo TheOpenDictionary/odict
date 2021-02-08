@@ -25,13 +25,14 @@ public class Dictionary {
 
   // private native String lookup(String term, String dictionary);
 
-  private native String search(String query, String dictionary);
+  // private native String search(String query, String dictionary);
 
-  private native void index(String dictionary);
+  // private native void index(String dictionary);
 
   // private native String read(String path);
 
   private schema.Dictionary dict;
+
   private ObjectMapper mapper;
 
   public Dictionary(String path) throws IOException {
@@ -41,6 +42,8 @@ public class Dictionary {
 
   public String lookup(String term) throws JsonProcessingException {
     schema.Entry found = this.dict.entriesByKey(term);
+    System.out.print(term);
+    System.out.println(found);
     return found != null ? this.mapper.writeValueAsString(new Entry(found)) : "{}";
   }
 
@@ -75,6 +78,7 @@ public class Dictionary {
     byte[] compressed = new byte[(int) compressed_size];
 
     stream.read(compressed);
+
     stream.close();
 
     // Decompress data
