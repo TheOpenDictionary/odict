@@ -19,7 +19,7 @@ public class Etymology {
     this.id = buffer.id();
 
     this.description = buffer.description().trim();
-    System.out.println(this.description);
+
     this.usages = new HashMap<>();
 
     for (int i = 0; i < buffer.usagesLength(); i++) {

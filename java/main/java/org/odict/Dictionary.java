@@ -55,8 +55,6 @@ public class Dictionary {
 
   public String lookup(String term) throws JsonProcessingException {
     Entry found = this.entries.get(term.toLowerCase());
-    System.out.println( this.mapper.writeValueAsString(found));
-    
     return found != null ? this.mapper.writeValueAsString(found) : "{}";
   }
 
