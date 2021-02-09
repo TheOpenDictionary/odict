@@ -704,6 +704,7 @@ def odict_extra_deps():
     )
 
     maven_install(
+        name = "odict_java_deps",
         artifacts = [
             "org.xerial.snappy:snappy-java:1.1.8.4",
             "com.fasterxml.jackson.core:jackson-core:2.12.1",

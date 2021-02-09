@@ -7,10 +7,10 @@ java_library(
     visibility = ["//java:__pkg__"],
     deps = [
         "//schema/java",
-        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
-        "@maven//:com_fasterxml_jackson_core_jackson_core",
-        "@maven//:com_fasterxml_jackson_core_jackson_databind",
-        "@maven//:org_xerial_snappy_snappy_java",
         "@native_utils",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_annotations",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_core",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_databind",
+        "@odict_java_deps//:org_xerial_snappy_snappy_java",
     ],
 )
