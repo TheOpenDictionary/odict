@@ -1,23 +1,26 @@
-load("@rules_java//java:defs.bzl", "java_library")
-load("@com_github_google_flatbuffers//:build_defs.bzl", "flatbuffer_library_public")
+# load("@rules_java//java:defs.bzl", "java_library")
+# load("@com_github_google_flatbuffers//:build_defs.bzl", "flatbuffer_library_public")
 
-flatbuffer_library_public(
-    name = "java_srcs",
-    srcs = ["//schema:file"],
-    outs = [
-        "schema/Dictionary.java",
-        "schema/Entry.java",
-        "schema/Etymology.java",
-        "schema/Group.java",
-        "schema/POS.java",
-        "schema/Usage.java",
-    ],
-    language_flag = "-j",
-)
+# flatbuffer_library_public(
+#     name = "java_srcs",
+#     srcs = ["//schema:file"],
+#     outs = [
+#         "schema/Dictionary.java",
+#         "schema/Entry.java",
+#         "schema/Etymology.java",
+#         "schema/Group.java",
+#         "schema/POS.java",
+#         "schema/Usage.java",
+#     ],
+#     language_flag = "-j",
+# )
+
+load("@rules_java//java:defs.bzl", "java_library")
 
 java_library(
     name = "java",
-    srcs = [":java_srcs"],
+    # srcs = [":java_srcs"],
+    srcs = glob(["schema/*.java"]),
     visibility = ["//visibility:public"],
     deps = ["@com_github_google_flatbuffers//java"],
 )

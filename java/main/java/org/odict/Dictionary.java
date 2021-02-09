@@ -42,11 +42,13 @@ public class Dictionary {
 
   public Dictionary(String path) throws IOException {
     this.dict = this.read(path);
+    System.out.println("Working Directory = " + System.getProperty("user.dir"));
     this.mapper = new ObjectMapper();
   }
 
   public String lookup(String term) throws JsonProcessingException {
-    schema.Entry found = this.dict.entriesByKey(term);
+    schema.Entry found = this.dict.entriesVector().getByKey(term);
+    System.out.println(found);
     return found != null ? this.mapper.writeValueAsString(new Entry(found)) : "{}";
   }
 

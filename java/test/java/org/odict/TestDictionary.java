@@ -32,17 +32,19 @@ public class TestDictionary {
   // assertTrue(json.length() > 2);
   // }
 
-  @Test
-  public void testWrite() throws Exception {
-    Dictionary.write(
-        "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition>hello world</definition></usage></ety></entry></dictionary>",
-        "test.odict");
+  // @Test
+  // public void testWrite() throws Exception {
+  // Dictionary.write(
+  // "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition>hello
+  // world</definition></usage></ety></entry></dictionary>",
+  // "test.odict");
 
-    Dictionary dict = new Dictionary("test.odict");
-    String json = dict.lookup("hello");
+  // Dictionary dict = new Dictionary("test.odict");
+  // String json = dict.lookup("hello");
 
-    assertEquals(
-        "{\"term\":\"hello\",\"etymologies\":[{\"id\":\"0\",\"usages\":{\"v\":{\"pos\":\"v\",\"definitions\":[\"hello world\"]}}}]}",
-        json);
-  }
+  // assertEquals(
+  // "{\"term\":\"hello\",\"etymologies\":[{\"id\":\"0\",\"usages\":{\"v\":{\"pos\":\"v\",\"definitions\":[\"hello
+  // world\"]}}}]}",
+  // json);
+  // }
 }
