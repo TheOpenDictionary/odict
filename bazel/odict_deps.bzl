@@ -57,5 +57,5 @@ def odict_deps():
         strip_prefix = "flatbuffers-1.12.0",
         urls = ["https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz"],
         patch_args = ["-p1"],
-        patches = ["//bazel:flatbuffers_1_12_0.patch"],
+        patches = ["@odict//bazel:flatbuffers_1_12_0.patch"],
     )
