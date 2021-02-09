@@ -2,13 +2,16 @@ package org.odict;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cz.adamh.utils.NativeUtils;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import cz.adamh.utils.NativeUtils;
-import org.xerial.snappy.Snappy;
 import org.odict.models.Entry;
+import org.xerial.snappy.Snappy;
+
+import java.util.*;
 
 public class Dictionary {
   static {
@@ -35,16 +38,30 @@ public class Dictionary {
 
   private ObjectMapper mapper;
 
+  private short version;
+
+  private Map<String, Entry> entries;
+
   public Dictionary(String path) throws IOException {
     this.dict = this.read(path);
     this.mapper = new ObjectMapper();
+    this.entries = new HashMap<String, Entry>();
+
+    for (int i = 0; i < this.dict.entriesLength(); i++) {
+      Entry entry = new Entry(this.dict.entries(i));
+      this.entries.put(entry.getTerm().toLowerCase(), entry);
+    }
   }
 
   public String lookup(String term) throws JsonProcessingException {
-    schema.Entry found = this.dict.entriesByKey(term);
-    System.out.print(term);
-    System.out.println(found);
-    return found != null ? this.mapper.writeValueAsString(new Entry(found)) : "{}";
+    Entry found = this.entries.get(term.toLowerCase());
+    System.out.println( this.mapper.writeValueAsString(found));
+    
+    return found != null ? this.mapper.writeValueAsString(found) : "{}";
+  }
+
+  public short getVersion() {
+    return this.version;
   }
 
   private schema.Dictionary read(String filePath) throws IOException {
@@ -83,6 +100,8 @@ public class Dictionary {
 
     // Decompress data
     byte[] uncompressed = Snappy.uncompress(compressed);
+
+    this.version = version;
 
     // Convert to dictionary and return
     return schema.Dictionary.getRootAsDictionary(ByteBuffer.wrap(uncompressed));

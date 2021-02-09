@@ -11,7 +11,7 @@ public class Etymology {
 
   private String id;
 
-  private Map<String, List<Usage>> usages;
+  private Map<String, Usage> usages;
 
   private String description;
 
@@ -19,12 +19,12 @@ public class Etymology {
     this.id = buffer.id();
 
     this.description = buffer.description().trim();
-
+    System.out.println(this.description);
     this.usages = new HashMap<>();
 
     for (int i = 0; i < buffer.usagesLength(); i++) {
       Usage usage = new Usage(buffer.usages(i));
-      this.usages.computeIfAbsent(usage.getPOS(), k -> new ArrayList<>()).add(usage);
+      this.usages.put(usage.getPOS(), usage);
     }
   }
 
@@ -32,7 +32,7 @@ public class Etymology {
     return id;
   }
 
-  public Map<String, List<Usage>> getUsages() {
+  public Map<String, Usage> getUsages() {
     return usages;
   }
 

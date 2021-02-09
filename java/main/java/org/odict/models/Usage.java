@@ -16,7 +16,7 @@ public class Usage {
 
   Usage(schema.Usage buffer) {
     this.pos = schema.POS.name(buffer.pos());
-
+    
     this.groups = new ArrayList<>();
 
     this.definitions = new ArrayList<>();
