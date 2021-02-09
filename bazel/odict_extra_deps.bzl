@@ -2,6 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def odict_extra_deps():
     maybe(
@@ -700,6 +701,20 @@ def odict_extra_deps():
         importpath = "golang.org/x/text",
         sum = "h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=",
         version = "v0.3.0",
+    )
+
+    maven_install(
+        artifacts = [
+            "org.xerial.snappy:snappy-java:1.1.8.4",
+            "com.fasterxml.jackson.core:jackson-core:2.12.1",
+            "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
+            "com.fasterxml.jackson.core:jackson-databind:2.12.1",
+        ],
+        repositories = [
+            "https://jcenter.bintray.com/",
+            "https://maven.google.com",
+            "https://repo1.maven.org/maven2",
+        ],
     )
 
     go_rules_dependencies()

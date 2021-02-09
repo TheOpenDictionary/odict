@@ -2,10 +2,15 @@ load("@rules_java//java:defs.bzl", "java_library")
 
 java_library(
     name = "odict",
-    srcs = glob(["*.java"]),
+    srcs = glob(["**/*.java"]),
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
     deps = [
+        "//schema/java",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:org_xerial_snappy_snappy_java",
         "@native_utils",
     ],
 )

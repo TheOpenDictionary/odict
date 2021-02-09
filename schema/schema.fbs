@@ -1,19 +1,19 @@
 namespace schema;
 
 enum POS:byte {
-    verb = 0,
-    noun,
+    v = 0,
+    n,
     adj,
-    pronoun,
+    pro,
     adv,
     prep,
     conj,
     intj,
-    prefix,
-    suffix,
-    particle,
-    article,
-    unknown
+    pref,
+    suff,
+    part,
+    art,
+    un
 }
 
 table Etymology {
