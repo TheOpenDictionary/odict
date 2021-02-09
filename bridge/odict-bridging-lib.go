@@ -62,8 +62,8 @@ func Free(res *C.char) {
 }
 
 //export IndexDictionary
-func IndexDictionary(dict *C.char) {
-	d := getDictionaryFromBuffer(dict)
+func IndexDictionary(path *C.char) {
+	d := odict.ReadDictionary(C.GoString(path))
 	odict.IndexDictionary(d, true)
 }
 

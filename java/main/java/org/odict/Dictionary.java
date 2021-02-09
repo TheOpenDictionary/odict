@@ -30,7 +30,7 @@ public class Dictionary {
 
   // private native String search(String query, String dictionary);
 
-  // private native void index(String dictionary);
+  private native void index(String dictionaryPath);
 
   // private native String read(String path);
 
@@ -40,22 +40,14 @@ public class Dictionary {
 
   private short version;
 
-  private Map<String, Entry> entries;
-
   public Dictionary(String path) throws IOException {
     this.dict = this.read(path);
     this.mapper = new ObjectMapper();
-    this.entries = new HashMap<String, Entry>();
-
-    for (int i = 0; i < this.dict.entriesLength(); i++) {
-      Entry entry = new Entry(this.dict.entries(i));
-      this.entries.put(entry.getTerm().toLowerCase(), entry);
-    }
   }
 
   public String lookup(String term) throws JsonProcessingException {
-    Entry found = this.entries.get(term.toLowerCase());
-    return found != null ? this.mapper.writeValueAsString(found) : "{}";
+    schema.Entry found = this.dict.entriesByKey(term);
+    return found != null ? this.mapper.writeValueAsString(new Entry(found)) : "{}";
   }
 
   public short getVersion() {

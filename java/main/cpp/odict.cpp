@@ -23,11 +23,11 @@ Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring di
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring encoded)
+Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path)
 {
-  char *enc = (char *)env->GetStringUTFChars(encoded, 0);
-  IndexDictionary(enc);
-  env->ReleaseStringUTFChars(encoded, enc);
+  char *p = (char *)env->GetStringUTFChars(path, 0);
+  IndexDictionary(p);
+  env->ReleaseStringUTFChars(path, p);
 }
 
 extern "C" JNIEXPORT jstring JNICALL
