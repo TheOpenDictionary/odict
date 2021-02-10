@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/golang/snappy"
+	// "github.com/golang/snappy"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/google/uuid"
@@ -223,7 +223,8 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatb
 		entry := entries.Get(key)
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
-
+		println(entryTerm)
+		println(entry.Term)
 		schema.EntryStart(builder)
 		schema.EntryAddTerm(builder, entryTerm)
 		schema.EntryAddEtymologies(builder, entryEtymologies)
@@ -261,7 +262,8 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 
 func createODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
-	compressed := snappy.Encode(nil, dictionaryBytes)
+	compressed := dictionaryBytes
+	//  snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
 
 	Check(err)

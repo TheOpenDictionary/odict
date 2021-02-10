@@ -6,8 +6,8 @@ gazelle(name = "gazelle")
 test_suite(
     name = "all",
     tests = [
-        "//cli:tests",
+        # "//cli:tests",
         "//java:tests",
-        "//python:tests",
+        # "//python:tests",
     ],
 )
