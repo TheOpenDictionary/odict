@@ -45,10 +45,10 @@ func ReadDictionary(path *C.char) *C.char {
 }
 
 //export SearchDictionary
-func SearchDictionary(query, dict *C.char) *C.char {
+func SearchDictionary(query, dictionaryID *C.char) *C.char {
 	q := C.GoString(query)
-	d := getDictionaryFromBuffer(dict)
-	result := odict.SearchDictionary(d.ID, q)
+	id := C.GoString(dictionaryID)
+	result := odict.SearchDictionary(id, q)
 	b, err := json.Marshal(&result)
 
 	odict.Check(err)
@@ -62,8 +62,8 @@ func Free(res *C.char) {
 }
 
 //export IndexDictionary
-func IndexDictionary(dict *C.char) {
-	d := getDictionaryFromBuffer(dict)
+func IndexDictionary(path *C.char) {
+	d := odict.ReadDictionary(C.GoString(path))
 	odict.IndexDictionary(d, true)
 }
 

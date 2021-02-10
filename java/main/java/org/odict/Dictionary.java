@@ -28,9 +28,9 @@ public class Dictionary {
 
   // private native String lookup(String term, String dictionary);
 
-  // private native String search(String query, String dictionary);
+  private native String search(String query, String dictionaryID);
 
-  // private native void index(String dictionary);
+  private native void index(String dictionaryPath);
 
   // private native String read(String path);
 
@@ -38,11 +38,14 @@ public class Dictionary {
 
   private ObjectMapper mapper;
 
+  private String path;
+
   private short version;
 
   private Map<String, Entry> entries;
 
   public Dictionary(String path) throws IOException {
+    this.path = path;
     this.dict = this.read(path);
     this.mapper = new ObjectMapper();
     this.entries = new HashMap<String, Entry>();
@@ -60,6 +63,14 @@ public class Dictionary {
 
   public short getVersion() {
     return this.version;
+  }
+
+  public void index() {
+    this.index(this.path);
+  }
+
+  public String search(String query) {
+    return this.search(query, this.dict.id());
   }
 
   private schema.Dictionary read(String filePath) throws IOException {

@@ -23,24 +23,24 @@ Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring di
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring encoded)
+Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path)
 {
-  char *enc = (char *)env->GetStringUTFChars(encoded, 0);
-  IndexDictionary(enc);
-  env->ReleaseStringUTFChars(encoded, enc);
+  char *p = (char *)env->GetStringUTFChars(path, 0);
+  IndexDictionary(p);
+  env->ReleaseStringUTFChars(path, p);
 }
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_Dictionary_search(JNIEnv *env, jobject, jstring query, jstring encoded)
+Java_org_odict_Dictionary_search(JNIEnv *env, jobject, jstring query, jstring dictionary_id)
 {
   char *q = (char *)env->GetStringUTFChars(query, 0);
-  char *enc = (char *)env->GetStringUTFChars(encoded, 0);
-  const char *result = SearchDictionary(q, enc);
+  char *dictid = (char *)env->GetStringUTFChars(dictionary_id, 0);
+  const char *result = SearchDictionary(q, dictid);
 
   jstring res = env->NewStringUTF(result);
 
   env->ReleaseStringUTFChars(query, q);
-  env->ReleaseStringUTFChars(encoded, enc);
+  env->ReleaseStringUTFChars(dictionary_id, dictid);
 
   free((char *)result);
 

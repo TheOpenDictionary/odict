@@ -46,5 +46,5 @@ def test_write_dictionary():
 
 if __name__ == "__main__":
     test_lookup_entry()
-    test_search_dictionary()
+    # test_search_dictionary()
     test_write_dictionary()
