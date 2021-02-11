@@ -38,8 +38,8 @@ lib.Free.restype = None
 class Dictionary:
 
     def __init__(self, path, should_index=False):
-        p = path.encode('utf-8')
-        self.__encoded_dict = lib.ReadDictionary(p)
+        self.p = path.encode('utf-8')
+        self.__encoded_dict = lib.ReadDictionary(self.p)
 
         if should_index:
             self.index()
@@ -62,16 +62,16 @@ class Dictionary:
     def __get_dictionary(self):
         return cast(self.__encoded_dict, c_char_p).value
 
-    def search(self, query):
-        v = lib.SearchDictionary(self.__encode(query), self.__get_dictionary())
-        d = self.__decode(cast(v, c_char_p).value)
+    # def search(self, query):
+    #     v = lib.SearchDictionary(self.__encode(query), self.__get_dictionary())
+    #     d = self.__decode(cast(v, c_char_p).value)
 
-        lib.Free(v)
+    #     lib.Free(v)
 
-        return d
+    #     return d
 
     def index(self):
-        lib.IndexDictionary(self.__get_dictionary())
+        lib.IndexDictionary(self.p)
 
     def lookup(self, term):
         e = self.__encode(term)
