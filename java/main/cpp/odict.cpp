@@ -10,11 +10,11 @@ using namespace std;
 #endif
 
 extern "C" JNIEXPORT jstring JNICALL
-Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring dict)
+Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring dictID)
 {
-  const char *dictionary = env->GetStringUTFChars(dict, 0);
+  const char *dictionaryID = env->GetStringUTFChars(dictID, 0);
   const char *entry_term = env->GetStringUTFChars(query, 0);
-  char *result = LookupEntry((char *)entry_term, (char *)dictionary);
+  char *result = LookupEntry((char *)entry_term, (char *)dictionaryID);
   jstring str = env->NewStringUTF(result);
 
   free(result);
@@ -23,9 +23,10 @@ Java_org_odict_Dictionary_lookup(JNIEnv *env, jobject, jstring query, jstring di
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path)
+Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path, jboolean force)
 {
   char *p = (char *)env->GetStringUTFChars(path, 0);
+
   IndexDictionary(p);
   env->ReleaseStringUTFChars(path, p);
 }

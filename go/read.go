@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/golang/snappy"
-	"github.com/odict/odict/schema"
+	"github.com/TheOpenDictionary/odict/schema/go"
 )
 
 func getDefinitionsFromUsage(usage schema.Usage) []string {

@@ -26,39 +26,35 @@ public class Dictionary {
 
   public native static void write(String xml, String outputPath);
 
-  // private native String lookup(String term, String dictionary);
+  private native String lookup(String term, String dictionaryID);
 
-  private native String search(String query, String dictionaryID);
+  private native String search(String query, String dictionaryID, Boolean exact);
 
   private native void index(String dictionaryPath);
 
   // private native String read(String path);
 
-  private schema.Dictionary dict;
-
-  private ObjectMapper mapper;
+  private String dictID;
 
   private String path;
 
   private short version;
 
-  private Map<String, Entry> entries;
-
   public Dictionary(String path) throws IOException {
-    this.path = path;
-    this.dict = this.read(path);
-    this.mapper = new ObjectMapper();
-    this.entries = new HashMap<String, Entry>();
+    this(path, false);
+  }
 
-    for (int i = 0; i < this.dict.entriesLength(); i++) {
-      Entry entry = new Entry(this.dict.entries(i));
-      this.entries.put(entry.getTerm().toLowerCase(), entry);
+  public Dictionary(String path, Boolean skipIndexing) throws IOException {
+    this.path = path;
+    this.dictID = this.read(path).id();
+
+    if (!skipIndexing) {
+      this.index();
     }
   }
 
   public String lookup(String term) throws JsonProcessingException {
-    Entry found = this.entries.get(term.toLowerCase());
-    return found != null ? this.mapper.writeValueAsString(found) : "{}";
+    return this.lookup(term, this.dictID);
   }
 
   public short getVersion() {
@@ -70,7 +66,7 @@ public class Dictionary {
   }
 
   public String search(String query) {
-    return this.search(query, this.dict.id());
+    return this.search(query, this.dictID, false);
   }
 
   private schema.Dictionary read(String filePath) throws IOException {

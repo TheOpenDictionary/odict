@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	odict "github.com/odict/odict/go"
+	odict "github.com/TheOpenDictionary/odict/go"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -23,7 +23,7 @@ func search(c *cli.Context) error {
 
 		odict.IndexDictionary(dict, force)
 
-		results := odict.SearchDictionary(dict.ID, searchTerm)
+		results := odict.SearchDictionary(dict.ID, searchTerm, false)
 
 		b, err := json.MarshalIndent(results, "", " ")
 
