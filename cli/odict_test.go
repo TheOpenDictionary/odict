@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -65,9 +64,7 @@ func TestMerge(t *testing.T) {
 	assert.Equal(t, len(dict2.Entries.Get("run").Etymologies), 1)
 
 	merged := odict.MergeDictionaries(dict1, dict2)
-	fmt.Println(odict.DumpDictionary(dict1))
-	fmt.Println(odict.DumpDictionary(dict2))
-	fmt.Println(odict.DumpDictionary(merged))
+
 	assert.Equal(t, merged.Entries.Size(), 2)
 	assert.Equal(t, len(merged.Entries.Get("run").Etymologies), 2)
 

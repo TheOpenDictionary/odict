@@ -281,8 +281,8 @@ def odict_extra_deps():
         go_repository,
         name = "com_github_imdario_mergo",
         importpath = "github.com/imdario/mergo",
-        sum = "h1:3tnifQM4i+fbajXKBHXWEH+KvNHqojZ778UH75j3bGA=",
-        version = "v0.3.11",
+        sum = "h1:UauaLniWCFHWd+Jp9oCEkTBj8VO/9DKg3PV3VCNMDIg=",
+        version = "v0.3.9",
     )
 
     maybe(
