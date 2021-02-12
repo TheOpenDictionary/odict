@@ -1,14 +1,16 @@
 package odict
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/blevesearch/bleve"
+	"github.com/blevesearch/bleve/v2"
+	query "github.com/blevesearch/bleve/v2/search/query"
 )
 
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(dictionaryID string, queryStr string) []Entry {
+func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry {
 	indexPath := getIndexPath(dictionaryID)
 	_, err := os.Stat(indexPath)
 
@@ -22,8 +24,14 @@ func SearchDictionary(dictionaryID string, queryStr string) []Entry {
 
 	Check(openErr)
 
-	query := bleve.NewMatchQuery(queryStr)
+	var query query.Query = bleve.NewMatchQuery(queryStr)
+
+	if exact {
+		query = bleve.NewDocIDQuery([]string{queryStr})
+	}
+
 	search := bleve.NewSearchRequest(query)
+	search.Fields = []string{"_source"}
 	searchResults, searchErr := index.Search(search)
 
 	Check(searchErr)
@@ -32,15 +40,12 @@ func SearchDictionary(dictionaryID string, queryStr string) []Entry {
 
 	entries := make([]Entry, len(hits))
 
-	for i := range hits {
-		hitID := hits[i].ID
-		b, err := index.GetInternal([]byte(hitID))
+	for i, x := range hits {
+		b, ok := x.Fields["_source"]
 
-		if err != nil {
-			panic(err)
+		if ok {
+			entries[i] = DecodeEntry([]byte(fmt.Sprintf("%v", b)))
 		}
-
-		entries[i] = DecodeEntry(b)
 	}
 
 	return entries

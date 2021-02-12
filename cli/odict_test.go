@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	odict "github.com/odict/odict/go"
+	odict "github.com/TheOpenDictionary/odict/go"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,7 +44,7 @@ func TestReadWriteSearch(t *testing.T) {
 
 	dict := odict.ReadDictionary("../examples/example1.odict")
 	odict.IndexDictionary(dict, true)
-	entries := odict.SearchDictionary(dict.ID, "run")
+	entries := odict.SearchDictionary(dict.ID, "run", false)
 
 	assert.NotEmpty(t, entries)
 
@@ -61,6 +61,7 @@ func TestMerge(t *testing.T) {
 	assert.Equal(t, dict1.Entries.Size(), 2)
 	assert.Equal(t, dict2.Entries.Size(), 1)
 	assert.Equal(t, len(dict1.Entries.Get("run").Etymologies), 1)
+	assert.Equal(t, len(dict2.Entries.Get("run").Etymologies), 1)
 
 	merged := odict.MergeDictionaries(dict1, dict2)
 

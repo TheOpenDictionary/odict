@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	odict "github.com/odict/odict/go"
+	odict "github.com/TheOpenDictionary/odict/go"
 	cli "github.com/urfave/cli/v2"
 )
 

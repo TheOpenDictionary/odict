@@ -16,7 +16,7 @@ import (
 
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/google/uuid"
-	"github.com/odict/odict/schema"
+	"github.com/TheOpenDictionary/odict/schema/go"
 )
 
 func xmlToDictionary(xmlStr string) Dictionary {

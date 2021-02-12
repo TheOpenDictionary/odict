@@ -59,9 +59,6 @@ class Dictionary:
         except:
             print("An exception occurred")
 
-    def __get_dictionary(self):
-        return cast(self.__encoded_dict, c_char_p).value
-
     # def search(self, query):
     #     v = lib.SearchDictionary(self.__encode(query), self.__get_dictionary())
     #     d = self.__decode(cast(v, c_char_p).value)
@@ -73,14 +70,14 @@ class Dictionary:
     def index(self):
         lib.IndexDictionary(self.p)
 
-    def lookup(self, term):
-        e = self.__encode(term)
-        v = lib.LookupEntry(e, self.__get_dictionary())
-        d = self.__decode(cast(v, c_char_p).value)
+    # def lookup(self, term):
+    #     e = self.__encode(term)
+    #     v = lib.LookupEntry(e, self.__get_dictionary())
+    #     d = self.__decode(cast(v, c_char_p).value)
 
-        lib.Free(v)
+    #     lib.Free(v)
 
-        return d
+    #     return d
 
     def __encode(self, str):
         return str.encode('utf-8')

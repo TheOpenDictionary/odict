@@ -9,7 +9,7 @@ import (
 	"encoding/json"
 	"unsafe"
 
-	odict "github.com/odict/odict/go"
+	odict "github.com/TheOpenDictionary/odict/go"
 )
 
 func getDictionaryFromBuffer(db *C.char) odict.Dictionary {
@@ -48,7 +48,7 @@ func ReadDictionary(path *C.char) *C.char {
 func SearchDictionary(query, dictionaryID *C.char) *C.char {
 	q := C.GoString(query)
 	id := C.GoString(dictionaryID)
-	result := odict.SearchDictionary(id, q)
+	result := odict.SearchDictionary(id, q, false)
 	b, err := json.Marshal(&result)
 
 	odict.Check(err)
@@ -68,14 +68,15 @@ func IndexDictionary(path *C.char) {
 }
 
 //export LookupEntry
-func LookupEntry(term, dictionary *C.char) *C.char {
-	dict := getDictionaryFromBuffer(dictionary)
-	query := C.GoString(term)
+func LookupEntry(term, dictionaryID *C.char) *C.char {
+	q := C.GoString(term)
+	id := C.GoString(dictionaryID)
+	result := odict.SearchDictionary(id, q, true)
 
-	if dict.Entries.Has(query) {
-		entry := dict.Entries.Get(query)
+	if len(result) > 0 {
+		r := result[0]
 
-		b, err := json.Marshal(&entry)
+		b, err := json.Marshal(&r)
 
 		odict.Check(err)
 
