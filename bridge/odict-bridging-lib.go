@@ -62,9 +62,9 @@ func Free(res *C.char) {
 }
 
 //export IndexDictionary
-func IndexDictionary(path *C.char) {
+func IndexDictionary(path *C.char, force bool) {
 	d := odict.ReadDictionary(C.GoString(path))
-	odict.IndexDictionary(d, true)
+	odict.IndexDictionary(d, force)
 }
 
 //export LookupEntry

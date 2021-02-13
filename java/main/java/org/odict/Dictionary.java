@@ -30,7 +30,7 @@ public class Dictionary {
 
   private native String search(String query, String dictionaryID, Boolean exact);
 
-  private native void index(String dictionaryPath);
+  private native void index(String dictionaryPath, Boolean force);
 
   // private native String read(String path);
 
@@ -49,7 +49,7 @@ public class Dictionary {
     this.dictID = this.read(path).id();
 
     if (!skipIndexing) {
-      this.index();
+      this.index(false);
     }
   }
 
@@ -62,7 +62,11 @@ public class Dictionary {
   }
 
   public void index() {
-    this.index(this.path);
+    this.index(false);
+  }
+
+  public void index(Boolean force) {
+    this.index(this.path, force);
   }
 
   public String search(String query) {

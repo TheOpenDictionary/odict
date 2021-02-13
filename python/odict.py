@@ -67,8 +67,8 @@ class Dictionary:
 
     #     return d
 
-    def index(self):
-        lib.IndexDictionary(self.p)
+    def index(self, force=False):
+        lib.IndexDictionary(self.p, force)
 
     # def lookup(self, term):
     #     e = self.__encode(term)

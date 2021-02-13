@@ -27,7 +27,8 @@ Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path, jboolean for
 {
   char *p = (char *)env->GetStringUTFChars(path, 0);
 
-  IndexDictionary(p);
+  IndexDictionary(p, force);
+
   env->ReleaseStringUTFChars(path, p);
 }
 

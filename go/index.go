@@ -14,43 +14,14 @@ import (
 )
 
 func getIndexPath(dictionaryID string) string {
-	return filepath.Join(os.TempDir(), "odict", "idx", dictionaryID)
+	path := os.Getenv("ODICT_INDEX_DIR")
+
+	if len(path) == 0 {
+		path = os.TempDir()
+	}
+
+	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
-
-// func getIndexMapping() {
-// 	// a generic reusable mapping for english text
-// 	textFieldMapping := bleve.NewTextFieldMapping()
-
-// 	// a generic reusable mapping for keyword text
-// 	keywordFieldMapping := bleve.NewTextFieldMapping()
-// 	keywordFieldMapping.Analyzer = keyword.Name
-
-// 	entryMapping := bleve.NewDocumentMapping()
-
-// 	// name
-// 	entryMapping.AddFieldMappingsAt("name", englishTextFieldMapping)
-
-// 	// description
-// 	beerMapping.AddFieldMappingsAt("description",
-// 		englishTextFieldMapping)
-
-// 	beerMapping.AddFieldMappingsAt("type", keywordFieldMapping)
-// 	beerMapping.AddFieldMappingsAt("style", keywordFieldMapping)
-// 	beerMapping.AddFieldMappingsAt("category", keywordFieldMapping)
-
-// 	breweryMapping := bleve.NewDocumentMapping()
-// 	breweryMapping.AddFieldMappingsAt("name", englishTextFieldMapping)
-// 	breweryMapping.AddFieldMappingsAt("description", englishTextFieldMapping)
-
-// 	indexMapping := bleve.NewIndexMapping()
-// 	indexMapping.AddDocumentMapping("beer", beerMapping)
-// 	indexMapping.AddDocumentMapping("brewery", breweryMapping)
-
-// 	indexMapping.TypeField = "type"
-// 	indexMapping.DefaultAnalyzer = "en"
-
-// 	return indexMapping, nil
-// }
 
 func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 	indexPath := getIndexPath(dictionary.ID)

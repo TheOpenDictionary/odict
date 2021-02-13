@@ -39,6 +39,26 @@ func cleanup() {
 	}
 }
 
+func TestIndex(t *testing.T) {
+	odict.CompileDictionary("../examples/example1.xml")
+
+	dict := odict.ReadDictionary("../examples/example1.odict")
+
+	path, err := os.Getwd()
+
+	odict.Check(err)
+
+	os.Setenv("ODICT_INDEX_DIR", path)
+
+	odict.IndexDictionary(dict, true)
+
+	_, e := os.Stat(filepath.Join(path, "odict", "idx", dict.ID))
+
+	assert.Equal(t, e, nil)
+
+	cleanup()
+}
+
 func TestReadWriteSearch(t *testing.T) {
 	odict.CompileDictionary("../examples/example1.xml")
 
