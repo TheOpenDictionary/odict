@@ -26,7 +26,7 @@ extern "C" JNIEXPORT void JNICALL
 Java_org_odict_Dictionary_index(JNIEnv *env, jobject, jstring path, jboolean force)
 {
   char *p = (char *)env->GetStringUTFChars(path, 0);
-
+  
   IndexDictionary(p, force);
 
   env->ReleaseStringUTFChars(path, p);

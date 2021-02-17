@@ -28,9 +28,9 @@ public class Dictionary {
 
   private native String lookup(String term, String dictionaryID);
 
-  private native String search(String query, String dictionaryID, Boolean exact);
+  private native String search(String query, String dictionaryID);
 
-  private native void index(String dictionaryPath, Boolean force);
+  private native void index(String dictionaryPath, boolean force);
 
   // private native String read(String path);
 
@@ -65,12 +65,12 @@ public class Dictionary {
     this.index(false);
   }
 
-  public void index(Boolean force) {
+  public void index(boolean force) {
     this.index(this.path, force);
   }
 
   public String search(String query) {
-    return this.search(query, this.dictID, false);
+    return this.search(query, this.dictID);
   }
 
   private schema.Dictionary read(String filePath) throws IOException {
