@@ -3,6 +3,7 @@ package odict
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/blevesearch/bleve/v2"
 	query "github.com/blevesearch/bleve/v2/search/query"
@@ -27,7 +28,7 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 	var query query.Query = bleve.NewMatchQuery(queryStr)
 
 	if exact {
-		query = bleve.NewDocIDQuery([]string{queryStr})
+		query = bleve.NewDocIDQuery([]string{strings.ToLower(queryStr)})
 	}
 
 	search := bleve.NewSearchRequest(query)

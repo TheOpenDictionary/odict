@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/blevesearch/bleve/v2"
@@ -45,7 +46,7 @@ func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 
 		for key := range dictionary.Entries.Iterable {
 			entry := dictionary.Entries.Get(key)
-			doc := document.NewDocument(entry.Term)
+			doc := document.NewDocument(strings.ToLower(entry.Term))
 
 			mapping.MapDocument(doc, entry)
 
