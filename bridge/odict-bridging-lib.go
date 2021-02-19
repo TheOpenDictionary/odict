@@ -71,7 +71,7 @@ func IndexDictionary(path *C.char, force bool) {
 func LookupEntry(term, dictionaryID *C.char) *C.char {
 	q := C.GoString(term)
 	id := C.GoString(dictionaryID)
-	result := odict.SearchDictionary(id, q, false)
+	result := odict.SearchDictionary(id, q, true)
 
 	if len(result) > 0 {
 		r := result[0]
