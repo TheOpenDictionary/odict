@@ -1,8 +1,8 @@
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
 def odict_extra_deps():
     go_rules_dependencies()
@@ -189,6 +189,7 @@ def odict_extra_deps():
         sum = "h1:BSKMNlYxDvnunlTymqtgONjNnaRV1sTpcovwwjF22jk=",
         version = "v1.0.10",
     )
+
     maybe(
         go_repository,
         name = "com_github_cpuguy83_go_md2man_v2",
@@ -444,6 +445,7 @@ def odict_extra_deps():
         sum = "h1:HyvC0ARfnZBqnXwABFeSZHpKvJHJJfPz81GNueLj0oo=",
         version = "v1.5.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_russross_blackfriday_v2",
@@ -563,6 +565,7 @@ def odict_extra_deps():
         sum = "h1:3SVOIvH7Ae1KRYyQWRjXWJEA9sS/c/pjvH++55Gr648=",
         version = "v0.0.0-20181204163529-d75b2dcb6bc8",
     )
+
     maybe(
         go_repository,
         name = "com_github_urfave_cli_v2",
@@ -571,8 +574,9 @@ def odict_extra_deps():
         version = "v2.3.0",
     )
 
-    maybe(
-        go_repository,
+    # For some reason, we can't use maybe on this specific dependency.
+    # I don't know why. Bleve complains.
+    go_repository(
         name = "com_github_willf_bitset",
         importpath = "github.com/willf/bitset",
         sum = "h1:NotGKqX0KwQ72NUzqrjZq5ipPNDQex9lo3WpaS8L2sc=",
