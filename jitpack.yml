@@ -1,9 +1,0 @@
-jdk:
-  - openjdk11
-before_install:
-  - curl -L https://github.com/bazelbuild/bazelisk/releases/download/v1.8.1/bazelisk-linux-amd64 --output bazelisk
-  - chmod +x bazelisk
-  - apt-get install gcc
-install:
-  - ./bazelisk build java
-  - cp ./bazel-bin/java/main/java/org/odict/libodict.jar ~/.m2/repository
