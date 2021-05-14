@@ -574,11 +574,11 @@ def odict_extra_deps():
         version = "v2.3.0",
     )
 
-    # For some reason, we can't use maybe on this specific dependency.
-    # I don't know why. Bleve complains.
-    go_repository(
-        name = "com_github_willf_bitset",
+    maybe(
+        go_repository,
+        name = "com_github_bits_and_blooms_bitset",
         importpath = "github.com/willf/bitset",
+        replace = "github.com/bits-and-blooms/bitset",
         sum = "h1:NotGKqX0KwQ72NUzqrjZq5ipPNDQex9lo3WpaS8L2sc=",
         version = "v1.1.10",
     )
