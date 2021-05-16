@@ -54,9 +54,9 @@ def odict_deps():
     maybe(
         http_archive,
         name = "com_github_google_flatbuffers",
-        sha256 = "62f2223fb9181d1d6338451375628975775f7522185266cd5296571ac152bc45",
-        strip_prefix = "flatbuffers-1.12.0",
-        urls = ["https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz"],
+        sha256 = "9ddb9031798f4f8754d00fca2f1a68ecf9d0f83dfac7239af1311e4fd9a565c4",
+        strip_prefix = "flatbuffers-2.0.0",
+        urls = ["https://github.com/google/flatbuffers/archive/v2.0.0.tar.gz"],
         patch_args = ["-p1"],
         patches = ["@odict//bazel:flatbuffers_1_12_0.patch"],
     )
