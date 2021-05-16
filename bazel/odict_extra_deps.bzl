@@ -1,17 +1,32 @@
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
-load("@rules_jvm_external//:defs.bzl", "maven_install")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
 
 def odict_extra_deps():
     go_rules_dependencies()
 
-    go_register_toolchains(version = "1.15.6")
+    go_register_toolchains(version = "1.16.3")
 
     gazelle_dependencies()
 
     protobuf_deps()
+
+    maven_install(
+        name = "odict_java_deps",
+        artifacts = [
+            "org.xerial.snappy:snappy-java:1.1.8.4",
+            "com.fasterxml.jackson.core:jackson-core:2.12.1",
+            "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
+            "com.fasterxml.jackson.core:jackson-databind:2.12.1",
+        ],
+        repositories = [
+            "https://jcenter.bintray.com/",
+            "https://maven.google.com",
+            "https://repo1.maven.org/maven2",
+        ],
+    )
 
     maybe(
         go_repository,
@@ -34,8 +49,8 @@ def odict_extra_deps():
         name = "com_github_blevesearch_bleve_v2",
         importpath = "github.com/blevesearch/bleve/v2",
         build_file_proto_mode = "disable",
-        sum = "h1:v1eV5K+/lndsjnykeVcuU9J4cJnjKLUKSwxXFxZsLuY=",
-        version = "v2.0.1",
+        sum = "h1:mDrwrsRIA4PDYkfUNjoh5zGECvquuJIA3MJU5ivaO8E=",
+        version = "v2.0.3",
     )
 
     maybe(
@@ -56,10 +71,10 @@ def odict_extra_deps():
 
     maybe(
         go_repository,
-        name = "com_github_blevesearch_scorch_segment_api",
-        importpath = "github.com/blevesearch/scorch_segment_api",
-        sum = "h1:BUkCPWDg2gimTEyVDXf85I2buqqt4lh28uaVMiJsIYk=",
-        version = "v1.0.0",
+        name = "com_github_blevesearch_scorch_segment_api_v2",
+        importpath = "github.com/blevesearch/scorch_segment_api/v2",
+        sum = "h1:fd+hPtZ8GsbqPK1HslGp7Vhoik4arZteA/IsCEgOisw=",
+        version = "v2.0.1",
     )
 
     maybe(
@@ -88,42 +103,51 @@ def odict_extra_deps():
 
     maybe(
         go_repository,
+        name = "com_github_blevesearch_vellum",
+        importpath = "github.com/blevesearch/vellum",
+        remote = "git@github.com:Nickersoft/vellum.git",
+        commit = "e1b412ddea6adc8efc1f958640b8c045b330c32b",
+        vcs = "git",
+    )
+
+    maybe(
+        go_repository,
         name = "com_github_blevesearch_zapx_v11",
         importpath = "github.com/blevesearch/zapx/v11",
-        sum = "h1:8Eo3rXiHsVSP9Sk+4StrrwLrj9vyulhMVPmxTf8ZuDg=",
-        version = "v11.1.10",
+        sum = "h1:GBkCJYsyj3eIU4+aiLPxoMz1PYvDbQZl/oXHIBZIP60=",
+        version = "v11.2.0",
     )
 
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v12",
         importpath = "github.com/blevesearch/zapx/v12",
-        sum = "h1:sqR+/0Z4dSTovApRqLA1HnilMtQer7a4UvPrNmPzlTM=",
-        version = "v12.1.10",
+        sum = "h1:dyRcSoZVO1jktL4UpGkCEF1AYa3xhKPirh4/N+Va+Ww=",
+        version = "v12.2.0",
     )
 
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v13",
         importpath = "github.com/blevesearch/zapx/v13",
-        sum = "h1:zCneEVRJDXwtDfSwh+33Dxguliv192vCK283zdGH4Sw=",
-        version = "v13.1.10",
+        sum = "h1:mUqbaqQABp8nBE4t4q2qMyHCCq4sykoV8r7aJk4ih3s=",
+        version = "v13.2.0",
     )
 
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v14",
         importpath = "github.com/blevesearch/zapx/v14",
-        sum = "h1:nD0vw2jxKogJFfA5WyoS4wNwZlVby3Aq8aW7CZi6YIw=",
-        version = "v14.1.10",
+        sum = "h1:UsfRqvM9RJxKNKrkR1U7aYc1cv9MWx719fsAjbF6joI=",
+        version = "v14.2.0",
     )
 
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v15",
         importpath = "github.com/blevesearch/zapx/v15",
-        sum = "h1:kZR3b9jO9l6s2B5UHI+1N1llLzJ4nYikkXQTMrDl1vQ=",
-        version = "v15.1.10",
+        sum = "h1:ZpibwcrrOaeslkOw3sJ7npP7KDgRHI/DkACjKTqFwyM=",
+        version = "v15.2.0",
     )
 
     maybe(
@@ -172,14 +196,6 @@ def odict_extra_deps():
         importpath = "github.com/couchbase/moss",
         sum = "h1:HCL+xxHUwmOaL44kMM/gU08OW6QGCui1WVFO58bjhNI=",
         version = "v0.1.0",
-    )
-
-    maybe(
-        go_repository,
-        name = "com_github_couchbase_vellum",
-        importpath = "github.com/couchbase/vellum",
-        sum = "h1:BrbP0NKiyDdndMPec8Jjhy0U47CZ0Lgx3xUC2r9rZqw=",
-        version = "v1.0.2",
     )
 
     maybe(
@@ -577,9 +593,8 @@ def odict_extra_deps():
     maybe(
         go_repository,
         name = "com_github_bits_and_blooms_bitset",
-        importpath = "github.com/willf/bitset",
-        replace = "github.com/bits-and-blooms/bitset",
-        sum = "h1:NotGKqX0KwQ72NUzqrjZq5ipPNDQex9lo3WpaS8L2sc=",
+        importpath = "github.com/bits-and-blooms/bitset",
+        sum = "h1:oTle449SfMfXO0BpZN1bMPe5SCRlQct8pX7siV30jGA=",
         version = "v1.1.10",
     )
 
@@ -619,8 +634,8 @@ def odict_extra_deps():
         go_repository,
         name = "in_gopkg_yaml_v2",
         importpath = "gopkg.in/yaml.v2",
-        sum = "h1:clyUAQHOM3G0M3f5vQj7LuJrETvjVot3Z5el9nffUtU=",
-        version = "v2.3.0",
+        sum = "h1:fvjTMHxHEw/mxHbtzPi3JCcKXQRAnQTBRo6YCJSVHKI=",
+        version = "v2.2.3",
     )
 
     maybe(
@@ -629,20 +644,6 @@ def odict_extra_deps():
         importpath = "go.etcd.io/bbolt",
         sum = "h1:XAzx9gjCb0Rxj7EoqcClPD1d5ZBxZJk0jbuoPHenBt0=",
         version = "v1.3.5",
-    )
-    maven_install(
-        name = "odict_java_deps",
-        artifacts = [
-            "org.xerial.snappy:snappy-java:1.1.8.4",
-            "com.fasterxml.jackson.core:jackson-core:2.12.1",
-            "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
-            "com.fasterxml.jackson.core:jackson-databind:2.12.1",
-        ],
-        repositories = [
-            "https://jcenter.bintray.com/",
-            "https://maven.google.com",
-            "https://repo1.maven.org/maven2",
-        ],
     )
 
     maybe(

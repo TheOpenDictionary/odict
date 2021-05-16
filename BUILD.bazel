@@ -1,7 +1,6 @@
-# gazelle:prefix github.com/TheOpenDictionary/odict
-
 load("@bazel_gazelle//:def.bzl", "gazelle")
 
+# gazelle:prefix github.com/TheOpenDictionary/odict
 gazelle(name = "gazelle")
 
 test_suite(
