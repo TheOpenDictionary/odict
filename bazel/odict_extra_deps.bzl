@@ -7,7 +7,7 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 def odict_extra_deps():
     go_rules_dependencies()
 
-    go_register_toolchains(version = "1.16.3")
+    go_register_toolchains(version = "1.15.6")
 
     gazelle_dependencies()
 
