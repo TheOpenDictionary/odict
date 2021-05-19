@@ -1,6 +1,8 @@
 package org.odict.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,5 +30,9 @@ public class Entry {
 
   public List<Etymology> getEtymologies() {
     return etymologies;
+  }
+
+  public String toJSON() throws JsonProcessingException {
+    return new ObjectMapper().writeValueAsString(this);
   }
 }

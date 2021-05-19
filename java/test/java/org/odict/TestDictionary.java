@@ -18,6 +18,7 @@ public class TestDictionary {
     Entry entry = dict.lookup("run");
 
     assertNotNull(entry);
+    assertNotEquals(entry.toJSON(), "{}");
   }
 
   @Test
