@@ -1,8 +1,9 @@
-load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_jvm_external//:defs.bzl", "java_export")
 
-java_library(
+java_export(
     name = "odict",
     srcs = glob(["**/*.java"]),
+    maven_coordinates = "org.odict:odict:1.4.4",
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
     deps = [
