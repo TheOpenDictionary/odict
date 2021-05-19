@@ -35,7 +35,8 @@ table Usage {
 }
 
 table Entry {
-    term:string (key);
+    key:string (key);
+    term:string;
     etymologies:[Etymology];
 }
 

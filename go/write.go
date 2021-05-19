@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -217,33 +218,43 @@ func getEtymologiesVector(builder *flatbuffers.Builder, entry Entry) flatbuffers
 func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatbuffers.UOffsetT {
 	entries := dictionary.Entries
 
-	var entryBuffer []flatbuffers.UOffsetT
+	var entriesBuffer []flatbuffers.UOffsetT
 
-	for key := range entries.Iterable {
+    keys := entries.Keys()
+
+    // EXTREMELY IMPORTANT!!
+    // Because FlatBuffers performs key lookups via binary search, if the keys are not sorted
+    // in the vector there may be a number of false negatives when searching
+    sort.Strings(keys)
+
+	for _, key := range keys {
 		entry := entries.Get(key)
+		entryKey := builder.CreateString(key)
 		entryTerm := builder.CreateString(entry.Term)
 		entryEtymologies := getEtymologiesVector(builder, entry)
 
 		schema.EntryStart(builder)
+		schema.EntryAddKey(builder, entryKey)
 		schema.EntryAddTerm(builder, entryTerm)
 		schema.EntryAddEtymologies(builder, entryEtymologies)
 
-		entryBuffer = append(entryBuffer, schema.EntryEnd(builder))
+		entryBuffer := schema.EntryEnd(builder)
+		entriesBuffer = append(entriesBuffer, entryBuffer)
 	}
 
-	entryCount := len(entryBuffer)
+	entryCount := len(entriesBuffer)
 
 	schema.DictionaryStartEntriesVector(builder, entryCount)
 
 	for i := entryCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(entryBuffer[i])
+		builder.PrependUOffsetT(entriesBuffer[i])
 	}
 
 	return builder.EndVector(entryCount)
 }
 
 func dictionaryToBytes(dictionary Dictionary) []byte {
-	builder := flatbuffers.NewBuilder(1024)
+	builder := flatbuffers.NewBuilder(0)
 
 	id := builder.CreateString(uuid.New().String())
 	name := builder.CreateString(dictionary.Name)
@@ -262,7 +273,7 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 func createODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
-	file, err := os.Create(outputPath)
+    file, err := os.Create(outputPath)
 
 	Check(err)
 

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jackson-core-2.12.1_8b4ade2b">
+    <CLASSES>
+      <root url="jar:///private/var/tmp/_bazel_tnickerson/0019a6bf008320198a79ef1cd374261c/external/odict_java_deps/v1/https/jcenter.bintray.com/com/fasterxml/jackson/core/jackson-core/2.12.1/jackson-core-2.12.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
