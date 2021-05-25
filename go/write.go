@@ -270,7 +270,9 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-func createODictFile(outputPath string, dictionary Dictionary) {
+// CreateODictFile writes a new .odict binary from a 
+// Dictionary struct
+func CreateODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
     file, err := os.Create(outputPath)
@@ -310,7 +312,7 @@ func createODictFile(outputPath string, dictionary Dictionary) {
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionary(xmlStr, outputPath string) {
-	createODictFile(outputPath, xmlToDictionary(xmlStr))
+	CreateODictFile(outputPath, xmlToDictionary(xmlStr))
 }
 
 // CompileDictionary compiles an XML file into an ODict binary
@@ -327,5 +329,6 @@ func CompileDictionary(xmlPath string) {
 	xmlStr, err := ioutil.ReadAll(xmlFile)
 
 	Check(err)
+
 	WriteDictionary(string(xmlStr), outputPath)
 }
