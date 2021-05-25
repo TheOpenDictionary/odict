@@ -1,4 +1,6 @@
-# API
+# Using the API
+
+## Installing
 
 Currently, it is only possible to use the Java and Python bindings from another Bazel project, as the ODict JAR is not yet on Maven Central and Python's dependency on the shared ODict library makes it difficult to distribute through `pip`. Fortunately, setting up ODict in another Bazel project is easy.
 

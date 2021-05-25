@@ -1,15 +1,4 @@
-# The ODict CLI
-
-The ODict command-line interface (CLI) is a Go program you can execute in any terminal to create, dump, merge, search, and index ODict dictionaries.
-
-The CLI's primary distribution channel is currently through its [Homebrew](homebrew.sh) formula:
-
-```
-$ brew tap TheOpenDictionary/odict
-$ brew install odict
-```
-
-While you most likely would interface with dictionaries via a language-specific library, the CLI exists as a convenience tool that can be used to help debug or rapidly produce new dictionaries.
+# CLI Reference
 
 ## Creating Dictionaries
 
