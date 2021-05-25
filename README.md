@@ -7,8 +7,6 @@
 
 </div>
 
-> Don't feel like reading the B.S. below and want to just jump right in? Have a look at our [quick start](quick-start.md) guide!
-
 The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats Babylon and Apple Dictionaries. Similar to other dictionaries, Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](cli.md) or via its open-source Go bindings.
 
 ## Motivation

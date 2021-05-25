@@ -2,16 +2,16 @@
 
 ## Installing
 
-Currently, it is only possible to use the Java and Python bindings from another Bazel project, as the ODict JAR is not yet on Maven Central and Python's dependency on the shared ODict library makes it difficult to distribute through `pip`. Fortunately, setting up ODict in another Bazel project is easy.
+Currently, it is only possible to use language bindings from another Bazel project, as the ODict JAR is not yet on Maven Central and Python's dependency on the shared ODict library makes it difficult to distribute through `pip`. Fortunately, setting up ODict in another Bazel project is easy.
 
 Just add the following to your `WORKSPACE` file:
 
-```bazel
+```python
 http_archive(
     name = "odict",
     sha256 = "b58fd3432a6f84865c67a16ef6718be12ecd6b9b32c12dfd917c0a899807062f",
-    strip_prefix = "odict-1.4",
-    url = "https://github.com/TheOpenDictionary/odict/archive/1.4.tar.gz",
+    strip_prefix = "odict-1.4.5",
+    url = "https://github.com/TheOpenDictionary/odict/archive/1.4.5.tar.gz",
 )
 
 load("@odict//bazel:odict_deps.bzl", "odict_deps")
@@ -24,6 +24,42 @@ odict_extra_deps()
 ```
 
 then require either `@odict//java` or `@odict//python` in your respective Bazel rules.
+
+If any API usage is unclear, you may be able to get a better idea of how to use the APIs by looking at ODict's unit tests.
+
+## Go
+
+ODict is built in Go, so naturally it supports a public API out-of-the-box:
+
+```go
+import (
+	odict "github.com/TheOpenDictionary/odict/go"
+)
+
+func main() {
+	// Write a dictionary from a local ODXML file
+	odict.CompileDictionary("mydict.xml")
+
+  // Write an XML string to a binary
+	odict.WriteDictionary("<dictionary></dictionary>", "mydict.odict")
+
+  // Read a compiled dictionary into memory
+	dict := odict.ReadDictionary("mydict.odict")
+
+  odict.IndexDictionary(
+    "mydict.odict",
+    false // Set to "true" to force-index
+  )
+
+  // Search an indexed dictionary by ID
+  results := odict.SearchDictionary(
+    dict.id,
+    "dog",
+    false // Set to "true" if you need to match the given word exactly
+  )
+}
+
+```
 
 ## Java
 
@@ -58,7 +94,7 @@ void main() {
 
 ## Python
 
-The Python interface for ODict is similar to that of Java:
+The Python interface for ODict is similar to that of Java and Go:
 
 ```python
 # Import statement
