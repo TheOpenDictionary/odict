@@ -55,7 +55,6 @@ public class Dictionary {
   }
 
   public Entry lookup(String term) {
-    System.out.println(Arrays.toString(term.getBytes(StandardCharsets.UTF_8)));
     schema.Entry entry = this.dict.entriesByKey(term.toLowerCase());
 
     if (entry == null) {
