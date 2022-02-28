@@ -31,7 +31,7 @@ Now let's break this down.
 
 ---
 
-## `<definition>`
+## `<dictionary>`
 
 Dictionary nodes occur at the base of all source files and will not compile without one. ODict looks for these nodes by default when compiling.
 
