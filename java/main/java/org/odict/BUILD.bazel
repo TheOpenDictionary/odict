@@ -3,7 +3,7 @@ load("//:projectinfo.bzl", "maven", "version")
 
 java_export(
     name = "odict",
-    maven_coordinates = "{}:{}:{}:{}:{}".format(maven["group"], maven["artifact"], version["major"], version["minor"], version["patch"]),
+    maven_coordinates = "{}:{}:{}.{}.{}".format(maven["group"], maven["artifact"], version["major"], version["minor"], version["patch"]),
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
     srcs = glob(["**/*.java"]),
