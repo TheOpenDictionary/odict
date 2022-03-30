@@ -1,8 +1,9 @@
 load("@rules_jvm_external//:defs.bzl", "java_export")
+load("//:projectinfo.bzl", "maven", "version")
 
 java_export(
     name = "odict",
-    maven_coordinates = "com.theopendictionary:odict:1.0.0",
+    maven_coordinates = "{}:{}:{}:{}:{}".format(maven["group"], maven["artifact"], version["major"], version["minor"], version["patch"]),
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
     srcs = glob(["**/*.java"]),
