@@ -1,4 +1,4 @@
-name: Go
+name: Deploy
 
 on:
   workflow_dispatch:
@@ -15,8 +15,8 @@ env:
   JAVA_VERSION: 11
 
 jobs:
-  build:
-    name: Test
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -42,7 +42,22 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v4
         with:
           gpg_private_key: ${{ secrets.MAVEN_KEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
+          passphrase: ${{ secrets.MAVEN_KEY_PASSPHRASE }}
+
+      - name: Update version number 
+        run: echo 'version="${{ github.event.inputs.version }}"' > version.bzl
+
+      - name: Tag & commit version number
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: 'version.bzl'
+          message: 'chore(*): Bump version number to ${{ github.event.inputs.version }}'
+          push: true
+          tag: "${{ github.event.inputs.version }} --force"
+          tag_push: '--force'
 
       - name: Deploy to Maven
-        run: bazelisk run --stamp --define "maven_repo=https://oss.sonatype.org/service/local/staging/deploy/maven2" --define "maven_user={{ secrets.MAVEN_USERNAME }}" --define "maven_password={{ secrets.MAVEN_PASSWORD }}" --define gpg_sign=true //java/main/java/org/odict:odict.publish
+        run: |
+          export GPG_TTY=$(tty)
+          bazelisk run --stamp --define "maven_repo=https://s01.oss.sonatype.org/service/local/staging/deploy/maven2" --define "maven_user=${{ secrets.MAVEN_USERNAME }}" --define "maven_password=${{ secrets.MAVEN_PASSWORD }}" --define gpg_sign=true //java/main/java/org/odict:odict.publish
+                    

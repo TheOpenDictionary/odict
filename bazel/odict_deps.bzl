@@ -5,12 +5,12 @@ def odict_deps():
     RULES_JVM_EXTERNAL_TAG = "4.0"
     RULES_JVM_EXTERNAL_SHA = "31701ad93dbfe544d597dbe62c9a1fdd76d81d8a9150c2bf1ecf928ecdf97169"
     RULES_GO = "0.31.0"
-    RULES_GAZELLE = "0.25.0"
+    RULES_GAZELLE = "0.24.0"
 
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "62ca106be173579c0a167deb23358fdfe71ffa1e4cfdddf5582af26520f1c66f",
+        sha256 = "de69a09dc70417580aabf20a28619bb3ef60d038470c7cf8442fafcf627c21cb",
         urls = [
             "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (RULES_GAZELLE, RULES_GAZELLE),
             "https://github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (RULES_GAZELLE, RULES_GAZELLE),
