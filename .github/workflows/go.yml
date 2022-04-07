@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 env:
-  GO_VERSION: "^1.14.4"
+  GO_VERSION: "^1.18"
   JAVA_VERSION: 11
 
 jobs:
