@@ -1,6 +1,6 @@
 alias(
     name = "java",
-    actual = "//java/main/java/org/odict",
+    actual = "//java/main/java/org/odict:odict_lib",
     visibility = ["//visibility:public"],
 )
 

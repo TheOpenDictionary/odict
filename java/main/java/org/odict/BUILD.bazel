@@ -1,6 +1,21 @@
 load("@rules_jvm_external//:defs.bzl", "java_export")
 load("//:version.bzl", "version")
 
+java_library(
+    name = "odict_lib",
+    resources = ["//java/main/cpp:libodict.so"],
+    visibility = ["//java:__pkg__"],
+    srcs = glob(["**/*.java"]),
+    deps = [
+        "//schema/java",
+        "@native_utils",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_annotations",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_core",
+        "@odict_java_deps//:com_fasterxml_jackson_core_jackson_databind",
+        "@odict_java_deps//:org_xerial_snappy_snappy_java",
+    ],
+)
+
 java_export(
     name = "odict",
     maven_coordinates = "org.odict:odict:{}".format(version),
