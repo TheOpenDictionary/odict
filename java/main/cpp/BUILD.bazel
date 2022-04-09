@@ -4,10 +4,9 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 cc_library(
     name = "odict-lib",
     srcs = ["odict.cpp"],
-    data = ["//bridge:archive.cc"],
     visibility = ["//visibility:public"],
     deps = [
-        "//bridge:archive.cc",
+        "//bridge:archive",
         "//tools/jni:copy_jni_hdr_lib",
     ],
     alwayslink = True,
