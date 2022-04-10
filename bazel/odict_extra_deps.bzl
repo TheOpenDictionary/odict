@@ -20,6 +20,7 @@ def odict_extra_deps():
         sum = "h1:G1bPvciwNyF7IUmKXNt9Ak3m6u9DE1rF+RmtIkBpVdA=",
         version = "v0.0.0-20180202201655-eb2c6b5be1b6",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_bleve_index_api",
@@ -27,6 +28,7 @@ def odict_extra_deps():
         sum = "h1:Ds3XeuTxjXCkG6pgIwWDRyooJKNIuOKemnN0N0IkhTU=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_bleve_v2",
@@ -35,6 +37,7 @@ def odict_extra_deps():
         sum = "h1:mDrwrsRIA4PDYkfUNjoh5zGECvquuJIA3MJU5ivaO8E=",
         version = "v2.0.3",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_go_porterstemmer",
@@ -42,6 +45,7 @@ def odict_extra_deps():
         sum = "h1:GtmsqID0aZdCSNiY8SkuPJ12pD4jI+DdXTAn4YRcHCo=",
         version = "v1.0.3",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_mmap_go",
@@ -49,6 +53,7 @@ def odict_extra_deps():
         sum = "h1:JtMHb+FgQCTTYIhtMvimw15dJwu1Y5lrZDMOFXVWPk0=",
         version = "v1.0.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_scorch_segment_api_v2",
@@ -56,6 +61,7 @@ def odict_extra_deps():
         sum = "h1:fd+hPtZ8GsbqPK1HslGp7Vhoik4arZteA/IsCEgOisw=",
         version = "v2.0.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_segment",
@@ -63,6 +69,7 @@ def odict_extra_deps():
         sum = "h1:5lG7yBCx98or7gK2cHMKPukPZ/31Kag7nONpoBt22Ac=",
         version = "v0.9.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_snowballstem",
@@ -70,6 +77,7 @@ def odict_extra_deps():
         sum = "h1:lMQ189YspGP6sXvZQ4WZ+MLawfV8wOmPoD/iWeNXm8s=",
         version = "v0.9.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_upsidedown_store_api",
@@ -77,6 +85,7 @@ def odict_extra_deps():
         sum = "h1:1SYRwyoFLwG3sj0ed89RLtM15amfX2pXlYbFOnF8zNU=",
         version = "v1.0.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_vellum",
@@ -85,6 +94,7 @@ def odict_extra_deps():
         strip_prefix = "vellum-master",
         type = "zip",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v11",
@@ -92,6 +102,7 @@ def odict_extra_deps():
         sum = "h1:GBkCJYsyj3eIU4+aiLPxoMz1PYvDbQZl/oXHIBZIP60=",
         version = "v11.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v12",
@@ -99,6 +110,7 @@ def odict_extra_deps():
         sum = "h1:dyRcSoZVO1jktL4UpGkCEF1AYa3xhKPirh4/N+Va+Ww=",
         version = "v12.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v13",
@@ -106,6 +118,7 @@ def odict_extra_deps():
         sum = "h1:mUqbaqQABp8nBE4t4q2qMyHCCq4sykoV8r7aJk4ih3s=",
         version = "v13.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v14",
@@ -113,6 +126,7 @@ def odict_extra_deps():
         sum = "h1:UsfRqvM9RJxKNKrkR1U7aYc1cv9MWx719fsAjbF6joI=",
         version = "v14.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_blevesearch_zapx_v15",
@@ -120,6 +134,7 @@ def odict_extra_deps():
         sum = "h1:ZpibwcrrOaeslkOw3sJ7npP7KDgRHI/DkACjKTqFwyM=",
         version = "v15.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_burntsushi_toml",
@@ -127,6 +142,7 @@ def odict_extra_deps():
         sum = "h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=",
         version = "v0.3.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_coreos_etcd",
@@ -134,6 +150,7 @@ def odict_extra_deps():
         sum = "h1:jFneRYjIvLMLhDLCzuTuU4rSJUjRplcJQ7pD7MnhC04=",
         version = "v3.3.10+incompatible",
     )
+
     maybe(
         go_repository,
         name = "com_github_coreos_go_etcd",
@@ -141,6 +158,7 @@ def odict_extra_deps():
         sum = "h1:bXhRBIXoTm9BYHS3gE0TtQuyNZyeEMux2sDi4oo5YOo=",
         version = "v2.0.0+incompatible",
     )
+
     maybe(
         go_repository,
         name = "com_github_coreos_go_semver",
@@ -148,6 +166,7 @@ def odict_extra_deps():
         sum = "h1:3Jm3tLmsgAYcjC+4Up7hJrFBPr+n7rAqYeSw/SZazuY=",
         version = "v0.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_couchbase_ghistogram",
@@ -155,6 +174,7 @@ def odict_extra_deps():
         sum = "h1:b95QcQTCzjTUocDXp/uMgSNQi8oj1tGwnJ4bODWZnps=",
         version = "v0.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_couchbase_moss",
@@ -162,6 +182,7 @@ def odict_extra_deps():
         sum = "h1:HCL+xxHUwmOaL44kMM/gU08OW6QGCui1WVFO58bjhNI=",
         version = "v0.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_cpuguy83_go_md2man",
@@ -169,6 +190,7 @@ def odict_extra_deps():
         sum = "h1:BSKMNlYxDvnunlTymqtgONjNnaRV1sTpcovwwjF22jk=",
         version = "v1.0.10",
     )
+
     maybe(
         go_repository,
         name = "com_github_cpuguy83_go_md2man_v2",
@@ -176,6 +198,7 @@ def odict_extra_deps():
         sum = "h1:U+s90UTSYgptZMwQh2aRr3LuazLJIa+Pg3Kc1ylSYVY=",
         version = "v2.0.0-20190314233015-f79a8a8ca69d",
     )
+
     maybe(
         go_repository,
         name = "com_github_davecgh_go_spew",
@@ -183,6 +206,7 @@ def odict_extra_deps():
         sum = "h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=",
         version = "v1.1.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_fsnotify_fsnotify",
@@ -190,6 +214,7 @@ def odict_extra_deps():
         sum = "h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV9I=",
         version = "v1.4.7",
     )
+
     maybe(
         go_repository,
         name = "com_github_glycerine_go_unsnap_stream",
@@ -197,6 +222,7 @@ def odict_extra_deps():
         sum = "h1:Ujru1hufTHVb++eG6OuNDKMxZnGIvF6o/u8q/8h2+I4=",
         version = "v0.0.0-20181221182339-f9677308dec2",
     )
+
     maybe(
         go_repository,
         name = "com_github_glycerine_goconvey",
@@ -204,6 +230,7 @@ def odict_extra_deps():
         sum = "h1:gclg6gY70GLy3PbkQ1AERPfmLMMagS60DKF78eWwLn8=",
         version = "v0.0.0-20190410193231-58a59202ab31",
     )
+
     maybe(
         go_repository,
         name = "com_github_golang_protobuf",
@@ -211,6 +238,7 @@ def odict_extra_deps():
         sum = "h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs=",
         version = "v1.3.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_golang_snappy",
@@ -218,6 +246,7 @@ def odict_extra_deps():
         sum = "h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=",
         version = "v0.0.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_google_uuid",
@@ -225,6 +254,7 @@ def odict_extra_deps():
         sum = "h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=",
         version = "v1.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_gopherjs_gopherjs",
@@ -232,6 +262,7 @@ def odict_extra_deps():
         sum = "h1:twflg0XRTjwKpxb/jFExr4HGq6on2dEOmnL6FV+fgPw=",
         version = "v0.0.0-20190910122728-9d188e94fb99",
     )
+
     maybe(
         go_repository,
         name = "com_github_hashicorp_hcl",
@@ -239,6 +270,7 @@ def odict_extra_deps():
         sum = "h1:0Anlzjpi4vEasTeNFn2mLJgTSwt0+6sfsiTG8qcWGx4=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_hpcloud_tail",
@@ -246,6 +278,7 @@ def odict_extra_deps():
         sum = "h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_imdario_mergo",
@@ -253,6 +286,7 @@ def odict_extra_deps():
         sum = "h1:UauaLniWCFHWd+Jp9oCEkTBj8VO/9DKg3PV3VCNMDIg=",
         version = "v0.3.9",
     )
+
     maybe(
         go_repository,
         name = "com_github_inconshreveable_mousetrap",
@@ -260,6 +294,7 @@ def odict_extra_deps():
         sum = "h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_jtolds_gls",
@@ -267,6 +302,7 @@ def odict_extra_deps():
         sum = "h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7C0MuV77Wo=",
         version = "v4.20.0+incompatible",
     )
+
     maybe(
         go_repository,
         name = "com_github_k0kubun_go_ansi",
@@ -274,6 +310,7 @@ def odict_extra_deps():
         sum = "h1:qGQQKEcAR99REcMpsXCp3lJ03zYT1PkRd3kQGPn9GVg=",
         version = "v0.0.0-20180517002512-3bf9e2903213",
     )
+
     maybe(
         go_repository,
         name = "com_github_kljensen_snowball",
@@ -281,6 +318,7 @@ def odict_extra_deps():
         sum = "h1:6DZLCcZeL0cLfodx+Md4/OLC6b/bfurWUOUGs1ydfOU=",
         version = "v0.6.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_magiconair_properties",
@@ -288,6 +326,7 @@ def odict_extra_deps():
         sum = "h1:LLgXmsheXeRoUOBOjtwPQCWIYqM/LU1ayDtDePerRcY=",
         version = "v1.8.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_mattn_go_isatty",
@@ -295,6 +334,7 @@ def odict_extra_deps():
         sum = "h1:wuysRhFDzyxgEmMf5xjvJ2M9dZoWAXNNr5LSBS7uHXY=",
         version = "v0.0.12",
     )
+
     maybe(
         go_repository,
         name = "com_github_mattn_go_runewidth",
@@ -302,6 +342,7 @@ def odict_extra_deps():
         sum = "h1:CoZ3S2P7pvtP45xOtBw+/mDL2z0RKI576gSkzRRpdGg=",
         version = "v0.0.10",
     )
+
     maybe(
         go_repository,
         name = "com_github_mitchellh_colorstring",
@@ -309,6 +350,7 @@ def odict_extra_deps():
         sum = "h1:62I3jR2EmQ4l5rM/4FEfDWcRD+abF5XlKShorW5LRoQ=",
         version = "v0.0.0-20190213212951-d06e56a500db",
     )
+
     maybe(
         go_repository,
         name = "com_github_mitchellh_go_homedir",
@@ -316,6 +358,7 @@ def odict_extra_deps():
         sum = "h1:lukF9ziXFxDFPkA1vsr5zpc1XuPDn/wFntq5mG+4E0Y=",
         version = "v1.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_mitchellh_mapstructure",
@@ -323,6 +366,7 @@ def odict_extra_deps():
         sum = "h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQzvN1EDeE=",
         version = "v1.1.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_mschoch_smat",
@@ -330,6 +374,7 @@ def odict_extra_deps():
         sum = "h1:8imxQsjDm8yFEAVBe7azKmKSgzSkZXDuKkSq9374khM=",
         version = "v0.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_onsi_ginkgo",
@@ -337,6 +382,7 @@ def odict_extra_deps():
         sum = "h1:WSHQ+IS43OoUrWtD1/bbclrwK8TTH5hzp+umCiuxHgs=",
         version = "v1.7.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_onsi_gomega",
@@ -344,6 +390,7 @@ def odict_extra_deps():
         sum = "h1:RE1xgDvH7imwFD45h+u2SgIfERHlS2yNG4DObb5BSKU=",
         version = "v1.4.3",
     )
+
     maybe(
         go_repository,
         name = "com_github_pelletier_go_toml",
@@ -351,6 +398,7 @@ def odict_extra_deps():
         sum = "h1:T5zMGML61Wp+FlcbWjRDT7yAxhJNAiPPLOFECq181zc=",
         version = "v1.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_philhofer_fwd",
@@ -358,6 +406,7 @@ def odict_extra_deps():
         sum = "h1:UbZqGr5Y38ApvM/V/jEljVxwocdweyH+vmYvRPBnbqQ=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_pmezard_go_difflib",
@@ -365,6 +414,7 @@ def odict_extra_deps():
         sum = "h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_rcrowley_go_metrics",
@@ -372,6 +422,7 @@ def odict_extra_deps():
         sum = "h1:dY6ETXrvDG7Sa4vE8ZQG4yqWg6UnOcbqTAahkV813vQ=",
         version = "v0.0.0-20190826022208-cac0b30c2563",
     )
+
     maybe(
         go_repository,
         name = "com_github_rivo_uniseg",
@@ -379,6 +430,7 @@ def odict_extra_deps():
         sum = "h1:S1pD9weZBuJdFmowNwbpi7BJ8TNftyUImj/0WQi72jY=",
         version = "v0.2.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_roaringbitmap_roaring",
@@ -386,6 +438,7 @@ def odict_extra_deps():
         sum = "h1:gpyfd12QohbqhFO4NVDUdoPOCXsyahYRQhINmlHxKeo=",
         version = "v0.4.23",
     )
+
     maybe(
         go_repository,
         name = "com_github_russross_blackfriday",
@@ -393,6 +446,7 @@ def odict_extra_deps():
         sum = "h1:HyvC0ARfnZBqnXwABFeSZHpKvJHJJfPz81GNueLj0oo=",
         version = "v1.5.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_russross_blackfriday_v2",
@@ -400,6 +454,7 @@ def odict_extra_deps():
         sum = "h1:lPqVAte+HuHNfhJ/0LC98ESWRz8afy9tM/0RK8m9o+Q=",
         version = "v2.0.1",
     )
+
     maybe(
         go_repository,
         name = "com_github_schollz_progressbar_v3",
@@ -407,6 +462,7 @@ def odict_extra_deps():
         sum = "h1:G2HfclnGJR2HtTOmFkERQcRqo9J20asOFiuD6AnI5EQ=",
         version = "v3.7.4",
     )
+
     maybe(
         go_repository,
         name = "com_github_shurcool_sanitized_anchor_name",
@@ -414,6 +470,7 @@ def odict_extra_deps():
         sum = "h1:PdmoCO6wvbs+7yrJyMORt4/BmY5IYyJwS/kOiWx8mHo=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_afero",
@@ -421,6 +478,7 @@ def odict_extra_deps():
         sum = "h1:m8/z1t7/fwjysjQRYbP0RD+bUIF/8tJwPdEZsI83ACI=",
         version = "v1.1.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_cast",
@@ -428,6 +486,7 @@ def odict_extra_deps():
         sum = "h1:oget//CVOEoFewqQxwr0Ej5yjygnqGkvggSE/gB35Q8=",
         version = "v1.3.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_cobra",
@@ -435,6 +494,7 @@ def odict_extra_deps():
         sum = "h1:f0B+LkLX6DtmRH1isoNA9VTtNUK9K8xYd28JNNfOv/s=",
         version = "v0.0.5",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_jwalterweatherman",
@@ -442,6 +502,7 @@ def odict_extra_deps():
         sum = "h1:XHEdyB+EcvlqZamSM4ZOMGlc93t6AcsBEu9Gc1vn7yk=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_pflag",
@@ -449,6 +510,7 @@ def odict_extra_deps():
         sum = "h1:zPAT6CGy6wXeQ7NtTnaTerfKOsV6V6F8agHXFiazDkg=",
         version = "v1.0.3",
     )
+
     maybe(
         go_repository,
         name = "com_github_spf13_viper",
@@ -456,6 +518,7 @@ def odict_extra_deps():
         sum = "h1:VUFqw5KcqRf7i70GOzW7N+Q7+gxVBkSSqiXB12+JQ4M=",
         version = "v1.3.2",
     )
+
     maybe(
         go_repository,
         name = "com_github_steveyen_gtreap",
@@ -463,6 +526,7 @@ def odict_extra_deps():
         sum = "h1:CjhzTa274PyJLJuMZwIzCO1PfC00oRa8d1Kc78bFXJM=",
         version = "v0.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_stretchr_objx",
@@ -470,6 +534,7 @@ def odict_extra_deps():
         sum = "h1:4G4v2dO3VZwixGIRoQ5Lfboy6nUhCyYzaqnIAPPhYs4=",
         version = "v0.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_stretchr_testify",
@@ -477,6 +542,7 @@ def odict_extra_deps():
         sum = "h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=",
         version = "v1.4.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_syndtr_goleveldb",
@@ -484,6 +550,7 @@ def odict_extra_deps():
         sum = "h1:fBdIW9lB4Iz0n9khmH8w27SJ3QEJ7+IgjPEwGSZiFdE=",
         version = "v1.0.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_tinylib_msgp",
@@ -491,6 +558,7 @@ def odict_extra_deps():
         sum = "h1:9fQd+ICuRIu/ue4vxJZu6/LzxN0HwMds2nq/0cFvxHU=",
         version = "v1.1.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_ugorji_go_codec",
@@ -498,6 +566,7 @@ def odict_extra_deps():
         sum = "h1:3SVOIvH7Ae1KRYyQWRjXWJEA9sS/c/pjvH++55Gr648=",
         version = "v0.0.0-20181204163529-d75b2dcb6bc8",
     )
+
     maybe(
         go_repository,
         name = "com_github_urfave_cli_v2",
@@ -505,6 +574,7 @@ def odict_extra_deps():
         sum = "h1:qph92Y649prgesehzOrQjdWyxFOp/QVM+6imKHad91M=",
         version = "v2.3.0",
     )
+
     maybe(
         go_repository,
         name = "com_github_bits_and_blooms_bitset",
@@ -512,6 +582,7 @@ def odict_extra_deps():
         sum = "h1:oTle449SfMfXO0BpZN1bMPe5SCRlQct8pX7siV30jGA=",
         version = "v1.1.10",
     )
+
     maybe(
         go_repository,
         name = "com_github_xordataexchange_crypt",
@@ -519,6 +590,7 @@ def odict_extra_deps():
         sum = "h1:ESFSdwYZvkeru3RtdrYueztKhOBCSAAzS4Gf+k0tEow=",
         version = "v0.0.3-0.20170626215501-b2862e3d0a77",
     )
+
     maybe(
         go_repository,
         name = "in_gopkg_check_v1",
@@ -526,6 +598,7 @@ def odict_extra_deps():
         sum = "h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=",
         version = "v0.0.0-20161208181325-20d25e280405",
     )
+
     maybe(
         go_repository,
         name = "in_gopkg_fsnotify_v1",
@@ -533,6 +606,7 @@ def odict_extra_deps():
         sum = "h1:xOHLXZwVvI9hhs+cLKq5+I5onOuwQLhQwiu63xxlHs4=",
         version = "v1.4.7",
     )
+
     maybe(
         go_repository,
         name = "in_gopkg_tomb_v1",
@@ -540,6 +614,7 @@ def odict_extra_deps():
         sum = "h1:uRGJdciOHaEIrze2W8Q3AKkepLTh2hOroT7a+7czfdQ=",
         version = "v1.0.0-20141024135613-dd632973f1e7",
     )
+
     maybe(
         go_repository,
         name = "in_gopkg_yaml_v2",
@@ -547,6 +622,7 @@ def odict_extra_deps():
         sum = "h1:fvjTMHxHEw/mxHbtzPi3JCcKXQRAnQTBRo6YCJSVHKI=",
         version = "v2.2.3",
     )
+
     maybe(
         go_repository,
         name = "io_etcd_go_bbolt",
@@ -569,6 +645,7 @@ def odict_extra_deps():
             "https://repo1.maven.org/maven2",
         ],
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_crypto",
@@ -576,6 +653,7 @@ def odict_extra_deps():
         sum = "h1:DN0cp81fZ3njFcrLCytUHRSUkqBjfTo4Tx9RJTWs0EY=",
         version = "v0.0.0-20201221181555-eec23a3978ad",
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_net",
@@ -583,6 +661,7 @@ def odict_extra_deps():
         sum = "h1:0GoQqolDA55aaLxZyTzK/Y2ePZzZTUrRacwib7cNsYQ=",
         version = "v0.0.0-20190404232315-eb5bcb51f2a3",
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_sync",
@@ -590,6 +669,7 @@ def odict_extra_deps():
         sum = "h1:wMNYb4v58l5UBM7MYRLPG6ZhfOqbKu7X5eyFl8ZhKvA=",
         version = "v0.0.0-20180314180146-1d60e4601c6f",
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_sys",
@@ -597,6 +677,7 @@ def odict_extra_deps():
         sum = "h1:VwygUrnw9jn88c4u8GD3rZQbqrP/tgas88tPUbBxQrk=",
         version = "v0.0.0-20210124154548-22da62e12c0c",
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_term",
@@ -604,6 +685,7 @@ def odict_extra_deps():
         sum = "h1:MZ2shdL+ZM/XzY3ZGOnh4Nlpnxz5GSOhOmtHo3iPU6M=",
         version = "v0.0.0-20201210144234-2321bbc49cbf",
     )
+
     maybe(
         go_repository,
         name = "org_golang_x_text",

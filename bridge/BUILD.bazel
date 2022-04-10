@@ -1,11 +1,18 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_binary(
     name = "bridge",
-    srcs = ["odict-bridging-lib.go"],
-    cgo = True,
+    embed = [":bridge_lib"],
     importpath = "github.com/TheOpenDictionary/odict/bridge",
     linkmode = "c-archive",
     visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "bridge_lib",
+    srcs = ["odict-bridging-lib.go"],
+    cgo = True,
+    importpath = "github.com/TheOpenDictionary/odict/bridge",
+    visibility = ["//visibility:private"],
     deps = ["//go"],
 )

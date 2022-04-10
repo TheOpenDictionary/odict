@@ -8,5 +8,4 @@ odict_deps()
 
 load("//bazel:odict_extra_deps.bzl", "odict_extra_deps")
 
-# gazelle:repository_macro bazel/odict_extra_deps.bzl%odict_extra_deps
 odict_extra_deps()
