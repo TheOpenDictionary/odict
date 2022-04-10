@@ -3,6 +3,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 cc_library(
     name = "odict-lib",
     srcs = ["odict.cpp"],
+    includes = ["@odict//bridge"],
     visibility = ["//visibility:public"],
     deps = [
         "//bridge",
