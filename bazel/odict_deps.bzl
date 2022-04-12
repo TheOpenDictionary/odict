@@ -4,7 +4,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def odict_deps():
     RULES_JVM_EXTERNAL_TAG = "4.2"
     RULES_JVM_EXTERNAL_SHA = "cd1a77b7b02e8e008439ca76fd34f5b07aecb8c752961f9640dea15e9e5ba1ca"
-    RULES_GO = "0.31.0"
+    RULES_GO = "76c459cad6fbe83f3db60443a28dd58202b63be9"
     RULES_GAZELLE = "0.24.0"
 
     maybe(
@@ -20,11 +20,9 @@ def odict_deps():
     maybe(
         http_archive,
         name = "io_bazel_rules_go",
-        sha256 = "f2dcd210c7095febe54b804bb1cd3a58fe8435a909db2ec04e31542631cf715c",
-        urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v%s/rules_go-v%s.zip" % (RULES_GO, RULES_GO),
-            "https://github.com/bazelbuild/rules_go/releases/download/v%s/rules_go-v%s.zip" % (RULES_GO, RULES_GO),
-        ],
+        sha256 = "5094563ee75463cdb600e32f8161a1366636591988c7cda9b8d1da3ca2cd67bc",
+        strip_prefix = "rules_go-76c459cad6fbe83f3db60443a28dd58202b63be9",
+        url = "https://github.com/fmeum/rules_go/archive/76c459cad6fbe83f3db60443a28dd58202b63be9.tar.gz",
     )
 
     maybe(
