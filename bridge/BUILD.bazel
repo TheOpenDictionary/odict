@@ -8,6 +8,14 @@ go_binary(
     visibility = ["//visibility:public"],
 )
 
+go_binary(
+    name = "shared",
+    embed = [":bridge_lib"],
+    importpath = "github.com/TheOpenDictionary/odict/bridge",
+    linkmode = "c-shared",
+    visibility = ["//visibility:public"],
+)
+
 go_library(
     name = "bridge_lib",
     srcs = ["odict-bridging-lib.go"],
