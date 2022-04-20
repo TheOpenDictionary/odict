@@ -3,9 +3,9 @@ load("//:version.bzl", "version")
 
 java_library(
     name = "odict_lib",
+    srcs = glob(["**/*.java"]),
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
-    srcs = glob(["**/*.java"]),
     deps = [
         "//schema/java",
         "@native_utils",
@@ -18,10 +18,10 @@ java_library(
 
 java_export(
     name = "odict",
+    srcs = glob(["**/*.java"]),
     maven_coordinates = "org.odict:odict:{}".format(version),
     resources = ["//java/main/cpp:libodict.so"],
     visibility = ["//java:__pkg__"],
-    srcs = glob(["**/*.java"]),
     deps = [
         "//schema/java",
         "@native_utils",
