@@ -20,9 +20,9 @@ def odict_deps():
     maybe(
         http_archive,
         name = "io_bazel_rules_go",
-        sha256 = "5094563ee75463cdb600e32f8161a1366636591988c7cda9b8d1da3ca2cd67bc",
-        strip_prefix = "rules_go-76c459cad6fbe83f3db60443a28dd58202b63be9",
-        url = "https://github.com/fmeum/rules_go/archive/76c459cad6fbe83f3db60443a28dd58202b63be9.tar.gz",
+        sha256 = "3c6cd3236a830a0c0c1fc5895e938f1e24fd4d8233765367875f07bdf7844ee3",
+        strip_prefix = "rules_go-b4a93a7e6e35a7c54a161fd7fa49ea04fe25cc39",
+        url = "https://github.com/bazelbuild/rules_go/archive/b4a93a7e6e35a7c54a161fd7fa49ea04fe25cc39.tar.gz",
     )
 
     maybe(

@@ -12,7 +12,7 @@ py_library(
         "odict.py",
     ],
     data = [
-        "//bridge:shared",
+        "//bridge",
     ],
 )
 
