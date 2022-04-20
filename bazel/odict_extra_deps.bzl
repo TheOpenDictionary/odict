@@ -7,26 +7,11 @@ load("@rules_jvm_external//:defs.bzl", "maven_install")
 def odict_extra_deps():
     go_rules_dependencies()
 
-    go_register_toolchains(version = "host")
+    go_register_toolchains(version = "1.18")
 
     gazelle_dependencies()
 
     protobuf_deps()
-
-    maven_install(
-        name = "odict_java_deps",
-        artifacts = [
-            "org.xerial.snappy:snappy-java:1.1.8.4",
-            "com.fasterxml.jackson.core:jackson-core:2.12.1",
-            "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
-            "com.fasterxml.jackson.core:jackson-databind:2.12.1",
-        ],
-        repositories = [
-            "https://jcenter.bintray.com/",
-            "https://maven.google.com",
-            "https://repo1.maven.org/maven2",
-        ],
-    )
 
     maybe(
         go_repository,
@@ -644,6 +629,21 @@ def odict_extra_deps():
         importpath = "go.etcd.io/bbolt",
         sum = "h1:XAzx9gjCb0Rxj7EoqcClPD1d5ZBxZJk0jbuoPHenBt0=",
         version = "v1.3.5",
+    )
+
+    maven_install(
+        name = "odict_java_deps",
+        artifacts = [
+            "org.xerial.snappy:snappy-java:1.1.8.4",
+            "com.fasterxml.jackson.core:jackson-core:2.12.1",
+            "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
+            "com.fasterxml.jackson.core:jackson-databind:2.12.1",
+        ],
+        repositories = [
+            "https://jcenter.bintray.com/",
+            "https://maven.google.com",
+            "https://repo1.maven.org/maven2",
+        ],
     )
 
     maybe(
