@@ -59,3 +59,11 @@ def odict_deps():
         patch_args = ["-p1"],
         patches = ["@odict//bazel:flatbuffers_1_12_0.patch"],
     )
+
+    maybe(
+        http_archive,
+        name = "rules_jvm_external",
+        strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+        sha256 = RULES_JVM_EXTERNAL_SHA,
+        url = "https://github.com/bazelbuild/rules_jvm_external/archive/%s.zip" % RULES_JVM_EXTERNAL_TAG,
+    )
