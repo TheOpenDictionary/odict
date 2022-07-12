@@ -35,7 +35,7 @@ That's where ODict comes in.
 
 ## ODXML
 
-ODict XML (ODXML) is the XML used to define and structure ODict dictionaries. All compiled ODict dictionaries originate from ODXML files, and can easily be reverted back to XML via the CLI [`dump` command](cli.md#dumping-dictionaries).
+ODict XML (ODXML) is the XML used to define and structure ODict dictionaries. All compiled ODict dictionaries originate from ODXML files, and can easily be reverted back to XML via the CLI [`dump` command](./docs/cli.md#dumping-dictionaries).
 
 An example dictionary might look like this:
 
