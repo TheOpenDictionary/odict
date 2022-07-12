@@ -51,7 +51,7 @@ Often times while developing an ODict application, it may be helpful to understa
 Using `dump` is easy:
 
 ```
-$ odict d mydictionary.xml outputfile.xml
+$ odict d mydictionary.odict outputfile.xml
 ```
 
 ## Merging Dictionaries
