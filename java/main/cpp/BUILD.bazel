@@ -1,8 +1,17 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
+platform(
+    name = "linux",
+    constraint_values = [
+        "@platforms//os:linux",
+        "@platforms//cpu:arm",
+    ],
+)
+
 cc_library(
     name = "odict-lib",
     srcs = ["odict.cpp"],
+    platforms = [":linux"],
     visibility = ["//visibility:public"],
     deps = [
         "//bridge",

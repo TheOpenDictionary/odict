@@ -9,6 +9,8 @@ RULES_GO = "0.33.0"
 
 RULES_GAZELLE = "0.24.0"
 
+RULES_PLATFORMS = "0.0.5"
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
@@ -17,6 +19,15 @@ http_archive(
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (RULES_GAZELLE, RULES_GAZELLE),
         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v%s/bazel-gazelle-v%s.tar.gz" % (RULES_GAZELLE, RULES_GAZELLE),
+    ],
+)
+
+http_archive(
+    name = "platforms",
+    sha256 = "379113459b0feaf6bfbb584a91874c065078aa673222846ac765f86661c27407",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/%s/platforms-%s.tar.gz" % (RULES_PLATFORMS, RULES_PLATFORMS),
+        "https://github.com/bazelbuild/platforms/releases/download/%s/platforms-%s.tar.gz" % (RULES_PLATFORMS, RULES_PLATFORMS),
     ],
 )
 
@@ -73,6 +84,23 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 go_rules_dependencies()
 
 go_register_toolchains(version = "1.18")
+
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+maven_install(
+    name = "odict_java_deps",
+    artifacts = [
+        "org.xerial.snappy:snappy-java:1.1.8.4",
+        "com.fasterxml.jackson.core:jackson-core:2.12.1",
+        "com.fasterxml.jackson.core:jackson-annotations:2.12.1",
+        "com.fasterxml.jackson.core:jackson-databind:2.12.1",
+    ],
+    repositories = [
+        "https://jcenter.bintray.com/",
+        "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
+    ],
+)
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 
