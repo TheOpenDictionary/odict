@@ -13,7 +13,7 @@ type EntryMap struct {
 }
 
 func (m *EntryMap) Set(key string, value Entry) {
-    m.Iterable[strings.ToLower(key)] = value
+	m.Iterable[strings.ToLower(key)] = value
 }
 
 func (m *EntryMap) Get(key string) Entry {
@@ -26,13 +26,13 @@ func (m *EntryMap) Has(key string) bool {
 }
 
 func (m *EntryMap) Keys() []string {
-    keys := make([]string, 0, len(m.Iterable))
+	keys := make([]string, 0, len(m.Iterable))
 
-    for k := range m.Iterable {
-        keys = append(keys, k)
-    }
+	for k := range m.Iterable {
+		keys = append(keys, k)
+	}
 
-    return keys
+	return keys
 }
 
 func (m *EntryMap) Size() int {
