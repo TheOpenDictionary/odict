@@ -4,10 +4,9 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 gazelle(name = "gazelle")
 
 gazelle(
-    name = "gazelle-update-repos",
+    name = "update-repos",
     args = [
         "-from_file=go.mod",
-        "-to_macro=bazel/odict_extra_deps.bzl%odict_extra_deps",
         "-prune",
     ],
     command = "update-repos",
