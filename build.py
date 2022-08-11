@@ -8,7 +8,7 @@ from setuptools.command.build_ext import build_ext
 class build_go_ext(build_ext):
     def build_extension(self, ext):
         ext_path = self.get_ext_fullpath(ext.name)
-        cmd = ["make", "OUTPUT=%s" % ext_path, "lib"]
+        cmd = ["make", "OUTPUT=%s" % ext_path, "lib", "-B"]
         out = call(cmd)
 
         if out != 0:
