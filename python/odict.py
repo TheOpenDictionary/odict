@@ -1,16 +1,12 @@
+from os import environ, path
 from distutils.sysconfig import get_config_var
 from glob import glob
-import os
 from pathlib import Path
-from struct import Struct, unpack
-import sys
-
 from ctypes import *
-from os import path
 
 here = Path(__file__).absolute().parent
 
-if os.environ["RUNTIME_ENV"] == "test":
+if environ["RUNTIME_ENV"] == "test":
     here = list(here.parent.joinpath("build").glob("**/*.so"))[0].parent
 
 ext_suffix = get_config_var("EXT_SUFFIX")
@@ -24,8 +20,10 @@ class DictionaryFile(Structure):
 lib = cdll.LoadLibrary(so_file)
 
 lib.SearchDictionary.restype = c_void_p
+lib.LookupEntry.argtypes = [c_char_p, POINTER(DictionaryFile)]
 lib.LookupEntry.restype = c_void_p
-lib.ReadDictionary.restype = c_void_p
+lib.IndexDictionary.restype = c_char_p
+lib.ReadDictionary.restype = POINTER(DictionaryFile)
 lib.free.argtypes = [c_void_p]
 lib.free.restype = None
 
@@ -33,13 +31,15 @@ lib.free.restype = None
 class Dictionary:
     def __init__(self, path, should_index=False):
         self.__path = path.encode("utf-8")
-        self.__dict = DictionaryFile.from_address(lib.ReadDictionary(self.p))
+        self.__dict_p = lib.ReadDictionary(self.__path)
+        self.__dict = self.__dict_p.contents
+        self.__id = None
 
         if should_index:
             self.index()
 
-    # def __del__(self):
-    #     lib.free(self.__encoded_dict)
+    def __del__(self):
+        lib.free(self.__dict_p)
 
     @staticmethod
     def compile(path):
@@ -54,7 +54,10 @@ class Dictionary:
             print("An exception occurred")
 
     def search(self, query):
-        v = lib.SearchDictionary(self.__encode(query), self.__get_dictionary())
+        if self.__id == None:
+            self.index(force=True)
+
+        v = lib.SearchDictionary(self.__encode(query), self.__id)
         d = self.__decode(cast(v, c_char_p).value)
 
         lib.free(v)
@@ -62,17 +65,16 @@ class Dictionary:
         return d
 
     def index(self, force=False):
-        lib.IndexDictionary(self.p, force)
+        self.__id = lib.IndexDictionary(self.__path, force)
 
     def lookup(self, term):
         e = self.__encode(term)
-        v = lib.LookupEntry(e, self.__dict.id)
-        print(v)
-        # d = self.__decode(cast(v, c_char_p).value)
+        v = lib.LookupEntry(e, self.__dict_p)
+        d = self.__decode(cast(v, c_char_p).value)
 
         lib.free(v)
 
-        return v
+        return d
 
     def __encode(self, str):
         return str.encode("utf-8")
