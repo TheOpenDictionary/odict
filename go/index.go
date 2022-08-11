@@ -79,12 +79,10 @@ func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 		Check(idxErr)
 
 		fmt.Println()
-	} else {
-		if overwrite {
-			println("Purging existing index...")
-			os.RemoveAll(indexPath)
-			return IndexDictionary(dictionary, false)
-		}
+	} else if overwrite {
+		println("Purging existing index...")
+		os.RemoveAll(indexPath)
+		return IndexDictionary(dictionary, false)
 	}
 
 	return indexPath

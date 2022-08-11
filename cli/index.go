@@ -15,7 +15,7 @@ func index(c *cli.Context) error {
 	}
 
 	t(func() {
-		odict.IndexDictionary(odict.ReadDictionary(inputFile), true)
+		odict.IndexDictionary(odict.ReadDictionaryFromPath(inputFile), true)
 	})
 
 	return nil

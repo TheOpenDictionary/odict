@@ -42,7 +42,7 @@ func cleanup() {
 func TestIndex(t *testing.T) {
 	odict.CompileDictionary("../examples/example1.xml")
 
-	dict := odict.ReadDictionary("../examples/example1.odict")
+	dict := odict.ReadDictionaryFromPath("../examples/example1.odict")
 
 	path, err := os.Getwd()
 
@@ -62,7 +62,7 @@ func TestIndex(t *testing.T) {
 func TestReadWriteSearch(t *testing.T) {
 	odict.CompileDictionary("../examples/example1.xml")
 
-	dict := odict.ReadDictionary("../examples/example1.odict")
+	dict := odict.ReadDictionaryFromPath("../examples/example1.odict")
 	odict.IndexDictionary(dict, true)
 	entries := odict.SearchDictionary(dict.ID, "run", false)
 
@@ -75,8 +75,8 @@ func TestMerge(t *testing.T) {
 	odict.CompileDictionary("../examples/example1.xml")
 	odict.CompileDictionary("../examples/example2.xml")
 
-	dict1 := odict.ReadDictionary("../examples/example1.odict")
-	dict2 := odict.ReadDictionary("../examples/example2.odict")
+	dict1 := odict.ReadDictionaryFromPath("../examples/example1.odict")
+	dict2 := odict.ReadDictionaryFromPath("../examples/example2.odict")
 
 	assert.Equal(t, dict1.Entries.Size(), 2)
 	assert.Equal(t, dict2.Entries.Size(), 1)
@@ -94,12 +94,12 @@ func TestMerge(t *testing.T) {
 func TestDump(t *testing.T) {
 	odict.CompileDictionary("../examples/example1.xml")
 
-	dict := odict.ReadDictionary("../examples/example1.odict")
+	dict := odict.ReadDictionaryFromPath("../examples/example1.odict")
 	dump := odict.DumpDictionary(dict)
 
 	odict.WriteDictionary(dump, "../examples/example1_generated.odict")
 
-	newdict := odict.ReadDictionary("../examples/example1_generated.odict")
+	newdict := odict.ReadDictionaryFromPath("../examples/example1_generated.odict")
 
 	// We need the IDs to match seeing they will definitely be different
 	// due to dictionary regeneration

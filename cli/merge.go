@@ -17,8 +17,8 @@ func merge(c *cli.Context) error {
 	}
 
 	t(func() {
-		dict1 := odict.ReadDictionary(inputFile1)
-		dict2 := odict.ReadDictionary(inputFile2)
+		dict1 := odict.ReadDictionaryFromPath(inputFile1)
+		dict2 := odict.ReadDictionaryFromPath(inputFile2)
 
 		result := odict.MergeDictionaries(dict1, dict2)
 

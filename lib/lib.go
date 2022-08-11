@@ -1,30 +1,22 @@
 package main
 
+/*
+#include <stdint.h>
+
+struct DictionaryFile {
+    uint16_t version;
+		uint16_t length;
+		char* bytes;
+};
+*/
 import "C"
 
 import (
-	"encoding/base64"
 	"encoding/json"
+	"unsafe"
 
 	odict "github.com/TheOpenDictionary/odict/go"
 )
-
-func getDictionaryFromBuffer(db *C.char) odict.Dictionary {
-	b, err := base64.StdEncoding.DecodeString(C.GoString(db))
-
-	odict.Check(err)
-
-	return odict.DecodeDictionary(b)
-}
-
-// We're sadly left to pass the dictionary around as a base64-encoded string
-// because passing pointers from Go doesn't always work as intended
-func convertDictionaryToBuffer(dict odict.Dictionary) *C.char {
-	d := odict.EncodeDictionary(dict)
-	s := base64.StdEncoding.EncodeToString(d)
-
-	return C.CString(s)
-}
 
 //export CompileDictionary
 func CompileDictionary(xmlFilePath *C.char) {
@@ -37,8 +29,16 @@ func WriteDictionary(xmlStr, outputPath *C.char) {
 }
 
 //export ReadDictionary
-func ReadDictionary(path *C.char) *C.char {
-	return convertDictionaryToBuffer(odict.ReadDictionary(C.GoString(path)))
+func ReadDictionary(path *C.char) *C.struct_DictionaryFile {
+	returnStruct := (*C.struct_DictionaryFile)(C.malloc(C.size_t(unsafe.Sizeof(C.struct_DictionaryFile{}))))
+
+	version, bytes := odict.ReadFile(C.GoString(path))
+
+	returnStruct.version = C.uint16_t(version)
+	returnStruct.bytes = C.CString(string(bytes))
+	returnStruct.length = C.uint16_t(len(bytes))
+
+	return returnStruct
 }
 
 //export SearchDictionary
@@ -53,14 +53,9 @@ func SearchDictionary(query, dictionaryID *C.char) *C.char {
 	return C.CString(string(b))
 }
 
-// //export Free
-// func Free(res *C.char) {
-// 	C.free(unsafe.Pointer(res))
-// }
-
 //export IndexDictionary
 func IndexDictionary(path *C.char, force bool) {
-	d := odict.ReadDictionary(C.GoString(path))
+	d := odict.ReadDictionaryFromPath(C.GoString(path))
 	odict.IndexDictionary(d, force)
 }
 

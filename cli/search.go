@@ -19,7 +19,7 @@ func search(c *cli.Context) error {
 	}
 
 	t(func() {
-		dict := odict.ReadDictionary(inputFile)
+		dict := odict.ReadDictionaryFromPath(inputFile)
 
 		odict.IndexDictionary(dict, force)
 

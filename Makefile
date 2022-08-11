@@ -3,11 +3,8 @@
 #                                    Schema                                    #
 # ---------------------------------------------------------------------------- #
 
-schema-build:
+schema:
 	flatc -g -o . schema/schema.fbs
-
-schema-clean:
-	rm -rf schema/*.go
 
 # ---------------------------------------------------------------------------- #
 #                                    Library                                   #
@@ -15,15 +12,18 @@ schema-clean:
 
 OUTPUT=build
 
-lib-build: schema
+lib: schema
 	go build -buildmode=c-shared -o ${OUTPUT} ./lib
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-python-build: python-clean schema
+python:
 	poetry build
 
-python-clean:
-	rm -rf setup.py dist build
+pytest: python
+	RUNTIME_ENV=test poetry run pytest ./python
+
+clean:
+	rm -rf setup.py dist build schema/*.go

@@ -53,7 +53,7 @@ extern "C" JNIEXPORT jstring JNICALL
 Java_org_odict_Dictionary_read(JNIEnv *env, jobject, jstring path)
 {
   const char *dictionary_path = env->GetStringUTFChars(path, 0);
-  char *encoded = ReadDictionary((char *)dictionary_path);
+  char *encoded = ReadDictionaryFromPath((char *)dictionary_path);
 
   jstring res = env->NewStringUTF(encoded);
 

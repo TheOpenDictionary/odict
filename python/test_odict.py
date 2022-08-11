@@ -36,8 +36,9 @@ def test_write_dictionary():
 
     dict = Dictionary("test.odict")
 
-    json = dict.lookup("hello")
+    assert False
+    # json = dict.lookup("hello")
 
-    expected = '{"term":"hello","etymologies":[{"id":"0","usages":{"v":{"pos":"v","definitions":["hello world"]}}}]}'
+    # expected = '{"term":"hello","etymologies":[{"id":"0","usages":{"v":{"pos":"v","definitions":["hello world"]}}}]}'
 
-    assert json == expected, "json should be %s, received: %s" % (expected, json)
+    # assert json == expected, "json should be %s, received: %s" % (expected, json)

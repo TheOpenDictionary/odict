@@ -104,7 +104,7 @@ func getEntryModels(dictionary *schema.Dictionary) EntryMap {
 	return entries
 }
 
-// ReadDictionaryBuffer reads the Flatbuffers buffer
+// ReadDictionaryFromPathBuffer reads the Flatbuffers buffer
 // from a filepath. This is heavily used by non-Go
 // languages because Go can't export its structs, so
 // we need to use language-specific Flatbuffer libraries
@@ -163,12 +163,18 @@ func ReadODictFile(path string) (string, uint16, []byte) {
 	return signature, version, decoded
 }
 
-// ReadDictionary loads a compiled ODict dictionary from the provided
+// ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionary(path string) Dictionary {
-	_, version, bytes := ReadODictFile(path)
+func ReadDictionaryFromPath(path string) Dictionary {
+	version, bytes := ReadFile(path)
+	return ReadDictionaryFromBuffer(version, bytes)
+}
 
+// ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
+// path and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
+func ReadDictionaryFromBuffer(version uint16, bytes []byte) Dictionary {
 	buffer := schema.GetRootAsDictionary(bytes, 0)
 
 	dictionary := Dictionary{
@@ -179,4 +185,11 @@ func ReadDictionary(path string) Dictionary {
 	}
 
 	return dictionary
+}
+
+// ReadFile reads a ODict dictionary and returns its version
+// and raw contents
+func ReadFile(path string) (uint16, []byte) {
+	_, version, bytes := ReadODictFile(path)
+	return version, bytes
 }

@@ -44,7 +44,7 @@ func main() {
 	odict.WriteDictionary("<dictionary></dictionary>", "mydict.odict")
 
   // Read a compiled dictionary into memory
-	dict := odict.ReadDictionary("mydict.odict")
+	dict := odict.ReadDictionaryFromPath("mydict.odict")
 
   odict.IndexDictionary(
     "mydict.odict",

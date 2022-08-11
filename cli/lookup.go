@@ -18,7 +18,7 @@ func lookup(c *cli.Context) error {
 	}
 
 	t(func() {
-		dict := odict.ReadDictionary(inputFile)
+		dict := odict.ReadDictionaryFromPath(inputFile)
 
 		if dict.Entries.Has(query) {
 			entry := dict.Entries.Get(query)

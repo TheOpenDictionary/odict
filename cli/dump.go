@@ -18,7 +18,7 @@ func dump(c *cli.Context) error {
 	}
 
 	t(func() {
-		dict := odict.ReadDictionary(inputFile)
+		dict := odict.ReadDictionaryFromPath(inputFile)
 		dumped := odict.DumpDictionary(dict)
 		file, err := os.Create(outputFile)
 
