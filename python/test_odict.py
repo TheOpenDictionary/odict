@@ -30,21 +30,14 @@ from odict import Dictionary
 
 
 def test_write_dictionary():
-    xml = "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition>hello world</definition></usage></ety></entry></dictionary>"
+    xml = '<dictionary><entry term="hello"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry></dictionary>'
 
     Dictionary.write(xml, "test.odict")
 
-    # dict = Dictionary("test.odict")
+    dict = Dictionary("test.odict")
 
-    # json = dict.lookup("hello")
+    json = dict.lookup("hello")
 
-    # expected = "{\"term\":\"hello\",\"etymologies\":[{\"id\":\"0\",\"usages\":{\"v\":{\"pos\":\"v\",\"definitions\":[\"hello world\"]}}}]}"
+    expected = '{"term":"hello","etymologies":[{"id":"0","usages":{"v":{"pos":"v","definitions":["hello world"]}}}]}'
 
-    # assert json == expected, "json should be %s, received: %s" % (
-    #     expected, json)
-
-
-if __name__ == "__main__":
-    # test_lookup_entry()
-    # test_search_dictionary()
-    test_write_dictionary()
+    assert json == expected, "json should be %s, received: %s" % (expected, json)

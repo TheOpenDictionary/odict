@@ -15,9 +15,9 @@ import (
 
 	"github.com/golang/snappy"
 
+	"github.com/TheOpenDictionary/odict/schema"
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/google/uuid"
-	"github.com/TheOpenDictionary/odict/schema/go"
 )
 
 func xmlToDictionary(xmlStr string) Dictionary {
@@ -220,12 +220,12 @@ func getEntriesVector(builder *flatbuffers.Builder, dictionary Dictionary) flatb
 
 	var entriesBuffer []flatbuffers.UOffsetT
 
-    keys := entries.Keys()
+	keys := entries.Keys()
 
-    // EXTREMELY IMPORTANT!!
-    // Because FlatBuffers performs key lookups via binary search, if the keys are not sorted
-    // in the vector there may be a number of false negatives when searching
-    sort.Strings(keys)
+	// EXTREMELY IMPORTANT!!
+	// Because FlatBuffers performs key lookups via binary search, if the keys are not sorted
+	// in the vector there may be a number of false negatives when searching
+	sort.Strings(keys)
 
 	for _, key := range keys {
 		entry := entries.Get(key)
@@ -270,12 +270,12 @@ func dictionaryToBytes(dictionary Dictionary) []byte {
 	return builder.FinishedBytes()
 }
 
-// CreateODictFile writes a new .odict binary from a 
+// CreateODictFile writes a new .odict binary from a
 // Dictionary struct
 func CreateODictFile(outputPath string, dictionary Dictionary) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
-    file, err := os.Create(outputPath)
+	file, err := os.Create(outputPath)
 
 	Check(err)
 

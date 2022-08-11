@@ -67,5 +67,6 @@
     "ostream": "cpp",
     "filesystem": "cpp",
     "iostream": "cpp"
-  }
+  },
+  "python.formatting.provider": "black"
 }

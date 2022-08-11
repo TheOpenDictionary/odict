@@ -1,5 +1,0 @@
-filegroup(
-    name = "file",
-    srcs = ["schema.fbs"],
-    visibility = ["//schema:__subpackages__"],
-)

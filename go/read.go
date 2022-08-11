@@ -4,8 +4,8 @@ import (
 	"encoding/binary"
 	"os"
 
+	"github.com/TheOpenDictionary/odict/schema"
 	"github.com/golang/snappy"
-	"github.com/TheOpenDictionary/odict/schema/go"
 )
 
 func getDefinitionsFromUsage(usage schema.Usage) []string {
