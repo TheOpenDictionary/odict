@@ -18,23 +18,23 @@ so_file = here / ("_odict" + ext_suffix)
 
 
 class DictionaryFile(Structure):
-    _fields_ = [("version", c_uint), ("length", c_uint)]
+    _fields_ = [("version", c_uint16), ("length", c_uint16)]
 
 
 lib = cdll.LoadLibrary(so_file)
 
 lib.SearchDictionary.restype = c_void_p
 lib.LookupEntry.restype = c_void_p
-lib.ReadDictionary.restype = DictionaryFile
+lib.ReadDictionary.restype = c_void_p
 lib.free.argtypes = [c_void_p]
 lib.free.restype = None
 
 
 class Dictionary:
     def __init__(self, path, should_index=False):
-        self.p = path.encode("utf-8")
-        self.__encoded_dict = lib.ReadDictionary(self.p)
-        print("poop", self.__encoded_dict.version, self.__encoded_dict.length)
+        self.__path = path.encode("utf-8")
+        self.__dict = DictionaryFile.from_address(lib.ReadDictionary(self.p))
+
         if should_index:
             self.index()
 
@@ -43,8 +43,8 @@ class Dictionary:
 
     @staticmethod
     def compile(path):
-        p = path.encode("utf-8")
-        lib.CompileDictionary(p)
+        __path = path.encode("utf-8")
+        lib.CompileDictionary(__path)
 
     @staticmethod
     def write(xml, path):
@@ -66,7 +66,7 @@ class Dictionary:
 
     def lookup(self, term):
         e = self.__encode(term)
-        v = lib.LookupEntry(e, self.__encoded_dict)
+        v = lib.LookupEntry(e, self.__dict.id)
         print(v)
         # d = self.__decode(cast(v, c_char_p).value)
 

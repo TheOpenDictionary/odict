@@ -284,4 +284,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# ODict files
+*.odict
 # End of https://www.toptal.com/developers/gitignore/api/osx,windows,linux,go,python,java
