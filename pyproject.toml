@@ -3,7 +3,7 @@ name = "odict"
 version = "0.1.0"
 description = ""
 authors = ["Tyler Nickerson <nickersoft@gmail.com>"]
-packages = [{include="python", from="."}]
+packages = [{include="odict", from="."}]
 
 [tool.poetry.build]
 script = "build.py"
