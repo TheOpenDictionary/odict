@@ -71,7 +71,7 @@ func LookupEntry(term *C.char, file *C.struct_DictionaryFile) *C.char {
 	if result.Entries.Has(query) {
 		r := result.Entries.Get(query)
 		b, err := json.Marshal(&r)
-		print(string(b))
+
 		odict.Check(err)
 
 		return C.CString(string(b))
