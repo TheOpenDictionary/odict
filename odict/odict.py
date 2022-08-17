@@ -6,8 +6,8 @@ from ctypes import *
 
 here = Path(__file__).absolute().parent
 
-# if environ.get("RUNTIME_ENV", "") == "test":
-here = list(here.parent.joinpath("build").glob("**/*.so"))[0].parent
+if environ.get("RUNTIME_ENV", "") == "test":
+  here = list(here.parent.joinpath("build").glob("**/*.so"))[0].parent
 
 ext_suffix = get_config_var("EXT_SUFFIX")
 so_file = here / ("_odict" + ext_suffix)
