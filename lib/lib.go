@@ -4,8 +4,8 @@ package main
 #include <stdint.h>
 
 struct DictionaryFile {
-		uint16_t version;
-		uint16_t length;
+		unsigned int version;
+		unsigned int length;
 		char* bytes;
 };
 */
@@ -33,9 +33,9 @@ func ReadDictionary(path *C.char) *C.struct_DictionaryFile {
 	version, bytes := odict.ReadFile(C.GoString(path))
 
 	returnStruct := (*C.struct_DictionaryFile)(C.malloc(C.size_t(unsafe.Sizeof(C.struct_DictionaryFile{}))))
-	returnStruct.version = C.uint16_t(version)
+	returnStruct.version = C.unsigned(version)
 	returnStruct.bytes = C.CString(string(bytes))
-	returnStruct.length = C.uint16_t(len(bytes))
+	returnStruct.length = C.unsigned(len(bytes))
 
 	return returnStruct
 }
