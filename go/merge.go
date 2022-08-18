@@ -1,6 +1,7 @@
 package odict
 
 import (
+	"encoding/json"
 	"github.com/imdario/mergo"
 )
 
@@ -15,6 +16,12 @@ func MergeDictionaries(dest Dictionary, srcs ...Dictionary) Dictionary {
 			Check(err)
 		}
 	}
+
+	b, err := json.MarshalIndent(&dst, "", " ")
+
+	Check(err)
+
+	print(string(b))
 
 	return dst
 }

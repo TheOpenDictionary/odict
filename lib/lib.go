@@ -62,22 +62,12 @@ func IndexDictionary(path *C.char, force bool) *C.char {
 }
 
 //export LookupEntry
-func LookupEntry(term *C.char, file *C.struct_DictionaryFile) *C.char {
+func LookupEntry(term *C.char, file *C.struct_DictionaryFile, splitting C.int) *C.char {
 	buf := C.GoBytes(unsafe.Pointer(file.bytes), C.int(file.length))
-	result := odict.ReadDictionaryFromBuffer(uint16(file.version), buf)
+	dict := odict.ReadDictionaryFromBuffer(uint16(file.version), buf)
 	query := C.GoString(term)
 
-	// TODO: use LookupByKey() once it's ported
-	if result.Entries.Has(query) {
-		r := result.Entries.Get(query)
-		b, err := json.Marshal(&r)
-
-		odict.Check(err)
-
-		return C.CString(string(b))
-	}
-
-	return C.CString("{}")
+	return C.CString(odict.Lookup(dict, query, int(splitting)))
 }
 
 func main() {}
