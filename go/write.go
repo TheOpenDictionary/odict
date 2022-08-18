@@ -7,7 +7,6 @@ import (
 	"html"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strconv"
@@ -316,10 +315,7 @@ func WriteDictionary(xmlStr, outputPath string) {
 }
 
 // CompileDictionary compiles an XML file into an ODict binary
-func CompileDictionary(xmlPath string) {
-	base := filepath.Base(xmlPath)
-	name := strings.TrimSuffix(base, filepath.Ext(base))
-	outputPath := fmt.Sprintf("%s/%s.odict", filepath.Dir(xmlPath), name)
+func CompileDictionary(xmlPath string, outputPath string) {
 	xmlFile, err := os.Open(xmlPath)
 
 	defer xmlFile.Close()

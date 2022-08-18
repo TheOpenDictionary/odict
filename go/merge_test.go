@@ -7,8 +7,8 @@ import (
 )
 
 func TestMerge(t *testing.T) {
-	CompileDictionary("../examples/example1.xml")
-	CompileDictionary("../examples/example2.xml")
+	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+	CompileDictionary("../examples/example2.xml", "../examples/example2.odict")
 
 	dict1 := ReadDictionaryFromPath("../examples/example1.odict")
 	dict2 := ReadDictionaryFromPath("../examples/example2.odict")

@@ -1,12 +1,13 @@
 package odict
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSearch(t *testing.T) {
-	CompileDictionary("../examples/example1.xml")
+	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
 
 	dict := ReadDictionaryFromPath("../examples/example1.odict")
 	IndexDictionary(dict, true)

@@ -12,7 +12,14 @@ var App = &cli.App{
 			Name:    "compile",
 			Aliases: []string{"c"},
 			Usage:   "compiles a dictionary from ODXML",
-			Action:  compile,
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:    "output",
+					Aliases: []string{"o"},
+					Usage:   "Path to generate dictionary",
+				},
+			},
+			Action: compile,
 		},
 		{
 			Name:    "index",
