@@ -12,8 +12,8 @@ schema:
 
 OUTPUT=build
 
-lib: schema
-	go build -buildmode=c-shared -o ${OUTPUT} ./lib
+cgo: schema
+	go build -buildmode=c-shared -o ${OUTPUT} ./cgo.go
 
 test:
 	go test ./go

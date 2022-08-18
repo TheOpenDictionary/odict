@@ -10,7 +10,7 @@ class build_go_ext(build_ext):
     def build_extension(self, ext):
         ext_path = Path(self.get_ext_fullpath(ext.name))
         ext_path = ext_path.parent.joinpath("odict", ext_path.name).absolute()
-        cmd = ["make", "OUTPUT=%s" % ext_path, "lib", "-B"]
+        cmd = ["make", "OUTPUT=%s" % ext_path, "cgo", "-B"]
         out = call(cmd)
 
         if out != 0:
