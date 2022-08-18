@@ -1,4 +1,4 @@
-from odict import Dictionary
+from python.odict import Dictionary
 
 
 def test_lookup_entry():

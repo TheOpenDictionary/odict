@@ -2,31 +2,6 @@ from os import environ, path
 from distutils.sysconfig import get_config_var
 from glob import glob
 from pathlib import Path
-from ctypes import *
-
-here = Path(__file__).absolute().parent
-
-if environ.get("RUNTIME_ENV", "") == "test":
-  here = list(here.parent.joinpath("build").glob("**/*.so"))[0].parent
-
-ext_suffix = get_config_var("EXT_SUFFIX")
-so_file = here / ("_odict" + ext_suffix)
-
-
-class DictionaryFile(Structure):
-    _fields_ = [("version", c_uint16), ("length", c_uint16)]
-
-
-lib = cdll.LoadLibrary(so_file)
-
-lib.SearchDictionary.restype = c_void_p
-lib.LookupEntry.argtypes = [c_char_p, POINTER(DictionaryFile)]
-lib.LookupEntry.restype = c_void_p
-lib.IndexDictionary.restype = c_char_p
-lib.ReadDictionary.restype = POINTER(DictionaryFile)
-lib.free.argtypes = [c_void_p]
-lib.free.restype = None
-
 
 class Dictionary:
     def __init__(self, path, should_index=False):
