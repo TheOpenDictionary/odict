@@ -91,6 +91,7 @@ func getEntryModels(dictionary *schema.Dictionary) EntryMap {
 	entries := EntryMap{make(map[string]Entry)}
 
 	for a := 0; a < dictionary.EntriesLength(); a++ {
+
 		dictionary.Entries(&entry, a)
 
 		odEntry := Entry{
