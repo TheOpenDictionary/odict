@@ -93,14 +93,20 @@ func (rcv *Entry) EtymologiesLength() int {
 //   }
 
 func Compare(offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) flatbuffers.UOffsetT {
+	println(offset_1)
 	offset_1 += flatbuffers.GetUOffsetT(buf[offset_1:])
+	println(offset_1)
 	len_1 := flatbuffers.GetUOffsetT(buf[offset_1:])
+	println(len_1)
 	len_2 := flatbuffers.UOffsetT(len(key))
+	println(len_2)
 	startPos_1 := offset_1 + flatbuffers.SizeInt32
+	println(startPos_1)
 	len := len_1
 	if len_2 < len_1 {
 		len = len_2
 	}
+	println(len)
 	for i := flatbuffers.UOffsetT(0); i < len; i++ {
 			b := buf[i + startPos_1]
 			if (b != key[i]) {
@@ -128,11 +134,8 @@ func lookupByKey(obj *Entry, vector flatbuffers.UOffsetT, k string, buf []byte) 
 	start := flatbuffers.UOffsetT(0)
 	for ok := true; ok; ok = span != 0 {
 		middle := span / 2
-		println("mid", middle)
 		tableOffset := Indirect(vector + 4 * (start + middle), buf)
-		println("off", tableOffset)
 		comp := Compare(flatbuffers.UOffsetT(Offset(4, flatbuffers.UOffsetT(len(buf)) - tableOffset, buf)), key, buf)
-		println("comp", comp)
 		if comp > 0 {
 			span = middle
 		} else if comp < 0 {
