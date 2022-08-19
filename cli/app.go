@@ -31,7 +31,15 @@ var App = &cli.App{
 			Name:    "lookup",
 			Aliases: []string{"l"},
 			Usage:   "looks up an entry in a compiled dictionary without indexing",
-			Action:  lookup,
+			Flags: []cli.Flag{
+				&cli.IntFlag{
+					Name:    "split",
+					Aliases: []string{"s"},
+					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
+					Value:   0,
+				},
+			},
+			Action: lookup,
 		},
 		{
 			Name:    "search",

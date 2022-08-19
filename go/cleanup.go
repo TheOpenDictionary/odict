@@ -7,6 +7,12 @@ import (
 )
 
 func CleanupTest() {
+	path, err := os.Getwd()
+
+	Check(err)
+
+	os.RemoveAll(filepath.Join(path, "odict"))
+
 	dirname := "../examples"
 
 	d, err := os.Open(dirname)

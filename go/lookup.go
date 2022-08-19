@@ -1,10 +1,6 @@
 package odict
 
-import (
-	"encoding/json"
-)
-
-func Lookup(dict Dictionary, query string, split int) string {
+func lookup(dict Dictionary, query string, split int) []Entry {
 	entries := []Entry{}
 
 	if dict.Entries.Has(query) {
@@ -27,9 +23,15 @@ func Lookup(dict Dictionary, query string, split int) string {
 		}
 	}
 
-	b, err := json.MarshalIndent(&entries, "", " ")
+	return entries
+}
 
-	Check(err)
+func Lookup(dict Dictionary, queries []string, split int) []Entry {
+	entries := []Entry{}
 
-	return string(b)
+	for _, query := range queries {
+		entries = append(entries, lookup(dict, query, split)...)
+	}
+
+	return entries
 }
