@@ -69,6 +69,70 @@ func (rcv *Entry) EtymologiesLength() int {
 	return 0
 }
 
+//  static public func compare(
+//     _ off1: Int32,
+//     _ off2: Int32,
+//     fbb: ByteBuffer) -> Int32
+//   {
+//     let memorySize = Int32(MemoryLayout<Int32>.size)
+//     let _off1 = off1 + fbb.read(def: Int32.self, position: Int(off1))
+//     let _off2 = off2 + fbb.read(def: Int32.self, position: Int(off2))
+//     let len1 = fbb.read(def: Int32.self, position: Int(_off1))
+//     let len2 = fbb.read(def: Int32.self, position: Int(_off2))
+//     let startPos1 = _off1 + memorySize
+//     let startPos2 = _off2 + memorySize
+//     let minValue = min(len1, len2)
+//     for i in 0...minValue {
+//       let b1 = fbb.read(def: Int8.self, position: Int(i + startPos1))
+//       let b2 = fbb.read(def: Int8.self, position: Int(i + startPos2))
+//       if b1 != b2 {
+//         return Int32(b2 - b1)
+//       }
+//     }
+//     return len1 - len2
+//   }
+
+func Compare(t *flatbuffers.Table, offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) flatbuffers.UOffsetT {
+	offset_1 += flatbuffers.GetUOffsetT(buf[offset_1:])
+	len_1 := flatbuffers.GetUOffsetT(buf[offset_1:])
+	len_2 := flatbuffers.UOffsetT(len(key))
+	startPos_1 := offset_1 + flatbuffers.SizeInt32
+	len := len_1
+	if len_2 < len_1 {
+		len = len_2
+	}
+	for i := flatbuffers.UOffsetT(0); i < len; i++ {
+			b := buf[i + startPos_1]
+			if (b != key[i]) {
+				return flatbuffers.UOffsetT(b - key[i]);
+			}
+	}
+	return len_1 - len_2;
+}
+
+func lookupByKey(vector flatbuffers.UOffsetT, k string, buf []byte) *Entry {
+	key := []byte(k)
+	span := flatbuffers.GetUOffsetT(buf[vector - 4:])
+	start := flatbuffers.UOffsetT(0)
+	for ok := true; ok; ok = span != 0 {
+		middle := span / 2
+		tableOffset := t.Indirect(vector + 4 * (start + middle))
+		comp := Compare(&t, flatbuffers.UOffsetT(t.Offset(4)), key, buf)
+		if comp > 0 {
+			span = middle
+		} else if comp < 0 {
+			middle += 1
+			start += middle
+			span -= middle
+		} else {
+			x := &Entry{}
+			x.Init(buf, tableOffset)
+			return x
+		}
+	}
+	return nil
+}
+
 func EntryStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
