@@ -14,7 +14,7 @@ func index(c *cli.Context) error {
 		return errors.New("The path to a compiled ODict file is required")
 	}
 
-	t(func() {
+	t(c, func() {
 		odict.IndexDictionary(odict.ReadDictionaryFromPath(inputFile), true)
 	})
 

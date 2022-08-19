@@ -16,7 +16,7 @@ func merge(c *cli.Context) error {
 		return fmt.Errorf("Usage: odict merge [dictionary1] [dictionary2] [outputFile]")
 	}
 
-	t(func() {
+	t(c, func() {
 		dict1 := odict.ReadDictionaryFromPath(inputFile1)
 		dict2 := odict.ReadDictionaryFromPath(inputFile2)
 

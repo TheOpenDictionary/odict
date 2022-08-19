@@ -18,7 +18,7 @@ func lookup(c *cli.Context) error {
 		return errors.New("Usage: odict lookup [dictionary path] [queries]")
 	}
 
-	t(func() {
+	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
 
 		entries := odict.Lookup(dict, queries, split)

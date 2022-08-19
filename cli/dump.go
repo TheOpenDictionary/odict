@@ -17,7 +17,7 @@ func dump(c *cli.Context) error {
 		return errors.New("Usage: odict dump [input file] [output file]")
 	}
 
-	t(func() {
+	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
 		dumped := odict.DumpDictionary(dict)
 		file, err := os.Create(outputFile)

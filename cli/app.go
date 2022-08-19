@@ -7,6 +7,12 @@ import (
 var App = &cli.App{
 	Name:  "odict",
 	Usage: "lighting-fast open-source dictionary compiler",
+	Flags: []cli.Flag{
+		&cli.BoolFlag{
+			Name:  "quiet",
+			Usage: "Silence any non-important output",
+		},
+	},
 	Commands: []*cli.Command{
 		{
 			Name:    "compile",

@@ -33,7 +33,7 @@ python:
 	poetry build
 
 pytest: python
-	RUNTIME_ENV=test poetry run pytest ./odict
+	RUNTIME_ENV=test cd python && poetry run pytest ./odict && cd ..
 
 clean:
 	rm -rf setup.py dist build schema/*.go

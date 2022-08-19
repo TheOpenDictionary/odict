@@ -18,7 +18,7 @@ func search(c *cli.Context) error {
 		return errors.New("Usage: odict search [odict file] [search term]")
 	}
 
-	t(func() {
+	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
 
 		odict.IndexDictionary(dict, force)

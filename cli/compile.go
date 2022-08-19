@@ -24,7 +24,7 @@ func compile(c *cli.Context) error {
 		outputFile = fmt.Sprintf("%s/%s.odict", filepath.Dir(inputFile), name)
 	}
 
-	t(func() {
+	t(c, func() {
 		odict.CompileDictionary(inputFile, outputFile)
 	})
 

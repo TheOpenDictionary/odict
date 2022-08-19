@@ -6,10 +6,12 @@ from subprocess import run
 from tempfile import NamedTemporaryFile
 
 def exec(*args: list[str]):
-  out = run(["../build/odict", *args], capture_output=True)
+  out = run(["../build/odict", "--quiet", *args], capture_output=True)
 
-  if (out):
-    print(out)
+  if out.stderr:
+    raise out.stderr
+    
+  return str(out.stdout)
 
 
 class Dictionary:
@@ -44,14 +46,9 @@ class Dictionary:
     # def index(self, force=False):
     #     self.__id = lib.IndexDictionary(self.__path, force)
 
-    # def lookup(self, term):
-    #     e = self.__encode(term)
-    #     v = lib.LookupEntry(e, self.__dict_p)
-    #     d = self.__decode(cast(v, c_char_p).value)
-
-    #     lib.free(v)
-
-    #     return d
+    def lookup(self, *terms):
+        output = exec("lookup", self.__path, *terms)
+        return output
 
     # def __encode(self, str):
     #     return str.encode("utf-8")
