@@ -178,6 +178,12 @@ func ReadDictionaryFromPath(path string) Dictionary {
 func ReadDictionaryFromBuffer(version uint16, bytes []byte) Dictionary {
 	buffer := schema.GetRootAsDictionary(bytes, 0)
 
+	var entry schema.Entry
+
+	print(buffer.EntryByKey(&entry, "run"))
+
+	// print(entry.Term())
+
 	dictionary := Dictionary{
 		ID:      string(buffer.Id()),
 		Name:    string(buffer.Name()),

@@ -92,7 +92,7 @@ func (rcv *Entry) EtymologiesLength() int {
 //     return len1 - len2
 //   }
 
-func Compare(t *flatbuffers.Table, offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) flatbuffers.UOffsetT {
+func Compare(offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) flatbuffers.UOffsetT {
 	offset_1 += flatbuffers.GetUOffsetT(buf[offset_1:])
 	len_1 := flatbuffers.GetUOffsetT(buf[offset_1:])
 	len_2 := flatbuffers.UOffsetT(len(key))
@@ -110,14 +110,27 @@ func Compare(t *flatbuffers.Table, offset_1 flatbuffers.UOffsetT, key []byte, bu
 	return len_1 - len_2;
 }
 
-func lookupByKey(vector flatbuffers.UOffsetT, k string, buf []byte) *Entry {
+func Offset(vtableOffset flatbuffers.VOffsetT, offset flatbuffers.UOffsetT, buf []byte) flatbuffers.VOffsetT {
+	vtable := flatbuffers.UOffsetT(len(buf)) - offset
+	i := flatbuffers.GetUOffsetT(buf[vtable:])
+	s := flatbuffers.GetUOffsetT(buf[:flatbuffers.GetInt8(buf[vtable + flatbuffers.UOffsetT(vtableOffset) - i:])])
+	return flatbuffers.VOffsetT(s + vtable)
+}
+
+// Indirect retrieves the relative offset stored at `offset`.
+func  Indirect(off flatbuffers.UOffsetT, buf []byte) flatbuffers.UOffsetT {
+	return off + flatbuffers.GetUOffsetT(buf[off:])
+}
+
+func lookupByKey(obj *Entry, vector flatbuffers.UOffsetT, k string, buf []byte) bool {
 	key := []byte(k)
 	span := flatbuffers.GetUOffsetT(buf[vector - 4:])
 	start := flatbuffers.UOffsetT(0)
 	for ok := true; ok; ok = span != 0 {
 		middle := span / 2
-		tableOffset := t.Indirect(vector + 4 * (start + middle))
-		comp := Compare(&t, flatbuffers.UOffsetT(t.Offset(4)), key, buf)
+		tableOffset := Indirect(vector + 4 * (start + middle), buf)
+		comp := Compare(flatbuffers.UOffsetT(Offset(4, flatbuffers.UOffsetT(len(buf)) - tableOffset, buf)), key, buf)
+		println(comp)
 		if comp > 0 {
 			span = middle
 		} else if comp < 0 {
@@ -125,12 +138,11 @@ func lookupByKey(vector flatbuffers.UOffsetT, k string, buf []byte) *Entry {
 			start += middle
 			span -= middle
 		} else {
-			x := &Entry{}
-			x.Init(buf, tableOffset)
-			return x
+			obj.Init(buf, tableOffset)
+			return true
 		}
 	}
-	return nil
+	return false
 }
 
 func EntryStart(builder *flatbuffers.Builder) {

@@ -64,12 +64,7 @@ func (rcv *Dictionary) Entries(obj *Entry, j int) bool {
 func (rcv *Dictionary) EntryByKey(obj *Entry, key string) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		x := rcv._tab.Vector(o)
-		x += flatbuffers.UOffsetT(j) * 4
-		x = rcv._tab.Indirect(x)
-		lookupByKey(rcv._tab.Vector(o), key, string(rcv._tab.Bytes))
-		obj.Init(rcv._tab.Bytes, x)
-		return true
+		return lookupByKey(obj, rcv._tab.Vector(o), key, rcv._tab.Bytes)
 	}
 	return false
 }
