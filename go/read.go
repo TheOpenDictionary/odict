@@ -182,7 +182,7 @@ func ReadDictionaryFromBuffer(version uint16, bytes []byte) Dictionary {
 
 	print(buffer.EntryByKey(&entry, "run"))
 
-	print(string(entry.Term()))
+	// print(string(entry.Term()))
 
 	dictionary := Dictionary{
 		ID:      string(buffer.Id()),
