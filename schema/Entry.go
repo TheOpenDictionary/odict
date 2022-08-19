@@ -92,35 +92,26 @@ func (rcv *Entry) EtymologiesLength() int {
 //     return len1 - len2
 //   }
 
-func Compare(offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) flatbuffers.UOffsetT {
-	println(offset_1)
+func Compare(offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) int {
 	offset_1 += flatbuffers.GetUOffsetT(buf[offset_1:])
-	println(offset_1)
-	len_1 := flatbuffers.GetUOffsetT(buf[offset_1:])
-	println(len_1)
-	len_2 := flatbuffers.UOffsetT(len(key))
-	println(len_2)
-	startPos_1 := offset_1 + flatbuffers.SizeInt32
-	println(startPos_1)
+	len_1 := int(flatbuffers.GetInt32(buf[offset_1:]))
+	len_2 := len(key)
+	startPos_1 := int(offset_1 + flatbuffers.SizeInt32)
 	len := len_1
 	if len_2 < len_1 {
 		len = len_2
 	}
-	println(len)
-	for i := flatbuffers.UOffsetT(0); i < len; i++ {
-			b := buf[i + startPos_1]
-			if (b != key[i]) {
-				return flatbuffers.UOffsetT(b - key[i]);
+	for i := 0; i < len; i++ {
+			if (buf[i + startPos_1] != key[i]) {
+				return int(buf[i + startPos_1]) - int(key[i])
 			}
 	}
 	return len_1 - len_2;
 }
 
 func Offset(vtableOffset flatbuffers.VOffsetT, offset flatbuffers.UOffsetT, buf []byte) flatbuffers.VOffsetT {
-	vtable := flatbuffers.UOffsetT(len(buf)) - offset
-	i := flatbuffers.GetUOffsetT(buf[vtable:])
-	s := flatbuffers.GetUOffsetT(buf[:flatbuffers.GetInt8(buf[vtable + flatbuffers.UOffsetT(vtableOffset) - i:])])
-	return flatbuffers.VOffsetT(s + vtable)
+	vtable := int32(len(buf) - int(offset))
+	return flatbuffers.VOffsetT(int32(flatbuffers.GetInt8(buf[vtable + int32(vtableOffset) - flatbuffers.GetInt32(buf[vtable:]):])) + vtable)
 }
 
 // Indirect retrieves the relative offset stored at `offset`.
