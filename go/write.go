@@ -10,6 +10,7 @@ import (
 
 func createODictFile(outputPath string, dictionary DictionaryRepresentable) {
 	dictionaryBytes := dictionaryToBytes(dictionary)
+	println(dictionaryBytes)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
 

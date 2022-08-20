@@ -2,10 +2,12 @@ package odict
 
 import (
 	"encoding/xml"
+	"io"
 	"sort"
 	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/imdario/mergo"
 )
 
 type DictionaryRepresentable struct {
@@ -13,6 +15,45 @@ type DictionaryRepresentable struct {
 	Name    string                        `json:"name" xml:"name,attr,omitempty"`
 	Entries map[string]EntryRepresentable `json:"entries" xml:"entry"`
 	XMLName xml.Name                      `json:"-" xml:"dictionary"`
+}
+
+// func (m DictionaryRepresentable) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+// 	e.Encode(m.Entries)
+
+// 	for key := range m.Iterable {
+// 		e.Encode(m.Get(key))
+// 	}
+
+// 	return nil
+// }
+
+func (m *DictionaryRepresentable) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var entry EntryRepresentable
+
+	d.DecodeElement(&entry, &start)
+
+	if m.Entries == nil {
+		m.Entries = make(map[string]EntryRepresentable)
+	}
+
+	if _, ok := m.Entries[entry.Term]; ok {
+		if err := mergo.Merge(&entry, m.Entries[entry.Term], mergo.WithAppendSlice); err != nil {
+			Check(err)
+		}
+	}
+
+	m.Entries[strings.ToLower(entry.Term)] = entry
+
+	for {
+		_, err := d.Token()
+
+		if err != nil {
+			if err == io.EOF {
+				return nil
+			}
+			return err
+		}
+	}
 }
 
 func (dict *Dictionary) AsRepresentable() DictionaryRepresentable {
