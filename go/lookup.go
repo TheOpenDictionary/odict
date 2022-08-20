@@ -1,19 +1,22 @@
 package odict
 
-func lookup(dict Dictionary, query string, split int) []Entry {
+func (dict *Dictionary) lookup(query string, split int) []Entry {
 	entries := []Entry{}
 
-	if dict.Entries.Has(query) {
-		entries = []Entry{dict.Entries.Get(query)}
+	var entry Entry
+	var found = dict.EntryByKey(&entry, query)
+
+	if found {
+		entries = append(entries, entry)
 	} else if split > 0 {
 		start := 0
 		end := len(query)
 
 		for ok := true; ok; ok = start < end {
 			substr := query[start:end]
+			found = dict.EntryByKey(&entry, substr)
 
-			if dict.Entries.Has(substr) && len(substr) >= split {
-				entry := dict.Entries.Get(query[start:end])
+			if found && len(substr) >= split {
 				entries = append(entries, entry)
 				start = end
 				end = len(query)
@@ -26,11 +29,11 @@ func lookup(dict Dictionary, query string, split int) []Entry {
 	return entries
 }
 
-func Lookup(dict Dictionary, queries []string, split int) []Entry {
+func (dict *Dictionary) Lookup(queries []string, split int) []Entry {
 	entries := []Entry{}
 
 	for _, query := range queries {
-		entries = append(entries, lookup(dict, query, split)...)
+		entries = append(entries, dict.lookup(query, split)...)
 	}
 
 	return entries

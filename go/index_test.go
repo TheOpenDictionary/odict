@@ -1,29 +1,29 @@
 package odict
 
-import (
-	"os"
-	"path/filepath"
-	"testing"
+// import (
+// 	"os"
+// 	"path/filepath"
+// 	"testing"
 
-	"github.com/stretchr/testify/assert"
-)
+// 	"github.com/stretchr/testify/assert"
+// )
 
-func TestIndex(t *testing.T) {
-	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+// func TestIndex(t *testing.T) {
+// 	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../examples/example1.odict")
+// 	dict := ReadDictionaryFromPath("../examples/example1.odict")
 
-	path, err := os.Getwd()
+// 	path, err := os.Getwd()
 
-	Check(err)
+// 	Check(err)
 
-	os.Setenv("ODICT_INDEX_DIR", path)
+// 	os.Setenv("ODICT_INDEX_DIR", path)
 
-	IndexDictionary(dict, true)
+// 	IndexDictionary(dict, true)
 
-	_, e := os.Stat(filepath.Join(path, "odict", "idx", dict.ID))
+// 	_, e := os.Stat(filepath.Join(path, "odict", "idx", dict.ID))
 
-	assert.Equal(t, e, nil)
+// 	assert.Equal(t, e, nil)
 
-	CleanupTest()
-}
+// 	CleanupTest()
+// }

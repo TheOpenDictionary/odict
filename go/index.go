@@ -24,33 +24,35 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
 
-func IndexDictionary(dictionary Dictionary, overwrite bool) string {
+func (dict *Dictionary) Index(overwrite bool) string {
+	dictionary := dict.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
 		fmt.Println("Indexing dictionary (this might take some time)...")
+
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
-		defer index.Close()
-
 		Check(indexErr)
 
-		totalEntries := len(dictionary.Entries.Iterable)
+		defer index.Close()
+
+		totalEntries := len(dictionary.Entries)
 
 		bar := progressbar.Default(int64(totalEntries))
 		batch := index.NewBatch()
 		batchCount := 0
 		batchSize := 100
 
-		for key := range dictionary.Entries.Iterable {
-			entry := dictionary.Entries.Get(key)
+		for key := range dictionary.Entries {
+			entry := dictionary.Entries[key]
 			doc := document.NewDocument(strings.ToLower(entry.Term))
 
 			mapping.MapDocument(doc, entry)
 
-			enc := EncodeEntry(entry)
+			enc := entryToBytes(entry)
 
 			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
 
@@ -82,7 +84,7 @@ func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 	} else if overwrite {
 		println("Purging existing index...")
 		os.RemoveAll(indexPath)
-		return IndexDictionary(dictionary, false)
+		return dict.Index(false)
 	}
 
 	return indexPath

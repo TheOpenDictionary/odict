@@ -1,4 +1,4 @@
-namespace schema;
+namespace odict;
 
 enum POS:byte {
     v = 0,

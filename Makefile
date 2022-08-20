@@ -4,16 +4,13 @@
 # ---------------------------------------------------------------------------- #
 
 schema:
-	flatc -g -o . schema/schema.fbs
+	flatc -g --gen-onefile --go-namespace odict -o ./go schema.fbs
 
 # ---------------------------------------------------------------------------- #
 #                                    Library                                   #
 # ---------------------------------------------------------------------------- #
 
 OUTPUT=build
-
-cgo: schema
-	go build -buildmode=c-shared -o ${OUTPUT} ./cgo.go
 
 test:
 	go test ./go
