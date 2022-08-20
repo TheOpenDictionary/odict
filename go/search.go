@@ -21,9 +21,9 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 
 	index, openErr := bleve.Open(indexPath)
 
-	defer index.Close()
-
 	Check(openErr)
+
+	defer index.Close()
 
 	var query query.Query = bleve.NewMatchQuery(queryStr)
 
@@ -45,7 +45,7 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 		b, ok := x.Fields["_source"]
 
 		if ok {
-			entries[i] = DecodeEntry([]byte(fmt.Sprintf("%v", b)))
+			entries[i] = *GetRootAsEntry([]byte(fmt.Sprintf("%v", b)), 0)
 		}
 	}
 

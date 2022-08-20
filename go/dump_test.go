@@ -1,28 +1,28 @@
 package odict
 
-// import (
-// 	"testing"
+import (
+	"testing"
 
-// 	"github.com/stretchr/testify/assert"
-// )
+	"github.com/stretchr/testify/assert"
+)
 
-// func TestDump(t *testing.T) {
-// 	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+func TestDump(t *testing.T) {
+	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
 
-// 	dict := ReadDictionaryFromPath("../examples/example1.odict")
-// 	dictr := dict.AsRepresentable()
-// 	dump := dict.Dump()
+	dict := ReadDictionaryFromPath("../examples/example1.odict")
+	dict_r := dict.AsRepresentable()
+	dump := dict.Dump()
 
-// 	WriteDictionary(dump, "../examples/example1_generated.odict")
+	WriteDictionaryFromXML(dump, "../examples/example1_generated.odict")
 
-// 	newdict := ReadDictionaryFromPath("../examples/example1_generated.odict")
-// 	newdictr := newdict.AsRepresentable()
+	newdict := ReadDictionaryFromPath("../examples/example1_generated.odict")
+	newdict_r := newdict.AsRepresentable()
 
-// 	// We need the IDs to match seeing they will definitely be different
-// 	// due to dictionary regeneration
-// 	newdictr.ID = dictr.ID
+	// We need the IDs to match seeing they will definitely be different
+	// due to dictionary regeneration
+	newdict_r.ID = dict_r.ID
 
-// 	assert.Equal(t, dict, newdict)
+	assert.Equal(t, dict_r, newdict_r)
 
-// 	CleanupTest()
-// }
+	CleanupTest()
+}

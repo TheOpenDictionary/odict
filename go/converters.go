@@ -1,6 +1,7 @@
 package odict
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html"
@@ -35,20 +36,19 @@ func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
 	return dictionary
 }
 
-func dictionaryToBytes(dictionary DictionaryRepresentable) []byte {
+func serialize(b Serializable) []byte {
 	builder := flatbuffers.NewBuilder(0)
-	buffer := dictionary.AsBuffer(builder)
+	buffer := b.AsBuffer(builder)
 
 	builder.Finish(buffer)
 
 	return builder.FinishedBytes()
 }
 
-func entryToBytes(entry EntryRepresentable) []byte {
-	builder := flatbuffers.NewBuilder(0)
-	buffer := entry.AsBuffer(builder)
+func JSON(any interface{}) string {
+	b, err := json.MarshalIndent(&any, "", " ")
 
-	builder.Finish(buffer)
+	Check(err)
 
-	return builder.FinishedBytes()
+	return string(b)
 }

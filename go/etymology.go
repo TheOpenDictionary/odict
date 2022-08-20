@@ -7,9 +7,9 @@ import (
 )
 
 type EtymologyRepresentable struct {
-	ID          string                              `json:"id" xml:"id,attr"`
-	Description string                              `json:"description,omitempty" xml:"description,attr,omitempty"`
-	Usages      map[PartOfSpeech]UsageRepresentable `json:"usages" xml:"usage"`
+	ID          string                                  `json:"id" xml:"id,attr"`
+	Description string                                  `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Usages      KVMap[PartOfSpeech, UsageRepresentable] `json:"usages" xml:"usage"`
 }
 
 func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
@@ -30,10 +30,14 @@ func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
 }
 
 func (ety *EtymologyRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	id := builder.CreateString(ety.ID)
+	description := builder.CreateString(ety.Description)
+	usages := ety.buildUsageVector(builder)
+
 	EtymologyStart(builder)
-	EtymologyAddId(builder, builder.CreateString(ety.ID))
-	EtymologyAddDescription(builder, builder.CreateString(ety.Description))
-	EtymologyAddUsages(builder, ety.buildUsageVector(builder))
+	EtymologyAddId(builder, id)
+	EtymologyAddDescription(builder, description)
+	EtymologyAddUsages(builder, usages)
 
 	return EtymologyEnd(builder)
 }
@@ -49,11 +53,15 @@ func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder
 
 	sort.Strings(keys)
 
+	usageBuffers := Map(keys, func(key string) flatbuffers.UOffsetT {
+		usage := usages[PartOfSpeech(key)]
+		return usage.AsBuffer(builder)
+	})
+
 	EtymologyStartUsagesVector(builder, usageCount)
 
 	for i := usageCount - 1; i >= 0; i-- {
-		usage := usages[PartOfSpeech(keys[i])]
-		builder.PrependUOffsetT(usage.AsBuffer(builder))
+		builder.PrependUOffsetT(usageBuffers[i])
 	}
 
 	return builder.EndVector(usageCount)

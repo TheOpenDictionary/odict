@@ -8,9 +8,8 @@ import (
 	"github.com/golang/snappy"
 )
 
-func createODictFile(outputPath string, dictionary DictionaryRepresentable) {
-	dictionaryBytes := dictionaryToBytes(dictionary)
-	println(dictionaryBytes)
+func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryRepresentable) {
+	dictionaryBytes := serialize(&dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
 
@@ -48,6 +47,6 @@ func createODictFile(outputPath string, dictionary DictionaryRepresentable) {
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionary(xmlStr, outputPath string) {
-	createODictFile(outputPath, xmlToDictionaryRepresentable(xmlStr))
+func WriteDictionaryFromXML(xmlStr, outputPath string) {
+	WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
 }

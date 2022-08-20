@@ -24,10 +24,14 @@ func (group *Group) AsRepresentable() GroupRepresentable {
 }
 
 func (group *GroupRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	id := builder.CreateString(group.ID)
+	description := builder.CreateString(group.Description)
+	definitions := group.buildDefinitionVector(builder)
+
 	GroupStart(builder)
-	GroupAddId(builder, builder.CreateString(group.ID))
-	GroupAddDescription(builder, builder.CreateString(group.Description))
-	GroupAddDefinitions(builder, group.buildDefinitionVector(builder))
+	GroupAddId(builder, id)
+	GroupAddDescription(builder, description)
+	GroupAddDefinitions(builder, definitions)
 
 	return GroupEnd(builder)
 }
@@ -35,11 +39,16 @@ func (group *GroupRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 func (group *GroupRepresentable) buildDefinitionVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	definitions := group.Definitions
 	definitionCount := len(definitions)
+	bufs := make([]flatbuffers.UOffsetT, 0, definitionCount)
+
+	for _, definition := range definitions {
+		bufs = append(bufs, builder.CreateString(definition))
+	}
 
 	GroupStartDefinitionsVector(builder, definitionCount)
 
 	for i := definitionCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(builder.CreateString(definitions[i]))
+		builder.PrependUOffsetT(bufs[i])
 	}
 
 	return builder.EndVector(definitionCount)

@@ -52,10 +52,8 @@ func (dict *Dictionary) Index(overwrite bool) string {
 
 			mapping.MapDocument(doc, entry)
 
-			enc := entryToBytes(entry)
-
+			enc := serialize(&entry)
 			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
-
 			nd := doc.AddField(field)
 
 			batch.IndexAdvanced(nd)

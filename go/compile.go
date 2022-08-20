@@ -9,13 +9,13 @@ import (
 func CompileDictionary(xmlPath string, outputPath string) {
 	xmlFile, err := os.Open(xmlPath)
 
-	defer xmlFile.Close()
-
 	Check(err)
+
+	defer xmlFile.Close()
 
 	xmlStr, err := ioutil.ReadAll(xmlFile)
 
 	Check(err)
 
-	WriteDictionary(string(xmlStr), outputPath)
+	WriteDictionaryFromXML(string(xmlStr), outputPath)
 }

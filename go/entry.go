@@ -2,15 +2,19 @@ package odict
 
 import (
 	"encoding/xml"
+	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
 type EntryRepresentable struct {
-	Key         string                   `json:"-" xml:"-"`
 	Term        string                   `json:"term" xml:"term,attr"`
 	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety"`
 	XMLName     xml.Name                 `json:"-" xml:"entry"`
+}
+
+func (entry EntryRepresentable) Key() string {
+	return strings.ToLower(entry.Term)
 }
 
 func (entry *Entry) AsRepresentable() EntryRepresentable {
@@ -30,10 +34,14 @@ func (entry *Entry) AsRepresentable() EntryRepresentable {
 }
 
 func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	key := builder.CreateString(entry.Key())
+	term := builder.CreateString(entry.Term)
+	etymologies := entry.buildEtymologyVector(builder)
+
 	EntryStart(builder)
-	EntryAddKey(builder, builder.CreateString(entry.Key))
-	EntryAddTerm(builder, builder.CreateString(entry.Term))
-	EntryAddEtymologies(builder, entry.buildEtymologyVector(builder))
+	EntryAddKey(builder, key)
+	EntryAddTerm(builder, term)
+	EntryAddEtymologies(builder, etymologies)
 
 	return EntryEnd(builder)
 }
@@ -41,11 +49,16 @@ func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	etymologies := entry.Etymologies
 	etymologiesCount := len(etymologies)
+	bufs := make([]flatbuffers.UOffsetT, 0, etymologiesCount)
+
+	for _, etymology := range etymologies {
+		bufs = append(bufs, etymology.AsBuffer(builder))
+	}
 
 	EntryStartEtymologiesVector(builder, etymologiesCount)
 
 	for i := etymologiesCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(etymologies[i].AsBuffer(builder))
+		builder.PrependUOffsetT(bufs[i])
 	}
 
 	return builder.EndVector(etymologiesCount)

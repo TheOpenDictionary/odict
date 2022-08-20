@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -20,14 +19,12 @@ func lookup(c *cli.Context) error {
 
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
+		entries := dict.Lookup(queries, split)
+		representable := odict.Map(entries, func(entry odict.Entry) odict.EntryRepresentable {
+			return entry.AsRepresentable()
+		})
 
-		entries := odict.Lookup(dict, queries, split)
-
-		b, err := json.MarshalIndent(&entries, "", " ")
-
-		odict.Check(err)
-
-		fmt.Println(string(b))
+		fmt.Println(odict.JSON(representable))
 	})
 
 	return nil

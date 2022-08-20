@@ -15,15 +15,15 @@ func search(c *cli.Context) error {
 	force := c.Bool("index")
 
 	if len(inputFile) == 0 || len(searchTerm) == 0 {
-		return errors.New("Usage: odict search [odict file] [search term]")
+		return errors.New("usage: odict search [odict file] [search term]")
 	}
 
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
 
-		odict.IndexDictionary(dict, force)
+		dict.Index(force)
 
-		results := odict.SearchDictionary(dict.ID, searchTerm, false)
+		results := odict.SearchDictionary(string(dict.Id()), searchTerm, false)
 
 		b, err := json.MarshalIndent(results, "", " ")
 

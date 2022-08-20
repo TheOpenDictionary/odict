@@ -54,6 +54,10 @@ type UsageRepresentable struct {
 	XMLName     xml.Name             `json:"-" xml:"usage"`
 }
 
+func (usage UsageRepresentable) Key() PartOfSpeech {
+	return usage.POS
+}
+
 func (usage *Usage) AsRepresentable() UsageRepresentable {
 	var group Group
 
@@ -77,35 +81,42 @@ func (usage *Usage) AsRepresentable() UsageRepresentable {
 }
 
 func (usage *UsageRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	pos := resolveSchemaPOS(usage.POS)
+	groups := usage.buildGroupVector(builder)
+	definitions := usage.buildDefinitionVector(builder)
+
 	UsageStart(builder)
-	UsageAddPos(builder, resolveSchemaPOS(usage.POS))
-	UsageAddGroups(builder, usage.buildGroupVector(builder))
-	UsageAddDefinitions(builder, usage.buildDefinitionVector(builder))
+	UsageAddPos(builder, pos)
+	UsageAddGroups(builder, groups)
+	UsageAddDefinitions(builder, definitions)
 
 	return UsageEnd(builder)
 }
 
 func (usage *UsageRepresentable) buildGroupVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	groups := usage.Groups
+	groups := Map(usage.Groups, func(group GroupRepresentable) flatbuffers.UOffsetT {
+		return group.AsBuffer(builder)
+	})
+
 	groupCount := len(groups)
 
 	UsageStartGroupsVector(builder, groupCount)
 
 	for i := groupCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(usage.Groups[i].AsBuffer(builder))
+		builder.PrependUOffsetT(groups[i])
 	}
 
 	return builder.EndVector(groupCount)
 }
 
 func (usage *UsageRepresentable) buildDefinitionVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	definitions := usage.Definitions
+	definitions := Map(usage.Definitions, builder.CreateString)
 	definitionCount := len(definitions)
 
 	GroupStartDefinitionsVector(builder, definitionCount)
 
 	for i := definitionCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(builder.CreateString(definitions[i]))
+		builder.PrependUOffsetT(definitions[i])
 	}
 
 	return builder.EndVector(definitionCount)
