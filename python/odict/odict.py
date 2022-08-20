@@ -1,4 +1,4 @@
-from os import environ, path
+from os import environ, path, remove
 from distutils.sysconfig import get_config_var
 from glob import glob
 from pathlib import Path
@@ -9,9 +9,9 @@ def exec(*args: list[str]):
   out = run(["../build/odict", "--quiet", *args], capture_output=True)
 
   if out.stderr:
-    raise out.stderr
+    raise Exception(out.stderr)
     
-  return str(out.stdout)
+  return str(out.stdout.decode('utf-8'))
 
 
 class Dictionary:
@@ -24,12 +24,13 @@ class Dictionary:
 
     @staticmethod
     def write(xml, path):
-        tmp = NamedTemporaryFile()
+        tmp = NamedTemporaryFile(delete=False)
         
         with open(tmp.name, 'wb') as f:
           f.write(xml.encode('utf-8'))    
-          exec("compile", "-o", path, tmp.name)
-          print(path)
+        
+        exec("compile", "-o", path, tmp.name)
+        remove(tmp.name)
     # def search(self, query):
     #     if self.__id == None:
     #         self.index(force=True)

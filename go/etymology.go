@@ -7,7 +7,7 @@ import (
 )
 
 type EtymologyRepresentable struct {
-	ID          string                                  `json:"id" xml:"id,attr"`
+	ID          string                                  `json:"id,omitempty" xml:"id,attr"`
 	Description string                                  `json:"description,omitempty" xml:"description,attr,omitempty"`
 	Usages      KVMap[PartOfSpeech, UsageRepresentable] `json:"usages" xml:"usage"`
 }

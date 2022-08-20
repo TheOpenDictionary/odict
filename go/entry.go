@@ -8,7 +8,7 @@ import (
 )
 
 type EntryRepresentable struct {
-	Term        string                   `json:"term" xml:"term,attr"`
+	Term        string                   `json:"term,omitempty" xml:"term,attr"`
 	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety"`
 	XMLName     xml.Name                 `json:"-" xml:"entry"`
 }

@@ -3,11 +3,6 @@ name = "theopendictionary"
 version = "0.0.4"
 description = ""
 authors = ["Tyler Nickerson <nickersoft@gmail.com>"]
-packages = [{include="odict", from="."}]
-include = ["go", "lib", "schema", "go.mod", "go.sum", "Makefile"]
-
-[tool.poetry.build]
-script = "build.py"
 
 [tool.poetry.dependencies]
 python = "^3.9"

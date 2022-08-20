@@ -49,8 +49,8 @@ func resolveSchemaPOS(pos PartOfSpeech) POS {
 
 type UsageRepresentable struct {
 	POS         PartOfSpeech         `json:"pos,omitempty" xml:"pos,attr"`
-	Definitions []string             `json:"definitions,omitempty" xml:"definition"`
-	Groups      []GroupRepresentable `json:"groups,omitempty" xml:"group"`
+	Definitions []string             `json:"definitions" xml:"definition"`
+	Groups      []GroupRepresentable `json:"groups" xml:"group"`
 	XMLName     xml.Name             `json:"-" xml:"usage"`
 }
 
