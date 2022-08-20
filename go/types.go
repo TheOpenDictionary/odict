@@ -5,6 +5,7 @@ import (
 	"io"
 
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/imdario/mergo"
 )
 
 type Keyable[T comparable] interface {
@@ -42,7 +43,17 @@ func (m *KVMap[K, V]) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 		return err
 	}
 
-	(*m)[e.Key()] = e
+	k := e.Key()
+
+	if _, ok := (*m)[k]; ok {
+		existing := (*m)[k]
+
+		if err := mergo.Merge(&e, existing, mergo.WithAppendSlice); err != nil {
+			Check(err)
+		}
+	}
+
+	(*m)[k] = e
 
 	for {
 		_, err := d.Token()
