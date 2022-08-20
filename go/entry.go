@@ -47,18 +47,16 @@ func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 }
 
 func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	etymologies := entry.Etymologies
-	etymologiesCount := len(etymologies)
-	bufs := make([]flatbuffers.UOffsetT, 0, etymologiesCount)
+	etymologies := Map(entry.Etymologies, func(ety EtymologyRepresentable) flatbuffers.UOffsetT {
+		return ety.AsBuffer(builder)
+	})
 
-	for _, etymology := range etymologies {
-		bufs = append(bufs, etymology.AsBuffer(builder))
-	}
+	etymologiesCount := len(etymologies)
 
 	EntryStartEtymologiesVector(builder, etymologiesCount)
 
 	for i := etymologiesCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(bufs[i])
+		builder.PrependUOffsetT(etymologies[i])
 	}
 
 	return builder.EndVector(etymologiesCount)

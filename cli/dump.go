@@ -14,7 +14,7 @@ func dump(c *cli.Context) error {
 	outputFile := c.Args().Get(1)
 
 	if len(inputFile) == 0 || len(outputFile) == 0 {
-		return errors.New("Usage: odict dump [input file] [output file]")
+		return errors.New("usage: odict dump [input file] [output file]")
 	}
 
 	t(c, func() {

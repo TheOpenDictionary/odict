@@ -11,7 +11,7 @@ func index(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 
 	if len(inputFile) == 0 {
-		return errors.New("The path to a compiled ODict file is required")
+		return errors.New("the path to a compiled ODict file is required")
 	}
 
 	t(c, func() {

@@ -14,7 +14,7 @@ func lookup(c *cli.Context) error {
 	split := c.Int("split")
 
 	if len(inputFile) == 0 || len(queries) == 0 {
-		return errors.New("Usage: odict lookup [dictionary path] [queries]")
+		return errors.New("usage: odict lookup [dictionary path] [queries]")
 	}
 
 	t(c, func() {

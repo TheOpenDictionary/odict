@@ -15,7 +15,7 @@ func compile(c *cli.Context) error {
 	outputFile := c.String("output")
 
 	if len(inputFile) == 0 {
-		return errors.New("Input XML file required")
+		return errors.New("input XML file required")
 	}
 
 	if len(outputFile) == 0 {

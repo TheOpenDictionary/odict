@@ -13,7 +13,7 @@ func merge(c *cli.Context) error {
 	outputFile := c.Args().Get(2)
 
 	if len(inputFile1) == 0 || len(inputFile2) == 0 || len(outputFile) == 0 {
-		return fmt.Errorf("Usage: odict merge [dictionary1] [dictionary2] [outputFile]")
+		return fmt.Errorf("usage: odict merge [dictionary1] [dictionary2] [outputFile]")
 	}
 
 	t(c, func() {
