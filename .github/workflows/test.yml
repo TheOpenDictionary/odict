@@ -40,4 +40,6 @@ jobs:
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
-        run: make test
+        run: |
+          . ~/.asdf/plugins/java/set-java-home.zsh
+          make test
