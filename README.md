@@ -70,7 +70,19 @@ ODict can currently be used in [Go](docs/api.md#go), [Java](docs/api.md#java), a
 
 The ODict command-line interface (CLI) is a Go program you can execute in any terminal to create, dump, merge, search, and index ODict dictionaries.
 
-The CLI's primary distribution channel is currently through its [Homebrew](homebrew.sh) formula:
+The easiest way to install the ODict compiler is through Go itself (version 1.18 or newer please):
+
+```bash
+$ go install github.com/TheOpenDictionary/odict
+```
+
+Just be sure that your `GOPATH` is on your path, otherwise you won't be able to find the executable! An easy way to ensure this is to stick this in your `.bashrc` or `.zshrc`:
+
+```
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+If you have a Mac, you can just use the [Homebrew](homebrew.sh) formula:
 
 ```
 $ brew tap TheOpenDictionary/odict
