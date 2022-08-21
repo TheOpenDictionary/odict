@@ -22,6 +22,10 @@ jobs:
           key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
           restore-keys: |
             ${{ runner.os }}-asdf-
+      - name: Add Python build dependencies 
+        run: |
+          asdf install make latest
+          asdf global make latest
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v1
       - name: Run tests
