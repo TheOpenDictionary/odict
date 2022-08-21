@@ -1,3 +1,4 @@
+from json import loads
 from os import environ, path, remove
 from distutils.sysconfig import get_config_var
 from glob import glob
@@ -11,6 +12,7 @@ def exec(*args: list[str]):
   if out.stderr:
     raise Exception(out.stderr)
     
+  print(str(out.stdout.decode('utf-8')))
   return str(out.stdout.decode('utf-8'))
 
 
@@ -31,30 +33,16 @@ class Dictionary:
         
         exec("compile", "-o", path, tmp.name)
         remove(tmp.name)
-    # def search(self, query):
-    #     if self.__id == None:
-    #         self.index(force=True)
+      
+    def search(self, query, index: bool = False):
+        if index:
+          return loads(exec("search", "-i", self.__path, query))
+        else:
+          return loads(exec("search", self.__path, query))
 
-    #     __exec("search")
-
-    #     v = lib.SearchDictionary(self.__encode(query), self.__id)
-    #     d = self.__decode(cast(v, c_char_p).value)
-
-    #     lib.free(v)
-
-    #     return d
-
-    # def index(self, force=False):
-    #     self.__id = lib.IndexDictionary(self.__path, force)
+    def index(self):
+        exec("index", self.__path)
 
     def lookup(self, *terms):
-        output = exec("lookup", self.__path, *terms)
-        return output
-
-    # def __encode(self, str):
-    #     return str.encode("utf-8")
-
-    # def __decode(self, str):
-    #     return str.decode("utf-8")
-    
+        return loads(exec("lookup", self.__path, *terms))
 

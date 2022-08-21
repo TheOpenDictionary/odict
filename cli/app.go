@@ -57,6 +57,12 @@ var App = &cli.App{
 					Usage:   "Forcibly creates a new index if one already exists",
 					Value:   false,
 				},
+				&cli.BoolFlag{
+					Name:    "exact",
+					Aliases: []string{"e"},
+					Usage:   "Match words exactly (works the same as `lookup`)",
+					Value:   false,
+				},
 			},
 			Usage:  "search a compiled dictionary",
 			Action: search,

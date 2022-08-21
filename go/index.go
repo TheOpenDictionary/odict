@@ -24,13 +24,15 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
 
-func (dict *Dictionary) Index(overwrite bool) string {
+func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 	dictionary := dict.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
-		fmt.Println("Indexing dictionary (this might take some time)...")
+		if !quiet {
+			fmt.Println("Indexing dictionary (this might take some time)...")
+		}
 
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
@@ -41,7 +43,12 @@ func (dict *Dictionary) Index(overwrite bool) string {
 
 		totalEntries := len(dictionary.Entries)
 
-		bar := progressbar.Default(int64(totalEntries))
+		var bar *progressbar.ProgressBar
+
+		if !quiet {
+			bar = progressbar.Default(int64(totalEntries))
+		}
+
 		batch := index.NewBatch()
 		batchCount := 0
 		batchSize := 100
@@ -60,7 +67,9 @@ func (dict *Dictionary) Index(overwrite bool) string {
 
 			batchCount++
 
-			bar.Add(1)
+			if !quiet {
+				bar.Add(1)
+			}
 
 			time.Sleep(time.Millisecond)
 
@@ -78,11 +87,17 @@ func (dict *Dictionary) Index(overwrite bool) string {
 
 		Check(idxErr)
 
-		fmt.Println()
+		if !quiet {
+			fmt.Println()
+		}
 	} else if overwrite {
-		println("Purging existing index...")
+		if !quiet {
+			fmt.Println("Purging existing index...")
+		}
+
 		os.RemoveAll(indexPath)
-		return dict.Index(false)
+
+		return dict.Index(false, quiet)
 	}
 
 	return indexPath

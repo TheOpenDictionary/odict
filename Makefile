@@ -26,10 +26,7 @@ cli:
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-python:
-	poetry build
-
-pytest: python
+pytest: cli
 	RUNTIME_ENV=test cd python && poetry run pytest ./odict && cd ..
 
 clean:

@@ -11,7 +11,7 @@ func TestSearch(t *testing.T) {
 
 	dict := ReadDictionaryFromPath("../examples/example1.odict")
 
-	dict.Index(true)
+	dict.Index(true, true)
 
 	entries := SearchDictionary(string(dict.Id()), "run", false)
 

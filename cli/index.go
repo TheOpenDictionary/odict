@@ -9,6 +9,7 @@ import (
 
 func index(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
+	quiet := c.Bool("quiet")
 
 	if len(inputFile) == 0 {
 		return errors.New("the path to a compiled ODict file is required")
@@ -16,7 +17,7 @@ func index(c *cli.Context) error {
 
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
-		dict.Index(true)
+		dict.Index(true, quiet)
 	})
 
 	return nil
