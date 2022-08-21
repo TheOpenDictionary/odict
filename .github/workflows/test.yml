@@ -22,6 +22,14 @@ jobs:
           key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
           restore-keys: |
             ${{ runner.os }}-asdf-
+      - name: Cache Poetry
+        uses: actions/cache@v2
+        with:
+          path: |
+            /home/runner/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/python/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
       - name: Add Python build dependencies 
         run: |
           asdf plugin add make
@@ -30,4 +38,6 @@ jobs:
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v1
       - name: Run tests
+        env:
+          POETRY_VIRTUALENVS_IN_PROJECT: true
         run: make test-all

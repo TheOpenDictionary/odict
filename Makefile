@@ -1,5 +1,5 @@
 
-test-all: test-go test-python test-jvm 
+test: go-test jvm-test python-test
 
 # ---------------------------------------------------------------------------- #
 #                                    Schema                                    #
@@ -14,28 +14,31 @@ schema:
 
 OUTPUT=build
 
-test-go:
+go-test:
 	go test ./go
 	
 # ---------------------------------------------------------------------------- #
 #                                      CLI                                     #
 # ---------------------------------------------------------------------------- #
 
-cli:
+cli-build:
 	go build -o ${OUTPUT} .
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-test-jvm: cli
+jvm-test: cli-build
 	cd jvm && RUNTIME_ENV=test ./gradlew test
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-test-python: cli
+python-install:
+	cd python && poetry install 
+
+python-test: cli-build python-install
 	cd python && RUNTIME_ENV=test poetry run pytest ./odict
 
 clean:
