@@ -3,10 +3,10 @@ package org.odict
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class Dictionary constructor(path: String) {
+class Dictionary constructor(private val path: String) {
 
     fun lookup(vararg queries: String, split: Int = 0): String? {
-        return Dictionary.execute("lookup", "-s", split.toString(), *queries)
+        return Dictionary.execute("lookup", "-s", split.toString(), path, *queries)
     }
 
     companion object {
@@ -24,8 +24,6 @@ class Dictionary constructor(path: String) {
 
                 proc.waitFor(3, TimeUnit.MINUTES)
 
-
-                println( proc.inputStream.bufferedReader().readText())
                 proc.inputStream.bufferedReader().readText()
             } catch(e: IOException) {
                 e.printStackTrace()
