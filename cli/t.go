@@ -13,9 +13,10 @@ type closure func()
 // execute then prints the elapsed time
 func t(c *cli.Context, cb closure) {
 	start := time.Now()
+
 	cb()
-	if c.Bool("quiet") {
-		return
+
+	if !c.Bool("quiet") {
+		fmt.Printf("\n✨ Completed in %s\n", time.Since(start).String())
 	}
-	fmt.Printf("Completed in %.4f seconds\n", time.Since(start).Seconds())
 }

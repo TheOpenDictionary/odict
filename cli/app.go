@@ -5,8 +5,9 @@ import (
 )
 
 var App = &cli.App{
-	Name:  "odict",
-	Usage: "lighting-fast open-source dictionary compiler",
+	Name:    "odict",
+	Version: "1.5.0",
+	Usage:   "lighting-fast open-source dictionary compiler",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "quiet",

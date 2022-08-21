@@ -19,9 +19,10 @@ func Compare(offset_1 flatbuffers.UOffsetT, key []byte, buf []byte) int {
 	return len_1 - len_2
 }
 
-func Offset(vtableOffset flatbuffers.VOffsetT, offset flatbuffers.UOffsetT, buf []byte) flatbuffers.VOffsetT {
-	vtable := int32(len(buf) - int(offset))
-	return flatbuffers.VOffsetT(int32(flatbuffers.GetInt8(buf[vtable+int32(vtableOffset)-flatbuffers.GetInt32(buf[vtable:]):])) + vtable)
+func Offset(vtableOffset flatbuffers.VOffsetT, offset flatbuffers.UOffsetT, buf []byte) flatbuffers.UOffsetT {
+	vtable := flatbuffers.UOffsetT(len(buf)) - offset
+	off := vtable + flatbuffers.UOffsetT(vtableOffset) - flatbuffers.GetUOffsetT(buf[vtable:])
+	return flatbuffers.UOffsetT(flatbuffers.GetInt8(buf[off:])) + vtable
 }
 
 // Indirect retrieves the relative offset stored at `offset`.
