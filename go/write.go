@@ -2,13 +2,12 @@ package odict
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 
 	"github.com/golang/snappy"
 )
 
-func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryRepresentable) {
+func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryRepresentable) int {
 	dictionaryBytes := serialize(&dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
@@ -42,11 +41,11 @@ func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryReprese
 
 	writer.Flush()
 
-	fmt.Printf("Wrote %d bytes to path: %s\n", total, outputPath)
+	return total
 }
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionaryFromXML(xmlStr, outputPath string) {
-	WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
+func WriteDictionaryFromXML(xmlStr, outputPath string) int {
+	return WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
 }

@@ -1,14 +1,21 @@
 package odict
 
-func (dict *Dictionary) lookup(query string, split int) []Entry {
+import (
+	"regexp"
+	"strings"
+)
+
+func (dict *Dictionary) lookup(query string, fallback string, split int) []Entry {
 	entries := []Entry{}
 
 	var entry Entry
-	var found = dict.EntryByKey(&entry, query)
+	var found = dict.EntryByKey(&entry, strings.ToLower(query))
 
-	if found {
-		entries = append(entries, entry)
-	} else if split > 0 {
+	if !found && fallback != "" {
+		found = dict.EntryByKey(&entry, strings.ToLower(fallback))
+	}
+
+	if !found && split > 0 {
 		start := 0
 		end := len(query)
 
@@ -24,6 +31,8 @@ func (dict *Dictionary) lookup(query string, split int) []Entry {
 				end--
 			}
 		}
+	} else if found {
+		entries = append(entries, entry)
 	}
 
 	return entries
@@ -31,9 +40,18 @@ func (dict *Dictionary) lookup(query string, split int) []Entry {
 
 func (dict *Dictionary) Lookup(queries []string, split int) []Entry {
 	entries := []Entry{}
+	r, _ := regexp.Compile(`\((.+)\)$`)
 
 	for _, query := range queries {
-		entries = append(entries, dict.lookup(query, split)...)
+		match := r.FindAllStringSubmatch(query, -1)
+		fallback := ""
+
+		if len(match) > 0 {
+			query = r.ReplaceAllString(query, "")
+			fallback = match[0][1]
+		}
+
+		entries = append(entries, dict.lookup(strings.Trim(query, " "), fallback, split)...)
 	}
 
 	return entries

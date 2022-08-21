@@ -13,6 +13,7 @@ import (
 func compile(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	outputFile := c.String("output")
+	quiet := c.Bool("quiet")
 
 	if len(inputFile) == 0 {
 		return errors.New("input XML file required")
@@ -25,7 +26,11 @@ func compile(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		odict.CompileDictionary(inputFile, outputFile)
+		bytes := odict.CompileDictionary(inputFile, outputFile)
+
+		if !quiet {
+			fmt.Printf("Wrote %d bytes to path: %s\n", bytes, outputFile)
+		}
 	})
 
 	return nil

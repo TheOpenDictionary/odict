@@ -6,7 +6,7 @@ import (
 )
 
 // CompileDictionary compiles an XML file into an ODict binary
-func CompileDictionary(xmlPath string, outputPath string) {
+func CompileDictionary(xmlPath string, outputPath string) int {
 	xmlFile, err := os.Open(xmlPath)
 
 	Check(err)
@@ -17,5 +17,5 @@ func CompileDictionary(xmlPath string, outputPath string) {
 
 	Check(err)
 
-	WriteDictionaryFromXML(string(xmlStr), outputPath)
+	return WriteDictionaryFromXML(string(xmlStr), outputPath)
 }

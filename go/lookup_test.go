@@ -31,3 +31,15 @@ func TestLookupSplitting(t *testing.T) {
 
 	CleanupTest()
 }
+
+func TestFallbacks(t *testing.T) {
+	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+
+	dict := ReadDictionaryFromPath("../examples/example1.odict")
+	entries := dict.Lookup([]string{"catdog(run)"}, 2)
+
+	assert.Equal(t, 1, len(entries))
+	assert.Equal(t, "run", string(entries[0].Term()))
+
+	CleanupTest()
+}
