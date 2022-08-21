@@ -40,4 +40,4 @@ jobs:
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
-        run: make test-all
+        run: make test
