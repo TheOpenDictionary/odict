@@ -1,4 +1,6 @@
 
+test-all: test-go test-python test-jvm 
+
 # ---------------------------------------------------------------------------- #
 #                                    Schema                                    #
 # ---------------------------------------------------------------------------- #
@@ -12,7 +14,7 @@ schema:
 
 OUTPUT=build
 
-test:
+test-go:
 	go test ./go
 	
 # ---------------------------------------------------------------------------- #
@@ -26,8 +28,15 @@ cli:
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-pytest: cli
-	RUNTIME_ENV=test cd python && poetry run pytest ./odict && cd ..
+test-jvm: cli
+	cd jvm && RUNTIME_ENV=test ./gradlew test
+
+# ---------------------------------------------------------------------------- #
+#                                    Python                                    #
+# ---------------------------------------------------------------------------- #
+
+test-python: cli
+	cd python && RUNTIME_ENV=test poetry run pytest ./odict
 
 clean:
 	rm -rf setup.py dist build schema/*.go
