@@ -24,6 +24,7 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Add Python build dependencies 
         run: |
+          asdf plugin add make
           asdf install make latest
           asdf global make latest
       - name: Install dependencies in .tool-versions
