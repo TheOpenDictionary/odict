@@ -40,9 +40,7 @@ jobs:
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
-        run: |
-          . ~/.asdf/plugins/java/set-java-home.bash
-          make test
+        run: make test -B
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}
         with:
