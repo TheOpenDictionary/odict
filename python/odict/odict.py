@@ -7,7 +7,7 @@ from subprocess import run
 from tempfile import NamedTemporaryFile
 
 def exec(*args: list[str]):
-  out = run(["../build/odict", "--quiet", *args], capture_output=True)
+  out = run(["../bin/odict", "--quiet", *args], capture_output=True)
 
   if out.stderr:
     raise Exception(out.stderr)

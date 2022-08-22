@@ -53,7 +53,7 @@ class Dictionary constructor(private val path: String) {
 
         private fun execute(vararg args: String): String? {
             return try {
-                val baseArgs = arrayOf(if (System.getenv("RUNTIME_ENV") == "test") "../../build/odict" else "odict", "--quiet")
+                val baseArgs = arrayOf(if (System.getenv("RUNTIME_ENV") == "test") "../../bin/odict" else "odict", "--quiet")
                 val proc = ProcessBuilder(*(baseArgs + args))
                         .redirectOutput(ProcessBuilder.Redirect.PIPE)
                         .start()
