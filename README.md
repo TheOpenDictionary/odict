@@ -7,7 +7,7 @@
 
 </div>
 
-The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats Babylon and Apple Dictionaries. Similar to other dictionaries, Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](cli.md) or via its open-source Go bindings.
+The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats Babylon and Apple Dictionaries. Similar to other dictionaries, Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](docs/cli.md) or via its open-source Go bindings.
 
 ## Motivation
 
@@ -35,7 +35,7 @@ That's where ODict comes in.
 
 ## ODXML
 
-ODict XML (ODXML) is the XML used to define and structure ODict dictionaries. All compiled ODict dictionaries originate from ODXML files, and can easily be reverted back to XML via the CLI [`dump` command](./docs/cli.md#dumping-dictionaries).
+ODict XML (ODXML) is the XML used to define and structure ODict dictionaries. All compiled ODict dictionaries originate from ODXML files, and can easily be reverted back to XML via the CLI [`dump` command](docs/cli.md#dumping-dictionaries).
 
 An example dictionary might look like this:
 
