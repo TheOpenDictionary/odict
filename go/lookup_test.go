@@ -41,5 +41,10 @@ func TestFallbacks(t *testing.T) {
 	assert.Equal(t, 1, len(entries))
 	assert.Equal(t, "run", string(entries[0].Term()))
 
+	entries = dict.Lookup([]string{"(run)"}, 2)
+
+	assert.Equal(t, 1, len(entries))
+	assert.Equal(t, "run", string(entries[0].Term()))
+
 	CleanupTest()
 }

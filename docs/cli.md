@@ -24,7 +24,27 @@ Looking up entries is super-duper easy. Just run:
 $ odict l mydictionary.odict "word"
 ```
 
-and a full-bodied JSON object will print out if there is a match.
+and a full-bodied JSON object will print out if there is a match. 
+
+#### Query Splitting
+
+As of ODict 1.5, you can specify an additional `--split` option while performing lookups. If `--split` is greater than zero and an entry _cannot_ be found, ODict will attempt to split the query into subqueries of at least the length specified to find a match.
+
+An example could be "lovebird", where, while the term itself may not be present in a dictionary, if `split` is 4, the entries for both `love` and `bird` will be returned instead.
+
+```bash
+$ odict lookup --split=4 mydict.odict lovebird
+```
+
+#### Query Fallbacks
+
+Also introduced in ODict 1.5 is the concept of _query fallbacks_. When ODict is used in environments where dictionaries are searched via arbitrary user input, it can sometimes be advantageous to use fallbacks if entries cannot be found. In most cases, a sensible fallback could be the lemma of the word being searched.
+
+Instead of building a multilingual lemmatizer into ODict, we instead opted for manually specifying fallbacks. Fallbacks can be specified via parentheses at the end of the original search term. 
+
+```
+$ odict lookup mydict.odict "running(run)"
+```
 
 ### Fuzzy Search
 
