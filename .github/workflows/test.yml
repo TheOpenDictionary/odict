@@ -43,3 +43,8 @@ jobs:
         run: |
           . ~/.asdf/plugins/java/set-java-home.bash
           make test
+      - uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: code
+          path: /home/runner/work/odict
