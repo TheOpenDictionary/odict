@@ -4,8 +4,9 @@ import "encoding/xml"
 
 // DumpDictionary converts an Dictionary struct
 // to its original ODXML
-func DumpDictionary(dict Dictionary) string {
-	str, err := xml.MarshalIndent(&dict, "", " ")
+func (dict *Dictionary) Dump() string {
+	representable := dict.AsRepresentable()
+	str, err := xml.MarshalIndent(&representable, "", " ")
 
 	Check(err)
 

@@ -1,7 +1,6 @@
-package main
+package cli
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -11,26 +10,21 @@ import (
 
 func lookup(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
-	query := c.Args().Get(1)
+	queries := c.Args().Tail()
+	split := c.Int("split")
 
-	if len(inputFile) == 0 || len(query) == 0 {
-		return errors.New("Usage: odict lookup [dictionary path] [query]")
+	if len(inputFile) == 0 || len(queries) == 0 {
+		return errors.New("usage: odict lookup [dictionary path] [queries]")
 	}
 
-	t(func() {
-		dict := odict.ReadDictionary(inputFile)
+	t(c, func() {
+		dict := odict.ReadDictionaryFromPath(inputFile)
+		entries := dict.Lookup(queries, split)
+		representable := odict.Map(entries, func(entry odict.Entry) odict.EntryRepresentable {
+			return entry.AsRepresentable()
+		})
 
-		if dict.Entries.Has(query) {
-			entry := dict.Entries.Get(query)
-
-			b, err := json.MarshalIndent(&entry, "", " ")
-
-			odict.Check(err)
-
-			fmt.Println(string(b))
-		} else {
-			fmt.Printf("Could not find any entry for \"%s\"\n", query)
-		}
+		fmt.Println(odict.JSON(representable))
 	})
 
 	return nil

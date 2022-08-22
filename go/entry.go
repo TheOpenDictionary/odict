@@ -2,82 +2,62 @@ package odict
 
 import (
 	"encoding/xml"
-	"io"
 	"strings"
 
-	"github.com/imdario/mergo"
+	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-type EntryMap struct {
-	Iterable map[string]Entry
+type EntryRepresentable struct {
+	Term        string                   `json:"term,omitempty" xml:"term,attr"`
+	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety"`
+	XMLName     xml.Name                 `json:"-" xml:"entry"`
 }
 
-func (m *EntryMap) Set(key string, value Entry) {
-    m.Iterable[strings.ToLower(key)] = value
+func (entry EntryRepresentable) Key() string {
+	return strings.ToLower(entry.Term)
 }
 
-func (m *EntryMap) Get(key string) Entry {
-	return m.Iterable[strings.ToLower(key)]
-}
+func (entry *Entry) AsRepresentable() EntryRepresentable {
+	var ety Etymology
+	var etymologies []EtymologyRepresentable
 
-func (m *EntryMap) Has(key string) bool {
-	_, ok := m.Iterable[strings.ToLower(key)]
-	return ok
-}
-
-func (m *EntryMap) Keys() []string {
-    keys := make([]string, 0, len(m.Iterable))
-
-    for k := range m.Iterable {
-        keys = append(keys, k)
-    }
-
-    return keys
-}
-
-func (m *EntryMap) Size() int {
-	return len(m.Iterable)
-}
-
-func (m EntryMap) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	for key := range m.Iterable {
-		e.Encode(m.Get(key))
+	for b := 0; b < entry.EtymologiesLength(); b++ {
+		entry.Etymologies(&ety, b)
+		representable := ety.AsRepresentable()
+		etymologies = append(etymologies, representable)
 	}
 
-	return nil
-}
-
-func (m *EntryMap) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var entry Entry
-
-	d.DecodeElement(&entry, &start)
-
-	if m.Iterable == nil {
-		m.Iterable = make(map[string]Entry)
-	}
-
-	if m.Has(entry.Term) {
-		if err := mergo.Merge(&entry, m.Get(entry.Term), mergo.WithAppendSlice); err != nil {
-			Check(err)
-		}
-	}
-
-	m.Set(strings.ToLower(entry.Term), entry)
-
-	for {
-		_, err := d.Token()
-
-		if err != nil {
-			if err == io.EOF {
-				return nil
-			}
-			return err
-		}
+	return EntryRepresentable{
+		Term:        string(entry.Term()),
+		Etymologies: etymologies,
 	}
 }
 
-type Entry struct {
-	Term        string      `json:"term" xml:"term,attr"`
-	Etymologies []Etymology `json:"etymologies" xml:"ety"`
-	XMLName     xml.Name    `json:"-" xml:"entry"`
+func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	key := builder.CreateString(entry.Key())
+	term := builder.CreateString(entry.Term)
+	etymologies := entry.buildEtymologyVector(builder)
+
+	EntryStart(builder)
+	EntryAddKey(builder, key)
+	EntryAddTerm(builder, term)
+	EntryAddEtymologies(builder, etymologies)
+
+	return EntryEnd(builder)
+}
+
+func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	etymologies := Map(entry.Etymologies, func(ety EtymologyRepresentable) flatbuffers.UOffsetT {
+		return ety.AsBuffer(builder)
+	})
+
+	etymologiesCount := len(etymologies)
+
+	EntryStartEtymologiesVector(builder, etymologiesCount)
+
+	for i := etymologiesCount - 1; i >= 0; i-- {
+		builder.PrependUOffsetT(etymologies[i])
+	}
+
+	return builder.EndVector(etymologiesCount)
 }

@@ -24,43 +24,52 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
 
-func IndexDictionary(dictionary Dictionary, overwrite bool) string {
+func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
+	dictionary := dict.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
-		fmt.Println("Indexing dictionary (this might take some time)...")
+		if !quiet {
+			fmt.Println("Indexing dictionary (this might take some time)...")
+		}
+
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
-		defer index.Close()
-
 		Check(indexErr)
 
-		totalEntries := len(dictionary.Entries.Iterable)
+		defer index.Close()
 
-		bar := progressbar.Default(int64(totalEntries))
+		totalEntries := len(dictionary.Entries)
+
+		var bar *progressbar.ProgressBar
+
+		if !quiet {
+			bar = progressbar.Default(int64(totalEntries))
+		}
+
 		batch := index.NewBatch()
 		batchCount := 0
 		batchSize := 100
 
-		for key := range dictionary.Entries.Iterable {
-			entry := dictionary.Entries.Get(key)
+		for key := range dictionary.Entries {
+			entry := dictionary.Entries[key]
 			doc := document.NewDocument(strings.ToLower(entry.Term))
 
 			mapping.MapDocument(doc, entry)
 
-			enc := EncodeEntry(entry)
-
+			enc := serialize(&entry)
 			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
-
 			nd := doc.AddField(field)
 
 			batch.IndexAdvanced(nd)
 
 			batchCount++
 
-			bar.Add(1)
+			if !quiet {
+				bar.Add(1)
+			}
 
 			time.Sleep(time.Millisecond)
 
@@ -78,13 +87,17 @@ func IndexDictionary(dictionary Dictionary, overwrite bool) string {
 
 		Check(idxErr)
 
-		fmt.Println()
-	} else {
-		if overwrite {
-			println("Purging existing index...")
-			os.RemoveAll(indexPath)
-			return IndexDictionary(dictionary, false)
+		if !quiet {
+			fmt.Println()
 		}
+	} else if overwrite {
+		if !quiet {
+			fmt.Println("Purging existing index...")
+		}
+
+		os.RemoveAll(indexPath)
+
+		return dict.Index(false, quiet)
 	}
 
 	return indexPath
