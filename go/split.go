@@ -1,16 +1,12 @@
 package odict
 
-import (
-	"strings"
-)
-
 // Split splits a query into definable tokens greater than or equal to the specified threshold
 // Example: household -> house + hold
 func (dict *Dictionary) Split(query string, threshold int) []Entry {
 	entries := []Entry{}
 
 	var entry Entry
-	var found = dict.EntryByKey(&entry, strings.ToLower(query))
+	var found bool
 
 	start := 0
 	end := len(query)
