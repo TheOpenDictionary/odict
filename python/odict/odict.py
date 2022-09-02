@@ -5,14 +5,14 @@ from glob import glob
 from pathlib import Path
 from subprocess import run
 from tempfile import NamedTemporaryFile
+from typing import List
 
-def exec(*args: list[str]):
+def exec(*args: List[str]):
   out = run(["../bin/odict", "--quiet", *args], capture_output=True)
 
   if out.stderr:
     raise Exception(out.stderr)
     
-  print(str(out.stdout.decode('utf-8')))
   return str(out.stdout.decode('utf-8'))
 
 
