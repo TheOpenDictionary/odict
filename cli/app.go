@@ -50,7 +50,7 @@ var App = &cli.App{
 		},
 		{
 			Name:    "search",
-			Aliases: []string{"s"},
+			Aliases: []string{"f"},
 			Flags: []cli.Flag{
 				&cli.BoolFlag{
 					Name:    "index",
@@ -65,8 +65,22 @@ var App = &cli.App{
 					Value:   false,
 				},
 			},
-			Usage:  "search a compiled dictionary",
+			Usage:  "search a compiled dictionary using full-text search",
 			Action: search,
+		},
+		{
+			Name:    "split",
+			Aliases: []string{"x"},
+			Flags: []cli.Flag{
+				&cli.IntFlag{
+					Name:    "threshold",
+					Aliases: []string{"t"},
+					Usage:   "Minimum length of each token",
+					Value:   2,
+				},
+			},
+			Usage:  "split a query into its definable terms",
+			Action: split,
 		},
 		{
 			Name:    "dump",

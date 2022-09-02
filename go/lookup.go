@@ -16,21 +16,7 @@ func (dict *Dictionary) lookup(query string, fallback string, split int) []Entry
 	}
 
 	if !found && split > 0 {
-		start := 0
-		end := len(query)
-
-		for ok := true; ok; ok = start < end {
-			substr := query[start:end]
-			found = dict.EntryByKey(&entry, substr)
-
-			if found && len(substr) >= split {
-				entries = append(entries, entry)
-				start = end
-				end = len(query)
-			} else {
-				end--
-			}
-		}
+		entries = append(entries, dict.Split(query, split)...)
 	} else if found {
 		entries = append(entries, entry)
 	}
