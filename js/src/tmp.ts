@@ -10,12 +10,14 @@ import type { DictionaryOptions } from "./types";
 
 const run = promisify(_exec);
 
-export async function withTemporaryFile(
-  cb: (path: string) => Promise<void> | void
-) {
+export async function withTemporaryFile<T>(
+  cb: (path: string) => Promise<T> | T
+): Promise<T> {
   const file = randomBytes(6).toString("hex");
   const tmp = join(tmpdir(), `${file}.xml`);
+  const value = await cb(tmp);
 
-  await cb(tmp);
   await rm(tmp);
+
+  return value;
 }

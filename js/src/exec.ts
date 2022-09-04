@@ -3,6 +3,12 @@ import { promisify } from "node:util";
 
 const run = promisify(_exec);
 
+/**
+ * Executes the ODict binary
+ *
+ * @param args Arguments to pass to the executable
+ * @returns The raw stdout output string
+ */
 export async function exec(...args: string[]) {
   let odictExecutable = "odict";
 
