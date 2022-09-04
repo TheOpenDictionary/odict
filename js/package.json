@@ -1,11 +1,12 @@
 {
-  "name": "js",
+  "name": "theopendictionary",
   "version": "0.0.1",
   "description": "A JavaScript wrapper around the Open Dictionary compiler",
   "type": "module",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "concurrently \"swc -d dist ./src/*.ts\" \"tsc\"",
     "test": "jest"
   },
