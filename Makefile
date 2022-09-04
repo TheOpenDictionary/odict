@@ -13,7 +13,7 @@ schema:
 # ---------------------------------------------------------------------------- #
 
 go-test:
-	go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=${CLI}' -X 'github.com/TheOpenDictionary/odict/go.version=${FILE}'" ./go
+	env $(cat versions.txt | xargs) go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=${CLI}' -X 'github.com/TheOpenDictionary/odict/go.version=${FILE}'" ./go
 	
 # ---------------------------------------------------------------------------- #
 #                                      CLI                                     #
