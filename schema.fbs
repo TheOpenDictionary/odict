@@ -16,6 +16,12 @@ enum POS:byte {
     un
 }
 
+table Definition {
+    id:string;
+    value:string;
+    examples:[string];
+}
+
 table Etymology {
     id:string;
     description:string;

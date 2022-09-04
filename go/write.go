@@ -3,6 +3,7 @@ package odict
 import (
 	"bufio"
 	"os"
+	"strconv"
 
 	"github.com/golang/snappy"
 )
@@ -11,13 +12,15 @@ func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryReprese
 	dictionaryBytes := serialize(&dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
+	versionInt, parseErr := strconv.Atoi(version)
 
 	Check(err)
+	Check(parseErr)
 
 	defer file.Close()
 
 	signature := []byte("ODICT")
-	version := Uint16ToBytes(2)
+	version := Uint16ToBytes(uint16(versionInt))
 	compressedSize := uint64(len(compressed))
 	compressedSizeBytes := Uint64ToBytes(compressedSize)
 
