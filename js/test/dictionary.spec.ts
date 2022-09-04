@@ -20,9 +20,15 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
-  it("can compile dictionaries properly", async () => {
+  it("can lookup terms properly", async () => {
     const result = await dict1.lookup("run");
     expect(result[0][0].term).toBe("run");
+  });
+
+  it("can split terms properly", async () => {
+    const result = await dict1.split("catdog");
+    expect(result[0].term).toBe("cat");
+    expect(result[1].term).toBe("dog");
   });
 
   it("can index and search a dictionary", async () => {

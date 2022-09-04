@@ -12,6 +12,10 @@ export interface SearchOptions {
   force?: boolean;
 }
 
+export interface SplitOptions {
+  threshold?: number;
+}
+
 export interface Entry {
   id?: string;
   term: string;

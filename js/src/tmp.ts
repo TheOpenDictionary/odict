@@ -14,7 +14,7 @@ export async function withTemporaryFile<T>(
   cb: (path: string) => Promise<T> | T
 ): Promise<T> {
   const file = randomBytes(6).toString("hex");
-  const tmp = join(tmpdir(), `${file}.xml`);
+  const tmp = join(tmpdir(), file);
   const value = await cb(tmp);
 
   await rm(tmp);

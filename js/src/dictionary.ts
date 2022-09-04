@@ -9,6 +9,7 @@ import type {
   LookupOptions,
   Query,
   SearchOptions,
+  SplitOptions,
 } from "./types";
 import { generateOutputPath, queryToString } from "./utils";
 
@@ -93,7 +94,7 @@ class Dictionary {
 
         const raw = await exec(...commands);
 
-        return JSON.parse(Buffer.from(raw).toString("utf-8"));
+        return JSON.parse(raw);
       })
     );
   }
@@ -123,9 +124,32 @@ class Dictionary {
           query
         );
 
-        return JSON.parse(Buffer.from(raw).toString("utf-8"));
+        return JSON.parse(raw);
       })
     );
+  }
+
+  /**
+   * Splits a query into its definable subparts
+   *
+   * @param query The query (or a list of queries) to lookup
+   * @param options Lookup options
+   * @returns A nested array of entries
+   */
+  async split(query: string, options: SplitOptions = {}): Promise<Entry[]> {
+    const queries = Array.isArray(query) ? query : [query];
+
+    const { threshold = this.options.defaultSplitThreshold } = options;
+
+    const result = await exec(
+      "split",
+      "-t",
+      threshold.toString(),
+      this.path,
+      query
+    );
+
+    return JSON.parse(result);
   }
 }
 

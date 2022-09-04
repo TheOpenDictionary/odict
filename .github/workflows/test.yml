@@ -34,6 +34,7 @@ jobs:
       - name: Add Python build dependencies 
         if: steps.cache-asdf.outputs.cache-hit != 'true'
         run: |
+          echo ${{ steps.cache-asdf.outputs.cache-hit }}
           asdf plugin add make
           asdf install make latest
           asdf global make latest
