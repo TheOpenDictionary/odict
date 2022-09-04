@@ -1,5 +1,8 @@
 
-test: go-test jvm-test python-test
+test: go-test jvm-test python-test js-test
+
+clean:
+	rm -rf setup.py dist build schema/*.go
 
 # ---------------------------------------------------------------------------- #
 #                                    Schema                                    #
@@ -29,6 +32,21 @@ cli-build:
 jvm-test: cli-build
 	cd jvm && RUNTIME_ENV=test ./gradlew test
 
+
+# ---------------------------------------------------------------------------- #
+#                                  JavaScript                                  #
+# ---------------------------------------------------------------------------- #
+
+js-install:
+	cd js && npm install
+
+js-build: js-install
+	cd js && npm run build
+
+js-test: cli-build js-install
+	cd js && RUNTIME_ENV=test npm run test
+
+
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
@@ -38,6 +56,3 @@ python-install:
 
 python-test: cli-build python-install
 	cd python && RUNTIME_ENV=test poetry run pytest ./odict
-
-clean:
-	rm -rf setup.py dist build schema/*.go
