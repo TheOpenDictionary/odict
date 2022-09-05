@@ -4,6 +4,7 @@
     "module": "ES2020",
     "moduleResolution": "Node",
     "strict": true,
+    "allowSyntheticDefaultImports": true, 
     "declarationDir": "dist",
     "sourceMap": true,
     "declarationMap": true,
@@ -12,7 +13,8 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "declaration": true
+    "declaration": true,
+    
   },
   "include": ["src"]
 }

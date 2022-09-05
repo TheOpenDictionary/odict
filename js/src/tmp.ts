@@ -5,8 +5,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 
-import { exec } from "./exec";
-import type { DictionaryOptions } from "./types";
+import { exec } from "./exec.js";
+import type { DictionaryOptions } from "./types.js";
 
 const run = promisify(_exec);
 

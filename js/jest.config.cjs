@@ -1,9 +1,14 @@
 module.exports = {
+  testEnvironment: "node",
+  clearMocks: true,
+  extensionsToTreatAsEsm: [".ts"],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8',
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest']
   },
-  clearMocks: true,
-  collectCoverage: true,
-  coverageDirectory: 'coverage',
-  coverageProvider: 'v8'
+  moduleNameMapper: {
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
 };

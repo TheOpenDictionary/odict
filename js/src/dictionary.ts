@@ -1,8 +1,8 @@
 import { writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join } from "node:path";
 
-import { exec } from "./exec";
-import { withTemporaryFile } from "./tmp";
+import { exec } from "./exec.js";
+import { withTemporaryFile } from "./tmp.js";
 import type {
   DictionaryOptions,
   Entry,
@@ -10,8 +10,8 @@ import type {
   Query,
   SearchOptions,
   SplitOptions,
-} from "./types";
-import { generateOutputPath, queryToString } from "./utils";
+} from "./types.js";
+import { generateOutputPath, queryToString } from "./utils.js";
 
 class Dictionary {
   private readonly options: DictionaryOptions;
