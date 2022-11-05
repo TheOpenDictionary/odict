@@ -1,0 +1,16 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple"
+    },
+    "js": {
+      "release-type": "node"
+    },
+    "python": {
+      "release-type": "python"
+    },
+    "jvm": {
+      "release-type": "java"
+    }
+  }
+}
