@@ -19,3 +19,17 @@ func TestSplit(t *testing.T) {
 
 	CleanupTest()
 }
+
+func TestSplitWithNumbers(t *testing.T) {
+	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+
+	dict1 := ReadDictionaryFromPath("../examples/example1.odict")
+
+	entries := dict1.Split("2cat8dog", 1)
+
+	assert.Equal(t, 2, len(entries))
+	assert.Equal(t, "cat", string(entries[0].Term()))
+	assert.Equal(t, "dog", string(entries[1].Term()))
+
+	CleanupTest()
+}

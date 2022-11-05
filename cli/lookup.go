@@ -20,8 +20,10 @@ func lookup(c *cli.Context) error {
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
 		entries := dict.Lookup(queries, split)
-		representable := odict.Map(entries, func(entry odict.Entry) odict.EntryRepresentable {
-			return entry.AsRepresentable()
+		representable := odict.Map(entries, func(e []odict.Entry) []odict.EntryRepresentable {
+			return odict.Map(e, func(entry odict.Entry) odict.EntryRepresentable {
+				return entry.AsRepresentable()
+			})
 		})
 
 		fmt.Println(odict.JSON(representable))

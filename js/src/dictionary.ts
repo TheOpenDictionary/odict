@@ -114,19 +114,13 @@ class Dictionary {
 
     const { split = this.options.defaultSplitThreshold } = options;
 
-    return Promise.all(
-      queries.map(queryToString).map(async (query) => {
-        const raw = await exec(
-          "lookup",
-          "-s",
-          split.toString(),
-          this.path,
-          query
-        );
-
-        return JSON.parse(raw);
-      })
-    );
+    return exec(
+      "lookup",
+      "-s",
+      split.toString(),
+      this.path,
+      ...queries.map(queryToString)
+    ).then(JSON.parse);
   }
 
   /**

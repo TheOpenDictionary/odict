@@ -15,13 +15,17 @@ func (dict *Dictionary) Split(query string, threshold int) []Entry {
 		substr := query[start:end]
 		found = dict.EntryByKey(&entry, substr)
 
-		if found && len(substr) >= threshold {
+		if found {
 			entries = append(entries, entry)
+		}
+
+		if found || len(substr) <= threshold {
 			start = end
 			end = len(query)
 		} else {
 			end--
 		}
+
 	}
 
 	return entries
