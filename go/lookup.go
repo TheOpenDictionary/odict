@@ -24,8 +24,8 @@ func (dict *Dictionary) lookup(query string, fallback string, split int) []Entry
 	return entries
 }
 
-func (dict *Dictionary) Lookup(queries []string, split int) []Entry {
-	entries := []Entry{}
+func (dict *Dictionary) Lookup(queries []string, split int) [][]Entry {
+	entries := [][]Entry{}
 	r, _ := regexp.Compile(`\((.+)\)$`)
 
 	for _, query := range queries {
@@ -37,7 +37,7 @@ func (dict *Dictionary) Lookup(queries []string, split int) []Entry {
 			fallback = match[0][1]
 		}
 
-		entries = append(entries, dict.lookup(strings.Trim(query, " "), fallback, split)...)
+		entries = append(entries, dict.lookup(strings.Trim(query, " "), fallback, split))
 	}
 
 	return entries
