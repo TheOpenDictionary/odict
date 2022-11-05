@@ -46,6 +46,8 @@ js-build: js-install
 js-test: cli-build js-install
 	cd js && RUNTIME_ENV=test npm run test
 
+js-publish: cli-build js-install
+	cd js && RUNTIME_ENV=test npm run test
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
