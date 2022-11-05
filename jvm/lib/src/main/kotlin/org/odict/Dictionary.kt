@@ -1,5 +1,6 @@
 package org.odict
 
+import com.beust.klaxon.JsonArray
 import com.beust.klaxon.Klaxon
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -7,13 +8,99 @@ import kotlin.io.path.deleteIfExists
 import kotlin.io.path.pathString
 import kotlin.io.path.writeText
 
+private fun getJson(): String {
+    return "[\n" +
+            " [\n" +
+            "  {\n" +
+            "   \"term\": \"run\",\n" +
+            "   \"etymologies\": [\n" +
+            "    {\n" +
+            "     \"description\": \"Latin root\",\n" +
+            "     \"usages\": {\n" +
+            "      \"n\": {\n" +
+            "       \"pos\": \"n\",\n" +
+            "       \"definitions\": [\n" +
+            "        \"\",\n" +
+            "        \"\",\n" +
+            "        \"\",\n" +
+            "        \"\",\n" +
+            "        \"\",\n" +
+            "        \"\"\n" +
+            "       ],\n" +
+            "       \"groups\": []\n" +
+            "      },\n" +
+            "      \"v\": {\n" +
+            "       \"pos\": \"v\",\n" +
+            "       \"definitions\": [],\n" +
+            "       \"groups\": [\n" +
+            "        {\n" +
+            "         \"description\": \"A number of verb usages\",\n" +
+            "         \"definitions\": [\n" +
+            "          \"\\n            \\n            \\n          \",\n" +
+            "          \"\",\n" +
+            "          \"\",\n" +
+            "          \"\",\n" +
+            "          \"\",\n" +
+            "          \"\"\n" +
+            "         ]\n" +
+            "        }\n" +
+            "       ]\n" +
+            "      }\n" +
+            "     }\n" +
+            "    }\n" +
+            "   ]\n" +
+            "  }\n" +
+            " ]\n" +
+            "]"
+}
+
 class Dictionary constructor(private val path: String) {
 
     fun lookup(vararg queries: String, split: Int = 0): List<Entry> {
         val json = execute("lookup", "-s", split.toString(), path, *queries)
 
+        // print(json)
+
         if (json != null && json.trim().isNotEmpty()) {
-            return Klaxon().parseArray<Entry>(json) ?: ArrayList()
+            val myThing = Klaxon().parseArray<JsonArray<JsonArray<Entry>>>("""[[{
+		"term": "run",
+		"etymologies": [{
+			"description": "Latin root",
+			"usages": {
+				"n": {
+					"pos": "n",
+					"definitions": [
+						"",
+						"",
+						"",
+						"",
+						"",
+						""
+					],
+					"groups": []
+				},
+				"v": {
+					"pos": "v",
+					"definitions": [],
+					"groups": [{
+						"description": "A number of verb usages",
+						"definitions": [
+							"\n            \n            \n          ",
+							"",
+							"",
+							"",
+							"",
+							""
+						]
+					}]
+				}
+			}
+		}]
+	}]]""")
+            print(myThing)
+            // val myThing = Klaxon().parseArray<List<Entry>>(json) ?: ArrayList()
+            // print(myThing)
+            // return "hello"
         }
 
         return ArrayList()
