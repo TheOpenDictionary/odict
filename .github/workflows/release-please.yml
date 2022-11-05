@@ -22,6 +22,18 @@ jobs:
         with:
           command: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v1
+      - uses: actions/setup-node@v3 # Needed to setup .npmrc correctly
+      - name: Cache asdf
+        id: cache-asdf
+        uses: actions/cache@v2
+        with:
+          path: |
+            /home/runner/.asdf
+          key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
+          restore-keys: |
+            ${{ runner.os }}-asdf-
       - name: Publish to NPM
         if: steps.release.outputs.release_created
         env:
