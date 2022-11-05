@@ -17,8 +17,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2      
       - id: release
+        name: Release please
         uses: google-github-actions/release-please-action@v3
         with:
           command: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+      - name: Publish to NPM
+        if: steps.release.outputs.release_created
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: make js-publish
+      - name: Publish to Pypi
+        if: steps.release.outputs.release_created
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: make python-publish
