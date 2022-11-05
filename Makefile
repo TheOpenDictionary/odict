@@ -16,14 +16,14 @@ schema:
 # ---------------------------------------------------------------------------- #
 
 go-test:
-	go test ./go
+	. ./versions.txt && go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$$CLI' -X 'github.com/TheOpenDictionary/odict/go.version=$$FILE'" ./go
 	
 # ---------------------------------------------------------------------------- #
 #                                      CLI                                     #
 # ---------------------------------------------------------------------------- #
 
 cli-build:
-	go build -o ./bin/odict ./odict.go
+	. ./versions.txt && go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$$CLI' -X 'github.com/TheOpenDictionary/odict/go.version=$$FILE'" -o ./bin/odict ./odict.go
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #

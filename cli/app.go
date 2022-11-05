@@ -4,9 +4,11 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
+var version string
+
 var App = &cli.App{
 	Name:    "odict",
-	Version: "1.5.0",
+	Version: version,
 	Usage:   "lighting-fast open-source dictionary compiler",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{

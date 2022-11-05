@@ -3,6 +3,7 @@ package odict
 import (
 	"encoding/binary"
 	"os"
+	"strconv"
 
 	"github.com/golang/snappy"
 )
@@ -41,11 +42,17 @@ func readODictFile(path string) (string, uint16, []byte) {
 
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
-	version := binary.LittleEndian.Uint16(versionBytes)
+	readVersion := binary.LittleEndian.Uint16(versionBytes)
 	contentSize := binary.LittleEndian.Uint64(contentSizeBytes)
+	expectedVersion, parseErr := strconv.Atoi(version)
+
+	Check(parseErr)
 
 	// Assert signature
-	Assert(signature == "ODICT", "Invalid file signature")
+	Assert(signature == "ODICT", "This is not an ODict file!")
+
+	// Assert version
+	Assert(readVersion == uint16(expectedVersion), "This file is not compatible with the latest version of the ODict schema!")
 
 	// Read compressed buffer content as bytes
 	contentBytes := make([]byte, contentSize)
@@ -58,7 +65,7 @@ func readODictFile(path string) (string, uint16, []byte) {
 
 	Check(decodedError)
 
-	return signature, version, decoded
+	return signature, readVersion, decoded
 }
 
 // ReadDictionaryFromPath loads a compiled ODict dictionary from the provided

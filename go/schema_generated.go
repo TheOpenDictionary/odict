@@ -65,6 +65,84 @@ func (v POS) String() string {
 	return "POS(" + strconv.FormatInt(int64(v), 10) + ")"
 }
 
+type Definition struct {
+	_tab flatbuffers.Table
+}
+
+func GetRootAsDefinition(buf []byte, offset flatbuffers.UOffsetT) *Definition {
+	n := flatbuffers.GetUOffsetT(buf[offset:])
+	x := &Definition{}
+	x.Init(buf, n+offset)
+	return x
+}
+
+func GetSizePrefixedRootAsDefinition(buf []byte, offset flatbuffers.UOffsetT) *Definition {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Definition{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
+func (rcv *Definition) Init(buf []byte, i flatbuffers.UOffsetT) {
+	rcv._tab.Bytes = buf
+	rcv._tab.Pos = i
+}
+
+func (rcv *Definition) Table() flatbuffers.Table {
+	return rcv._tab
+}
+
+func (rcv *Definition) Id() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Definition) Value() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Definition) Examples(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Definition) ExamplesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func DefinitionStart(builder *flatbuffers.Builder) {
+	builder.StartObject(3)
+}
+func DefinitionAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
+}
+func DefinitionAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(value), 0)
+}
+func DefinitionAddExamples(builder *flatbuffers.Builder, examples flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(examples), 0)
+}
+func DefinitionStartExamplesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func DefinitionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	return builder.EndObject()
+}
 type Etymology struct {
 	_tab flatbuffers.Table
 }

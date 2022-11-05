@@ -2,7 +2,7 @@
   <entry term="runner">
     <ety description="Latin root">
       <usage pos="verb">
-        <definition>An additional definition</definition>
+        <definition value="An additional definition" />
       </usage>
     </ety>
   </entry>

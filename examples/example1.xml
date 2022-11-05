@@ -3,21 +3,24 @@
     <ety description="Latin root">
       <usage pos="v">
         <group description="A number of verb usages">
-          <definition>(vertebrates) To move swiftly.</definition>
-          <definition>(fluids) To flow.</definition>
-          <definition>(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled.</definition>
-          <definition>(social) To carry out an activity.</definition>
-          <definition>To extend or persist, statically or dynamically, through space or time.</definition>
-          <definition>(transitive) To execute or carry out a plan, procedure or program.</definition>
+          <definition value="(vertebrates) To move swiftly">
+            <example value="The dog ran after the cat." />
+            <example value="The horse ran away." />
+          </definition>
+          <definition value="(fluids) To flow." />
+          <definition value="(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled." />
+          <definition value="(social) To carry out an activity." />
+          <definition value="To extend or persist, statically or dynamically, through space or time." />
+          <definition value="(transitive) To execute or carry out a plan, procedure or program." />
         </group>
       </usage>
       <usage pos="n">
-        <definition>Act or instance of running, of moving rapidly using the feet.</definition>
-        <definition>Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.</definition>
-        <definition>A pleasure trip.</definition>
-        <definition>Flight, instance or period of fleeing.</definition>
-        <definition>Migration (of fish).</definition>
-        <definition>A group of fish that migrate, or ascend a river for the purpose of spawning.</definition>
+        <definition value="Act or instance of running, of moving rapidly using the feet." />
+        <definition value="Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip." />
+        <definition value="A pleasure trip." />
+        <definition value="Flight, instance or period of fleeing." />
+        <definition value="Migration (of fish)." />
+        <definition value="A group of fish that migrate, or ascend a river for the purpose of spawning." />
       </usage>
     </ety>
   </entry>
@@ -25,7 +28,7 @@
     <ety description="Latin root">
       <usage pos="v">
         <group description="A number of verb usages">
-          <definition>crap, shit</definition>
+          <definition value="crap, shit" />
         </group>
       </usage>
     </ety>
@@ -33,14 +36,14 @@
   <entry term="dog">
     <ety description="Latin root">
       <usage pos="v">
-        <definition>a dog</definition>
+        <definition value="a dog" />
       </usage>
     </ety>
   </entry>
   <entry term="cat">
     <ety description="Latin root">
       <usage pos="v">
-        <definition>a cat</definition>
+        <definition value="a cat" />
       </usage>
     </ety>
   </entry>
