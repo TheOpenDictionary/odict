@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v3 # Needed to setup .npmrc correctly
       - name: Cache asdf
         id: cache-asdf
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /home/runner/.asdf
