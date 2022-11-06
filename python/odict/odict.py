@@ -5,7 +5,6 @@ from tempfile import NamedTemporaryFile
 from typing import List
 
 def exec(*args: List[str]):
-  print(environ.get("RUNTIME_ENV"))
   out = run(["../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict", "--quiet", *args], capture_output=True)
 
   if out.stderr:
