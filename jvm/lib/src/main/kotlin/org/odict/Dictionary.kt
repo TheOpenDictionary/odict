@@ -1,6 +1,5 @@
 package org.odict
 
-import com.beust.klaxon.Klaxon
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
@@ -14,14 +13,8 @@ import kotlin.io.path.writeText
 class Dictionary constructor(private val path: String) {
 
     fun lookup(vararg queries: String, split: Int = 0): List<List<Entry>> {
-
-        val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-        val type = Types.newParameterizedType(List::class.java, List::class.java, Entry::class.java)
-        val tylerAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(type)
-
-        val json = execute("lookup", "-s", split.toString(), path, *queries)
-
-        return tylerAdapter.fromJson(json) ?: emptyList()
+        val resultJson = execute("lookup", "-s", split.toString(), path, *queries)
+        return resultJson?.let { lookupAdapter.fromJson(it) } ?: emptyList()
     }
 
     fun index() {
@@ -36,15 +29,18 @@ class Dictionary constructor(private val path: String) {
         }
 
         val output = execute(*args)
-
-        if (output != null && output.trim().isNotEmpty()) {
-            return Klaxon().parseArray<Entry>(output) ?: ArrayList()
-        }
-
-        return ArrayList()
+        return output?.let { searchAdapter.fromJson(it) } ?: emptyList()
     }
 
     companion object {
+        private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+        
+        private val lookupType = Types.newParameterizedType(List::class.java, List::class.java, Entry::class.java)
+        private val lookupAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(lookupType)
+
+        private val searchType = Types.newParameterizedType(List::class.java, Entry::class.java)
+        private val searchAdapter = moshi.adapter<List<Entry>>(searchType)
+
         fun compile(path: String) {
             this.execute("compile", path)
         }

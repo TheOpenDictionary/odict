@@ -38,7 +38,6 @@ dependencies {
     api "org.apache.commons:commons-math3:3.6.1"
 
     // For parsing JSON
-    implementation "com.beust:klaxon:5.5"
     implementation "com.squareup.moshi:moshi:1.14.0"
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
