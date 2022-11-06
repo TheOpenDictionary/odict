@@ -1,6 +1,6 @@
 {
   "name": "theopendictionary",
-  "version": "0.0.2",
+  "version": "0.0.2-rc5",
   "description": "A JavaScript wrapper around the Open Dictionary compiler",
   "type": "module",
   "main": "dist/index.js",
