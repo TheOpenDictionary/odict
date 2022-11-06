@@ -24,7 +24,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v1
-      - uses: actions/setup-node@v3 # Needed to setup .npmrc correctly
       - name: Cache asdf
         id: cache-asdf
         uses: actions/cache@v2
@@ -37,7 +36,7 @@ jobs:
       - name: Publish to NPM
         if: steps.release.outputs.release_created
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: make js-publish
       - name: Publish to Pypi
         if: steps.release.outputs.release_created
