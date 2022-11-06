@@ -33,6 +33,8 @@ jobs:
           key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
           restore-keys: |
             ${{ runner.os }}-asdf-
+      - name: Install dependencies in .tool-versions
+        uses: asdf-vm/actions/install@v1
       - name: Publish to NPM
         if: steps.release.outputs.release_created
         env:

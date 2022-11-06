@@ -59,5 +59,8 @@ python-install:
 python-test: cli-build python-install
 	cd python && RUNTIME_ENV=test poetry run pytest ./odict
 
-python-publish: python-install
+python-build:
+	cd python && poetry build
+
+python-publish: python-build
 	cd python && poetry publish
