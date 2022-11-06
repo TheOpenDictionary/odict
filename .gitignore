@@ -38,6 +38,9 @@ go.work
 # BlueJ files
 *.ctxt
 
+# Gradle local.properties
+jvm/local.properties
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

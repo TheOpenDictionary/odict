@@ -2,7 +2,6 @@ package org.odict
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class DictionaryTest {
     @Test fun testLookup() {
@@ -11,8 +10,8 @@ class DictionaryTest {
         val dict = Dictionary("../../examples/example1.odict")
         val entry = dict.lookup("run")
 
-        assertEquals("run", entry[0].term)
-        assertEquals(6, entry[0].etymologies?.get(0)?.usages?.get("v")?.groups?.get(0)?.definitions?.count())
+        assertEquals("run", entry[0][0].term)
+        assertEquals(6, entry[0][0].etymologies?.get(0)?.usages?.get("v")?.groups?.get(0)?.definitions?.count())
     }
 
     @Test
@@ -39,7 +38,7 @@ class DictionaryTest {
         val dict = Dictionary("test.odict")
         val entries = dict.lookup("hello")
 
-        assertEquals("hello", entries[0].term)
-        assertEquals("hello world", entries[0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0))
+        assertEquals("hello", entries[0][0].term)
+        assertEquals("hello world", entries[0][0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0))
     }
 }
