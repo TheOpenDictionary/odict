@@ -34,9 +34,10 @@ class Dictionary constructor(private val path: String) {
 
     companion object {
         private val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-        
-        private val lookupType = Types.newParameterizedType(List::class.java, List::class.java, Entry::class.java)
-        private val lookupAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(lookupType)
+
+        private val innerLookupType = Types.newParameterizedType(MutableList::class.java, Entry::class.java)
+        private val outerLookupType = Types.newParameterizedType(MutableList::class.java, innerLookupType)
+        private val lookupAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(outerLookupType)
 
         private val searchType = Types.newParameterizedType(List::class.java, Entry::class.java)
         private val searchAdapter = moshi.adapter<List<Entry>>(searchType)
