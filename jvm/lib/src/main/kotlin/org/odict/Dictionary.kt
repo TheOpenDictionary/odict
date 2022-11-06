@@ -1,6 +1,10 @@
 package org.odict
 
 import com.beust.klaxon.Klaxon
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.deleteIfExists
@@ -9,14 +13,15 @@ import kotlin.io.path.writeText
 
 class Dictionary constructor(private val path: String) {
 
-    fun lookup(vararg queries: String, split: Int = 0): List<Entry> {
+    fun lookup(vararg queries: String, split: Int = 0): List<List<Entry>> {
+
+        val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+        val type = Types.newParameterizedType(List::class.java, List::class.java, Entry::class.java)
+        val tylerAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(type)
+
         val json = execute("lookup", "-s", split.toString(), path, *queries)
 
-        if (json != null && json.trim().isNotEmpty()) {
-            return Klaxon().parseArray<Entry>(json) ?: ArrayList()
-        }
-
-        return ArrayList()
+        return tylerAdapter.fromJson(json) ?: emptyList()
     }
 
     fun index() {
