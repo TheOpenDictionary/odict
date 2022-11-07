@@ -16,7 +16,7 @@ jobs:
         uses: asdf-vm/actions/setup@v1
       - name: Cache asdf
         id: cache-asdf
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /home/runner/.asdf
@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-asdf-
       - name: Cache Poetry dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /home/runner/.venv
