@@ -36,7 +36,7 @@ jobs:
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
-        run: make test -B
+        run: just test
       - uses: actions/upload-artifact@v3
         if: ${{ failure() }}
         with:

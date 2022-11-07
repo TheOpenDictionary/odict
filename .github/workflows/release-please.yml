@@ -39,9 +39,9 @@ jobs:
         if: steps.release.outputs.release_created
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: make js-publish
+        run: just js-publish
       - name: Publish to Pypi
         if: steps.release.outputs.release_created
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: make python-publish
+        run: just python-publish

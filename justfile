@@ -26,12 +26,11 @@ cli-build:
 	go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$$(cat version.txt)'" -o ./bin/odict ./odict.go
 
 # ---------------------------------------------------------------------------- #
-#                                    Python                                    #
+#                                     Java                                     #
 # ---------------------------------------------------------------------------- #
 
 jvm-test: cli-build
 	cd jvm && RUNTIME_ENV=test ./gradlew test
-
 
 # ---------------------------------------------------------------------------- #
 #                                  JavaScript                                  #
@@ -53,13 +52,16 @@ js-publish: js-install
 #                                    Python                                    #
 # ---------------------------------------------------------------------------- #
 
-python-install:
+python-install: python-update
 	cd python && poetry install 
 
 python-test: cli-build python-install
-	cd python && RUNTIME_ENV=test poetry run pytest ./odict
+	cd python && RUNTIME_ENV=test poetry run pytest ./theopendictionary
 
-python-build:
+python-update:
+	cd python && poetry update 
+
+python-build: python-install
 	cd python && poetry build
 
 python-publish: python-build
