@@ -1,14 +1,11 @@
 from json import loads
-from os import environ, path, remove
-from distutils.sysconfig import get_config_var
-from glob import glob
-from pathlib import Path
+from os import environ, remove
 from subprocess import run
 from tempfile import NamedTemporaryFile
 from typing import List
 
 def exec(*args: List[str]):
-  out = run(["../bin/odict", "--quiet", *args], capture_output=True)
+  out = run(["../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict", "--quiet", *args], capture_output=True)
 
   if out.stderr:
     raise Exception(out.stderr)
