@@ -47,7 +47,7 @@ js-test: cli-build js-install
 	cd js && RUNTIME_ENV=test npm run test
 
 js-publish: js-install
-	cd js && npm run publish
+	cd js && npm publish
 
 # ---------------------------------------------------------------------------- #
 #                                    Python                                    #
@@ -59,5 +59,8 @@ python-install:
 python-test: cli-build python-install
 	cd python && RUNTIME_ENV=test poetry run pytest ./odict
 
-python-publish: python-install
+python-build:
+	cd python && poetry build
+
+python-publish: python-build
 	cd python && poetry publish

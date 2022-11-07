@@ -27,7 +27,7 @@ func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
 		for _, entry := range entries {
 			v := html.UnescapeString(entry[1])
 
-			if _, ok := dictionary.Entries[v]; ok {
+			if _, ok := dictionary.Entries[v]; !ok {
 				fmt.Printf("- %s\n", v)
 			}
 		}
