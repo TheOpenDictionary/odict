@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.1](https://github.com/TheOpenDictionary/odict/compare/v1.6.0...v1.6.1) (2022-11-12)
+
+
+### Bug Fixes
+
+* **ci:** updated release-please to only publish for released packages ([7e2e083](https://github.com/TheOpenDictionary/odict/commit/7e2e0831cc4b171047aea100c78eff77e82f1c03))
+* don't use lowercase entry keys ([c57d01e](https://github.com/TheOpenDictionary/odict/commit/c57d01e6655a5e517c811c11b02456e7ae2e48ee))
+* fix tests ([8bbf73d](https://github.com/TheOpenDictionary/odict/commit/8bbf73d556d65d5ffb82669769cf4cf15e38e805))
+* **js:** disable term splitting by default ([f739ef0](https://github.com/TheOpenDictionary/odict/commit/f739ef0bc8ef4709b3fea52cc8b00486c547366d))
+* **js:** update Node configuration ([b0f3850](https://github.com/TheOpenDictionary/odict/commit/b0f385060cc45460d8ca38c699b00ad0cac9aa9e))
+* **make:** fix publish command ([178a6da](https://github.com/TheOpenDictionary/odict/commit/178a6da9215ec7ae9e6736a30ebf6903d230438d))
+* **python:** fix python build ([3df34ac](https://github.com/TheOpenDictionary/odict/commit/3df34ac46051e6e618e890e157527cffad2d44bd))
+
 ## [1.6.0](https://github.com/TheOpenDictionary/odict/compare/v1.5.0...v1.6.0) (2022-11-06)
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.3](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.2...theopendictionary-v0.0.3) (2022-11-12)
+
+
+### Bug Fixes
+
+* **js:** disable term splitting by default ([f739ef0](https://github.com/TheOpenDictionary/odict/commit/f739ef0bc8ef4709b3fea52cc8b00486c547366d))
+* **js:** update Node configuration ([b0f3850](https://github.com/TheOpenDictionary/odict/commit/b0f385060cc45460d8ca38c699b00ad0cac9aa9e))
+
 ## [0.0.2](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.1...theopendictionary-v0.0.2) (2022-11-06)
 
 
