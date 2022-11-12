@@ -1,7 +1,7 @@
 export type Query = { word: string; fallback: string } | string;
 
 export interface DictionaryOptions {
-  defaultSplitThreshold: number;
+  defaultSplitThreshold?: number;
 }
 
 export interface LookupOptions {
@@ -10,10 +10,6 @@ export interface LookupOptions {
 
 export interface SearchOptions {
   force?: boolean;
-}
-
-export interface SplitOptions {
-  threshold?: number;
 }
 
 export interface Entry {

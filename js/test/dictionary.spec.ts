@@ -25,8 +25,19 @@ describe("Dictionary", () => {
     expect(result[0][0].term).toBe("run");
   });
 
+  it("doesn't split unless specified", async () => {
+    const result = await dict1.lookup("catdog");
+    expect(result[0].length).toBe(0);
+  });
+
+  it("can split terms during lookup", async () => {
+    const result = await dict1.lookup("catdog", { split: 3 });
+    expect(result[0][0].term).toBe("cat");
+    expect(result[0][1].term).toBe("dog");
+  });
+
   it("can split terms properly", async () => {
-    const result = await dict1.split("catdog");
+    const result = await dict1.split("catdog", 2);
     expect(result[0].term).toBe("cat");
     expect(result[1].term).toBe("dog");
   });

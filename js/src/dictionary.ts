@@ -9,7 +9,6 @@ import type {
   LookupOptions,
   Query,
   SearchOptions,
-  SplitOptions,
 } from "./types.js";
 import { generateOutputPath, queryToString } from "./utils.js";
 
@@ -17,10 +16,7 @@ class Dictionary {
   private readonly options: DictionaryOptions;
 
   constructor(readonly path: string, options: Partial<DictionaryOptions> = {}) {
-    this.options = {
-      defaultSplitThreshold: 2,
-      ...options,
-    };
+    this.options = options;
   }
 
   /**
@@ -113,11 +109,10 @@ class Dictionary {
     const queries = Array.isArray(query) ? query : [query];
 
     const { split = this.options.defaultSplitThreshold } = options;
-
+    console.log(split);
     return exec(
       "lookup",
-      "-s",
-      split.toString(),
+      ...(split ? ["-s", split.toString()] : []),
       this.path,
       ...queries.map(queryToString)
     ).then(JSON.parse);
@@ -130,15 +125,10 @@ class Dictionary {
    * @param options Lookup options
    * @returns A nested array of entries
    */
-  async split(query: string, options: SplitOptions = {}): Promise<Entry[]> {
-    const queries = Array.isArray(query) ? query : [query];
-
-    const { threshold = this.options.defaultSplitThreshold } = options;
-
+  async split(query: string, threshold: number): Promise<Entry[]> {
     const result = await exec(
       "split",
-      "-t",
-      threshold.toString(),
+      ...(threshold ? ["-t", threshold.toString()] : []),
       this.path,
       query
     );

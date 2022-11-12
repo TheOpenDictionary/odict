@@ -15,7 +15,10 @@ export async function exec(...args: string[]) {
   let odictExecutable = "odict";
 
   if (process.env.RUNTIME_ENV === "test") {
-    odictExecutable = join(fileURLToPath(import.meta.url), "../../../bin/odict");
+    odictExecutable = join(
+      fileURLToPath(import.meta.url),
+      "../../../bin/odict"
+    );
   }
 
   const { stderr, stdout } = await run(
