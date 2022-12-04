@@ -37,6 +37,12 @@ var App = &cli.App{
 			Action:  index,
 		},
 		{
+			Name:    "lexicon",
+			Aliases: []string{"e"},
+			Usage:   "lists all words defined in a dictionary",
+			Action:  lexicon,
+		},
+		{
 			Name:    "lookup",
 			Aliases: []string{"l"},
 			Usage:   "looks up an entry in a compiled dictionary without indexing",
