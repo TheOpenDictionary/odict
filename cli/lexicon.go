@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"fmt"
+
 	odict "github.com/TheOpenDictionary/odict/go"
 	cli "github.com/urfave/cli/v2"
 )
@@ -13,7 +15,7 @@ func lexicon(c *cli.Context) error {
 		result := dict.Lexicon()
 
 		for _, word := range result {
-			println(word)
+			fmt.Println(word)
 		}
 	})
 
