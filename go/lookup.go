@@ -9,10 +9,10 @@ func (dict *Dictionary) lookup(query string, fallback string, split int) []Entry
 	entries := []Entry{}
 
 	var entry Entry
-	var found = dict.EntryByKey(&entry, strings.ToLower(query))
+	var found = dict.EntriesByKey(&entry, strings.ToLower(query))
 
 	if !found && fallback != "" {
-		found = dict.EntryByKey(&entry, strings.ToLower(fallback))
+		found = dict.EntriesByKey(&entry, strings.ToLower(fallback))
 	}
 
 	if !found && split > 0 {

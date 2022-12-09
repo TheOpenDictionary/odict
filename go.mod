@@ -6,8 +6,7 @@ require (
 	github.com/blevesearch/bleve/v2 v2.3.5
 	github.com/blevesearch/bleve_index_api v1.0.4
 	github.com/golang/snappy v0.0.4
-	github.com/google/flatbuffers v2.0.6+incompatible
-	github.com/google/uuid v1.3.0
+	github.com/google/flatbuffers v22.11.23+incompatible
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.9.0
 	github.com/stretchr/testify v1.8.0

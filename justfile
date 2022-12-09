@@ -15,7 +15,7 @@ schema:
 #                                    Library                                   #
 # ---------------------------------------------------------------------------- #
 
-go-test:
+go-test: schema
 	go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$$(cat version.txt)'" ./go
 	
 # ---------------------------------------------------------------------------- #
