@@ -15,7 +15,7 @@ func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
-	r := regexp.MustCompile("<entry.*?term=\"(.*?)\">")
+	r := regexp.MustCompile("<entry.*?term=\"(.*?)\".*?>")
 	entries := r.FindAllStringSubmatch(xmlStr, -1)
 	expectedEntries := len(entries)
 	actualEntries := len(dictionary.Entries)

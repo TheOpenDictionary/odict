@@ -5,26 +5,36 @@ import (
 	"strings"
 )
 
-func (dict *Dictionary) lookup(query string, fallback string, split int) []Entry {
+func (dict *Dictionary) lookup(query string, fallback string, split int, follow bool) []Entry {
 	entries := []Entry{}
 
 	var entry Entry
-	var found = dict.EntryByKey(&entry, strings.ToLower(query))
+	var found = dict.EntriesByKey(&entry, strings.ToLower(query))
 
-	if !found && fallback != "" {
-		found = dict.EntryByKey(&entry, strings.ToLower(fallback))
+	print(query)
+
+	if found {
+		var see = entry.See()
+		print("FUC", string(see))
+
+		if len(see) > 0 && follow {
+			println("YES", string(see))
+			return dict.lookup(string(see), fallback, split, follow)
+		}
+	} else if fallback != "" {
+		found = dict.EntriesByKey(&entry, strings.ToLower(fallback))
 	}
 
-	if !found && split > 0 {
-		entries = append(entries, dict.Split(query, split)...)
-	} else if found {
+	if found {
 		entries = append(entries, entry)
+	} else if split > 0 {
+		entries = append(entries, dict.Split(query, split)...)
 	}
 
 	return entries
 }
 
-func (dict *Dictionary) Lookup(queries []string, split int) [][]Entry {
+func (dict *Dictionary) Lookup(queries []string, split int, follow bool) [][]Entry {
 	entries := [][]Entry{}
 	r, _ := regexp.Compile(`\((.+)\)$`)
 
@@ -37,7 +47,7 @@ func (dict *Dictionary) Lookup(queries []string, split int) [][]Entry {
 			fallback = match[0][1]
 		}
 
-		entries = append(entries, dict.lookup(strings.Trim(query, " "), fallback, split))
+		entries = append(entries, dict.lookup(strings.Trim(query, " "), fallback, split, follow))
 	}
 
 	return entries

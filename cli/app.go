@@ -53,6 +53,12 @@ var App = &cli.App{
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
 				},
+				&cli.BoolFlag{
+					Name:    "follow",
+					Aliases: []string{"f"},
+					Usage:   "Follows all \"see also\" attributes (\"see\") until it finds a root term.",
+					Value:   false,
+				},
 			},
 			Action: lookup,
 		},

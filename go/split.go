@@ -13,7 +13,7 @@ func (dict *Dictionary) Split(query string, threshold int) []Entry {
 
 	for ok := true; ok; ok = start < end {
 		substr := query[start:end]
-		found = dict.EntryByKey(&entry, substr)
+		found = dict.EntriesByKey(&entry, substr)
 
 		if found {
 			entries = append(entries, entry)
