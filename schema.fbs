@@ -43,6 +43,7 @@ table Usage {
 table Entry {
     key:string (key);
     term:string;
+    see:string;
     etymologies:[Etymology];
 }
 
