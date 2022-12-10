@@ -53,6 +53,12 @@ var App = &cli.App{
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
 				},
+				&cli.IntFlag{
+					Name:    "format",
+					Aliases: []string{"k"},
+					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
+					Value:   0,
+				},
 			},
 			Action: lookup,
 		},
