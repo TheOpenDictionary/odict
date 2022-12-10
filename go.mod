@@ -5,9 +5,9 @@ go 1.19
 require (
 	github.com/blevesearch/bleve/v2 v2.3.5
 	github.com/blevesearch/bleve_index_api v1.0.4
+	github.com/fatih/color v1.13.0
 	github.com/golang/snappy v0.0.4
-	github.com/google/flatbuffers v2.0.6+incompatible
-	github.com/google/uuid v1.3.0
+	github.com/google/flatbuffers v22.11.23+incompatible
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.9.0
 	github.com/stretchr/testify v1.8.0
@@ -33,7 +33,6 @@ require (
 	github.com/blevesearch/zapx/v15 v15.3.6 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fatih/color v1.13.0 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
