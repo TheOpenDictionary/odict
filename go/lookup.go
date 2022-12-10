@@ -11,14 +11,10 @@ func (dict *Dictionary) lookup(query string, fallback string, split int, follow 
 	var entry Entry
 	var found = dict.EntriesByKey(&entry, strings.ToLower(query))
 
-	print(query)
-
 	if found {
 		var see = entry.See()
-		print("FUC", string(see))
 
 		if len(see) > 0 && follow {
-			println("YES", string(see))
 			return dict.lookup(string(see), fallback, split, follow)
 		}
 	} else if fallback != "" {

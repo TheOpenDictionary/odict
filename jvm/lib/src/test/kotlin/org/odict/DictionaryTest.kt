@@ -37,7 +37,7 @@ class DictionaryTest {
                 "test.odict")
         val dict = Dictionary("test.odict")
         val entries = dict.lookup("hello")
-
+println(entries)
         assertEquals("hello", entries[0][0].term)
         assertEquals("hello world", entries[0][0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0))
     }

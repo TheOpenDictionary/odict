@@ -30,7 +30,7 @@ cli-build:
 # ---------------------------------------------------------------------------- #
 
 jvm-test: cli-build
-	cd jvm && RUNTIME_ENV=test ./gradlew test
+	cd jvm && RUNTIME_ENV=test ./gradlew test --info
 
 # ---------------------------------------------------------------------------- #
 #                                  JavaScript                                  #
