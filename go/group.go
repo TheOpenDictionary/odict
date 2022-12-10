@@ -5,16 +5,19 @@ import (
 )
 
 type GroupRepresentable struct {
-	ID          string   `json:"id,omitempty" xml:"id,attr"`
-	Description string   `json:"description,omitempty" xml:"description,attr,omitempty"`
-	Definitions []string `json:"definitions" xml:"definition"`
+	ID          string                    `json:"id,omitempty" xml:"id,attr"`
+	Description string                    `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Definitions []DefinitionRepresentable `json:"definitions" xml:"definition"`
 }
 
 func (group *Group) AsRepresentable() GroupRepresentable {
-	definitions := []string{}
+	var definition Definition
 
-	for e := 0; e < group.DefinitionsLength(); e++ {
-		definitions = append(definitions, string(group.Definitions(e)))
+	definitions := []DefinitionRepresentable{}
+
+	for d := 0; d < group.DefinitionsLength(); d++ {
+		group.Definitions(&definition, d)
+		definitions = append(definitions, definition.AsRepresentable())
 	}
 
 	return GroupRepresentable{
@@ -42,7 +45,7 @@ func (group *GroupRepresentable) buildDefinitionVector(builder *flatbuffers.Buil
 	bufs := make([]flatbuffers.UOffsetT, 0, definitionCount)
 
 	for _, definition := range definitions {
-		bufs = append(bufs, builder.CreateString(definition))
+		bufs = append(bufs, definition.AsBuffer(builder))
 	}
 
 	GroupStartDefinitionsVector(builder, definitionCount)

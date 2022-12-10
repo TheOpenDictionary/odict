@@ -2,13 +2,15 @@ package cli
 
 import (
 	"fmt"
+	"strings"
 
 	odict "github.com/TheOpenDictionary/odict/go"
 	"github.com/fatih/color"
 )
 
 var title = color.New(color.Bold)
-var pos = color.New(color.Italic, color.Faint)
+var italic = color.New(color.Italic, color.Faint)
+var italicUnderline = color.New(color.Italic, color.Faint, color.Underline)
 var etyTitle = color.New(color.Bold, color.Underline)
 
 type PrintFormat = string
@@ -20,25 +22,45 @@ const (
 )
 
 func prettyPrint(entries [][]odict.EntryRepresentable) {
+	fmt.Println()
+
 	for _, entry := range entries {
 		for _, subentry := range entry {
 
+			Divider(32)
 			title.Printf("%s\n", subentry.Term)
-
 			Divider(32)
 
 			etys := subentry.Etymologies
 
 			for eidx, ety := range etys {
-				etyTitle.Printf("\nEtymology #%d\n\n", eidx+1)
+				etyTitle.Printf("\nEtymology #%d\n", eidx+1)
 
 				for _, usage := range ety.Usages {
-					pos.Printf("%s\n\n", usage.POS.Name())
+					italic.Printf("\n%s\n\n", usage.POS.Name())
 
 					var i = 0
 
 					for i < len(usage.Definitions) {
-						fmt.Printf("  %d. %s\n", i+1, usage.Definitions[i])
+						def := usage.Definitions[i]
+
+						fmt.Printf("  %d. %s\n", i+1, def.Value)
+
+						for _, example := range def.Examples {
+							term := subentry.Term
+							fmt.Print("     ")
+							start := strings.Index(strings.ToLower(example), strings.ToLower(term))
+
+							if start >= 0 {
+								end := start + len(term)
+								italic.Print(example[0:start])
+								italicUnderline.Print(example[start:end])
+								italic.Print(example[end:])
+								fmt.Println()
+							} else {
+								italic.Printf("%s\n", example)
+							}
+						}
 						i++
 					}
 				}

@@ -276,13 +276,16 @@ func (rcv *Group) Description() []byte {
 	return nil
 }
 
-func (rcv *Group) Definitions(j int) []byte {
+func (rcv *Group) Definitions(obj *Definition, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		a := rcv._tab.Vector(o)
-		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
 	}
-	return nil
+	return false
 }
 
 func (rcv *Group) DefinitionsLength() int {
@@ -387,13 +390,16 @@ func (rcv *Usage) LookupByKey(key POS, vectorLocation flatbuffers.UOffsetT, buf 
 	return false
 }
 
-func (rcv *Usage) Definitions(j int) []byte {
+func (rcv *Usage) Definitions(obj *Definition, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
-		a := rcv._tab.Vector(o)
-		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
 	}
-	return nil
+	return false
 }
 
 func (rcv *Usage) DefinitionsLength() int {

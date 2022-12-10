@@ -40,6 +40,7 @@ func (def *DefinitionRepresentable) AsBuffer(builder *flatbuffers.Builder) flatb
 func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	examples := def.Examples
 	exampleCount := len(examples)
+
 	exampleBuffers := Map(examples, func(example string) flatbuffers.UOffsetT {
 		return builder.CreateString(example)
 	})

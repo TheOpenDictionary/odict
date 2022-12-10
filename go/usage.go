@@ -7,10 +7,10 @@ import (
 )
 
 type UsageRepresentable struct {
-	POS         PartOfSpeech         `json:"pos,omitempty" xml:"pos,attr"`
-	Definitions []string             `json:"definitions" xml:"definition"`
-	Groups      []GroupRepresentable `json:"groups" xml:"group"`
-	XMLName     xml.Name             `json:"-" xml:"usage"`
+	POS         PartOfSpeech              `json:"pos,omitempty" xml:"pos,attr"`
+	Definitions []DefinitionRepresentable `json:"definitions" xml:"definition"`
+	Groups      []GroupRepresentable      `json:"groups" xml:"group"`
+	XMLName     xml.Name                  `json:"-" xml:"usage"`
 }
 
 func (usage UsageRepresentable) Key() PartOfSpeech {
@@ -19,12 +19,14 @@ func (usage UsageRepresentable) Key() PartOfSpeech {
 
 func (usage *Usage) AsRepresentable() UsageRepresentable {
 	var group Group
+	var definition Definition
 
 	groups := []GroupRepresentable{}
-	definitions := []string{}
+	definitions := []DefinitionRepresentable{}
 
 	for d := 0; d < usage.DefinitionsLength(); d++ {
-		definitions = append(definitions, string(usage.Definitions(d)))
+		usage.Definitions(&definition, d)
+		definitions = append(definitions, definition.AsRepresentable())
 	}
 
 	for g := 0; g < usage.GroupsLength(); g++ {
@@ -69,7 +71,10 @@ func (usage *UsageRepresentable) buildGroupVector(builder *flatbuffers.Builder) 
 }
 
 func (usage *UsageRepresentable) buildDefinitionVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	definitions := Map(usage.Definitions, builder.CreateString)
+	definitions := Map(usage.Definitions, func(d DefinitionRepresentable) flatbuffers.UOffsetT {
+		return d.AsBuffer(builder)
+	})
+
 	definitionCount := len(definitions)
 
 	GroupStartDefinitionsVector(builder, definitionCount)
