@@ -3,8 +3,8 @@
 package odict
 
 import (
-	"bytes"
 	"strconv"
+	"bytes"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
