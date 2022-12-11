@@ -12,7 +12,7 @@ The Open Dictionary Project (ODict for short), is an open-source alternative to 
 Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](docs/cli.md) or via its open-source Go bindings.
 
 <div align="center">
-<img src="terminal.png" width="800" />
+<img src="terminal.png" width="1000" />
 </div>
 
 ## Motivation
