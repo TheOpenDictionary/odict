@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.3...theopendictionary-v0.0.4) (2022-12-11)
+
+
+### Features
+
+* add support for pretty-printing entries ([#62](https://github.com/TheOpenDictionary/odict/issues/62)) ([24d82bc](https://github.com/TheOpenDictionary/odict/commit/24d82bcf44b896347f4c9e9210cfe72bea82d978))
+
 ## [0.0.3](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.2...theopendictionary-v0.0.3) (2022-11-12)
 
 
