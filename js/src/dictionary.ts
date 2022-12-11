@@ -108,10 +108,13 @@ class Dictionary {
   ): Promise<Entry[][]> {
     const queries = Array.isArray(query) ? query : [query];
 
-    const { split = this.options.defaultSplitThreshold } = options;
-    console.log(split);
+    const { follow, split = this.options.defaultSplitThreshold } = options;
+
     return exec(
       "lookup",
+      "-f",
+      "json",
+      follow ? "--follow" : "",
       ...(split ? ["-s", split.toString()] : []),
       this.path,
       ...queries.map(queryToString)

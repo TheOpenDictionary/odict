@@ -61,7 +61,7 @@ var App = &cli.App{
 				},
 				&cli.BoolFlag{
 					Name:    "follow",
-					Aliases: []string{"l"},
+					Aliases: []string{"F"},
 					Usage:   "Follows all \"see also\" attributes (\"see\") until it finds a root term.",
 					Value:   false,
 				},

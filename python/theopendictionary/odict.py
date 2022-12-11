@@ -6,6 +6,15 @@ from typing import List
 
 
 def exec(*args: List[str]):
+    print(
+        " ".join(
+            [
+                "../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict",
+                "--quiet",
+                *args,
+            ]
+        )
+    )
     out = run(
         [
             "../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict",
@@ -48,5 +57,10 @@ class Dictionary:
     def index(self):
         exec("index", self.__path)
 
-    def lookup(self, *terms):
-        return loads(exec("lookup", self.__path, *terms))
+    def lookup(self, *terms, **kwargs):
+        args = ["lookup", "-f", "json"]
+
+        if kwargs.get("follow"):
+            args.append("-F")
+
+        return loads(exec(*args, self.__path, *terms))

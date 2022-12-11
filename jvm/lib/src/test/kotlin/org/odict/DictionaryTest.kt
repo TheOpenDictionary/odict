@@ -14,31 +14,31 @@ class DictionaryTest {
         assertEquals(6, entry[0][0].etymologies?.get(0)?.usages?.get("v")?.groups?.get(0)?.definitions?.count())
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testSearch() {
-        Dictionary.compile("../../examples/example1.xml")
+    // @Test
+    // @Throws(Exception::class)
+    // fun testSearch() {
+    //     Dictionary.compile("../../examples/example1.xml")
 
-        val dict = Dictionary("../../examples/example1.odict")
+    //     val dict = Dictionary("../../examples/example1.odict")
 
-        dict.index()
+    //     dict.index()
 
-        val json = dict.search("run")
+    //     val json = dict.search("run")
 
-        assertEquals(1, json.count())
-        assertEquals("run", json[0].term)
-    }
+    //     assertEquals(1, json.count())
+    //     assertEquals("run", json[0].term)
+    // }
 
-    @Test
-    @Throws(Exception::class)
-    fun testWrite() {
-        Dictionary.write(
-                "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition>hello world</definition></usage></ety></entry></dictionary>",
-                "test.odict")
-        val dict = Dictionary("test.odict")
-        val entries = dict.lookup("hello")
+    // @Test
+    // @Throws(Exception::class)
+    // fun testWrite() {
+    //     Dictionary.write(
+    //             "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition>hello world</definition></usage></ety></entry></dictionary>",
+    //             "test.odict")
+    //     val dict = Dictionary("test.odict")
+    //     val entries = dict.lookup("hello")
 
-        assertEquals("hello", entries[0][0].term)
-        assertEquals("hello world", entries[0][0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0))
-    }
+    //     assertEquals("hello", entries[0][0].term)
+    //     assertEquals("hello world", entries[0][0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0))
+    // }
 }
