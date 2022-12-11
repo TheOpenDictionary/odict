@@ -10,6 +10,7 @@ import (
 	"github.com/fatih/color"
 )
 
+var faint = color.New(color.Faint)
 var italic = color.New(color.Italic)
 var italicFaint = color.New(color.Italic, color.Faint)
 var italicFaintUnderlined = color.New(color.Italic, color.Faint, color.Underline)
@@ -29,6 +30,7 @@ func ppExample(example string, underlined string, indent int) {
 	start := strings.Index(strings.ToLower(example), strings.ToLower(underlined))
 
 	fmt.Print(strings.Repeat(" ", indent))
+	faint.Print("• ")
 
 	if start >= 0 {
 		end := start + len(underlined)
@@ -98,6 +100,11 @@ func ppEty(ety odict.EtymologyRepresentable, i int, showTitle bool, entry odict.
 	if showTitle {
 		boldUnderlined.Printf("\nEtymology #%d\n", i+1)
 	}
+
+	if len(ety.Description) > 0 {
+		fmt.Println(ety.Description)
+	}
+
 	for _, usage := range ety.Usages {
 		ppUsage(usage, entry)
 	}
