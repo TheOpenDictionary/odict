@@ -3,7 +3,7 @@ package odict
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
+	"log"
 	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
@@ -46,7 +46,9 @@ func (pos PartOfSpeech) Name() string {
 		return val
 	}
 
-	panic(fmt.Sprintf("Error: invalid part-of-speech: %s", pos))
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return ""
 }
 
 var posPartOfSpeechMap = func() map[POS]PartOfSpeech {
@@ -64,7 +66,9 @@ func posToPartOfSpeech(pos POS) PartOfSpeech {
 		return val
 	}
 
-	panic(fmt.Sprintf("Read error: invalid part-of-speech used: %s", pos))
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return ""
 }
 
 func partOfSpeechToPOS(pos PartOfSpeech) POS {
@@ -76,7 +80,9 @@ func partOfSpeechToPOS(pos PartOfSpeech) POS {
 		return POSun
 	}
 
-	panic(fmt.Sprintf("Write error: invalid part-of-speech used: %s", pos))
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return POSun
 }
 
 func serialize(b Serializable) []byte {

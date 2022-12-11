@@ -2,6 +2,7 @@ package odict
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -16,7 +17,7 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 	_, err := os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
-		panic("Index path does not exist. Did you call IndexDictionary() first?")
+		log.Fatalln("Index path does not exist. Did you call IndexDictionary() first?")
 	}
 
 	index, openErr := bleve.Open(indexPath)

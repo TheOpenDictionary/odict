@@ -7,9 +7,9 @@ import (
 )
 
 type UsageRepresentable struct {
-	POS         PartOfSpeech              `json:"pos,omitempty" xml:"pos,attr"`
-	Definitions []DefinitionRepresentable `json:"definitions" xml:"definition"`
-	Groups      []GroupRepresentable      `json:"groups" xml:"group"`
+	POS         PartOfSpeech              `json:"-" xml:"pos,attr"`
+	Definitions []DefinitionRepresentable `json:"definitions,omitempty" xml:"definition"`
+	Groups      []GroupRepresentable      `json:"groups,omitempty" xml:"group"`
 	XMLName     xml.Name                  `json:"-" xml:"usage"`
 }
 

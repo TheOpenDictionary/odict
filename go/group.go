@@ -13,7 +13,10 @@ type GroupRepresentable struct {
 func (group *Group) AsRepresentable() GroupRepresentable {
 	var definition Definition
 
+	description := string(group.Description())
 	definitions := []DefinitionRepresentable{}
+
+	Assert(len(description) != 0, "All definition groups must have descriptions!")
 
 	for d := 0; d < group.DefinitionsLength(); d++ {
 		group.Definitions(&definition, d)
@@ -21,7 +24,7 @@ func (group *Group) AsRepresentable() GroupRepresentable {
 	}
 
 	return GroupRepresentable{
-		Description: string(group.Description()),
+		Description: description,
 		Definitions: definitions,
 	}
 }
@@ -30,6 +33,8 @@ func (group *GroupRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 	id := builder.CreateString(group.ID)
 	description := builder.CreateString(group.Description)
 	definitions := group.buildDefinitionVector(builder)
+
+	Assert(len(group.Description) != 0, "All definition groups must have descriptions!")
 
 	GroupStart(builder)
 	GroupAddId(builder, id)
