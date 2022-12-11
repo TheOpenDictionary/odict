@@ -1,3 +1,3 @@
 package odict
 
-var version string = "3"
+var version string = "4"

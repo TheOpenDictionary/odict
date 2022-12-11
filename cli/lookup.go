@@ -2,7 +2,6 @@ package cli
 
 import (
 	"errors"
-	"fmt"
 
 	odict "github.com/TheOpenDictionary/odict/go"
 	cli "github.com/urfave/cli/v2"
@@ -13,6 +12,7 @@ func lookup(c *cli.Context) error {
 	queries := c.Args().Tail()
 	follow := c.Bool("follow")
 	split := c.Int("split")
+	format := c.String("format")
 
 	if len(inputFile) == 0 || len(queries) == 0 {
 		return errors.New("usage: odict lookup [dictionary path] [queries]")
@@ -27,7 +27,7 @@ func lookup(c *cli.Context) error {
 			})
 		})
 
-		fmt.Println(odict.JSON(representable))
+		PrintEntries(representable, format)
 	})
 
 	return nil

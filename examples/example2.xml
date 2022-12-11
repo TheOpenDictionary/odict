@@ -1,7 +1,7 @@
 <dictionary name="Example Dictionary 2">
   <entry term="runner">
     <ety description="Latin root">
-      <usage pos="verb">
+      <usage pos="v">
         <definition value="An additional definition" />
       </usage>
     </ety>

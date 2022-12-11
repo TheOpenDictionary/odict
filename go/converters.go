@@ -2,9 +2,88 @@ package odict
 
 import (
 	"encoding/json"
+	"encoding/xml"
+	"log"
+	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
+
+var partOfSpeechNameMap = map[PartOfSpeech]string{
+	Adjective:    "adjective",
+	Adverb:       "adverb",
+	Article:      "article",
+	Conjugation:  "conjugation",
+	Interjection: "interjection",
+	Noun:         "noun",
+	Particle:     "particle",
+	Prefix:       "prefix",
+	Preposition:  "preposition",
+	Pronoun:      "pronoun",
+	Suffix:       "suffix",
+	Unknown:      "unknown part-of-speech",
+	Verb:         "verb",
+}
+
+var partOfSpeechPOSMap = map[PartOfSpeech]POS{
+	Adjective:    POSadj,
+	Adverb:       POSadv,
+	Article:      POSart,
+	Conjugation:  POSconj,
+	Interjection: POSintj,
+	Noun:         POSn,
+	Particle:     POSpart,
+	Prefix:       POSpref,
+	Preposition:  POSprep,
+	Pronoun:      POSpro,
+	Suffix:       POSsuff,
+	Unknown:      POSun,
+	Verb:         POSv,
+}
+
+func (pos PartOfSpeech) Name() string {
+	if val, ok := partOfSpeechNameMap[pos]; ok {
+		return val
+	}
+
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return ""
+}
+
+var posPartOfSpeechMap = func() map[POS]PartOfSpeech {
+	posMap := map[POS]PartOfSpeech{}
+
+	for k, v := range partOfSpeechPOSMap {
+		posMap[v] = k
+	}
+
+	return posMap
+}()
+
+func posToPartOfSpeech(pos POS) PartOfSpeech {
+	if val, ok := posPartOfSpeechMap[pos]; ok {
+		return val
+	}
+
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return ""
+}
+
+func partOfSpeechToPOS(pos PartOfSpeech) POS {
+	if val, ok := partOfSpeechPOSMap[pos]; ok {
+		return val
+	}
+
+	if len(strings.TrimSpace(string(pos))) == 0 {
+		return POSun
+	}
+
+	log.Fatalf("Invalid part-of-speech used: %s", pos)
+
+	return POSun
+}
 
 func serialize(b Serializable) []byte {
 	builder := flatbuffers.NewBuilder(0)
@@ -21,4 +100,12 @@ func JSON(any interface{}) string {
 	Check(err)
 
 	return string(b)
+}
+
+func XML(any interface{}) string {
+	str, err := xml.MarshalIndent(&any, "", " ")
+
+	Check(err)
+
+	return string(str)
 }

@@ -22,7 +22,7 @@ go-test:
 #                                      CLI                                     #
 # ---------------------------------------------------------------------------- #
 
-cli-build:  
+cli-build:
 	go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat version.txt)'" -o ./bin/odict ./odict.go
 
 # ---------------------------------------------------------------------------- #

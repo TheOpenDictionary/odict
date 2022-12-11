@@ -7,7 +7,7 @@ import (
 type DefinitionRepresentable struct {
 	ID       string   `json:"id,omitempty" xml:"id,attr"`
 	Value    string   `json:"value,omitempty" xml:"value,attr"`
-	Examples []string `json:"examples" xml:"example"`
+	Examples []string `json:"examples,omitempty" xml:"example"`
 }
 
 func (definition *Definition) AsRepresentable() DefinitionRepresentable {
@@ -40,6 +40,7 @@ func (def *DefinitionRepresentable) AsBuffer(builder *flatbuffers.Builder) flatb
 func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	examples := def.Examples
 	exampleCount := len(examples)
+
 	exampleBuffers := Map(examples, func(example string) flatbuffers.UOffsetT {
 		return builder.CreateString(example)
 	})

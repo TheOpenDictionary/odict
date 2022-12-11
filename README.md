@@ -1,13 +1,19 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="350" />
+<img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="250" />
 <br/><br/>
 
 ![Go](https://github.com/TheOpenDictionary/odict/workflows/Go/badge.svg?branch=master)
 
 </div>
 
-The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats Babylon and Apple Dictionaries. Similar to other dictionaries, Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](docs/cli.md) or via its open-source Go bindings.
+The Open Dictionary Project (ODict for short), is an open-source alternative to proprietary dictionary file formats Babylon and Apple Dictionaries. 
+
+Open Dictionary files are converted from XML to compressed binary files that can be easily indexed, searched, and modified using the Open Dictionary [CLI tool](docs/cli.md) or via its open-source Go bindings.
+
+<div align="center">
+<img src="terminal.png" width="1000" />
+</div>
 
 ## Motivation
 

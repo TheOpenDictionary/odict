@@ -2,56 +2,15 @@ package odict
 
 import (
 	"encoding/xml"
-	"fmt"
-	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-func resolveSchemaPOS(pos PartOfSpeech) POS {
-	posMap := map[PartOfSpeech]POS{
-		"adjective":    POSadj,
-		"adj":          POSadj,
-		"adverb":       POSadv,
-		"adv":          POSadv,
-		"verb":         POSv,
-		"v":            POSv,
-		"n":            POSn,
-		"noun":         POSn,
-		"pronoun":      POSpro,
-		"pn":           POSpro,
-		"prep":         POSprep,
-		"preposition":  POSprep,
-		"conj":         POSconj,
-		"conjugation":  POSconj,
-		"intj":         POSintj,
-		"interjection": POSintj,
-		"prefix":       POSpref,
-		"pre":          POSpref,
-		"suffix":       POSsuff,
-		"suf":          POSsuff,
-		"particle":     POSpart,
-		"part":         POSpart,
-		"article":      POSart,
-		"art":          POSart,
-		"un":           POSun,
-		"unknown":      POSun,
-	}
-
-	if val, ok := posMap[pos]; ok {
-		return val
-	} else if len(strings.TrimSpace(string(pos))) == 0 {
-		return POSun
-	} else {
-		panic(fmt.Sprintf("Compilation error: invalid part-of-speech used: %s", pos))
-	}
-}
-
 type UsageRepresentable struct {
-	POS         PartOfSpeech         `json:"pos,omitempty" xml:"pos,attr"`
-	Definitions []string             `json:"definitions" xml:"definition"`
-	Groups      []GroupRepresentable `json:"groups" xml:"group"`
-	XMLName     xml.Name             `json:"-" xml:"usage"`
+	POS         PartOfSpeech              `json:"-" xml:"pos,attr"`
+	Definitions []DefinitionRepresentable `json:"definitions,omitempty" xml:"definition"`
+	Groups      []GroupRepresentable      `json:"groups,omitempty" xml:"group"`
+	XMLName     xml.Name                  `json:"-" xml:"usage"`
 }
 
 func (usage UsageRepresentable) Key() PartOfSpeech {
@@ -60,12 +19,14 @@ func (usage UsageRepresentable) Key() PartOfSpeech {
 
 func (usage *Usage) AsRepresentable() UsageRepresentable {
 	var group Group
+	var definition Definition
 
 	groups := []GroupRepresentable{}
-	definitions := []string{}
+	definitions := []DefinitionRepresentable{}
 
 	for d := 0; d < usage.DefinitionsLength(); d++ {
-		definitions = append(definitions, string(usage.Definitions(d)))
+		usage.Definitions(&definition, d)
+		definitions = append(definitions, definition.AsRepresentable())
 	}
 
 	for g := 0; g < usage.GroupsLength(); g++ {
@@ -81,7 +42,7 @@ func (usage *Usage) AsRepresentable() UsageRepresentable {
 }
 
 func (usage *UsageRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	pos := resolveSchemaPOS(usage.POS)
+	pos := partOfSpeechToPOS(usage.POS)
 	groups := usage.buildGroupVector(builder)
 	definitions := usage.buildDefinitionVector(builder)
 
@@ -110,7 +71,10 @@ func (usage *UsageRepresentable) buildGroupVector(builder *flatbuffers.Builder) 
 }
 
 func (usage *UsageRepresentable) buildDefinitionVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	definitions := Map(usage.Definitions, builder.CreateString)
+	definitions := Map(usage.Definitions, func(d DefinitionRepresentable) flatbuffers.UOffsetT {
+		return d.AsBuffer(builder)
+	})
+
 	definitionCount := len(definitions)
 
 	GroupStartDefinitionsVector(builder, definitionCount)

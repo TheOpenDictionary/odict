@@ -61,14 +61,15 @@ func DecodeEntry(b []byte) Entry {
 	return entry
 }
 
-// Check panics the program if an error exists
+// Check exits the program if an error exists
 func Check(e error) {
 	if e != nil {
-		panic(e)
+		log.SetFlags(0)
+		log.Fatalln(e)
 	}
 }
 
-// Assert panics the program if a condition is not met
+// Assert exits the program if a condition is not met
 func Assert(condition bool, errorMessage string) {
 	if !condition {
 		log.SetFlags(0)
