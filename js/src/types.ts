@@ -6,6 +6,7 @@ export interface DictionaryOptions {
 
 export interface LookupOptions {
   split?: number;
+  follow?: boolean;
 }
 
 export interface SearchOptions {

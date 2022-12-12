@@ -12,8 +12,17 @@ import kotlin.io.path.writeText
 
 class Dictionary constructor(private val path: String) {
 
-    fun lookup(vararg queries: String, split: Int = 0): List<List<Entry>> {
-        val resultJson = execute("lookup", "-s", split.toString(), path, *queries)
+    fun lookup(vararg queries: String, follow: Boolean = false, split: Int = 0): List<List<Entry>> {
+        var args = arrayOf("lookup", "-f", "json")
+        
+        if (follow) {
+          args += "-F"
+        }
+
+        args += arrayOf("-s", split.toString(), path)
+
+        val resultJson = execute(*args, *queries)
+
         return resultJson?.let { lookupAdapter.fromJson(it) } ?: emptyList()
     }
 
@@ -59,7 +68,7 @@ class Dictionary constructor(private val path: String) {
                 val proc = ProcessBuilder(*(baseArgs + args))
                         .redirectOutput(ProcessBuilder.Redirect.PIPE)
                         .start()
-
+                        
                 proc.waitFor(3, TimeUnit.MINUTES)
 
                 val err = proc.errorStream.bufferedReader().readText()
@@ -80,7 +89,9 @@ class Dictionary constructor(private val path: String) {
 
     data class Etymology(val id: String? = null, val description: String? = null, val usages: Map<String, Usage>? = null)
 
-    data class Usage(val id: String? = null, val description: String? = null, val definitions: List<String>? = null, val groups: List<Group>? = null)
+    data class Description(val id: String? = null, val value: String? = null, val examples: List<String>? = null)
 
-    data class Group(val id: String? = null, val description: String? = null, val definitions: List<String>? = null)
+    data class Usage(val id: String? = null, val description: String? = null, val definitions: List<Description>? = null, val groups: List<Group>? = null)
+
+    data class Group(val id: String? = null, val description: String? = null, val definitions: List<Description>? = null)
 }

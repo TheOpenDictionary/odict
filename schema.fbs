@@ -31,18 +31,19 @@ table Etymology {
 table Group {
     id:string;
     description:string;
-    definitions:[string];
+    definitions:[Definition];
 }
 
 table Usage {
     pos:POS (key);
-    definitions:[string];
+    definitions:[Definition];
     groups:[Group];
 }
 
 table Entry {
     key:string (key);
     term:string;
+    see:string;
     etymologies:[Etymology];
 }
 
