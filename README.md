@@ -86,7 +86,7 @@ Just be sure that your `GOPATH` is on your path, otherwise you won't be able to 
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
 
-If you have a Mac, you can just use the [Homebrew](https://github.com/TheOpenDictionary/homebrew-odict) formula:
+If you have a Mac, you can just use the [Homebrew formula](https://github.com/TheOpenDictionary/homebrew-odict):
 
 ```
 $ brew tap TheOpenDictionary/odict
