@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/v1.6.1...v1.7.0) (2022-12-11)
+
+
+### Features
+
+* add support for entry aliasing ([#61](https://github.com/TheOpenDictionary/odict/issues/61)) ([077d947](https://github.com/TheOpenDictionary/odict/commit/077d94735a8d81f747015fc36045ff265ed1b736))
+* add support for pretty-printing entries ([#62](https://github.com/TheOpenDictionary/odict/issues/62)) ([24d82bc](https://github.com/TheOpenDictionary/odict/commit/24d82bcf44b896347f4c9e9210cfe72bea82d978))
+* **cli:** add lexicon command ([#58](https://github.com/TheOpenDictionary/odict/issues/58)) ([cb40db1](https://github.com/TheOpenDictionary/odict/commit/cb40db116865e79fc5faf0538755c494bc789462))
+* **renovate:** enable automerge and updateLockFiles ([a1d96ad](https://github.com/TheOpenDictionary/odict/commit/a1d96ad8350e564fd7f9174d46cf52085ce76a86))
+
+
+### Bug Fixes
+
+* **cli:** write lexicon to stdout ([461725c](https://github.com/TheOpenDictionary/odict/commit/461725cb920d5ba497fa4492eba3d6146cc84ce0))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.5 ([#36](https://github.com/TheOpenDictionary/odict/issues/36)) ([3d4f20d](https://github.com/TheOpenDictionary/odict/commit/3d4f20daf7833ecd0d6315c9e92dd052baed0262))
+
 ## [1.6.1](https://github.com/TheOpenDictionary/odict/compare/v1.6.0...v1.6.1) (2022-11-12)
 
 
