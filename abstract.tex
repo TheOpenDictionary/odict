@@ -2,8 +2,14 @@
 \usepackage{hyperref}
 \begin{document}
 \title{\textbf{The Open Dictionary Project}}
-\author{\textbf{Tyler Nickerson} \\ \small{Linguistic Inc.} \\\texttt{\small{tyler@linguistic.io}}}
+\author{\textbf{Tyler Nickerson} \\ \small{Linguistic Inc.} \\ \small{tyler@linguistic.io}}
 \date{}
 \maketitle
-The majority of dictionary formats currently in use are now several decades old. StarDict, one of the most popular dictionary formats, was released in 2003. The TEI format emerged during the 1980s. Dictd was created in 1997. The technology and decisions that went into these formats 
+The majority of dictionary formats in use today are built either upon antiquated or proprietary technologies, making offline, programmatic access to lexical data needlessly complex.
+In addition, most dictionary formats store entries as unstructured HTML, making the extraction of hierarchical or tagged data difficult and varying across formats.
+
+The Open Dictionary Project (ODict) aims to create a new standard for dictionary formats that is open, extensible, and easy to use. Introduced in 2017, ODict is a file format specification, compiler, and API for creating and accessing dictionaries.
+Files are compiled to tiny, standalone binary files from easy-to-read XML and can retrieve definition entries in under one second. Along with its command-line interface, ODict ships with bindings for Node, Python, and the JVM.
+
+In this presentation, the rationale and motivation behind ODict's development will be discussed, along with a demonstration of its full features and capabilities.
 \end{document}
