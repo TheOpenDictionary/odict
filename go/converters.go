@@ -9,40 +9,8 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-var partOfSpeechNameMap = map[PartOfSpeech]string{
-	Adjective:    "adjective",
-	Adverb:       "adverb",
-	Article:      "article",
-	Conjugation:  "conjugation",
-	Interjection: "interjection",
-	Noun:         "noun",
-	Particle:     "particle",
-	Prefix:       "prefix",
-	Preposition:  "preposition",
-	Pronoun:      "pronoun",
-	Suffix:       "suffix",
-	Unknown:      "unknown part-of-speech",
-	Verb:         "verb",
-}
-
-var partOfSpeechPOSMap = map[PartOfSpeech]POS{
-	Adjective:    POSadj,
-	Adverb:       POSadv,
-	Article:      POSart,
-	Conjugation:  POSconj,
-	Interjection: POSintj,
-	Noun:         POSn,
-	Particle:     POSpart,
-	Prefix:       POSpref,
-	Preposition:  POSprep,
-	Pronoun:      POSpro,
-	Suffix:       POSsuff,
-	Unknown:      POSun,
-	Verb:         POSv,
-}
-
 func (pos PartOfSpeech) Name() string {
-	if val, ok := partOfSpeechNameMap[pos]; ok {
+	if val, ok := PartOfSpeechNameMap[pos]; ok {
 		return val
 	}
 
@@ -54,7 +22,7 @@ func (pos PartOfSpeech) Name() string {
 var posPartOfSpeechMap = func() map[POS]PartOfSpeech {
 	posMap := map[POS]PartOfSpeech{}
 
-	for k, v := range partOfSpeechPOSMap {
+	for k, v := range PartOfSpeechPOSMap {
 		posMap[v] = k
 	}
 
@@ -72,7 +40,7 @@ func posToPartOfSpeech(pos POS) PartOfSpeech {
 }
 
 func partOfSpeechToPOS(pos PartOfSpeech) POS {
-	if val, ok := partOfSpeechPOSMap[pos]; ok {
+	if val, ok := PartOfSpeechPOSMap[pos]; ok {
 		return val
 	}
 
