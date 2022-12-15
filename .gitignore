@@ -422,6 +422,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Stores VSCode launch.json file for command line argument debugging
+.vscode/
+
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
