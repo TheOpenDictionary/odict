@@ -4,30 +4,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"log"
-	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
-
-func (pos PartOfSpeech) Name() string {
-	if val, ok := PartOfSpeechNameMap[pos]; ok {
-		return val
-	}
-
-	log.Fatalf("Invalid part-of-speech used: %s", pos)
-
-	return ""
-}
-
-var posPartOfSpeechMap = func() map[POS]PartOfSpeech {
-	posMap := map[POS]PartOfSpeech{}
-
-	for k, v := range PartOfSpeechPOSMap {
-		posMap[v] = k
-	}
-
-	return posMap
-}()
 
 func posToPartOfSpeech(pos POS) PartOfSpeech {
 	if val, ok := posPartOfSpeechMap[pos]; ok {
@@ -36,21 +15,17 @@ func posToPartOfSpeech(pos POS) PartOfSpeech {
 
 	log.Fatalf("Invalid part-of-speech used: %s", pos)
 
-	return ""
+	return PartOfSpeech{} // Should never happen, dw
 }
 
-func partOfSpeechToPOS(pos PartOfSpeech) POS {
-	if val, ok := PartOfSpeechPOSMap[pos]; ok {
+func strToPartOfSpeech(str string) PartOfSpeech {
+	if val, ok := posTagPartOfSpeechMap[str]; ok {
 		return val
 	}
 
-	if len(strings.TrimSpace(string(pos))) == 0 {
-		return POSun
-	}
+	log.Fatalf("Invalid part-of-speech used: %s", str)
 
-	log.Fatalf("Invalid part-of-speech used: %s", pos)
-
-	return POSun
+	return PartOfSpeech{} // Should never happen, dw
 }
 
 func serialize(b Serializable) []byte {
