@@ -8,16 +8,6 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-func posToPartOfSpeech(pos POS) PartOfSpeech {
-	if val, ok := posPartOfSpeechMap[pos]; ok {
-		return val
-	}
-
-	log.Fatalf("Invalid part-of-speech used: %s", pos)
-
-	return PartOfSpeech{} // Should never happen, dw
-}
-
 func strToPartOfSpeech(str string) PartOfSpeech {
 	if val, ok := posTagPartOfSpeechMap[str]; ok {
 		return val

@@ -1,5 +1,9 @@
 package odict
 
+import (
+	"encoding/xml"
+)
+
 type PartOfSpeech struct {
 	Tag   string
 	Label string
@@ -217,16 +221,6 @@ var partsOfSpeech = []PartOfSpeech{
 	VerbYodanTsu,
 }
 
-var posPartOfSpeechMap = (func() map[POS]PartOfSpeech {
-	m := map[POS]PartOfSpeech{}
-
-	for _, pos := range partsOfSpeech {
-		m[pos.Buf] = pos
-	}
-
-	return m
-})()
-
 var posTagPartOfSpeechMap = (func() map[string]PartOfSpeech {
 	m := map[string]PartOfSpeech{}
 
@@ -236,3 +230,22 @@ var posTagPartOfSpeechMap = (func() map[string]PartOfSpeech {
 
 	return m
 })()
+
+func (p PartOfSpeech) MarshalText() ([]byte, error) {
+	return []byte(p.Tag), nil
+}
+
+func (p *PartOfSpeech) UnmarshalText(text []byte) error {
+	tag := string(text)
+	*p = strToPartOfSpeech(tag)
+	return nil
+}
+
+func (pos PartOfSpeech) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
+	return xml.Attr{Name: name, Value: pos.Tag}, nil
+}
+
+func (pos *PartOfSpeech) UnmarshalXMLAttr(attr xml.Attr) error {
+	*pos = strToPartOfSpeech(attr.Value)
+	return nil
+}
