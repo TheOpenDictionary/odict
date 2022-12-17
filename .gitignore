@@ -422,8 +422,7 @@ dist
 # TernJS port file
 .tern-port
 
-# VS-Code launch.json file for cmd line argument debugging and its binary
-.vscode/
+# VS-Code debugging binaries 
 __debug_bin
 
 # Stores VSCode versions used for testing VSCode extensions
