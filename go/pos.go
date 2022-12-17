@@ -91,6 +91,7 @@ var VerbYodanTsu = PartOfSpeech{Tag: "v4t", Buf: POSv4t, Label: "Yodan verb with
 /*                                Universal POS                               */
 /* -------------------------------------------------------------------------- */
 
+var Adjective = PartOfSpeech{Tag: "adj", Label: "adjective", Buf: POSadj}
 var Adverb = PartOfSpeech{Tag: "adv", Label: "adverb", Buf: POSadv}
 var Auxiliary = PartOfSpeech{Tag: "aux", Label: "auxiliary", Buf: POSaux}
 var AuxiliaryAdjective = PartOfSpeech{Tag: "aux-adj", Buf: POSaux_adj, Label: "auxiliary adjective"}
@@ -120,6 +121,7 @@ var partsOfSpeech = []PartOfSpeech{
 
 	/* -------------------------------- Universal ------------------------------- */
 
+	Adjective,
 	Adverb,
 	Auxiliary,
 	AuxiliaryAdjective,
