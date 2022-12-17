@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/TheOpenDictionary/odict/compare/v1.8.0...v1.8.1) (2022-12-17)
+
+
+### Bug Fixes
+
+* **pos:** add back missing adjective ([550e8cc](https://github.com/TheOpenDictionary/odict/commit/550e8cc54ff5084e4cc74529103e3bd7b6d909ca))
+
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/v1.7.0...v1.8.0) (2022-12-16)
 
 
