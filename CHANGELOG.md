@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.8.1](https://github.com/TheOpenDictionary/odict/compare/v1.8.0...v1.8.1) (2022-12-17)
+
+
+### Bug Fixes
+
+* **pos:** add back missing adjective ([550e8cc](https://github.com/TheOpenDictionary/odict/commit/550e8cc54ff5084e4cc74529103e3bd7b6d909ca))
+
+## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/v1.7.0...v1.8.0) (2022-12-16)
+
+
+### Features
+
+* add support for Japanese-specific POS tags ([#66](https://github.com/TheOpenDictionary/odict/issues/66)) ([2dd7171](https://github.com/TheOpenDictionary/odict/commit/2dd717101323d11481c9bd87e153f25feef3569f))
+* created FUNDING.yml ([aa70c6f](https://github.com/TheOpenDictionary/odict/commit/aa70c6fe006af7379a8da64c262aa33b95dc336a))
+
 ## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/v1.6.1...v1.7.0) (2022-12-11)
 
 

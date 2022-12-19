@@ -35,14 +35,14 @@ func (usage *Usage) AsRepresentable() UsageRepresentable {
 	}
 
 	return UsageRepresentable{
-		POS:         PartOfSpeech(usage.Pos().String()),
+		POS:         strToPartOfSpeech(usage.Pos().String()),
 		Groups:      groups,
 		Definitions: definitions,
 	}
 }
 
 func (usage *UsageRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	pos := partOfSpeechToPOS(usage.POS)
+	pos := usage.POS.Buf
 	groups := usage.buildGroupVector(builder)
 	definitions := usage.buildDefinitionVector(builder)
 

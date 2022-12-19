@@ -81,7 +81,7 @@ func ppGroup(group odict.GroupRepresentable, i int, entry odict.EntryRepresentab
 }
 
 func ppUsage(usage odict.UsageRepresentable, entry odict.EntryRepresentable) {
-	italic.Printf("\n%s\n\n", usage.POS.Name())
+	italic.Printf("\n%s\n\n", usage.POS.Label)
 
 	var i = 0
 

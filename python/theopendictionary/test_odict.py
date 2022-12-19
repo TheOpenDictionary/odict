@@ -34,6 +34,7 @@ def test_write_lookup_dictionary():
     expected = '[{"term":"hello","etymologies":[{"id":"0","usages":{"v":{"pos":"v","definitions":["hello world"]}}}]}]'
 
     assert len(output) == 1, "there should only be one result"
+
     assert output[0][0].get("term") == "hello", "json should be %s, received: %s" % (
         expected,
         json,
