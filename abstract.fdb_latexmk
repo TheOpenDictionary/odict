@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1670826110 "/Users/tjnickerson/Documents/odict/abstract.tex" "abstract.pdf" "abstract" 1670826110
-  "/Users/tjnickerson/Documents/odict/abstract.tex" 1670826109 1220 f2ba9c1131087dac434418deb1097c24 ""
+["pdflatex"] 1672019985 "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/abstract.tex" "abstract.pdf" "abstract" 1672019986
+  "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/abstract.tex" 1672019984 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
@@ -14,9 +14,11 @@
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1248133631 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
+  "/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/local/texlive/2022/texmf-dist/tex/generic/atbegshi/atbegshi.sty" 1575674566 24708 5584a51a7101caf7e6bbf1fc27d8f7b1 ""
   "/usr/local/texlive/2022/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty" 1576625341 40635 c40361e206be584d448876bba8a64a3b ""
   "/usr/local/texlive/2022/texmf-dist/tex/generic/bitset/bitset.sty" 1576016050 33961 6b5c75130e435b2bfdb9f480a09a39f9 ""
@@ -52,11 +54,11 @@
   "/usr/local/texlive/2022/texmf-dist/tex/latex/url/url.sty" 1388531844 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/local/texlive/2022/texmf-dist/web2c/texmf.cnf" 1646502317 40171 cdab547de63d26590bebb3baff566530 ""
   "/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1647878959 4410336 7d30a02e9fa9a16d7d1f8d037ba69641 ""
-  "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1670655130 2826439 ec83acb85f6c6b6de3ef7483ee59d76e ""
+  "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1672014499 2826440 cd2cdaa51b3f710720a41201b4e9df7a ""
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
-  "abstract.aux" 1670826110 686 e6bf9f11827e1eae1d85e75b99e0a183 "pdflatex"
+  "abstract.aux" 1672019986 686 e6bf9f11827e1eae1d85e75b99e0a183 "pdflatex"
   "abstract.out" 0 -1 0 "pdflatex"
-  "abstract.tex" 1670826109 1220 f2ba9c1131087dac434418deb1097c24 ""
+  "abstract.tex" 1672019984 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
   (generated)
   "abstract.aux"
   "abstract.log"
