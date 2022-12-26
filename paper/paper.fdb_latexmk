@@ -1,6 +1,6 @@
 # Fdb version 3
-["pdflatex"] 1672019985 "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/abstract.tex" "abstract.pdf" "abstract" 1672019986
-  "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/abstract.tex" 1672019984 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
+["pdflatex"] 1672023854 "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/paper/paper.tex" "paper.pdf" "paper" 1672023854
+  "/Users/tjnickerson/Documents/Github/TheOpenDictionary/odict/paper/paper.tex" 1672023853 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1136768653 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "/usr/local/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
@@ -56,11 +56,11 @@
   "/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1647878959 4410336 7d30a02e9fa9a16d7d1f8d037ba69641 ""
   "/usr/local/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1672014499 2826440 cd2cdaa51b3f710720a41201b4e9df7a ""
   "/usr/local/texlive/2022/texmf.cnf" 1647878952 577 209b46be99c9075fd74d4c0369380e8c ""
-  "abstract.aux" 1672019986 686 e6bf9f11827e1eae1d85e75b99e0a183 "pdflatex"
-  "abstract.out" 0 -1 0 "pdflatex"
-  "abstract.tex" 1672019984 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
+  "paper.aux" 1672023854 686 e6bf9f11827e1eae1d85e75b99e0a183 "pdflatex"
+  "paper.out" 0 -1 0 "pdflatex"
+  "paper.tex" 1672023853 2713 ebcbf85d2a5dfc73d87b5325566572d6 ""
   (generated)
-  "abstract.aux"
-  "abstract.log"
-  "abstract.out"
-  "abstract.pdf"
+  "paper.aux"
+  "paper.log"
+  "paper.out"
+  "paper.pdf"
