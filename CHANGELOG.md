@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.2](https://github.com/TheOpenDictionary/odict/compare/v1.8.1...v1.8.2) (2022-12-29)
+
+
+### Bug Fixes
+
+* **go:** fix issue where usages required a valid part-of-speech ([cf5163a](https://github.com/TheOpenDictionary/odict/commit/cf5163a5683e1c07761951c816bb550e1ee7608f))
+* **python:** remove log ([8f43725](https://github.com/TheOpenDictionary/odict/commit/8f4372541b17327788f8e4680e608f45e6ab92ac))
+
 ## [1.8.1](https://github.com/TheOpenDictionary/odict/compare/v1.8.0...v1.8.1) (2022-12-17)
 
 
