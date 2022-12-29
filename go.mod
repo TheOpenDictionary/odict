@@ -10,7 +10,7 @@ require (
 	github.com/google/flatbuffers v22.11.23+incompatible
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.9.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	github.com/urfave/cli/v2 v2.11.1
 )
 
