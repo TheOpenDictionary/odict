@@ -11,51 +11,309 @@ import (
 type POS int8
 
 const (
-	POSv    POS = 0
-	POSn    POS = 1
-	POSadj  POS = 2
-	POSpro  POS = 3
-	POSadv  POS = 4
-	POSprep POS = 5
-	POSconj POS = 6
-	POSintj POS = 7
-	POSpref POS = 8
-	POSsuff POS = 9
-	POSpart POS = 10
-	POSart  POS = 11
-	POSun   POS = 12
+	POSv         POS = 0
+	POSn         POS = 1
+	POSadj       POS = 2
+	POSpro       POS = 3
+	POSadv       POS = 4
+	POSprep      POS = 5
+	POSconj      POS = 6
+	POSintj      POS = 7
+	POSpref      POS = 8
+	POSsuff      POS = 9
+	POSpart      POS = 10
+	POSart       POS = 11
+	POSun        POS = 12
+	POSaux       POS = 13
+	POSaux_adj   POS = 14
+	POSaux_v     POS = 15
+	POScconj     POS = 16
+	POScop       POS = 17
+	POSctr       POS = 18
+	POSexpr      POS = 19
+	POSvi        POS = 20
+	POSnum       POS = 21
+	POSpron      POS = 22
+	POSpropn     POS = 23
+	POSsconj     POS = 24
+	POSsym       POS = 25
+	POSvt        POS = 26
+	POSadj_f     POS = 27
+	POSadj_ix    POS = 28
+	POSadj_kari  POS = 29
+	POSadj_ku    POS = 30
+	POSadj_na    POS = 31
+	POSadj_nari  POS = 32
+	POSadj_no    POS = 33
+	POSadj_pn    POS = 34
+	POSadj_shiku POS = 35
+	POSadj_t     POS = 36
+	POSadv_to    POS = 37
+	POSn_adv     POS = 38
+	POSn_pref    POS = 39
+	POSn_suf     POS = 40
+	POSn_t       POS = 41
+	POSv_unspec  POS = 42
+	POSv1_s      POS = 43
+	POSv1        POS = 44
+	POSv2a_s     POS = 45
+	POSv2b_k     POS = 46
+	POSv2b_s     POS = 47
+	POSv2d_k     POS = 48
+	POSv2d_s     POS = 49
+	POSv2g_k     POS = 50
+	POSv2g_s     POS = 51
+	POSv2h_k     POS = 52
+	POSv2h_s     POS = 53
+	POSv2k_k     POS = 54
+	POSv2k_s     POS = 55
+	POSv2m_k     POS = 56
+	POSv2m_s     POS = 57
+	POSv2n_s     POS = 58
+	POSv2r_k     POS = 59
+	POSv2r_s     POS = 60
+	POSv2s_s     POS = 61
+	POSv2t_k     POS = 62
+	POSv2t_s     POS = 63
+	POSv2w_s     POS = 64
+	POSv2y_k     POS = 65
+	POSv2y_s     POS = 66
+	POSv2z_s     POS = 67
+	POSv4b       POS = 68
+	POSv4g       POS = 69
+	POSv4h       POS = 70
+	POSv4k       POS = 71
+	POSv4m       POS = 72
+	POSv4n       POS = 73
+	POSv4r       POS = 74
+	POSv4s       POS = 75
+	POSv4t       POS = 76
+	POSv5aru     POS = 77
+	POSv5b       POS = 78
+	POSv5g       POS = 79
+	POSv5k_s     POS = 80
+	POSv5k       POS = 81
+	POSv5m       POS = 82
+	POSv5n       POS = 83
+	POSv5r_i     POS = 84
+	POSv5r       POS = 85
+	POSv5s       POS = 86
+	POSv5t       POS = 87
+	POSv5u_s     POS = 88
+	POSv5u       POS = 89
+	POSv5uru     POS = 90
+	POSvk        POS = 91
+	POSvn        POS = 92
+	POSvr        POS = 93
+	POSvs_c      POS = 94
+	POSvs_i      POS = 95
+	POSvs_s      POS = 96
+	POSvs        POS = 97
+	POSvz        POS = 98
 )
 
 var EnumNamesPOS = map[POS]string{
-	POSv:    "v",
-	POSn:    "n",
-	POSadj:  "adj",
-	POSpro:  "pro",
-	POSadv:  "adv",
-	POSprep: "prep",
-	POSconj: "conj",
-	POSintj: "intj",
-	POSpref: "pref",
-	POSsuff: "suff",
-	POSpart: "part",
-	POSart:  "art",
-	POSun:   "un",
+	POSv:         "v",
+	POSn:         "n",
+	POSadj:       "adj",
+	POSpro:       "pro",
+	POSadv:       "adv",
+	POSprep:      "prep",
+	POSconj:      "conj",
+	POSintj:      "intj",
+	POSpref:      "pref",
+	POSsuff:      "suff",
+	POSpart:      "part",
+	POSart:       "art",
+	POSun:        "un",
+	POSaux:       "aux",
+	POSaux_adj:   "aux_adj",
+	POSaux_v:     "aux_v",
+	POScconj:     "cconj",
+	POScop:       "cop",
+	POSctr:       "ctr",
+	POSexpr:      "expr",
+	POSvi:        "vi",
+	POSnum:       "num",
+	POSpron:      "pron",
+	POSpropn:     "propn",
+	POSsconj:     "sconj",
+	POSsym:       "sym",
+	POSvt:        "vt",
+	POSadj_f:     "adj_f",
+	POSadj_ix:    "adj_ix",
+	POSadj_kari:  "adj_kari",
+	POSadj_ku:    "adj_ku",
+	POSadj_na:    "adj_na",
+	POSadj_nari:  "adj_nari",
+	POSadj_no:    "adj_no",
+	POSadj_pn:    "adj_pn",
+	POSadj_shiku: "adj_shiku",
+	POSadj_t:     "adj_t",
+	POSadv_to:    "adv_to",
+	POSn_adv:     "n_adv",
+	POSn_pref:    "n_pref",
+	POSn_suf:     "n_suf",
+	POSn_t:       "n_t",
+	POSv_unspec:  "v_unspec",
+	POSv1_s:      "v1_s",
+	POSv1:        "v1",
+	POSv2a_s:     "v2a_s",
+	POSv2b_k:     "v2b_k",
+	POSv2b_s:     "v2b_s",
+	POSv2d_k:     "v2d_k",
+	POSv2d_s:     "v2d_s",
+	POSv2g_k:     "v2g_k",
+	POSv2g_s:     "v2g_s",
+	POSv2h_k:     "v2h_k",
+	POSv2h_s:     "v2h_s",
+	POSv2k_k:     "v2k_k",
+	POSv2k_s:     "v2k_s",
+	POSv2m_k:     "v2m_k",
+	POSv2m_s:     "v2m_s",
+	POSv2n_s:     "v2n_s",
+	POSv2r_k:     "v2r_k",
+	POSv2r_s:     "v2r_s",
+	POSv2s_s:     "v2s_s",
+	POSv2t_k:     "v2t_k",
+	POSv2t_s:     "v2t_s",
+	POSv2w_s:     "v2w_s",
+	POSv2y_k:     "v2y_k",
+	POSv2y_s:     "v2y_s",
+	POSv2z_s:     "v2z_s",
+	POSv4b:       "v4b",
+	POSv4g:       "v4g",
+	POSv4h:       "v4h",
+	POSv4k:       "v4k",
+	POSv4m:       "v4m",
+	POSv4n:       "v4n",
+	POSv4r:       "v4r",
+	POSv4s:       "v4s",
+	POSv4t:       "v4t",
+	POSv5aru:     "v5aru",
+	POSv5b:       "v5b",
+	POSv5g:       "v5g",
+	POSv5k_s:     "v5k_s",
+	POSv5k:       "v5k",
+	POSv5m:       "v5m",
+	POSv5n:       "v5n",
+	POSv5r_i:     "v5r_i",
+	POSv5r:       "v5r",
+	POSv5s:       "v5s",
+	POSv5t:       "v5t",
+	POSv5u_s:     "v5u_s",
+	POSv5u:       "v5u",
+	POSv5uru:     "v5uru",
+	POSvk:        "vk",
+	POSvn:        "vn",
+	POSvr:        "vr",
+	POSvs_c:      "vs_c",
+	POSvs_i:      "vs_i",
+	POSvs_s:      "vs_s",
+	POSvs:        "vs",
+	POSvz:        "vz",
 }
 
 var EnumValuesPOS = map[string]POS{
-	"v":    POSv,
-	"n":    POSn,
-	"adj":  POSadj,
-	"pro":  POSpro,
-	"adv":  POSadv,
-	"prep": POSprep,
-	"conj": POSconj,
-	"intj": POSintj,
-	"pref": POSpref,
-	"suff": POSsuff,
-	"part": POSpart,
-	"art":  POSart,
-	"un":   POSun,
+	"v":         POSv,
+	"n":         POSn,
+	"adj":       POSadj,
+	"pro":       POSpro,
+	"adv":       POSadv,
+	"prep":      POSprep,
+	"conj":      POSconj,
+	"intj":      POSintj,
+	"pref":      POSpref,
+	"suff":      POSsuff,
+	"part":      POSpart,
+	"art":       POSart,
+	"un":        POSun,
+	"aux":       POSaux,
+	"aux_adj":   POSaux_adj,
+	"aux_v":     POSaux_v,
+	"cconj":     POScconj,
+	"cop":       POScop,
+	"ctr":       POSctr,
+	"expr":      POSexpr,
+	"vi":        POSvi,
+	"num":       POSnum,
+	"pron":      POSpron,
+	"propn":     POSpropn,
+	"sconj":     POSsconj,
+	"sym":       POSsym,
+	"vt":        POSvt,
+	"adj_f":     POSadj_f,
+	"adj_ix":    POSadj_ix,
+	"adj_kari":  POSadj_kari,
+	"adj_ku":    POSadj_ku,
+	"adj_na":    POSadj_na,
+	"adj_nari":  POSadj_nari,
+	"adj_no":    POSadj_no,
+	"adj_pn":    POSadj_pn,
+	"adj_shiku": POSadj_shiku,
+	"adj_t":     POSadj_t,
+	"adv_to":    POSadv_to,
+	"n_adv":     POSn_adv,
+	"n_pref":    POSn_pref,
+	"n_suf":     POSn_suf,
+	"n_t":       POSn_t,
+	"v_unspec":  POSv_unspec,
+	"v1_s":      POSv1_s,
+	"v1":        POSv1,
+	"v2a_s":     POSv2a_s,
+	"v2b_k":     POSv2b_k,
+	"v2b_s":     POSv2b_s,
+	"v2d_k":     POSv2d_k,
+	"v2d_s":     POSv2d_s,
+	"v2g_k":     POSv2g_k,
+	"v2g_s":     POSv2g_s,
+	"v2h_k":     POSv2h_k,
+	"v2h_s":     POSv2h_s,
+	"v2k_k":     POSv2k_k,
+	"v2k_s":     POSv2k_s,
+	"v2m_k":     POSv2m_k,
+	"v2m_s":     POSv2m_s,
+	"v2n_s":     POSv2n_s,
+	"v2r_k":     POSv2r_k,
+	"v2r_s":     POSv2r_s,
+	"v2s_s":     POSv2s_s,
+	"v2t_k":     POSv2t_k,
+	"v2t_s":     POSv2t_s,
+	"v2w_s":     POSv2w_s,
+	"v2y_k":     POSv2y_k,
+	"v2y_s":     POSv2y_s,
+	"v2z_s":     POSv2z_s,
+	"v4b":       POSv4b,
+	"v4g":       POSv4g,
+	"v4h":       POSv4h,
+	"v4k":       POSv4k,
+	"v4m":       POSv4m,
+	"v4n":       POSv4n,
+	"v4r":       POSv4r,
+	"v4s":       POSv4s,
+	"v4t":       POSv4t,
+	"v5aru":     POSv5aru,
+	"v5b":       POSv5b,
+	"v5g":       POSv5g,
+	"v5k_s":     POSv5k_s,
+	"v5k":       POSv5k,
+	"v5m":       POSv5m,
+	"v5n":       POSv5n,
+	"v5r_i":     POSv5r_i,
+	"v5r":       POSv5r,
+	"v5s":       POSv5s,
+	"v5t":       POSv5t,
+	"v5u_s":     POSv5u_s,
+	"v5u":       POSv5u,
+	"v5uru":     POSv5uru,
+	"vk":        POSvk,
+	"vn":        POSvn,
+	"vr":        POSvr,
+	"vs_c":      POSvs_c,
+	"vs_i":      POSvs_i,
+	"vs_s":      POSvs_s,
+	"vs":        POSvs,
+	"vz":        POSvz,
 }
 
 func (v POS) String() string {

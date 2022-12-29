@@ -23,7 +23,7 @@ def exec(*args: List[str]):
         ],
         capture_output=True,
     )
-
+    
     if out.stderr:
         raise Exception(out.stderr)
 

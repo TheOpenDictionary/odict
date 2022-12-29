@@ -48,13 +48,13 @@ func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder
 	keys := make([]string, 0, usageCount)
 
 	for key := range usages {
-		keys = append(keys, string(key))
+		keys = append(keys, string(key.Tag))
 	}
 
 	sort.Strings(keys)
 
 	usageBuffers := Map(keys, func(key string) flatbuffers.UOffsetT {
-		usage := usages[PartOfSpeech(key)]
+		usage := usages[strToPartOfSpeech(key)]
 		return usage.AsBuffer(builder)
 	})
 
