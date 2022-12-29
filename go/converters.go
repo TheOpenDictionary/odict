@@ -3,7 +3,6 @@ package odict
 import (
 	"encoding/json"
 	"encoding/xml"
-	"log"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
@@ -13,9 +12,7 @@ func strToPartOfSpeech(str string) PartOfSpeech {
 		return val
 	}
 
-	log.Fatalf("Invalid part-of-speech used: %s", str)
-
-	return PartOfSpeech{} // Should never happen, dw
+	return Unknown
 }
 
 func serialize(b Serializable) []byte {
