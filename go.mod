@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/blevesearch/bleve/v2 v2.3.5
-	github.com/blevesearch/bleve_index_api v1.0.4
+	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/fatih/color v1.13.0
 	github.com/golang/snappy v0.0.4
 	github.com/google/flatbuffers v22.11.23+incompatible
