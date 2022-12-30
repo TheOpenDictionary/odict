@@ -1,5 +1,5 @@
 golang 1.19
-python 3.8.10
+python 3.11.1
 poetry 1.2.2
 gradle 7.5.1
 kotlin 1.7.10
