@@ -5,4 +5,4 @@ gradle 7.5.1
 kotlin 1.7.10
 java adoptopenjdk-11.0.17+8
 nodejs 16.13.0
-just 1.8.0
+just 1.9.0
