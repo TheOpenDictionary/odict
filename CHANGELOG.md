@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.3](https://github.com/TheOpenDictionary/odict/compare/v1.8.2...v1.8.3) (2023-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v31.1-jre ([61f9ece](https://github.com/TheOpenDictionary/odict/commit/61f9eceed4dc3b962c5209919c6e0d2818e3ce74))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.6 ([bec0d8c](https://github.com/TheOpenDictionary/odict/commit/bec0d8cdf326f13c2e69c8ce3dacd99e8b3625c6))
+* **deps:** update module github.com/schollz/progressbar/v3 to v3.12.2 ([3962131](https://github.com/TheOpenDictionary/odict/commit/39621314bced6b6ee86eaef1026c287a2ca1752d))
+* **deps:** update module github.com/stretchr/testify to v1.8.1 ([5deb242](https://github.com/TheOpenDictionary/odict/commit/5deb242b4e9da01a76b1ba972d9d9b206bb6a83b))
+
 ## [1.8.2](https://github.com/TheOpenDictionary/odict/compare/v1.8.1...v1.8.2) (2022-12-29)
 
 
