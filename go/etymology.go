@@ -48,7 +48,7 @@ func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder
 	keys := make([]string, 0, usageCount)
 
 	for key := range usages {
-		keys = append(keys, string(key.Tag))
+		keys = append(keys, key.Tag)
 	}
 
 	sort.Strings(keys)

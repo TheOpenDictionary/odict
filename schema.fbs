@@ -3,7 +3,8 @@ namespace odict;
 enum POS:byte {
     // Universal 
 
-    v = 0,
+    un = 0,
+    v,
     n,
     adj,
     pron,
@@ -15,7 +16,6 @@ enum POS:byte {
     suff,
     part,
     art,
-    un,
 
     // Universal (Extended)
     aux,

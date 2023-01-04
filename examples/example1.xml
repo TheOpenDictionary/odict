@@ -38,15 +38,17 @@
   </entry>
   <entry term="dog">
     <ety description="Latin root">
-      <usage pos="v">
+      <usage>
         <definition value="a dog" />
       </usage>
     </ety>
   </entry>
   <entry term="cat">
     <ety description="Latin root">
-      <usage pos="v">
-        <definition value="a cat" />
+      <usage pos="n">
+        <definition value="a cat">
+          <example>There goes a cat!</example>
+        </definition>
       </usage>
     </ety>
   </entry>
