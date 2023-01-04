@@ -233,6 +233,16 @@ var posTagPartOfSpeechMap = (func() map[string]PartOfSpeech {
 	return m
 })()
 
+func (p PartOfSpeech) MarshalText() ([]byte, error) {
+	return []byte(p.Tag), nil
+}
+
+func (p *PartOfSpeech) UnmarshalText(text []byte) error {
+	tag := string(text)
+	*p = strToPartOfSpeech(tag)
+	return nil
+}
+
 func (pos PartOfSpeech) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	return xml.Attr{Name: name, Value: pos.Tag}, nil
 }
