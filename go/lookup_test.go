@@ -10,14 +10,60 @@ func TestLookup(t *testing.T) {
 	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
 
 	dict := ReadDictionaryFromPath("../examples/example1.odict")
-	entries := dict.Lookup([]string{"run", "poo"}, 0, false)
+	entries := Map(dict.Lookup([]string{"dog", "cat"}, 0, false), func(entryList []Entry) []EntryRepresentable {
+		return Map(entryList, func(entry Entry) EntryRepresentable {
+			return entry.AsRepresentable()
+		})
+	})
 
-	assert.Equal(t, 2, len(entries))
-	assert.Equal(t, 1, len(entries[0]))
-	assert.Equal(t, 1, len(entries[1]))
-	assert.Equal(t, "run", string(entries[0][0].Term()))
-	assert.Equal(t, "poo", string(entries[1][0].Term()))
-	assert.Equal(t, Verb, entries[0][0].AsRepresentable().Etymologies[0].Usages[Verb].POS)
+	assert.EqualValues(t, EntryRepresentable{
+		Term: "dog",
+		Etymologies: []EtymologyRepresentable{
+			{
+				Description: "Latin root",
+				Usages: KVMap[PartOfSpeech, UsageRepresentable]{
+					Unknown: UsageRepresentable{
+						POS:    Unknown,
+						Groups: []GroupRepresentable{},
+						Definitions: []DefinitionRepresentable{
+							{
+								Value:    "a dog",
+								Examples: []string{},
+							},
+						},
+					},
+				},
+			},
+		},
+	}, entries[0][0])
+
+	assert.EqualValues(t, EntryRepresentable{
+		Term: "cat",
+		Etymologies: []EtymologyRepresentable{
+			{
+				Description: "Latin root",
+				Usages: KVMap[PartOfSpeech, UsageRepresentable]{
+					Noun: UsageRepresentable{
+						POS:    Noun,
+						Groups: []GroupRepresentable{},
+						Definitions: []DefinitionRepresentable{
+							{
+								Value:    "a cat",
+								Examples: []string{"There goes a cat!"},
+							},
+						},
+					},
+				},
+			},
+		},
+	}, entries[1][0])
+	// assert.Equal(t, 2, len(entries))
+	// assert.Equal(t, 1, len(entries[0]))
+	// assert.Equal(t, 1, len(entries[1]))
+	// assert.Equal(t, "run", string(entries[0][0].Term))
+	// assert.Equal(t, "poo", string(entries[1][0].Term))
+	// assert.Equal(t, "poo", string(entries[1][0]))
+	// assert.Equal(t, Verb, entries[0][0].AsRepresentable().Etymologies[0].Usages[Verb].POS)
 	CleanupTest()
 }
 

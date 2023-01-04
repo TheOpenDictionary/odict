@@ -13,6 +13,20 @@ type UsageRepresentable struct {
 	XMLName     xml.Name                  `json:"-" xml:"usage"`
 }
 
+func (ur *UsageRepresentable) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type UR UsageRepresentable // new type to prevent recursion
+
+	item := UR{POS: Unknown} // sets default POS to Unknown if unspecified in XML
+
+	if err := d.DecodeElement(&item, &start); err != nil {
+		return err
+	}
+
+	*ur = (UsageRepresentable)(item)
+
+	return nil
+}
+
 func (usage UsageRepresentable) Key() PartOfSpeech {
 	return usage.POS
 }
