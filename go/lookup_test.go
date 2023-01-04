@@ -57,13 +57,7 @@ func TestLookup(t *testing.T) {
 			},
 		},
 	}, entries[1][0])
-	// assert.Equal(t, 2, len(entries))
-	// assert.Equal(t, 1, len(entries[0]))
-	// assert.Equal(t, 1, len(entries[1]))
-	// assert.Equal(t, "run", string(entries[0][0].Term))
-	// assert.Equal(t, "poo", string(entries[1][0].Term))
-	// assert.Equal(t, "poo", string(entries[1][0]))
-	// assert.Equal(t, Verb, entries[0][0].AsRepresentable().Etymologies[0].Usages[Verb].POS)
+
 	CleanupTest()
 }
 
