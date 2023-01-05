@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.4](https://github.com/TheOpenDictionary/odict/compare/v1.8.3...v1.8.4) (2023-01-05)
+
+
+### Bug Fixes
+
+* **js:** update types ([0670089](https://github.com/TheOpenDictionary/odict/commit/0670089449ccc1601a8e6a08c41c8faffd981814))
+
 ## [1.8.3](https://github.com/TheOpenDictionary/odict/compare/v1.8.2...v1.8.3) (2023-01-04)
 
 

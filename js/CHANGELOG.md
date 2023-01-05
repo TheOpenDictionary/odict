@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.4...theopendictionary-v0.0.5) (2023-01-05)
+
+
+### Bug Fixes
+
+* **js:** update types ([0670089](https://github.com/TheOpenDictionary/odict/commit/0670089449ccc1601a8e6a08c41c8faffd981814))
+
 ## [0.0.4](https://github.com/TheOpenDictionary/odict/compare/theopendictionary-v0.0.3...theopendictionary-v0.0.4) (2022-12-11)
 
 
