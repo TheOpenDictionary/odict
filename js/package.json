@@ -13,7 +13,7 @@
     "prepare": "npm run build",
     "postpublish": "rimraf dist && git push --follow-tags",
     "build": "concurrently \"swc -d dist ./src/*.ts\" \"tsc\"",
-    "test": "jest"
+    "test": "tsc && jest"
   },
   "files": [
     "dist"

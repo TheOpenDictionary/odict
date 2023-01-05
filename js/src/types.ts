@@ -25,16 +25,21 @@ export interface Etymology {
   usages: Record<string, Usage>;
 }
 
+export interface Definition {
+  value: string;
+  examples: string[];
+}
+
 export interface Usage {
   id?: string;
   pos: string;
   description?: string;
-  definitions: string[];
+  definitions: Definition[];
   groups: Group[];
 }
 
 export interface Group {
   id?: string;
   description: string;
-  definitions: string[];
+  definitions: Definition[];
 }
