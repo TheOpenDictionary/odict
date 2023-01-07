@@ -1,20 +1,19 @@
 {
   "packages": {
     ".": {
-      "release-type": "simple",
-      "bump-patch-for-minor-pre-major": true
+      "release-type": "simple"
     },
     "js": {
       "release-type": "node",
-      "bump-patch-for-minor-pre-major": true
+      "path": "./js"
     },
     "python": {
       "release-type": "python",
-      "bump-patch-for-minor-pre-major": true
+      "path": "./python"
     },
     "jvm": {
       "release-type": "java",
-      "bump-patch-for-minor-pre-major": true
+      "path": "./jvm"
     }
   }
 }

@@ -22,6 +22,8 @@ jobs:
         with:
           command: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
+          monorepo-tags: true
+          bump-patch-for-minor-pre-major: true
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v1
       - name: Cache asdf
