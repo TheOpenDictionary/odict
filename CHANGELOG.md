@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.5](https://github.com/TheOpenDictionary/odict/compare/v1.8.4...v1.8.5) (2023-01-07)
+
+
+### Bug Fixes
+
+* **ci:** update release-please config ([eceac85](https://github.com/TheOpenDictionary/odict/commit/eceac85af3e236aaa042dd61ade102601e48564c))
+* **deps:** update module github.com/google/flatbuffers to v22.12.6+incompatible ([6287eb4](https://github.com/TheOpenDictionary/odict/commit/6287eb4f37846250e4a516edd710d59278516a64))
+* **deps:** update module github.com/schollz/progressbar/v3 to v3.13.0 ([a840651](https://github.com/TheOpenDictionary/odict/commit/a840651a5f8156b96018158c061a9ec0f384d198))
+* store all keys as lowercase ([b405776](https://github.com/TheOpenDictionary/odict/commit/b40577620f406ae98d4e559b2f483327ca74dff2))
+
 ## [1.8.4](https://github.com/TheOpenDictionary/odict/compare/v1.8.3...v1.8.4) (2023-01-05)
 
 
