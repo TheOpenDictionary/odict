@@ -17,7 +17,8 @@ func TestLookup(t *testing.T) {
 	})
 
 	assert.EqualValues(t, EntryRepresentable{
-		Term: "dog",
+		Term:          "dog",
+		Pronunciation: "dooooog",
 		Etymologies: []EtymologyRepresentable{
 			{
 				Description: "Latin root",

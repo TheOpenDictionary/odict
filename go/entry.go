@@ -8,10 +8,11 @@ import (
 )
 
 type EntryRepresentable struct {
-	Term        string                   `json:"term" xml:"term,attr"`
-	SeeAlso     string                   `json:"see,omitempty" xml:"see,attr,omitempty"`
-	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety"`
-	XMLName     xml.Name                 `json:"-" xml:"entry"`
+	Term          string                   `json:"term" xml:"term,attr"`
+	Pronunciation string                   `json:"pronunciation,omitempty" xml:"pronunciation,attr,omitempty"`
+	SeeAlso       string                   `json:"see,omitempty" xml:"see,attr,omitempty"`
+	Etymologies   []EtymologyRepresentable `json:"etymologies" xml:"ety"`
+	XMLName       xml.Name                 `json:"-" xml:"entry"`
 }
 
 func (entry EntryRepresentable) Key() string {
@@ -29,21 +30,24 @@ func (entry *Entry) AsRepresentable() EntryRepresentable {
 	}
 
 	return EntryRepresentable{
-		Term:        string(entry.Term()),
-		SeeAlso:     string(entry.See()),
-		Etymologies: etymologies,
+		Term:          string(entry.Term()),
+		Pronunciation: string(entry.Pronunciation()),
+		SeeAlso:       string(entry.See()),
+		Etymologies:   etymologies,
 	}
 }
 
 func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	key := builder.CreateString(entry.Key())
 	term := builder.CreateString(entry.Term)
+	pronunciation := builder.CreateString(entry.Pronunciation)
 	see := builder.CreateString(entry.SeeAlso)
 	etymologies := entry.buildEtymologyVector(builder)
 
 	EntryStart(builder)
 	EntryAddKey(builder, key)
 	EntryAddSee(builder, see)
+	EntryAddPronunciation(builder, pronunciation)
 	EntryAddTerm(builder, term)
 	EntryAddEtymologies(builder, etymologies)
 
