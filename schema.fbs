@@ -135,6 +135,7 @@ table Usage {
 table Entry {
     key:string (key);
     term:string;
+    pronunciation:string;
     see:string;
     etymologies:[Etymology];
 }
