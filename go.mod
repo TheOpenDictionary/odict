@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/blevesearch/bleve/v2 v2.3.6
 	github.com/blevesearch/bleve_index_api v1.0.5
-	github.com/fatih/color v1.13.0
+	github.com/fatih/color v1.14.0
 	github.com/golang/snappy v0.0.4
 	github.com/google/flatbuffers v22.12.6+incompatible
 	github.com/imdario/mergo v0.3.13
@@ -36,7 +36,7 @@ require (
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/mattn/go-colorable v0.1.9 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
