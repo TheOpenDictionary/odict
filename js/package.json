@@ -31,7 +31,7 @@
     "concurrently": "^7.6.0",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-config-standard-with-typescript": "^31.0.0",
+    "eslint-config-standard-with-typescript": "^32.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
