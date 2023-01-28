@@ -7,7 +7,7 @@ require (
 	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/fatih/color v1.14.1
 	github.com/golang/snappy v0.0.4
-	github.com/google/flatbuffers/v23 v23.1.21+incompatible
+	github.com/google/flatbuffers v23.1.21+incompatible
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.13.0
 	github.com/stretchr/testify v1.8.1
@@ -48,7 +48,6 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
-	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 	golang.org/x/sys v0.4.0 // indirect
 	golang.org/x/term v0.4.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
