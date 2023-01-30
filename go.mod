@@ -11,7 +11,7 @@ require (
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.13.0
 	github.com/stretchr/testify v1.8.1
-	github.com/urfave/cli/v2 v2.24.1
+	github.com/urfave/cli/v2 v2.24.2
 )
 
 require (
