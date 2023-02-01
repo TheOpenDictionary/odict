@@ -3,38 +3,55 @@ namespace odict;
 enum POS:byte {
     // Universal 
 
-    un = 0,
-    v,
-    n,
-    adj,
-    pron,
-    adv,
-    prep,
-    conj,
-    intj,
-    pref,
-    suff,
-    part,
-    art,
+    un = 0, // Unknown
+    adj,    // Adjective
+    adv,    // Adverb
+    art,    // Article
+    conj,   // Conjunction
+    intj,   // Interjection
+    n,      // Noun
+    part,   // Particle
+    pref,   // Prefix
+    prep,   // Preposition
+    postp,  // Postposition
+    pron,   // Pronoun
+    suff,   // Suffix
+    v,      // Verb
 
     // Universal (Extended)
-    aux,
-    aux_adj,
-    aux_v,
-    cconj,
-    cop,
-    ctr,
-    expr,
-    vi,
-    num,
-    propn,
-    sconj,
-    sym,
-    vt,
+    
+    abv,      // Abbreviation
+    adf,      // Adfix, 
+    aff,      // Affix
+    aux_adj,  // Auxiliary Adjective
+    aux_v,    // Auxiliary Verb
+    aux,      // Auxiliary
+    chr,      // Character
+    conj_c,   // Coordinating Conjunction
+    conj_s,   // Subordinating Conjunction
+    cop,      // Copula
+    cf,       // Circumfix
+    ctr,      // Counter
+    det,      // Determiner
+    expr,     // Expression
+    inf,      // Infix 
+    intf,     // Interfix
+    name,     // Name
+    num,      // Numeric
+    phr_adv,  // Adverbial Phrase
+    phr_adj,  // Adjective Phrase
+    phr_prep, // Prepositional Phrase
+    phr,      // Phrase
+    propn,    // Proper Noun
+    prov,     // Proverb
+    punc,     // Punctuation
+    sym,      // Symbol
+    vi,       // Intransitive Verb
+    vt,       // Transitive Verb
     
     // Japanese 
 
-    adj_f,
+    adj_f, 
     adj_ix,
     adj_kari,
     adj_ku,

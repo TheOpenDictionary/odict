@@ -91,26 +91,42 @@ var VerbYodanTsu = PartOfSpeech{Tag: "v4t", Buf: POSv4t, Label: "Yodan verb with
 /*                                Universal POS                               */
 /* -------------------------------------------------------------------------- */
 
+var Abbreviation = PartOfSpeech{Tag: "abbrev", Buf: POSabv, Label: "abbreviation"}
+var Adfix = PartOfSpeech{Tag: "adf", Buf: POSadf, Label: "adfix"}
 var Adjective = PartOfSpeech{Tag: "adj", Label: "adjective", Buf: POSadj}
+var AdjectivePhrase = PartOfSpeech{Tag: "phr_adj", Label: "adjective phrase", Buf: POSphr_adj}
 var Adverb = PartOfSpeech{Tag: "adv", Label: "adverb", Buf: POSadv}
+var AdverbialPhrase = PartOfSpeech{Tag: "phr_adv", Label: "adverbial phrase", Buf: POSphr_adv}
+var Affix = PartOfSpeech{Tag: "aff", Buf: POSaff, Label: "affix"}
 var Auxiliary = PartOfSpeech{Tag: "aux", Label: "auxiliary", Buf: POSaux}
 var AuxiliaryAdjective = PartOfSpeech{Tag: "aux-adj", Buf: POSaux_adj, Label: "auxiliary adjective"}
 var AuxiliaryVerb = PartOfSpeech{Tag: "aux-v", Buf: POSaux_v, Label: "auxiliary verb"}
+var Character = PartOfSpeech{Tag: "chr", Label: "character", Buf: POSchr}
+var Circumfix = PartOfSpeech{Tag: "crcf", Buf: POScf, Label: "circumfix"}
 var Conjunction = PartOfSpeech{Tag: "conj", Buf: POSconj, Label: "conjunction"}
-var CoordinatingConjunction = PartOfSpeech{Tag: "cconj", Buf: POScconj, Label: "coordinating conjunction"}
+var CoordinatingConjunction = PartOfSpeech{Tag: "cconj", Buf: POSconj_c, Label: "coordinating conjunction"}
 var Copula = PartOfSpeech{Tag: "cop", Buf: POScop, Label: "copula"}
 var Counter = PartOfSpeech{Tag: "ctr", Buf: POSctr, Label: "counter"}
+var Determiner = PartOfSpeech{Tag: "det", Buf: POSdet, Label: "determiner"}
 var Expression = PartOfSpeech{Tag: "expr", Buf: POSexpr, Label: "expression"}
+var Infix = PartOfSpeech{Tag: "inf", Buf: POSinf, Label: "infix"}
+var Interfix = PartOfSpeech{Tag: "intf", Buf: POSintf, Label: "interfix"}
 var Interjection = PartOfSpeech{Tag: "intj", Buf: POSintj, Label: "interjection"}
 var IntransitiveVerb = PartOfSpeech{Tag: "vi", Buf: POSvi, Label: "intransitive verb"}
+var Name = PartOfSpeech{Tag: "name", Buf: POSname, Label: "name"}
 var Noun = PartOfSpeech{Tag: "n", Buf: POSn, Label: "noun"}
 var Numeric = PartOfSpeech{Tag: "num", Buf: POSnum, Label: "numeric"}
 var Particle = PartOfSpeech{Tag: "part", Buf: POSpart, Label: "particle"}
+var Phrase = PartOfSpeech{Tag: "phr", Buf: POSpart, Label: "phrase"}
+var Postposition = PartOfSpeech{Tag: "postp", Buf: POSpostp, Label: "postposition"}
 var Prefix = PartOfSpeech{Tag: "pref", Buf: POSpart, Label: "prefix"}
 var Preposition = PartOfSpeech{Tag: "prep", Buf: POSprep, Label: "preposition"}
+var PrepositionalPhrase = PartOfSpeech{Tag: "phr_prep", Label: "prepositional phrase", Buf: POSphr_adj}
 var Pronoun = PartOfSpeech{Tag: "pron", Buf: POSpron, Label: "pronoun"}
 var ProperNoun = PartOfSpeech{Tag: "propn", Buf: POSpropn, Label: "proper noun"}
-var SubordinatingConjunction = PartOfSpeech{Tag: "sconj", Buf: POSsconj, Label: "subordinating conjunction"}
+var Proverb = PartOfSpeech{Tag: "prov", Buf: POSprov, Label: "proverb"}
+var Punctuation = PartOfSpeech{Tag: "punc", Buf: POSpunc, Label: "punctuation"}
+var SubordinatingConjunction = PartOfSpeech{Tag: "conj_s", Buf: POSconj_s, Label: "subordinating conjunction"}
 var Suffix = PartOfSpeech{Tag: "suff", Buf: POSsuff, Label: "suffix"}
 var Symbol = PartOfSpeech{Tag: "sym", Buf: POSsym, Label: "symbol"}
 var TransitiveVerb = PartOfSpeech{Tag: "vt", Buf: POSvt, Label: "transitive verb"}
@@ -121,25 +137,41 @@ var partsOfSpeech = []PartOfSpeech{
 
 	/* -------------------------------- Universal ------------------------------- */
 
+	Abbreviation,
+	Adfix,
 	Adjective,
+	AdjectivePhrase,
 	Adverb,
+	AdverbialPhrase,
+	Affix,
 	Auxiliary,
 	AuxiliaryAdjective,
 	AuxiliaryVerb,
+	Character,
+	Circumfix,
 	Conjunction,
 	CoordinatingConjunction,
 	Copula,
 	Counter,
+	Determiner,
 	Expression,
+	Infix,
+	Interfix,
 	Interjection,
 	IntransitiveVerb,
+	Name,
 	Noun,
 	Numeric,
 	Particle,
+	Phrase,
+	Postposition,
 	Prefix,
 	Preposition,
+	PrepositionalPhrase,
 	Pronoun,
 	ProperNoun,
+	Proverb,
+	Punctuation,
 	SubordinatingConjunction,
 	Suffix,
 	Symbol,

@@ -12,131 +12,163 @@ type POS int8
 
 const (
 	POSun        POS = 0
-	POSv         POS = 1
-	POSn         POS = 2
-	POSadj       POS = 3
-	POSpron      POS = 4
-	POSadv       POS = 5
-	POSprep      POS = 6
-	POSconj      POS = 7
-	POSintj      POS = 8
-	POSpref      POS = 9
-	POSsuff      POS = 10
-	POSpart      POS = 11
-	POSart       POS = 12
-	POSaux       POS = 13
-	POSaux_adj   POS = 14
-	POSaux_v     POS = 15
-	POScconj     POS = 16
-	POScop       POS = 17
-	POSctr       POS = 18
-	POSexpr      POS = 19
-	POSvi        POS = 20
-	POSnum       POS = 21
-	POSpropn     POS = 22
-	POSsconj     POS = 23
-	POSsym       POS = 24
-	POSvt        POS = 25
-	POSadj_f     POS = 26
-	POSadj_ix    POS = 27
-	POSadj_kari  POS = 28
-	POSadj_ku    POS = 29
-	POSadj_na    POS = 30
-	POSadj_nari  POS = 31
-	POSadj_no    POS = 32
-	POSadj_pn    POS = 33
-	POSadj_shiku POS = 34
-	POSadj_t     POS = 35
-	POSadv_to    POS = 36
-	POSn_adv     POS = 37
-	POSn_pref    POS = 38
-	POSn_suf     POS = 39
-	POSn_t       POS = 40
-	POSv_unspec  POS = 41
-	POSv1_s      POS = 42
-	POSv1        POS = 43
-	POSv2a_s     POS = 44
-	POSv2b_k     POS = 45
-	POSv2b_s     POS = 46
-	POSv2d_k     POS = 47
-	POSv2d_s     POS = 48
-	POSv2g_k     POS = 49
-	POSv2g_s     POS = 50
-	POSv2h_k     POS = 51
-	POSv2h_s     POS = 52
-	POSv2k_k     POS = 53
-	POSv2k_s     POS = 54
-	POSv2m_k     POS = 55
-	POSv2m_s     POS = 56
-	POSv2n_s     POS = 57
-	POSv2r_k     POS = 58
-	POSv2r_s     POS = 59
-	POSv2s_s     POS = 60
-	POSv2t_k     POS = 61
-	POSv2t_s     POS = 62
-	POSv2w_s     POS = 63
-	POSv2y_k     POS = 64
-	POSv2y_s     POS = 65
-	POSv2z_s     POS = 66
-	POSv4b       POS = 67
-	POSv4g       POS = 68
-	POSv4h       POS = 69
-	POSv4k       POS = 70
-	POSv4m       POS = 71
-	POSv4n       POS = 72
-	POSv4r       POS = 73
-	POSv4s       POS = 74
-	POSv4t       POS = 75
-	POSv5aru     POS = 76
-	POSv5b       POS = 77
-	POSv5g       POS = 78
-	POSv5k_s     POS = 79
-	POSv5k       POS = 80
-	POSv5m       POS = 81
-	POSv5n       POS = 82
-	POSv5r_i     POS = 83
-	POSv5r       POS = 84
-	POSv5s       POS = 85
-	POSv5t       POS = 86
-	POSv5u_s     POS = 87
-	POSv5u       POS = 88
-	POSv5uru     POS = 89
-	POSvk        POS = 90
-	POSvn        POS = 91
-	POSvr        POS = 92
-	POSvs_c      POS = 93
-	POSvs_i      POS = 94
-	POSvs_s      POS = 95
-	POSvs        POS = 96
-	POSvz        POS = 97
+	POSadj       POS = 1
+	POSadv       POS = 2
+	POSart       POS = 3
+	POSconj      POS = 4
+	POSintj      POS = 5
+	POSn         POS = 6
+	POSpart      POS = 7
+	POSpref      POS = 8
+	POSprep      POS = 9
+	POSpostp     POS = 10
+	POSpron      POS = 11
+	POSsuff      POS = 12
+	POSv         POS = 13
+	POSabv       POS = 14
+	POSadf       POS = 15
+	POSaff       POS = 16
+	POSaux_adj   POS = 17
+	POSaux_v     POS = 18
+	POSaux       POS = 19
+	POSchr       POS = 20
+	POSconj_c    POS = 21
+	POSconj_s    POS = 22
+	POScop       POS = 23
+	POScf        POS = 24
+	POSctr       POS = 25
+	POSdet       POS = 26
+	POSexpr      POS = 27
+	POSinf       POS = 28
+	POSintf      POS = 29
+	POSname      POS = 30
+	POSnum       POS = 31
+	POSphr_adv   POS = 32
+	POSphr_adj   POS = 33
+	POSphr_prep  POS = 34
+	POSphr       POS = 35
+	POSpropn     POS = 36
+	POSprov      POS = 37
+	POSpunc      POS = 38
+	POSsym       POS = 39
+	POSvi        POS = 40
+	POSvt        POS = 41
+	POSadj_f     POS = 42
+	POSadj_ix    POS = 43
+	POSadj_kari  POS = 44
+	POSadj_ku    POS = 45
+	POSadj_na    POS = 46
+	POSadj_nari  POS = 47
+	POSadj_no    POS = 48
+	POSadj_pn    POS = 49
+	POSadj_shiku POS = 50
+	POSadj_t     POS = 51
+	POSadv_to    POS = 52
+	POSn_adv     POS = 53
+	POSn_pref    POS = 54
+	POSn_suf     POS = 55
+	POSn_t       POS = 56
+	POSv_unspec  POS = 57
+	POSv1_s      POS = 58
+	POSv1        POS = 59
+	POSv2a_s     POS = 60
+	POSv2b_k     POS = 61
+	POSv2b_s     POS = 62
+	POSv2d_k     POS = 63
+	POSv2d_s     POS = 64
+	POSv2g_k     POS = 65
+	POSv2g_s     POS = 66
+	POSv2h_k     POS = 67
+	POSv2h_s     POS = 68
+	POSv2k_k     POS = 69
+	POSv2k_s     POS = 70
+	POSv2m_k     POS = 71
+	POSv2m_s     POS = 72
+	POSv2n_s     POS = 73
+	POSv2r_k     POS = 74
+	POSv2r_s     POS = 75
+	POSv2s_s     POS = 76
+	POSv2t_k     POS = 77
+	POSv2t_s     POS = 78
+	POSv2w_s     POS = 79
+	POSv2y_k     POS = 80
+	POSv2y_s     POS = 81
+	POSv2z_s     POS = 82
+	POSv4b       POS = 83
+	POSv4g       POS = 84
+	POSv4h       POS = 85
+	POSv4k       POS = 86
+	POSv4m       POS = 87
+	POSv4n       POS = 88
+	POSv4r       POS = 89
+	POSv4s       POS = 90
+	POSv4t       POS = 91
+	POSv5aru     POS = 92
+	POSv5b       POS = 93
+	POSv5g       POS = 94
+	POSv5k_s     POS = 95
+	POSv5k       POS = 96
+	POSv5m       POS = 97
+	POSv5n       POS = 98
+	POSv5r_i     POS = 99
+	POSv5r       POS = 100
+	POSv5s       POS = 101
+	POSv5t       POS = 102
+	POSv5u_s     POS = 103
+	POSv5u       POS = 104
+	POSv5uru     POS = 105
+	POSvk        POS = 106
+	POSvn        POS = 107
+	POSvr        POS = 108
+	POSvs_c      POS = 109
+	POSvs_i      POS = 110
+	POSvs_s      POS = 111
+	POSvs        POS = 112
+	POSvz        POS = 113
 )
 
 var EnumNamesPOS = map[POS]string{
 	POSun:        "un",
-	POSv:         "v",
-	POSn:         "n",
 	POSadj:       "adj",
-	POSpron:      "pron",
 	POSadv:       "adv",
-	POSprep:      "prep",
+	POSart:       "art",
 	POSconj:      "conj",
 	POSintj:      "intj",
-	POSpref:      "pref",
-	POSsuff:      "suff",
+	POSn:         "n",
 	POSpart:      "part",
-	POSart:       "art",
-	POSaux:       "aux",
+	POSpref:      "pref",
+	POSprep:      "prep",
+	POSpostp:     "postp",
+	POSpron:      "pron",
+	POSsuff:      "suff",
+	POSv:         "v",
+	POSabv:       "abv",
+	POSadf:       "adf",
+	POSaff:       "aff",
 	POSaux_adj:   "aux_adj",
 	POSaux_v:     "aux_v",
-	POScconj:     "cconj",
+	POSaux:       "aux",
+	POSchr:       "chr",
+	POSconj_c:    "conj_c",
+	POSconj_s:    "conj_s",
 	POScop:       "cop",
+	POScf:        "cf",
 	POSctr:       "ctr",
+	POSdet:       "det",
 	POSexpr:      "expr",
-	POSvi:        "vi",
+	POSinf:       "inf",
+	POSintf:      "intf",
+	POSname:      "name",
 	POSnum:       "num",
+	POSphr_adv:   "phr_adv",
+	POSphr_adj:   "phr_adj",
+	POSphr_prep:  "phr_prep",
+	POSphr:       "phr",
 	POSpropn:     "propn",
-	POSsconj:     "sconj",
+	POSprov:      "prov",
+	POSpunc:      "punc",
 	POSsym:       "sym",
+	POSvi:        "vi",
 	POSvt:        "vt",
 	POSadj_f:     "adj_f",
 	POSadj_ix:    "adj_ix",
@@ -214,30 +246,46 @@ var EnumNamesPOS = map[POS]string{
 
 var EnumValuesPOS = map[string]POS{
 	"un":        POSun,
-	"v":         POSv,
-	"n":         POSn,
 	"adj":       POSadj,
-	"pron":      POSpron,
 	"adv":       POSadv,
-	"prep":      POSprep,
+	"art":       POSart,
 	"conj":      POSconj,
 	"intj":      POSintj,
-	"pref":      POSpref,
-	"suff":      POSsuff,
+	"n":         POSn,
 	"part":      POSpart,
-	"art":       POSart,
-	"aux":       POSaux,
+	"pref":      POSpref,
+	"prep":      POSprep,
+	"postp":     POSpostp,
+	"pron":      POSpron,
+	"suff":      POSsuff,
+	"v":         POSv,
+	"abv":       POSabv,
+	"adf":       POSadf,
+	"aff":       POSaff,
 	"aux_adj":   POSaux_adj,
 	"aux_v":     POSaux_v,
-	"cconj":     POScconj,
+	"aux":       POSaux,
+	"chr":       POSchr,
+	"conj_c":    POSconj_c,
+	"conj_s":    POSconj_s,
 	"cop":       POScop,
+	"cf":        POScf,
 	"ctr":       POSctr,
+	"det":       POSdet,
 	"expr":      POSexpr,
-	"vi":        POSvi,
+	"inf":       POSinf,
+	"intf":      POSintf,
+	"name":      POSname,
 	"num":       POSnum,
+	"phr_adv":   POSphr_adv,
+	"phr_adj":   POSphr_adj,
+	"phr_prep":  POSphr_prep,
+	"phr":       POSphr,
 	"propn":     POSpropn,
-	"sconj":     POSsconj,
+	"prov":      POSprov,
+	"punc":      POSpunc,
 	"sym":       POSsym,
+	"vi":        POSvi,
 	"vt":        POSvt,
 	"adj_f":     POSadj_f,
 	"adj_ix":    POSadj_ix,
