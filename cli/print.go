@@ -36,7 +36,7 @@ func ppExample(example string, underlined string, indent int) {
 		end := start + len(underlined)
 		italicFaint.Print(example[0:start])
 		italicFaintUnderlined.Print(example[start:end])
-		italicFaint.Printf("%"+fmt.Sprint(indent)+"s\n", example[end:])
+		italicFaint.Printf("%s\n", example[end:])
 	} else {
 		italicFaint.Printf("%s\n", example)
 	}
@@ -85,13 +85,13 @@ func ppUsage(usage odict.UsageRepresentable, entry odict.EntryRepresentable) {
 
 	var i = 0
 
-	for i < len(usage.Definitions) {
-		ppDefinition(usage.Definitions[i], strconv.Itoa(i+1), entry, 4)
+	for i < len(usage.Groups) {
+		ppGroup(usage.Groups[i], i, entry)
 		i++
 	}
 
-	for i < len(usage.Groups) {
-		ppGroup(usage.Groups[i], i, entry)
+	for i < len(usage.Definitions) {
+		ppDefinition(usage.Definitions[i], strconv.Itoa(i+1), entry, 4)
 		i++
 	}
 }
