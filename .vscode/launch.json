@@ -14,7 +14,7 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/odict.go",
-      "args": ["c", "examples/example2.xml"]
+      "args": ["c", "examples/example1.xml"]
     },
     {
       "name": "Entry Lookup",
@@ -25,7 +25,7 @@
       "args": ["l", "examples/example1.odict", "run"]
     },
     {
-      "name": "Dump Dictionary",
+      "name": "Dump Dictionary to Default XML format",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -38,12 +38,23 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/odict.go",
-      "args": [
-        "m",
-        "examples/example1.odict",
-        "examples/example2.odict",
-        "examples/merged.odict"
-      ]
+      "args": ["m", "examples/example1.odict", "examples/example2.odict", "examples/merged.odict"]
+    },
+    {
+      "name": "Dump Dictionary to Specific XML Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "xml", "examples/example1.odict", "examples/output.xml"]
+    },
+    {
+      "name": "Dump Dictionary to Specific SQL Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "sql", "examples/example1.odict", "examples/output.sql"]
     }
   ]
 }
