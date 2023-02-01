@@ -9,7 +9,7 @@ func (dict *Dictionary) lookup(query string, fallback string, split int, follow 
 	entries := []Entry{}
 
 	var entry Entry
-	var found = dict.EntriesByKey(&entry, strings.ToLower(query))
+	var found = dict.EntriesByKey(&entry, query)
 
 	if found {
 		var see = entry.See()
@@ -18,7 +18,7 @@ func (dict *Dictionary) lookup(query string, fallback string, split int, follow 
 			return dict.lookup(string(see), fallback, split, follow)
 		}
 	} else if fallback != "" {
-		found = dict.EntriesByKey(&entry, strings.ToLower(fallback))
+		found = dict.EntriesByKey(&entry, fallback)
 	}
 
 	if found {

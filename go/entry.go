@@ -2,7 +2,6 @@ package odict
 
 import (
 	"encoding/xml"
-	"strings"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
@@ -16,7 +15,7 @@ type EntryRepresentable struct {
 }
 
 func (entry EntryRepresentable) Key() string {
-	return strings.ToLower(entry.Term)
+	return entry.Term
 }
 
 func (entry *Entry) AsRepresentable() EntryRepresentable {

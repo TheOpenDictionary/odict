@@ -1,19 +1,23 @@
 {
   "packages": {
     ".": {
-      "release-type": "simple"
+      "release-type": "simple",
+      "component": "cli"
     },
     "js": {
       "release-type": "node",
-      "path": "./js"
+      "path": "./js",
+      "component": "js"
     },
     "python": {
       "release-type": "python",
-      "path": "./python"
+      "path": "./python",
+      "component": "python"
     },
     "jvm": {
       "release-type": "java",
-      "path": "./jvm"
+      "path": "./jvm",
+      "component": "jvm"
     }
   }
 }

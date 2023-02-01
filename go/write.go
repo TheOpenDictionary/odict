@@ -23,7 +23,6 @@ func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
 	actualEntries := len(dictionary.Entries)
 
 	if expectedEntries != actualEntries {
-
 		fmt.Printf("WARNING: The dictionary that was read into memory from XML is missing entries. %d entries were read when there should be %d total. Are you sure your XML is 100%% valid and there are no duplicate entries?\n", actualEntries, expectedEntries)
 
 		for _, entry := range entries {
