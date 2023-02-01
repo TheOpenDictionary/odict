@@ -1,8 +1,7 @@
 {
   "packages": {
     ".": {
-      "release-type": "simple",
-      "component": "cli"
+      "release-type": "simple"
     },
     "js": {
       "release-type": "node",
