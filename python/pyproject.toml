@@ -8,7 +8,7 @@ authors = ["Tyler Nickerson <nickersoft@gmail.com>"]
 python = "^3.8"
 
 [tool.poetry.dev-dependencies]
-black = "^22.6.0"
+black = "^23.0.0"
 pytest = "^7.1.2"
 
 [build-system]
