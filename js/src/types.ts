@@ -16,6 +16,7 @@ export interface SearchOptions {
 export interface Entry {
   id?: string;
   term: string;
+  pronunciation?: string;
   etymologies: Etymology[];
 }
 
