@@ -6,7 +6,7 @@ import (
 
 type GroupRepresentable struct {
 	ID          string                    `json:"id,omitempty" xml:"id,attr"`
-	Description string                    `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Description string                    `json:"description" xml:"description,attr"`
 	Definitions []DefinitionRepresentable `json:"definitions" xml:"definition"`
 }
 
