@@ -9,5 +9,5 @@ func (dict *Dictionary) DumpXML() string {
 // DumpDictionarySQL converts an Dictionary struct
 // to SQL output to seed a database
 func (dict *Dictionary) DumpSQL() string {
-	return ""
+	return "testing SQL"
 }

@@ -30,7 +30,14 @@ func dump(c *cli.Context) error {
 
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
-		dumped := dict.DumpXML()
+
+		var dumped string
+		if format == dumpSql {
+			dumped = dict.DumpSQL()
+		} else {
+			dumped = dict.DumpXML()
+		}
+
 		file, err := os.Create(outputFile)
 
 		odict.Check(err)
