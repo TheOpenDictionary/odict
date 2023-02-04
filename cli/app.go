@@ -105,8 +105,16 @@ var App = &cli.App{
 		{
 			Name:    "dump",
 			Aliases: []string{"d"},
-			Usage:   "dumps a previously compiled dictionary to its original ODXML",
-			Action:  dump,
+			Usage:   "dumps a previously compiled dictionary (defaults to original ODXML)",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:    "format",
+					Aliases: []string{"f"},
+					Usage:   "Specific output format of the dump (ODXML or SQL)",
+					Value:   dumpXml,
+				},
+			},
+			Action: dump,
 		},
 		{
 			Name:    "merge",

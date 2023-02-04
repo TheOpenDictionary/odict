@@ -9,6 +9,13 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
+type DumpFormat = string
+
+const (
+	dumpXml DumpFormat = "xml"
+	dumpSql DumpFormat = "sql"
+)
+
 func dump(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	outputFile := c.Args().Get(1)
