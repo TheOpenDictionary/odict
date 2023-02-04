@@ -25,6 +25,14 @@
       "args": ["l", "examples/example1.odict", "run"]
     },
     {
+      "name": "Entry Lookup JSON Formatted",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["l", "-f", "json", "examples/example1.odict", "run"]
+    },
+    {
       "name": "Dump Dictionary to Default XML format",
       "type": "go",
       "request": "launch",
