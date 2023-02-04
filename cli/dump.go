@@ -3,6 +3,7 @@ package cli
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 
 	odict "github.com/TheOpenDictionary/odict/go"
@@ -19,6 +20,9 @@ const (
 func dump(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	outputFile := c.Args().Get(1)
+	format := c.String("format")
+
+	fmt.Println(format)
 
 	if len(inputFile) == 0 || len(outputFile) == 0 {
 		return errors.New("usage: odict dump [input file] [output file]")
@@ -26,7 +30,7 @@ func dump(c *cli.Context) error {
 
 	t(c, func() {
 		dict := odict.ReadDictionaryFromPath(inputFile)
-		dumped := dict.Dump()
+		dumped := dict.DumpXML()
 		file, err := os.Create(outputFile)
 
 		odict.Check(err)
