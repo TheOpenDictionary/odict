@@ -98,15 +98,20 @@ func TestFollow(t *testing.T) {
 
 	dict := ReadDictionaryFromPath("../examples/example2.odict")
 
-	entries1 := dict.Lookup([]string{"runners"}, 2, false)
+	control := dict.Lookup([]string{"runners"}, 2, false)
 
-	assert.Equal(t, len(entries1), 1)
-	assert.Equal(t, "runners", string(entries1[0][0].Term()))
+	assert.Equal(t, len(control), 1)
+	assert.Equal(t, "runners", string(control[0][0].Term()))
 
-	entries2 := dict.Lookup([]string{"runner"}, 2, true)
+	basic := dict.Lookup([]string{"runners"}, 2, true)
 
-	assert.Equal(t, 1, len(entries2))
-	assert.Equal(t, "runner", string(entries2[0][0].Term()))
+	assert.Equal(t, 1, len(basic))
+	assert.Equal(t, "runner", string(basic[0][0].Term()))
+
+	fallback := dict.Lookup([]string{"unfindable (runners)"}, 2, true)
+
+	assert.Equal(t, 1, len(fallback))
+	assert.Equal(t, "runner", string(fallback[0][0].Term()))
 
 	CleanupTest()
 }
