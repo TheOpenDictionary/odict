@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/v1.9.0...v1.9.1) (2023-02-13)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.3 ([e8bd9bf](https://github.com/TheOpenDictionary/odict/commit/e8bd9bfa9c35e78db0c6c0abd24b359381d2f76c))
+* **go:** always show description for groups ([97e8a62](https://github.com/TheOpenDictionary/odict/commit/97e8a62153a392189bdc57ae57a0bf7837790f60))
+* **js:** update TypeScript types ([dde8af5](https://github.com/TheOpenDictionary/odict/commit/dde8af56457e44ac1bee808f02ba18a640bb86ac))
+* **lookup:** fix follow flag for fallback lookups ([fb0748d](https://github.com/TheOpenDictionary/odict/commit/fb0748d47aeee4e4ff5c13899a36e5742b008af2))
+* remove component for cli ([f3618e2](https://github.com/TheOpenDictionary/odict/commit/f3618e2daac35d3cac6ecd741f91b2f375e0c150))
+
 ## [1.9.0](https://github.com/TheOpenDictionary/odict/compare/cli-v1.8.5...cli-v1.9.0) (2023-02-01)
 
 
