@@ -1,6 +1,7 @@
 package odict
 
 import (
+	"bytes"
 	"embed"
 	"encoding/json"
 	"encoding/xml"
@@ -48,21 +49,43 @@ func XML(any interface{}) string {
 	return string(str)
 }
 
-func SQL(dict DictionaryRepresentable) string {
-	dialects := []string{sq.DialectSQLite, sq.DialectPostgres, sq.DialectMySQL, sq.DialectSQLServer}
-	for _, dialect := range dialects {
-		fmt.Println("\n--[ " + dialect + " ]--\n")
-		generateCmd := &ddl.GenerateCmd{
-			Dialect:   dialect,
-			DirFS:     fsys,
-			Filenames: []string{"sql.go"},
-			DryRun:    true,
-		}
-		err := generateCmd.Run()
-		if err != nil {
-			fmt.Println(err)
-		}
+func SQL(dict DictionaryRepresentable, sqlDialect string) string {
+	var buf bytes.Buffer
+	var sqlCmds string
+
+	generateCmd := &ddl.GenerateCmd{
+		Dialect:   sqlDialect,
+		DirFS:     fsys,
+		Filenames: []string{"sql.go"},
+		DryRun:    true,
+		Stdout:    &buf,
+	}
+	err := generateCmd.Run()
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	return "yo"
+	sqlCmds += buf.String()
+
+	languages := [][2]string{
+		{"abc", "def"},
+		{"ghi", "jkl"},
+		{"mno", "pqr"},
+	}
+	for _, language := range languages {
+		l := sq.New[LANGUAGE]("")
+		insertQuery := sq.
+			InsertInto(l).
+			Columns(l.CODE, l.FLAG).
+			Values(sq.Literal(language[0]), sq.Literal(language[1]))
+		query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		fmt.Println(query + ";")
+		sqlCmds += query + ";\n"
+	}
+
+	return sqlCmds
 }
