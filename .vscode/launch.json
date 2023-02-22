@@ -62,7 +62,7 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/odict.go",
-      "args": ["d", "-f", "pgsql", "examples/example1.odict", "examples/output.sql"]
+      "args": ["d", "-f", "postgres", "examples/example1.odict", "examples/output.sql"]
     },
     {
       "name": "Dump Dictionary to Specific SQLite Format",
