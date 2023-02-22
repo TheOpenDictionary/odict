@@ -66,25 +66,17 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 
 	sqlCmds += buf.String()
 
-	languages := [][2]string{
-		{"abc", "def"},
-		{"ghi", "jkl"},
-		{"mno", "pqr"},
+	// Insert Dictionary with primary key of 1
+	d := sq.New[DICTIONARY]("")
+	insertQuery := sq.
+		InsertInto(d).
+		Columns(d.NAME, d.ID).
+		Values(sq.Literal(dict.Name), sq.Literal(1))
+	query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
+	if err != nil {
+		fmt.Println(err)
 	}
-	for _, language := range languages {
-		l := sq.New[LANGUAGE]("")
-		insertQuery := sq.
-			InsertInto(l).
-			Columns(l.CODE, l.FLAG).
-			Values(sq.Literal(language[0]), sq.Literal(language[1]))
-		query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		fmt.Println(query + ";")
-		sqlCmds += query + ";\n"
-	}
+	sqlCmds += query + ";\n"
 
 	return sqlCmds
 }

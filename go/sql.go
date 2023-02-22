@@ -11,10 +11,8 @@ type LANGUAGE struct {
 
 type DICTIONARY struct {
 	sq.TableStruct
-	ID                 sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
-	NAME               sq.StringField `ddl:"notnull"`
-	SOURCE_LANGUAGE_ID sq.NumberField `ddl:"type=BIGINT notnull references=language.id"`
-	TARGET_LANGUAGE_ID sq.NumberField `ddl:"type=BIGINT notnull references=language.id"`
+	ID   sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
+	NAME sq.StringField `ddl:"notnull"`
 }
 
 type ENTRY struct {
