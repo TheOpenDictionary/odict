@@ -10,7 +10,6 @@ import (
 	"github.com/bokwoon95/sq"
 	"github.com/bokwoon95/sqddl/ddl"
 	flatbuffers "github.com/google/flatbuffers/go"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 //go:embed sql.go
