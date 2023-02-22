@@ -51,6 +51,9 @@ func XML(any interface{}) string {
 func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	var buf bytes.Buffer
 	var sqlCmds string
+	dictId := 1
+	entryId := 1
+	etyId := 1
 
 	generateCmd := &ddl.GenerateCmd{
 		Dialect:   sqlDialect,
@@ -66,17 +69,48 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 
 	sqlCmds += buf.String()
 
-	// Insert Dictionary with primary key of 1
+	// Insert Dictionary with PK of 1
 	d := sq.New[DICTIONARY]("")
 	insertQuery := sq.
 		InsertInto(d).
 		Columns(d.NAME, d.ID).
-		Values(sq.Literal(dict.Name), sq.Literal(1))
-	query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
+		Values(sq.Literal(dict.Name), sq.Literal(dictId))
+	dict_query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
-	sqlCmds += query + ";\n"
+	sqlCmds += dict_query + ";\n"
+
+	// Insert entries with relation to dictionary with PK of 1
+	for _, entry := range dict.Entries {
+		e := sq.New[ENTRY]("")
+		insertQuery := sq.
+			InsertInto(e).
+			Columns(e.ID, e.TERM, e.DICTIONARY_ID).
+			Values(sq.Literal(entryId), sq.Literal(entry.Term), sq.Literal(1))
+		e_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		sqlCmds += e_query + ";\n"
+		// Insert ety with relation to current entry
+		for _, etymology := range entry.Etymologies {
+			ety := sq.New[ETYMOLOGY]("")
+			insertQuery := sq.
+				InsertInto(ety).
+				Columns(ety.ID, ety.DESCRIPTION, ety.ENTRY_ID).
+				Values(sq.Literal(etyId), sq.Literal(etymology.Description), sq.Literal(entryId))
+			ety_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			sqlCmds += ety_query + ";\n"
+			etyId++
+		}
+		entryId++
+	}
 
 	return sqlCmds
 }
