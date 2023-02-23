@@ -11,17 +11,17 @@ func (dict *Dictionary) lookup(query string, fallback string, split int, follow 
 	var entry Entry
 	var found = dict.EntriesByKey(&entry, query)
 
+	if !found && fallback != "" {
+		found = dict.EntriesByKey(&entry, fallback)
+	}
+
 	if found {
 		var see = entry.See()
 
 		if len(see) > 0 && follow {
 			return dict.lookup(string(see), fallback, split, follow)
 		}
-	} else if fallback != "" {
-		found = dict.EntriesByKey(&entry, fallback)
-	}
 
-	if found {
 		entries = append(entries, entry)
 	} else if split > 0 {
 		entries = append(entries, dict.Split(query, split)...)

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.1.0...js-v0.1.1) (2023-02-13)
+
+
+### Bug Fixes
+
+* **js:** update TypeScript types ([dde8af5](https://github.com/TheOpenDictionary/odict/commit/dde8af56457e44ac1bee808f02ba18a640bb86ac))
+
 ## [0.1.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.0.5...js-v0.1.0) (2023-02-01)
 
 
