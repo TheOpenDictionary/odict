@@ -79,7 +79,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 		InsertInto(d).
 		Columns(d.NAME, d.ID).
 		Values(sq.Literal(dict.Name), sq.Literal(dictId))
-	dict_query, _, err := sq.ToSQL(sq.DialectPostgres, insertQuery, nil)
+	dict_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
