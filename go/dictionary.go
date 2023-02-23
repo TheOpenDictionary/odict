@@ -8,7 +8,7 @@ import (
 )
 
 type DictionaryRepresentable struct {
-	ID      string                            `json:"id" xml:"id,attr" gorm:"column:id;primary_key;AUTO_INCREMENT"`
+	ID      string                            `json:"id" xml:"id,attr"`
 	Name    string                            `json:"name" xml:"name,attr,omitempty"`
 	Entries KVMap[string, EntryRepresentable] `json:"entries" xml:"entry"`
 	XMLName xml.Name                          `json:"-" xml:"dictionary"`
