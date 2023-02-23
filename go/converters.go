@@ -59,6 +59,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	defId := 1
 	exId := 1
 
+	// Generate SQL create statements and constraints
 	generateCmd := &ddl.GenerateCmd{
 		Dialect:   sqlDialect,
 		DirFS:     fsys,
@@ -70,10 +71,9 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	sqlCmds += buf.String()
 
-	// Insert Dictionary with PK of 1
+	// Insert dictionary w/ PK of 1
 	d := sq.New[DICTIONARY]("")
 	insertQuery := sq.
 		InsertInto(d).
@@ -85,7 +85,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	}
 	sqlCmds += dict_query + ";\n"
 
-	// Insert entries with relation to dictionary with PK of 1
+	// Insert entries w/ relation to dictionary with PK of 1
 	for _, entry := range dict.Entries {
 		e := sq.New[ENTRY]("")
 		insertQuery := sq.
@@ -98,7 +98,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 			continue
 		}
 		sqlCmds += e_query + ";\n"
-		// Insert etymologies with relation to current entry
+		// Insert etymologies w/ relation to current entry
 		for _, etymology := range entry.Etymologies {
 			ety := sq.New[ETYMOLOGY]("")
 			insertQuery := sq.
@@ -124,6 +124,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 					continue
 				}
 				sqlCmds += usg_query + ";\n"
+				// Insert groups w/ relation to current usage
 				for _, group := range usage.Groups {
 					grp := sq.New[GROUP]("")
 					insertQuery := sq.
@@ -136,6 +137,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 						continue
 					}
 					sqlCmds += grp_query + ";\n"
+					// Insert definitions w/ relation to current usage/group
 					for _, definition := range group.Definitions {
 						def := sq.New[DEFINITION]("")
 						insertQuery := sq.
@@ -148,6 +150,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 							continue
 						}
 						sqlCmds += def_query + ";\n"
+						// Insert examples w/ relation to current definition
 						for _, example := range definition.Examples {
 							ex := sq.New[EXAMPLE]("")
 							insertQuery := sq.
