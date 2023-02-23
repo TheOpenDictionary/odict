@@ -55,6 +55,9 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	entryId := 1
 	etyId := 1
 	usageId := 1
+	groupId := 1
+	defId := 1
+	exId := 1
 
 	generateCmd := &ddl.GenerateCmd{
 		Dialect:   sqlDialect,
@@ -110,7 +113,6 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 			sqlCmds += ety_query + ";\n"
 			// Insert usages w/ relation to current ety
 			for _, usage := range etymology.Usages {
-				fmt.Println(usage)
 				usg := sq.New[USAGE]("")
 				insertQuery := sq.
 					InsertInto(usg).
@@ -122,6 +124,48 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 					continue
 				}
 				sqlCmds += usg_query + ";\n"
+				for _, group := range usage.Groups {
+					grp := sq.New[GROUP]("")
+					insertQuery := sq.
+						InsertInto(grp).
+						Columns(grp.ID, grp.DESCRIPTION, grp.USAGE_ID).
+						Values(sq.Literal(groupId), sq.Literal(group.Description), sq.Literal(usageId))
+					grp_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+					if err != nil {
+						fmt.Println(err)
+						continue
+					}
+					sqlCmds += grp_query + ";\n"
+					for _, definition := range group.Definitions {
+						def := sq.New[DEFINITION]("")
+						insertQuery := sq.
+							InsertInto(def).
+							Columns(def.ID, def.TEXT, def.USAGE_ID, def.GROUP_ID).
+							Values(sq.Literal(defId), sq.Literal(definition.Value), sq.Literal(usageId), sq.Literal(groupId))
+						def_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+						if err != nil {
+							fmt.Println(err)
+							continue
+						}
+						sqlCmds += def_query + ";\n"
+						for _, example := range definition.Examples {
+							ex := sq.New[EXAMPLE]("")
+							insertQuery := sq.
+								InsertInto(ex).
+								Columns(ex.ID, ex.TEXT, ex.DEFINITION_ID).
+								Values(sq.Literal(exId), sq.Literal(example), sq.Literal(defId))
+							ex_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+							if err != nil {
+								fmt.Println(err)
+								continue
+							}
+							sqlCmds += ex_query + ";\n"
+							exId++
+						}
+						defId++
+					}
+					groupId++
+				}
 				usageId++
 			}
 			etyId++
