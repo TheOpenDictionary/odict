@@ -2,13 +2,6 @@ package odict
 
 import "github.com/bokwoon95/sq"
 
-type LANGUAGE struct {
-	sq.TableStruct
-	ID   sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
-	CODE sq.StringField `ddl:"notnull unique"`
-	FLAG sq.StringField `ddl:"notnull unique"`
-}
-
 type DICTIONARY struct {
 	sq.TableStruct
 	ID   sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`

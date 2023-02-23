@@ -54,6 +54,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 	dictId := 1
 	entryId := 1
 	etyId := 1
+	usageId := 1
 
 	generateCmd := &ddl.GenerateCmd{
 		Dialect:   sqlDialect,
@@ -94,7 +95,7 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 			continue
 		}
 		sqlCmds += e_query + ";\n"
-		// Insert ety with relation to current entry
+		// Insert etymologies with relation to current entry
 		for _, etymology := range entry.Etymologies {
 			ety := sq.New[ETYMOLOGY]("")
 			insertQuery := sq.
@@ -107,6 +108,22 @@ func SQL(dict DictionaryRepresentable, sqlDialect string) string {
 				continue
 			}
 			sqlCmds += ety_query + ";\n"
+			// Insert usages w/ relation to current ety
+			for _, usage := range etymology.Usages {
+				fmt.Println(usage)
+				usg := sq.New[USAGE]("")
+				insertQuery := sq.
+					InsertInto(usg).
+					Columns(usg.ID, usg.ETYMOLOGY_ID).
+					Values(sq.Literal(usageId), sq.Literal(etyId))
+				usg_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+				sqlCmds += usg_query + ";\n"
+				usageId++
+			}
 			etyId++
 		}
 		entryId++
