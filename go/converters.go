@@ -252,8 +252,6 @@ func sqlInsertExamples(sqlDialect SqlDialect, examples []string, defId int, exId
 		}
 
 		sqlCmds += ex_query + ";\n"
-
-		exId++
 	}
 
 	return sqlCmds
