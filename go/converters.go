@@ -154,7 +154,6 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresen
 		sqlInsertUsages(sqlDialect, etymology.Usages, etyId, usageId)
 
 		usageId++
-
 	}
 
 	return sqlCmds
