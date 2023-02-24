@@ -108,6 +108,7 @@ func sqlInsertDictionary(sqlDialect SqlDialect, dict DictionaryRepresentable) st
 func sqlInsertEntries(sqlDialect SqlDialect, entries KVMap[string, EntryRepresentable], dictId int) string {
 	var sqlCmds string
 	entryId := 1
+	etyId := 1
 
 	// Insert entries w/ relation to dictionary with PK of 1
 	for _, entry := range entries {
@@ -123,17 +124,18 @@ func sqlInsertEntries(sqlDialect SqlDialect, entries KVMap[string, EntryRepresen
 		}
 
 		sqlCmds += e_query + ";\n"
-		sqlCmds += sqlInsertEtymologies(sqlCmds, entry.Etymologies, entryId)
+		sqlCmds += sqlInsertEtymologies(sqlDialect, entry.Etymologies, entryId, etyId)
 
+		etyId++
 		entryId++
 	}
 
 	return sqlCmds
 }
 
-func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresentable, entryId int) string {
+func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresentable, entryId int, etyId int) string {
 	var sqlCmds string
-	etyId := 1
+	usageId := 1
 
 	// Insert etymologies w/ relation to current entry
 	for _, etymology := range etymologies {
@@ -149,18 +151,18 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresen
 		}
 
 		sqlCmds += ety_query + ";\n"
-		sqlInsertUsages(sqlDialect, etymology.Usages, etyId)
+		sqlInsertUsages(sqlDialect, etymology.Usages, etyId, usageId)
 
-		etyId++
+		usageId++
 
 	}
 
 	return sqlCmds
 }
 
-func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepresentable], etyId int) string {
+func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepresentable], etyId int, usageId int) string {
 	var sqlCmds string
-	usageId := 1
+	groupId := 1
 
 	// Insert usages w/ relation to current ety
 	for _, usage := range usages {
@@ -176,17 +178,17 @@ func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepr
 		}
 
 		sqlCmds += usg_query + ";\n"
-		sqlCmds += sqlInsertGroups(sqlDialect, usage.Groups, usageId)
+		sqlCmds += sqlInsertGroups(sqlDialect, usage.Groups, usageId, groupId)
 
-		usageId++
+		groupId++
 	}
 
 	return sqlCmds
 }
 
-func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable, usageId int) string {
+func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable, usageId int, groupId int) string {
 	var sqlCmds string
-	groupId := 1
+	defId := 1
 
 	// Insert groups w/ relation to current usage
 	for _, group := range groups {
@@ -202,16 +204,16 @@ func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable, usageId
 		}
 
 		sqlCmds += grp_query + ";\n"
-		sqlCmds += sqlInsertDefinitions(sqlDialect, group.Definitions, usageId, groupId)
+		sqlCmds += sqlInsertDefinitions(sqlDialect, group.Definitions, usageId, groupId, defId)
 
-		groupId++
+		defId++
 	}
 	return sqlCmds
 }
 
-func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionRepresentable, usageId int, groupId int) string {
+func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionRepresentable, usageId int, groupId int, defId int) string {
 	var sqlCmds string
-	defId := 1
+	exId := 1
 
 	// Insert definitions w/ relation to current usage/group
 	for _, definition := range definitions {
@@ -227,16 +229,15 @@ func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionReprese
 		}
 
 		sqlCmds += def_query + ";\n"
-		sqlInsertExamples(sqlDialect, definition.Examples, defId)
+		sqlInsertExamples(sqlDialect, definition.Examples, defId, exId)
 
-		defId++
+		exId++
 	}
 	return sqlCmds
 }
 
-func sqlInsertExamples(sqlDialect SqlDialect, examples []string, defId int) string {
+func sqlInsertExamples(sqlDialect SqlDialect, examples []string, defId int, exId int) string {
 	var sqlCmds string
-	exId := 1
 
 	// Insert examples w/ relation to current definition
 	for _, example := range examples {
