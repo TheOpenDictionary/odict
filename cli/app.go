@@ -1,6 +1,9 @@
 package cli
 
 import (
+	"fmt"
+	"strings"
+
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -108,12 +111,22 @@ var App = &cli.App{
 			Usage:   "dumps a previously compiled dictionary (defaults to ODXML)",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
-					Name:    "format",
-					Aliases: []string{"f"},
-					Usage:   "Specific output format of the dump (ODXML or SQL)",
-					Value:   dumpXml,
+					Name:     "format",
+					Aliases:  []string{"f"},
+					Usage:    "Specific output format of the dump (ODXML or SQL)",
+					Required: true,
 				},
 			},
+			Before: cli.BeforeFunc(func(c *cli.Context) error {
+				s := c.String("format")
+				switch s {
+				case Xml, Postgres, Sqlite, Mysql, Sqlserver:
+					return nil
+				default:
+					validFormats := strings.Join([]string{Xml, Postgres, Sqlite, Mysql, Sqlserver}, " ")
+					return fmt.Errorf("invalid format: %s. Valid formats are: %s", s, validFormats)
+				}
+			}),
 			Action: dump,
 		},
 		{

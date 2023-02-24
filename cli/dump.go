@@ -12,11 +12,11 @@ import (
 type DumpFormat = string
 
 const (
-	dumpXml        DumpFormat = "xml"
-	dumpPostgreSQL DumpFormat = "postgres"
-	dumpSQLite     DumpFormat = "sqlite"
-	dumpMySQL      DumpFormat = "mysql"
-	dumpSQLServer  DumpFormat = "sqlserver"
+	Xml       DumpFormat = "xml"
+	Postgres  DumpFormat = "postgres"
+	Sqlite    DumpFormat = "sqlite"
+	Mysql     DumpFormat = "mysql"
+	Sqlserver DumpFormat = "sqlserver"
 )
 
 func dump(c *cli.Context) error {
@@ -33,16 +33,17 @@ func dump(c *cli.Context) error {
 
 		// All SQL formats and XML
 		var dumped string
-		if format == dumpPostgreSQL {
-			dumped = dict.DumpSQL(dumpPostgreSQL)
-		} else if format == dumpSQLite {
-			dumped = dict.DumpSQL(dumpSQLite)
-		} else if format == dumpMySQL {
-			dumped = dict.DumpSQL(dumpMySQL)
-		} else if format == dumpSQLServer {
-			dumped = dict.DumpSQL(dumpSQLServer)
-		} else {
+		switch format {
+		case Xml:
 			dumped = dict.DumpXML()
+		case Postgres:
+			dumped = dict.DumpSQL(Postgres)
+		case Sqlite:
+			dumped = dict.DumpSQL(Sqlite)
+		case Mysql:
+			dumped = dict.DumpSQL(Mysql)
+		case Sqlserver:
+			dumped = dict.DumpSQL(Sqlserver)
 		}
 
 		file, err := os.Create(outputFile)
