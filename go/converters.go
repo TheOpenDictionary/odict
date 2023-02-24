@@ -151,7 +151,7 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresen
 		}
 
 		sqlCmds += ety_query + ";\n"
-		sqlInsertUsages(sqlDialect, etymology.Usages, etyId, usageId)
+		sqlCmds += sqlInsertUsages(sqlDialect, etymology.Usages, etyId, usageId)
 
 		usageId++
 	}
@@ -228,7 +228,7 @@ func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionReprese
 		}
 
 		sqlCmds += def_query + ";\n"
-		sqlInsertExamples(sqlDialect, definition.Examples, defId, exId)
+		sqlCmds += sqlInsertExamples(sqlDialect, definition.Examples, defId, exId)
 
 		exId++
 	}
