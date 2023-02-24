@@ -2,52 +2,52 @@ package odict
 
 import "github.com/bokwoon95/sq"
 
-type DICTIONARY struct {
+type DICTIONARIES struct {
 	sq.TableStruct
 	ID   sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	NAME sq.StringField `ddl:"notnull"`
 }
 
-type ENTRY struct {
+type ENTRIES struct {
 	sq.TableStruct
 	ID            sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	CREATED_AT    sq.TimeField   `ddl:"default=CURRENT_TIMESTAMP"`
 	UPDATED_AT    sq.TimeField
 	TERM          sq.StringField `ddl:"notnull"`
-	DICTIONARY_ID sq.NumberField `ddl:"type=BIGINT references=dictionary.id"`
+	DICTIONARY_ID sq.NumberField `ddl:"type=BIGINT references=dictionaries.id"`
 }
 
-type ETYMOLOGY struct {
+type ETYMOLOGIES struct {
 	sq.TableStruct
 	ID          sq.StringField `ddl:"primarykey"` // cuid() generation is handled by prisma, not the database.
 	DESCRIPTION sq.StringField
-	ENTRY_ID    sq.NumberField `ddl:"type=BIGINT notnull references=entry.id"`
+	ENTRY_ID    sq.NumberField `ddl:"type=BIGINT notnull references=entries.id"`
 }
 
-type USAGE struct {
+type USAGES struct {
 	sq.TableStruct
 	ID           sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
-	ETYMOLOGY_ID sq.StringField `ddl:"notnull references=etymology.id"`
+	ETYMOLOGY_ID sq.StringField `ddl:"notnull references=etymologies.id"`
 }
 
-type GROUP struct {
+type GROUPS struct {
 	sq.TableStruct
 	ID          sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	DESCRIPTION sq.StringField
-	USAGE_ID    sq.NumberField `ddl:"type=BIGINT notnull references=usage.id"`
+	USAGE_ID    sq.NumberField `ddl:"type=BIGINT notnull references=usages.id"`
 }
 
-type DEFINITION struct {
+type DEFINITIONS struct {
 	sq.TableStruct
 	ID       sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	TEXT     sq.StringField `ddl:"notnull"`
-	USAGE_ID sq.NumberField `ddl:"type=BIGINT references=usage.id"`
-	GROUP_ID sq.NumberField `ddl:"type=BIGINT references=group.id"`
+	USAGE_ID sq.NumberField `ddl:"type=BIGINT references=usages.id"`
+	GROUP_ID sq.NumberField `ddl:"type=BIGINT references=groups.id"`
 }
 
-type EXAMPLE struct {
+type EXAMPLES struct {
 	sq.TableStruct
 	ID            sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	TEXT          sq.StringField `ddl:"notnull"`
-	DEFINITION_ID sq.NumberField `ddl:"type=BIGINT notnull references=definition.id"`
+	DEFINITION_ID sq.NumberField `ddl:"type=BIGINT notnull references=definitions.id"`
 }
