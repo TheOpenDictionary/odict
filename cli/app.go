@@ -124,7 +124,7 @@ var App = &cli.App{
 					return nil
 				default:
 					validFormats := strings.Join([]string{Xml, Postgres, Sqlite, Mysql, Sqlserver}, " ")
-					return fmt.Errorf("invalid format: %s. Valid formats are: %s", s, validFormats)
+					return fmt.Errorf("invalid format: %s, valid formats are: %s", s, validFormats)
 				}
 			}),
 			Action: dump,
