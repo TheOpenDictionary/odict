@@ -48,7 +48,7 @@ func XML(any interface{}) string {
 	return string(str)
 }
 
-func sql(dict DictionaryRepresentable, sqlDialect string) string {
+func sql(dict DictionaryRepresentable, sqlDialect SqlDialect) string {
 	var sqlCmds string
 
 	sqlCmds += sqlCreate(sqlDialect)
@@ -57,7 +57,7 @@ func sql(dict DictionaryRepresentable, sqlDialect string) string {
 	return sqlCmds
 }
 
-func sqlCreate(sqlDialect string) string {
+func sqlCreate(sqlDialect SqlDialect) string {
 	var buf bytes.Buffer
 
 	// Generate SQL create statements and constraints
@@ -75,7 +75,7 @@ func sqlCreate(sqlDialect string) string {
 	return buf.String()
 }
 
-func sqlInsert(sqlDialect string, dict DictionaryRepresentable) string {
+func sqlInsert(sqlDialect SqlDialect, dict DictionaryRepresentable) string {
 	var sqlCmds string
 
 	// Entry point that will capture every insert statement
@@ -84,7 +84,7 @@ func sqlInsert(sqlDialect string, dict DictionaryRepresentable) string {
 	return sqlCmds
 }
 
-func sqlInsertDictionary(sqlDialect string, dict DictionaryRepresentable) string {
+func sqlInsertDictionary(sqlDialect SqlDialect, dict DictionaryRepresentable) string {
 	var sqlCmds string
 	dictId := 1
 
@@ -105,7 +105,7 @@ func sqlInsertDictionary(sqlDialect string, dict DictionaryRepresentable) string
 	return sqlCmds
 }
 
-func sqlInsertEntries(sqlDialect string, entries KVMap[string, EntryRepresentable], dictId int) string {
+func sqlInsertEntries(sqlDialect SqlDialect, entries KVMap[string, EntryRepresentable], dictId int) string {
 	var sqlCmds string
 	entryId := 1
 
@@ -131,7 +131,7 @@ func sqlInsertEntries(sqlDialect string, entries KVMap[string, EntryRepresentabl
 	return sqlCmds
 }
 
-func sqlInsertEtymologies(sqlDialect string, etymologies []EtymologyRepresentable, entryId int) string {
+func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresentable, entryId int) string {
 	var sqlCmds string
 	etyId := 1
 
@@ -158,7 +158,7 @@ func sqlInsertEtymologies(sqlDialect string, etymologies []EtymologyRepresentabl
 	return sqlCmds
 }
 
-func sqlInsertUsages(sqlDialect string, usages KVMap[PartOfSpeech, UsageRepresentable], etyId int) string {
+func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepresentable], etyId int) string {
 	var sqlCmds string
 	usageId := 1
 
@@ -184,7 +184,7 @@ func sqlInsertUsages(sqlDialect string, usages KVMap[PartOfSpeech, UsageRepresen
 	return sqlCmds
 }
 
-func sqlInsertGroups(sqlDialect string, groups []GroupRepresentable, usageId int) string {
+func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable, usageId int) string {
 	var sqlCmds string
 	groupId := 1
 
@@ -209,7 +209,7 @@ func sqlInsertGroups(sqlDialect string, groups []GroupRepresentable, usageId int
 	return sqlCmds
 }
 
-func sqlInsertDefinitions(sqlDialect string, definitions []DefinitionRepresentable, usageId int, groupId int) string {
+func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionRepresentable, usageId int, groupId int) string {
 	var sqlCmds string
 	defId := 1
 
@@ -234,7 +234,7 @@ func sqlInsertDefinitions(sqlDialect string, definitions []DefinitionRepresentab
 	return sqlCmds
 }
 
-func sqlInsertExamples(sqlDialect string, examples []string, defId int) string {
+func sqlInsertExamples(sqlDialect SqlDialect, examples []string, defId int) string {
 	var sqlCmds string
 	exId := 1
 
