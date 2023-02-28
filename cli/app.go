@@ -108,7 +108,7 @@ var App = &cli.App{
 		{
 			Name:    "dump",
 			Aliases: []string{"d"},
-			Usage:   "dumps a previously compiled dictionary (defaults to ODXML)",
+			Usage:   "dumps a previously compiled dictionary",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
 					Name:     "format",
