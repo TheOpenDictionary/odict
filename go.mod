@@ -7,7 +7,7 @@ require (
 	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/fatih/color v1.14.1
 	github.com/golang/snappy v0.0.4
-	github.com/google/flatbuffers v23.1.21+incompatible
+	github.com/google/flatbuffers v23.3.3+incompatible
 	github.com/imdario/mergo v0.3.13
 	github.com/schollz/progressbar/v3 v3.13.0
 	github.com/stretchr/testify v1.8.2
