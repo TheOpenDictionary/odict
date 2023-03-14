@@ -25,7 +25,7 @@ jobs:
           monorepo-tags: true
           bump-patch-for-minor-pre-major: true
       - name: Setup asdf
-        uses: asdf-vm/actions/setup@v1
+        uses: asdf-vm/actions/setup@v2
       - name: Cache asdf
         id: cache-asdf
         uses: actions/cache@v3
@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
-        uses: asdf-vm/actions/install@v1
+        uses: asdf-vm/actions/install@v2
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:
