@@ -11,7 +11,7 @@ func TestDump(t *testing.T) {
 
 	dict := ReadDictionaryFromPath("../examples/example1.odict")
 	dict_r := dict.AsRepresentable()
-	dump := dict.Dump()
+	dump := dict.DumpXML()
 
 	WriteDictionaryFromXML(dump, "../examples/example1_generated.odict")
 

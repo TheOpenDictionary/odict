@@ -15,6 +15,13 @@ require (
 )
 
 require (
+	github.com/kr/pretty v0.1.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
+	golang.org/x/tools v0.5.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
+)
+
+require (
 	github.com/RoaringBitmap/roaring v1.2.1 // indirect
 	github.com/bits-and-blooms/bitset v1.3.0 // indirect
 	github.com/blevesearch/geo v0.1.16 // indirect
@@ -31,6 +38,8 @@ require (
 	github.com/blevesearch/zapx/v13 v13.3.7 // indirect
 	github.com/blevesearch/zapx/v14 v14.3.7 // indirect
 	github.com/blevesearch/zapx/v15 v15.3.8 // indirect
+	github.com/bokwoon95/sq v0.2.6
+	github.com/bokwoon95/sqddl v0.3.12
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
@@ -50,7 +59,6 @@ require (
 	go.etcd.io/bbolt v1.3.6 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/term v0.6.0 // indirect
-	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

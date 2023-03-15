@@ -14,7 +14,7 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/odict.go",
-      "args": ["c", "examples/example2.xml"]
+      "args": ["c", "examples/example1.xml"]
     },
     {
       "name": "Entry Lookup",
@@ -25,7 +25,15 @@
       "args": ["l", "examples/example1.odict", "run"]
     },
     {
-      "name": "Dump Dictionary",
+      "name": "Entry Lookup JSON Formatted",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["l", "-f", "json", "examples/example1.odict", "run"]
+    },
+    {
+      "name": "Dump Dictionary to Default XML format",
       "type": "go",
       "request": "launch",
       "mode": "auto",
@@ -38,12 +46,47 @@
       "request": "launch",
       "mode": "auto",
       "program": "${workspaceFolder}/odict.go",
-      "args": [
-        "m",
-        "examples/example1.odict",
-        "examples/example2.odict",
-        "examples/merged.odict"
-      ]
+      "args": ["m", "examples/example1.odict", "examples/example2.odict", "examples/merged.odict"]
+    },
+    {
+      "name": "Dump Dictionary to Specific XML Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "xml", "examples/example1.odict", "examples/output.xml"]
+    },
+    {
+      "name": "Dump Dictionary to Specific PostgreSQL Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "postgres", "examples/example1.odict", "examples/output.sql"]
+    },
+    {
+      "name": "Dump Dictionary to Specific SQLite Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "sqlite", "examples/example1.odict", "examples/output.sql"]
+    },
+    {
+      "name": "Dump Dictionary to Specific MySQL Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "mysql", "examples/example1.odict", "examples/output.sql"]
+    },
+    {
+      "name": "Dump Dictionary to Specific SQLServer Format",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/odict.go",
+      "args": ["d", "-f", "sqlserver", "examples/example1.odict", "examples/output.sql"]
     }
   ]
 }
