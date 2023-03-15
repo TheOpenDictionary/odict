@@ -113,16 +113,15 @@ var App = &cli.App{
 				&cli.StringFlag{
 					Name:     "format",
 					Aliases:  []string{"f"},
-					Usage:    "Specific output format of the dump (ODXML or SQL)",
+					Usage:    "output format of the dump (ODXML or SQL)",
 					Required: true,
 				},
 			},
 			Before: cli.BeforeFunc(func(c *cli.Context) error {
 				s := c.String("format")
-				switch s {
-				case Xml, Postgres, Sqlite, Mysql, Sqlserver:
+				if s == Xml || s == Postgres || s == Sqlite || s == Mysql || s == Sqlserver {
 					return nil
-				default:
+				} else {
 					validFormats := strings.Join([]string{Xml, Postgres, Sqlite, Mysql, Sqlserver}, " ")
 					return fmt.Errorf("invalid format: %s, valid formats are: %s", s, validFormats)
 				}
