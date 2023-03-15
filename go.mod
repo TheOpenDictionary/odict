@@ -38,7 +38,7 @@ require (
 	github.com/blevesearch/zapx/v13 v13.3.7 // indirect
 	github.com/blevesearch/zapx/v14 v14.3.7 // indirect
 	github.com/blevesearch/zapx/v15 v15.3.8 // indirect
-	github.com/bokwoon95/sq v0.2.6
+	github.com/bokwoon95/sq v0.2.7
 	github.com/bokwoon95/sqddl v0.3.12
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
