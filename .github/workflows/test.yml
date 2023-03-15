@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Setup asdf
-        uses: asdf-vm/actions/setup@v1
+        uses: asdf-vm/actions/setup@v2
       - name: Cache asdf
         id: cache-asdf
         uses: actions/cache@v3
@@ -32,7 +32,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-poetry-
       - name: Install dependencies in .tool-versions
-        uses: asdf-vm/actions/install@v1
+        uses: asdf-vm/actions/install@v2
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true

@@ -5,11 +5,11 @@ go 1.19
 require (
 	github.com/blevesearch/bleve/v2 v2.3.6
 	github.com/blevesearch/bleve_index_api v1.0.5
-	github.com/fatih/color v1.14.1
+	github.com/fatih/color v1.15.0
 	github.com/golang/snappy v0.0.4
 	github.com/google/flatbuffers v23.3.3+incompatible
 	github.com/imdario/mergo v0.3.13
-	github.com/schollz/progressbar/v3 v3.13.0
+	github.com/schollz/progressbar/v3 v3.13.1
 	github.com/stretchr/testify v1.8.2
 	github.com/urfave/cli/v2 v2.25.0
 )
@@ -57,8 +57,8 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/term v0.4.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/term v0.6.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
