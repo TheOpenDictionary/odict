@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.15.0
 	github.com/golang/snappy v0.0.4
 	github.com/google/flatbuffers v23.3.3+incompatible
-	github.com/imdario/mergo v0.3.13
+	github.com/imdario/mergo v0.3.14
 	github.com/schollz/progressbar/v3 v3.13.1
 	github.com/stretchr/testify v1.8.2
 	github.com/urfave/cli/v2 v2.25.0
