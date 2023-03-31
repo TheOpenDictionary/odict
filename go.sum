@@ -55,6 +55,8 @@ github.com/bokwoon95/sqddl v0.3.12 h1:ByIxglGU/ng7OkoEDtlyI8n3YRRHE2gCZjLfhhf+oN
 github.com/bokwoon95/sqddl v0.3.12/go.mod h1:OgvFqEXoqtz1xH1Z3yQiBphDu3l5aXzcD/s4hvAxPnU=
 github.com/bokwoon95/sqddl v0.3.13 h1:IirPhvozyvs7nN6WFG88R4at22Wlwp9/QPM0hlZC2nk=
 github.com/bokwoon95/sqddl v0.3.13/go.mod h1:OgvFqEXoqtz1xH1Z3yQiBphDu3l5aXzcD/s4hvAxPnU=
+github.com/bokwoon95/sqddl v0.4.1 h1:x2H/M5hPJzCrR/f45VWhdscb3vngkbHzixbnVYUE1Ys=
+github.com/bokwoon95/sqddl v0.4.1/go.mod h1:GddDMEsjLBCzUuoF60nvMhdjWdx5wXQblmq+b4WvIjk=
 github.com/cpuguy83/go-md2man/v2 v2.0.2 h1:p1EgwI/C7NhT0JmVkwCD2ZBK8j4aeHQX2pMHHBfMQ6w=
 github.com/cpuguy83/go-md2man/v2 v2.0.2/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -151,6 +153,8 @@ golang.org/x/term v0.6.0 h1:clScbb1cHjoCkyRbWwBEUZ5H/tIFu5TAXIqaZD0Gcjw=
 golang.org/x/term v0.6.0/go.mod h1:m6U89DPEgQRMq3DNkDClhWw02AUbt2daBVO4cn4Hv9U=
 golang.org/x/tools v0.5.0 h1:+bSpV5HIeWkuvgaMfI3UmKRThoTA5ODJTUd8T17NO+4=
 golang.org/x/tools v0.5.0/go.mod h1:N+Kgy78s5I24c24dU8OfWNEotWjutIs8SnJvn5IDq+k=
+golang.org/x/tools v0.7.0 h1:W4OVu8VVOaIO0yzWMNdepAulS7YfoS3Zabrm8DOXXU4=
+golang.org/x/tools v0.7.0/go.mod h1:4pg6aUX35JBAogB10C9AtvVL+qowtN4pT3CGSQex14s=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp09yW+WbY/TyQbw=
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
