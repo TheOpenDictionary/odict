@@ -1,5 +1,4 @@
 import { writeFile } from "node:fs/promises";
-import { basename, dirname, extname, join } from "node:path";
 
 import { exec } from "./exec.js";
 import { withTemporaryFile } from "./tmp.js";
@@ -93,6 +92,16 @@ class Dictionary {
         return JSON.parse(raw);
       })
     );
+  }
+
+  /**
+   * Returns a list of all headwords in the dictionary
+   *
+   * @returns A list of all headwords in the dictionary
+   */
+  async lexicon(): Promise<string[]> {
+    const lexicon = await exec("lexicon", this.path);
+    return lexicon.trim().split("\n");
   }
 
   /**

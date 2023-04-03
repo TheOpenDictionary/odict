@@ -48,6 +48,10 @@ class Dictionary:
         exec("compile", "-o", path, tmp.name)
         remove(tmp.name)
 
+    def lexicon(self):
+        list = exec("lexicon", self.__path)
+        return list.splitlines()
+    
     def search(self, query, index: bool = False):
         if index:
             return loads(exec("search", "-i", self.__path, query))

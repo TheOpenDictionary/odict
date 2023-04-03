@@ -22,12 +22,17 @@ class Dictionary constructor(private val path: String) {
         args += arrayOf("-s", split.toString(), path)
 
         val resultJson = execute(*args, *queries)
-
+        
         return resultJson?.let { lookupAdapter.fromJson(it) } ?: emptyList()
     }
 
     fun index() {
         execute("index", this.path)
+    }
+
+    fun lexicon(): List<String> {
+        val lexicon = execute("lexicon", this.path)
+        return lexicon?.trim()?.split("\n") ?: emptyList()
     }
 
     fun search(vararg queries: String, index: Boolean = false): List<Entry> {

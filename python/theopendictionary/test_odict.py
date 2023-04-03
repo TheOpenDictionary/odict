@@ -21,6 +21,21 @@ def test_search_dictionary():
         json,
     )
 
+def test_lexicon():
+    xml = '<dictionary><entry term="hello"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry><entry term="world"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry></dictionary>'
+
+    Dictionary.write(xml, "test.odict")
+
+    dict = Dictionary("test.odict")
+
+    output = dict.lexicon()
+
+    expected = ['hello', 'world']
+
+    assert output == expected, "lexicon should be %s, received: %s" % (
+        expected,
+        output,
+    )
 
 def test_write_lookup_dictionary():
     xml = '<dictionary><entry term="hello"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry></dictionary>'
