@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.10.0](https://github.com/TheOpenDictionary/odict/compare/v1.9.1...v1.10.0) (2023-04-04)
+
+
+### Features
+
+* add lexicon() method to all SDKs ([#181](https://github.com/TheOpenDictionary/odict/issues/181)) ([bc6450f](https://github.com/TheOpenDictionary/odict/commit/bc6450fdbc2e9848e1376a6433aa6b759219ff1f))
+* support SQL output format ([#122](https://github.com/TheOpenDictionary/odict/issues/122)) ([7dd99c5](https://github.com/TheOpenDictionary/odict/commit/7dd99c53120e35a7b2d3f824530670cdf545ce54))
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.7 ([a1324ba](https://github.com/TheOpenDictionary/odict/commit/a1324bad86ba82bdfc4f2e30d0776eccab34a1b1))
+* **deps:** update module github.com/bokwoon95/sq to v0.2.7 ([bc63ba2](https://github.com/TheOpenDictionary/odict/commit/bc63ba23d20a729f03bd6f7e991c8ead7c41da7d))
+* **deps:** update module github.com/bokwoon95/sq to v0.2.8 ([5309a68](https://github.com/TheOpenDictionary/odict/commit/5309a68c5ecb9f982acade77f72fe51abdab616a))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.3.13 ([4f378dc](https://github.com/TheOpenDictionary/odict/commit/4f378dc8e0629715b6b05f174d6481ca718902f5))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.4.1 ([c81b6ff](https://github.com/TheOpenDictionary/odict/commit/c81b6ff5f1f9d595984fa7ae4b9cfa811b4e2833))
+* **deps:** update module github.com/fatih/color to v1.15.0 ([d13ad4d](https://github.com/TheOpenDictionary/odict/commit/d13ad4d85050ef95025a84e3d2d26cbb1f0e6906))
+* **deps:** update module github.com/google/flatbuffers to v23.3.3+incompatible ([36c0e00](https://github.com/TheOpenDictionary/odict/commit/36c0e0080785c5d60ebeea79b1031af0b0bf0072))
+* **deps:** update module github.com/imdario/mergo to v0.3.14 ([5bc1850](https://github.com/TheOpenDictionary/odict/commit/5bc1850d95b6df7519342dcbc8e562b3c6d2f475))
+* **deps:** update module github.com/imdario/mergo to v0.3.15 ([7559455](https://github.com/TheOpenDictionary/odict/commit/755945541db95a1b8ce2e4f84576de6ae537e758))
+* **deps:** update module github.com/schollz/progressbar/v3 to v3.13.1 ([68ea5e8](https://github.com/TheOpenDictionary/odict/commit/68ea5e83cf31ea4f9cbaebd95b72e4236cfd4d26))
+* **deps:** update module github.com/stretchr/testify to v1.8.2 ([d9ae95a](https://github.com/TheOpenDictionary/odict/commit/d9ae95a22175f58c37a9ce60faf1f97ba832b393))
+* **deps:** update module github.com/urfave/cli/v2 to v2.24.4 ([fde31cb](https://github.com/TheOpenDictionary/odict/commit/fde31cbcea8827a20e812bfb5a57b1c07ea3fcfc))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.0 ([5b5b684](https://github.com/TheOpenDictionary/odict/commit/5b5b684115c8f323e8fc4a1e2b8143ee1159ac50))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.1 ([9287596](https://github.com/TheOpenDictionary/odict/commit/92875964844119bc9d66a72e9d047c5f2375eec2))
+
 ## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/v1.9.0...v1.9.1) (2023-02-13)
 
 

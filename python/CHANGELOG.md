@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.2.0...python-v0.3.0) (2023-04-04)
+
+
+### Features
+
+* add lexicon() method to all SDKs ([#181](https://github.com/TheOpenDictionary/odict/issues/181)) ([bc6450f](https://github.com/TheOpenDictionary/odict/commit/bc6450fdbc2e9848e1376a6433aa6b759219ff1f))
+
 ## [0.2.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.1.0...python-v0.2.0) (2023-02-01)
 
 
