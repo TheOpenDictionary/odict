@@ -6,15 +6,6 @@ from typing import List
 
 
 def exec(*args: List[str]):
-    print(
-        " ".join(
-            [
-                "../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict",
-                "--quiet",
-                *args,
-            ]
-        )
-    )
     out = run(
         [
             "../bin/odict" if environ.get("RUNTIME_ENV") == "test" else "odict",
