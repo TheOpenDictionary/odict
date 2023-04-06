@@ -29,6 +29,3 @@ js +command:
 
 python +command:
 	just python/{{command}}
-
-wasm +command:
-	just wasm/{{command}}

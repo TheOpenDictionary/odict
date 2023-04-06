@@ -12,4 +12,4 @@ build: install
 	poetry build
 
 publish: build
-	poetry publish
+  poetry publish
