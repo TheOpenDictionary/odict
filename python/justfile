@@ -1,0 +1,15 @@
+install: update
+	poetry install 
+
+test: install
+  just ../cli/build
+  RUNTIME_ENV=test poetry run pytest ./theopendictionary
+
+update:
+	poetry update 
+
+build: install
+	poetry build
+
+publish: build
+  poetry publish

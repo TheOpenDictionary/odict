@@ -1,0 +1,3 @@
+test:
+  just ../cli/build
+  go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" .

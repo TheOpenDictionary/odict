@@ -1,0 +1,12 @@
+install:
+	npm install
+
+build: install
+  npm run build
+
+test: install
+  just ../cli/build
+  RUNTIME_ENV=test npm run test
+
+publish: install
+  npm publish
