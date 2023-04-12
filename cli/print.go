@@ -1,3 +1,5 @@
+//go:build !js && !wasm
+
 package cli
 
 import (
@@ -6,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	odict "github.com/TheOpenDictionary/odict/lib"
 	"github.com/fatih/color"
 )
 

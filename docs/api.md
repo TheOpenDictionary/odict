@@ -33,7 +33,7 @@ ODict is built in Go, so naturally it supports a public API out-of-the-box:
 
 ```go
 import (
-	odict "github.com/TheOpenDictionary/odict/go"
+	odict "github.com/TheOpenDictionary/odict/lib"
 )
 
 func main() {

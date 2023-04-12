@@ -1,3 +1,3 @@
 build:
-  just ../go/schema
-  go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin/odict ../odict.go
+  just ../lib/schema
+  go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin/odict ../main.go

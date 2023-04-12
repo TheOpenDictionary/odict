@@ -5,7 +5,7 @@ import (
 	"errors"
 	"os"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	odict "github.com/TheOpenDictionary/odict/lib"
 	cli "github.com/urfave/cli/v2"
 )
 
