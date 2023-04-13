@@ -3,7 +3,9 @@ package cli
 import (
 	"errors"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -19,10 +21,10 @@ func lookup(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict := odict.ReadDictionaryFromPath(inputFile)
-		entries := dict.Lookup(queries, split, follow)
-		representable := odict.Map(entries, func(e []odict.Entry) []odict.EntryRepresentable {
-			return odict.Map(e, func(entry odict.Entry) odict.EntryRepresentable {
+		dict := core.ReadDictionaryFromPath(inputFile)
+		entries := core.Lookup(dict, queries, split, follow)
+		representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
+			return utils.Map(e, func(entry types.Entry) types.EntryRepresentable {
 				return entry.AsRepresentable()
 			})
 		})

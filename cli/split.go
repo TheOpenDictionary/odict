@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -18,13 +20,13 @@ func split(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict := odict.ReadDictionaryFromPath(inputFile)
-		entries := dict.Split(searchTerm, threshold)
-		representable := odict.Map(entries, func(entry odict.Entry) odict.EntryRepresentable {
+		dict := core.ReadDictionaryFromPath(inputFile)
+		entries := core.Split(dict, searchTerm, threshold)
+		representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 
-		fmt.Println(odict.JSON(representable))
+		fmt.Println(utils.SerializeToJSON(representable))
 	})
 
 	return nil

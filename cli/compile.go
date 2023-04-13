@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/core"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -26,7 +26,7 @@ func compile(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		bytes := odict.CompileDictionary(inputFile, outputFile)
+		bytes := core.CompileDictionary(inputFile, outputFile)
 
 		if !quiet {
 			fmt.Printf("Wrote %d bytes to path: %s\n", bytes, outputFile)

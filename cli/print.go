@@ -1,3 +1,5 @@
+//go:build !js && !wasm
+
 package cli
 
 import (
@@ -6,7 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/fatih/color"
 )
 
@@ -43,7 +46,7 @@ func ppExample(example string, underlined string, indent int) {
 
 }
 
-func ppDefinition(definition odict.DefinitionRepresentable, numbering string, entry odict.EntryRepresentable, indent int) {
+func ppDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
 	value := definition.Value
 	matches := parentheticalRegex.FindAllStringIndex(value, -1)
 
@@ -72,7 +75,7 @@ func ppDefinition(definition odict.DefinitionRepresentable, numbering string, en
 	}
 }
 
-func ppGroup(group odict.GroupRepresentable, i int, entry odict.EntryRepresentable) {
+func ppGroup(group types.GroupRepresentable, i int, entry types.EntryRepresentable) {
 	fmt.Printf("%4d. %s\n", i+1, group.Description)
 
 	for j, definition := range group.Definitions {
@@ -80,7 +83,7 @@ func ppGroup(group odict.GroupRepresentable, i int, entry odict.EntryRepresentab
 	}
 }
 
-func ppUsage(usage odict.UsageRepresentable, entry odict.EntryRepresentable) {
+func ppUsage(usage types.UsageRepresentable, entry types.EntryRepresentable) {
 	italic.Printf("\n%s\n\n", usage.POS.Label)
 
 	var i = 0
@@ -96,7 +99,7 @@ func ppUsage(usage odict.UsageRepresentable, entry odict.EntryRepresentable) {
 	}
 }
 
-func ppEty(ety odict.EtymologyRepresentable, i int, showTitle bool, entry odict.EntryRepresentable) {
+func ppEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.EntryRepresentable) {
 	if showTitle {
 		boldUnderlined.Printf("\nEtymology #%d\n", i+1)
 	}
@@ -110,7 +113,7 @@ func ppEty(ety odict.EtymologyRepresentable, i int, showTitle bool, entry odict.
 	}
 }
 
-func ppEntry(entry odict.EntryRepresentable) {
+func ppEntry(entry types.EntryRepresentable) {
 	line := strings.Repeat("─", 32)
 
 	fmt.Println(line)
@@ -125,7 +128,7 @@ func ppEntry(entry odict.EntryRepresentable) {
 
 }
 
-func prettyPrint(entries [][]odict.EntryRepresentable) bool {
+func prettyPrint(entries [][]types.EntryRepresentable) bool {
 	fmt.Println()
 
 	hasEntries := false
@@ -140,12 +143,12 @@ func prettyPrint(entries [][]odict.EntryRepresentable) bool {
 	return hasEntries
 }
 
-func PrintEntries(entries [][]odict.EntryRepresentable, format PrintFormat) {
+func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat) {
 	switch {
 	case format == "json":
-		fmt.Print(odict.JSON(entries))
+		fmt.Print(utils.SerializeToJSON(entries))
 	case format == "xml":
-		fmt.Print(odict.XML(entries))
+		fmt.Print(utils.SerializeToXML(entries))
 	case format == "pp":
 		if !prettyPrint(entries) {
 			fmt.Printf("No entries found!\n")

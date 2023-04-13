@@ -1,0 +1,27 @@
+package dump
+
+import (
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
+)
+
+type SqlDialect = string
+
+const (
+	Postgres  SqlDialect = "postgres"
+	Sqlite    SqlDialect = "sqlite"
+	Mysql     SqlDialect = "mysql"
+	Sqlserver SqlDialect = "sqlserver"
+)
+
+// AsXML converts an Dictionary struct
+// to its original ODXML
+func AsXML(dict *types.Dictionary) string {
+	return utils.SerializeToXML(dict.AsRepresentable())
+}
+
+// AsSQL converts an Dictionary struct
+// to SQL output to seed a database
+func AsSQL(dict *types.Dictionary, sqlDialect SqlDialect) string {
+	return sql(dict.AsRepresentable(), sqlDialect)
+}

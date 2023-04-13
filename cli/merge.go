@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/core"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -17,10 +17,10 @@ func merge(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict1 := odict.ReadDictionaryFromPath(inputFile1)
-		dict2 := odict.ReadDictionaryFromPath(inputFile2)
-		result := odict.MergeDictionaries(dict1, dict2)
-		odict.WriteDictionaryFromExisting(outputFile, result)
+		dict1 := core.ReadDictionaryFromPath(inputFile1)
+		dict2 := core.ReadDictionaryFromPath(inputFile2)
+		result := core.MergeDictionaries(dict1, dict2)
+		core.WriteDictionaryFromExisting(outputFile, result)
 	})
 
 	return nil

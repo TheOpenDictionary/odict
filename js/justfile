@@ -9,4 +9,4 @@ test: install
   RUNTIME_ENV=test npm run test
 
 publish: install
-  npm publish
+	npm publish

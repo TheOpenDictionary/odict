@@ -3,7 +3,8 @@ package cli
 import (
 	"errors"
 
-	odict "github.com/TheOpenDictionary/odict/go"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	search_ "github.com/TheOpenDictionary/odict/lib/search"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -16,8 +17,8 @@ func index(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict := odict.ReadDictionaryFromPath(inputFile)
-		dict.Index(true, quiet)
+		dict := core.ReadDictionaryFromPath(inputFile)
+		search_.Index(dict, true, quiet)
 	})
 
 	return nil
