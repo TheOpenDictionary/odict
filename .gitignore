@@ -747,6 +747,3 @@ TSWLatexianTemp*
 
 # glossaries
 *.glstex
-
-__generated__
-*.wasm
