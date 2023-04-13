@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/xml"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -69,7 +70,7 @@ func (usage *UsageRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 }
 
 func (usage *UsageRepresentable) buildGroupVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	groups := Map(usage.Groups, func(group GroupRepresentable) flatbuffers.UOffsetT {
+	groups := utils.Map(usage.Groups, func(group GroupRepresentable) flatbuffers.UOffsetT {
 		return group.AsBuffer(builder)
 	})
 
@@ -85,7 +86,7 @@ func (usage *UsageRepresentable) buildGroupVector(builder *flatbuffers.Builder) 
 }
 
 func (usage *UsageRepresentable) buildDefinitionVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	definitions := Map(usage.Definitions, func(d DefinitionRepresentable) flatbuffers.UOffsetT {
+	definitions := utils.Map(usage.Definitions, func(d DefinitionRepresentable) flatbuffers.UOffsetT {
 		return d.AsBuffer(builder)
 	})
 

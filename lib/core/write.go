@@ -9,11 +9,13 @@ import (
 	"regexp"
 	"strconv"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/golang/snappy"
 )
 
-func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
-	var dictionary DictionaryRepresentable
+func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
+	var dictionary types.DictionaryRepresentable
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
 
@@ -37,21 +39,21 @@ func xmlToDictionaryRepresentable(xmlStr string) DictionaryRepresentable {
 	return dictionary
 }
 
-func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryRepresentable) int {
-	dictionaryBytes := serialize(&dictionary)
+func WriteDictionaryFromExisting(outputPath string, dictionary types.DictionaryRepresentable) int {
+	dictionaryBytes := types.Serialize(&dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
 	versionInt, parseErr := strconv.Atoi(version)
 
-	Check(err)
-	Check(parseErr)
+	utils.Check(err)
+	utils.Check(parseErr)
 
 	defer file.Close()
 
 	signature := []byte("ODICT")
-	version := Uint16ToBytes(uint16(versionInt))
+	version := utils.Uint16ToBytes(uint16(versionInt))
 	compressedSize := uint64(len(compressed))
-	compressedSizeBytes := Uint64ToBytes(compressedSize)
+	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
 
 	writer := bufio.NewWriter(file)
 
@@ -61,15 +63,15 @@ func WriteDictionaryFromExisting(outputPath string, dictionary DictionaryReprese
 	contentBytes, contentErr := writer.Write(compressed)
 	total := sigBytes + versionBytes + contentSizeBytes + contentBytes
 
-	Check(sigErr)
-	Check(versionErr)
-	Check(contentCountErr)
-	Check(contentErr)
+	utils.Check(sigErr)
+	utils.Check(versionErr)
+	utils.Check(contentCountErr)
+	utils.Check(contentErr)
 
-	Assert(sigBytes == 5, "Signature bytes do not equal 5")
-	Assert(versionBytes == 2, "Version bytes do not equal 2")
-	Assert(contentSizeBytes == 8, "Content byte count does not equal 8")
-	Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
+	utils.Assert(sigBytes == 5, "Signature bytes do not equal 5")
+	utils.Assert(versionBytes == 2, "Version bytes do not equal 2")
+	utils.Assert(contentSizeBytes == 8, "Content byte count does not equal 8")
+	utils.Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
 
 	writer.Flush()
 

@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/bokwoon95/sq"
 	"github.com/bokwoon95/sqddl/ddl"
 )
@@ -20,15 +21,7 @@ var sqlGroupId int = 1
 var sqlDefinitionId int = 1
 var sqlExampleId int = 1
 
-func strToPartOfSpeech(str string) PartOfSpeech {
-	if val, ok := posTagPartOfSpeechMap[str]; ok {
-		return val
-	}
-
-	return Unknown
-}
-
-func sql(dict DictionaryRepresentable, sqlDialect SqlDialect) string {
+func sql(dict types.DictionaryRepresentable, sqlDialect SqlDialect) string {
 	var sqlCmds string
 
 	sqlCmds += sqlCreate(sqlDialect)
@@ -55,7 +48,7 @@ func sqlCreate(sqlDialect SqlDialect) string {
 	return buf.String()
 }
 
-func sqlInsert(sqlDialect SqlDialect, dict DictionaryRepresentable) string {
+func sqlInsert(sqlDialect SqlDialect, dict types.DictionaryRepresentable) string {
 	var sqlCmds string
 
 	// Entry point that will capture every insert statement
@@ -64,7 +57,7 @@ func sqlInsert(sqlDialect SqlDialect, dict DictionaryRepresentable) string {
 	return sqlCmds
 }
 
-func sqlInsertDictionary(sqlDialect SqlDialect, dict DictionaryRepresentable) string {
+func sqlInsertDictionary(sqlDialect SqlDialect, dict types.DictionaryRepresentable) string {
 	var sqlCmds string
 
 	// Insert dictionary w/ PK of 1
@@ -85,7 +78,7 @@ func sqlInsertDictionary(sqlDialect SqlDialect, dict DictionaryRepresentable) st
 	return sqlCmds
 }
 
-func sqlInsertEntries(sqlDialect SqlDialect, entries KVMap[string, EntryRepresentable]) string {
+func sqlInsertEntries(sqlDialect SqlDialect, entries types.KVMap[string, types.EntryRepresentable]) string {
 	var sqlCmds string
 
 	// Insert entries w/ relation to dictionary with PK of 1
@@ -110,7 +103,7 @@ func sqlInsertEntries(sqlDialect SqlDialect, entries KVMap[string, EntryRepresen
 	return sqlCmds
 }
 
-func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresentable) string {
+func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []types.EtymologyRepresentable) string {
 	var sqlCmds string
 
 	// Insert etymologies w/ relation to current entry
@@ -135,7 +128,7 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []EtymologyRepresen
 	return sqlCmds
 }
 
-func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepresentable]) string {
+func sqlInsertUsages(sqlDialect SqlDialect, usages types.KVMap[types.PartOfSpeech, types.UsageRepresentable]) string {
 	var sqlCmds string
 
 	// Insert usages w/ relation to current ety
@@ -160,7 +153,7 @@ func sqlInsertUsages(sqlDialect SqlDialect, usages KVMap[PartOfSpeech, UsageRepr
 	return sqlCmds
 }
 
-func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable) string {
+func sqlInsertGroups(sqlDialect SqlDialect, groups []types.GroupRepresentable) string {
 	var sqlCmds string
 
 	// Insert groups w/ relation to current usage
@@ -184,7 +177,7 @@ func sqlInsertGroups(sqlDialect SqlDialect, groups []GroupRepresentable) string 
 	return sqlCmds
 }
 
-func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []DefinitionRepresentable) string {
+func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []types.DefinitionRepresentable) string {
 	var sqlCmds string
 
 	// Insert definitions w/ relation to current usage/group

@@ -16,7 +16,7 @@ schema:
 # ------------------------------------------------------------------------------ #
 
 go +command:
-	just go/{{command}}
+	just lib/{{command}}
 
 cli +command:
 	just cli/{{command}}

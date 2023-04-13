@@ -3,19 +3,21 @@ package dump
 import (
 	"testing"
 
+	"github.com/TheOpenDictionary/odict/lib/core"
+	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDump(t *testing.T) {
-	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+func TestDictionaryToXML(t *testing.T) {
+	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../examples/example1.odict")
+	dict := core.ReadDictionaryFromPath("../../examples/example1.odict")
 	dict_r := dict.AsRepresentable()
-	dump := dict.DumpXML()
+	dump := AsXML(dict)
 
-	WriteDictionaryFromXML(dump, "../examples/example1_generated.odict")
+	core.WriteDictionaryFromXML(dump, "../../examples/example1_generated.odict")
 
-	newdict := ReadDictionaryFromPath("../examples/example1_generated.odict")
+	newdict := core.ReadDictionaryFromPath("../../examples/example1_generated.odict")
 	newdict_r := newdict.AsRepresentable()
 
 	// We need the IDs to match seeing they will definitely be different
@@ -24,5 +26,5 @@ func TestDump(t *testing.T) {
 
 	assert.Equal(t, dict_r, newdict_r)
 
-	CleanupTest()
+	test.CleanupTest()
 }

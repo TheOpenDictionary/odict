@@ -6,7 +6,7 @@ require (
 	github.com/blevesearch/bleve/v2 v2.3.7
 	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/schollz/progressbar/v3 v3.13.1
-	github.com/stretchr/testify v1.7.1
+	github.com/stretchr/testify v1.8.2
 )
 
 require (
@@ -29,7 +29,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
-	github.com/golang/snappy v0.0.1 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect

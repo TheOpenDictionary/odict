@@ -6,13 +6,15 @@ import (
 	"os"
 	"strings"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	query "github.com/blevesearch/bleve/v2/search/query"
 )
 
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry {
+func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.Entry {
 	indexPath := getIndexPath(dictionaryID)
 	_, err := os.Stat(indexPath)
 
@@ -22,7 +24,7 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 
 	index, openErr := bleve.Open(indexPath)
 
-	Check(openErr)
+	utils.Check(openErr)
 
 	defer index.Close()
 
@@ -36,17 +38,17 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []Entry 
 	search.Fields = []string{"_source"}
 	searchResults, searchErr := index.Search(search)
 
-	Check(searchErr)
+	utils.Check(searchErr)
 
 	hits := searchResults.Hits
 
-	entries := make([]Entry, len(hits))
+	entries := make([]types.Entry, len(hits))
 
 	for i, x := range hits {
 		b, ok := x.Fields["_source"]
 
 		if ok {
-			entries[i] = *GetRootAsEntry([]byte(fmt.Sprintf("%v", b)), 0)
+			entries[i] = *types.GetRootAsEntry([]byte(fmt.Sprintf("%v", b)), 0)
 		}
 	}
 

@@ -4,7 +4,10 @@ import (
 	"errors"
 	"fmt"
 
-	odict "github.com/TheOpenDictionary/odict/lib"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	search_ "github.com/TheOpenDictionary/odict/lib/search"
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -20,17 +23,17 @@ func search(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict := odict.ReadDictionaryFromPath(inputFile)
+		dict := core.ReadDictionaryFromPath(inputFile)
 
-		dict.Index(force, quiet)
+		search_.Index(dict, force, quiet)
 
-		results := odict.SearchDictionary(string(dict.Id()), searchTerm, exact)
+		results := search_.SearchDictionary(string(dict.Id()), searchTerm, exact)
 
-		representable := odict.Map(results, func(entry odict.Entry) odict.EntryRepresentable {
+		representable := utils.Map(results, func(entry types.Entry) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 
-		fmt.Println(odict.JSON(representable))
+		fmt.Println(utils.SerializeToJSON(representable))
 	})
 
 	return nil

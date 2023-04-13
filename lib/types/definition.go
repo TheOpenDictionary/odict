@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -41,7 +42,7 @@ func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Buil
 	examples := def.Examples
 	exampleCount := len(examples)
 
-	exampleBuffers := Map(examples, func(example string) flatbuffers.UOffsetT {
+	exampleBuffers := utils.Map(examples, func(example string) flatbuffers.UOffsetT {
 		return builder.CreateString(example)
 	})
 

@@ -4,9 +4,19 @@ import (
 	"encoding/xml"
 	"io"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/imdario/mergo"
 )
+
+func Serialize(b Serializable) []byte {
+	builder := flatbuffers.NewBuilder(0)
+	buffer := b.AsBuffer(builder)
+
+	builder.Finish(buffer)
+
+	return builder.FinishedBytes()
+}
 
 type Keyable[T comparable] interface {
 	Key() T
@@ -49,7 +59,7 @@ func (m *KVMap[K, V]) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 		existing := (*m)[k]
 
 		if err := mergo.Merge(&e, existing, mergo.WithAppendSlice); err != nil {
-			Check(err)
+			utils.Check(err)
 		}
 	}
 

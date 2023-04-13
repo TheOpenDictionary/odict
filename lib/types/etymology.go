@@ -3,6 +3,7 @@ package types
 import (
 	"sort"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -53,7 +54,7 @@ func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder
 
 	sort.Strings(keys)
 
-	usageBuffers := Map(keys, func(key string) flatbuffers.UOffsetT {
+	usageBuffers := utils.Map(keys, func(key string) flatbuffers.UOffsetT {
 		usage := usages[strToPartOfSpeech(key)]
 		return usage.AsBuffer(builder)
 	})

@@ -1,5 +1,10 @@
 package dump
 
+import (
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
+)
+
 type SqlDialect = string
 
 const (
@@ -9,14 +14,14 @@ const (
 	Sqlserver SqlDialect = "sqlserver"
 )
 
-// DumpDictionaryXML converts an Dictionary struct
+// AsXML converts an Dictionary struct
 // to its original ODXML
-func (dict *Dictionary) DumpXML() string {
-	return XML(dict.AsRepresentable())
+func AsXML(dict *types.Dictionary) string {
+	return utils.SerializeToXML(dict.AsRepresentable())
 }
 
-// DumpDictionarySQL converts an Dictionary struct
+// AsSQL converts an Dictionary struct
 // to SQL output to seed a database
-func (dict *Dictionary) DumpSQL(sqlDialect SqlDialect) string {
+func AsSQL(dict *types.Dictionary, sqlDialect SqlDialect) string {
 	return sql(dict.AsRepresentable(), sqlDialect)
 }

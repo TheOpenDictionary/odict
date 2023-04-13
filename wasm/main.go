@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"syscall/js"
 
-	odict "github.com/TheOpenDictionary/odict/lib"
+	"github.com/TheOpenDictionary/odict/lib/core"
 )
 
 func prettyJson(input string) (string, error) {
@@ -21,7 +21,7 @@ func prettyJson(input string) (string, error) {
 }
 
 func jsonWrapper() js.Func {
-	odict.ReadDictionaryFromPath("/Users/tjnickerson/.linguistic/dictionaries/eng-eng.odict")
+	core.ReadDictionaryFromPath("/Users/tjnickerson/.linguistic/dictionaries/eng-eng.odict")
 
 	jsonFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
 		if len(args) != 1 {

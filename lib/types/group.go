@@ -2,6 +2,8 @@ package types
 
 import (
 	flatbuffers "github.com/google/flatbuffers/go"
+
+	"github.com/TheOpenDictionary/odict/lib/utils"
 )
 
 type GroupRepresentable struct {
@@ -16,7 +18,7 @@ func (group *Group) AsRepresentable() GroupRepresentable {
 	description := string(group.Description())
 	definitions := []DefinitionRepresentable{}
 
-	Assert(len(description) != 0, "All definition groups must have descriptions!")
+	utils.Assert(len(description) != 0, "All definition groups must have descriptions!")
 
 	for d := 0; d < group.DefinitionsLength(); d++ {
 		group.Definitions(&definition, d)
@@ -34,7 +36,7 @@ func (group *GroupRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 	description := builder.CreateString(group.Description)
 	definitions := group.buildDefinitionVector(builder)
 
-	Assert(len(group.Description) != 0, "All definition groups must have descriptions!")
+	utils.Assert(len(group.Description) != 0, "All definition groups must have descriptions!")
 
 	GroupStart(builder)
 	GroupAddId(builder, id)

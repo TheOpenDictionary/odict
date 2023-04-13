@@ -1,19 +1,21 @@
-package core
+package test
 
 import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/TheOpenDictionary/odict/lib/utils"
 )
 
 func CleanupTest() {
 	path, err := os.Getwd()
 
-	Check(err)
+	utils.Check(err)
 
 	os.RemoveAll(filepath.Join(path, "odict"))
 
-	dirname := "../examples"
+	dirname := "../../examples"
 
 	d, err := os.Open(dirname)
 

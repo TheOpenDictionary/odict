@@ -1,11 +1,13 @@
 package core
 
+import "github.com/TheOpenDictionary/odict/lib/types"
+
 // Split splits a query into definable tokens greater than or equal to the specified threshold
 // Example: household -> house + hold
-func (dict *Dictionary) Split(query string, threshold int) []Entry {
-	entries := []Entry{}
+func Split(dict *types.Dictionary, query string, threshold int) []types.Entry {
+	entries := []types.Entry{}
 
-	var entry Entry
+	var entry types.Entry
 	var found bool
 
 	start := 0

@@ -5,7 +5,9 @@ import (
 	"errors"
 	"os"
 
-	odict "github.com/TheOpenDictionary/odict/lib"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	dump_ "github.com/TheOpenDictionary/odict/lib/dump"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -29,26 +31,26 @@ func dump(c *cli.Context) error {
 	}
 
 	t(c, func() {
-		dict := odict.ReadDictionaryFromPath(inputFile)
+		dict := core.ReadDictionaryFromPath(inputFile)
 
 		// All SQL formats and XML
 		var dumped string
 		switch format {
 		case Xml:
-			dumped = dict.DumpXML()
+			dumped = dump_.AsXML(dict)
 		case Postgres:
-			dumped = dict.DumpSQL(Postgres)
+			dumped = dump_.AsSQL(dict, Postgres)
 		case Sqlite:
-			dumped = dict.DumpSQL(Sqlite)
+			dumped = dump_.AsSQL(dict, Sqlite)
 		case Mysql:
-			dumped = dict.DumpSQL(Mysql)
+			dumped = dump_.AsSQL(dict, Mysql)
 		case Sqlserver:
-			dumped = dict.DumpSQL(Sqlserver)
+			dumped = dump_.AsSQL(dict, Sqlserver)
 		}
 
 		file, err := os.Create(outputFile)
 
-		odict.Check(err)
+		utils.Check(err)
 
 		defer file.Close()
 

@@ -3,15 +3,16 @@ package core
 import (
 	"testing"
 
+	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestLexicon(t *testing.T) {
-	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../examples/example1.odict")
+	dict := ReadDictionaryFromPath("../../examples/example1.odict")
 
-	assert.Equal(t, dict.Lexicon(), []string{"cat", "dog", "poo", "run"})
+	assert.Equal(t, Lexicon(dict), []string{"cat", "dog", "poo", "run"})
 
-	CleanupTest()
+	test.CleanupTest()
 }

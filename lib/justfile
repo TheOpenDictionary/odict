@@ -1,6 +1,6 @@
 schema:
-	flatc -g --gen-onefile --go-namespace odict -o . ../schema.fbs
+	flatc -g --gen-onefile --go-namespace types -o ./types ../schema.fbs
 
 test:
   just ../cli/build
-  go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" .
+  go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" ./**/

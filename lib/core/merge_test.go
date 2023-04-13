@@ -3,15 +3,16 @@ package core
 import (
 	"testing"
 
+	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMerge(t *testing.T) {
-	CompileDictionary("../examples/example1.xml", "../examples/example1.odict")
-	CompileDictionary("../examples/example2.xml", "../examples/example2.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
 
-	dict1 := ReadDictionaryFromPath("../examples/example1.odict")
-	dict2 := ReadDictionaryFromPath("../examples/example2.odict")
+	dict1 := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict2 := ReadDictionaryFromPath("../../examples/example2.odict")
 
 	dict1_r := dict1.AsRepresentable()
 	dict2_r := dict2.AsRepresentable()
@@ -25,5 +26,5 @@ func TestMerge(t *testing.T) {
 
 	assert.Equal(t, len(merged.Entries), 6)
 
-	CleanupTest()
+	test.CleanupTest()
 }

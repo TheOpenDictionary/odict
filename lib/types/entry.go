@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/xml"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -54,7 +55,7 @@ func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 }
 
 func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	etymologies := Map(entry.Etymologies, func(ety EtymologyRepresentable) flatbuffers.UOffsetT {
+	etymologies := utils.Map(entry.Etymologies, func(ety EtymologyRepresentable) flatbuffers.UOffsetT {
 		return ety.AsBuffer(builder)
 	})
 

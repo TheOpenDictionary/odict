@@ -7,6 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/document"
 	"github.com/blevesearch/bleve/v2/index/scorch"
@@ -24,7 +26,7 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
 
-func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
+func Index(dict *types.Dictionary, overwrite bool, quiet bool) string {
 	dictionary := dict.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
@@ -37,7 +39,7 @@ func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 		mapping := bleve.NewIndexMapping()
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
-		Check(indexErr)
+		utils.Check(indexErr)
 
 		defer index.Close()
 
@@ -59,7 +61,7 @@ func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 
 			mapping.MapDocument(doc, entry)
 
-			enc := serialize(&entry)
+			enc := types.Serialize(&entry)
 			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
 			nd := doc.AddField(field)
 
@@ -76,7 +78,7 @@ func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 			if batchCount >= batchSize {
 				idxErr := index.Batch(batch)
 
-				Check(idxErr)
+				utils.Check(idxErr)
 
 				batch = index.NewBatch()
 				batchCount = 0
@@ -85,7 +87,7 @@ func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 
 		idxErr := index.Batch(batch)
 
-		Check(idxErr)
+		utils.Check(idxErr)
 
 		if !quiet {
 			fmt.Println()
@@ -97,7 +99,7 @@ func (dict *Dictionary) Index(overwrite bool, quiet bool) string {
 
 		os.RemoveAll(indexPath)
 
-		return dict.Index(false, quiet)
+		return Index(dict, false, quiet)
 	}
 
 	return indexPath
