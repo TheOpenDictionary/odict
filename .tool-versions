@@ -6,3 +6,4 @@ kotlin 1.8.20
 java adoptopenjdk-17.0.6+10
 nodejs 18.16.0
 just 1.13.0
+flatc 23.3.3
