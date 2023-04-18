@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230417155427-10225b479940
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230414121059-5011bd1bf147
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230414121059-5011bd1bf147
+	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230418090945-28bcbe05e987
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230414121059-5011bd1bf147
 	github.com/bokwoon95/sq v0.2.9
 	github.com/bokwoon95/sqddl v0.4.2
