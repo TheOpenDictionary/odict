@@ -24,6 +24,8 @@ github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230414121059-5011bd1bf147 
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230414121059-5011bd1bf147/go.mod h1:ozpmZK+KtiWvPdpC6H5Ec6WADwxDbTri3M0o5oPwtbU=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230414121059-5011bd1bf147 h1:ZNZoxst2VMB3G5Fg/vgyNVpfudod54zXb3YOmpjFPRQ=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230414121059-5011bd1bf147/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230418090945-28bcbe05e987 h1:y4A0xXHUw7gr2IQSif/DMCqra+qTEoi2AxCH8Lwef6A=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230418090945-28bcbe05e987/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bokwoon95/sq v0.2.8 h1:2MD1EoILEgX5HTfejEyqT6nUkbgXkUiCW46p85s/XYA=
 github.com/bokwoon95/sq v0.2.8/go.mod h1:7UwnMRNTM1SgDHcZNaseXbznALQ1BF3XKldEf/XUVyk=
 github.com/bokwoon95/sq v0.2.9 h1:jxdbxNKQV389BxWmQP63rGalMNhhhOZExa/m/gUhCYs=
