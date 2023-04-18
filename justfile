@@ -4,6 +4,9 @@ test: (go "test") (jvm "test") (python "test") (js "test")
 clean:
 	rm -rf setup.py dist build schema/*.go
 
+sync:
+  go work sync
+  
 # ---------------------------------------------------------------------------- #
 #                                    Schema                                    #
 # ---------------------------------------------------------------------------- #
@@ -29,9 +32,6 @@ js +command:
 
 python +command:
 	just python/{{command}}
-<<<<<<< HEAD
 
 wasm +command:
 	just wasm/{{command}}
-=======
->>>>>>> main
