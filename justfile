@@ -1,17 +1,18 @@
-
-test: (go "test") (jvm "test") (python "test") (js "test")
-
-clean:
-	rm -rf setup.py dist build schema/*.go
+# ---------------------------------------------------------------------------- #
+#                                    Global                                    #
+# ---------------------------------------------------------------------------- #
 
 build: (cli "build")
 
-# ---------------------------------------------------------------------------- #
-#                                    Schema                                    #
-# ---------------------------------------------------------------------------- #
+test: (go "test") (jvm "test") (python "test") (js "test")
 
-schema:
-	flatc -g --gen-onefile --go-namespace odict -o ./go schema.fbs
+clean: (python "clean") (jvm "clean") (js "clean")
+  rm -rf **/*.odict 
+
+schema: (go "schema")
+
+sync:
+  go work sync 
 
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
