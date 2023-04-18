@@ -8,5 +8,8 @@ use (
 	./lib/test
 	./lib/types
 	./lib/utils
+<<<<<<< HEAD
 	./wasm
+=======
+>>>>>>> main
 )

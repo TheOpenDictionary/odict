@@ -29,6 +29,9 @@ js +command:
 
 python +command:
 	just python/{{command}}
+<<<<<<< HEAD
 
 wasm +command:
 	just wasm/{{command}}
+=======
+>>>>>>> main

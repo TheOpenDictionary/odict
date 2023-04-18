@@ -12,4 +12,8 @@ build: install
 	poetry build
 
 publish: build
+<<<<<<< HEAD
 	poetry publish
+=======
+	poetry publish
+>>>>>>> main
