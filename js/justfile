@@ -1,6 +1,9 @@
 install:
 	npm install
 
+clean:
+  rm -rf coverage dist 
+
 build: install
   npm run build
 

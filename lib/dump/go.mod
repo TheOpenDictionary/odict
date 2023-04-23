@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/lib/dump
 go 1.20
 
 require (
-	github.com/bokwoon95/sq v0.2.8
+	github.com/bokwoon95/sq v0.2.9
 	github.com/bokwoon95/sqddl v0.4.2
 	github.com/stretchr/testify v1.8.2
 )

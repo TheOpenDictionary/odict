@@ -21,8 +21,11 @@ github.com/blevesearch/zapx/v13 v13.3.7/go.mod h1:yyrB4kJ0OT75UPZwT/zS+Ru0/jYKor
 github.com/blevesearch/zapx/v14 v14.3.7/go.mod h1:9J/RbOkqZ1KSjmkOes03AkETX7hrXT0sFMpWH4ewC4w=
 github.com/blevesearch/zapx/v15 v15.3.9/go.mod h1:m7Y6m8soYUvS7MjN9eKlz1xrLCcmqfFadmu7GhWIrLY=
 github.com/bokwoon95/sq v0.2.8/go.mod h1:7UwnMRNTM1SgDHcZNaseXbznALQ1BF3XKldEf/XUVyk=
+github.com/bokwoon95/sq v0.2.9 h1:jxdbxNKQV389BxWmQP63rGalMNhhhOZExa/m/gUhCYs=
+github.com/bokwoon95/sq v0.2.9/go.mod h1:7UwnMRNTM1SgDHcZNaseXbznALQ1BF3XKldEf/XUVyk=
 github.com/bokwoon95/sqddl v0.4.1 h1:x2H/M5hPJzCrR/f45VWhdscb3vngkbHzixbnVYUE1Ys=
 github.com/bokwoon95/sqddl v0.4.1/go.mod h1:GddDMEsjLBCzUuoF60nvMhdjWdx5wXQblmq+b4WvIjk=
+github.com/bokwoon95/sqddl v0.4.2 h1:mI8z2sFf6mSA+MjbAuVQFdDCzMWXYwOhjlgXFKy0KyI=
 github.com/bokwoon95/sqddl v0.4.2/go.mod h1:GddDMEsjLBCzUuoF60nvMhdjWdx5wXQblmq+b4WvIjk=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -65,11 +68,13 @@ github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
 go.etcd.io/bbolt v1.3.6 h1:/ecaJf0sk1l4l6V4awd65v2C3ILy7MSj+s/x1ADCIMU=
 go.etcd.io/bbolt v1.3.6/go.mod h1:qXsaaIqmgQH0T+OPdb99Bf+PKfBBQVAdyD6TY9G8XM4=
+golang.org/x/sync v0.1.0 h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=
 golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200923182605-d9f96fdee20d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.6.0/go.mod h1:m6U89DPEgQRMq3DNkDClhWw02AUbt2daBVO4cn4Hv9U=
+golang.org/x/tools v0.7.0 h1:W4OVu8VVOaIO0yzWMNdepAulS7YfoS3Zabrm8DOXXU4=
 golang.org/x/tools v0.7.0/go.mod h1:4pg6aUX35JBAogB10C9AtvVL+qowtN4pT3CGSQex14s=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp09yW+WbY/TyQbw=
