@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "parcel index.ts",
+    "build": "parcel src/example.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +12,8 @@
   "devDependencies": {
     "@types/golang-wasm-exec": "^1.15.0",
     "parcel": "^2.8.3",
-    "typescript": "^5.0.3"
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0"
   }
 }

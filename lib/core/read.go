@@ -1,7 +1,9 @@
 package core
 
 import (
+	"bytes"
 	"encoding/binary"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -10,37 +12,33 @@ import (
 	"github.com/golang/snappy"
 )
 
-func readODictFile(path string) (string, uint16, []byte) {
-	// Read input file
-	file, err := os.Open(path)
-
-	utils.Check(err)
-
-	defer file.Close()
+func readODictBytes(data []byte) (string, uint16, []byte) {
+	// Create a bytes reader
+	reader := bytes.NewReader(data)
 
 	// Read file signature as bytes
 	sigBytes := make([]byte, 5)
-	_, sigErr := file.Read(sigBytes)
+	_, sigErr := reader.Read(sigBytes)
 
 	utils.Check(sigErr)
 
 	// Read ODict version as bytes
-	file.Seek(5, 0)
+	reader.Seek(5, 0)
 
 	versionBytes := make([]byte, 2)
-	_, versionError := file.Read(versionBytes)
+	_, versionError := reader.Read(versionBytes)
 
 	utils.Check(versionError)
 
 	// Read the compressed content size in bytes
-	file.Seek(7, 0)
+	reader.Seek(7, 0)
 
 	contentSizeBytes := make([]byte, 8)
-	_, contentSizeError := file.Read(contentSizeBytes)
+	_, contentSizeError := reader.Read(contentSizeBytes)
 
 	utils.Check(contentSizeError)
 
-	file.Seek(15, 0)
+	reader.Seek(15, 0)
 
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
@@ -59,7 +57,7 @@ func readODictFile(path string) (string, uint16, []byte) {
 	// Read compressed buffer content as bytes
 	contentBytes := make([]byte, contentSize)
 
-	_, contentError := file.Read(contentBytes)
+	_, contentError := reader.Read(contentBytes)
 
 	utils.Check(contentError)
 
@@ -70,10 +68,35 @@ func readODictFile(path string) (string, uint16, []byte) {
 	return signature, readVersion, decoded
 }
 
+func readODictFile(path string) (string, uint16, []byte) {
+	// Read input file
+	file, err := os.Open(path)
+
+	utils.Check(err)
+
+	defer file.Close()
+
+	// Read file contents as bytes
+	fileBytes, readErr := ioutil.ReadAll(file)
+
+	utils.Check(readErr)
+
+	// Parse bytes using readODictBytes function
+	return readODictBytes(fileBytes)
+}
+
 // ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
 func ReadDictionaryFromPath(path string) *types.Dictionary {
 	_, _, bytes := readODictFile(path)
 	return types.GetRootAsDictionary(bytes, 0)
+}
+
+// ReadDictionaryFromBytes loads a compiled ODict dictionary from the provided
+// bytes and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
+func ReadDictionaryFromBytes(bytes []byte) *types.Dictionary {
+	_, _, bytes_ := readODictBytes(bytes)
+	return types.GetRootAsDictionary(bytes_, 0)
 }

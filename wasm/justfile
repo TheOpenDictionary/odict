@@ -1,9 +1,9 @@
 [private]
 copy-exec:
-  mkdir -p ./__generated__ && cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./__generated__/
+  mkdir -p ./src/__generated__ && cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./src/__generated__/
 
 install:
   npm install 
 
 build: copy-exec install
-  GOOS=js GOARCH=wasm go build -o ./json.wasm && npm run build
+  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/main.go && npm run build
