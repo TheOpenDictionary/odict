@@ -9,7 +9,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/fatih/color v1.15.0
-	github.com/urfave/cli/v2 v2.25.2
+	github.com/urfave/cli/v2 v2.25.3
 )
 
 require (
