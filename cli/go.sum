@@ -2,6 +2,8 @@ github.com/RoaringBitmap/roaring v0.9.4 h1:ckvZSX5gwCRaJYBNe7syNawCU5oruY9gQmjXl
 github.com/RoaringBitmap/roaring v0.9.4/go.mod h1:icnadbWcNyfEHlYdr+tDlOTih1Bf/h+rzPpv4sbomAA=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230429192443-aa723bd6e3ef h1:fFPnAY9+dnpXXIg3THhUqLs0Nmfa4N1iBK1G2lQvDdA=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230501054101-9c7d6d2a7a0d h1:f1N8hzX0So1yIM1gI1f6lr5ZBqiu8a/Hu6eXjyioW04=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230501054101-9c7d6d2a7a0d/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef h1:iHwrfBfUocz9tM8p9I+M190O4VHckEZSjZ4Tl2slvTo=
 github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:vK53OUZXCwSVutZq6XzpTqxRo1/QYW916Mj8yAPVG6Q=
 github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef h1:nYFoTiYt/mhKyhf7sRYIitrfc+LWxTRaniZLMFwQkrI=
