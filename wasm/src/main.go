@@ -74,10 +74,47 @@ func lookupWord() js.Func {
 	return lookupFunc
 }
 
+func getLexicon() js.Func {
+	lexiconFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
+		name := args[0].String()
+
+		if dict, ok := dictMap[name]; ok {
+			lexicon := core.Lexicon(dict)
+			return js.ValueOf(utils.SerializeToJSON(lexicon))
+		} else {
+			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
+		}
+
+		return "[]"
+	})
+
+	return lexiconFunc
+}
+
+// func compileXML() js.Func {
+// 	lexiconFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
+// 		name := args[0].String()
+// 		xml := args[0].String()
+
+// 		core.WriteDictionaryFromXML()
+// 		if dict, ok := dictMap[name]; ok {
+// 			lexicon := core.Lexicon(dict)
+// 			return js.ValueOf(utils.SerializeToJSON(lexicon))
+// 		} else {
+// 			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
+// 		}
+
+// 		return "[]"
+// 	})
+
+// 	return lexiconFunc
+// }
+
 func main() {
 	js.Global().Set("odict", js.ValueOf(make(map[string]interface{})))
 	module := js.Global().Get("odict")
 	module.Set("loadDictionary", loadDictionary())
 	module.Set("lookupWord", lookupWord())
+	module.Set("getLexicon", getLexicon())
 	<-make(chan bool)
 }

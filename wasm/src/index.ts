@@ -1,5 +1,5 @@
 import "./__generated__/wasm_exec.js";
-import type { Query } from "./types";
+import type { LookupOptions, Query } from "./types";
 
 const go = new Go();
 
@@ -36,8 +36,14 @@ export class Dictionary {
     return new Dictionary(name, service);
   }
 
-  lookup(word: Query[] | string[]) {
-    console.log(word);
-    return this.service.lookupWord(this.name, [word], 0, false);
+  lookup(
+    word: Query[] | string[],
+    { follow, split }: LookupOptions = { split: 0, follow: false }
+  ) {
+    return this.service.lookupWord(this.name, [word], split, follow);
+  }
+
+  lexicon() {
+    return JSON.parse(this.service.getLexicon(this.name));
   }
 }
