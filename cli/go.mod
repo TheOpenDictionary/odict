@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/cli
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230503064111-ddbb069bf0ae
+	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230503142147-e9e86992814f
 	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230429192443-aa723bd6e3ef
