@@ -14,6 +14,8 @@ github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230502150745-a69237e20273 h
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230502150745-a69237e20273/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230502225425-797c93b61d4e h1:kQjm2kGtcLRxxLClgVgqT3rKe7iQ9FVl5Wz7ajCdGBk=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230502225425-797c93b61d4e/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230503064111-ddbb069bf0ae h1:c/+KUS3AB+vUwasRQ9dJsewck5x8updnvM2dEOjyhP8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230503064111-ddbb069bf0ae/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef h1:iHwrfBfUocz9tM8p9I+M190O4VHckEZSjZ4Tl2slvTo=
 github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:vK53OUZXCwSVutZq6XzpTqxRo1/QYW916Mj8yAPVG6Q=
 github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef h1:nYFoTiYt/mhKyhf7sRYIitrfc+LWxTRaniZLMFwQkrI=
