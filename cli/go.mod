@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230504141930-694535fb0f5c
-	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef
+	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230504141930-694535fb0f5c
 	github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230429192443-aa723bd6e3ef
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230429192443-aa723bd6e3ef
