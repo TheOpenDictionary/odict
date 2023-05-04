@@ -28,6 +28,8 @@ github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef h
 github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:vK53OUZXCwSVutZq6XzpTqxRo1/QYW916Mj8yAPVG6Q=
 github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef h1:nYFoTiYt/mhKyhf7sRYIitrfc+LWxTRaniZLMFwQkrI=
 github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:VfhgjOvvjzO7nSkXsLaJwvNPwSr5l+aMvRDHoQMV+dg=
+github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230504141930-694535fb0f5c h1:0PIdiOsTwj4Jh30bN6CxFDmdLeA6md16ah2f5RpeeBc=
+github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230504141930-694535fb0f5c/go.mod h1:VfhgjOvvjzO7nSkXsLaJwvNPwSr5l+aMvRDHoQMV+dg=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230429192443-aa723bd6e3ef h1:en40HMTKagQedkiJECgERrhnUaVDN4dG3hcmmhoQ2t8=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230429192443-aa723bd6e3ef/go.mod h1:ozpmZK+KtiWvPdpC6H5Ec6WADwxDbTri3M0o5oPwtbU=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230429192443-aa723bd6e3ef h1:ccEfBPQbTqMDMtxE0WESieW6nZ+c03o6XO/gYBAvMZQ=
