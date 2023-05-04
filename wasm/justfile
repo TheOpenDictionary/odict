@@ -6,4 +6,4 @@ install:
   npm install 
 
 build: copy-exec install
-  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/main.go && npm run build
+  GOOS=js GOARCH=wasm tinygo build -o ./src/odict.wasm ./src/main.go && npm run build
