@@ -2,6 +2,8 @@ github.com/RoaringBitmap/roaring v0.9.4 h1:ckvZSX5gwCRaJYBNe7syNawCU5oruY9gQmjXl
 github.com/RoaringBitmap/roaring v0.9.4/go.mod h1:icnadbWcNyfEHlYdr+tDlOTih1Bf/h+rzPpv4sbomAA=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230505131014-784bccfdebda h1:WEF/9cF48jb8W5iZOyfswBGD7EBH0ATnYWAWt4aE5uI=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230505131014-784bccfdebda/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230505213319-00c71422d60a h1:jsp4SAwi+h56+TX6uWifWWd0+dNuN2IN2h3BZGDU5D4=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230505213319-00c71422d60a/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230505131014-784bccfdebda h1:Pf4e6nN0KywS49gm+ZKSiebF9G7wjUr3X5PaXWEbuSo=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230505131014-784bccfdebda/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230505131014-784bccfdebda h1:BFSI1+duplhyWFBl0u7VcIk3oyCWOj3dSYKwGyCF9Sw=
