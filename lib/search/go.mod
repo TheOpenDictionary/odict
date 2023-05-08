@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/lib/search
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230508082354-88225741600c
+	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230508174022-d560c35519e9
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230505131014-784bccfdebda
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230505131014-784bccfdebda
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230505131014-784bccfdebda
