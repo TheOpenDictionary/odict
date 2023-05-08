@@ -20,6 +20,8 @@ github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230507160220-591c113af1bb h
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230507160220-591c113af1bb/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230507194819-69a42a85d679 h1:7rlszN2RhPObZbTCDqXKLzDsYWlRWhDjRAMciv4QUa8=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230507194819-69a42a85d679/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230508004051-cec338e59cf5 h1:yajqhC5DpzV5YGjhiG2h7q80T65OOj9mwU8DF6U6iHE=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230508004051-cec338e59cf5/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230505131014-784bccfdebda h1:Pf4e6nN0KywS49gm+ZKSiebF9G7wjUr3X5PaXWEbuSo=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230505131014-784bccfdebda/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230505131014-784bccfdebda h1:BFSI1+duplhyWFBl0u7VcIk3oyCWOj3dSYKwGyCF9Sw=
