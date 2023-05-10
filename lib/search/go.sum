@@ -34,6 +34,8 @@ github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230509062753-e9e84bb54e32 h
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230509062753-e9e84bb54e32/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230505131014-784bccfdebda h1:BFSI1+duplhyWFBl0u7VcIk3oyCWOj3dSYKwGyCF9Sw=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230505131014-784bccfdebda/go.mod h1:ozpmZK+KtiWvPdpC6H5Ec6WADwxDbTri3M0o5oPwtbU=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230509190229-1e2f5ca9b992 h1:CH37ByM1mKunz6Z2C+GgR2U7tnpRSiSI2GvJnvILZPE=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230509190229-1e2f5ca9b992/go.mod h1:ozpmZK+KtiWvPdpC6H5Ec6WADwxDbTri3M0o5oPwtbU=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230505131014-784bccfdebda h1:+8yzKMi+oq0NQllM9SvQMDciQdhOoQ8uchi7hBTkDeU=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230505131014-784bccfdebda/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bits-and-blooms/bitset v1.2.0 h1:Kn4yilvwNtMACtf1eYDlG8H77R07mZSPbMjLyS07ChA=
