@@ -22,6 +22,8 @@ github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230513185515-82c261b0f7c6 
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230513185515-82c261b0f7c6/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230514003435-85a3960cde19 h1:IYmaHFjPrlp7zO6Q9sMr/ZRe6QXfKGCsjqKwcJC9PvQ=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230514003435-85a3960cde19/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230514045107-e87b3779ab47 h1:7dodZfG7wf95JsAIoHrj0ECdUATCOEMYp6A+uqfQtXI=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230514045107-e87b3779ab47/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
