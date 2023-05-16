@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/lib/types
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230514233730-cd5468b06b26
+	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230516133650-9255a7f0f7a6
 	github.com/google/flatbuffers v23.5.9+incompatible
 	github.com/imdario/mergo v0.3.15
 	github.com/stretchr/testify v1.8.2
