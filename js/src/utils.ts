@@ -14,5 +14,5 @@ export function queryToString(query: Query | string) {
     return query;
   }
 
-  return `"${query.word.trim()} (${query.fallback.trim()})"`;
+  return `${query.word.trim()} (${query.fallback.trim()})`;
 }

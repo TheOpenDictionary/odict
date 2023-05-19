@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/TheOpenDictionary/odict/lib/core"
-	search_ "github.com/TheOpenDictionary/odict/lib/search"
+	ods "github.com/TheOpenDictionary/odict/lib/search"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -18,7 +18,7 @@ func index(c *cli.Context) error {
 
 	t(c, func() {
 		dict := core.ReadDictionaryFromPath(inputFile)
-		search_.Index(dict, true, quiet)
+		ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: quiet})
 	})
 
 	return nil

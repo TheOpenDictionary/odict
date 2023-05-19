@@ -13,7 +13,13 @@ func TestSearch(t *testing.T) {
 
 	dict := core.ReadDictionaryFromPath("../../examples/example1.odict")
 
-	Index(dict, true, true)
+	Index(
+		IndexRequest{
+			Dictionary: dict,
+			Overwrite:  true,
+			Quiet:      true,
+		},
+	)
 
 	entries := SearchDictionary(string(dict.Id()), "run", false)
 

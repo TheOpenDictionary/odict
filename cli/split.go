@@ -10,6 +10,16 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
+func split_(request core.SplitRequest) {
+	entries := core.Split(request)
+
+	representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
+		return entry.AsRepresentable()
+	})
+
+	fmt.Println(utils.SerializeToJSON(representable))
+}
+
 func split(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	searchTerm := c.Args().Get(1)
@@ -21,12 +31,12 @@ func split(c *cli.Context) error {
 
 	t(c, func() {
 		dict := core.ReadDictionaryFromPath(inputFile)
-		entries := core.Split(dict, searchTerm, threshold)
-		representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
-			return entry.AsRepresentable()
-		})
 
-		fmt.Println(utils.SerializeToJSON(representable))
+		split_(core.SplitRequest{
+			Dictionary: dict,
+			Query:      searchTerm,
+			Threshold:  threshold,
+		})
 	})
 
 	return nil

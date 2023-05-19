@@ -4,10 +4,13 @@ install:
 clean:
   rm -rf coverage dist 
 
+@schema:
+  flatc --ts --gen-onefile -o ./src/fb ../service.fbs
+
 build: install
   npm run build
 
-test: install
+@test: install
   just ../cli/build
   RUNTIME_ENV=test npm run test
 

@@ -11,6 +11,7 @@ export interface LookupOptions {
 
 export interface SearchOptions {
   force?: boolean;
+  exact?: boolean;
 }
 
 export interface Entry {

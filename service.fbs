@@ -1,0 +1,39 @@
+enum ODictMethod:byte {
+  Lookup = 1,
+  Split = 2,
+  Index = 3,
+  Search = 4,
+  Compile = 5,
+  Write = 6,
+  Lexicon = 7
+}
+
+
+table LookupPayload {
+  follow:bool;
+  split:int;
+  queries:[string];
+}
+
+table WritePayload {
+  xml:string;
+  out:string;
+}
+
+table SplitPayload {
+  threshold:int;
+  query:string;
+}
+
+table SearchPayload {
+  force:bool;
+  exact:bool;
+  query:string;
+}
+
+table CompilePayload {
+  path:string;
+  out:string;
+}
+
+
