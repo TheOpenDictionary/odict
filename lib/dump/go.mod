@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/lib/dump
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230518224834-5e8c480783f3
+	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230519203810-1547d409af52
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3

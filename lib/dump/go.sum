@@ -1,5 +1,7 @@
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230518224834-5e8c480783f3 h1:RlyQbCs657OxWH68D9FW1kZNEk4l7mXyEfI4ok7UT4A=
 github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230518224834-5e8c480783f3/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230519203810-1547d409af52 h1:1HUbNIRDviu/GbJtM/67skO+TrfuO/EMKt/V97cBTt4=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230519203810-1547d409af52/go.mod h1:hTOmK5Mskouw84hSmcNJtUQVoad8O9bbvh6oy3yqwm4=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3 h1:ZSklxd3YgnsdxfIBFmYweFKemzkEO0cBSAjZadiigE0=
 github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3 h1:gCNLnhnWnnOyJ4b6Kx4aGE2i3GLfXxYhKEkEcZUpPuI=
