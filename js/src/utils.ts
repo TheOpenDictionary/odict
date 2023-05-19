@@ -1,6 +1,6 @@
 import { basename, dirname, extname, join } from "node:path";
 
-import { Query } from "./types.js";
+import type { Query } from "./types.js";
 
 export function generateOutputPath(xmlPath: string) {
   const dir = dirname(xmlPath);

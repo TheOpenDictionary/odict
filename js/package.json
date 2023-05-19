@@ -12,7 +12,7 @@
   "scripts": {
     "prepare": "npm run build",
     "postpublish": "rimraf dist && git push --follow-tags",
-    "build": "concurrently \"swc -d dist ./src/*.ts\" \"tsc\"",
+    "build": "concurrently \"swc -d dist ./src/**/*.ts\" \"tsc\"",
     "test": "tsc && jest --detectOpenHandles"
   },
   "files": [

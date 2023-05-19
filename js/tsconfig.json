@@ -12,7 +12,8 @@
     "emitDeclarationOnly": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "declaration": true
+    "declaration": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src"]
 }

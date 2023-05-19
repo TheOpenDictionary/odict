@@ -1,7 +1,5 @@
 import { Builder } from "flatbuffers";
 
-import { writeFile } from "node:fs/promises";
-
 import { CompilePayload } from "./fb/compile-payload.js";
 import {
   LookupPayload,
@@ -11,7 +9,6 @@ import {
 } from "./fb/index.js";
 import { ODictMethod } from "./fb/odict-method.js";
 import { startService } from "./service.js";
-import { withTemporaryFile } from "./tmp.js";
 import type {
   DictionaryOptions,
   Entry,
