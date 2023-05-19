@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.1](https://github.com/TheOpenDictionary/odict/compare/v1.11.0...v1.11.1) (2023-05-19)
+
+
+### Bug Fixes
+
+* **js:** compile FlatBuffer files ([1b2f9a2](https://github.com/TheOpenDictionary/odict/commit/1b2f9a25def93b954ada35d31db0dc4367fc4d4d))
+* **js:** remove service upon exit/disconnect ([42669ce](https://github.com/TheOpenDictionary/odict/commit/42669ce4e7478d5acd69342dac70d9cebcbc4c4a))
+
 ## [1.11.0](https://github.com/TheOpenDictionary/odict/compare/v1.10.0...v1.11.0) (2023-05-19)
 
 
