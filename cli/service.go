@@ -20,6 +20,10 @@ type Request struct {
 	Parameters map[string]string `json:"parameters"`
 }
 
+func printSuccess() {
+	fmt.Println("{ success: true }")
+}
+
 func service(c *cli.Context) error {
 	reader := bufio.NewReader(os.Stdin)
 	dictPath := c.Args().Get(0)
@@ -51,7 +55,7 @@ func service(c *cli.Context) error {
 			case ODictMethodCompile:
 				payload := GetRootAsCompilePayload(buf, 0)
 				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
-				fmt.Println("{ success: true }")
+				printSuccess()
 			case ODictMethodSplit:
 				if dict != nil {
 					payload := GetRootAsSplitPayload(buf, 0)
@@ -68,10 +72,11 @@ func service(c *cli.Context) error {
 			case ODictMethodWrite:
 				payload := GetRootAsWritePayload(buf, 0)
 				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()))
+				printSuccess()
 			case ODictMethodIndex:
 				if dict != nil {
 					ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: true})
-					fmt.Println("{ success: true }")
+					printSuccess()
 				}
 			case ODictMethodSearch:
 				if dict != nil {

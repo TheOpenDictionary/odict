@@ -29,7 +29,7 @@ class Dictionary {
   private readonly options: DictionaryOptions;
 
   constructor(
-    private readonly path: string,
+    public readonly path: string,
     options: Partial<DictionaryOptions> = {}
   ) {
     this.options = options;
