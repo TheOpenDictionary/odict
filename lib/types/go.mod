@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/google/flatbuffers v23.5.9+incompatible
 	github.com/imdario/mergo v0.3.15
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 )
 
 require (
