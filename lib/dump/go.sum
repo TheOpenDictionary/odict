@@ -6,6 +6,8 @@ github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3 
 github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3/go.mod h1:0gO7CXOBgZqLUFmZgbJCnyzF3BaxPuw4rbGUzoOyzzc=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3 h1:NHDAdncI6QGAhPUjzcmGIGENBiBX1iaD7rTKGCMgIBk=
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230519203810-1547d409af52 h1:miWomRmNw5hx1Fww3U6NqbGHc0ffdzhtNPcI+xjzva8=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230519203810-1547d409af52/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bokwoon95/sq v0.2.9 h1:jxdbxNKQV389BxWmQP63rGalMNhhhOZExa/m/gUhCYs=
 github.com/bokwoon95/sq v0.2.9/go.mod h1:7UwnMRNTM1SgDHcZNaseXbznALQ1BF3XKldEf/XUVyk=
 github.com/bokwoon95/sqddl v0.4.2 h1:mI8z2sFf6mSA+MjbAuVQFdDCzMWXYwOhjlgXFKy0KyI=
