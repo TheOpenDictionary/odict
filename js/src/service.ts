@@ -59,7 +59,6 @@ export function startService(dictionaryPath?: string) {
         );
 
         service.stdout.once("data", (data) => {
-          console.log(data.toString());
           // Kill service if we aren't opening to a dictionary
           if (!dictionaryPath) stop();
           resolve(data);
