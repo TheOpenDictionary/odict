@@ -11,7 +11,7 @@
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
 
-@schema: (go "schema")
+@schema: (go "schema") (cli "schema") (js "schema")
 
 @sync:
   go work sync 

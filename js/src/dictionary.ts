@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 
-import { startService, stopService } from "./service.js";
+import { startService } from "./service.js";
 import { withTemporaryFile } from "./tmp.js";
 import type {
   DictionaryOptions,
@@ -14,12 +14,11 @@ import { generateOutputPath, queryToString } from "./utils.js";
 class Dictionary {
   private readonly options: DictionaryOptions;
 
-  constructor(readonly path: string, options: Partial<DictionaryOptions> = {}) {
+  constructor(
+    private readonly path: string,
+    options: Partial<DictionaryOptions> = {}
+  ) {
     this.options = options;
-  }
-
-  destroy() {
-    stopService();
   }
 
   /**
@@ -33,14 +32,15 @@ class Dictionary {
     const commands = ["compile"];
     const out = outPath ?? generateOutputPath(xmlPath);
 
-    if (outPath) {
-      commands.push("-o");
-      commands.push(outPath ?? out);
-    }
-
     commands.push(xmlPath);
 
-    await startService().run(commands);
+    await startService().run({
+      function: "compile",
+      parameters: {
+        outPath: out,
+        path: xmlPath,
+      },
+    });
 
     return new Dictionary(out);
   }
@@ -55,7 +55,15 @@ class Dictionary {
   static async write(xml: string, outPath: string): Promise<Dictionary> {
     return withTemporaryFile(async (tmp) => {
       await writeFile(tmp, xml, "utf-8");
-      await startService().run(["compile", "-o", outPath, tmp]);
+
+      await startService().run({
+        function: "compile",
+        parameters: {
+          outPath: outPath,
+          path: tmp,
+        },
+      });
+
       return new Dictionary(outPath);
     });
   }
@@ -64,7 +72,7 @@ class Dictionary {
    * Indexes a compiled dictionary so it can be searched via the search() method
    */
   async index() {
-    await startService().run(["index", this.path]);
+    await startService(this.path).run({ function: "index", parameters: {} });
   }
 
   /**
@@ -82,16 +90,16 @@ class Dictionary {
 
     return Promise.all(
       queries.map(queryToString).map(async (query) => {
-        const commands = ["search"];
-
-        if (options.force) {
-          commands.push("-i");
-        }
-
-        commands.push(this.path);
-        commands.push(query);
-
-        return JSON.parse(await startService().run(commands)) as Entry[];
+        return JSON.parse(
+          await startService(this.path).run({
+            function: "search",
+            parameters: {
+              query,
+              exact: options.exact ?? "false",
+              force: options.force ?? "false",
+            },
+          })
+        ) as Entry[];
       })
     );
   }
@@ -102,9 +110,11 @@ class Dictionary {
    * @returns A list of all headwords in the dictionary
    */
   async lexicon(): Promise<string[]> {
-    return (await startService().run(["lexicon", this.path]))
-      .trim()
-      .split("\n");
+    const lexicon = await startService(this.path).run({
+      function: "lexicon",
+      parameters: {},
+    });
+    return lexicon.toString().trim().split("\n");
   }
 
   /**
@@ -122,16 +132,15 @@ class Dictionary {
 
     const { follow, split = this.options.defaultSplitThreshold } = options;
 
-    return startService()
-      .run([
-        "lookup",
-        "-f",
-        "json",
-        follow ? "--follow" : "",
-        ...(split ? ["-s", split.toString()] : []),
-        this.path,
-        ...queries.map(queryToString),
-      ])
+    return startService(this.path)
+      .run({
+        function: "lookup",
+        parameters: {
+          follow: follow?.toString() ?? "false",
+          split: split?.toString() ?? "0",
+          queries: queries.map(queryToString).join("|"),
+        },
+      })
       .then(JSON.parse);
   }
 
@@ -143,13 +152,13 @@ class Dictionary {
    * @returns A nested array of entries
    */
   async split(query: string, threshold: number): Promise<Entry[]> {
-    const result = await startService().run([
-      "split",
-      ...(threshold ? ["-t", threshold.toString()] : []),
-      this.path,
-      query,
-    ]);
-
+    const result = await startService(this.path).run({
+      function: "split",
+      parameters: {
+        threshold: threshold.toString(),
+        query,
+      },
+    });
     return JSON.parse(result);
   }
 }

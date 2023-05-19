@@ -7,7 +7,7 @@ clean:
 build: install
   npm run build
 
-test: install
+@test: install
   just ../cli/build
   RUNTIME_ENV=test npm run test
 

@@ -3,12 +3,13 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dictionary } from "../src";
+import { teardownServices } from "../src/service";
 
 describe("Dictionary", () => {
   let dict1: Dictionary;
 
   afterAll(() => {
-    dict1?.destroy();
+    teardownServices();
   });
 
   beforeAll(async () => {
@@ -24,7 +25,7 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
-  it.only("can lookup terms properly", async () => {
+  it("can lookup terms properly", async () => {
     const result = await dict1.lookup({ word: "run", fallback: "run" });
     expect(result[0][0].term).toBe("run");
   });

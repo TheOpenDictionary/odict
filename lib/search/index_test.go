@@ -22,7 +22,13 @@ func TestIndex(t *testing.T) {
 
 	os.Setenv("ODICT_INDEX_DIR", path)
 
-	Index(dict, true, true)
+	Index(
+		IndexRequest{
+			Dictionary: dict,
+			Overwrite:  true,
+			Quiet:      true,
+		},
+	)
 
 	_, e := os.Stat(filepath.Join(path, "odict", "idx", string(dict.Id())))
 
