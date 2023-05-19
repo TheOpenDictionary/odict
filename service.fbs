@@ -17,7 +17,6 @@ table LookupPayload {
 
 table WritePayload {
   xml:string;
-  path:string;
   out:string;
 }
 
@@ -36,4 +35,5 @@ table CompilePayload {
   path:string;
   out:string;
 }
+
 

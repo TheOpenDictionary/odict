@@ -70,27 +70,21 @@ class Dictionary {
    * @returns A pointer to the compiled dictionary
    */
   static async write(xml: string, outPath: string): Promise<Dictionary> {
-    return withTemporaryFile(async (tmp) => {
-      await writeFile(tmp, xml, "utf-8");
+    const builder = createBuilder();
+    const xmlS = builder.createString(xml);
+    const outS = builder.createString(outPath);
 
-      const builder = createBuilder();
-      const xmlS = builder.createString(xml);
-      const pathS = builder.createString(tmp);
-      const outS = builder.createString(outPath);
+    WritePayload.startWritePayload(builder);
+    WritePayload.addXml(builder, xmlS);
+    WritePayload.addOut(builder, outS);
 
-      WritePayload.startWritePayload(builder);
-      WritePayload.addXml(builder, xmlS);
-      WritePayload.addPath(builder, pathS);
-      WritePayload.addOut(builder, outS);
+    const payload = WritePayload.endWritePayload(builder);
 
-      const payload = CompilePayload.endCompilePayload(builder);
+    builder.finish(payload);
 
-      builder.finish(payload);
+    await startService().run(ODictMethod.Write, builder.asUint8Array());
 
-      await startService().run(ODictMethod.Write, builder.asUint8Array());
-
-      return new Dictionary(outPath);
-    });
+    return new Dictionary(outPath);
   }
 
   /**

@@ -52,9 +52,14 @@ export function startService(dictionaryPath?: string) {
     stop,
     run(method, payload) {
       return new Promise((resolve, reject) => {
-        service.stdin.write(`${method} ${payload}\n`);
+        service.stdin.write(
+          `${method};${
+            payload ? Buffer.from(payload).toString("base64") : ""
+          }\n`
+        );
 
         service.stdout.once("data", (data) => {
+          console.log(data.toString());
           // Kill service if we aren't opening to a dictionary
           if (!dictionaryPath) stop();
           resolve(data);

@@ -7,43 +7,43 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-type Method int8
+type ODictMethod int8
 
 const (
-	MethodLookup  Method = 1
-	MethodSplit   Method = 2
-	MethodIndex   Method = 3
-	MethodSearch  Method = 4
-	MethodCompile Method = 5
-	MethodWrite   Method = 6
-	MethodLexicon Method = 7
+	ODictMethodLookup  ODictMethod = 1
+	ODictMethodSplit   ODictMethod = 2
+	ODictMethodIndex   ODictMethod = 3
+	ODictMethodSearch  ODictMethod = 4
+	ODictMethodCompile ODictMethod = 5
+	ODictMethodWrite   ODictMethod = 6
+	ODictMethodLexicon ODictMethod = 7
 )
 
-var EnumNamesMethod = map[Method]string{
-	MethodLookup:  "Lookup",
-	MethodSplit:   "Split",
-	MethodIndex:   "Index",
-	MethodSearch:  "Search",
-	MethodCompile: "Compile",
-	MethodWrite:   "Write",
-	MethodLexicon: "Lexicon",
+var EnumNamesODictMethod = map[ODictMethod]string{
+	ODictMethodLookup:  "Lookup",
+	ODictMethodSplit:   "Split",
+	ODictMethodIndex:   "Index",
+	ODictMethodSearch:  "Search",
+	ODictMethodCompile: "Compile",
+	ODictMethodWrite:   "Write",
+	ODictMethodLexicon: "Lexicon",
 }
 
-var EnumValuesMethod = map[string]Method{
-	"Lookup":  MethodLookup,
-	"Split":   MethodSplit,
-	"Index":   MethodIndex,
-	"Search":  MethodSearch,
-	"Compile": MethodCompile,
-	"Write":   MethodWrite,
-	"Lexicon": MethodLexicon,
+var EnumValuesODictMethod = map[string]ODictMethod{
+	"Lookup":  ODictMethodLookup,
+	"Split":   ODictMethodSplit,
+	"Index":   ODictMethodIndex,
+	"Search":  ODictMethodSearch,
+	"Compile": ODictMethodCompile,
+	"Write":   ODictMethodWrite,
+	"Lexicon": ODictMethodLexicon,
 }
 
-func (v Method) String() string {
-	if s, ok := EnumNamesMethod[v]; ok {
+func (v ODictMethod) String() string {
+	if s, ok := EnumNamesODictMethod[v]; ok {
 		return s
 	}
-	return "Method(" + strconv.FormatInt(int64(v), 10) + ")"
+	return "ODictMethod(" + strconv.FormatInt(int64(v), 10) + ")"
 }
 
 type LookupPayload struct {
@@ -130,6 +130,61 @@ func LookupPayloadStartQueriesVector(builder *flatbuffers.Builder, numElems int)
 	return builder.StartVector(4, numElems, 4)
 }
 func LookupPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	return builder.EndObject()
+}
+type WritePayload struct {
+	_tab flatbuffers.Table
+}
+
+func GetRootAsWritePayload(buf []byte, offset flatbuffers.UOffsetT) *WritePayload {
+	n := flatbuffers.GetUOffsetT(buf[offset:])
+	x := &WritePayload{}
+	x.Init(buf, n+offset)
+	return x
+}
+
+func GetSizePrefixedRootAsWritePayload(buf []byte, offset flatbuffers.UOffsetT) *WritePayload {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &WritePayload{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
+func (rcv *WritePayload) Init(buf []byte, i flatbuffers.UOffsetT) {
+	rcv._tab.Bytes = buf
+	rcv._tab.Pos = i
+}
+
+func (rcv *WritePayload) Table() flatbuffers.Table {
+	return rcv._tab
+}
+
+func (rcv *WritePayload) Xml() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *WritePayload) Out() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func WritePayloadStart(builder *flatbuffers.Builder) {
+	builder.StartObject(2)
+}
+func WritePayloadAddXml(builder *flatbuffers.Builder, xml flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(xml), 0)
+}
+func WritePayloadAddOut(builder *flatbuffers.Builder, out flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(out), 0)
+}
+func WritePayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
 type SplitPayload struct {
