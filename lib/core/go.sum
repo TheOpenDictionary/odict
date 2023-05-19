@@ -1,8 +1,16 @@
+github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3 h1:ZSklxd3YgnsdxfIBFmYweFKemzkEO0cBSAjZadiigE0=
+github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3 h1:gCNLnhnWnnOyJ4b6Kx4aGE2i3GLfXxYhKEkEcZUpPuI=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3/go.mod h1:0gO7CXOBgZqLUFmZgbJCnyzF3BaxPuw4rbGUzoOyzzc=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3 h1:NHDAdncI6QGAhPUjzcmGIGENBiBX1iaD7rTKGCMgIBk=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/snappy v0.0.4 h1:yAGX7huGHXlcLOEtBnF4w7FQwA26wojNCwOYAEhLjQM=
 github.com/golang/snappy v0.0.4/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
+github.com/google/flatbuffers v23.5.9+incompatible h1:mTPHyMn3/qO7lvBcm5S9p0olWUQgtQhBf2QWiz1U3qA=
+github.com/google/flatbuffers v23.5.9+incompatible/go.mod h1:1AeVuKshWv4vARoZatz6mlQ0JxURH0Kv5+zNeJKJCa8=
 github.com/imdario/mergo v0.3.15 h1:M8XP7IuFNsqUx6VPK2P9OSmsYsI/YFaGil0uD21V3dM=
 github.com/imdario/mergo v0.3.15/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -14,6 +22,8 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
+github.com/stretchr/testify v1.8.3 h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=
+github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=

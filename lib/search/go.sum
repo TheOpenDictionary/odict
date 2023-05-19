@@ -1,5 +1,13 @@
 github.com/RoaringBitmap/roaring v0.9.4 h1:ckvZSX5gwCRaJYBNe7syNawCU5oruY9gQmjXlp4riwo=
 github.com/RoaringBitmap/roaring v0.9.4/go.mod h1:icnadbWcNyfEHlYdr+tDlOTih1Bf/h+rzPpv4sbomAA=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230518224834-5e8c480783f3 h1:RlyQbCs657OxWH68D9FW1kZNEk4l7mXyEfI4ok7UT4A=
+github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230518224834-5e8c480783f3/go.mod h1:QndqQLGite1ic1R8VxYiMd5Jw9BPTBFvsXNfxK/vsn8=
+github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3 h1:ZSklxd3YgnsdxfIBFmYweFKemzkEO0cBSAjZadiigE0=
+github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3 h1:gCNLnhnWnnOyJ4b6Kx4aGE2i3GLfXxYhKEkEcZUpPuI=
+github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3/go.mod h1:0gO7CXOBgZqLUFmZgbJCnyzF3BaxPuw4rbGUzoOyzzc=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3 h1:NHDAdncI6QGAhPUjzcmGIGENBiBX1iaD7rTKGCMgIBk=
+github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bits-and-blooms/bitset v1.2.0 h1:Kn4yilvwNtMACtf1eYDlG8H77R07mZSPbMjLyS07ChA=
 github.com/bits-and-blooms/bitset v1.2.0/go.mod h1:gIdJ4wp64HaoK2YrL1Q5/N7Y16edYb8uY+O0FJTyyDA=
 github.com/blevesearch/bleve/v2 v2.3.8 h1:IqFyMJ73n4gY8AmVqM8Sa6EtAZ5beE8yramVqCvs2kQ=
@@ -43,7 +51,11 @@ github.com/golang/protobuf v1.3.2 h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/snappy v0.0.4 h1:yAGX7huGHXlcLOEtBnF4w7FQwA26wojNCwOYAEhLjQM=
 github.com/golang/snappy v0.0.4/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
+github.com/google/flatbuffers v23.5.9+incompatible h1:mTPHyMn3/qO7lvBcm5S9p0olWUQgtQhBf2QWiz1U3qA=
+github.com/google/flatbuffers v23.5.9+incompatible/go.mod h1:1AeVuKshWv4vARoZatz6mlQ0JxURH0Kv5+zNeJKJCa8=
 github.com/google/gofuzz v1.2.0 h1:xRy4A+RhZaiKjJ1bPfwQ8sedCA+YS2YcCHW6ec7JMi0=
+github.com/imdario/mergo v0.3.15 h1:M8XP7IuFNsqUx6VPK2P9OSmsYsI/YFaGil0uD21V3dM=
+github.com/imdario/mergo v0.3.15/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede h1:YrgBGwxMRK0Vq0WSCWFaZUnTsrA/PZE/xs1QZh+/edg=
 github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213/go.mod h1:vNUNkEQ1e29fT/6vq2aBdFsgNPmy8qMdSay1npru+Sw=
@@ -69,6 +81,8 @@ github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
+github.com/stretchr/testify v1.8.3 h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=
+github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
 go.etcd.io/bbolt v1.3.5 h1:XAzx9gjCb0Rxj7EoqcClPD1d5ZBxZJk0jbuoPHenBt0=
 go.etcd.io/bbolt v1.3.5/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
 golang.org/x/sys v0.0.0-20200202164722-d101bd2416d5/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

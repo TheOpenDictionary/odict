@@ -6,7 +6,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3
 	github.com/google/flatbuffers v23.5.9+incompatible
 	github.com/imdario/mergo v0.3.15
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 )
 
 require (
