@@ -48,6 +48,18 @@ export function startService(dictionaryPath?: string) {
     service?.kill();
   }
 
+  service.on("exit", () => {
+    if (dictionaryPath) {
+      openDictionaries.delete(dictionaryPath);
+    }
+  });
+
+  service.on("disconnect", () => {
+    if (dictionaryPath) {
+      openDictionaries.delete(dictionaryPath);
+    }
+  });
+
   const processWrapper: ProcessWrapper = {
     stop,
     run(method, payload) {
