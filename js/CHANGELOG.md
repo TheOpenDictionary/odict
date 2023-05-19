@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.2.0...js-v0.3.0) (2023-05-19)
+
+
+### Features
+
+* **js:** communicate to CLI via long-running process ([#316](https://github.com/TheOpenDictionary/odict/issues/316)) ([1547d40](https://github.com/TheOpenDictionary/odict/commit/1547d409af52763dac16ab7cb3e11b7cb89609e2))
+* modularize Justfiles ([#187](https://github.com/TheOpenDictionary/odict/issues/187)) ([5b02037](https://github.com/TheOpenDictionary/odict/commit/5b0203772975518cb2428b36a7dbb7c050179937))
+
+
+### Bug Fixes
+
+* **dump:** remove unnecessary ODict dependencies ([a93c14c](https://github.com/TheOpenDictionary/odict/commit/a93c14cd108764c86ad2fa3b4c8fc721aaace0c7))
+* remove commented code and print statement ([777a668](https://github.com/TheOpenDictionary/odict/commit/777a6686179bc0b5cdd294b2bcc9cf7e81364587))
+
 ## [0.2.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.1.1...js-v0.2.0) (2023-04-04)
 
 
