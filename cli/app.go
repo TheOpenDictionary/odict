@@ -34,9 +34,9 @@ var App = &cli.App{
 			Action: compile,
 		},
 		{
-			Name:     "service",
-			Action:   service,
-			HideHelp: true,
+			Name:   "service",
+			Action: service,
+			Hidden: true,
 		},
 		{
 			Name:    "index",
