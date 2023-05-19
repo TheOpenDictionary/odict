@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230518224834-5e8c480783f3
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230518224834-5e8c480783f3
+	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230519203810-1547d409af52
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230518224834-5e8c480783f3
 	github.com/golang/snappy v0.0.4
 	github.com/imdario/mergo v0.3.15
