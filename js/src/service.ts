@@ -32,12 +32,20 @@ export function startService() {
 
     longRunningProcess = {
       stop() {
-        // service.stdin.end();
+        service.stdin.end();
         service.kill();
         longRunningProcess = undefined;
       },
       run(args) {
         return new Promise((resolve, reject) => {
+          const request = JSON.stringify([...args]);
+
+          const f = service.stdin.write(request, (err) => {
+            console.log(err);
+          });
+
+          console.log(request, f);
+
           service.stdout.on("data", (data) => {
             console.log(data.toString());
             resolve(data);
@@ -47,10 +55,6 @@ export function startService() {
             console.log(error.message);
             reject(error);
           });
-
-          const request = JSON.stringify([...args]);
-          console.log(request);
-          service.stdin.write(request + "\n");
         });
       },
     };

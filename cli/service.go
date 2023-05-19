@@ -18,7 +18,7 @@ func service(c *cli.Context) error {
 
 	for scanner.Scan() {
 		var args []string
-
+		fmt.Println("cadsf")
 		if err := json.Unmarshal([]byte(scanner.Text()), &args); err != nil {
 			fmt.Println(err)
 			continue
