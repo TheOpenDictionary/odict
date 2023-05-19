@@ -39,5 +39,8 @@
     "prettier": "^2.8.1",
     "rimraf": "^5.0.0",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "flatbuffers": "^23.5.9"
   }
 }

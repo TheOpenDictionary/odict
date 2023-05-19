@@ -4,6 +4,9 @@ install:
 clean:
   rm -rf coverage dist 
 
+@schema:
+  flatc --ts --gen-onefile -o ./src/fb ../service.fbs
+
 build: install
   npm run build
 

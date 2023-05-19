@@ -2,10 +2,10 @@ import { spawn } from "node:child_process";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ServiceRequest } from "./types";
+import { ODictMethod } from "./fb";
 
 type ProcessWrapper = {
-  run: (request: ServiceRequest) => Promise<string>;
+  run: (method: ODictMethod, buffer?: Uint8Array) => Promise<string>;
   stop: () => void;
 };
 
@@ -50,11 +50,9 @@ export function startService(dictionaryPath?: string) {
 
   const processWrapper: ProcessWrapper = {
     stop,
-    run(req) {
+    run(method, payload) {
       return new Promise((resolve, reject) => {
-        const request = JSON.stringify(req);
-
-        service.stdin.write(request + "\n");
+        service.stdin.write(`${method} ${payload}\n`);
 
         service.stdout.once("data", (data) => {
           // Kill service if we aren't opening to a dictionary

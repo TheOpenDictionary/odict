@@ -1,10 +1,5 @@
 export type Query = { word: string; fallback: string } | string;
 
-export interface ServiceRequest {
-  function: string;
-  parameters: Record<string, unknown>;
-}
-
 export interface DictionaryOptions {
   defaultSplitThreshold?: number;
 }

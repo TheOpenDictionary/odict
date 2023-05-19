@@ -35,6 +35,18 @@ func service(c *cli.Context) error {
 
 		text, err := reader.ReadString('\n')
 
+		split := strings.Split(text, " ")
+
+		if len(split) > 0 {
+			method = split[0]
+			payload = split[1]
+
+			switch method {
+			case MethodCompile:
+				var request CompileRequest
+
+			}
+		}
 		if err != nil {
 			fmt.Println(err)
 			continue

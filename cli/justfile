@@ -2,5 +2,8 @@
   just ../lib/schema
   go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin/odict ../main.go
 
+@schema:
+  flatc -g --gen-onefile --go-namespace cli -o . ../service.fbs
+
 @run +args="": build
   ../bin/odict {{args}}

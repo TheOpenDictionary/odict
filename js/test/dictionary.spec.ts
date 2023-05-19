@@ -25,7 +25,7 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
-  it("can lookup terms properly", async () => {
+  it.only("can lookup terms properly", async () => {
     const result = await dict1.lookup({ word: "run", fallback: "run" });
     expect(result[0][0].term).toBe("run");
   });

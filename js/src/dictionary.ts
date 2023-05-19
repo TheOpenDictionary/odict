@@ -1,5 +1,15 @@
+import { Builder } from "flatbuffers";
+
 import { writeFile } from "node:fs/promises";
 
+import { CompilePayload } from "./fb/compile-payload.js";
+import {
+  LookupPayload,
+  SearchPayload,
+  SplitPayload,
+  WritePayload,
+} from "./fb/index.js";
+import { ODictMethod } from "./fb/odict-method.js";
 import { startService } from "./service.js";
 import { withTemporaryFile } from "./tmp.js";
 import type {
@@ -10,6 +20,10 @@ import type {
   SearchOptions,
 } from "./types.js";
 import { generateOutputPath, queryToString } from "./utils.js";
+
+function createBuilder() {
+  return new Builder(1024);
+}
 
 class Dictionary {
   private readonly options: DictionaryOptions;
@@ -29,18 +43,21 @@ class Dictionary {
    * @returns A pointer to the compiled Dictionary
    */
   static async compile(xmlPath: string, outPath?: string): Promise<Dictionary> {
-    const commands = ["compile"];
     const out = outPath ?? generateOutputPath(xmlPath);
+    const builder = createBuilder();
 
-    commands.push(xmlPath);
+    const pathS = builder.createString(xmlPath);
+    const outS = builder.createString(out);
 
-    await startService().run({
-      function: "compile",
-      parameters: {
-        outPath: out,
-        path: xmlPath,
-      },
-    });
+    CompilePayload.startCompilePayload(builder);
+    CompilePayload.addPath(builder, pathS);
+    CompilePayload.addOut(builder, outS);
+
+    const payload = CompilePayload.endCompilePayload(builder);
+
+    builder.finish(payload);
+
+    await startService().run(ODictMethod.Compile, builder.asUint8Array());
 
     return new Dictionary(out);
   }
@@ -56,13 +73,21 @@ class Dictionary {
     return withTemporaryFile(async (tmp) => {
       await writeFile(tmp, xml, "utf-8");
 
-      await startService().run({
-        function: "compile",
-        parameters: {
-          outPath: outPath,
-          path: tmp,
-        },
-      });
+      const builder = createBuilder();
+      const xmlS = builder.createString(xml);
+      const pathS = builder.createString(tmp);
+      const outS = builder.createString(outPath);
+
+      WritePayload.startWritePayload(builder);
+      WritePayload.addXml(builder, xmlS);
+      WritePayload.addPath(builder, pathS);
+      WritePayload.addOut(builder, outS);
+
+      const payload = CompilePayload.endCompilePayload(builder);
+
+      builder.finish(payload);
+
+      await startService().run(ODictMethod.Write, builder.asUint8Array());
 
       return new Dictionary(outPath);
     });
@@ -72,7 +97,7 @@ class Dictionary {
    * Indexes a compiled dictionary so it can be searched via the search() method
    */
   async index() {
-    await startService(this.path).run({ function: "index", parameters: {} });
+    await startService(this.path).run(ODictMethod.Index);
   }
 
   /**
@@ -90,16 +115,24 @@ class Dictionary {
 
     return Promise.all(
       queries.map(queryToString).map(async (query) => {
-        return JSON.parse(
-          await startService(this.path).run({
-            function: "search",
-            parameters: {
-              query,
-              exact: options.exact ?? "false",
-              force: options.force ?? "false",
-            },
-          })
-        ) as Entry[];
+        const builder = createBuilder();
+        const queryS = builder.createString(query);
+
+        SearchPayload.startSearchPayload(builder);
+        SearchPayload.addQuery(builder, queryS);
+        SearchPayload.addExact(builder, options.exact ?? false);
+        SearchPayload.addForce(builder, options.force ?? false);
+
+        const payload = SearchPayload.endSearchPayload(builder);
+
+        builder.finish(payload);
+
+        const response = await startService(this.path).run(
+          ODictMethod.Search,
+          builder.asUint8Array()
+        );
+
+        return JSON.parse(response) as Entry[];
       })
     );
   }
@@ -110,10 +143,7 @@ class Dictionary {
    * @returns A list of all headwords in the dictionary
    */
   async lexicon(): Promise<string[]> {
-    const lexicon = await startService(this.path).run({
-      function: "lexicon",
-      parameters: {},
-    });
+    const lexicon = await startService(this.path).run(ODictMethod.Lexicon);
     return lexicon.toString().trim().split("\n");
   }
 
@@ -132,15 +162,25 @@ class Dictionary {
 
     const { follow, split = this.options.defaultSplitThreshold } = options;
 
+    const builder = createBuilder();
+
+    const queriesS = queries
+      .map(queryToString)
+      .map((str) => builder.createString(str));
+
+    const queriesV = LookupPayload.createQueriesVector(builder, queriesS);
+
+    LookupPayload.startLookupPayload(builder);
+    LookupPayload.addQueries(builder, queriesV);
+    LookupPayload.addFollow(builder, follow ?? false);
+    LookupPayload.addSplit(builder, split ?? 0);
+
+    const payload = LookupPayload.endLookupPayload(builder);
+
+    builder.finish(payload);
+
     return startService(this.path)
-      .run({
-        function: "lookup",
-        parameters: {
-          follow: follow?.toString() ?? "false",
-          split: split?.toString() ?? "0",
-          queries: queries.map(queryToString).join("|"),
-        },
-      })
+      .run(ODictMethod.Lookup, builder.asUint8Array())
       .then(JSON.parse);
   }
 
@@ -152,13 +192,22 @@ class Dictionary {
    * @returns A nested array of entries
    */
   async split(query: string, threshold: number): Promise<Entry[]> {
-    const result = await startService(this.path).run({
-      function: "split",
-      parameters: {
-        threshold: threshold.toString(),
-        query,
-      },
-    });
+    const builder = createBuilder();
+    const queryS = builder.createString(query);
+
+    SplitPayload.startSplitPayload(builder);
+    SplitPayload.addThreshold(builder, threshold);
+    SplitPayload.addQuery(builder, queryS);
+
+    const payload = SplitPayload.endSplitPayload(builder);
+
+    builder.finish(payload);
+
+    const result = await startService(this.path).run(
+      ODictMethod.Split,
+      builder.asUint8Array()
+    );
+
     return JSON.parse(result);
   }
 }
