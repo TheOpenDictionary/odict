@@ -1,4 +1,4 @@
-schema:
+@schema:
 	flatc -g --gen-onefile --go-namespace types -o ./types ../schema.fbs
 
 test:

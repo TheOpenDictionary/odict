@@ -24,9 +24,9 @@ var parentheticalRegex = regexp.MustCompile(`(\(.*?\))`)
 type PrintFormat = string
 
 const (
-	json PrintFormat = "json"
-	xml  PrintFormat = "xml"
-	pp   PrintFormat = "pp"
+	jsonFormat PrintFormat = "json"
+	xmlFormat  PrintFormat = "xml"
+	ppFormat   PrintFormat = "pp"
 )
 
 func ppExample(example string, underlined string, indent int) {

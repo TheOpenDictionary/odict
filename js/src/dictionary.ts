@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 
-import { exec } from "./exec.js";
+import { startService, stopService } from "./service.js";
 import { withTemporaryFile } from "./tmp.js";
 import type {
   DictionaryOptions,
@@ -16,6 +16,10 @@ class Dictionary {
 
   constructor(readonly path: string, options: Partial<DictionaryOptions> = {}) {
     this.options = options;
+  }
+
+  destroy() {
+    stopService();
   }
 
   /**
@@ -36,7 +40,7 @@ class Dictionary {
 
     commands.push(xmlPath);
 
-    await exec(...commands);
+    await startService().run(commands);
 
     return new Dictionary(out);
   }
@@ -51,7 +55,7 @@ class Dictionary {
   static async write(xml: string, outPath: string): Promise<Dictionary> {
     return withTemporaryFile(async (tmp) => {
       await writeFile(tmp, xml, "utf-8");
-      await exec("compile", "-o", outPath, tmp);
+      await startService().run(["compile", "-o", outPath, tmp]);
       return new Dictionary(outPath);
     });
   }
@@ -60,7 +64,7 @@ class Dictionary {
    * Indexes a compiled dictionary so it can be searched via the search() method
    */
   async index() {
-    await exec("index", this.path);
+    await startService().run(["index", this.path]);
   }
 
   /**
@@ -87,9 +91,7 @@ class Dictionary {
         commands.push(this.path);
         commands.push(query);
 
-        const raw = await exec(...commands);
-
-        return JSON.parse(raw);
+        return JSON.parse(await startService().run(commands)) as Entry[];
       })
     );
   }
@@ -100,8 +102,9 @@ class Dictionary {
    * @returns A list of all headwords in the dictionary
    */
   async lexicon(): Promise<string[]> {
-    const lexicon = await exec("lexicon", this.path);
-    return lexicon.trim().split("\n");
+    return (await startService().run(["lexicon", this.path]))
+      .trim()
+      .split("\n");
   }
 
   /**
@@ -119,15 +122,17 @@ class Dictionary {
 
     const { follow, split = this.options.defaultSplitThreshold } = options;
 
-    return exec(
-      "lookup",
-      "-f",
-      "json",
-      follow ? "--follow" : "",
-      ...(split ? ["-s", split.toString()] : []),
-      this.path,
-      ...queries.map(queryToString)
-    ).then(JSON.parse);
+    return startService()
+      .run([
+        "lookup",
+        "-f",
+        "json",
+        follow ? "--follow" : "",
+        ...(split ? ["-s", split.toString()] : []),
+        this.path,
+        ...queries.map(queryToString),
+      ])
+      .then(JSON.parse);
   }
 
   /**
@@ -138,12 +143,12 @@ class Dictionary {
    * @returns A nested array of entries
    */
   async split(query: string, threshold: number): Promise<Entry[]> {
-    const result = await exec(
+    const result = await startService().run([
       "split",
       ...(threshold ? ["-t", threshold.toString()] : []),
       this.path,
-      query
-    );
+      query,
+    ]);
 
     return JSON.parse(result);
   }

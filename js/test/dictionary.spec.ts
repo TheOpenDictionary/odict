@@ -1,11 +1,15 @@
 import { stat } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Dictionary } from "../src";
 
 describe("Dictionary", () => {
   let dict1: Dictionary;
+
+  afterAll(() => {
+    dict1?.destroy();
+  });
 
   beforeAll(async () => {
     dict1 = await Dictionary.compile(
@@ -20,7 +24,7 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
-  it("can lookup terms properly", async () => {
+  it.only("can lookup terms properly", async () => {
     const result = await dict1.lookup({ word: "run", fallback: "run" });
     expect(result[0][0].term).toBe("run");
   });

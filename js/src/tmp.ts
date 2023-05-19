@@ -1,14 +1,9 @@
 import { exec as _exec } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
-
-import { exec } from "./exec.js";
-import type { DictionaryOptions } from "./types.js";
-
-const run = promisify(_exec);
 
 export async function withTemporaryFile<T>(
   cb: (path: string) => Promise<T> | T

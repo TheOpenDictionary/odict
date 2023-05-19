@@ -2,33 +2,35 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-build: (cli "build")
+@build: (cli "build")
 
-test: (go "test") (jvm "test") (python "test") (js "test")
+@run +args="": (cli "run" args)
 
-clean: (python "clean") (jvm "clean") (js "clean")
+@test: (go "test") (jvm "test") (python "test") (js "test")
+
+@clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
 
-schema: (go "schema")
+@schema: (go "schema")
 
-sync:
+@sync:
   go work sync 
 
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
 # ------------------------------------------------------------------------------ #
 
-go +command:
+@go +command:
 	just lib/{{command}}
 
-cli +command:
+@cli +command:
 	just cli/{{command}}
 
-jvm +command:
+@jvm +command:
 	just jvm/{{command}}
 
-js +command:
+@js +command:
 	just js/{{command}}
 
-python +command:
+@python +command:
 	just python/{{command}}
