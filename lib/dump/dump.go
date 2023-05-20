@@ -17,7 +17,7 @@ const (
 // AsXML converts an Dictionary struct
 // to its original ODXML
 func AsXML(dict *types.Dictionary) string {
-	return utils.SerializeToXML(dict.AsRepresentable())
+	return utils.SerializeToXML(dict.AsRepresentable(), true)
 }
 
 // AsSQL converts an Dictionary struct

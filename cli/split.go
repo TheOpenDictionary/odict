@@ -10,14 +10,14 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
-func split_(request core.SplitRequest) {
+func split_(request core.SplitRequest, prettyPrint bool) {
 	entries := core.Split(request)
 
 	representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
 		return entry.AsRepresentable()
 	})
 
-	fmt.Println(utils.SerializeToJSON(representable))
+	fmt.Print(utils.SerializeToJSON(representable, prettyPrint))
 }
 
 func split(c *cli.Context) error {
@@ -36,7 +36,7 @@ func split(c *cli.Context) error {
 			Dictionary: dict,
 			Query:      searchTerm,
 			Threshold:  threshold,
-		})
+		}, true)
 	})
 
 	return nil

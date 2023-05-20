@@ -3,6 +3,7 @@ package core
 import (
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
 )
@@ -46,19 +47,46 @@ func lookup(dict *types.Dictionary, query string, fallback string, split int, fo
 }
 
 func Lookup(request LookupRequest) [][]types.Entry {
-	entries := [][]types.Entry{}
+	entries := make([][]types.Entry, len(request.Queries))
 	r, _ := regexp.Compile(`\((.+)\)$`)
 
-	for _, query := range request.Queries {
-		match := r.FindAllStringSubmatch(query, -1)
-		fallback := ""
+	// Create a channel to receive results
+	resultChan := make(chan struct {
+		index   int
+		entries []types.Entry
+	})
 
-		if len(match) > 0 {
-			query = r.ReplaceAllString(query, "")
-			fallback = match[0][1]
-		}
+	var wg sync.WaitGroup
 
-		entries = append(entries, lookup(request.Dictionary, strings.Trim(query, " "), fallback, request.Split, request.Follow))
+	for i, query := range request.Queries {
+		wg.Add(1)
+
+		go func(idx int, query string) {
+			defer wg.Done()
+
+			match := r.FindAllStringSubmatch(query, -1)
+			fallback := ""
+
+			if len(match) > 0 {
+				query = r.ReplaceAllString(query, "")
+				fallback = match[0][1]
+			}
+
+			resultChan <- struct {
+				index   int
+				entries []types.Entry
+			}{idx, lookup(request.Dictionary, strings.Trim(query, " "), fallback, request.Split, request.Follow)}
+		}(i, query)
+	}
+
+	go func() {
+		wg.Wait()
+		close(resultChan)
+	}()
+
+	// Collect and order results from the channel
+	for result := range resultChan {
+		entries[result.index] = result.entries
 	}
 
 	return entries
