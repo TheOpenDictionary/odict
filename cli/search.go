@@ -12,11 +12,12 @@ import (
 )
 
 type SearchRequest struct {
-	Dictionary *types.Dictionary
-	Force      bool
-	Exact      bool
-	Query      string
-	Quiet      bool
+	Dictionary  *types.Dictionary
+	Force       bool
+	Exact       bool
+	Query       string
+	Quiet       bool
+	PrettyPrint bool
 }
 
 func search_(request SearchRequest) {
@@ -28,7 +29,7 @@ func search_(request SearchRequest) {
 		return entry.AsRepresentable()
 	})
 
-	fmt.Println(utils.SerializeToJSON(representable))
+	fmt.Print(utils.SerializeToJSON(representable, request.PrettyPrint))
 }
 
 func search(c *cli.Context) error {
@@ -46,11 +47,12 @@ func search(c *cli.Context) error {
 		dict := core.ReadDictionaryFromPath(inputFile)
 
 		search_(SearchRequest{
-			Dictionary: dict,
-			Force:      force,
-			Exact:      exact,
-			Query:      searchTerm,
-			Quiet:      quiet,
+			Dictionary:  dict,
+			Force:       force,
+			Exact:       exact,
+			Query:       searchTerm,
+			Quiet:       quiet,
+			PrettyPrint: true,
 		})
 	})
 

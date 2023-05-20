@@ -21,7 +21,11 @@ type Request struct {
 }
 
 func printSuccess() {
-	fmt.Println("{ success: true }")
+	fmt.Print("{success:true}")
+}
+
+func end() {
+	fmt.Print("EOF")
 }
 
 func service(c *cli.Context) error {
@@ -56,38 +60,49 @@ func service(c *cli.Context) error {
 				payload := GetRootAsCompilePayload(buf, 0)
 				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
 				printSuccess()
+				end()
 			case ODictMethodSplit:
 				if dict != nil {
 					payload := GetRootAsSplitPayload(buf, 0)
+
 					split_(core.SplitRequest{
 						Dictionary: dict,
 						Query:      string(payload.Query()),
 						Threshold:  int(payload.Threshold()),
-					})
+					}, false)
+
+					end()
 				}
 			case ODictMethodLexicon:
 				if dict != nil {
 					lexicon_(dict)
+					end()
 				}
 			case ODictMethodWrite:
 				payload := GetRootAsWritePayload(buf, 0)
 				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()))
 				printSuccess()
+				end()
 			case ODictMethodIndex:
 				if dict != nil {
 					ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: true})
 					printSuccess()
+					end()
 				}
 			case ODictMethodSearch:
 				if dict != nil {
 					payload := GetRootAsSearchPayload(buf, 0)
+
 					search_(SearchRequest{
-						Dictionary: dict,
-						Query:      string(payload.Query()),
-						Force:      payload.Force(),
-						Quiet:      true,
-						Exact:      payload.Exact(),
+						Dictionary:  dict,
+						Query:       string(payload.Query()),
+						Force:       payload.Force(),
+						Quiet:       true,
+						Exact:       payload.Exact(),
+						PrettyPrint: false,
 					})
+
+					end()
 				}
 			case ODictMethodLookup:
 				if dict != nil {
@@ -105,7 +120,9 @@ func service(c *cli.Context) error {
 						Queries:    queries,
 						Follow:     follow,
 						Split:      split,
-					}, "json")
+					}, "json", false)
+
+					end()
 				}
 			}
 		}

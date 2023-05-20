@@ -69,11 +69,22 @@ export function startService(dictionaryPath?: string) {
             payload ? Buffer.from(payload).toString("base64") : ""
           }\n`
         );
+        console.log(service.connected);
+        let outBuffer = "";
 
-        service.stdout.once("data", (data) => {
-          // Kill service if we aren't opening to a dictionary
-          if (!dictionaryPath) stop();
-          resolve(data);
+        service.stdout.on("data", (data) => {
+          outBuffer += data.toString();
+
+          if (outBuffer.endsWith("EOF")) {
+            outBuffer = outBuffer.slice(0, -3);
+
+            // Kill service if we aren't opening to a dictionary
+            if (!dictionaryPath) {
+              stop();
+            }
+
+            resolve(outBuffer);
+          }
         });
 
         service.once("error", (error) => {

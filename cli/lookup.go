@@ -9,7 +9,7 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
-func lookup_(request core.LookupRequest, format string) {
+func lookup_(request core.LookupRequest, format string, prettyPrint bool) {
 	entries := core.Lookup(request)
 
 	representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
@@ -18,7 +18,7 @@ func lookup_(request core.LookupRequest, format string) {
 		})
 	})
 
-	PrintEntries(representable, format)
+	PrintEntries(representable, format, prettyPrint)
 }
 
 func lookup(c *cli.Context) error {
@@ -36,7 +36,7 @@ func lookup(c *cli.Context) error {
 			Queries:    queries,
 			Follow:     c.Bool("follow"),
 			Split:      c.Int("split"),
-		}, c.String("format"))
+		}, c.String("format"), true)
 	})
 
 	return nil

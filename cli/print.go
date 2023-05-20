@@ -143,12 +143,12 @@ func prettyPrint(entries [][]types.EntryRepresentable) bool {
 	return hasEntries
 }
 
-func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat) {
+func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, indent bool) {
 	switch {
 	case format == "json":
-		fmt.Print(utils.SerializeToJSON(entries))
+		fmt.Print(utils.SerializeToJSON(entries, indent))
 	case format == "xml":
-		fmt.Print(utils.SerializeToXML(entries))
+		fmt.Print(utils.SerializeToXML(entries, indent))
 	case format == "pp":
 		if !prettyPrint(entries) {
 			fmt.Printf("No entries found!\n")
