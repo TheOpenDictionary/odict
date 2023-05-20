@@ -33,9 +33,9 @@ export function startService(dictionaryPath?: string) {
 
   let executable = "odict";
 
-  // if (process.env.RUNTIME_ENV === "test") {
-  executable = join(fileURLToPath(import.meta.url), "../../../bin/odict");
-  // }
+  if (process.env.RUNTIME_ENV === "test") {
+    executable = join(fileURLToPath(import.meta.url), "../../../bin/odict");
+  }
 
   const service = spawn(executable, ["service", dictionaryPath ?? ""], {
     windowsHide: true,
