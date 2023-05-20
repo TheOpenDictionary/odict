@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.1...js-v0.3.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* **js:** bug fixes with service implementation ([#325](https://github.com/TheOpenDictionary/odict/issues/325)) ([e76cb1c](https://github.com/TheOpenDictionary/odict/commit/e76cb1c1ba1724528d7113c924d2b582494eb11b))
+
 ## [0.3.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.0...js-v0.3.1) (2023-05-19)
 
 

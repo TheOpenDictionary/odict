@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.2](https://github.com/TheOpenDictionary/odict/compare/v1.11.1...v1.11.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* **js:** bug fixes with service implementation ([#325](https://github.com/TheOpenDictionary/odict/issues/325)) ([e76cb1c](https://github.com/TheOpenDictionary/odict/commit/e76cb1c1ba1724528d7113c924d2b582494eb11b))
+
 ## [1.11.1](https://github.com/TheOpenDictionary/odict/compare/v1.11.0...v1.11.1) (2023-05-19)
 
 
