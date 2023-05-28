@@ -69,7 +69,7 @@ export function startService(dictionaryPath?: string) {
             payload ? Buffer.from(payload).toString("base64") : ""
           }\n`
         );
-        console.log(service.connected);
+
         let outBuffer = "";
 
         service.stdout.on("data", (data) => {
@@ -88,7 +88,6 @@ export function startService(dictionaryPath?: string) {
         });
 
         service.once("error", (error) => {
-          console.log(error.message);
           reject(error);
         });
       });
