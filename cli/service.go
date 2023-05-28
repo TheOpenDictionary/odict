@@ -2,8 +2,6 @@ package cli
 
 import (
 	"encoding/base64"
-	"log"
-	"os"
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	ods "github.com/TheOpenDictionary/odict/lib/search"
@@ -45,14 +43,6 @@ func service(c *cli.Context) error {
 	if len(dictPath) > 0 {
 		dict = core.ReadDictionaryFromPath(dictPath)
 	}
-
-	f, err := os.OpenFile("testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-
-	log.SetOutput(f)
 
 	go func() {
 		// Write
