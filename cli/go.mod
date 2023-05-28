@@ -3,9 +3,14 @@ module github.com/TheOpenDictionary/odict/cli
 go 1.20
 
 require (
+	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230528005640-810e6f7b0a77
+	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230528005640-810e6f7b0a77
+	github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230528005640-810e6f7b0a77
+	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230528031004-ac7c75e6491b
+	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230528005640-810e6f7b0a77
 	github.com/fatih/color v1.15.0
 	github.com/google/flatbuffers v23.5.26+incompatible
-	github.com/urfave/cli/v2 v2.25.3
+	github.com/urfave/cli/v2 v2.25.4
 )
 
 require (
@@ -27,14 +32,14 @@ require (
 	github.com/blevesearch/zapx/v13 v13.3.7 // indirect
 	github.com/blevesearch/zapx/v14 v14.3.7 // indirect
 	github.com/blevesearch/zapx/v15 v15.3.10 // indirect
-	github.com/bokwoon95/sq v0.3.3 // indirect
+	github.com/bokwoon95/sq v0.3.4 // indirect
 	github.com/bokwoon95/sqddl v0.4.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/imdario/mergo v0.3.15 // indirect
+	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
