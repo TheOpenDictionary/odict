@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.2...js-v0.4.0) (2023-05-28)
+
+
+### Features
+
+* **js:** add part of speech enum to js package ([0fdd9bc](https://github.com/TheOpenDictionary/odict/commit/0fdd9bc073a20769a6bb80939290a8981d526920))
+
+
+### Bug Fixes
+
+* **deps:** update dependency flatbuffers to v23.5.26 ([60b6baf](https://github.com/TheOpenDictionary/odict/commit/60b6baf51caaf8d835a5bc8d2c1c052926224364))
+
 ## [0.3.2](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.1...js-v0.3.2) (2023-05-20)
 
 

@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.12.0](https://github.com/TheOpenDictionary/odict/compare/v1.11.2...v1.12.0) (2023-05-28)
+
+
+### Features
+
+* **js:** add part of speech enum to js package ([0fdd9bc](https://github.com/TheOpenDictionary/odict/commit/0fdd9bc073a20769a6bb80939290a8981d526920))
+* make goimports call more specific ([4a1a0db](https://github.com/TheOpenDictionary/odict/commit/4a1a0dbd1d005683dbb2f63abd733ec26b0064c5))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32 ([6c7b5ad](https://github.com/TheOpenDictionary/odict/commit/6c7b5ad3a638cade5ec7cfa9a0c7f8d12cb817d5))
+* **deps:** update dependency flatbuffers to v23.5.26 ([60b6baf](https://github.com/TheOpenDictionary/odict/commit/60b6baf51caaf8d835a5bc8d2c1c052926224364))
+* **deps:** update module github.com/bokwoon95/sq to v0.3.0 ([fec4115](https://github.com/TheOpenDictionary/odict/commit/fec4115d7150de48a74a1b10ceb1028588ccba31))
+* **deps:** update module github.com/bokwoon95/sq to v0.3.3 ([cb3b29d](https://github.com/TheOpenDictionary/odict/commit/cb3b29d9068b6b7419e895afe8fe001c75449a07))
+* **deps:** update module github.com/bokwoon95/sq to v0.3.4 ([cc1479a](https://github.com/TheOpenDictionary/odict/commit/cc1479a31a3d48df89f21557c606beec51b0d7cc))
+* **deps:** update module github.com/google/flatbuffers to v23.5.26+incompatible ([15b2ec6](https://github.com/TheOpenDictionary/odict/commit/15b2ec69deab6e7da97a331607f785fb11d69785))
+* **deps:** update module github.com/imdario/mergo to v0.3.16 ([c8bf550](https://github.com/TheOpenDictionary/odict/commit/c8bf5501d0802f1b0e1e26de6541faf649f0454a))
+
 ## [1.11.2](https://github.com/TheOpenDictionary/odict/compare/v1.11.1...v1.11.2) (2023-05-20)
 
 
