@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/TheOpenDictionary/odict/compare/v1.12.0...v1.12.1) (2023-05-28)
+
+
+### Bug Fixes
+
+* **js:** remove log statements ([810e6f7](https://github.com/TheOpenDictionary/odict/commit/810e6f7b0a772cc0d58797f02ff4c962a9e98bcc))
+
 ## [1.12.0](https://github.com/TheOpenDictionary/odict/compare/v1.11.2...v1.12.0) (2023-05-28)
 
 
