@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/TheOpenDictionary/odict/compare/v1.12.1...v1.13.0) (2023-05-28)
+
+
+### Features
+
+* use IPC library for inter-process communication ([#344](https://github.com/TheOpenDictionary/odict/issues/344)) ([fc23307](https://github.com/TheOpenDictionary/odict/commit/fc2330771dcdbfe6358fa09f15f1cdf86bd4b9ab))
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.4 ([d026d4e](https://github.com/TheOpenDictionary/odict/commit/d026d4e06ae6250980b88745c5bcd04b53591547))
+
 ## [1.12.1](https://github.com/TheOpenDictionary/odict/compare/v1.12.0...v1.12.1) (2023-05-28)
 
 

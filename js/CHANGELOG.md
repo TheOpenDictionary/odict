@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.4.1...js-v0.5.0) (2023-05-28)
+
+
+### Features
+
+* use IPC library for inter-process communication ([#344](https://github.com/TheOpenDictionary/odict/issues/344)) ([fc23307](https://github.com/TheOpenDictionary/odict/commit/fc2330771dcdbfe6358fa09f15f1cdf86bd4b9ab))
+
 ## [0.4.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.4.0...js-v0.4.1) (2023-05-28)
 
 
