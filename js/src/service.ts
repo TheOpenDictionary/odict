@@ -59,46 +59,6 @@ export function startService(dictionaryPath?: string) {
           payload ? Buffer.from(payload).toString("base64") : "",
           (err, data) => (err ? reject(err) : resolve(data))
         );
-
-        // setTimeout(() => {
-        //   resolve({} as any);
-        // }, 4000);
-
-        // service.stdin.write(
-        //   `${method};${
-        //     payload ? Buffer.from(payload).toString("base64") : ""
-        //   }\n`
-        // );
-        // let outBuffer = "";
-        // function handleError(error: Error) {
-        //   reject(error);
-        // }
-        // function cleanupListeners() {
-        //   service.stdout.removeListener("data", buildBuffer);
-        //   service.removeListener("error", handleError);
-        // }
-        // function buildBuffer(data: any) {
-        //   outBuffer += data.toString();
-        //   if (outBuffer.endsWith("EOF\n")) {
-        //     outBuffer = outBuffer.slice(0, -4);
-        //     // Kill service if we aren't opening to a dictionary
-        //     if (!dictionaryPath) {
-        //       stop();
-        //     }
-        //     cleanupListeners();
-        //     console.log(
-        //       "event listener removed!",
-        //       service.stdout.listenerCount("data")
-        //     );
-        //     resolve(outBuffer);
-        //   }
-        // }
-        // service.stdout.on("data", buildBuffer);
-        // console.log(
-        //   "event listener added!",
-        //   service.stdout.listenerCount("data")
-        // );
-        // service.once("error", handleError);
       });
     },
   };
