@@ -20,41 +20,30 @@ static getSizePrefixedRootAsWritePayload(bb:flatbuffers.ByteBuffer, obj?:WritePa
   return (obj || new WritePayload()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-id():string|null
-id(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
-id(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
-}
-
 xml():string|null
 xml(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
 xml(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 6);
+  const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
 out():string|null
 out(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
 out(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 8);
+  const offset = this.bb!.__offset(this.bb_pos, 6);
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
 static startWritePayload(builder:flatbuffers.Builder) {
-  builder.startObject(3);
-}
-
-static addId(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(0, idOffset, 0);
+  builder.startObject(2);
 }
 
 static addXml(builder:flatbuffers.Builder, xmlOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(1, xmlOffset, 0);
+  builder.addFieldOffset(0, xmlOffset, 0);
 }
 
 static addOut(builder:flatbuffers.Builder, outOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(2, outOffset, 0);
+  builder.addFieldOffset(1, outOffset, 0);
 }
 
 static endWritePayload(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -62,9 +51,8 @@ static endWritePayload(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createWritePayload(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset, xmlOffset:flatbuffers.Offset, outOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createWritePayload(builder:flatbuffers.Builder, xmlOffset:flatbuffers.Offset, outOffset:flatbuffers.Offset):flatbuffers.Offset {
   WritePayload.startWritePayload(builder);
-  WritePayload.addId(builder, idOffset);
   WritePayload.addXml(builder, xmlOffset);
   WritePayload.addOut(builder, outOffset);
   return WritePayload.endWritePayload(builder);

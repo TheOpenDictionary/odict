@@ -1,4 +1,5 @@
-import { spawn } from "node:child_process";
+import { v4 as uuid } from "uuid";
+
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -58,6 +59,11 @@ export function startService(dictionaryPath?: string) {
           payload ? Buffer.from(payload).toString("base64") : "",
           (err, data) => (err ? reject(err) : resolve(data))
         );
+
+        // setTimeout(() => {
+        //   resolve({} as any);
+        // }, 4000);
+
         // service.stdin.write(
         //   `${method};${
         //     payload ? Buffer.from(payload).toString("base64") : ""

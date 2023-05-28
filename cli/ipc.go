@@ -35,6 +35,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // IPC channel
@@ -49,8 +51,14 @@ var (
 	rRLock sync.Mutex
 )
 
+type replyChannel struct {
+	event string `json:"event"`
+	ID    string `json:"id"`
+}
+
 // Payload this is the payload structure
 type payload struct {
+	ID    string `json:"id"`
 	Event string `json:"event"`
 	// If the data received from the parent is a literal value `Data`
 	//type will be equals to the underlining type for example:
@@ -63,7 +71,7 @@ type payload struct {
 	// data will be a JSON string
 	Data  interface{} `json:"data"`
 	Error interface{} `json:"error"`
-	SR    bool        `json:"SR"` //send and receive
+	SR    bool        `json:"SR"` // send and receive
 	RS    bool        `json:"RC"` // receive and send
 }
 
@@ -81,10 +89,11 @@ type Handler func(data interface{})
 //	the data will be return.
 //	`replyChannel` is the event name you'll pass to `ipc.Reply` method to respond
 //	 to the sender
-type HandlerWithReply func(replyChannel string, data interface{})
+type HandlerWithReply func(channel replyChannel, data interface{})
 
 // PayloadReceive this is the payload structure
 type payloadReceive struct {
+	ID    string      `json:"id"`
 	Event string      `json:"event"`
 	Data  interface{} `json:"data"`
 	SR    bool        `json:"SR"` //send and receive
@@ -92,12 +101,12 @@ type payloadReceive struct {
 
 // Send data to parent process
 func (ipc IPC) Send(event string, data interface{}) {
-	ipc.sendChannel <- payload{Event: event, Data: data}
+	ipc.sendChannel <- payload{ID: uuid.NewString(), Event: event, Data: data}
 }
 
 // Reply back to sender
-func (ipc IPC) Reply(event string, data, err interface{}) {
-	ipc.sendChannel <- payload{Event: event, Data: data, SR: true, Error: err}
+func (ipc IPC) Reply(channel replyChannel, data, err interface{}) {
+	ipc.sendChannel <- payload{ID: channel.ID, Event: channel.event, Data: data, SR: true, Error: err}
 }
 
 // On listens for events from parent process
@@ -121,8 +130,9 @@ func (ipc IPC) OnReceiveAndReply(event string, handler HandlerWithReply) {
 
 // SendAndReceive send and listen for reply event
 func (ipc IPC) SendAndReceive(event string, data interface{}, handler Handler) {
-	ipc.sendChannel <- payload{Event: event, Data: data, RS: true}
-	channel := event + "___RS___"
+	id := uuid.NewString()
+	ipc.sendChannel <- payload{ID: id, Event: event, Data: data, RS: true}
+	channel := event + ":" + id
 	ipc.On(channel, handler)
 }
 
@@ -180,10 +190,12 @@ func (ipc IPC) Start() {
 				go func() {
 					if payload.SR {
 						for _, handler := range ipc.receiveSendListerners[payload.Event] {
-							replyChannel := payload.Event + "___RC___"
-							handler(replyChannel, payload.Data)
+							handler(replyChannel{ID: payload.ID, event: payload.Event}, payload.Data)
 						}
 					} else {
+						for _, handler := range ipc.receiveListerners[payload.Event+":"+payload.ID] {
+							handler(payload.Data)
+						}
 						for _, handler := range ipc.receiveListerners[payload.Event] {
 							handler(payload.Data)
 						}

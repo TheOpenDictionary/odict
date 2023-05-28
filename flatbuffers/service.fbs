@@ -10,33 +10,28 @@ enum ODictMethod:byte {
 
 
 table LookupPayload {
-  id:string;
   follow:bool;
   split:int;
   queries:[string];
 }
 
 table WritePayload {
-  id:string;
   xml:string;
   out:string;
 }
 
 table SplitPayload {
-  id:string;
   threshold:int;
   query:string;
 }
 
 table SearchPayload {
-  id:string;
   force:bool;
   exact:bool;
   query:string;
 }
 
 table CompilePayload {
-  id:string;
   path:string;
   out:string;
 }

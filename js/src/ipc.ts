@@ -1,12 +1,17 @@
+import { v4 as uuid } from "uuid";
+
 import { ChildProcess, spawn } from "node:child_process";
 import { EventEmitter } from "node:events";
 
 export interface GoPayload {
+  id: string;
   event: string;
   data: any;
   error: any;
   SR: boolean;
 }
+
+export type Channel = string | { event: string; id: string };
 
 /**
   Adapted from https://github.com/Akumzy/ipc-node/blob/master/src/index.ts
@@ -97,10 +102,11 @@ export class IPC extends EventEmitter {
 
     if (Array.isArray(_data)) {
       for (const item of _data) {
-        const { error, data, event } = item;
+        const { id, error, data, event } = item;
 
         this.emit("data", item);
         this.emit(event, data, error);
+        this.emit(`${event}:${id}`, data, error);
       }
     }
   }
@@ -123,7 +129,7 @@ export class IPC extends EventEmitter {
    * @param event
    * @param data
    */
-  public send(event: string, data: any = undefined) {
+  public send(event: Channel, data: any = undefined) {
     this._send(event, data, false);
   }
 
@@ -131,7 +137,7 @@ export class IPC extends EventEmitter {
    * sendRaw gives your access to a third `boolean` argument which
    * is used to determine if this is a sendAndReceive action
    */
-  public sendRaw(event: string, data: any, isSendAndReceive = false) {
+  public sendRaw(event: Channel, data: any, isSendAndReceive = false) {
     this._send(event, data, isSendAndReceive);
   }
 
@@ -141,7 +147,7 @@ export class IPC extends EventEmitter {
    * @param data
    * @param SR this tells `Go` process if this message needs an acknowledgement
    */
-  private _send(event: string, data: any, SR: boolean) {
+  private _send(event: Channel, data: any, SR: boolean) {
     try {
       if (this.go && !this.closed && this.go.stdin?.writable) {
         const payload =
@@ -152,7 +158,8 @@ export class IPC extends EventEmitter {
         // We are converting this to `JSON` this to preserve the
         // data types
         let d = JSON.stringify({
-          event,
+          id: typeof event === "string" ? uuid() : event.id,
+          event: typeof event === "string" ? event : event.event,
           data: payload,
           SR: !!SR,
         });
@@ -178,9 +185,11 @@ export class IPC extends EventEmitter {
     data: any,
     cb: (error: Error, data: any) => void
   ) {
-    this._send(event, data, true);
+    const id = uuid();
 
-    const rc = event + "___RC___";
+    this._send({ event, id }, data, true);
+
+    const rc = `${event}:${id}`;
 
     this.once(rc, (data, error) => {
       if (typeof cb === "function") {
@@ -198,9 +207,9 @@ export class IPC extends EventEmitter {
    */
   public onReceiveAnSend(
     event: string,
-    cb: (channel: string, data: any) => void
+    cb: (channel: Channel, data: any) => void
   ) {
-    const channel = event + "___RS___";
+    const channel = { event, id: uuid() };
 
     this.on(event, (data) => {
       if (typeof cb === "function") {

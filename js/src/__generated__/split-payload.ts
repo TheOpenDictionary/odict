@@ -20,39 +20,28 @@ static getSizePrefixedRootAsSplitPayload(bb:flatbuffers.ByteBuffer, obj?:SplitPa
   return (obj || new SplitPayload()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-id():string|null
-id(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
-id(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
-}
-
 threshold():number {
-  const offset = this.bb!.__offset(this.bb_pos, 6);
+  const offset = this.bb!.__offset(this.bb_pos, 4);
   return offset ? this.bb!.readInt32(this.bb_pos + offset) : 0;
 }
 
 query():string|null
 query(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
 query(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 8);
+  const offset = this.bb!.__offset(this.bb_pos, 6);
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
 static startSplitPayload(builder:flatbuffers.Builder) {
-  builder.startObject(3);
-}
-
-static addId(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(0, idOffset, 0);
+  builder.startObject(2);
 }
 
 static addThreshold(builder:flatbuffers.Builder, threshold:number) {
-  builder.addFieldInt32(1, threshold, 0);
+  builder.addFieldInt32(0, threshold, 0);
 }
 
 static addQuery(builder:flatbuffers.Builder, queryOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(2, queryOffset, 0);
+  builder.addFieldOffset(1, queryOffset, 0);
 }
 
 static endSplitPayload(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -60,9 +49,8 @@ static endSplitPayload(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createSplitPayload(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset, threshold:number, queryOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createSplitPayload(builder:flatbuffers.Builder, threshold:number, queryOffset:flatbuffers.Offset):flatbuffers.Offset {
   SplitPayload.startSplitPayload(builder);
-  SplitPayload.addId(builder, idOffset);
   SplitPayload.addThreshold(builder, threshold);
   SplitPayload.addQuery(builder, queryOffset);
   return SplitPayload.endSplitPayload(builder);
