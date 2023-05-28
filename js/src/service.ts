@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ODictMethod } from "./fb";
+import { ODictMethod } from "./__generated__";
 
 type ProcessWrapper = {
   run: (method: ODictMethod, buffer?: Uint8Array) => Promise<string>;

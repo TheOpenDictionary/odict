@@ -1,13 +1,13 @@
 import { Builder } from "flatbuffers";
 
-import { CompilePayload } from "./fb/compile-payload.js";
+import { CompilePayload } from "./__generated__/compile-payload.js";
 import {
   LookupPayload,
   SearchPayload,
   SplitPayload,
   WritePayload,
-} from "./fb/index.js";
-import { ODictMethod } from "./fb/odict-method.js";
+} from "./__generated__/index.js";
+import { ODictMethod } from "./__generated__/odict-method.js";
 import { startService } from "./service.js";
 import type {
   DictionaryOptions,

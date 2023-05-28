@@ -1,3 +1,5 @@
+import { POS } from "./__generated__";
+
 export type Query = { word: string; fallback: string } | string;
 
 export interface DictionaryOptions {
@@ -45,3 +47,12 @@ export interface Group {
   description: string;
   definitions: Definition[];
 }
+
+export const PartOfSpeech = Object.entries(POS).reduce((acc, [key, value]) => {
+  const t = POS[POS.det];
+
+  if (typeof value === "number") {
+    acc[key as keyof typeof POS] = key;
+  }
+  return acc;
+}, {} as Record<keyof typeof POS, string>);

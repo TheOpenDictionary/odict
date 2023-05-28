@@ -2,7 +2,10 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@build: (cli "build")
+@deps: 
+  go install golang.org/x/tools/cmd/goimports@latest
+
+@build: deps (cli "build")
 
 @run +args="": (cli "run" args)
 

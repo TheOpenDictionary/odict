@@ -4,6 +4,7 @@ package cli
 
 import (
 	"strconv"
+
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
@@ -132,6 +133,7 @@ func LookupPayloadStartQueriesVector(builder *flatbuffers.Builder, numElems int)
 func LookupPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
+
 type WritePayload struct {
 	_tab flatbuffers.Table
 }
@@ -187,6 +189,7 @@ func WritePayloadAddOut(builder *flatbuffers.Builder, out flatbuffers.UOffsetT) 
 func WritePayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
+
 type SplitPayload struct {
 	_tab flatbuffers.Table
 }
@@ -246,6 +249,7 @@ func SplitPayloadAddQuery(builder *flatbuffers.Builder, query flatbuffers.UOffse
 func SplitPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
+
 type SearchPayload struct {
 	_tab flatbuffers.Table
 }
@@ -320,6 +324,7 @@ func SearchPayloadAddQuery(builder *flatbuffers.Builder, query flatbuffers.UOffs
 func SearchPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
+
 type CompilePayload struct {
 	_tab flatbuffers.Table
 }

@@ -1,5 +1,5 @@
 @schema:
-	flatc -g --gen-onefile --go-namespace types -o ./types ../schema.fbs
+	flatc -g --gen-onefile --go-namespace types -o ./types ../flatbuffers/schema.fbs ../flatbuffers/enums.fbs && goimports -w ./types/*.go
 
 test:
   just ../cli/build

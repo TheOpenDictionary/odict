@@ -3,11 +3,6 @@ module github.com/TheOpenDictionary/odict/cli
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230527001433-6d86f8af279a
-	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230527001433-6d86f8af279a
-	github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230527001433-6d86f8af279a
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230527001433-6d86f8af279a
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230527001433-6d86f8af279a
 	github.com/fatih/color v1.15.0
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/urfave/cli/v2 v2.25.3
@@ -50,8 +45,9 @@ require (
 	github.com/schollz/progressbar/v3 v3.13.1 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
-	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/mod v0.10.0 // indirect
+	golang.org/x/sync v0.2.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/term v0.6.0 // indirect
-	golang.org/x/tools v0.7.0 // indirect
+	golang.org/x/tools v0.9.1 // indirect
 )

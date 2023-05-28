@@ -5,7 +5,7 @@ clean:
   rm -rf coverage dist 
 
 @schema:
-  flatc --ts --gen-onefile -o ./src/fb ../service.fbs
+  flatc --ts -o ./src/__generated__ ../flatbuffers/service.fbs ../flatbuffers/enums.fbs
 
 build: install
   npm run build
