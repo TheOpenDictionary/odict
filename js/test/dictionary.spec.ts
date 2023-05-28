@@ -38,6 +38,20 @@ describe("Dictionary", () => {
     expect(result[0].length).toBe(0);
   });
 
+  it("works with parallelization", async () => {
+    const result = await Promise.all([
+      dict1.lookup("dog"),
+      dict1.lookup("run"),
+      dict1.lookup("cat"),
+      dict1.lookup("poo"),
+    ]);
+
+    expect(JSON.stringify(result[0])).toContain("dog");
+    expect(JSON.stringify(result[1])).toContain("run");
+    expect(JSON.stringify(result[2])).toContain("cat");
+    expect(JSON.stringify(result[3])).toContain("poo");
+  });
+
   it("can return the lexicon", async () => {
     const result = await dict1.lexicon();
     expect(result).toStrictEqual(["cat", "dog", "poo", "run"]);

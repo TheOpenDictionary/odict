@@ -118,12 +118,10 @@ class Dictionary {
 
         builder.finish(payload);
 
-        const response = await startService(this.path).run(
+        return startService(this.path).run<Entry[]>(
           ODictMethod.Search,
           builder.asUint8Array()
         );
-
-        return JSON.parse(response) as Entry[];
       })
     );
   }
@@ -134,8 +132,7 @@ class Dictionary {
    * @returns A list of all headwords in the dictionary
    */
   async lexicon(): Promise<string[]> {
-    const lexicon = await startService(this.path).run(ODictMethod.Lexicon);
-    return lexicon.toString().trim().split("\n");
+    return startService(this.path).run<string[]>(ODictMethod.Lexicon);
   }
 
   /**
@@ -170,9 +167,10 @@ class Dictionary {
 
     builder.finish(payload);
 
-    return startService(this.path)
-      .run(ODictMethod.Lookup, builder.asUint8Array())
-      .then(JSON.parse);
+    return startService(this.path).run<Entry[][]>(
+      ODictMethod.Lookup,
+      builder.asUint8Array()
+    );
   }
 
   /**
@@ -194,12 +192,10 @@ class Dictionary {
 
     builder.finish(payload);
 
-    const result = await startService(this.path).run(
+    return startService(this.path).run<Entry[]>(
       ODictMethod.Split,
       builder.asUint8Array()
     );
-
-    return JSON.parse(result);
   }
 }
 
