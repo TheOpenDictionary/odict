@@ -9,7 +9,7 @@
 
 @run +args="": (cli "run" args)
 
-@test: (go "test") (jvm "test") (python "test") (js "test")
+@test: deps (go "test") (jvm "test") (python "test") (js "test")
 
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
