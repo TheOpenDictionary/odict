@@ -3,9 +3,10 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { ODictMethod } from "./__generated__";
+import { IPC } from "./ipc";
 
 type ProcessWrapper = {
-  run: (method: ODictMethod, buffer?: Uint8Array) => Promise<string>;
+  run: <T>(method: ODictMethod, buffer?: Uint8Array) => Promise<T>;
   stop: () => void;
 };
 
@@ -20,6 +21,12 @@ process.on("beforeExit", () => {
   teardownServices();
 });
 
+function getExecutablePath() {
+  return process.env.RUNTIME_ENV === "test"
+    ? join(fileURLToPath(import.meta.url), "../../../bin/odict")
+    : "odict";
+}
+
 /**
  * Executes the ODict binary
  *
@@ -27,76 +34,70 @@ process.on("beforeExit", () => {
  * @returns The raw stdout output string
  */
 export function startService(dictionaryPath?: string) {
-  if (dictionaryPath && openDictionaries.has(dictionaryPath)) {
-    return openDictionaries.get(dictionaryPath) as ProcessWrapper;
+  const cacheKey = dictionaryPath ?? "shared";
+
+  if (openDictionaries.has(cacheKey)) {
+    return openDictionaries.get(cacheKey) as ProcessWrapper;
   }
 
-  let executable = "odict";
+  const executable = getExecutablePath();
+  const ipc = new IPC(executable);
 
-  if (process.env.RUNTIME_ENV === "test") {
-    executable = join(fileURLToPath(import.meta.url), "../../../bin/odict");
-  }
-
-  const service = spawn(executable, ["service", dictionaryPath ?? ""], {
-    windowsHide: true,
-    stdio: ["pipe", "pipe", "inherit"],
-    cwd: process.cwd(),
-  });
+  ipc.init(["service", dictionaryPath ?? ""]);
 
   function stop() {
-    service?.stdin.end();
-    service?.kill();
+    ipc.kill();
   }
-
-  service.on("exit", () => {
-    if (dictionaryPath) {
-      openDictionaries.delete(dictionaryPath);
-    }
-  });
-
-  service.on("disconnect", () => {
-    if (dictionaryPath) {
-      openDictionaries.delete(dictionaryPath);
-    }
-  });
 
   const processWrapper: ProcessWrapper = {
     stop,
     run(method, payload) {
       return new Promise((resolve, reject) => {
-        service.stdin.write(
-          `${method};${
-            payload ? Buffer.from(payload).toString("base64") : ""
-          }\n`
+        ipc.sendAndReceive(
+          ODictMethod[method],
+          payload ? Buffer.from(payload).toString("base64") : "",
+          (err, data) => (err ? reject(err) : resolve(data))
         );
-
-        let outBuffer = "";
-
-        service.stdout.on("data", (data) => {
-          outBuffer += data.toString();
-
-          if (outBuffer.endsWith("EOF")) {
-            outBuffer = outBuffer.slice(0, -3);
-
-            // Kill service if we aren't opening to a dictionary
-            if (!dictionaryPath) {
-              stop();
-            }
-
-            resolve(outBuffer);
-          }
-        });
-
-        service.once("error", (error) => {
-          reject(error);
-        });
+        // service.stdin.write(
+        //   `${method};${
+        //     payload ? Buffer.from(payload).toString("base64") : ""
+        //   }\n`
+        // );
+        // let outBuffer = "";
+        // function handleError(error: Error) {
+        //   reject(error);
+        // }
+        // function cleanupListeners() {
+        //   service.stdout.removeListener("data", buildBuffer);
+        //   service.removeListener("error", handleError);
+        // }
+        // function buildBuffer(data: any) {
+        //   outBuffer += data.toString();
+        //   if (outBuffer.endsWith("EOF\n")) {
+        //     outBuffer = outBuffer.slice(0, -4);
+        //     // Kill service if we aren't opening to a dictionary
+        //     if (!dictionaryPath) {
+        //       stop();
+        //     }
+        //     cleanupListeners();
+        //     console.log(
+        //       "event listener removed!",
+        //       service.stdout.listenerCount("data")
+        //     );
+        //     resolve(outBuffer);
+        //   }
+        // }
+        // service.stdout.on("data", buildBuffer);
+        // console.log(
+        //   "event listener added!",
+        //   service.stdout.listenerCount("data")
+        // );
+        // service.once("error", handleError);
       });
     },
   };
 
-  if (dictionaryPath) {
-    openDictionaries.set(dictionaryPath, processWrapper);
-  }
+  openDictionaries.set(cacheKey, processWrapper);
 
   return processWrapper;
 }

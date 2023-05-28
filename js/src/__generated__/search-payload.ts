@@ -20,37 +20,48 @@ static getSizePrefixedRootAsSearchPayload(bb:flatbuffers.ByteBuffer, obj?:Search
   return (obj || new SearchPayload()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 }
 
-force():boolean {
+id():string|null
+id(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+id(optionalEncoding?:any):string|Uint8Array|null {
   const offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+}
+
+force():boolean {
+  const offset = this.bb!.__offset(this.bb_pos, 6);
   return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
 }
 
 exact():boolean {
-  const offset = this.bb!.__offset(this.bb_pos, 6);
+  const offset = this.bb!.__offset(this.bb_pos, 8);
   return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
 }
 
 query():string|null
 query(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
 query(optionalEncoding?:any):string|Uint8Array|null {
-  const offset = this.bb!.__offset(this.bb_pos, 8);
+  const offset = this.bb!.__offset(this.bb_pos, 10);
   return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
 }
 
 static startSearchPayload(builder:flatbuffers.Builder) {
-  builder.startObject(3);
+  builder.startObject(4);
+}
+
+static addId(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, idOffset, 0);
 }
 
 static addForce(builder:flatbuffers.Builder, force:boolean) {
-  builder.addFieldInt8(0, +force, +false);
+  builder.addFieldInt8(1, +force, +false);
 }
 
 static addExact(builder:flatbuffers.Builder, exact:boolean) {
-  builder.addFieldInt8(1, +exact, +false);
+  builder.addFieldInt8(2, +exact, +false);
 }
 
 static addQuery(builder:flatbuffers.Builder, queryOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(2, queryOffset, 0);
+  builder.addFieldOffset(3, queryOffset, 0);
 }
 
 static endSearchPayload(builder:flatbuffers.Builder):flatbuffers.Offset {
@@ -58,8 +69,9 @@ static endSearchPayload(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 }
 
-static createSearchPayload(builder:flatbuffers.Builder, force:boolean, exact:boolean, queryOffset:flatbuffers.Offset):flatbuffers.Offset {
+static createSearchPayload(builder:flatbuffers.Builder, idOffset:flatbuffers.Offset, force:boolean, exact:boolean, queryOffset:flatbuffers.Offset):flatbuffers.Offset {
   SearchPayload.startSearchPayload(builder);
+  SearchPayload.addId(builder, idOffset);
   SearchPayload.addForce(builder, force);
   SearchPayload.addExact(builder, exact);
   SearchPayload.addQuery(builder, queryOffset);

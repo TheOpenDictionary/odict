@@ -38,6 +38,16 @@ describe("Dictionary", () => {
     expect(result[0].length).toBe(0);
   });
 
+  it.only("works with parallelization", async () => {
+    const result = await Promise.all([
+      dict1.lookup("dog"),
+      dict1.lookup("run"),
+    ]);
+    console.log(JSON.stringify(result));
+    expect(JSON.stringify(result[0])).toContain("dog");
+    expect(JSON.stringify(result[1])).toContain("run");
+  });
+
   it("can return the lexicon", async () => {
     const result = await dict1.lexicon();
     expect(result).toStrictEqual(["cat", "dog", "poo", "run"]);

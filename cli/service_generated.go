@@ -74,8 +74,16 @@ func (rcv *LookupPayload) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *LookupPayload) Follow() bool {
+func (rcv *LookupPayload) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *LookupPayload) Follow() bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
@@ -83,11 +91,11 @@ func (rcv *LookupPayload) Follow() bool {
 }
 
 func (rcv *LookupPayload) MutateFollow(n bool) bool {
-	return rcv._tab.MutateBoolSlot(4, n)
+	return rcv._tab.MutateBoolSlot(6, n)
 }
 
 func (rcv *LookupPayload) Split() int32 {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.GetInt32(o + rcv._tab.Pos)
 	}
@@ -95,11 +103,11 @@ func (rcv *LookupPayload) Split() int32 {
 }
 
 func (rcv *LookupPayload) MutateSplit(n int32) bool {
-	return rcv._tab.MutateInt32Slot(6, n)
+	return rcv._tab.MutateInt32Slot(8, n)
 }
 
 func (rcv *LookupPayload) Queries(j int) []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
 		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
@@ -108,7 +116,7 @@ func (rcv *LookupPayload) Queries(j int) []byte {
 }
 
 func (rcv *LookupPayload) QueriesLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -116,16 +124,19 @@ func (rcv *LookupPayload) QueriesLength() int {
 }
 
 func LookupPayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
+}
+func LookupPayloadAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func LookupPayloadAddFollow(builder *flatbuffers.Builder, follow bool) {
-	builder.PrependBoolSlot(0, follow, false)
+	builder.PrependBoolSlot(1, follow, false)
 }
 func LookupPayloadAddSplit(builder *flatbuffers.Builder, split int32) {
-	builder.PrependInt32Slot(1, split, 0)
+	builder.PrependInt32Slot(2, split, 0)
 }
 func LookupPayloadAddQueries(builder *flatbuffers.Builder, queries flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(queries), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(queries), 0)
 }
 func LookupPayloadStartQueriesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
@@ -161,7 +172,7 @@ func (rcv *WritePayload) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *WritePayload) Xml() []byte {
+func (rcv *WritePayload) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -169,7 +180,7 @@ func (rcv *WritePayload) Xml() []byte {
 	return nil
 }
 
-func (rcv *WritePayload) Out() []byte {
+func (rcv *WritePayload) Xml() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -177,14 +188,25 @@ func (rcv *WritePayload) Out() []byte {
 	return nil
 }
 
+func (rcv *WritePayload) Out() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func WritePayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
+}
+func WritePayloadAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func WritePayloadAddXml(builder *flatbuffers.Builder, xml flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(xml), 0)
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(xml), 0)
 }
 func WritePayloadAddOut(builder *flatbuffers.Builder, out flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(out), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(out), 0)
 }
 func WritePayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
@@ -217,8 +239,16 @@ func (rcv *SplitPayload) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *SplitPayload) Threshold() int32 {
+func (rcv *SplitPayload) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *SplitPayload) Threshold() int32 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetInt32(o + rcv._tab.Pos)
 	}
@@ -226,11 +256,11 @@ func (rcv *SplitPayload) Threshold() int32 {
 }
 
 func (rcv *SplitPayload) MutateThreshold(n int32) bool {
-	return rcv._tab.MutateInt32Slot(4, n)
+	return rcv._tab.MutateInt32Slot(6, n)
 }
 
 func (rcv *SplitPayload) Query() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -238,13 +268,16 @@ func (rcv *SplitPayload) Query() []byte {
 }
 
 func SplitPayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
+}
+func SplitPayloadAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func SplitPayloadAddThreshold(builder *flatbuffers.Builder, threshold int32) {
-	builder.PrependInt32Slot(0, threshold, 0)
+	builder.PrependInt32Slot(1, threshold, 0)
 }
 func SplitPayloadAddQuery(builder *flatbuffers.Builder, query flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(query), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(query), 0)
 }
 func SplitPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
@@ -277,19 +310,15 @@ func (rcv *SearchPayload) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *SearchPayload) Force() bool {
+func (rcv *SearchPayload) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetBool(o + rcv._tab.Pos)
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
-	return false
+	return nil
 }
 
-func (rcv *SearchPayload) MutateForce(n bool) bool {
-	return rcv._tab.MutateBoolSlot(4, n)
-}
-
-func (rcv *SearchPayload) Exact() bool {
+func (rcv *SearchPayload) Force() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.GetBool(o + rcv._tab.Pos)
@@ -297,12 +326,24 @@ func (rcv *SearchPayload) Exact() bool {
 	return false
 }
 
-func (rcv *SearchPayload) MutateExact(n bool) bool {
+func (rcv *SearchPayload) MutateForce(n bool) bool {
 	return rcv._tab.MutateBoolSlot(6, n)
 }
 
-func (rcv *SearchPayload) Query() []byte {
+func (rcv *SearchPayload) Exact() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
+	}
+	return false
+}
+
+func (rcv *SearchPayload) MutateExact(n bool) bool {
+	return rcv._tab.MutateBoolSlot(8, n)
+}
+
+func (rcv *SearchPayload) Query() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -310,16 +351,19 @@ func (rcv *SearchPayload) Query() []byte {
 }
 
 func SearchPayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
+}
+func SearchPayloadAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func SearchPayloadAddForce(builder *flatbuffers.Builder, force bool) {
-	builder.PrependBoolSlot(0, force, false)
+	builder.PrependBoolSlot(1, force, false)
 }
 func SearchPayloadAddExact(builder *flatbuffers.Builder, exact bool) {
-	builder.PrependBoolSlot(1, exact, false)
+	builder.PrependBoolSlot(2, exact, false)
 }
 func SearchPayloadAddQuery(builder *flatbuffers.Builder, query flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(query), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(query), 0)
 }
 func SearchPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
@@ -352,7 +396,7 @@ func (rcv *CompilePayload) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *CompilePayload) Path() []byte {
+func (rcv *CompilePayload) Id() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -360,7 +404,7 @@ func (rcv *CompilePayload) Path() []byte {
 	return nil
 }
 
-func (rcv *CompilePayload) Out() []byte {
+func (rcv *CompilePayload) Path() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -368,14 +412,25 @@ func (rcv *CompilePayload) Out() []byte {
 	return nil
 }
 
+func (rcv *CompilePayload) Out() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
 func CompilePayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(2)
+	builder.StartObject(3)
+}
+func CompilePayloadAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
 func CompilePayloadAddPath(builder *flatbuffers.Builder, path flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(path), 0)
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(path), 0)
 }
 func CompilePayloadAddOut(builder *flatbuffers.Builder, out flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(out), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(out), 0)
 }
 func CompilePayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
