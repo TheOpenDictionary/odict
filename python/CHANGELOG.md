@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.4.0...python-v0.5.0) (2023-05-28)
+
+
+### Features
+
+* **js:** add part of speech enum to js package ([0fdd9bc](https://github.com/TheOpenDictionary/odict/commit/0fdd9bc073a20769a6bb80939290a8981d526920))
+
 ## [0.4.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.3.0...python-v0.4.0) (2023-05-19)
 
 
