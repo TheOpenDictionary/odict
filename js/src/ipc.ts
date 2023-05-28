@@ -119,6 +119,7 @@ export class IPC extends EventEmitter {
       this.send("___EXIT___", null);
       this.closed = true;
       this.go?.kill();
+      this.emit("killed");
     } catch (error) {
       console.log(error);
     }

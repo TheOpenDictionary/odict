@@ -29,7 +29,7 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
-  it.only("restarts if the process was killed", async () => {
+  it("restarts if the process was killed", async () => {
     const result1 = await dict1.lookup({
       word: "dog",
       fallback: "dog",
