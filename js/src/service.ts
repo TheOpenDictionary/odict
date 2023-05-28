@@ -42,9 +42,12 @@ export function startService(dictionaryPath?: string) {
   }
 
   const executable = getExecutablePath();
+
   const ipc = new IPC(executable);
 
   ipc.init(["service", dictionaryPath ?? ""]);
+
+  ipc.on("close", () => openDictionaries.delete(cacheKey));
 
   function stop() {
     ipc.kill();

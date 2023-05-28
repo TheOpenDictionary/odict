@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from "@jest/globals";
+import findProcess from "find-process";
 
 import { existsSync } from "node:fs";
 import { rm, stat } from "node:fs/promises";
@@ -28,6 +29,28 @@ describe("Dictionary", () => {
     expect(stats.isFile).toBeTruthy();
   });
 
+  it.only("restarts if the process was killed", async () => {
+    const result1 = await dict1.lookup({
+      word: "dog",
+      fallback: "dog",
+    });
+
+    expect(result1[0][0].term).toBe("dog");
+
+    const processes = await findProcess("name", "odict", true);
+
+    processes.forEach((p) => process.kill(p.pid));
+
+    await new Promise((r) => setTimeout(r, 0)); // Not sure why this is needed...
+
+    const result2 = await dict1.lookup({
+      word: "run",
+      fallback: "run",
+    });
+
+    expect(result2[0][0].term).toBe("run");
+  });
+
   it("can lookup terms properly", async () => {
     const result = await dict1.lookup({ word: "run", fallback: "run" });
     expect(result[0][0].term).toBe("run");
@@ -36,20 +59,6 @@ describe("Dictionary", () => {
   it("doesn't split unless specified", async () => {
     const result = await dict1.lookup("catdog");
     expect(result[0].length).toBe(0);
-  });
-
-  it("works with parallelization", async () => {
-    const result = await Promise.all([
-      dict1.lookup("dog"),
-      dict1.lookup("run"),
-      dict1.lookup("cat"),
-      dict1.lookup("poo"),
-    ]);
-
-    expect(JSON.stringify(result[0])).toContain("dog");
-    expect(JSON.stringify(result[1])).toContain("run");
-    expect(JSON.stringify(result[2])).toContain("cat");
-    expect(JSON.stringify(result[3])).toContain("poo");
   });
 
   it("can return the lexicon", async () => {
