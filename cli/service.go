@@ -140,7 +140,11 @@ func service(c *cli.Context) error {
 
 		// Compile
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodCompile], func(reply replyChannel, payload interface{}) {
-			ipc.Reply(reply, "Sup Node", nil)
+			if buf, ok := decodePayload(payload); ok {
+				payload := GetRootAsCompilePayload(buf, 0)
+				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
+				ipc.Reply(reply, true, nil)
+			}
 		})
 
 	}()
