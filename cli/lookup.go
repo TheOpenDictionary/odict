@@ -30,9 +30,7 @@ func lookup(c *cli.Context) error {
 		entries := core.Lookup(request)
 
 		representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
-			return utils.Map(e, func(entry types.Entry) types.EntryRepresentable {
-				return entry.AsRepresentable()
-			})
+			return types.MapEntriesToRepresentable(e)
 		})
 
 		PrintEntries(representable, "json", true)

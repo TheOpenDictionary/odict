@@ -15,6 +15,8 @@ describe("Dictionary", () => {
 
     const compiled = await Dictionary.compile(xmlContents);
 
+    expect(compiled.length).toBeGreaterThan(0);
+
     await writeFile(
       new URL("../../examples/example1.odict", import.meta.url),
       compiled
@@ -25,7 +27,23 @@ describe("Dictionary", () => {
 
   it("can lookup words properly", async () => {
     const result = await dict1.lookup("run");
-    console.log(typeof result);
     expect(result[0][0].term).toBe("run");
+  });
+
+  it("returns a lexicon properly", async () => {
+    const result = await dict1.lexicon();
+    expect(result).toHaveLength(4);
+  });
+
+  it("can split terms during lookup", async () => {
+    const result = await dict1.lookup("catdog", { split: 3 });
+    expect(result[0][0].term).toBe("cat");
+    expect(result[0][1].term).toBe("dog");
+  });
+
+  it("can split terms properly", async () => {
+    const result = await dict1.split("catdog", 2);
+    expect(result[0].term).toBe("cat");
+    expect(result[1].term).toBe("dog");
   });
 });

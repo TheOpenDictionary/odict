@@ -1,4 +1,4 @@
-import { polyfillCrypto } from "./polyfill.js";
+import { polyfill } from "./polyfill.js";
 
 let wasmURL: string;
 
@@ -33,12 +33,10 @@ export const getService = (() => {
       return service;
     }
 
-    await polyfillCrypto();
+    await polyfill();
 
-    // @ts-ignore
-    await import("./wasm_exec.js");
+    require("./wasm_exec.js");
 
-    // @ts-ignore
     const go = new Go();
 
     const result = await loadWASM(go.importObject);

@@ -1,5 +1,5 @@
 import { getService } from "./service";
-import type { Entry, LookupOptions, Query, WordWithFallback } from "./types";
+import type { Entry, LookupOptions, Query } from "./types";
 
 export class Dictionary {
   private constructor(
@@ -9,13 +9,13 @@ export class Dictionary {
 
   static async load(name: string, data: ArrayBuffer) {
     const service = await getService();
-    await service.loadDictionary(name, data);
+    await service.load(name, data);
     return new Dictionary(name, service);
   }
 
-  static async compile(xml: string) {
+  static async compile(xml: string): Promise<Uint8Array> {
     const service = await getService();
-    return service.compileXML(xml);
+    return service.compile(xml);
   }
 
   lookup(
@@ -25,7 +25,7 @@ export class Dictionary {
     const queries = Array.isArray(words) ? words : [words];
 
     return JSON.parse(
-      this.service.lookupWord(
+      this.service.lookup(
         this.name,
         queries.map((query) => {
           return typeof query === "string"
@@ -38,7 +38,11 @@ export class Dictionary {
     );
   }
 
-  lexicon() {
-    return JSON.parse(this.service.getLexicon(this.name));
+  lexicon(): string[] {
+    return JSON.parse(this.service.lexicon(this.name));
+  }
+
+  split(query: string, threshold: number): Entry[] {
+    return JSON.parse(this.service.split(this.name, query, threshold));
   }
 }

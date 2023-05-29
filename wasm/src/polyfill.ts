@@ -1,4 +1,4 @@
-export async function polyfillCrypto() {
+export async function polyfill() {
   if (!globalThis.crypto) {
     const crypto = await import("crypto");
     Object.defineProperty(globalThis, "crypto", {

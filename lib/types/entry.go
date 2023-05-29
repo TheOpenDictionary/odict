@@ -69,3 +69,9 @@ func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Build
 
 	return builder.EndVector(etymologiesCount)
 }
+
+func MapEntriesToRepresentable(e []Entry) []EntryRepresentable {
+	return utils.Map(e, func(entry Entry) EntryRepresentable {
+		return entry.AsRepresentable()
+	})
+}

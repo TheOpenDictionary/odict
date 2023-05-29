@@ -4,7 +4,7 @@
 
 [private]
 @wasm:
-  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/main.go && cp ./src/odict.wasm ./dist/odict.wasm
+  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/odict.go && cp ./src/odict.wasm ./dist/odict.wasm
 
 @install:
   npm install 
