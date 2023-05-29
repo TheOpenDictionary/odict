@@ -10,7 +10,8 @@ require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230528005640-810e6f7b0a77
 	github.com/fatih/color v1.15.0
 	github.com/google/flatbuffers v23.5.26+incompatible
-	github.com/urfave/cli/v2 v2.25.4
+	github.com/google/uuid v1.3.0
+	github.com/urfave/cli/v2 v2.25.5
 )
 
 require (
@@ -38,7 +39,6 @@ require (
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
