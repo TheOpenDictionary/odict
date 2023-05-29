@@ -1,6 +1,8 @@
 import { POS } from "./__generated__";
 
-export type Query = { word: string; fallback: string } | string;
+export type WordWithFallback = { word: string; fallback: string };
+
+export type Query = WordWithFallback | string;
 
 export interface DictionaryOptions {
   defaultSplitThreshold?: number;

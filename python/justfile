@@ -1,12 +1,12 @@
 install: update
 	poetry install 
 
-test: install
+test: install && clean
   just ../cli/build
   RUNTIME_ENV=test poetry run pytest ./theopendictionary
 
 clean:
-  rm -rf *.odict .pytest_cache **/__pycache__ **/*.pyc
+  rm -rf *.odict ../**/*.odict .pytest_cache **/__pycache__ **/*.pyc
 
 update:
 	poetry update 

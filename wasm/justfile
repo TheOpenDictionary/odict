@@ -1,9 +1,24 @@
 [private]
-copy-exec:
-  mkdir -p ./src/__generated__ && cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./src/__generated__/
+@copy-exec:
+  cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./src
 
-install:
+[private]
+@wasm:
+  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/main.go && cp ./src/odict.wasm ./dist/odict.wasm
+
+@install:
   npm install 
 
-build: copy-exec install
-  GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/main.go && npm run build
+@preview: build
+  npx parcel --dist-dir=.preview demo.html --open && cp ./src/odict.wasm ./.preview/odict.wasm
+
+@clean:
+  rm -rf ../**/*.odict 
+
+@test: copy-exec install wasm && clean
+  npx tsc && npx jest --detectOpenHandles
+
+@build: copy-exec install wasm
+  just ../js/schema
+  cp -r ../js/src/types.ts ../js/src/__generated__ ./src
+  npx concurrently "swc -d dist ./src/*.{ts,js} ./src/**/*.{ts,js}" "tsc"

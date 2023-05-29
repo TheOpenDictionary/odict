@@ -2,7 +2,7 @@ install:
 	npm install
 
 clean:
-  rm -rf coverage dist 
+  rm -rf coverage dist ../**/*.odict 
 
 @schema:
   flatc --ts -o ./src/__generated__ ../flatbuffers/service.fbs ../flatbuffers/enums.fbs
@@ -10,7 +10,7 @@ clean:
 build: install
   npm run build
 
-@test: install
+@test: install && clean
   just ../cli/build
   RUNTIME_ENV=test npm run test
 

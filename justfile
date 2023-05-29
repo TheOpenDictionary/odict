@@ -12,7 +12,6 @@
 @test: deps (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
-  rm -rf **/*.odict 
 
 @schema: (go "schema") (cli "schema") (js "schema")
 

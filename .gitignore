@@ -748,5 +748,8 @@ TSWLatexianTemp*
 # glossaries
 *.glstex
 
-__generated__
+# WASM files
 *.wasm
+
+# WASM preview
+.preview

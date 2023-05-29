@@ -1,19 +1,28 @@
 {
-  "name": "@theopendictionary/browser",
+  "name": "@theopendictionary/wasm",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "parcel src/example.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "main": "./dist/index.js",
+  "type": "module",
+  "author": "Tyler Nickerson <nickersoft@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@swc/core": "^1.3.60",
+    "@swc/jest": "^0.2.26",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/golang-wasm-exec": "^1.15.0",
-    "parcel": "^2.8.3",
+    "buffer": "^6.0.3",
+    "concurrently": "^8.0.1",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "jest": "^29.5.0",
+    "parcel": "^2.9.1",
     "prettier": "^2.8.7",
-    "typescript": "^5.0.3",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0"
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "swc": "^1.0.11",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.3"
   }
 }
