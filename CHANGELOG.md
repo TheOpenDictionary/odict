@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.1](https://github.com/TheOpenDictionary/odict/compare/v1.13.0...v1.13.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* attempt to fix tests ([eda588a](https://github.com/TheOpenDictionary/odict/commit/eda588ae0e6b9c971df3bee4c2d598d9a95a22e8))
+* **js:** fix test ([0487c39](https://github.com/TheOpenDictionary/odict/commit/0487c39c173fdd52c35c5f959ddc4c2d23cd40af))
+* **js:** restart process if there are unexpected exits ([388176c](https://github.com/TheOpenDictionary/odict/commit/388176c60145ba1ba02ca4dc3a54c8fb3a688b68))
+
 ## [1.13.0](https://github.com/TheOpenDictionary/odict/compare/v1.12.1...v1.13.0) (2023-05-28)
 
 
