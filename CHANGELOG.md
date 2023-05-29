@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.13.2](https://github.com/TheOpenDictionary/odict/compare/v1.13.1...v1.13.2) (2023-05-29)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/bokwoon95/sq to v0.3.5 ([c424360](https://github.com/TheOpenDictionary/odict/commit/c424360ed8bd9dfb2989a542a45b0c560b4be204))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.5 ([640fac8](https://github.com/TheOpenDictionary/odict/commit/640fac815821be72bdcfba7e70055228e7c9b05c))
+* **js:** fix broken compilation ([741c236](https://github.com/TheOpenDictionary/odict/commit/741c236d537cb1eaacc728ae4bcddad5664fee42))
+
 ## [1.13.1](https://github.com/TheOpenDictionary/odict/compare/v1.13.0...v1.13.1) (2023-05-29)
 
 
