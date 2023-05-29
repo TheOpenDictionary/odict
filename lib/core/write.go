@@ -1,11 +1,10 @@
 package core
 
 import (
-	"bufio"
 	"encoding/xml"
 	"fmt"
 	"html"
-	"os"
+	"io/ioutil"
 	"regexp"
 	"strconv"
 
@@ -39,47 +38,54 @@ func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
 	return dictionary
 }
 
-func WriteDictionaryFromExisting(outputPath string, dictionary types.DictionaryRepresentable) int {
+func writeBytesToFile(outputPath string, data []byte) error {
+	err := ioutil.WriteFile(outputPath, data, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func serializeDictionary(dictionary types.DictionaryRepresentable) []byte {
 	dictionaryBytes := types.Serialize(&dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
-	file, err := os.Create(outputPath)
 	versionInt, parseErr := strconv.Atoi(version)
 
-	utils.Check(err)
 	utils.Check(parseErr)
-
-	defer file.Close()
 
 	signature := []byte("ODICT")
 	version := utils.Uint16ToBytes(uint16(versionInt))
 	compressedSize := uint64(len(compressed))
 	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
+	totalSize := len(signature) + len(version) + len(compressedSizeBytes) + len(compressed)
 
-	writer := bufio.NewWriter(file)
+	output := make([]byte, 0, totalSize)
 
-	sigBytes, sigErr := writer.Write(signature)
-	versionBytes, versionErr := writer.Write(version)
-	contentSizeBytes, contentCountErr := writer.Write(compressedSizeBytes)
-	contentBytes, contentErr := writer.Write(compressed)
-	total := sigBytes + versionBytes + contentSizeBytes + contentBytes
+	output = append(output, signature...)
+	output = append(output, version...)
+	output = append(output, compressedSizeBytes...)
+	output = append(output, compressed...)
 
-	utils.Check(sigErr)
-	utils.Check(versionErr)
-	utils.Check(contentCountErr)
-	utils.Check(contentErr)
+	utils.Assert(len(signature) == 5, "Signature bytes do not equal 5")
+	utils.Assert(len(version) == 2, "Version bytes do not equal 2")
+	utils.Assert(len(compressedSizeBytes) == 8, "Content byte count does not equal 8")
+	utils.Assert(len(compressed) == int(compressedSize), "Content does not equal the computed byte count")
 
-	utils.Assert(sigBytes == 5, "Signature bytes do not equal 5")
-	utils.Assert(versionBytes == 2, "Version bytes do not equal 2")
-	utils.Assert(contentSizeBytes == 8, "Content byte count does not equal 8")
-	utils.Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
+	return output
+}
 
-	writer.Flush()
-
-	return total
+func WriteDictionaryToDisk(outputPath string, dictionary types.DictionaryRepresentable) error {
+	return writeBytesToFile(outputPath, serializeDictionary(dictionary))
 }
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionaryFromXML(xmlStr, outputPath string) int {
-	return WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
+func WriteDictionaryFromXML(xmlStr, outputPath string) error {
+	return WriteDictionaryToDisk(outputPath, xmlToDictionaryRepresentable(xmlStr))
+}
+
+func GetDictionaryBytesFromXML(xmlStr string) []byte {
+	return serializeDictionary(xmlToDictionaryRepresentable(xmlStr))
 }

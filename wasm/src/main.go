@@ -21,6 +21,17 @@ func jsArrayToGo(jsArray js.Value) []string {
 	return goArray
 }
 
+func byteArrayToJS(data []byte) js.Value {
+	length := len(data)
+	uint8Array := js.Global().Get("Uint8Array").New(length)
+	arrayBuffer := uint8Array.Get("buffer")
+	buffer := js.Global().Get("Uint8Array").New(arrayBuffer)
+
+	js.CopyBytesToJS(buffer, data)
+
+	return uint8Array
+}
+
 func loadDictionary() js.Func {
 	loadFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
 		name := args[0].String()
@@ -51,9 +62,17 @@ func lookupWord() js.Func {
 
 		if dict, ok := dictMap[name]; ok {
 			queries := jsArrayToGo(args[1])
+
 			split := args[2].Int()
+
 			follow := args[3].Bool()
-			entries := core.Lookup(dict, queries, split, follow)
+
+			entries := core.Lookup(core.LookupRequest{
+				Dictionary: dict,
+				Queries:    queries,
+				Split:      split,
+				Follow:     follow,
+			})
 
 			representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
 				return utils.Map(e, func(entry types.Entry) types.EntryRepresentable {
@@ -61,7 +80,7 @@ func lookupWord() js.Func {
 				})
 			})
 
-			json := utils.SerializeToJSON(representable)
+			json := utils.SerializeToJSON(representable, false)
 
 			return js.ValueOf(json)
 		} else {
@@ -80,7 +99,7 @@ func getLexicon() js.Func {
 
 		if dict, ok := dictMap[name]; ok {
 			lexicon := core.Lexicon(dict)
-			return js.ValueOf(utils.SerializeToJSON(lexicon))
+			return js.ValueOf(utils.SerializeToJSON(lexicon, false))
 		} else {
 			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
 		}
@@ -91,24 +110,15 @@ func getLexicon() js.Func {
 	return lexiconFunc
 }
 
-// func compileXML() js.Func {
-// 	lexiconFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
-// 		name := args[0].String()
-// 		xml := args[0].String()
+func compileXML() js.Func {
+	compileFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
+		xml := args[0].String()
+		bytes := core.GetDictionaryBytesFromXML(xml)
+		return byteArrayToJS(bytes)
+	})
 
-// 		core.WriteDictionaryFromXML()
-// 		if dict, ok := dictMap[name]; ok {
-// 			lexicon := core.Lexicon(dict)
-// 			return js.ValueOf(utils.SerializeToJSON(lexicon))
-// 		} else {
-// 			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
-// 		}
-
-// 		return "[]"
-// 	})
-
-// 	return lexiconFunc
-// }
+	return compileFunc
+}
 
 func main() {
 	js.Global().Set("odict", js.ValueOf(make(map[string]interface{})))
@@ -116,5 +126,6 @@ func main() {
 	module.Set("loadDictionary", loadDictionary())
 	module.Set("lookupWord", lookupWord())
 	module.Set("getLexicon", getLexicon())
+	module.Set("compileXML", compileXML())
 	<-make(chan bool)
 }

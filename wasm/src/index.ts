@@ -1,6 +1,7 @@
 import "./__generated__/wasm_exec.js";
 import type { LookupOptions, Query } from "./types";
 
+// @ts-ignore
 const go = new Go();
 
 const getService = (() => {
@@ -34,6 +35,11 @@ export class Dictionary {
     const service = await getService();
     await service.loadDictionary(name, data);
     return new Dictionary(name, service);
+  }
+
+  static async compile(xml: string) {
+    const service = await getService();
+    return service.compileXML(xml);
   }
 
   lookup(

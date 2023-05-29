@@ -20,7 +20,7 @@ func merge(c *cli.Context) error {
 		dict1 := core.ReadDictionaryFromPath(inputFile1)
 		dict2 := core.ReadDictionaryFromPath(inputFile2)
 		result := core.MergeDictionaries(dict1, dict2)
-		core.WriteDictionaryFromExisting(outputFile, result)
+		core.WriteDictionaryToDisk(outputFile, result)
 	})
 
 	return nil

@@ -30,8 +30,10 @@
             return content;
           })
         );
-        console.log(allContent[0])
+        
         const dictionary = await Dictionary.load('eng', allContent[0]);
+
+        console.log(await Dictionary.compile("<dictionary><entry term=\"dog\"/></entry></dictionary>"));
         console.log(dictionary.lookup('dog'));
         console.log(dictionary.lexicon());
       };
