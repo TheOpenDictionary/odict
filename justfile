@@ -9,7 +9,7 @@
 
 @run +args="": (cli "run" args)
 
-@test: deps (go "test") (jvm "test") (python "test") (js "test") clean
+@test: deps (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
 
