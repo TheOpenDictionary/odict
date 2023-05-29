@@ -34,6 +34,11 @@ var App = &cli.App{
 			Action: compile,
 		},
 		{
+			Name:   "service",
+			Action: service,
+			Hidden: true,
+		},
+		{
 			Name:    "index",
 			Aliases: []string{"i"},
 			Usage:   "index a compiled dictionary",
@@ -60,7 +65,7 @@ var App = &cli.App{
 					Name:    "format",
 					Aliases: []string{"f"},
 					Usage:   "Output format of the entries.",
-					Value:   pp,
+					Value:   ppFormat,
 				},
 				&cli.BoolFlag{
 					Name:    "follow",

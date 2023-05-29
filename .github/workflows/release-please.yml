@@ -5,14 +5,12 @@ on:
      branches:
        - main
        
-permissions: {}
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release-please:
-    permissions:
-      contents: write # to create release commit (google-github-actions/release-please-action)
-      pull-requests: write # to create release PR (google-github-actions/release-please-action)
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3      

@@ -21,12 +21,20 @@ func split(c *cli.Context) error {
 
 	t(c, func() {
 		dict := core.ReadDictionaryFromPath(inputFile)
-		entries := core.Split(dict, searchTerm, threshold)
+
+		request := core.SplitRequest{
+			Dictionary: dict,
+			Query:      searchTerm,
+			Threshold:  threshold,
+		}
+
+		entries := core.Split(request)
+
 		representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 
-		fmt.Println(utils.SerializeToJSON(representable))
+		fmt.Print(utils.SerializeToJSON(representable, true))
 	})
 
 	return nil

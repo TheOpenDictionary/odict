@@ -4,5 +4,11 @@
     "config:base"
   ],
   "automerge": true,
-  "updateLockFiles": true
+  "updateLockFiles": true,
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["github.com/TheOpenDictionary/odict"],
+      "enabled": false
+    }
+  ] 
 }

@@ -24,9 +24,9 @@ var parentheticalRegex = regexp.MustCompile(`(\(.*?\))`)
 type PrintFormat = string
 
 const (
-	json PrintFormat = "json"
-	xml  PrintFormat = "xml"
-	pp   PrintFormat = "pp"
+	jsonFormat PrintFormat = "json"
+	xmlFormat  PrintFormat = "xml"
+	ppFormat   PrintFormat = "pp"
 )
 
 func ppExample(example string, underlined string, indent int) {
@@ -143,12 +143,12 @@ func prettyPrint(entries [][]types.EntryRepresentable) bool {
 	return hasEntries
 }
 
-func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat) {
+func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, indent bool) {
 	switch {
 	case format == "json":
-		fmt.Print(utils.SerializeToJSON(entries))
+		fmt.Print(utils.SerializeToJSON(entries, indent))
 	case format == "xml":
-		fmt.Print(utils.SerializeToXML(entries))
+		fmt.Print(utils.SerializeToXML(entries, indent))
 	case format == "pp":
 		if !prettyPrint(entries) {
 			fmt.Printf("No entries found!\n")

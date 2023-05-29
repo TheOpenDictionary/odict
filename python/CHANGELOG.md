@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.5.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.4.0...python-v0.5.0) (2023-05-28)
+
+
+### Features
+
+* **js:** add part of speech enum to js package ([0fdd9bc](https://github.com/TheOpenDictionary/odict/commit/0fdd9bc073a20769a6bb80939290a8981d526920))
+
+## [0.4.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.3.0...python-v0.4.0) (2023-05-19)
+
+
+### Features
+
+* **js:** communicate to CLI via long-running process ([#316](https://github.com/TheOpenDictionary/odict/issues/316)) ([1547d40](https://github.com/TheOpenDictionary/odict/commit/1547d409af52763dac16ab7cb3e11b7cb89609e2))
+* modularize Justfiles ([#187](https://github.com/TheOpenDictionary/odict/issues/187)) ([5b02037](https://github.com/TheOpenDictionary/odict/commit/5b0203772975518cb2428b36a7dbb7c050179937))
+
+
+### Bug Fixes
+
+* **dump:** remove unnecessary ODict dependencies ([a93c14c](https://github.com/TheOpenDictionary/odict/commit/a93c14cd108764c86ad2fa3b4c8fc721aaace0c7))
+* **python:** remove log statement ([cf78da9](https://github.com/TheOpenDictionary/odict/commit/cf78da92ca0e0a8cf164f5ca976ac18975f98f88))
+
 ## [0.3.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.2.0...python-v0.3.0) (2023-04-04)
 
 

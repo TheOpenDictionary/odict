@@ -1,5 +1,69 @@
 # Changelog
 
+## [0.5.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.5.0...js-v0.5.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* attempt to fix tests ([eda588a](https://github.com/TheOpenDictionary/odict/commit/eda588ae0e6b9c971df3bee4c2d598d9a95a22e8))
+* **js:** fix test ([0487c39](https://github.com/TheOpenDictionary/odict/commit/0487c39c173fdd52c35c5f959ddc4c2d23cd40af))
+* **js:** restart process if there are unexpected exits ([388176c](https://github.com/TheOpenDictionary/odict/commit/388176c60145ba1ba02ca4dc3a54c8fb3a688b68))
+
+## [0.5.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.4.1...js-v0.5.0) (2023-05-28)
+
+
+### Features
+
+* use IPC library for inter-process communication ([#344](https://github.com/TheOpenDictionary/odict/issues/344)) ([fc23307](https://github.com/TheOpenDictionary/odict/commit/fc2330771dcdbfe6358fa09f15f1cdf86bd4b9ab))
+
+## [0.4.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.4.0...js-v0.4.1) (2023-05-28)
+
+
+### Bug Fixes
+
+* **js:** remove log statements ([810e6f7](https://github.com/TheOpenDictionary/odict/commit/810e6f7b0a772cc0d58797f02ff4c962a9e98bcc))
+
+## [0.4.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.2...js-v0.4.0) (2023-05-28)
+
+
+### Features
+
+* **js:** add part of speech enum to js package ([0fdd9bc](https://github.com/TheOpenDictionary/odict/commit/0fdd9bc073a20769a6bb80939290a8981d526920))
+
+
+### Bug Fixes
+
+* **deps:** update dependency flatbuffers to v23.5.26 ([60b6baf](https://github.com/TheOpenDictionary/odict/commit/60b6baf51caaf8d835a5bc8d2c1c052926224364))
+
+## [0.3.2](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.1...js-v0.3.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* **js:** bug fixes with service implementation ([#325](https://github.com/TheOpenDictionary/odict/issues/325)) ([e76cb1c](https://github.com/TheOpenDictionary/odict/commit/e76cb1c1ba1724528d7113c924d2b582494eb11b))
+
+## [0.3.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.3.0...js-v0.3.1) (2023-05-19)
+
+
+### Bug Fixes
+
+* **js:** compile FlatBuffer files ([1b2f9a2](https://github.com/TheOpenDictionary/odict/commit/1b2f9a25def93b954ada35d31db0dc4367fc4d4d))
+* **js:** remove service upon exit/disconnect ([42669ce](https://github.com/TheOpenDictionary/odict/commit/42669ce4e7478d5acd69342dac70d9cebcbc4c4a))
+
+## [0.3.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.2.0...js-v0.3.0) (2023-05-19)
+
+
+### Features
+
+* **js:** communicate to CLI via long-running process ([#316](https://github.com/TheOpenDictionary/odict/issues/316)) ([1547d40](https://github.com/TheOpenDictionary/odict/commit/1547d409af52763dac16ab7cb3e11b7cb89609e2))
+* modularize Justfiles ([#187](https://github.com/TheOpenDictionary/odict/issues/187)) ([5b02037](https://github.com/TheOpenDictionary/odict/commit/5b0203772975518cb2428b36a7dbb7c050179937))
+
+
+### Bug Fixes
+
+* **dump:** remove unnecessary ODict dependencies ([a93c14c](https://github.com/TheOpenDictionary/odict/commit/a93c14cd108764c86ad2fa3b4c8fc721aaace0c7))
+* remove commented code and print statement ([777a668](https://github.com/TheOpenDictionary/odict/commit/777a6686179bc0b5cdd294b2bcc9cf7e81364587))
+
 ## [0.2.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.1.1...js-v0.2.0) (2023-04-04)
 
 

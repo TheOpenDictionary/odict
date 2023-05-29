@@ -1,0 +1,41 @@
+include "enums.fbs";
+
+table Definition {
+    id:string;
+    value:string;
+    examples:[string];
+}
+
+table Etymology {
+    id:string;
+    description:string;
+    usages:[Usage];
+}
+
+table Group {
+    id:string;
+    description:string;
+    definitions:[Definition];
+}
+
+table Usage {
+    pos:POS (key);
+    definitions:[Definition];
+    groups:[Group];
+}
+
+table Entry {
+    key:string (key);
+    term:string;
+    pronunciation:string;
+    see:string;
+    etymologies:[Etymology];
+}
+
+table Dictionary {
+    id:string;
+    name:string;
+    entries:[Entry];
+}
+
+root_type Dictionary;

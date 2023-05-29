@@ -5,11 +5,20 @@ import (
 	"fmt"
 
 	"github.com/TheOpenDictionary/odict/lib/core"
-	search_ "github.com/TheOpenDictionary/odict/lib/search"
+	ods "github.com/TheOpenDictionary/odict/lib/search"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
+
+type SearchRequest struct {
+	Dictionary  *types.Dictionary
+	Force       bool
+	Exact       bool
+	Query       string
+	Quiet       bool
+	PrettyPrint bool
+}
 
 func search(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
@@ -25,15 +34,24 @@ func search(c *cli.Context) error {
 	t(c, func() {
 		dict := core.ReadDictionaryFromPath(inputFile)
 
-		search_.Index(dict, force, quiet)
+		request := SearchRequest{
+			Dictionary:  dict,
+			Force:       force,
+			Exact:       exact,
+			Query:       searchTerm,
+			Quiet:       quiet,
+			PrettyPrint: true,
+		}
 
-		results := search_.SearchDictionary(string(dict.Id()), searchTerm, exact)
+		ods.Index(ods.IndexRequest{Dictionary: request.Dictionary, Overwrite: request.Force, Quiet: request.Quiet})
+
+		results := ods.SearchDictionary(string(request.Dictionary.Id()), request.Query, request.Exact)
 
 		representable := utils.Map(results, func(entry types.Entry) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 
-		fmt.Println(utils.SerializeToJSON(representable))
+		fmt.Print(utils.SerializeToJSON(representable, request.PrettyPrint))
 	})
 
 	return nil

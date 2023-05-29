@@ -16,6 +16,12 @@ import (
 	"github.com/schollz/progressbar/v3"
 )
 
+type IndexRequest struct {
+	Dictionary *types.Dictionary
+	Overwrite  bool
+	Quiet      bool
+}
+
 func getIndexPath(dictionaryID string) string {
 	path := os.Getenv("ODICT_INDEX_DIR")
 
@@ -26,13 +32,13 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, "odict", "idx", dictionaryID)
 }
 
-func Index(dict *types.Dictionary, overwrite bool, quiet bool) string {
-	dictionary := dict.AsRepresentable()
+func Index(request IndexRequest) string {
+	dictionary := request.Dictionary.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
-		if !quiet {
+		if !request.Quiet {
 			fmt.Println("Indexing dictionary (this might take some time)...")
 		}
 
@@ -47,7 +53,7 @@ func Index(dict *types.Dictionary, overwrite bool, quiet bool) string {
 
 		var bar *progressbar.ProgressBar
 
-		if !quiet {
+		if !request.Quiet {
 			bar = progressbar.Default(int64(totalEntries))
 		}
 
@@ -69,7 +75,7 @@ func Index(dict *types.Dictionary, overwrite bool, quiet bool) string {
 
 			batchCount++
 
-			if !quiet {
+			if !request.Quiet {
 				bar.Add(1)
 			}
 
@@ -89,17 +95,17 @@ func Index(dict *types.Dictionary, overwrite bool, quiet bool) string {
 
 		utils.Check(idxErr)
 
-		if !quiet {
+		if !request.Quiet {
 			fmt.Println()
 		}
-	} else if overwrite {
-		if !quiet {
+	} else if request.Overwrite {
+		if !request.Quiet {
 			fmt.Println("Purging existing index...")
 		}
 
 		os.RemoveAll(indexPath)
 
-		return Index(dict, false, quiet)
+		return Index(IndexRequest{Dictionary: request.Dictionary, Overwrite: false, Quiet: request.Quiet})
 	}
 
 	return indexPath
