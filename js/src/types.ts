@@ -48,6 +48,8 @@ export interface Group {
   definitions: Definition[];
 }
 
+export type PartOfSpeech = keyof typeof POS;
+
 export const PartOfSpeech = Object.entries(POS).reduce((acc, [key, value]) => {
   const t = POS[POS.det];
 
@@ -55,4 +57,5 @@ export const PartOfSpeech = Object.entries(POS).reduce((acc, [key, value]) => {
     acc[key as keyof typeof POS] = key;
   }
   return acc;
-}, {} as Record<keyof typeof POS, string>);
+}, {} as Record<PartOfSpeech, string>);
+
