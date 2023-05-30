@@ -3,6 +3,7 @@
 # ---------------------------------------------------------------------------- #
 
 @deps: 
+  asdf install
   go install golang.org/x/tools/cmd/goimports@latest
 
 @build: deps (cli "build")
