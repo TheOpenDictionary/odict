@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.1](https://github.com/TheOpenDictionary/odict/compare/v1.14.0...v1.14.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* **js:** fixed PartOfSpeech map types ([725bba4](https://github.com/TheOpenDictionary/odict/commit/725bba46a5f31580ed3207b7bea2e302680b49fb))
+
 ## [1.14.0](https://github.com/TheOpenDictionary/odict/compare/v1.13.2...v1.14.0) (2023-05-31)
 
 

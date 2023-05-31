@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.6.0...js-v0.6.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* **js:** fixed PartOfSpeech map types ([725bba4](https://github.com/TheOpenDictionary/odict/commit/725bba46a5f31580ed3207b7bea2e302680b49fb))
+
 ## [0.6.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.5.1...js-v0.6.0) (2023-05-31)
 
 
