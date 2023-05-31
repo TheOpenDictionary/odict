@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.14.0](https://github.com/TheOpenDictionary/odict/compare/v1.13.2...v1.14.0) (2023-05-31)
+
+
+### Features
+
+* **js:** add PartOfSpeech type ([8ee6e9a](https://github.com/TheOpenDictionary/odict/commit/8ee6e9a119445807af7e5fe4017e54e2fde0474a))
+* **just:** update deps rule ([e22e47d](https://github.com/TheOpenDictionary/odict/commit/e22e47d19a36d011bd9d677192a8334f656925eb))
+
+
+### Bug Fixes
+
+* **cli:** fix issue where format option was ignored ([47fcf5a](https://github.com/TheOpenDictionary/odict/commit/47fcf5a745ce76cb81ca6735dc46721e52bb8d73))
+* **deps:** update module github.com/stretchr/testify to v1.8.4 ([ffb1f44](https://github.com/TheOpenDictionary/odict/commit/ffb1f441ee06601330049a7dea89467946d7b92e))
+
 ## [1.13.2](https://github.com/TheOpenDictionary/odict/compare/v1.13.1...v1.13.2) (2023-05-29)
 
 
