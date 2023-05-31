@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.5.1...js-v0.6.0) (2023-05-31)
+
+
+### Features
+
+* **js:** add PartOfSpeech type ([8ee6e9a](https://github.com/TheOpenDictionary/odict/commit/8ee6e9a119445807af7e5fe4017e54e2fde0474a))
+
 ## [0.5.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.5.0...js-v0.5.1) (2023-05-29)
 
 
