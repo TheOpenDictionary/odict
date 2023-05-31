@@ -54,8 +54,8 @@ export const PartOfSpeech = Object.entries(POS).reduce((acc, [key, value]) => {
   const t = POS[POS.det];
 
   if (typeof value === "number") {
-    acc[key as keyof typeof POS] = key;
+    acc[key as PartOfSpeech] = key as PartOfSpeech;
   }
   return acc;
-}, {} as Record<PartOfSpeech, string>);
+}, {} as Record<PartOfSpeech, PartOfSpeech>);
 
