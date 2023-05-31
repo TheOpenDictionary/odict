@@ -12,6 +12,7 @@ import (
 func lookup(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	queries := c.Args().Tail()
+	format := c.String("format")
 
 	if len(inputFile) == 0 || len(queries) == 0 {
 		return errors.New("usage: odict lookup [dictionary path] [queries]")
@@ -35,7 +36,7 @@ func lookup(c *cli.Context) error {
 			})
 		})
 
-		PrintEntries(representable, "json", true)
+		PrintEntries(representable, format, true)
 	})
 
 	return nil
