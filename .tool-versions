@@ -2,7 +2,7 @@ golang 1.20
 python 3.11.4
 poetry 1.5.1
 gradle 7.5.1
-kotlin 1.8.21
+kotlin 1.8.22
 java adoptopenjdk-17.0.7+7
 nodejs 18.16.0
 just 1.14.0
