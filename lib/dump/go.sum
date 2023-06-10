@@ -20,6 +20,8 @@ github.com/bokwoon95/sqddl v0.4.2 h1:mI8z2sFf6mSA+MjbAuVQFdDCzMWXYwOhjlgXFKy0KyI
 github.com/bokwoon95/sqddl v0.4.2/go.mod h1:GddDMEsjLBCzUuoF60nvMhdjWdx5wXQblmq+b4WvIjk=
 github.com/bokwoon95/sqddl v0.4.4 h1:72HPz6PEHCaKOAn2cpPOkct5Iqx+WVmrsY0IF/tnazQ=
 github.com/bokwoon95/sqddl v0.4.4/go.mod h1:gdCZ/YncGycaXDhmr2toCSfk7EHS3WcmFOCgkuAsp5E=
+github.com/bokwoon95/sqddl v0.4.5 h1:iAfSrWdb8NElTAstvB3Bj9uHpyAWLlNLsWrXcHJdCbM=
+github.com/bokwoon95/sqddl v0.4.5/go.mod h1:gdCZ/YncGycaXDhmr2toCSfk7EHS3WcmFOCgkuAsp5E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/denisenkom/go-mssqldb v0.12.3 h1:pBSGx9Tq67pBOTLmxNuirNTeB8Vjmf886Kx+8Y+8shw=
