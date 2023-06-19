@@ -29,7 +29,7 @@ func getIndexPath(dictionaryID string) string {
 		path = os.TempDir()
 	}
 
-	return filepath.Join(path, "odict", "idx", dictionaryID)
+	return filepath.Join(path, ".odict", "idx", dictionaryID)
 }
 
 func Index(request IndexRequest) string {

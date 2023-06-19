@@ -30,7 +30,7 @@ func TestIndex(t *testing.T) {
 		},
 	)
 
-	_, e := os.Stat(filepath.Join(path, "odict", "idx", string(dict.Id())))
+	_, e := os.Stat(filepath.Join(path, ".odict", "idx", string(dict.Id())))
 
 	assert.Equal(t, e, nil)
 
