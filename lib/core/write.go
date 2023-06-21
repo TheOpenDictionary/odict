@@ -11,6 +11,7 @@ import (
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/golang/snappy"
+	"github.com/google/uuid"
 )
 
 func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
@@ -33,6 +34,10 @@ func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
 				fmt.Printf("- %s\n", v)
 			}
 		}
+	}
+
+	if len(dictionary.ID) == 0 {
+		dictionary.ID = uuid.New().String()
 	}
 
 	return dictionary

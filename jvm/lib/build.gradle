@@ -8,12 +8,12 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id "org.jetbrains.kotlin.jvm" version "1.8.21"
+    id "org.jetbrains.kotlin.jvm" version "1.8.22"
 
     // Apply the java-library plugin for API and implementation separation.
     id "java-library"
 
-    id("com.google.devtools.ksp").version("1.8.21-1.0.11")
+    id("com.google.devtools.ksp").version("1.8.22-1.0.11")
 }
 
 repositories {
@@ -26,7 +26,7 @@ dependencies {
     implementation platform("org.jetbrains.kotlin:kotlin-bom")
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation "com.google.guava:guava:32.0.0-jre"
+    implementation "com.google.guava:guava:32.0.1-jre"
 
     // Use the Kotlin test library.
     testImplementation "org.jetbrains.kotlin:kotlin-test"

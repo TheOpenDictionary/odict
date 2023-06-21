@@ -13,7 +13,7 @@ func CleanupTest() {
 
 	utils.Check(err)
 
-	os.RemoveAll(filepath.Join(path, "odict"))
+	os.RemoveAll(filepath.Join(path, ".odict"))
 
 	dirname := "../../examples"
 

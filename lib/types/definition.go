@@ -6,7 +6,7 @@ import (
 )
 
 type DefinitionRepresentable struct {
-	ID       string   `json:"id,omitempty" xml:"id,attr"`
+	ID       string   `json:"id,omitempty" xml:"id,attr,omitempty"`
 	Value    string   `json:"value,omitempty" xml:"value,attr"`
 	Examples []string `json:"examples,omitempty" xml:"example"`
 }

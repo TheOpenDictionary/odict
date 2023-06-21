@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.15.0](https://github.com/TheOpenDictionary/odict/compare/v1.14.1...v1.15.0) (2023-06-19)
+
+
+### Features
+
+* **docs:** update README ([7680cf5](https://github.com/TheOpenDictionary/odict/commit/7680cf5b6205b4210bd18c439025ef71238fd81c))
+* **jvm:** add build script ([3eed477](https://github.com/TheOpenDictionary/odict/commit/3eed477faa5616a2ba4394297defe7ca8c10246c))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32.0.1-jre ([b1c9213](https://github.com/TheOpenDictionary/odict/commit/b1c921392dfa1d9df9803d3e8963bd5762af8e8a))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.4.4 ([a77e513](https://github.com/TheOpenDictionary/odict/commit/a77e51315bf34cad15e8e7e031a290c846f99eca))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.4.5 ([ffdab01](https://github.com/TheOpenDictionary/odict/commit/ffdab016f8bad669fdfa08ec14219627c5c8297c))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.6 ([7c62e86](https://github.com/TheOpenDictionary/odict/commit/7c62e864b6fb61fee81cb819bbf5dd507add49af))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.7 ([124f3be](https://github.com/TheOpenDictionary/odict/commit/124f3be491554d99c10c2facfe74f7e66310901d))
+* **write:** fix default dictionary IDs ([#383](https://github.com/TheOpenDictionary/odict/issues/383)) ([9207e5a](https://github.com/TheOpenDictionary/odict/commit/9207e5a4bb05fc52c9ff8ed6f0c6e931c6dc150d))
+
+## [1.14.1](https://github.com/TheOpenDictionary/odict/compare/v1.14.0...v1.14.1) (2023-05-31)
+
+
+### Bug Fixes
+
+* **js:** fixed PartOfSpeech map types ([725bba4](https://github.com/TheOpenDictionary/odict/commit/725bba46a5f31580ed3207b7bea2e302680b49fb))
+
+## [1.14.0](https://github.com/TheOpenDictionary/odict/compare/v1.13.2...v1.14.0) (2023-05-31)
+
+
+### Features
+
+* **js:** add PartOfSpeech type ([8ee6e9a](https://github.com/TheOpenDictionary/odict/commit/8ee6e9a119445807af7e5fe4017e54e2fde0474a))
+* **just:** update deps rule ([e22e47d](https://github.com/TheOpenDictionary/odict/commit/e22e47d19a36d011bd9d677192a8334f656925eb))
+
+
+### Bug Fixes
+
+* **cli:** fix issue where format option was ignored ([47fcf5a](https://github.com/TheOpenDictionary/odict/commit/47fcf5a745ce76cb81ca6735dc46721e52bb8d73))
+* **deps:** update module github.com/stretchr/testify to v1.8.4 ([ffb1f44](https://github.com/TheOpenDictionary/odict/commit/ffb1f441ee06601330049a7dea89467946d7b92e))
+
+## [1.13.2](https://github.com/TheOpenDictionary/odict/compare/v1.13.1...v1.13.2) (2023-05-29)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/bokwoon95/sq to v0.3.5 ([c424360](https://github.com/TheOpenDictionary/odict/commit/c424360ed8bd9dfb2989a542a45b0c560b4be204))
+* **deps:** update module github.com/urfave/cli/v2 to v2.25.5 ([640fac8](https://github.com/TheOpenDictionary/odict/commit/640fac815821be72bdcfba7e70055228e7c9b05c))
+* **js:** fix broken compilation ([741c236](https://github.com/TheOpenDictionary/odict/commit/741c236d537cb1eaacc728ae4bcddad5664fee42))
+
 ## [1.13.1](https://github.com/TheOpenDictionary/odict/compare/v1.13.0...v1.13.1) (2023-05-29)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/TheOpenDictionary/odict/compare/python-v0.5.0...python-v0.5.1) (2023-06-19)
+
+
+### Bug Fixes
+
+* **write:** fix default dictionary IDs ([#383](https://github.com/TheOpenDictionary/odict/issues/383)) ([9207e5a](https://github.com/TheOpenDictionary/odict/commit/9207e5a4bb05fc52c9ff8ed6f0c6e931c6dc150d))
+
 ## [0.5.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.4.0...python-v0.5.0) (2023-05-28)
 
 
