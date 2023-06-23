@@ -38,5 +38,5 @@
 @python +command:
 	just python/{{command}}
 
-wasm +command:
+@wasm +command:
 	just wasm/{{command}}

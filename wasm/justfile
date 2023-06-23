@@ -4,13 +4,15 @@
 
 [private]
 @wasm:
+  mkdir -p dist
   GOOS=js GOARCH=wasm go build -o ./src/odict.wasm ./src/odict.go && cp ./src/odict.wasm ./dist/odict.wasm
 
 @install:
   npm install 
 
 @preview: build
-  npx parcel --dist-dir=.preview demo.html --open && cp ./src/odict.wasm ./.preview/odict.wasm
+  cp ./src/odict.wasm ./.preview/odict.wasm
+  npx parcel --dist-dir=.preview demo.html --open
 
 @clean:
   rm -rf ../**/*.odict 
