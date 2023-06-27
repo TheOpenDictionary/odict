@@ -1,58 +1,36 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
+	"text/tabwriter"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/TheOpenDictionary/lib/config"
 	cli "github.com/urfave/cli/v2"
 )
 
-func getDictionariesFile() string {
-	return path.Join(GetConfigDir(), "dictionaries.json")
-}
+func listDictionaries(c *cli.Context) error {
+	dictionaries, err := config.ListDictionaries()
 
-func getDictionariesConfig() map[string]string {
-	dictionariesFile := getDictionariesFile()
-
-	dictionariesFileBytes, err := ioutil.ReadFile(dictionariesFile)
-
-	if os.IsNotExist(err) {
-		writeErr := ioutil.WriteFile(dictionariesFile, []byte("{}"), 0644)
-		utils.Check(writeErr)
-		return map[string]string{}
+	if err != nil {
+		return err
 	}
 
-	utils.Check(err)
+	fmt.Println()
 
-	var dictionaryMap map[string]string
+	w := tabwriter.NewWriter(os.Stdout, 4, 4, 4, ' ', 0)
 
-	json.Unmarshal(dictionariesFileBytes, &dictionaryMap)
+	for _, dict := range dictionaries {
+		fmt.Fprintf(w, "%s\t%s\t%s\n", bold.Sprint(dict.Name), faint.Sprint("→"), faint.Sprint(dict.Path))
+	}
 
-	return dictionaryMap
-}
+	w.Flush()
 
-func writeDictionaryConfig(config map[string]string) {
-	dictionariesFile := getDictionariesFile()
-
-	configBytes, err := json.Marshal(config)
-
-	utils.Check(err)
-
-	writeErr := ioutil.WriteFile(dictionariesFile, configBytes, 0644)
-
-	utils.Check(writeErr)
-}
-
-func listDictionaries(c *cli.Context) {
-
+	return nil
 }
 
 func addDictionary(c *cli.Context) error {
-	dictionaries := getDictionariesConfig()
+
 	name := c.Args().First()
 	path := c.Args().Get(1)
 
@@ -60,34 +38,38 @@ func addDictionary(c *cli.Context) error {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	if _, ok := dictionaries[name]; ok {
-		return cli.Exit("A dictionary alias with that name already exists!", 1)
+	if err := config.AddDictionaryAlias(name, path); err != nil {
+		return err
 	}
 
-	dictionaries[name] = path
+	return nil
+}
 
-	writeDictionaryConfig(dictionaries)
+func setDictionary(c *cli.Context) error {
+	name := c.Args().First()
+	path := c.Args().Get(1)
+
+	if len(name) == 0 || len(path) == 0 {
+		cli.ShowSubcommandHelpAndExit(c, 1)
+	}
+
+	config.SetDictionaryAlias(name, path)
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
 	return nil
 }
 
-func removedDictionary(c *cli.Context) error {
-	dictionaries := getDictionariesConfig()
+func removeDictionary(c *cli.Context) error {
 	name := c.Args().First()
 
 	if len(name) == 0 {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	if _, ok := dictionaries[name]; !ok {
-		return cli.Exit("No dictionary alias with that name exists!", 1)
+	if err := config.RemoveDictionaryAlias(name); err != nil {
+		return err
 	}
-
-	delete(dictionaries, name)
-
-	writeDictionaryConfig(dictionaries)
 
 	return nil
 }

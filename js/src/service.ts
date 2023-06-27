@@ -50,7 +50,7 @@ export function startService(dictionaryPath?: string) {
   ipc.on("close", () => openDictionaries.delete(cacheKey));
 
   ipc.on("killed", () => openDictionaries.delete(cacheKey));
-
+ 
   function stop() {
     ipc.kill();
   }

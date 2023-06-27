@@ -80,7 +80,7 @@ export class IPC extends EventEmitter {
 
     go.stdout.on("data", (s) => {
       outBuffer += s;
-
+      
       if (s.endsWith("}\\n")) {
         self._processData(outBuffer);
         outBuffer = "";

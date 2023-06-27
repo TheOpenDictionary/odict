@@ -11,7 +11,9 @@ import (
 func TestSearch(t *testing.T) {
 	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := core.ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := core.ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	Index(
 		IndexRequest{
@@ -21,8 +23,9 @@ func TestSearch(t *testing.T) {
 		},
 	)
 
-	entries := SearchDictionary(string(dict.Id()), "run", false)
+	entries, err := SearchDictionary(string(dict.Id()), "run", false)
 
+	assert.Equal(t, nil, err)
 	assert.Equal(t, string(entries[0].Term()), "run")
 
 	test.CleanupTest()
