@@ -45,6 +45,20 @@ var App = &cli.App{
 			Action:  index,
 		},
 		{
+			Name:    "serve",
+			Aliases: []string{"srv"},
+			Flags: []cli.Flag{
+				&cli.IntFlag{
+					Name:    "port",
+					Aliases: []string{"p"},
+					Value:   5005,
+					Usage:   "Port to listen on",
+				},
+			},
+			Usage:  "start a local web server to serve one or several dictionaries",
+			Action: serve,
+		},
+		{
 			Name:    "lexicon",
 			Aliases: []string{"e"},
 			Usage:   "lists all words defined in a dictionary",
@@ -57,10 +71,16 @@ var App = &cli.App{
 			Subcommands: []*cli.Command{
 				{
 					Name:        "add",
-					Usage:       "add a new dictionary alias",
+					Usage:       "add a new dictionary alias for quick access",
 					Description: "will fail if an alias with the same name already exists.",
 					Action:      addDictionary,
-					ArgsUsage:   "[name] [dictionary path]",
+					Flags: []cli.Flag{
+						&cli.BoolFlag{
+							Name:  "no-index",
+							Usage: "Don't index the dictionary when an alias is created",
+						},
+					},
+					ArgsUsage: "[name] [dictionary path]",
 				},
 				{
 					Name:      "remove",

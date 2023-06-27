@@ -6,6 +6,8 @@ import (
 	"text/tabwriter"
 
 	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	_search "github.com/TheOpenDictionary/odict/lib/search"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -30,7 +32,6 @@ func listDictionaries(c *cli.Context) error {
 }
 
 func addDictionary(c *cli.Context) error {
-
 	name := c.Args().First()
 	path := c.Args().Get(1)
 
@@ -41,6 +42,16 @@ func addDictionary(c *cli.Context) error {
 	if err := config.AddDictionaryAlias(name, path); err != nil {
 		return err
 	}
+
+	dict, err := core.ReadDictionary(path)
+
+	if err != nil {
+		return err
+	}
+
+	_search.Index(_search.IndexRequest{Dictionary: dict})
+
+	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
 	return nil
 }
@@ -54,6 +65,14 @@ func setDictionary(c *cli.Context) error {
 	}
 
 	config.SetDictionaryAlias(name, path)
+
+	dict, err := core.ReadDictionary(path)
+
+	if err != nil {
+		return err
+	}
+
+	_search.Index(_search.IndexRequest{Dictionary: dict})
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
