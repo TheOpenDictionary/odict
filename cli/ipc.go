@@ -36,6 +36,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/google/uuid"
 )
 
@@ -154,7 +155,13 @@ func (ipc IPC) Start() {
 			if err != nil {
 				log.Println(err)
 			} else {
-				fmt.Print(data + "\\n")
+				text := data + "\\n"
+
+				if os.Getenv("ODICT_DEBUG_IPC") == "true" {
+					utils.AppendToFile("ipc.log", "GO SENT: "+text)
+				}
+
+				fmt.Print(text)
 			}
 		}
 	}()
@@ -173,6 +180,10 @@ func (ipc IPC) Start() {
 			var payload payloadReceive
 
 			text = strings.TrimSuffix(text, "\n")
+
+			if os.Getenv("ODICT_DEBUG_IPC") == "true" {
+				utils.AppendToFile("ipc.log", "GO RECEIVED: "+text)
+			}
 
 			// check if the text is not empty string
 			if text != "" {
