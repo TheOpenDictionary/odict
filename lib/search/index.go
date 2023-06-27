@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/document"
 	"github.com/blevesearch/bleve/v2/index/scorch"
@@ -32,7 +31,7 @@ func getIndexPath(dictionaryID string) string {
 	return filepath.Join(path, ".odict", "idx", dictionaryID)
 }
 
-func Index(request IndexRequest) string {
+func Index(request IndexRequest) (string, error) {
 	dictionary := request.Dictionary.AsRepresentable()
 	indexPath := getIndexPath(dictionary.ID)
 	_, statErr := os.Stat(indexPath)
@@ -43,9 +42,12 @@ func Index(request IndexRequest) string {
 		}
 
 		mapping := bleve.NewIndexMapping()
+
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
-		utils.Check(indexErr)
+		if indexErr != nil {
+			return "", indexErr
+		}
 
 		defer index.Close()
 
@@ -84,7 +86,9 @@ func Index(request IndexRequest) string {
 			if batchCount >= batchSize {
 				idxErr := index.Batch(batch)
 
-				utils.Check(idxErr)
+				if idxErr != nil {
+					return "", idxErr
+				}
 
 				batch = index.NewBatch()
 				batchCount = 0
@@ -93,7 +97,9 @@ func Index(request IndexRequest) string {
 
 		idxErr := index.Batch(batch)
 
-		utils.Check(idxErr)
+		if idxErr != nil {
+			return "", idxErr
+		}
 
 		if !request.Quiet {
 			fmt.Println()
@@ -108,5 +114,5 @@ func Index(request IndexRequest) string {
 		return Index(IndexRequest{Dictionary: request.Dictionary, Overwrite: false, Quiet: request.Quiet})
 	}
 
-	return indexPath
+	return indexPath, nil
 }

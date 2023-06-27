@@ -7,14 +7,13 @@ import (
 	"strings"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	query "github.com/blevesearch/bleve/v2/search/query"
 )
 
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.Entry {
+func SearchDictionary(dictionaryID string, queryStr string, exact bool) ([]types.Entry, error) {
 	indexPath := getIndexPath(dictionaryID)
 	_, err := os.Stat(indexPath)
 
@@ -24,7 +23,9 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.
 
 	index, openErr := bleve.Open(indexPath)
 
-	utils.Check(openErr)
+	if openErr != nil {
+		return nil, openErr
+	}
 
 	defer index.Close()
 
@@ -38,7 +39,9 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.
 	search.Fields = []string{"_source"}
 	searchResults, searchErr := index.Search(search)
 
-	utils.Check(searchErr)
+	if searchErr != nil {
+		return nil, searchErr
+	}
 
 	hits := searchResults.Hits
 
@@ -52,5 +55,5 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.
 		}
 	}
 
-	return entries
+	return entries, nil
 }

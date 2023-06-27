@@ -10,7 +10,9 @@ import (
 func TestSplit(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict1 := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict1, err := ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	entries := Split(
 		SplitRequest{
@@ -30,7 +32,9 @@ func TestSplit(t *testing.T) {
 func TestSplitWithNumbers(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict1 := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict1, err := ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	entries := Split(
 		SplitRequest{

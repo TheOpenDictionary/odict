@@ -3,8 +3,8 @@ package types
 import (
 	"sort"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/samber/lo"
 )
 
 type EtymologyRepresentable struct {
@@ -54,7 +54,7 @@ func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder
 
 	sort.Strings(keys)
 
-	usageBuffers := utils.Map(keys, func(key string) flatbuffers.UOffsetT {
+	usageBuffers := lo.Map(keys, func(key string, _ int) flatbuffers.UOffsetT {
 		usage := usages[strToPartOfSpeech(key)]
 		return usage.AsBuffer(builder)
 	})

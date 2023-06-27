@@ -5,23 +5,26 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestLookup(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../../examples/example1.odict")
-	entries := utils.Map(Lookup(
+	dict, err := ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
+
+	entries := lo.Map(Lookup(
 		LookupRequest{
 			Dictionary: dict,
 			Queries:    []string{"dog", "cat"},
 			Split:      0,
 			Follow:     false,
 		},
-	), func(entryList []types.Entry) []types.EntryRepresentable {
-		return utils.Map(entryList, func(entry types.Entry) types.EntryRepresentable {
+	), func(entryList []types.Entry, _ int) []types.EntryRepresentable {
+		return lo.Map(entryList, func(entry types.Entry, _ int) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 	})
@@ -75,7 +78,9 @@ func TestLookup(t *testing.T) {
 func TestLookupSplitting(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	entries := Lookup(
 		LookupRequest{
@@ -97,7 +102,9 @@ func TestLookupSplitting(t *testing.T) {
 func TestFallbacks(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	entries := Lookup(
 		LookupRequest{
@@ -129,7 +136,9 @@ func TestFallbacks(t *testing.T) {
 func TestFollow(t *testing.T) {
 	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
 
-	dict := ReadDictionaryFromPath("../../examples/example2.odict")
+	dict, err := ReadDictionary("../../examples/example2.odict")
+
+	assert.Equal(t, nil, err)
 
 	control := Lookup(
 		LookupRequest{

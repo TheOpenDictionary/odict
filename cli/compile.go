@@ -25,13 +25,17 @@ func compile(c *cli.Context) error {
 		outputFile = fmt.Sprintf("%s/%s.odict", filepath.Dir(inputFile), name)
 	}
 
-	t(c, func() {
-		bytes := core.CompileDictionary(inputFile, outputFile)
+	return t(c, func() error {
+		bytes, err := core.CompileDictionary(inputFile, outputFile)
+
+		if err != nil {
+			return err
+		}
 
 		if !quiet {
 			fmt.Printf("Wrote %d bytes to path: %s\n", bytes, outputFile)
 		}
-	})
 
-	return nil
+		return nil
+	})
 }

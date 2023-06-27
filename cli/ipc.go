@@ -36,6 +36,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/google/uuid"
 )
 
@@ -52,7 +53,7 @@ var (
 )
 
 type replyChannel struct {
-	event string `json:"event"`
+	Event string `json:"event"`
 	ID    string `json:"id"`
 }
 
@@ -106,7 +107,7 @@ func (ipc IPC) Send(event string, data interface{}) {
 
 // Reply back to sender
 func (ipc IPC) Reply(channel replyChannel, data, err interface{}) {
-	ipc.sendChannel <- payload{ID: channel.ID, Event: channel.event, Data: data, SR: true, Error: err}
+	ipc.sendChannel <- payload{ID: channel.ID, Event: channel.Event, Data: data, SR: true, Error: err}
 }
 
 // On listens for events from parent process
@@ -154,7 +155,13 @@ func (ipc IPC) Start() {
 			if err != nil {
 				log.Println(err)
 			} else {
-				fmt.Print(data + "\\n")
+				text := data + "\\n"
+
+				if os.Getenv("ODICT_DEBUG_IPC") == "true" {
+					utils.AppendToFile("ipc.log", "GO SENT: "+text)
+				}
+
+				fmt.Print(text)
 			}
 		}
 	}()
@@ -174,6 +181,10 @@ func (ipc IPC) Start() {
 
 			text = strings.TrimSuffix(text, "\n")
 
+			if os.Getenv("ODICT_DEBUG_IPC") == "true" {
+				utils.AppendToFile("ipc.log", "GO RECEIVED: "+text)
+			}
+
 			// check if the text is not empty string
 			if text != "" {
 				if err := json.Unmarshal([]byte(text), &payload); err != nil {
@@ -190,13 +201,17 @@ func (ipc IPC) Start() {
 				go func() {
 					if payload.SR {
 						for _, handler := range ipc.receiveSendListerners[payload.Event] {
-							handler(replyChannel{ID: payload.ID, event: payload.Event}, payload.Data)
+							handler(replyChannel{ID: payload.ID, Event: payload.Event}, payload.Data)
 						}
 					} else {
 						for _, handler := range ipc.receiveListerners[payload.Event+":"+payload.ID] {
 							handler(payload.Data)
 						}
+						println(payload.Event)
+						println(payload.SR)
+						println(len(ipc.receiveListerners[payload.Event]))
 						for _, handler := range ipc.receiveListerners[payload.Event] {
+							println(handler)
 							handler(payload.Data)
 						}
 					}
