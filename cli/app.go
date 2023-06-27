@@ -51,6 +51,25 @@ var App = &cli.App{
 			Action:  lexicon,
 		},
 		{
+			Name:    "dictionaries",
+			Aliases: []string{"e"},
+			Usage:   "manage dictionary aliases",
+			Subcommands: []*cli.Command{
+				{
+					Name:      "add",
+					Usage:     "add a new dictionary alias",
+					Action:    addDictionary,
+					ArgsUsage: "[name] [dictionary path]",
+				},
+				{
+					Name:      "remove",
+					Usage:     "remove an aliased dictionary",
+					Action:    removedDictionary,
+					ArgsUsage: "[name]",
+				},
+			},
+		},
+		{
 			Name:    "lookup",
 			Aliases: []string{"l"},
 			Usage:   "looks up an entry in a compiled dictionary without indexing",
