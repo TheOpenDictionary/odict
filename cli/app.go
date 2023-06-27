@@ -51,6 +51,38 @@ var App = &cli.App{
 			Action:  lexicon,
 		},
 		{
+			Name:    "dictionaries",
+			Aliases: []string{"ds"},
+			Usage:   "manage dictionary aliases",
+			Subcommands: []*cli.Command{
+				{
+					Name:        "add",
+					Usage:       "add a new dictionary alias",
+					Description: "will fail if an alias with the same name already exists.",
+					Action:      addDictionary,
+					ArgsUsage:   "[name] [dictionary path]",
+				},
+				{
+					Name:      "remove",
+					Usage:     "remove an aliased dictionary",
+					Action:    removeDictionary,
+					ArgsUsage: "[name]",
+				},
+				{
+					Name:        "set",
+					Usage:       "adds or updates an aliased dictionary",
+					Description: "differs from `add` in that it will overwrite an existing alias if it exists",
+					Action:      setDictionary,
+					ArgsUsage:   "[name] [dictionary path]",
+				},
+				{
+					Name:   "list",
+					Usage:  "list dictionary aliases",
+					Action: listDictionaries,
+				},
+			},
+		},
+		{
 			Name:    "lookup",
 			Aliases: []string{"l"},
 			Usage:   "looks up an entry in a compiled dictionary without indexing",

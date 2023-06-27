@@ -1,0 +1,5 @@
+{
+	"files": {
+		"ignore": ["src/__generated__/*.ts", "dist/**/*", "coverage/**/*"]
+	}
+}

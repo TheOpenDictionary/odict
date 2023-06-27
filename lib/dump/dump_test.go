@@ -11,13 +11,21 @@ import (
 func TestDictionaryToXML(t *testing.T) {
 	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := core.ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := core.ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
+
 	dict_r := dict.AsRepresentable()
-	dump := AsXML(dict)
+	dump, err := AsXML(dict)
+
+	assert.Equal(t, nil, err)
 
 	core.WriteDictionaryFromXML(dump, "../../examples/example1_generated.odict")
 
-	newdict := core.ReadDictionaryFromPath("../../examples/example1_generated.odict")
+	newdict, err := core.ReadDictionary("../../examples/example1_generated.odict")
+
+	assert.Equal(t, nil, err)
+
 	newdict_r := newdict.AsRepresentable()
 
 	// We need the IDs to match seeing they will definitely be different

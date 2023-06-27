@@ -3,6 +3,7 @@ package core
 import (
 	"bufio"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"html"
 	"os"
@@ -15,7 +16,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
+func xmlToDictionaryRepresentable(xmlStr string) *types.DictionaryRepresentable {
 	var dictionary types.DictionaryRepresentable
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
@@ -41,50 +42,85 @@ func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
 		dictionary.ID = uuid.New().String()
 	}
 
-	return dictionary
+	return &dictionary
 }
 
-func WriteDictionaryFromExisting(outputPath string, dictionary types.DictionaryRepresentable) int {
-	dictionaryBytes := types.Serialize(&dictionary)
+func WriteDictionaryFromExisting(outputPath string, dictionary *types.DictionaryRepresentable) (int, error) {
+	dictionaryBytes := types.Serialize(dictionary)
 	compressed := snappy.Encode(nil, dictionaryBytes)
 	file, err := os.Create(outputPath)
+
+	if err != nil {
+		return 0, err
+	}
+
 	versionInt, parseErr := strconv.Atoi(version)
 
-	utils.Check(err)
-	utils.Check(parseErr)
+	if parseErr != nil {
+		return 0, parseErr
+	}
 
 	defer file.Close()
 
 	signature := []byte("ODICT")
+
 	version := utils.Uint16ToBytes(uint16(versionInt))
+
 	compressedSize := uint64(len(compressed))
+
 	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
 
 	writer := bufio.NewWriter(file)
 
 	sigBytes, sigErr := writer.Write(signature)
+
+	if sigErr != nil {
+		return 0, sigErr
+	}
+
 	versionBytes, versionErr := writer.Write(version)
+
+	if versionErr != nil {
+		return 0, versionErr
+	}
+
 	contentSizeBytes, contentCountErr := writer.Write(compressedSizeBytes)
+
+	if contentCountErr != nil {
+		return 0, contentCountErr
+	}
+
 	contentBytes, contentErr := writer.Write(compressed)
+
+	if contentErr != nil {
+		return 0, contentErr
+	}
+
 	total := sigBytes + versionBytes + contentSizeBytes + contentBytes
 
-	utils.Check(sigErr)
-	utils.Check(versionErr)
-	utils.Check(contentCountErr)
-	utils.Check(contentErr)
+	if sigBytes != 5 {
+		return 0, errors.New("signature bytes do not equal 5")
+	}
 
-	utils.Assert(sigBytes == 5, "Signature bytes do not equal 5")
-	utils.Assert(versionBytes == 2, "Version bytes do not equal 2")
-	utils.Assert(contentSizeBytes == 8, "Content byte count does not equal 8")
-	utils.Assert(contentBytes == int(compressedSize), "Content does not equal the computed byte count")
+	if versionBytes != 2 {
+		return 0, errors.New("version bytes do not equal 2")
+	}
+
+	if contentSizeBytes != 8 {
+		return 0, errors.New("content byte count does not equal 8")
+	}
+
+	if contentBytes != int(compressedSize) {
+		return 0, errors.New("content does not equal the computed byte count")
+	}
 
 	writer.Flush()
 
-	return total
+	return total, nil
 }
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionaryFromXML(xmlStr, outputPath string) int {
+func WriteDictionaryFromXML(xmlStr, outputPath string) (int, error) {
 	return WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
 }

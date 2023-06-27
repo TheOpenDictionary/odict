@@ -2,43 +2,55 @@ package core
 
 import (
 	"encoding/binary"
+	"errors"
 	"os"
 	"strconv"
 
+	"github.com/TheOpenDictionary/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/golang/snappy"
 )
 
-func readODictFile(path string) (string, uint16, []byte) {
+type ODictFile struct {
+	Signature string
+	Version   uint16
+	Content   []byte
+}
+
+func readODictFile(path string) (*ODictFile, error) {
 	// Read input file
 	file, err := os.Open(path)
 
-	utils.Check(err)
+	if err != nil {
+		return nil, err
+	}
 
 	defer file.Close()
 
 	// Read file signature as bytes
 	sigBytes := make([]byte, 5)
-	_, sigErr := file.Read(sigBytes)
 
-	utils.Check(sigErr)
+	if _, sigErr := file.Read(sigBytes); sigErr != nil {
+		return nil, sigErr
+	}
 
 	// Read ODict version as bytes
 	file.Seek(5, 0)
 
 	versionBytes := make([]byte, 2)
-	_, versionError := file.Read(versionBytes)
 
-	utils.Check(versionError)
+	if _, versionError := file.Read(versionBytes); versionError != nil {
+		return nil, versionError
+	}
 
 	// Read the compressed content size in bytes
 	file.Seek(7, 0)
 
 	contentSizeBytes := make([]byte, 8)
-	_, contentSizeError := file.Read(contentSizeBytes)
 
-	utils.Check(contentSizeError)
+	if _, contentSizeError := file.Read(contentSizeBytes); contentSizeError != nil {
+		return nil, contentSizeError
+	}
 
 	file.Seek(15, 0)
 
@@ -48,32 +60,64 @@ func readODictFile(path string) (string, uint16, []byte) {
 	contentSize := binary.LittleEndian.Uint64(contentSizeBytes)
 	expectedVersion, parseErr := strconv.Atoi(version)
 
-	utils.Check(parseErr)
+	if parseErr != nil {
+		return nil, parseErr
+	}
 
 	// Assert signature
-	utils.Assert(signature == "ODICT", "This is not an ODict file!")
+	if signature != "ODICT" {
+		return nil, errors.New("this is not an ODict file")
+	}
 
 	// Assert version
-	utils.Assert(readVersion == uint16(expectedVersion), "This file is not compatible with the latest version of the ODict schema!")
+	if readVersion != uint16(expectedVersion) {
+		return nil, errors.New("this file is not compatible with the latest version of the ODict schema")
+	}
 
 	// Read compressed buffer content as bytes
 	contentBytes := make([]byte, contentSize)
 
-	_, contentError := file.Read(contentBytes)
-
-	utils.Check(contentError)
+	if _, contentError := file.Read(contentBytes); contentError != nil {
+		return nil, contentError
+	}
 
 	decoded, decodedError := snappy.Decode(nil, contentBytes)
 
-	utils.Check(decodedError)
+	if decodedError != nil {
+		return nil, decodedError
+	}
 
-	return signature, readVersion, decoded
+	return &ODictFile{Signature: signature, Version: readVersion, Content: decoded}, nil
 }
 
-// ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
+// ReadDictionary loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionaryFromPath(path string) *types.Dictionary {
-	_, _, bytes := readODictFile(path)
-	return types.GetRootAsDictionary(bytes, 0)
+func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
+	dict, err := readODictFile(path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return types.GetRootAsDictionary(dict.Content, 0), nil
+}
+
+// ReadDictionary loads a compiled ODict dictionary from the provided
+// path and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
+func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
+	dict, err := ReadDictionaryFromPath(pathOrAlias)
+
+	if dict == nil || os.IsNotExist(err) {
+		path, err := config.GetDictionaryPathFromAlias(pathOrAlias)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return ReadDictionaryFromPath(path)
+	}
+
+	return dict, err
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/samber/lo"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -18,8 +18,12 @@ func lookup(c *cli.Context) error {
 		return errors.New("usage: odict lookup [dictionary path] [queries]")
 	}
 
-	t(c, func() {
-		dict := core.ReadDictionaryFromPath(inputFile)
+	return t(c, func() error {
+		dict, err := core.ReadDictionary(inputFile)
+
+		if err != nil {
+			return err
+		}
 
 		request := core.LookupRequest{
 			Dictionary: dict,
@@ -30,14 +34,14 @@ func lookup(c *cli.Context) error {
 
 		entries := core.Lookup(request)
 
-		representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
-			return utils.Map(e, func(entry types.Entry) types.EntryRepresentable {
+		representable := lo.Map(entries, func(e []types.Entry, _ int) []types.EntryRepresentable {
+			return lo.Map(e, func(entry types.Entry, _ int) types.EntryRepresentable {
 				return entry.AsRepresentable()
 			})
 		})
 
 		PrintEntries(representable, format, true)
-	})
 
-	return nil
+		return nil
+	})
 }
