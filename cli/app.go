@@ -45,10 +45,68 @@ var App = &cli.App{
 			Action:  index,
 		},
 		{
+			Name:    "serve",
+			Aliases: []string{"srv"},
+			Flags: []cli.Flag{
+				&cli.IntFlag{
+					Name:    "port",
+					Aliases: []string{"p"},
+					Value:   5005,
+					Usage:   "Port to listen on",
+				},
+			},
+			Usage:  "start a local web server to serve one or several dictionaries",
+			Action: serve,
+		},
+		{
 			Name:    "lexicon",
 			Aliases: []string{"e"},
 			Usage:   "lists all words defined in a dictionary",
 			Action:  lexicon,
+		},
+		{
+			Name:    "alias",
+			Aliases: []string{"ds"},
+			Usage:   "manage dictionary aliases",
+			Subcommands: []*cli.Command{
+				{
+					Name:        "add",
+					Usage:       "add a new dictionary alias for quick access",
+					Description: "will fail if an alias with the same name already exists.",
+					Action:      addDictionary,
+					Flags: []cli.Flag{
+						&cli.BoolFlag{
+							Name:  "no-index",
+							Usage: "Don't index the dictionary when an alias is created",
+						},
+					},
+					ArgsUsage: "[name] [dictionary path]",
+				},
+				{
+					Name:      "remove",
+					Usage:     "remove an aliased dictionary",
+					Action:    removeDictionary,
+					ArgsUsage: "[name]",
+				},
+				{
+					Name:        "set",
+					Usage:       "adds or updates an aliased dictionary",
+					Description: "differs from `add` in that it will overwrite an existing alias if it exists",
+					Action:      setDictionary,
+					Flags: []cli.Flag{
+						&cli.BoolFlag{
+							Name:  "no-index",
+							Usage: "Don't index the dictionary when an alias is created",
+						},
+					},
+					ArgsUsage: "[name] [dictionary path]",
+				},
+				{
+					Name:   "list",
+					Usage:  "list dictionary aliases",
+					Action: listDictionaries,
+				},
+			},
 		},
 		{
 			Name:    "lookup",

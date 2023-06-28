@@ -7,7 +7,6 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	dump_ "github.com/TheOpenDictionary/odict/lib/dump"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -30,27 +29,39 @@ func dump(c *cli.Context) error {
 		return errors.New("usage: odict dump [input file] [output file]")
 	}
 
-	t(c, func() {
-		dict := core.ReadDictionaryFromPath(inputFile)
+	return t(c, func() error {
+		dict, readErr := core.ReadDictionary(inputFile)
+
+		if readErr != nil {
+			return readErr
+		}
 
 		// All SQL formats and XML
 		var dumped string
+		var dumpErr error
+
 		switch format {
 		case Xml:
-			dumped = dump_.AsXML(dict)
+			dumped, dumpErr = dump_.AsXML(dict)
 		case Postgres:
-			dumped = dump_.AsSQL(dict, Postgres)
+			dumped, dumpErr = dump_.AsSQL(dict, Postgres)
 		case Sqlite:
-			dumped = dump_.AsSQL(dict, Sqlite)
+			dumped, dumpErr = dump_.AsSQL(dict, Sqlite)
 		case Mysql:
-			dumped = dump_.AsSQL(dict, Mysql)
+			dumped, dumpErr = dump_.AsSQL(dict, Mysql)
 		case Sqlserver:
-			dumped = dump_.AsSQL(dict, Sqlserver)
+			dumped, dumpErr = dump_.AsSQL(dict, Sqlserver)
 		}
 
-		file, err := os.Create(outputFile)
+		if dumpErr != nil {
+			return dumpErr
+		}
 
-		utils.Check(err)
+		file, writeErr := os.Create(outputFile)
+
+		if writeErr != nil {
+			return writeErr
+		}
 
 		defer file.Close()
 
@@ -59,7 +70,7 @@ func dump(c *cli.Context) error {
 		writer.Write([]byte(dumped))
 
 		writer.Flush()
-	})
 
-	return nil
+		return nil
+	})
 }

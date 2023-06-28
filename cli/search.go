@@ -8,6 +8,7 @@ import (
 	ods "github.com/TheOpenDictionary/odict/lib/search"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/samber/lo"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -31,8 +32,12 @@ func search(c *cli.Context) error {
 		return errors.New("usage: odict search [odict file] [search term]")
 	}
 
-	t(c, func() {
-		dict := core.ReadDictionaryFromPath(inputFile)
+	return t(c, func() error {
+		dict, err := core.ReadDictionary(inputFile)
+
+		if err != nil {
+			return err
+		}
 
 		request := SearchRequest{
 			Dictionary:  dict,
@@ -45,14 +50,30 @@ func search(c *cli.Context) error {
 
 		ods.Index(ods.IndexRequest{Dictionary: request.Dictionary, Overwrite: request.Force, Quiet: request.Quiet})
 
-		results := ods.SearchDictionary(string(request.Dictionary.Id()), request.Query, request.Exact)
+		results, err := ods.SearchDictionary(
+			ods.SearchDictionaryRequest{
+				Dictionary: request.Dictionary,
+				Query:      request.Query,
+				Exact:      request.Exact,
+			},
+		)
 
-		representable := utils.Map(results, func(entry types.Entry) types.EntryRepresentable {
+		if err != nil {
+			return err
+		}
+
+		representable := lo.Map(results, func(entry types.Entry, _ int) types.EntryRepresentable {
 			return entry.AsRepresentable()
 		})
 
-		fmt.Print(utils.SerializeToJSON(representable, request.PrettyPrint))
-	})
+		json, err := utils.SerializeToJSON(representable, request.PrettyPrint)
 
-	return nil
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(json)
+
+		return nil
+	})
 }

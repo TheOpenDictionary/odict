@@ -2,11 +2,12 @@ package cli
 
 import (
 	"encoding/base64"
+	"fmt"
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	ods "github.com/TheOpenDictionary/odict/lib/search"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/samber/lo"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -19,19 +20,14 @@ type Payload struct {
 	Payload []int `json:"payload"`
 }
 
-func decodePayload(payload interface{}) ([]byte, bool) {
+func decodePayload(payload interface{}) ([]byte, error) {
 	text := payload.(string)
 
-	var buf []byte
-	var err error
-
 	if len(text) > 0 {
-		buf, err = base64.StdEncoding.DecodeString(text)
-		utils.Check(err)
-		return buf, true
+		return base64.StdEncoding.DecodeString(text)
 	}
 
-	return nil, false
+	return nil, fmt.Errorf("cannot decode an empty payload")
 }
 
 func service(c *cli.Context) error {
@@ -41,13 +37,21 @@ func service(c *cli.Context) error {
 	var dict *types.Dictionary
 
 	if len(dictPath) > 0 {
-		dict = core.ReadDictionaryFromPath(dictPath)
+		var err error
+
+		dict, err = core.ReadDictionary(dictPath)
+
+		if err != nil {
+			return err
+		}
 	}
 
 	go func() {
 		// Write
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodWrite], func(reply replyChannel, payload interface{}) {
-			if buf, ok := decodePayload(payload); ok {
+			if buf, err := decodePayload(payload); err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
 				payload := GetRootAsWritePayload(buf, 0)
 				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()))
 				ipc.Reply(reply, true, nil)
@@ -56,7 +60,9 @@ func service(c *cli.Context) error {
 
 		// Split
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodSplit], func(reply replyChannel, payload interface{}) {
-			if buf, ok := decodePayload(payload); ok {
+			if buf, err := decodePayload(payload); err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
 				payload := GetRootAsSplitPayload(buf, 0)
 
 				query := string(payload.Query())
@@ -69,9 +75,7 @@ func service(c *cli.Context) error {
 					Threshold:  threshold,
 				})
 
-				representable := utils.Map(entries, func(entry types.Entry) types.EntryRepresentable {
-					return entry.AsRepresentable()
-				})
+				representable := types.EntriesToRepresentables(entries)
 
 				ipc.Reply(reply, representable, nil)
 			}
@@ -79,7 +83,9 @@ func service(c *cli.Context) error {
 
 		// Search
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodSearch], func(reply replyChannel, payload interface{}) {
-			if buf, ok := decodePayload(payload); ok {
+			if buf, err := decodePayload(payload); err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
 				payload := GetRootAsSearchPayload(buf, 0)
 				force := payload.Force()
 				exact := payload.Exact()
@@ -87,9 +93,14 @@ func service(c *cli.Context) error {
 
 				ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: force, Quiet: true})
 
-				results := ods.SearchDictionary(string(dict.Id()), query, exact)
+				results, err := ods.SearchDictionary(ods.SearchDictionaryRequest{Dictionary: dict, Query: query, Exact: exact})
 
-				representable := utils.Map(results, func(entry types.Entry) types.EntryRepresentable {
+				if err != nil {
+					ipc.Reply(reply, nil, err)
+					return
+				}
+
+				representable := lo.Map(results, func(entry types.Entry, _ int) types.EntryRepresentable {
 					return entry.AsRepresentable()
 				})
 
@@ -111,7 +122,7 @@ func service(c *cli.Context) error {
 
 		// Lookup
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodLookup], func(reply replyChannel, payload interface{}) {
-			if buf, ok := decodePayload(payload); ok && dict != nil {
+			if buf, err := decodePayload(payload); err == nil && dict != nil {
 				payload := GetRootAsLookupPayload(buf, 0)
 				queries := make([]string, payload.QueriesLength())
 				follow := payload.Follow()
@@ -128,19 +139,21 @@ func service(c *cli.Context) error {
 					Split:      split,
 				})
 
-				representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
-					return utils.Map(e, func(entry types.Entry) types.EntryRepresentable {
-						return entry.AsRepresentable()
-					})
-				})
+				representable := types.NestedEntriesToRepresentables(entries)
 
 				ipc.Reply(reply, representable, nil)
+			} else if err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
+				ipc.Reply(reply, nil, fmt.Errorf("no dictionary loaded"))
 			}
 		})
 
 		// Compile
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodCompile], func(reply replyChannel, payload interface{}) {
-			if buf, ok := decodePayload(payload); ok {
+			if buf, err := decodePayload(payload); err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
 				payload := GetRootAsCompilePayload(buf, 0)
 				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
 				ipc.Reply(reply, true, nil)

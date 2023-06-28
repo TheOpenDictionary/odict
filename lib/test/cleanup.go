@@ -5,13 +5,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/stretchr/testify/assert"
 )
 
 func CleanupTest() {
 	path, err := os.Getwd()
 
-	utils.Check(err)
+	assert.Nil(nil, err)
 
 	os.RemoveAll(filepath.Join(path, ".odict"))
 

@@ -4,7 +4,6 @@ import (
 	"encoding/xml"
 	"io"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/imdario/mergo"
 )
@@ -59,7 +58,7 @@ func (m *KVMap[K, V]) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 		existing := (*m)[k]
 
 		if err := mergo.Merge(&e, existing, mergo.WithAppendSlice); err != nil {
-			utils.Check(err)
+			return err
 		}
 	}
 

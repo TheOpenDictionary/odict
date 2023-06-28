@@ -46,7 +46,12 @@ func load() js.Func {
 
 		js.CopyBytesToGo(dst, data)
 
-		dict := core.ReadDictionaryFromBytes(dst)
+		dict, err := core.ReadDictionaryFromBytes(dst)
+
+		if err != nil {
+			fmt.Printf("Error reading dictionary: %s", err)
+			return false
+		}
 
 		dictMap[name] = dict
 
@@ -74,11 +79,13 @@ func lookup() js.Func {
 				Follow:     follow,
 			})
 
-			representable := utils.Map(entries, func(e []types.Entry) []types.EntryRepresentable {
-				return types.MapEntriesToRepresentable(e)
-			})
+			representable := types.NestedEntriesToRepresentables(entries)
 
-			json := utils.SerializeToJSON(representable, false)
+			json, err := utils.SerializeToJSON(representable, false)
+
+			if err != nil {
+				fmt.Printf("Error serializing lookup result: %s", err)
+			}
 
 			return js.ValueOf(json)
 		} else {
@@ -97,7 +104,13 @@ func lexicon() js.Func {
 
 		if dict, ok := dictMap[name]; ok {
 			lexicon := core.Lexicon(dict)
-			return js.ValueOf(utils.SerializeToJSON(lexicon, false))
+			serialized, err := utils.SerializeToJSON(lexicon, false)
+
+			if err != nil {
+				fmt.Printf("Error serializing lexicon: %s", err)
+			}
+
+			return js.ValueOf(serialized)
 		} else {
 			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
 		}
@@ -116,7 +129,13 @@ func split() js.Func {
 
 		if dict, ok := dictMap[name]; ok {
 			result := core.Split(core.SplitRequest{Dictionary: dict, Query: query, Threshold: threshold})
-			return js.ValueOf(utils.SerializeToJSON(types.MapEntriesToRepresentable(result), false))
+			serialized, err := utils.SerializeToJSON(types.EntriesToRepresentables(result), false)
+
+			if err != nil {
+				fmt.Printf("Error serializing split result: %s", err)
+			}
+
+			return js.ValueOf(serialized)
 		} else {
 			fmt.Printf("Could not find any loaded dictionary called %s! Are you sure you called Dictionary.load() first?", name)
 		}
@@ -130,7 +149,12 @@ func split() js.Func {
 func compile() js.Func {
 	compileFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
 		xml := args[0].String()
-		bytes := core.GetDictionaryBytesFromXML(xml)
+		bytes, err := core.GetDictionaryBytesFromXML(xml)
+
+		if err != nil {
+			fmt.Printf("Error compiling dictionary: %s", err)
+		}
+
 		return byteArrayToJS(bytes)
 	})
 

@@ -6,27 +6,43 @@ import (
 )
 
 // Serializes any interface to JSON if possible
-func SerializeToJSON(any interface{}, prettyPrint bool) string {
+func SerializeToJSON(any interface{}, prettyPrint bool) (string, error) {
 	if prettyPrint {
 		b, err := json.MarshalIndent(&any, "", " ")
-		Check(err)
-		return string(b)
+
+		if err != nil {
+			return "", err
+		}
+
+		return string(b), nil
 	} else {
 		b, err := json.Marshal(&any)
-		Check(err)
-		return string(b)
+
+		if err != nil {
+			return "", err
+		}
+
+		return string(b), nil
 	}
 }
 
 // Serializes any interface to XML if possible
-func SerializeToXML(any interface{}, prettyPrint bool) string {
+func SerializeToXML(any interface{}, prettyPrint bool) (string, error) {
 	if prettyPrint {
 		str, err := xml.MarshalIndent(&any, "", " ")
-		Check(err)
-		return string(str)
+
+		if err != nil {
+			return "", err
+		}
+
+		return string(str), nil
 	} else {
 		str, err := xml.Marshal(&any)
-		Check(err)
-		return string(str)
+
+		if err != nil {
+			return "", err
+		}
+
+		return string(str), err
 	}
 }

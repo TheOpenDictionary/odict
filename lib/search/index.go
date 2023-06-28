@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/TheOpenDictionary/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/document"
 	"github.com/blevesearch/bleve/v2/index/scorch"
@@ -22,19 +22,24 @@ type IndexRequest struct {
 	Quiet      bool
 }
 
-func getIndexPath(dictionaryID string) string {
-	path := os.Getenv("ODICT_INDEX_DIR")
+func getIndexPath(dictionaryID string) (string, error) {
+	path, err := config.GetConfigDir()
 
-	if len(path) == 0 {
-		path = os.TempDir()
+	if err != nil {
+		return "", err
 	}
 
-	return filepath.Join(path, ".odict", "idx", dictionaryID)
+	return filepath.Join(path, "idx", dictionaryID), nil
 }
 
-func Index(request IndexRequest) string {
+func Index(request IndexRequest) (string, error) {
 	dictionary := request.Dictionary.AsRepresentable()
-	indexPath := getIndexPath(dictionary.ID)
+	indexPath, err := getIndexPath(dictionary.ID)
+
+	if err != nil {
+		return "", err
+	}
+
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
@@ -43,9 +48,12 @@ func Index(request IndexRequest) string {
 		}
 
 		mapping := bleve.NewIndexMapping()
+
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
-		utils.Check(indexErr)
+		if indexErr != nil {
+			return "", indexErr
+		}
 
 		defer index.Close()
 
@@ -84,7 +92,9 @@ func Index(request IndexRequest) string {
 			if batchCount >= batchSize {
 				idxErr := index.Batch(batch)
 
-				utils.Check(idxErr)
+				if idxErr != nil {
+					return "", idxErr
+				}
 
 				batch = index.NewBatch()
 				batchCount = 0
@@ -93,7 +103,9 @@ func Index(request IndexRequest) string {
 
 		idxErr := index.Batch(batch)
 
-		utils.Check(idxErr)
+		if idxErr != nil {
+			return "", idxErr
+		}
 
 		if !request.Quiet {
 			fmt.Println()
@@ -108,5 +120,5 @@ func Index(request IndexRequest) string {
 		return Index(IndexRequest{Dictionary: request.Dictionary, Overwrite: false, Quiet: request.Quiet})
 	}
 
-	return indexPath
+	return indexPath, nil
 }

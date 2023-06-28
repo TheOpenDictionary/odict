@@ -7,16 +7,26 @@ import (
 	"strings"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/blevesearch/bleve/v2"
 	query "github.com/blevesearch/bleve/v2/search/query"
 )
 
+type SearchDictionaryRequest struct {
+	Dictionary *types.Dictionary
+	Query      string
+	Exact      bool
+}
+
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.Entry {
-	indexPath := getIndexPath(dictionaryID)
-	_, err := os.Stat(indexPath)
+func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
+	indexPath, err := getIndexPath(string(request.Dictionary.Id()))
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
 		log.Fatalln("Index path does not exist. Did you call IndexDictionary() first?")
@@ -24,21 +34,25 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.
 
 	index, openErr := bleve.Open(indexPath)
 
-	utils.Check(openErr)
+	if openErr != nil {
+		return nil, openErr
+	}
 
 	defer index.Close()
 
-	var query query.Query = bleve.NewMatchQuery(queryStr)
+	var query query.Query = bleve.NewMatchQuery(request.Query)
 
-	if exact {
-		query = bleve.NewDocIDQuery([]string{strings.ToLower(queryStr)})
+	if request.Exact {
+		query = bleve.NewDocIDQuery([]string{strings.ToLower(request.Query)})
 	}
 
 	search := bleve.NewSearchRequest(query)
 	search.Fields = []string{"_source"}
 	searchResults, searchErr := index.Search(search)
 
-	utils.Check(searchErr)
+	if searchErr != nil {
+		return nil, searchErr
+	}
 
 	hits := searchResults.Hits
 
@@ -52,5 +66,5 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) []types.
 		}
 	}
 
-	return entries
+	return entries, nil
 }

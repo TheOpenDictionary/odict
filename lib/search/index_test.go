@@ -7,20 +7,21 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/test"
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestIndex(t *testing.T) {
 	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := core.ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := core.ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
 
 	path, err := os.Getwd()
 
-	utils.Check(err)
+	assert.Equal(t, nil, err)
 
-	os.Setenv("ODICT_INDEX_DIR", path)
+	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
 	Index(
 		IndexRequest{
@@ -32,7 +33,7 @@ func TestIndex(t *testing.T) {
 
 	_, e := os.Stat(filepath.Join(path, ".odict", "idx", string(dict.Id())))
 
-	assert.Equal(t, e, nil)
+	assert.Equal(t, nil, e)
 
 	test.CleanupTest()
 }

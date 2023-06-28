@@ -6,7 +6,6 @@ require (
 	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230530002149-e22e47d19a36
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230530002149-e22e47d19a36
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230530002149-e22e47d19a36
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230530002149-e22e47d19a36
 	github.com/blevesearch/bleve/v2 v2.3.8
 	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/schollz/progressbar/v3 v3.13.1
@@ -15,6 +14,7 @@ require (
 
 require (
 	github.com/RoaringBitmap/roaring v0.9.4 // indirect
+	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230530002149-e22e47d19a36 // indirect
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/blevesearch/geo v0.1.17 // indirect
 	github.com/blevesearch/go-porterstemmer v1.0.3 // indirect

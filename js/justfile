@@ -1,18 +1,33 @@
-install:
-	npm install
+@install:
+	pnpm install
 
-clean:
-  rm -rf coverage dist ../**/*.odict 
+@add +args:
+  pnpm add {{args}}
 
+@clean:
+  rm -rf coverage dist ../**/*.odict  ../**/*.log
+
+[private]
+@dlx +args:
+  ./node_modules/.bin/{{args}}
+  
 @schema:
   flatc --ts -o ./src/__generated__ ../flatbuffers/service.fbs ../flatbuffers/enums.fbs
 
-build: install
-  npm run build
+@check +args="":
+  just dlx rome check {{args}} .
+
+@format +args="":
+  just dlx rome format {{args}} .
+
+@build: install
+  just dlx swc -d dist ./src/*.ts ./src/**/*.ts & \
+  just dlx tsc
 
 @test: install && clean
   just ../cli/build
-  RUNTIME_ENV=test npm run test
+  just dlx tsc
+  RUNTIME_ENV=test just dlx jest --detectOpenHandles
 
-publish: install
-	npm publish
+@publish: build
+	pnpm publish

@@ -1,8 +1,8 @@
 package types
 
 import (
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/samber/lo"
 )
 
 type DefinitionRepresentable struct {
@@ -42,7 +42,7 @@ func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Buil
 	examples := def.Examples
 	exampleCount := len(examples)
 
-	exampleBuffers := utils.Map(examples, func(example string) flatbuffers.UOffsetT {
+	exampleBuffers := lo.Map(examples, func(example string, _ int) flatbuffers.UOffsetT {
 		return builder.CreateString(example)
 	})
 

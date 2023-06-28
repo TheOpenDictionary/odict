@@ -32,7 +32,7 @@ describe("Dictionary", () => {
 
   it("returns a lexicon properly", async () => {
     const result = await dict1.lexicon();
-    expect(result).toHaveLength(4);
+    expect(result).toHaveLength(5);
   });
 
   it("can split terms during lookup", async () => {

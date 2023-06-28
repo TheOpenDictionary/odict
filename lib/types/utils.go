@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/gob"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
+	"github.com/samber/lo"
 )
 
 func strToPartOfSpeech(str string) PartOfSpeech {
@@ -17,54 +17,75 @@ func strToPartOfSpeech(str string) PartOfSpeech {
 
 // EncodeDictionary encodes a dictionary struct
 // into a byte array
-func EncodeDictionary(dictionary Dictionary) []byte {
+func EncodeDictionary(dictionary Dictionary) ([]byte, error) {
 	var buffer bytes.Buffer
 
 	enc := gob.NewEncoder(&buffer)
 	err := enc.Encode(dictionary)
 
-	utils.Check(err)
+	if err != nil {
+		return nil, err
+	}
 
-	return buffer.Bytes()
+	return buffer.Bytes(), nil
 }
 
 // DecodeDictionary decodes a byte array into
 // a dictionary object
-func DecodeDictionary(b []byte) Dictionary {
+func DecodeDictionary(b []byte) (*Dictionary, error) {
 	var dict Dictionary
 
 	buffer := bytes.NewBuffer(b)
 	dec := gob.NewDecoder(buffer)
 	err := dec.Decode(&dict)
 
-	utils.Check(err)
+	if err != nil {
+		return nil, err
+	}
 
-	return dict
+	return &dict, nil
 }
 
 // EncodeDictionary encodes an entry struct
 // into a byte array
-func EncodeEntry(entry Entry) []byte {
+func EncodeEntry(entry Entry) ([]byte, error) {
 	var buffer bytes.Buffer
 
 	enc := gob.NewEncoder(&buffer)
 	err := enc.Encode(entry)
 
-	utils.Check(err)
+	if err != nil {
+		return nil, err
+	}
 
-	return buffer.Bytes()
+	return buffer.Bytes(), nil
 }
 
 // DecodeDictionary decodes a byte array into
 // an entry object
-func DecodeEntry(b []byte) Entry {
+func DecodeEntry(b []byte) (*Entry, error) {
 	var entry Entry
 
 	buffer := bytes.NewBuffer(b)
 	dec := gob.NewDecoder(buffer)
 	err := dec.Decode(&entry)
 
-	utils.Check(err)
+	if err != nil {
+		return nil, err
+	}
 
-	return entry
+	return &entry, nil
+}
+
+func NestedEntriesToRepresentables(entries [][]Entry) [][]EntryRepresentable {
+	return lo.Map(entries, func(e []Entry, _ int) []EntryRepresentable {
+		return EntriesToRepresentables(e)
+	})
+}
+
+func EntriesToRepresentables(entries []Entry) []EntryRepresentable {
+	return lo.Map(entries, func(entry Entry, _ int) EntryRepresentable {
+		return entry.AsRepresentable()
+
+	})
 }

@@ -43,6 +43,7 @@
       </usage>
     </ety>
   </entry>
+  <entry term="ran" see="run" />
   <entry term="cat">
     <ety description="Latin root">
       <usage pos="n">

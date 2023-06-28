@@ -128,7 +128,7 @@ func ppEntry(entry types.EntryRepresentable) {
 
 }
 
-func prettyPrint(entries [][]types.EntryRepresentable) bool {
+func prettyPrint(entries [][]types.EntryRepresentable) error {
 	fmt.Println()
 
 	hasEntries := false
@@ -140,18 +140,38 @@ func prettyPrint(entries [][]types.EntryRepresentable) bool {
 		}
 	}
 
-	return hasEntries
+	if !hasEntries {
+		return fmt.Errorf("no entries found")
+	}
+
+	return nil
 }
 
-func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, indent bool) {
+func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, indent bool) error {
 	switch {
 	case format == "json":
-		fmt.Print(utils.SerializeToJSON(entries, indent))
+		json, err := utils.SerializeToJSON(entries, indent)
+
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(json)
 	case format == "xml":
-		fmt.Print(utils.SerializeToXML(entries, indent))
+		xml, err := utils.SerializeToXML(entries, indent)
+
+		if err != nil {
+			return err
+		}
+
+		fmt.Print(xml)
 	case format == "pp":
-		if !prettyPrint(entries) {
-			fmt.Printf("No entries found!\n")
+		err := prettyPrint(entries)
+
+		if err != nil {
+			return err
 		}
 	}
+
+	return nil
 }

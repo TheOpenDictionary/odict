@@ -2,9 +2,10 @@ package core
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"html"
-	"io/ioutil"
+	"os"
 	"regexp"
 	"strconv"
 
@@ -14,7 +15,61 @@ import (
 	"github.com/google/uuid"
 )
 
-func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
+func writeBytesToFile(outputPath string, data []byte) (int, error) {
+	err := os.WriteFile(outputPath, data, 0644)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return len(data), nil
+}
+
+func serializeDictionary(dictionary *types.DictionaryRepresentable) ([]byte, error) {
+	dictionaryBytes := types.Serialize(dictionary)
+	compressed := snappy.Encode(nil, dictionaryBytes)
+	versionInt, parseErr := strconv.Atoi(version)
+
+	if parseErr != nil {
+		return nil, parseErr
+	}
+
+	signature := []byte("ODICT")
+
+	version := utils.Uint16ToBytes(uint16(versionInt))
+
+	compressedSize := uint64(len(compressed))
+
+	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
+	totalSize := len(signature) + len(version) + len(compressedSizeBytes) + len(compressed)
+
+	output := make([]byte, 0, totalSize)
+
+	output = append(output, signature...)
+	output = append(output, version...)
+	output = append(output, compressedSizeBytes...)
+	output = append(output, compressed...)
+
+	if len(signature) != 5 {
+		return nil, errors.New("signature bytes do not equal 5")
+	}
+
+	if len(version) != 2 {
+		return nil, errors.New("version bytes do not equal 2")
+	}
+
+	if len(compressedSizeBytes) != 8 {
+		return nil, errors.New("content byte count does not equal 8")
+	}
+
+	if len(compressed) != int(compressedSize) {
+		return nil, errors.New("content does not equal the computed byte count")
+	}
+
+	return output, nil
+}
+
+func GetDictionaryFromXML(xmlStr string) *types.DictionaryRepresentable {
 	var dictionary types.DictionaryRepresentable
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
@@ -40,57 +95,25 @@ func xmlToDictionaryRepresentable(xmlStr string) types.DictionaryRepresentable {
 		dictionary.ID = uuid.New().String()
 	}
 
-	return dictionary
+	return &dictionary
 }
 
-func writeBytesToFile(outputPath string, data []byte) error {
-	err := ioutil.WriteFile(outputPath, data, 0644)
+func WriteDictionaryToDisk(outputPath string, dictionary *types.DictionaryRepresentable) (int, error) {
+	serialized, err := serializeDictionary(dictionary)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
-}
-
-func serializeDictionary(dictionary types.DictionaryRepresentable) []byte {
-	dictionaryBytes := types.Serialize(&dictionary)
-	compressed := snappy.Encode(nil, dictionaryBytes)
-	versionInt, parseErr := strconv.Atoi(version)
-
-	utils.Check(parseErr)
-
-	signature := []byte("ODICT")
-	version := utils.Uint16ToBytes(uint16(versionInt))
-	compressedSize := uint64(len(compressed))
-	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
-	totalSize := len(signature) + len(version) + len(compressedSizeBytes) + len(compressed)
-
-	output := make([]byte, 0, totalSize)
-
-	output = append(output, signature...)
-	output = append(output, version...)
-	output = append(output, compressedSizeBytes...)
-	output = append(output, compressed...)
-
-	utils.Assert(len(signature) == 5, "Signature bytes do not equal 5")
-	utils.Assert(len(version) == 2, "Version bytes do not equal 2")
-	utils.Assert(len(compressedSizeBytes) == 8, "Content byte count does not equal 8")
-	utils.Assert(len(compressed) == int(compressedSize), "Content does not equal the computed byte count")
-
-	return output
-}
-
-func WriteDictionaryToDisk(outputPath string, dictionary types.DictionaryRepresentable) error {
-	return writeBytesToFile(outputPath, serializeDictionary(dictionary))
+	return writeBytesToFile(outputPath, serialized)
 }
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionaryFromXML(xmlStr, outputPath string) error {
-	return WriteDictionaryToDisk(outputPath, xmlToDictionaryRepresentable(xmlStr))
+func WriteDictionaryFromXML(xmlStr, outputPath string) (int, error) {
+	return WriteDictionaryToDisk(outputPath, GetDictionaryFromXML(xmlStr))
 }
 
-func GetDictionaryBytesFromXML(xmlStr string) []byte {
-	return serializeDictionary(xmlToDictionaryRepresentable(xmlStr))
+func GetDictionaryBytesFromXML(xmlStr string) ([]byte, error) {
+	return serializeDictionary(GetDictionaryFromXML(xmlStr))
 }

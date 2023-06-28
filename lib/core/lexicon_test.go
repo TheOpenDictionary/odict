@@ -10,9 +10,10 @@ import (
 func TestLexicon(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 
-	dict := ReadDictionaryFromPath("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict")
 
-	assert.Equal(t, Lexicon(dict), []string{"cat", "dog", "poo", "run"})
+	assert.Equal(t, nil, err, err)
+	assert.Equal(t, []string{"cat", "dog", "poo", "ran", "run"}, Lexicon(dict))
 
 	test.CleanupTest()
 }

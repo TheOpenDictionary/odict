@@ -16,10 +16,15 @@ func index(c *cli.Context) error {
 		return errors.New("the path to a compiled ODict file is required")
 	}
 
-	t(c, func() {
-		dict := core.ReadDictionaryFromPath(inputFile)
-		ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: quiet})
-	})
+	return t(c, func() error {
+		dict, err := core.ReadDictionary(inputFile)
 
-	return nil
+		if err != nil {
+			return err
+		}
+
+		ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: quiet})
+
+		return nil
+	})
 }

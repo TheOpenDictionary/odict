@@ -3,8 +3,8 @@ package types
 import (
 	"encoding/xml"
 
-	"github.com/TheOpenDictionary/odict/lib/utils"
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/samber/lo"
 )
 
 type EntryRepresentable struct {
@@ -55,7 +55,7 @@ func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuff
 }
 
 func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	etymologies := utils.Map(entry.Etymologies, func(ety EtymologyRepresentable) flatbuffers.UOffsetT {
+	etymologies := lo.Map(entry.Etymologies, func(ety EtymologyRepresentable, _ int) flatbuffers.UOffsetT {
 		return ety.AsBuffer(builder)
 	})
 
@@ -68,10 +68,4 @@ func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Build
 	}
 
 	return builder.EndVector(etymologiesCount)
-}
-
-func MapEntriesToRepresentable(e []Entry) []EntryRepresentable {
-	return utils.Map(e, func(entry Entry) EntryRepresentable {
-		return entry.AsRepresentable()
-	})
 }
