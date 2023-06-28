@@ -13,7 +13,7 @@ func TestLexicon(t *testing.T) {
 	dict, err := ReadDictionary("../../examples/example1.odict")
 
 	assert.Equal(t, err, nil)
-	assert.Equal(t, Lexicon(dict), []string{"cat", "dog", "poo", "run", "ran"})
+	assert.Equal(t, Lexicon(dict), []string{"cat", "dog", "poo", "ran", "run"})
 
 	test.CleanupTest()
 }
