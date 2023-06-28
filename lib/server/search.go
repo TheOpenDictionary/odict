@@ -18,7 +18,9 @@ func handleSearch(pathOrAlias string) http.HandlerFunc {
 		}
 
 		query := r.URL.Query()
+
 		queries := query.Get("query")
+
 		entries, err := search.SearchDictionary(search.SearchDictionaryRequest{
 			Dictionary: dictionary,
 			Query:      queries,

@@ -20,8 +20,13 @@ type SearchDictionaryRequest struct {
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
 func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
-	indexPath := getIndexPath(string(request.Dictionary.Id()))
-	_, err := os.Stat(indexPath)
+	indexPath, err := getIndexPath(string(request.Dictionary.Id()))
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
 		log.Fatalln("Index path does not exist. Did you call IndexDictionary() first?")

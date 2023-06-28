@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/TheOpenDictionary/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/blevesearch/bleve/v2"
 	"github.com/blevesearch/bleve/v2/document"
@@ -21,19 +22,24 @@ type IndexRequest struct {
 	Quiet      bool
 }
 
-func getIndexPath(dictionaryID string) string {
-	path := os.Getenv("ODICT_INDEX_DIR")
+func getIndexPath(dictionaryID string) (string, error) {
+	path, err := config.GetConfigDir()
 
-	if len(path) == 0 {
-		path = os.TempDir()
+	if err != nil {
+		return "", err
 	}
 
-	return filepath.Join(path, ".odict", "idx", dictionaryID)
+	return filepath.Join(path, "idx", dictionaryID), nil
 }
 
 func Index(request IndexRequest) (string, error) {
 	dictionary := request.Dictionary.AsRepresentable()
-	indexPath := getIndexPath(dictionary.ID)
+	indexPath, err := getIndexPath(dictionary.ID)
+
+	if err != nil {
+		return "", err
+	}
+
 	_, statErr := os.Stat(indexPath)
 
 	if os.IsNotExist(statErr) {
