@@ -35,7 +35,7 @@ func (suite *TestLookupSuite) SetupTest() {
 }
 
 func (suite *TestLookupSuite) TestLookupSingleDictionary() {
-	request, _ := http.NewRequest(http.MethodGet, "/lookup?query=hot(dog)&query=run", nil)
+	request, _ := http.NewRequest(http.MethodGet, "/lookup?query=hot(dog)&query=run&query=catdog&query=ran&split=3&follow=1", nil)
 
 	response := httptest.NewRecorder()
 
@@ -44,7 +44,9 @@ func (suite *TestLookupSuite) TestLookupSingleDictionary() {
 	entries := core.Lookup(
 		core.LookupRequest{
 			Dictionary: suite.dict,
-			Queries:    []string{"hot(dog)", "run"},
+			Split:      3,
+			Follow:     true,
+			Queries:    []string{"hot(dog)", "run", "catdog", "ran"},
 		},
 	)
 
@@ -62,7 +64,7 @@ func (suite *TestLookupSuite) TestLookupSingleDictionary() {
 }
 
 func (suite *TestLookupSuite) TestLookupMultiDictionary() {
-	request, _ := http.NewRequest(http.MethodGet, "/lookup?dictionary=lookup&query=hot(dog)&query=run", nil)
+	request, _ := http.NewRequest(http.MethodGet, "/lookup?dictionary=lookup&split=3&follow=1&query=hot(dog)&query=run&query=catdog&query=ran", nil)
 
 	response := httptest.NewRecorder()
 
@@ -73,7 +75,9 @@ func (suite *TestLookupSuite) TestLookupMultiDictionary() {
 	entries := core.Lookup(
 		core.LookupRequest{
 			Dictionary: suite.dict,
-			Queries:    []string{"hot(dog)", "run"},
+			Split:      3,
+			Follow:     true,
+			Queries:    []string{"hot(dog)", "run", "catdog", "ran"},
 		},
 	)
 
