@@ -65,7 +65,7 @@ var App = &cli.App{
 			Action:  lexicon,
 		},
 		{
-			Name:    "dictionaries",
+			Name:    "alias",
 			Aliases: []string{"ds"},
 			Usage:   "manage dictionary aliases",
 			Subcommands: []*cli.Command{
@@ -93,7 +93,13 @@ var App = &cli.App{
 					Usage:       "adds or updates an aliased dictionary",
 					Description: "differs from `add` in that it will overwrite an existing alias if it exists",
 					Action:      setDictionary,
-					ArgsUsage:   "[name] [dictionary path]",
+					Flags: []cli.Flag{
+						&cli.BoolFlag{
+							Name:  "no-index",
+							Usage: "Don't index the dictionary when an alias is created",
+						},
+					},
+					ArgsUsage: "[name] [dictionary path]",
 				},
 				{
 					Name:   "list",

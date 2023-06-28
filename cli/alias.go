@@ -34,6 +34,7 @@ func listDictionaries(c *cli.Context) error {
 func addDictionary(c *cli.Context) error {
 	name := c.Args().First()
 	path := c.Args().Get(1)
+	noIndex := c.Bool("no-index")
 
 	if len(name) == 0 || len(path) == 0 {
 		cli.ShowSubcommandHelpAndExit(c, 1)
@@ -49,7 +50,9 @@ func addDictionary(c *cli.Context) error {
 		return err
 	}
 
-	_search.Index(_search.IndexRequest{Dictionary: dict})
+	if !noIndex {
+		_search.Index(_search.IndexRequest{Dictionary: dict})
+	}
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
@@ -59,6 +62,7 @@ func addDictionary(c *cli.Context) error {
 func setDictionary(c *cli.Context) error {
 	name := c.Args().First()
 	path := c.Args().Get(1)
+	noIndex := c.Bool("no-index")
 
 	if len(name) == 0 || len(path) == 0 {
 		cli.ShowSubcommandHelpAndExit(c, 1)
@@ -72,7 +76,9 @@ func setDictionary(c *cli.Context) error {
 		return err
 	}
 
-	_search.Index(_search.IndexRequest{Dictionary: dict})
+	if !noIndex {
+		_search.Index(_search.IndexRequest{Dictionary: dict})
+	}
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
