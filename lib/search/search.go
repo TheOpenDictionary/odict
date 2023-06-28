@@ -11,10 +11,16 @@ import (
 	query "github.com/blevesearch/bleve/v2/search/query"
 )
 
+type SearchDictionaryRequest struct {
+	Dictionary *types.Dictionary
+	Query      string
+	Exact      bool
+}
+
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(dictionaryID string, queryStr string, exact bool) ([]types.Entry, error) {
-	indexPath := getIndexPath(dictionaryID)
+func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
+	indexPath := getIndexPath(string(request.Dictionary.Id()))
 	_, err := os.Stat(indexPath)
 
 	if os.IsNotExist(err) {
@@ -29,10 +35,10 @@ func SearchDictionary(dictionaryID string, queryStr string, exact bool) ([]types
 
 	defer index.Close()
 
-	var query query.Query = bleve.NewMatchQuery(queryStr)
+	var query query.Query = bleve.NewMatchQuery(request.Query)
 
-	if exact {
-		query = bleve.NewDocIDQuery([]string{strings.ToLower(queryStr)})
+	if request.Exact {
+		query = bleve.NewDocIDQuery([]string{strings.ToLower(request.Query)})
 	}
 
 	search := bleve.NewSearchRequest(query)

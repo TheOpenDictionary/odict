@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/TheOpenDictionary/odict/lib/search"
 	"github.com/TheOpenDictionary/odict/lib/types"
@@ -20,30 +19,20 @@ func handleSearch(pathOrAlias string) {
 		}
 
 		query := r.URL.Query()
-		queries := query["query"]
-		follow := query.Has("follow")
-		split := 0
-
-		if r.URL.Query().Has("split") {
-			split, err = strconv.Atoi(r.URL.Query().Get("split"))
-
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-
-		entries := search.SearchDictionary(search.SearchReqSeuest{
+		queries := query.Get("query")
+		entries, err := search.SearchDictionary(search.SearchDictionaryRequest{
 			Dictionary: dictionary,
-			Queries:    queries,
-			Split:      split,
-			Follow:     follow,
+			Query:      queries,
+			Exact:      false,
 		})
 
-		representable := lo.Map(entries, func(e []types.Entry, _ int) []types.EntryRepresentable {
-			return lo.Map(e, func(entry types.Entry, _ int) types.EntryRepresentable {
-				return entry.AsRepresentable()
-			})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		representable := lo.Map(entries, func(entry types.Entry, _ int) types.EntryRepresentable {
+			return entry.AsRepresentable()
 		})
 
 		// Return the result as JSON

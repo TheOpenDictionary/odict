@@ -23,7 +23,7 @@ func TestSearch(t *testing.T) {
 		},
 	)
 
-	entries, err := SearchDictionary(string(dict.Id()), "run", false)
+	entries, err := SearchDictionary(SearchDictionaryRequest{Dictionary: dict, Query: "run", Exact: false})
 
 	assert.Equal(t, nil, err)
 	assert.Equal(t, string(entries[0].Term()), "run")
