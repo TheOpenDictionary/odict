@@ -40,10 +40,6 @@ func addDictionary(c *cli.Context) error {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	if err := config.AddDictionaryAlias(name, path); err != nil {
-		return err
-	}
-
 	dict, err := core.ReadDictionary(path)
 
 	if err != nil {
@@ -52,6 +48,10 @@ func addDictionary(c *cli.Context) error {
 
 	if !noIndex {
 		_search.Index(_search.IndexRequest{Dictionary: dict})
+	}
+
+	if err := config.AddDictionaryAlias(name, path); err != nil {
+		return err
 	}
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
@@ -68,8 +68,6 @@ func setDictionary(c *cli.Context) error {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	config.SetDictionaryAlias(name, path)
-
 	dict, err := core.ReadDictionary(path)
 
 	if err != nil {
@@ -79,6 +77,8 @@ func setDictionary(c *cli.Context) error {
 	if !noIndex {
 		_search.Index(_search.IndexRequest{Dictionary: dict})
 	}
+
+	config.SetDictionaryAlias(name, path)
 
 	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
