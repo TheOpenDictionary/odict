@@ -25,7 +25,7 @@ func (c *dictionaryCache) getDictionary(pathOrAlias string) (*types.Dictionary, 
 
 	if _, ok := c.data[pathOrAlias]; !ok {
 		dict, err := core.ReadDictionary(pathOrAlias)
-		println("id2", pathOrAlias, string(dict.Id()))
+
 		if err != nil {
 			return nil, err
 		}

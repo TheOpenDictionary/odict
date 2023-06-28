@@ -33,7 +33,7 @@ func (suite *TestSearchSuite) SetupTest() {
 	suite.Equal(nil, err)
 
 	suite.dict = dict
-	println("id", string(dict.Id()))
+
 	_, err = ods.Index(ods.IndexRequest{Dictionary: dict, Quiet: true})
 
 	suite.Equal(nil, err)
