@@ -5,7 +5,6 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/samber/lo"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -34,13 +33,9 @@ func lookup(c *cli.Context) error {
 
 		entries := core.Lookup(request)
 
-		representable := lo.Map(entries, func(e []types.Entry, _ int) []types.EntryRepresentable {
-			return lo.Map(e, func(entry types.Entry, _ int) types.EntryRepresentable {
-				return entry.AsRepresentable()
-			})
-		})
+		representables := types.NestedEntriesToRepresentables(entries)
 
-		PrintEntries(representable, format, true)
+		PrintEntries(representables, format, true)
 
 		return nil
 	})

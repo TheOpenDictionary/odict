@@ -7,11 +7,10 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/samber/lo"
 )
 
-func handleLookup(pathOrAlias string) {
-	http.HandleFunc("/lookup", func(w http.ResponseWriter, r *http.Request) {
+func handleLookup(pathOrAlias string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		dictionary, err := getDictionary(pathOrAlias, r)
 
 		if err != nil {
@@ -40,15 +39,11 @@ func handleLookup(pathOrAlias string) {
 			Follow:     follow,
 		})
 
-		representable := lo.Map(entries, func(e []types.Entry, _ int) []types.EntryRepresentable {
-			return lo.Map(e, func(entry types.Entry, _ int) types.EntryRepresentable {
-				return entry.AsRepresentable()
-			})
-		})
+		representable := types.NestedEntriesToRepresentables(entries)
 
 		// Return the result as JSON
 		w.Header().Set("Content-Type", "application/json")
 
 		json.NewEncoder(w).Encode(representable)
-	})
+	}
 }

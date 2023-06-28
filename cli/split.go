@@ -7,7 +7,6 @@ import (
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"
-	"github.com/samber/lo"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -35,9 +34,7 @@ func split(c *cli.Context) error {
 
 		entries := core.Split(request)
 
-		representable := lo.Map(entries, func(entry types.Entry, _ int) types.EntryRepresentable {
-			return entry.AsRepresentable()
-		})
+		representable := types.EntriesToRepresentables(entries)
 
 		fmt.Print(utils.SerializeToJSON(representable, true))
 

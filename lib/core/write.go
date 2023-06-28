@@ -16,7 +16,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func xmlToDictionaryRepresentable(xmlStr string) *types.DictionaryRepresentable {
+func GetDictionaryFromXML(xmlStr string) *types.DictionaryRepresentable {
 	var dictionary types.DictionaryRepresentable
 
 	xml.Unmarshal([]byte(xmlStr), &dictionary)
@@ -122,5 +122,5 @@ func WriteDictionaryFromExisting(outputPath string, dictionary *types.Dictionary
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
 func WriteDictionaryFromXML(xmlStr, outputPath string) (int, error) {
-	return WriteDictionaryFromExisting(outputPath, xmlToDictionaryRepresentable(xmlStr))
+	return WriteDictionaryFromExisting(outputPath, GetDictionaryFromXML(xmlStr))
 }

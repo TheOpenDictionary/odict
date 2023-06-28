@@ -6,11 +6,10 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/search"
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/samber/lo"
 )
 
-func handleSearch(pathOrAlias string) {
-	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
+func handleSearch(pathOrAlias string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		dictionary, err := getDictionary(pathOrAlias, r)
 
 		if err != nil {
@@ -31,13 +30,11 @@ func handleSearch(pathOrAlias string) {
 			return
 		}
 
-		representable := lo.Map(entries, func(entry types.Entry, _ int) types.EntryRepresentable {
-			return entry.AsRepresentable()
-		})
+		representable := types.EntriesToRepresentables(entries)
 
 		// Return the result as JSON
 		w.Header().Set("Content-Type", "application/json")
 
 		json.NewEncoder(w).Encode(representable)
-	})
+	}
 }
