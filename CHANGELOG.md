@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.16.0](https://github.com/TheOpenDictionary/odict/compare/v1.15.0...v1.16.0) (2023-06-28)
+
+
+### Features
+
+* add `serve` command ([#393](https://github.com/TheOpenDictionary/odict/issues/393)) ([cc7ef5c](https://github.com/TheOpenDictionary/odict/commit/cc7ef5c69811a4554e3b62bf492090de65ae86ea))
+* add support for dictionary aliasing ([#391](https://github.com/TheOpenDictionary/odict/issues/391)) ([c6f1a04](https://github.com/TheOpenDictionary/odict/commit/c6f1a0495136817065007acc4414194f4e8445ad))
+
 ## [1.15.0](https://github.com/TheOpenDictionary/odict/compare/v1.14.1...v1.15.0) (2023-06-19)
 
 
