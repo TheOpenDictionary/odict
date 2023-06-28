@@ -8,5 +8,6 @@ use (
 	./lib/test
 	./lib/types
 	./lib/utils
+	./lib/server
 	./lib/config
 )

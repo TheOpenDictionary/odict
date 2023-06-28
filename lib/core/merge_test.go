@@ -20,7 +20,7 @@ func TestMerge(t *testing.T) {
 	dict1_r := dict1.AsRepresentable()
 	dict2_r := dict2.AsRepresentable()
 
-	assert.Equal(t, dict1.EntriesLength(), 4)
+	assert.Equal(t, dict1.EntriesLength(), 5)
 	assert.Equal(t, dict2.EntriesLength(), 2)
 	assert.Equal(t, len(dict1_r.Entries["run"].Etymologies), 1)
 	assert.Equal(t, len(dict2_r.Entries["runner"].Etymologies), 1)
@@ -28,7 +28,7 @@ func TestMerge(t *testing.T) {
 	merged, err := MergeDictionaries(dict1, dict2)
 
 	assert.Equal(t, nil, err)
-	assert.Equal(t, len(merged.Entries), 6)
+	assert.Equal(t, len(merged.Entries), 7)
 
 	test.CleanupTest()
 }

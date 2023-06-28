@@ -6,6 +6,8 @@ import (
 	"text/tabwriter"
 
 	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/core"
+	_search "github.com/TheOpenDictionary/odict/lib/search"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -30,17 +32,29 @@ func listDictionaries(c *cli.Context) error {
 }
 
 func addDictionary(c *cli.Context) error {
-
 	name := c.Args().First()
 	path := c.Args().Get(1)
+	noIndex := c.Bool("no-index")
 
 	if len(name) == 0 || len(path) == 0 {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
+	dict, err := core.ReadDictionary(path)
+
+	if err != nil {
+		return err
+	}
+
+	if !noIndex {
+		_search.Index(_search.IndexRequest{Dictionary: dict})
+	}
+
 	if err := config.AddDictionaryAlias(name, path); err != nil {
 		return err
 	}
+
+	fmt.Printf("Aliased \"%s\" to the dictionary at %s.\n", name, path)
 
 	return nil
 }
@@ -48,9 +62,20 @@ func addDictionary(c *cli.Context) error {
 func setDictionary(c *cli.Context) error {
 	name := c.Args().First()
 	path := c.Args().Get(1)
+	noIndex := c.Bool("no-index")
 
 	if len(name) == 0 || len(path) == 0 {
 		cli.ShowSubcommandHelpAndExit(c, 1)
+	}
+
+	dict, err := core.ReadDictionary(path)
+
+	if err != nil {
+		return err
+	}
+
+	if !noIndex {
+		_search.Index(_search.IndexRequest{Dictionary: dict})
 	}
 
 	config.SetDictionaryAlias(name, path)

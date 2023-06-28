@@ -63,7 +63,7 @@ describe("Dictionary", () => {
 
 	it("can return the lexicon", async () => {
 		const result = await dict1.lexicon();
-		expect(result).toStrictEqual(["cat", "dog", "poo", "run"]);
+		expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
 	});
   
   it("can write raw XML", async () => {
@@ -89,7 +89,10 @@ describe("Dictionary", () => {
 
 	it("can index and search a dictionary", async () => {
 		await dict1.index();
-		const results = await dict1.search("run");
-		expect(results[0][0].term).toBe("run");
+		
+    const results = await dict1.search("run");
+		
+    expect(results[0][0].term).toBe("ran");
+    expect(results[0][1].term).toBe("run");
 	});
 });

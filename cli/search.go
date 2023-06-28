@@ -50,7 +50,13 @@ func search(c *cli.Context) error {
 
 		ods.Index(ods.IndexRequest{Dictionary: request.Dictionary, Overwrite: request.Force, Quiet: request.Quiet})
 
-		results, err := ods.SearchDictionary(string(request.Dictionary.Id()), request.Query, request.Exact)
+		results, err := ods.SearchDictionary(
+			ods.SearchDictionaryRequest{
+				Dictionary: request.Dictionary,
+				Query:      request.Query,
+				Exact:      request.Exact,
+			},
+		)
 
 		if err != nil {
 			return err

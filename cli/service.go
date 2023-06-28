@@ -75,9 +75,7 @@ func service(c *cli.Context) error {
 					Threshold:  threshold,
 				})
 
-				representable := lo.Map(entries, func(entry types.Entry, _ int) types.EntryRepresentable {
-					return entry.AsRepresentable()
-				})
+				representable := types.EntriesToRepresentables(entries)
 
 				ipc.Reply(reply, representable, nil)
 			}
@@ -95,7 +93,7 @@ func service(c *cli.Context) error {
 
 				ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: force, Quiet: true})
 
-				results, err := ods.SearchDictionary(string(dict.Id()), query, exact)
+				results, err := ods.SearchDictionary(ods.SearchDictionaryRequest{Dictionary: dict, Query: query, Exact: exact})
 
 				if err != nil {
 					ipc.Reply(reply, nil, err)
@@ -141,11 +139,7 @@ func service(c *cli.Context) error {
 					Split:      split,
 				})
 
-				representable := lo.Map(entries, func(e []types.Entry, _ int) []types.EntryRepresentable {
-					return lo.Map(e, func(entry types.Entry, _ int) types.EntryRepresentable {
-						return entry.AsRepresentable()
-					})
-				})
+				representable := types.NestedEntriesToRepresentables(entries)
 
 				ipc.Reply(reply, representable, nil)
 			} else if err != nil {

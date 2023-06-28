@@ -24,9 +24,7 @@ func TestLookup(t *testing.T) {
 			Follow:     false,
 		},
 	), func(entryList []types.Entry, _ int) []types.EntryRepresentable {
-		return lo.Map(entryList, func(entry types.Entry, _ int) types.EntryRepresentable {
-			return entry.AsRepresentable()
-		})
+		return types.EntriesToRepresentables(entryList)
 	})
 
 	assert.EqualValues(t, types.EntryRepresentable{

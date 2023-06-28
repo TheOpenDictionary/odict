@@ -21,7 +21,7 @@ func TestIndex(t *testing.T) {
 
 	assert.Equal(t, nil, err)
 
-	os.Setenv("ODICT_INDEX_DIR", path)
+	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
 	Index(
 		IndexRequest{
@@ -33,7 +33,7 @@ func TestIndex(t *testing.T) {
 
 	_, e := os.Stat(filepath.Join(path, ".odict", "idx", string(dict.Id())))
 
-	assert.Equal(t, e, nil)
+	assert.Equal(t, nil, e)
 
 	test.CleanupTest()
 }

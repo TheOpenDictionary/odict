@@ -20,7 +20,7 @@ class DictionaryTest {
         val dict = Dictionary("../../examples/example1.odict")
         val lexicon = dict.lexicon()
 
-        assertEquals(lexicon, listOf("cat", "dog", "poo", "run"))
+        assertEquals(lexicon, listOf("cat", "dog", "poo", "ran", "run"))
     }
 
     @Test
@@ -34,8 +34,9 @@ class DictionaryTest {
 
         val json = dict.search("run")
 
-        assertEquals(1, json.count())
-        assertEquals("run", json[0].term)
+        assertEquals(2, json.count())
+        assertEquals("ran", json[0].term)
+        assertEquals("run", json[1].term)
     }
 
     @Test

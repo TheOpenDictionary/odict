@@ -3,6 +3,8 @@ package types
 import (
 	"bytes"
 	"encoding/gob"
+
+	"github.com/samber/lo"
 )
 
 func strToPartOfSpeech(str string) PartOfSpeech {
@@ -73,4 +75,17 @@ func DecodeEntry(b []byte) (*Entry, error) {
 	}
 
 	return &entry, nil
+}
+
+func NestedEntriesToRepresentables(entries [][]Entry) [][]EntryRepresentable {
+	return lo.Map(entries, func(e []Entry, _ int) []EntryRepresentable {
+		return EntriesToRepresentables(e)
+	})
+}
+
+func EntriesToRepresentables(entries []Entry) []EntryRepresentable {
+	return lo.Map(entries, func(entry Entry, _ int) EntryRepresentable {
+		return entry.AsRepresentable()
+
+	})
 }

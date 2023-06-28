@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/TheOpenDictionary/odict/lib/core"
-	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -34,5 +33,4 @@ func TestDictionaryToXML(t *testing.T) {
 
 	assert.Equal(t, dict_r, newdict_r)
 
-	test.CleanupTest()
 }

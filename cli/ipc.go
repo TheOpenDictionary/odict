@@ -207,11 +207,8 @@ func (ipc IPC) Start() {
 						for _, handler := range ipc.receiveListerners[payload.Event+":"+payload.ID] {
 							handler(payload.Data)
 						}
-						println(payload.Event)
-						println(payload.SR)
-						println(len(ipc.receiveListerners[payload.Event]))
+
 						for _, handler := range ipc.receiveListerners[payload.Event] {
-							println(handler)
 							handler(payload.Data)
 						}
 					}

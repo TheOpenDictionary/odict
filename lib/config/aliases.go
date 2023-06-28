@@ -24,7 +24,7 @@ func getDictionariesFile() (string, error) {
 		return "", err
 	}
 
-	return path.Join(configDir, "dictionaries.json"), nil
+	return path.Join(configDir, "aliases.json"), nil
 }
 
 func getDictionariesConfig() (map[string]string, error) {
