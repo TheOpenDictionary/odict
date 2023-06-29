@@ -1,6 +1,6 @@
 {
   "name": "@theopendictionary/wasm",
-  "version": "0.0.1",
+  "version": "0.0.1-rc1",
   "description": "",
   "main": "./dist/index.js",
   "type": "module",

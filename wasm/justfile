@@ -11,6 +11,7 @@
   npm install 
 
 @preview: build
+  mkdir -p .preview
   cp ./src/odict.wasm ./.preview/odict.wasm
   npx parcel --dist-dir=.preview demo.html --open
 
