@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.16.1](https://github.com/TheOpenDictionary/odict/compare/v1.16.0...v1.16.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32.1.0-jre ([a72fdcf](https://github.com/TheOpenDictionary/odict/commit/a72fdcfb6752319e7560f61db484c7ed4190502f))
+* fix ODict imports ([e31dcdd](https://github.com/TheOpenDictionary/odict/commit/e31dcddc11006e6b2895f2516c592d660101cf83))
+* sync workspace ([a399eae](https://github.com/TheOpenDictionary/odict/commit/a399eaee8f8d12ee537ed68a87487c12c3387237))
+
 ## [1.16.0](https://github.com/TheOpenDictionary/odict/compare/v1.15.0...v1.16.0) (2023-06-28)
 
 
