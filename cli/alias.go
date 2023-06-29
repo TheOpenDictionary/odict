@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/core"
 	_search "github.com/TheOpenDictionary/odict/lib/search"
 	cli "github.com/urfave/cli/v2"

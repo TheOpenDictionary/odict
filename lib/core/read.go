@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/golang/snappy"
 )

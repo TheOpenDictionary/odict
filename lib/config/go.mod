@@ -1,4 +1,4 @@
-module github.com/TheOpenDictionary/lib/config
+module github.com/TheOpenDictionary/odict/lib/config
 
 go 1.20
 
