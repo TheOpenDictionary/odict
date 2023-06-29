@@ -6,7 +6,7 @@
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "build")
+@build system="": deps (cli "build" system)
 
 @run +args="": (cli "run" args)
 

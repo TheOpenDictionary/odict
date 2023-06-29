@@ -1,9 +1,14 @@
-@build:
+@_build os="" arch="":
+  GOOS={{os}} GOARCH={{arch}} go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin ../odict.go
+
+@_build_win32: && (_build "windows" "386")
   just ../lib/schema
-  go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin/odict ../odict.go
+
+@_build_win64: && (_build "windows" "")
+  just ../lib/schema
 
 @schema:
   flatc -g --gen-onefile --go-namespace cli -o . ../flatbuffers/service.fbs ../flatbuffers/enums.fbs && $(go env GOPATH)/bin/goimports -w *.go
 
-@run +args="": build
+@run +args="": _build
   ../bin/odict {{args}}
