@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/TheOpenDictionary/odict/compare/python-v0.6.0...python-v0.6.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* fix ODict imports ([e31dcdd](https://github.com/TheOpenDictionary/odict/commit/e31dcddc11006e6b2895f2516c592d660101cf83))
+
 ## [0.6.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.5.1...python-v0.6.0) (2023-06-28)
 
 
