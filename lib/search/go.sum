@@ -1,13 +1,5 @@
 github.com/RoaringBitmap/roaring v0.9.4 h1:ckvZSX5gwCRaJYBNe7syNawCU5oruY9gQmjXlp4riwo=
 github.com/RoaringBitmap/roaring v0.9.4/go.mod h1:icnadbWcNyfEHlYdr+tDlOTih1Bf/h+rzPpv4sbomAA=
-github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230530002149-e22e47d19a36 h1:QvVl4Ne9go8BOepbxJwkuD/UBofAijzC7bFpN2VmyGo=
-github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230530002149-e22e47d19a36/go.mod h1:X3XvNGcRjDiL+ISYjvihuBiNuK6QkyFqhfYUBkc//kE=
-github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230530002149-e22e47d19a36 h1:P9MJtuaS4uuqNo/xX/O5L98zhHRPhCPW/DjJ+h5xqd0=
-github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230530002149-e22e47d19a36/go.mod h1:10by/1fkIAM+8HGFJsLX4DjdgtpyFgsfST0B9w9ogG4=
-github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230530002149-e22e47d19a36 h1:ASvKJabiTx3STlJrO8EHS5yrLJunZPYu3zbl+Sk18PQ=
-github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230530002149-e22e47d19a36/go.mod h1:35fWisnnV/xJgvgg0qjdNuH++Hwg85ybTAB2K40FzSg=
-github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230530002149-e22e47d19a36 h1:ABavIBCkbbU/gIZbt5gtBPpXIkO9C7ybRTFuEtVQ/I4=
-github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230530002149-e22e47d19a36/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bits-and-blooms/bitset v1.2.0 h1:Kn4yilvwNtMACtf1eYDlG8H77R07mZSPbMjLyS07ChA=
 github.com/bits-and-blooms/bitset v1.2.0/go.mod h1:gIdJ4wp64HaoK2YrL1Q5/N7Y16edYb8uY+O0FJTyyDA=
 github.com/blevesearch/bleve/v2 v2.3.8 h1:IqFyMJ73n4gY8AmVqM8Sa6EtAZ5beE8yramVqCvs2kQ=
@@ -51,11 +43,7 @@ github.com/golang/protobuf v1.3.2 h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/snappy v0.0.4 h1:yAGX7huGHXlcLOEtBnF4w7FQwA26wojNCwOYAEhLjQM=
 github.com/golang/snappy v0.0.4/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
-github.com/google/flatbuffers v23.5.26+incompatible h1:M9dgRyhJemaM4Sw8+66GHBu8ioaQmyPLg1b8VwK5WJg=
-github.com/google/flatbuffers v23.5.26+incompatible/go.mod h1:1AeVuKshWv4vARoZatz6mlQ0JxURH0Kv5+zNeJKJCa8=
 github.com/google/gofuzz v1.2.0 h1:xRy4A+RhZaiKjJ1bPfwQ8sedCA+YS2YcCHW6ec7JMi0=
-github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
-github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede h1:YrgBGwxMRK0Vq0WSCWFaZUnTsrA/PZE/xs1QZh+/edg=
 github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede/go.mod h1:+SdeFBvtyEkXs7REEP0seUULqWtbJapLOCVDaaPEHmU=
 github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213/go.mod h1:vNUNkEQ1e29fT/6vq2aBdFsgNPmy8qMdSay1npru+Sw=

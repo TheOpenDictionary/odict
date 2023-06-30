@@ -3,9 +3,6 @@ module github.com/TheOpenDictionary/odict/lib/search
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230530002149-e22e47d19a36
-	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230530002149-e22e47d19a36
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230530002149-e22e47d19a36
 	github.com/blevesearch/bleve/v2 v2.3.8
 	github.com/blevesearch/bleve_index_api v1.0.5
 	github.com/schollz/progressbar/v3 v3.13.1
@@ -14,7 +11,6 @@ require (
 
 require (
 	github.com/RoaringBitmap/roaring v0.9.4 // indirect
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230530002149-e22e47d19a36 // indirect
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/blevesearch/geo v0.1.17 // indirect
 	github.com/blevesearch/go-porterstemmer v1.0.3 // indirect
@@ -34,8 +30,6 @@ require (
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/flatbuffers v23.5.26+incompatible // indirect
-	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
