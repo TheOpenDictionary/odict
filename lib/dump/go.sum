@@ -8,6 +8,8 @@ github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230806153940-6b01ba7136fa 
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230806153940-6b01ba7136fa/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bokwoon95/sq v0.3.5 h1:twhQrqQzcAS0uYwGXyAlHrT4uzLNksIom7H01hm5tfU=
 github.com/bokwoon95/sq v0.3.5/go.mod h1:6LUUV8bualVy3xuXpJQ1MOx+OZvs/jy97XbxTebfNj8=
+github.com/bokwoon95/sq v0.4.0 h1:Ih/31TsBbqP+EmaFhJidltWc3FQqkDE6COoE2epYDGo=
+github.com/bokwoon95/sq v0.4.0/go.mod h1:E3X8ARaXQ77XGMvjS0sQrcA1F5BZvq4Ck/91dPsMKR4=
 github.com/bokwoon95/sqddl v0.4.5 h1:iAfSrWdb8NElTAstvB3Bj9uHpyAWLlNLsWrXcHJdCbM=
 github.com/bokwoon95/sqddl v0.4.5/go.mod h1:gdCZ/YncGycaXDhmr2toCSfk7EHS3WcmFOCgkuAsp5E=
 github.com/bokwoon95/sqddl v0.4.6 h1:E8wbTNf0650nuaZtIzagunYyzLq0aSXvk06/K5SoUso=

@@ -6,7 +6,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230806153940-6b01ba7136fa
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230806153940-6b01ba7136fa
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230806153940-6b01ba7136fa
-	github.com/bokwoon95/sq v0.3.5
+	github.com/bokwoon95/sq v0.4.0
 	github.com/bokwoon95/sqddl v0.4.6
 	github.com/stretchr/testify v1.8.4
 )
