@@ -8,7 +8,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230711210455-63e387c1c37c
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230711210455-63e387c1c37c
 	github.com/blevesearch/bleve/v2 v2.3.9
-	github.com/blevesearch/bleve_index_api v1.0.5
+	github.com/blevesearch/bleve_index_api v1.0.6
 	github.com/schollz/progressbar/v3 v3.13.1
 	github.com/stretchr/testify v1.8.4
 )
