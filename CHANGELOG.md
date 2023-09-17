@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.1](https://github.com/TheOpenDictionary/odict/compare/v1.17.0...v1.17.1) (2023-09-17)
+
+
+### Bug Fixes
+
+* **cli:** remove ODict dependencies from go.mod ([aaca7d4](https://github.com/TheOpenDictionary/odict/commit/aaca7d4de126f72e2ab4100cedccd493ff6eff15))
+
 ## [1.17.0](https://github.com/TheOpenDictionary/odict/compare/v1.16.1...v1.17.0) (2023-09-17)
 
 
