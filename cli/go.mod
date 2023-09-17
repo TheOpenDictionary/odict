@@ -3,13 +3,6 @@ module github.com/TheOpenDictionary/odict/cli
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/config v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/dump v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/search v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/server v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230820221914-fdc46de0c695
 	github.com/fatih/color v1.15.0
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/google/uuid v1.3.1
@@ -20,23 +13,23 @@ require (
 require (
 	github.com/RoaringBitmap/roaring v1.2.3 // indirect
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
-	github.com/blevesearch/bleve/v2 v2.3.9 // indirect
-	github.com/blevesearch/bleve_index_api v1.0.5 // indirect
-	github.com/blevesearch/geo v0.1.17 // indirect
+	github.com/blevesearch/bleve/v2 v2.3.10 // indirect
+	github.com/blevesearch/bleve_index_api v1.0.6 // indirect
+	github.com/blevesearch/geo v0.1.18 // indirect
 	github.com/blevesearch/go-porterstemmer v1.0.3 // indirect
 	github.com/blevesearch/gtreap v0.1.1 // indirect
 	github.com/blevesearch/mmap-go v1.0.4 // indirect
-	github.com/blevesearch/scorch_segment_api/v2 v2.1.5 // indirect
+	github.com/blevesearch/scorch_segment_api/v2 v2.1.6 // indirect
 	github.com/blevesearch/segment v0.9.1 // indirect
 	github.com/blevesearch/snowballstem v0.9.0 // indirect
 	github.com/blevesearch/upsidedown_store_api v1.0.2 // indirect
 	github.com/blevesearch/vellum v1.0.10 // indirect
-	github.com/blevesearch/zapx/v11 v11.3.9 // indirect
-	github.com/blevesearch/zapx/v12 v12.3.9 // indirect
-	github.com/blevesearch/zapx/v13 v13.3.9 // indirect
-	github.com/blevesearch/zapx/v14 v14.3.9 // indirect
-	github.com/blevesearch/zapx/v15 v15.3.12 // indirect
-	github.com/bokwoon95/sq v0.4.0 // indirect
+	github.com/blevesearch/zapx/v11 v11.3.10 // indirect
+	github.com/blevesearch/zapx/v12 v12.3.10 // indirect
+	github.com/blevesearch/zapx/v13 v13.3.10 // indirect
+	github.com/blevesearch/zapx/v14 v14.3.10 // indirect
+	github.com/blevesearch/zapx/v15 v15.3.13 // indirect
+	github.com/bokwoon95/sq v0.4.1 // indirect
 	github.com/bokwoon95/sqddl v0.4.6 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect

@@ -3,10 +3,6 @@ module github.com/TheOpenDictionary/odict/lib/search
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/config v0.0.0-20230711210455-63e387c1c37c
-	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230711210455-63e387c1c37c
-	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230711210455-63e387c1c37c
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230711210455-63e387c1c37c
 	github.com/blevesearch/bleve/v2 v2.3.10
 	github.com/blevesearch/bleve_index_api v1.0.6
 	github.com/schollz/progressbar/v3 v3.13.1
@@ -15,7 +11,6 @@ require (
 
 require (
 	github.com/RoaringBitmap/roaring v1.2.3 // indirect
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230711210455-63e387c1c37c // indirect
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/blevesearch/geo v0.1.18 // indirect
 	github.com/blevesearch/go-porterstemmer v1.0.3 // indirect

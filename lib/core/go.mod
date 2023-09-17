@@ -3,10 +3,6 @@ module github.com/TheOpenDictionary/odict/lib/core
 go 1.20
 
 require (
-	github.com/TheOpenDictionary/odict/lib/config v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230820221914-fdc46de0c695
-	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230820221914-fdc46de0c695
 	github.com/golang/snappy v0.0.4
 	github.com/google/uuid v1.3.1
 	github.com/imdario/mergo v0.3.16
