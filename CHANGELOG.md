@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.17.0](https://github.com/TheOpenDictionary/odict/compare/v1.16.1...v1.17.0) (2023-09-17)
+
+
+### Features
+
+* **core:** add DefinitionNote type ([#450](https://github.com/TheOpenDictionary/odict/issues/450)) ([08bcac4](https://github.com/TheOpenDictionary/odict/commit/08bcac4b0710112166d6a43429fbb2f0c784c241))
+* **js:** remove detectOpenHandles from test run ([2eed906](https://github.com/TheOpenDictionary/odict/commit/2eed906830a569a89b9f74d4a5058f71fde8dd10))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32.1.1-jre ([57633a4](https://github.com/TheOpenDictionary/odict/commit/57633a471cbc92a7c5c64ca497e53c5f8db78b8b))
+* **deps:** update dependency com.google.guava:guava to v32.1.2-jre ([ee29572](https://github.com/TheOpenDictionary/odict/commit/ee2957265f48d7041a01dc238e555ad6aa6d27c8))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.10 ([4f8082d](https://github.com/TheOpenDictionary/odict/commit/4f8082d8a48933fc9a1dd8693eea57763e3ee70b))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.9 ([3e50eec](https://github.com/TheOpenDictionary/odict/commit/3e50eec8268e25a5f122c58e1802c6a97e70136b))
+* **deps:** update module github.com/bokwoon95/sq to v0.4.0 ([5c7add6](https://github.com/TheOpenDictionary/odict/commit/5c7add66de99e0e0b8074fb16470a2e2db15f940))
+* **deps:** update module github.com/bokwoon95/sq to v0.4.1 ([24ab925](https://github.com/TheOpenDictionary/odict/commit/24ab92554cced324a31eac266778c43b05caa87a))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.4.6 ([7694773](https://github.com/TheOpenDictionary/odict/commit/76947734f3a704d9970e40662e492ce0b36ac904))
+* **deps:** update module github.com/google/uuid to v1.3.1 ([985f897](https://github.com/TheOpenDictionary/odict/commit/985f897345e924636976f7897039aa19a8153958))
+* remove local dependencies ([de4805a](https://github.com/TheOpenDictionary/odict/commit/de4805a008d706326c3be317311c5092cd4ee43f))
+
 ## [1.16.1](https://github.com/TheOpenDictionary/odict/compare/v1.16.0...v1.16.1) (2023-06-29)
 
 
