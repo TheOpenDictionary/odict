@@ -41,6 +41,7 @@ func TestLookup(t *testing.T) {
 							{
 								Value:    "a dog",
 								Examples: []string{},
+								Notes:    []types.NoteRepresentable{},
 							},
 						},
 					},
@@ -62,6 +63,12 @@ func TestLookup(t *testing.T) {
 							{
 								Value:    "a cat",
 								Examples: []string{"There goes a cat!"},
+								Notes: []types.NoteRepresentable{
+									{
+										Value:    "Some definition note",
+										Examples: []string{"Some example"},
+									},
+								},
 							},
 						},
 					},

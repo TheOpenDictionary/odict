@@ -1,9 +1,16 @@
 include "enums.fbs";
 
+table Note {
+    id:string;
+    value:string;
+    examples:[string];
+}
+
 table Definition {
     id:string;
     value:string;
     examples:[string];
+    notes:[Note];
 }
 
 table Etymology {

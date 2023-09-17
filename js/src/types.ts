@@ -29,9 +29,16 @@ export interface Etymology {
   senses: Record<string, Sense>;
 }
 
+export interface DefinitionNote {
+  id?: string;
+  value?: string;
+  examples?: string[];
+}
+
 export interface Definition {
-  value: string;
-  examples: string[];
+  value?: string;
+  examples?: string[];
+  notes: DefinitionNote[];
 }
 
 export interface Sense {
