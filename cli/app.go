@@ -123,7 +123,7 @@ var App = &cli.App{
 					Name:    "format",
 					Aliases: []string{"f"},
 					Usage:   "Output format of the entries.",
-					Value:   ppFormat,
+					Value:   printFormat,
 				},
 				&cli.BoolFlag{
 					Name:    "follow",

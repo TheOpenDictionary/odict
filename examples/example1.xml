@@ -49,6 +49,9 @@
       <sense pos="n">
         <definition value="a cat">
           <example>There goes a cat!</example>
+          <note value="Some definition note">
+            <example>Some example</example>
+          </note>
         </definition>
       </sense>
     </ety>

@@ -1,5 +1,4 @@
 import json
-import re
 
 from theopendictionary import Dictionary
 

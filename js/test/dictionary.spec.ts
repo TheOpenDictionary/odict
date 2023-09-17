@@ -35,7 +35,7 @@ describe("Dictionary", () => {
       fallback: "dog",
     });
 
-    expect(result1[0][0].term).toBe("dog");
+    expect(result1).toMatchSnapshot();
 
     const processes = await findProcess("name", "odict", true);
 
@@ -48,12 +48,12 @@ describe("Dictionary", () => {
       fallback: "run",
     });
 
-    expect(result2[0][0].term).toBe("run");
+    expect(result2).toMatchSnapshot();
   });
 
   it("can lookup terms properly", async () => {
-    const result = await dict1.lookup({ word: "run", fallback: "run" });
-    expect(result[0][0].term).toBe("run");
+    const result = await dict1.lookup({ word: "cat", fallback: "cat" });
+    expect(result).toMatchSnapshot();
   });
 
   it("doesn't split unless specified", async () => {
@@ -71,20 +71,20 @@ describe("Dictionary", () => {
       '<dictionary><entry term="hello"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry><entry term="world"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry></dictionary>"    )',
       "test.odict",
     );
+
     expect(existsSync("test.odict")).toBeTruthy();
+
     await rm("test.odict");
   });
 
   it("can split terms during lookup", async () => {
     const result = await dict1.lookup("catdog", { split: 3 });
-    expect(result[0][0].term).toBe("cat");
-    expect(result[0][1].term).toBe("dog");
+    expect(result).toMatchSnapshot();
   });
 
   it("can split terms properly", async () => {
     const result = await dict1.split("catdog", 2);
-    expect(result[0].term).toBe("cat");
-    expect(result[1].term).toBe("dog");
+    expect(result).toMatchSnapshot();
   });
 
   it("can index and search a dictionary", async () => {
@@ -92,7 +92,6 @@ describe("Dictionary", () => {
 
     const results = await dict1.search("run");
 
-    expect(results[0][0].term).toBe("ran");
-    expect(results[0][1].term).toBe("run");
+    expect(results).toMatchSnapshot();
   });
 });

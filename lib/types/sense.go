@@ -92,7 +92,7 @@ func (sense *SenseRepresentable) buildDefinitionVector(builder *flatbuffers.Buil
 
 	definitionCount := len(definitions)
 
-	GroupStartDefinitionsVector(builder, definitionCount)
+	SenseStartDefinitionsVector(builder, definitionCount)
 
 	for i := definitionCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(definitions[i])

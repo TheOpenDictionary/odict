@@ -6,13 +6,22 @@ import (
 )
 
 type DefinitionRepresentable struct {
-	ID       string   `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Value    string   `json:"value,omitempty" xml:"value,attr"`
-	Examples []string `json:"examples,omitempty" xml:"example"`
+	ID       string              `json:"id,omitempty" xml:"id,attr,omitempty"`
+	Value    string              `json:"value,omitempty" xml:"value,attr"`
+	Examples []string            `json:"examples,omitempty" xml:"example"`
+	Notes    []NoteRepresentable `json:"notes,omitempty" xml:"note"`
 }
 
 func (definition *Definition) AsRepresentable() DefinitionRepresentable {
+	var note Note
+
 	examples := []string{}
+	notes := []NoteRepresentable{}
+
+	for n := 0; n < definition.NotesLength(); n++ {
+		definition.Notes(&note, n)
+		notes = append(notes, note.AsRepresentable())
+	}
 
 	for e := 0; e < definition.ExamplesLength(); e++ {
 		examples = append(examples, string(definition.Examples(e)))
@@ -22,6 +31,7 @@ func (definition *Definition) AsRepresentable() DefinitionRepresentable {
 		ID:       string(definition.Id()),
 		Value:    string(definition.Value()),
 		Examples: examples,
+		Notes:    notes,
 	}
 }
 
@@ -29,28 +39,49 @@ func (def *DefinitionRepresentable) AsBuffer(builder *flatbuffers.Builder) flatb
 	id := builder.CreateString(def.ID)
 	value := builder.CreateString(def.Value)
 	examples := def.buildExampleVector(builder)
+	notes := def.buildNoteVector(builder)
 
 	DefinitionStart(builder)
 	DefinitionAddId(builder, id)
 	DefinitionAddValue(builder, value)
 	DefinitionAddExamples(builder, examples)
+	DefinitionAddNotes(builder, notes)
 
 	return DefinitionEnd(builder)
 }
 
 func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	examples := def.Examples
+
 	exampleCount := len(examples)
 
 	exampleBuffers := lo.Map(examples, func(example string, _ int) flatbuffers.UOffsetT {
 		return builder.CreateString(example)
 	})
 
-	EtymologyStartSensesVector(builder, exampleCount)
+	DefinitionStartExamplesVector(builder, exampleCount)
 
 	for i := exampleCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(exampleBuffers[i])
 	}
 
 	return builder.EndVector(exampleCount)
+}
+
+func (def *DefinitionRepresentable) buildNoteVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	notes := def.Notes
+
+	noteCount := len(notes)
+
+	noteBuffers := lo.Map(notes, func(note NoteRepresentable, _ int) flatbuffers.UOffsetT {
+		return note.AsBuffer(builder)
+	})
+
+	DefinitionStartNotesVector(builder, noteCount)
+
+	for i := noteCount - 1; i >= 0; i-- {
+		builder.PrependUOffsetT(noteBuffers[i])
+	}
+
+	return builder.EndVector(noteCount)
 }

@@ -8,6 +8,85 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Note struct {
+	_tab flatbuffers.Table
+}
+
+func GetRootAsNote(buf []byte, offset flatbuffers.UOffsetT) *Note {
+	n := flatbuffers.GetUOffsetT(buf[offset:])
+	x := &Note{}
+	x.Init(buf, n+offset)
+	return x
+}
+
+func GetSizePrefixedRootAsNote(buf []byte, offset flatbuffers.UOffsetT) *Note {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Note{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
+func (rcv *Note) Init(buf []byte, i flatbuffers.UOffsetT) {
+	rcv._tab.Bytes = buf
+	rcv._tab.Pos = i
+}
+
+func (rcv *Note) Table() flatbuffers.Table {
+	return rcv._tab
+}
+
+func (rcv *Note) Id() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Note) Value() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Note) Examples(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Note) ExamplesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func NoteStart(builder *flatbuffers.Builder) {
+	builder.StartObject(3)
+}
+func NoteAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
+}
+func NoteAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(value), 0)
+}
+func NoteAddExamples(builder *flatbuffers.Builder, examples flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(examples), 0)
+}
+func NoteStartExamplesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func NoteEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	return builder.EndObject()
+}
+
 type Definition struct {
 	_tab flatbuffers.Table
 }
@@ -68,8 +147,28 @@ func (rcv *Definition) ExamplesLength() int {
 	return 0
 }
 
+func (rcv *Definition) Notes(obj *Note, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Definition) NotesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func DefinitionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func DefinitionAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -81,6 +180,12 @@ func DefinitionAddExamples(builder *flatbuffers.Builder, examples flatbuffers.UO
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(examples), 0)
 }
 func DefinitionStartExamplesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func DefinitionAddNotes(builder *flatbuffers.Builder, notes flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(notes), 0)
+}
+func DefinitionStartNotesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func DefinitionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
