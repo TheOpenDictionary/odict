@@ -9,7 +9,7 @@ table Definition {
 table Etymology {
     id:string;
     description:string;
-    usages:[Usage];
+    senses:[Sense];
 }
 
 table Group {
@@ -18,7 +18,7 @@ table Group {
     definitions:[Definition];
 }
 
-table Usage {
+table Sense {
     pos:POS (key);
     definitions:[Definition];
     groups:[Group];

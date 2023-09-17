@@ -11,7 +11,7 @@ class DictionaryTest {
         val entry = dict.lookup("run")
 
         assertEquals("run", entry[0][0].term)
-        assertEquals(6, entry[0][0].etymologies?.get(0)?.usages?.get("v")?.groups?.get(0)?.definitions?.count())
+        assertEquals(6, entry[0][0].etymologies?.get(0)?.senses?.get("v")?.groups?.get(0)?.definitions?.count())
     }
 
     @Test fun testLexicon() {
@@ -43,13 +43,13 @@ class DictionaryTest {
     @Throws(Exception::class)
     fun testWrite() {
         Dictionary.write(
-                "<dictionary><entry term=\"hello\"><ety><usage pos=\"v\"><definition value=\"hello world\" /></usage></ety></entry></dictionary>",
+                "<dictionary><entry term=\"hello\"><ety><sense pos=\"v\"><definition value=\"hello world\" /></sense></ety></entry></dictionary>",
                 "test.odict")
         
         val dict = Dictionary("test.odict")
         val entries = dict.lookup("hello")
 
         assertEquals("hello", entries[0][0].term)
-        assertEquals("hello world", entries[0][0].etymologies?.get(0)?.usages?.get("v")?.definitions?.get(0)?.value)
+        assertEquals("hello world", entries[0][0].etymologies?.get(0)?.senses?.get("v")?.definitions?.get(0)?.value)
     }
 }

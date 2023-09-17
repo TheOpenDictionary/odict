@@ -33,8 +33,8 @@ func TestLookup(t *testing.T) {
 		Etymologies: []types.EtymologyRepresentable{
 			{
 				Description: "Latin root",
-				Usages: types.KVMap[types.PartOfSpeech, types.UsageRepresentable]{
-					types.Unknown: types.UsageRepresentable{
+				Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+					types.Unknown: types.SenseRepresentable{
 						POS:    types.Unknown,
 						Groups: []types.GroupRepresentable{},
 						Definitions: []types.DefinitionRepresentable{
@@ -54,8 +54,8 @@ func TestLookup(t *testing.T) {
 		Etymologies: []types.EtymologyRepresentable{
 			{
 				Description: "Latin root",
-				Usages: types.KVMap[types.PartOfSpeech, types.UsageRepresentable]{
-					types.Noun: types.UsageRepresentable{
+				Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+					types.Noun: types.SenseRepresentable{
 						POS:    types.Noun,
 						Groups: []types.GroupRepresentable{},
 						Definitions: []types.DefinitionRepresentable{

@@ -83,18 +83,18 @@ func ppGroup(group types.GroupRepresentable, i int, entry types.EntryRepresentab
 	}
 }
 
-func ppUsage(usage types.UsageRepresentable, entry types.EntryRepresentable) {
-	italic.Printf("\n%s\n\n", usage.POS.Label)
+func ppSense(sense types.SenseRepresentable, entry types.EntryRepresentable) {
+	italic.Printf("\n%s\n\n", sense.POS.Label)
 
 	var i = 0
 
-	for i < len(usage.Groups) {
-		ppGroup(usage.Groups[i], i, entry)
+	for i < len(sense.Groups) {
+		ppGroup(sense.Groups[i], i, entry)
 		i++
 	}
 
-	for i < len(usage.Definitions) {
-		ppDefinition(usage.Definitions[i], strconv.Itoa(i+1), entry, 4)
+	for i < len(sense.Definitions) {
+		ppDefinition(sense.Definitions[i], strconv.Itoa(i+1), entry, 4)
 		i++
 	}
 }
@@ -108,8 +108,8 @@ func ppEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.
 		fmt.Println(ety.Description)
 	}
 
-	for _, usage := range ety.Usages {
-		ppUsage(usage, entry)
+	for _, sense := range ety.Senses {
+		ppSense(sense, entry)
 	}
 }
 

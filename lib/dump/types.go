@@ -24,7 +24,7 @@ type ETYMOLOGIES struct {
 	ENTRY_ID    sq.NumberField `ddl:"type=BIGINT notnull references=entries.id"`
 }
 
-type USAGES struct {
+type SENSES struct {
 	sq.TableStruct
 	ID           sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	ETYMOLOGY_ID sq.StringField `ddl:"notnull references=etymologies.id"`
@@ -34,14 +34,14 @@ type GROUPS struct {
 	sq.TableStruct
 	ID          sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	DESCRIPTION sq.StringField
-	USAGE_ID    sq.NumberField `ddl:"type=BIGINT notnull references=usages.id"`
+	SENSE_ID    sq.NumberField `ddl:"type=BIGINT notnull references=senses.id"`
 }
 
 type DEFINITIONS struct {
 	sq.TableStruct
 	ID       sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	TEXT     sq.StringField `ddl:"notnull"`
-	USAGE_ID sq.NumberField `ddl:"type=BIGINT references=usages.id"`
+	SENSE_ID sq.NumberField `ddl:"type=BIGINT references=senses.id"`
 	GROUP_ID sq.NumberField `ddl:"type=BIGINT references=groups.id"`
 }
 

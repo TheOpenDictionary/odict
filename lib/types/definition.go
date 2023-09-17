@@ -46,7 +46,7 @@ func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Buil
 		return builder.CreateString(example)
 	})
 
-	EtymologyStartUsagesVector(builder, exampleCount)
+	EtymologyStartSensesVector(builder, exampleCount)
 
 	for i := exampleCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(exampleBuffers[i])

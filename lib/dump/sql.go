@@ -15,7 +15,7 @@ var fsys embed.FS
 var sqlDictionaryId int = 1
 var sqlEntryId int = 1
 var sqlEtymologyId int = 1
-var sqlUsageId int = 1
+var sqlSenseId int = 1
 var sqlGroupId int = 1
 var sqlDefinitionId int = 1
 var sqlExampleId int = 1
@@ -66,7 +66,7 @@ func sqlInsert(sqlDialect SqlDialect, dict types.DictionaryRepresentable) (strin
 	var sqlCmds string
 
 	// Entry point that will capture every insert statement
-	// Dictionary, entries, etymologies, usages, groups, definitions, examples
+	// Dictionary, entries, etymologies, senses, groups, definitions, examples
 	insert, err := sqlInsertDictionary(sqlDialect, dict)
 
 	if err != nil {
@@ -161,30 +161,30 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []types.EtymologyRe
 
 		sqlCmds += ety_query + ";\n"
 
-		insertUsages, insertErr := sqlInsertUsages(sqlDialect, etymology.Usages)
+		insertSenses, insertErr := sqlInsertSenses(sqlDialect, etymology.Senses)
 
 		if insertErr != nil {
 			return "", insertErr
 		}
 
-		sqlCmds += insertUsages
+		sqlCmds += insertSenses
 		sqlEtymologyId++
 	}
 
 	return sqlCmds, nil
 }
 
-func sqlInsertUsages(sqlDialect SqlDialect, usages types.KVMap[types.PartOfSpeech, types.UsageRepresentable]) (string, error) {
+func sqlInsertSenses(sqlDialect SqlDialect, senses types.KVMap[types.PartOfSpeech, types.SenseRepresentable]) (string, error) {
 	var sqlCmds string
 
-	// Insert usages w/ relation to current ety
-	for _, usage := range usages {
-		usg := sq.New[USAGES]("")
+	// Insert senses w/ relation to current ety
+	for _, sense := range senses {
+		usg := sq.New[SENSES]("")
 
 		insertQuery := sq.
 			InsertInto(usg).
 			Columns(usg.ID, usg.ETYMOLOGY_ID).
-			Values(sq.Literal(sqlUsageId), sq.Literal(sqlEtymologyId))
+			Values(sq.Literal(sqlSenseId), sq.Literal(sqlEtymologyId))
 
 		usg_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
@@ -194,14 +194,14 @@ func sqlInsertUsages(sqlDialect SqlDialect, usages types.KVMap[types.PartOfSpeec
 
 		sqlCmds += usg_query + ";\n"
 
-		insertGroups, insertErr := sqlInsertGroups(sqlDialect, usage.Groups)
+		insertGroups, insertErr := sqlInsertGroups(sqlDialect, sense.Groups)
 
 		if insertErr != nil {
 			return "", insertErr
 		}
 
 		sqlCmds += insertGroups
-		sqlUsageId++
+		sqlSenseId++
 	}
 
 	return sqlCmds, nil
@@ -210,14 +210,14 @@ func sqlInsertUsages(sqlDialect SqlDialect, usages types.KVMap[types.PartOfSpeec
 func sqlInsertGroups(sqlDialect SqlDialect, groups []types.GroupRepresentable) (string, error) {
 	var sqlCmds string
 
-	// Insert groups w/ relation to current usage
+	// Insert groups w/ relation to current sense
 	for _, group := range groups {
 		grp := sq.New[GROUPS]("")
 
 		insertQuery := sq.
 			InsertInto(grp).
-			Columns(grp.ID, grp.DESCRIPTION, grp.USAGE_ID).
-			Values(sq.Literal(sqlGroupId), sq.Literal(group.Description), sq.Literal(sqlUsageId))
+			Columns(grp.ID, grp.DESCRIPTION, grp.SENSE_ID).
+			Values(sq.Literal(sqlGroupId), sq.Literal(group.Description), sq.Literal(sqlSenseId))
 
 		grp_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
@@ -243,14 +243,14 @@ func sqlInsertGroups(sqlDialect SqlDialect, groups []types.GroupRepresentable) (
 func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []types.DefinitionRepresentable) (string, error) {
 	var sqlCmds string
 
-	// Insert definitions w/ relation to current usage/group
+	// Insert definitions w/ relation to current sense/group
 	for _, definition := range definitions {
 		def := sq.New[DEFINITIONS]("")
 
 		insertQuery := sq.
 			InsertInto(def).
-			Columns(def.ID, def.TEXT, def.USAGE_ID, def.GROUP_ID).
-			Values(sq.Literal(sqlDefinitionId), sq.Literal(definition.Value), sq.Literal(sqlUsageId), sq.Literal(sqlGroupId))
+			Columns(def.ID, def.TEXT, def.SENSE_ID, def.GROUP_ID).
+			Values(sq.Literal(sqlDefinitionId), sq.Literal(definition.Value), sq.Literal(sqlSenseId), sq.Literal(sqlGroupId))
 
 		def_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
