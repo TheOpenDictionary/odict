@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.6.1...python-v0.7.0) (2023-09-17)
+
+
+### Features
+
+* **core:** add DefinitionNote type ([#450](https://github.com/TheOpenDictionary/odict/issues/450)) ([08bcac4](https://github.com/TheOpenDictionary/odict/commit/08bcac4b0710112166d6a43429fbb2f0c784c241))
+* **js:** remove detectOpenHandles from test run ([2eed906](https://github.com/TheOpenDictionary/odict/commit/2eed906830a569a89b9f74d4a5058f71fde8dd10))
+
 ## [0.6.1](https://github.com/TheOpenDictionary/odict/compare/python-v0.6.0...python-v0.6.1) (2023-06-29)
 
 
