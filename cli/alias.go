@@ -8,8 +8,13 @@ import (
 	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/core"
 	_search "github.com/TheOpenDictionary/odict/lib/search"
+	"github.com/fatih/color"
 	cli "github.com/urfave/cli/v2"
 )
+
+var bold = color.New(color.Bold)
+
+var faint = color.New(color.Faint)
 
 func listDictionaries(c *cli.Context) error {
 	dictionaries, err := config.ListDictionaries()

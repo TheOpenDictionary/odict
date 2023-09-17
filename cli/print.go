@@ -13,95 +13,124 @@ import (
 	"github.com/fatih/color"
 )
 
-var faint = color.New(color.Faint)
-var italic = color.New(color.Italic)
-var italicFaint = color.New(color.Italic, color.Faint)
-var italicFaintUnderlined = color.New(color.Italic, color.Faint, color.Underline)
-var bold = color.New(color.Bold)
-var boldUnderlined = color.New(color.Bold, color.Underline)
-var parentheticalRegex = regexp.MustCompile(`(\(.*?\))`)
+var fmtFaint = color.New(color.Faint).SprintfFunc()
+var fmtEtymology = color.New(color.Underline, color.Bold).SprintfFunc()
+var fmtExample = color.New(color.Faint, color.Italic).SprintfFunc()
+var fmtExampleTarget = color.New(color.Faint, color.Underline, color.Italic).SprintfFunc()
+var fmtParenthetical = color.New(color.Italic).SprintfFunc()
+var fmtNoteTitle = color.New(color.Underline, color.Bold).SprintfFunc()
+var fmtPartOfSpeech = color.New(color.Italic).SprintfFunc()
+var fmtEntry = color.New(color.Bold).SprintfFunc()
+
+var parentheticalRegex = regexp.MustCompile(`^(\(.*?\))`)
 
 type PrintFormat = string
 
 const (
-	jsonFormat PrintFormat = "json"
-	xmlFormat  PrintFormat = "xml"
-	ppFormat   PrintFormat = "pp"
+	jsonFormat  PrintFormat = "json"
+	xmlFormat   PrintFormat = "xml"
+	printFormat PrintFormat = "print"
 )
 
-func ppExample(example string, underlined string, indent int) {
-	start := strings.Index(strings.ToLower(example), strings.ToLower(underlined))
+func printNewLine() {
+	fmt.Println()
+}
 
-	fmt.Print(strings.Repeat(" ", indent))
-	faint.Print("• ")
+func printExample(example string, targetWord string, indent int) {
+	start := strings.Index(strings.ToLower(example), strings.ToLower(targetWord))
+	caret := fmtExample("▸")
 
 	if start >= 0 {
-		end := start + len(underlined)
-		italicFaint.Print(example[0:start])
-		italicFaintUnderlined.Print(example[start:end])
-		italicFaint.Printf("%s\n", example[end:])
+		end := start + len(targetWord)
+		before := fmtExample(example[0:start])
+		after := fmtExample(example[end:])
+		target := fmtExampleTarget(example[start:end])
+
+		fmt.Printf("%*s%s %s%s%s\n", indent, "", caret, before, target, after)
 	} else {
-		italicFaint.Printf("%s\n", example)
+		fmt.Printf("%*s%s %s\n", indent, "", caret, fmtExample(example))
 	}
 
 }
 
-func ppDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
+func printDivider() {
+	fmt.Println(strings.Repeat("─", 32))
+}
+
+func printNote(note types.NoteRepresentable, targetWord string, numbering string, indent int) {
+	fmtNumbering := "%" + fmt.Sprint(indent) + "s."
+
+	fmt.Printf(fmtNumbering+" %s\n", numbering, note.Value)
+
+	for _, example := range note.Examples {
+		printExample(example, targetWord, indent+2)
+	}
+}
+
+func printDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
 	value := definition.Value
 	matches := parentheticalRegex.FindAllStringIndex(value, -1)
+	fmtNumbering := "%" + fmt.Sprint(indent) + "s."
 
 	if len(matches) > 0 {
 		j := 0
 
-		fmt.Printf("%"+fmt.Sprint(indent)+"s. %s", numbering, value[0:matches[0][0]])
+		fmt.Printf(fmtNumbering+" %s", numbering, value[0:matches[0][0]])
 
 		for i := 0; i < len(matches); i += 1 {
 			start := matches[i][0]
 			end := matches[i][1]
 
-			fmt.Print(value[j:start])
-			italic.Print(value[start:end])
+			fmt.Printf("%s%s", value[j:start], fmtParenthetical(value[start:end]))
 
 			j = end
 		}
 
 		fmt.Printf("%s\n", value[j:])
 	} else {
-		fmt.Printf("%"+fmt.Sprint(indent)+"s. %s\n", numbering, value)
+		fmt.Printf(fmtNumbering+" %s\n", numbering, value)
 	}
 
 	for _, example := range definition.Examples {
-		ppExample(example, entry.Term, indent+2)
+		printExample(example, entry.Term, indent+2)
+	}
+
+	if len(definition.Notes) > 0 {
+		fmt.Printf("\n%*s%s\n\n", indent+2, "", fmtNoteTitle("Notes"))
+	}
+
+	for j, note := range definition.Notes {
+		printNote(note, entry.Term, string(rune('a'+j)), indent+4)
 	}
 }
 
-func ppGroup(group types.GroupRepresentable, i int, entry types.EntryRepresentable) {
+func printGroup(group types.GroupRepresentable, i int, entry types.EntryRepresentable) {
 	fmt.Printf("%4d. %s\n", i+1, group.Description)
 
 	for j, definition := range group.Definitions {
-		ppDefinition(definition, string(rune('a'+j)), entry, 7)
+		printDefinition(definition, string(rune('a'+j)), entry, 7)
 	}
 }
 
-func ppSense(sense types.SenseRepresentable, entry types.EntryRepresentable) {
-	italic.Printf("\n%s\n\n", sense.POS.Label)
+func printSense(sense types.SenseRepresentable, entry types.EntryRepresentable) {
+	fmt.Printf("\n%s\n\n", fmtPartOfSpeech(sense.POS.Label))
 
 	var i = 0
 
 	for i < len(sense.Groups) {
-		ppGroup(sense.Groups[i], i, entry)
+		printGroup(sense.Groups[i], i, entry)
 		i++
 	}
 
 	for i < len(sense.Definitions) {
-		ppDefinition(sense.Definitions[i], strconv.Itoa(i+1), entry, 4)
+		printDefinition(sense.Definitions[i], strconv.Itoa(i+1), entry, 4)
 		i++
 	}
 }
 
-func ppEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.EntryRepresentable) {
+func printEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.EntryRepresentable) {
 	if showTitle {
-		boldUnderlined.Printf("\nEtymology #%d\n", i+1)
+		fmt.Printf("%s\n", fmtEtymology("Etymology #%d", i+1))
 	}
 
 	if len(ety.Description) > 0 {
@@ -109,21 +138,23 @@ func ppEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.
 	}
 
 	for _, sense := range ety.Senses {
-		ppSense(sense, entry)
+		printSense(sense, entry)
 	}
 }
 
-func ppEntry(entry types.EntryRepresentable) {
-	line := strings.Repeat("─", 32)
+func printEntry(entry types.EntryRepresentable) {
+	printDivider()
 
-	fmt.Println(line)
-	bold.Println(entry.Term)
-	fmt.Println(line)
+	fmt.Println(fmtEntry(entry.Term))
+
+	printDivider()
+
+	fmt.Println()
 
 	etys := entry.Etymologies
 
 	for i, ety := range etys {
-		ppEty(ety, i, len(etys) > 1, entry)
+		printEty(ety, i, len(etys) > 1, entry)
 	}
 
 }
@@ -136,7 +167,7 @@ func prettyPrint(entries [][]types.EntryRepresentable) error {
 	for _, entry := range entries {
 		for _, subentry := range entry {
 			hasEntries = true
-			ppEntry(subentry)
+			printEntry(subentry)
 		}
 	}
 
@@ -165,7 +196,7 @@ func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, inde
 		}
 
 		fmt.Print(xml)
-	case format == "pp":
+	case format == "print":
 		err := prettyPrint(entries)
 
 		if err != nil {
