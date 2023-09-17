@@ -1,9 +1,9 @@
 <dictionary name="Example Dictionary 2">
   <entry term="runner">
     <ety description="Latin root">
-      <usage pos="v">
+      <sense pos="v">
         <definition value="An additional definition" />
-      </usage>
+      </sense>
     </ety>
   </entry>
   <entry term="runners" see="runner" />

@@ -92,11 +92,11 @@ class Dictionary constructor(private val path: String) {
 
     data class Entry(val id: String? = null, val term: String, val etymologies: List<Etymology>? = null)
 
-    data class Etymology(val id: String? = null, val description: String? = null, val usages: Map<String, Usage>? = null)
+    data class Etymology(val id: String? = null, val description: String? = null, val senses: Map<String, Sense>? = null)
 
     data class Description(val id: String? = null, val value: String? = null, val examples: List<String>? = null)
 
-    data class Usage(val id: String? = null, val description: String? = null, val definitions: List<Description>? = null, val groups: List<Group>? = null)
+    data class Sense(val id: String? = null, val description: String? = null, val definitions: List<Description>? = null, val groups: List<Group>? = null)
 
     data class Group(val id: String? = null, val description: String? = null, val definitions: List<Description>? = null)
 }
