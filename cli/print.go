@@ -65,6 +65,8 @@ func printNote(note types.NoteRepresentable, targetWord string, numbering string
 	for _, example := range note.Examples {
 		printExample(example, targetWord, indent+2)
 	}
+
+	fmt.Println()
 }
 
 func printDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
