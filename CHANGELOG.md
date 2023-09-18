@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.18.0](https://github.com/TheOpenDictionary/odict/compare/v1.17.1...v1.18.0) (2023-09-18)
+
+
+### Features
+
+* **merge:** simplify merging logic ([#455](https://github.com/TheOpenDictionary/odict/issues/455)) ([2e0b218](https://github.com/TheOpenDictionary/odict/commit/2e0b2186543d065272a3996c3edef8421c427280))
+
+
+### Bug Fixes
+
+* **print:** add line break after printing notes ([329e788](https://github.com/TheOpenDictionary/odict/commit/329e788a71e094a9ebaa0af9386bfa739eb899ac))
+
 ## [1.17.1](https://github.com/TheOpenDictionary/odict/compare/v1.17.0...v1.17.1) (2023-09-17)
 
 
