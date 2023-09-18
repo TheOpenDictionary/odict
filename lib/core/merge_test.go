@@ -1,9 +1,11 @@
 package core
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/TheOpenDictionary/odict/lib/test"
+	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,24 +13,95 @@ func TestMerge(t *testing.T) {
 	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
 	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
 
-	dict1, e1 := ReadDictionary("../../examples/example1.odict")
-	dict2, e2 := ReadDictionary("../../examples/example2.odict")
+	dict1 := types.DictionaryRepresentable{
+		Entries: types.KVMap[string, types.EntryRepresentable]{
+			"dog": types.EntryRepresentable{
+				Term: "dog",
+				Etymologies: []types.EtymologyRepresentable{
+					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+						types.Noun: types.SenseRepresentable{
+							POS: types.Noun,
+							Definitions: []types.DefinitionRepresentable{
+								{Value: "some definition"},
+							},
+						},
+					},
+					},
+				},
+			},
+		},
+	}
 
-	assert.Equal(t, nil, e1)
-	assert.Equal(t, nil, e2)
+	dict2 := types.DictionaryRepresentable{
+		Entries: types.KVMap[string, types.EntryRepresentable]{
+			"cat": types.EntryRepresentable{
+				Term: "cat",
+				Etymologies: []types.EtymologyRepresentable{
+					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+						types.Noun: types.SenseRepresentable{
+							POS: types.Noun,
+							Definitions: []types.DefinitionRepresentable{
+								{Value: "some other definition"},
+							},
+						},
+					},
+					},
+				},
+			},
+		},
+	}
 
-	dict1_r := dict1.AsRepresentable()
-	dict2_r := dict2.AsRepresentable()
+	expected := types.DictionaryRepresentable{
+		Entries: types.KVMap[string, types.EntryRepresentable]{
+			"cat": types.EntryRepresentable{
+				Term: "cat",
+				Etymologies: []types.EtymologyRepresentable{
+					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+						types.Noun: types.SenseRepresentable{
+							POS: types.Noun,
+							Definitions: []types.DefinitionRepresentable{
+								{
+									Value:    "some other definition",
+									Examples: []string{},
+									Notes:    []types.NoteRepresentable{},
+								},
+							},
+							Groups: []types.GroupRepresentable{},
+						},
+					},
+					},
+				},
+			},
+			"dog": types.EntryRepresentable{
+				Term: "dog",
+				Etymologies: []types.EtymologyRepresentable{
+					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
+						types.Noun: types.SenseRepresentable{
+							POS: types.Noun,
+							Definitions: []types.DefinitionRepresentable{
+								{
+									Value:    "some definition",
+									Examples: []string{},
+									Notes:    []types.NoteRepresentable{},
+								},
+							},
+							Groups: []types.GroupRepresentable{},
+						},
+					},
+					},
+				},
+			},
+		},
+	}
 
-	assert.Equal(t, dict1.EntriesLength(), 5)
-	assert.Equal(t, dict2.EntriesLength(), 2)
-	assert.Equal(t, len(dict1_r.Entries["run"].Etymologies), 1)
-	assert.Equal(t, len(dict2_r.Entries["runner"].Etymologies), 1)
+	dict1_b := types.GetRootAsDictionary(types.Serialize(&dict1), 0)
+	dict2_b := types.GetRootAsDictionary(types.Serialize(&dict2), 0)
 
-	merged, err := MergeDictionaries(dict1, dict2)
+	merged, err := MergeDictionaries(dict1_b, dict2_b)
 
+	fmt.Print(merged)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, len(merged.Entries), 7)
+	assert.Equal(t, expected, *merged)
 
 	test.CleanupTest()
 }
