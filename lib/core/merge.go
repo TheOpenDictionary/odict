@@ -2,19 +2,21 @@ package core
 
 import (
 	"github.com/TheOpenDictionary/odict/lib/types"
-	"github.com/imdario/mergo"
 )
 
 // MergeDictionaries merges the entries of two dictionaries.
-func MergeDictionaries(dest *types.Dictionary, srcs ...*types.Dictionary) (*types.DictionaryRepresentable, error) {
-	dst := dest.AsRepresentable()
+func MergeDictionaries(dst *types.Dictionary, srcs ...*types.Dictionary) (*types.DictionaryRepresentable, error) {
+	parent := dst.AsRepresentable()
 
-	for i := range srcs {
-		src := srcs[i].AsRepresentable()
-		if err := mergo.Map(&dst, src, mergo.WithAppendSlice); err != nil {
-			return nil, err
+	for _, src := range srcs {
+		entries := src.AsRepresentable().Entries
+
+		for _, entry := range entries {
+			if _, ok := parent.Entries[entry.Term]; !ok {
+				parent.Entries[entry.Term] = entry
+			}
 		}
 	}
 
-	return &dst, nil
+	return &parent, nil
 }
