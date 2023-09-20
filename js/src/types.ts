@@ -38,7 +38,7 @@ export interface DefinitionNote {
 export interface Definition {
   value?: string;
   examples?: string[];
-  notes: DefinitionNote[];
+  notes?: DefinitionNote[];
 }
 
 export interface Sense {
