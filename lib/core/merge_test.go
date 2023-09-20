@@ -1,18 +1,13 @@
 package core
 
 import (
-	"fmt"
 	"testing"
 
-	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMerge(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
-	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
-
 	dict1 := types.DictionaryRepresentable{
 		Entries: types.KVMap[string, types.EntryRepresentable]{
 			"dog": types.EntryRepresentable{
@@ -99,9 +94,6 @@ func TestMerge(t *testing.T) {
 
 	merged, err := MergeDictionaries(dict1_b, dict2_b)
 
-	fmt.Print(merged)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, expected, *merged)
-
-	test.CleanupTest()
 }
