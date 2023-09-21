@@ -5,17 +5,14 @@
     },
     "js": {
       "release-type": "node",
-      "path": "./js",
       "component": "js"
     },
     "python": {
       "release-type": "python",
-      "path": "./python",
       "component": "python"
     },
     "jvm": {
       "release-type": "java",
-      "path": "./jvm",
       "component": "jvm"
     }
   }

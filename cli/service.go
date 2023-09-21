@@ -32,21 +32,28 @@ func decodePayload(payload interface{}) ([]byte, error) {
 
 func service(c *cli.Context) error {
 	ipc := NewIPC()
-	dictPath := c.Args().Get(0)
-
-	var dict *types.Dictionary
-
-	if len(dictPath) > 0 {
-		var err error
-
-		dict, err = core.ReadDictionary(dictPath)
-
-		if err != nil {
-			return err
-		}
-	}
 
 	go func() {
+		var dict *types.Dictionary
+
+		// Load
+		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodLoad], func(reply replyChannel, payload interface{}) {
+			if buf, err := decodePayload(payload); err != nil {
+				ipc.Reply(reply, nil, err)
+			} else {
+				var err error
+
+				payload := GetRootAsLoadPayload(buf, 0)
+				dict, err = core.ReadDictionary(string(payload.Path()))
+
+				if err != nil {
+					ipc.Reply(reply, nil, err)
+				} else {
+					ipc.Reply(reply, true, nil)
+				}
+			}
+		})
+
 		// Write
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodWrite], func(reply replyChannel, payload interface{}) {
 			if buf, err := decodePayload(payload); err != nil {

@@ -18,6 +18,7 @@ const (
 	ODictMethodCompile ODictMethod = 5
 	ODictMethodWrite   ODictMethod = 6
 	ODictMethodLexicon ODictMethod = 7
+	ODictMethodLoad    ODictMethod = 8
 )
 
 var EnumNamesODictMethod = map[ODictMethod]string{
@@ -28,6 +29,7 @@ var EnumNamesODictMethod = map[ODictMethod]string{
 	ODictMethodCompile: "Compile",
 	ODictMethodWrite:   "Write",
 	ODictMethodLexicon: "Lexicon",
+	ODictMethodLoad:    "Load",
 }
 
 var EnumValuesODictMethod = map[string]ODictMethod{
@@ -38,6 +40,7 @@ var EnumValuesODictMethod = map[string]ODictMethod{
 	"Compile": ODictMethodCompile,
 	"Write":   ODictMethodWrite,
 	"Lexicon": ODictMethodLexicon,
+	"Load":    ODictMethodLoad,
 }
 
 func (v ODictMethod) String() string {
@@ -247,6 +250,51 @@ func SplitPayloadAddQuery(builder *flatbuffers.Builder, query flatbuffers.UOffse
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(query), 0)
 }
 func SplitPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	return builder.EndObject()
+}
+
+type LoadPayload struct {
+	_tab flatbuffers.Table
+}
+
+func GetRootAsLoadPayload(buf []byte, offset flatbuffers.UOffsetT) *LoadPayload {
+	n := flatbuffers.GetUOffsetT(buf[offset:])
+	x := &LoadPayload{}
+	x.Init(buf, n+offset)
+	return x
+}
+
+func GetSizePrefixedRootAsLoadPayload(buf []byte, offset flatbuffers.UOffsetT) *LoadPayload {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &LoadPayload{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
+func (rcv *LoadPayload) Init(buf []byte, i flatbuffers.UOffsetT) {
+	rcv._tab.Bytes = buf
+	rcv._tab.Pos = i
+}
+
+func (rcv *LoadPayload) Table() flatbuffers.Table {
+	return rcv._tab
+}
+
+func (rcv *LoadPayload) Path() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func LoadPayloadStart(builder *flatbuffers.Builder) {
+	builder.StartObject(1)
+}
+func LoadPayloadAddPath(builder *flatbuffers.Builder, path flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(path), 0)
+}
+func LoadPayloadEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
 

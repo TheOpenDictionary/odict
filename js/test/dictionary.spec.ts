@@ -94,4 +94,13 @@ describe("Dictionary", () => {
 
     expect(results).toMatchSnapshot();
   });
+
+  it.only("throws errors inside JavaScript", async () => {
+    try {
+      const dict = new Dictionary("nonexistent-alias");
+      await dict.lookup("dog");
+    } catch (e) {
+      expect(e as Error).toEqual("Hi");
+    }
+  });
 });

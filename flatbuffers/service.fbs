@@ -5,7 +5,8 @@ enum ODictMethod:byte {
   Search = 4,
   Compile = 5,
   Write = 6,
-  Lexicon = 7
+  Lexicon = 7,
+  Load = 8
 }
 
 
@@ -23,6 +24,10 @@ table WritePayload {
 table SplitPayload {
   threshold:int;
   query:string;
+}
+
+table LoadPayload {
+  path:string;
 }
 
 table SearchPayload {

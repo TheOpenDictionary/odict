@@ -7,5 +7,6 @@ export enum ODictMethod {
   Search = 4,
   Compile = 5,
   Write = 6,
-  Lexicon = 7
+  Lexicon = 7,
+  Load = 8
 }
