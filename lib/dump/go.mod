@@ -3,7 +3,10 @@ module github.com/TheOpenDictionary/odict/lib/dump
 go 1.20
 
 require (
-	github.com/bokwoon95/sq v0.4.1
+	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20230921060249-e2cb2527d998
+	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230921060249-e2cb2527d998
+	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230921060249-e2cb2527d998
+	github.com/bokwoon95/sq v0.4.2
 	github.com/bokwoon95/sqddl v0.4.6
 	github.com/stretchr/testify v1.8.4
 )
@@ -13,7 +16,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/google/uuid v1.3.1 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
