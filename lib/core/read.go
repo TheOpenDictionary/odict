@@ -109,7 +109,7 @@ func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
 func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
 	dict, err := ReadDictionaryFromPath(pathOrAlias)
 
-	if dict == nil || os.IsNotExist(err) {
+	if os.IsNotExist(err) {
 		path, err := config.GetDictionaryPathFromAlias(pathOrAlias)
 
 		if err != nil {
