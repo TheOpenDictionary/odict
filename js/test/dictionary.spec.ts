@@ -94,4 +94,15 @@ describe("Dictionary", () => {
 
     expect(results).toMatchSnapshot();
   });
+
+  it("throws errors inside JavaScript", async () => {
+    try {
+      const dict = new Dictionary("fake-alias");
+      await dict.lookup("dog");
+    } catch (e) {
+      expect(e as Error).toEqual(
+        'Encountered an error starting the ODict service for path "fake-alias": open : no such file or directory',
+      );
+    }
+  });
 });

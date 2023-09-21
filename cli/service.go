@@ -34,19 +34,23 @@ func service(c *cli.Context) error {
 	ipc := NewIPC()
 	dictPath := c.Args().Get(0)
 
-	var dict *types.Dictionary
-
-	if len(dictPath) > 0 {
-		var err error
-
-		dict, err = core.ReadDictionary(dictPath)
-
-		if err != nil {
-			return err
-		}
-	}
-
 	go func() {
+		var dict *types.Dictionary
+
+		if len(dictPath) > 0 {
+			var err error
+
+			dict, err = core.ReadDictionary(dictPath)
+
+			if err != nil {
+				ipc.Send(EnumNamesODictMethod[ODictMethodReady], nil, fmt.Sprint(err))
+			} else {
+				ipc.Send(EnumNamesODictMethod[ODictMethodReady], true, nil)
+			}
+		} else {
+			ipc.Send(EnumNamesODictMethod[ODictMethodReady], true, nil)
+		}
+
 		// Write
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodWrite], func(reply replyChannel, payload interface{}) {
 			if buf, err := decodePayload(payload); err != nil {

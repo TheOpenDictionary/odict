@@ -101,8 +101,8 @@ type payloadReceive struct {
 }
 
 // Send data to parent process
-func (ipc IPC) Send(event string, data interface{}) {
-	ipc.sendChannel <- payload{ID: uuid.NewString(), Event: event, Data: data}
+func (ipc IPC) Send(event string, data interface{}, err interface{}) {
+	ipc.sendChannel <- payload{ID: uuid.NewString(), Event: event, Data: data, Error: err}
 }
 
 // Reply back to sender
@@ -246,7 +246,7 @@ func pingPong(ipc *IPC) {
 			log.Println("[IPC] Timeout closing process.")
 			os.Exit(0)
 		}
-		ipc.Send("ping", nil)
+		ipc.Send("ping", nil, nil)
 	}
 }
 

@@ -18,6 +18,7 @@ const (
 	ODictMethodCompile ODictMethod = 5
 	ODictMethodWrite   ODictMethod = 6
 	ODictMethodLexicon ODictMethod = 7
+	ODictMethodReady   ODictMethod = 8
 )
 
 var EnumNamesODictMethod = map[ODictMethod]string{
@@ -28,6 +29,7 @@ var EnumNamesODictMethod = map[ODictMethod]string{
 	ODictMethodCompile: "Compile",
 	ODictMethodWrite:   "Write",
 	ODictMethodLexicon: "Lexicon",
+	ODictMethodReady:   "Ready",
 }
 
 var EnumValuesODictMethod = map[string]ODictMethod{
@@ -38,6 +40,7 @@ var EnumValuesODictMethod = map[string]ODictMethod{
 	"Compile": ODictMethodCompile,
 	"Write":   ODictMethodWrite,
 	"Lexicon": ODictMethodLexicon,
+	"Ready":   ODictMethodReady,
 }
 
 func (v ODictMethod) String() string {
