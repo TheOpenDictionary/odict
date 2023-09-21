@@ -142,6 +142,8 @@ func printEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry typ
 	for _, sense := range ety.Senses {
 		printSense(sense, entry)
 	}
+
+	fmt.Println()
 }
 
 func printEntry(entry types.EntryRepresentable) {
