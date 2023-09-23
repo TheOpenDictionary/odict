@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.18.1](https://github.com/TheOpenDictionary/odict/compare/v1.18.0...v1.18.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* **ci:** Update release-please setup ([a372e48](https://github.com/TheOpenDictionary/odict/commit/a372e4826f043f5fa6abfa90162fc1f9aa665009))
+* **deps:** Disable renovate upgrades of GH actions ([6a02948](https://github.com/TheOpenDictionary/odict/commit/6a02948a106b1129d22090219d4cea149dfa3def))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.2 ([05af8cd](https://github.com/TheOpenDictionary/odict/commit/05af8cdf4c176af5a107142df5f83ea2ec4c8e70))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.3 ([382f35d](https://github.com/TheOpenDictionary/odict/commit/382f35dbfa3655acfb05171a20f08e455058b224))
+* **js:** Add ready check for service ([#458](https://github.com/TheOpenDictionary/odict/issues/458)) ([ed984ba](https://github.com/TheOpenDictionary/odict/commit/ed984bad21af2c57f8e8c421a8ffe81c1b3fb8fe))
+* **js:** Make notes optional ([ee72c66](https://github.com/TheOpenDictionary/odict/commit/ee72c6666cfc37f740946b801dc68190a46b22e4))
+* **print:** Add line break after etymologies ([e2cb252](https://github.com/TheOpenDictionary/odict/commit/e2cb2527d99827536fff3ef8e37128aa3f063d64))
+
 ## [1.18.0](https://github.com/TheOpenDictionary/odict/compare/v1.17.1...v1.18.0) (2023-09-18)
 
 
