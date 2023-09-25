@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.8.0...js-v0.8.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* **js:** Add ready check for service ([#458](https://github.com/TheOpenDictionary/odict/issues/458)) ([ed984ba](https://github.com/TheOpenDictionary/odict/commit/ed984bad21af2c57f8e8c421a8ffe81c1b3fb8fe))
+* **js:** Make notes optional ([ee72c66](https://github.com/TheOpenDictionary/odict/commit/ee72c6666cfc37f740946b801dc68190a46b22e4))
+
 ## [0.8.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.7.0...js-v0.8.0) (2023-09-17)
 
 
