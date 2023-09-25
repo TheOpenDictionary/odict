@@ -32,10 +32,3 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - "^docs:"
-      - "^test:"
