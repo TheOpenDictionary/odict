@@ -8,6 +8,7 @@ export interface DictionaryOptions {
 
 export interface LookupOptions {
   split?: number;
+  skipProcessing?: boolean;
   follow?: boolean;
 }
 

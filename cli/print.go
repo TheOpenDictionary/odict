@@ -71,7 +71,7 @@ func printNote(note types.NoteRepresentable, targetWord string, numbering string
 
 func printDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
 	value := definition.Value
-	matches := parentheticalRegex.FindAllStringIndex(value, -1)
+	matches := parentheticalRegex.FindAllStringIndex(string(value), -1)
 	fmtNumbering := "%" + fmt.Sprint(indent) + "s."
 
 	if len(matches) > 0 {
@@ -83,7 +83,7 @@ func printDefinition(definition types.DefinitionRepresentable, numbering string,
 			start := matches[i][0]
 			end := matches[i][1]
 
-			fmt.Printf("%s%s", value[j:start], fmtParenthetical(value[start:end]))
+			fmt.Printf("%s%s", value[j:start], fmtParenthetical(string(value[start:end])))
 
 			j = end
 		}

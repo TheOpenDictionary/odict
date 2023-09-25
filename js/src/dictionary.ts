@@ -167,6 +167,7 @@ class Dictionary {
     LookupPayload.addQueries(builder, queriesV);
     LookupPayload.addFollow(builder, follow ?? false);
     LookupPayload.addSplit(builder, split ?? 0);
+    LookupPayload.addNoProcess(builder, options.skipProcessing ?? false);
 
     const payload = LookupPayload.endLookupPayload(builder);
 

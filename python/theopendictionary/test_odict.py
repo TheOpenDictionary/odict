@@ -61,3 +61,43 @@ def test_write_lookup_dictionary():
         expected,
         json,
     )
+
+
+def test_write_lookup_dictionary_no_markdown():
+    Dictionary.compile("../examples/example2.xml")
+
+    dict = Dictionary("../examples/example2.odict")
+
+    expected1 = "This <strong>is</strong> a <em>markdown</em> test"
+    expected2 = "This **is** a _markdown_ test"
+
+    output1 = dict.lookup("markdown")
+    output2 = dict.lookup("markdown", skip_processing=True)
+
+    actual1 = (
+        output1[0][0]
+        .get("etymologies")[0]
+        .get("senses")
+        .get("v")
+        .get("definitions")[0]
+        .get("value")
+    )
+
+    actual2 = (
+        output2[0][0]
+        .get("etymologies")[0]
+        .get("senses")
+        .get("v")
+        .get("definitions")[0]
+        .get("value")
+    )
+
+    assert actual1 == expected1, "definition should be %s, received: %s" % (
+        expected1,
+        actual1,
+    )
+
+    assert actual2 == expected2, "definition should be %s, received: %s" % (
+        expected2,
+        actual2,
+    )

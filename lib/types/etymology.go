@@ -9,7 +9,7 @@ import (
 
 type EtymologyRepresentable struct {
 	ID          string                                  `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Description string                                  `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Description MDString                                `json:"description,omitempty" xml:"description,attr,omitempty"`
 	Senses      KVMap[PartOfSpeech, SenseRepresentable] `json:"senses" xml:"sense"`
 }
 
@@ -25,14 +25,14 @@ func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
 
 	return EtymologyRepresentable{
 		ID:          string(etymology.Id()),
-		Description: string(etymology.Description()),
+		Description: MDString(etymology.Description()),
 		Senses:      senses,
 	}
 }
 
 func (ety *EtymologyRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(ety.ID)
-	description := builder.CreateString(ety.Description)
+	description := builder.CreateString(ety.Description.String())
 	senses := ety.buildSenseVector(builder)
 
 	EtymologyStart(builder)

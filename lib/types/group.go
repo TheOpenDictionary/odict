@@ -6,7 +6,7 @@ import (
 
 type GroupRepresentable struct {
 	ID          string                    `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Description string                    `json:"description" xml:"description,attr"`
+	Description MDString                  `json:"description" xml:"description,attr"`
 	Definitions []DefinitionRepresentable `json:"definitions" xml:"definition"`
 }
 
@@ -26,14 +26,14 @@ func (group *Group) AsRepresentable() GroupRepresentable {
 	}
 
 	return GroupRepresentable{
-		Description: description,
+		Description: MDString(description),
 		Definitions: definitions,
 	}
 }
 
 func (group *GroupRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(group.ID)
-	description := builder.CreateString(group.Description)
+	description := builder.CreateString(group.Description.String())
 	definitions := group.buildDefinitionVector(builder)
 
 	if len(group.Description) == 0 {
