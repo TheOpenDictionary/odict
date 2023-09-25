@@ -35,6 +35,12 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Build artifacts
+        if: steps.release.outputs.release_created
+        uses: goreleaser/goreleaser-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: just js publish
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:
