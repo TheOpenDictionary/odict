@@ -38,8 +38,13 @@ jobs:
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
       - name: Publish CLI
-        if: steps.release.outputs.release_created
-        run: just publish --clean
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:
