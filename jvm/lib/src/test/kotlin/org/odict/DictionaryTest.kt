@@ -5,13 +5,21 @@ import kotlin.test.assertEquals
 
 class DictionaryTest {
     @Test fun testLookup() {
-        Dictionary.compile("../../examples/example1.xml")
+        Dictionary.compile("../../examples/example2.xml")
 
-        val dict = Dictionary("../../examples/example1.odict")
-        val entry = dict.lookup("run")
+        val dict = Dictionary("../../examples/example2.odict")
+        val entry = dict.lookup("markdown")
 
-        assertEquals("run", entry[0][0].term)
-        assertEquals(6, entry[0][0].etymologies?.get(0)?.senses?.get("v")?.groups?.get(0)?.definitions?.count())
+        assertEquals("This <strong>is</strong> a <em>markdown</em> test", entry[0][0].etymologies?.get(0)?.senses?.get("v")?.definitions?.get(0)?.value);
+    }
+
+    @Test fun testLookupWithoutMarkdown() {
+        Dictionary.compile("../../examples/example2.xml")
+
+        val dict = Dictionary("../../examples/example2.odict")
+        val entry = dict.lookup("markdown", skipProcessing = true)
+
+        assertEquals("This **is** a _markdown_ test", entry[0][0].etymologies?.get(0)?.senses?.get("v")?.definitions?.get(0)?.value);
     }
 
     @Test fun testLexicon() {

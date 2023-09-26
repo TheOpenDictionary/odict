@@ -7,4 +7,11 @@
     </ety>
   </entry>
   <entry term="runners" see="runner" />
+  <entry term="markdown">
+    <ety description="Latin root">
+      <sense pos="v">
+        <definition value="This **is** a _markdown_ test" />
+      </sense>
+    </ety>
+  </entry>
 </dictionary>

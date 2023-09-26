@@ -131,6 +131,11 @@ func service(c *cli.Context) error {
 				queries := make([]string, payload.QueriesLength())
 				follow := payload.Follow()
 				split := int(payload.Split())
+				noProcess := payload.NoProcess()
+
+				if noProcess {
+					types.SetMarkdownProcessingEnabled(false)
+				}
 
 				for i := 0; i < payload.QueriesLength(); i++ {
 					queries[i] = string(payload.Queries(i))
