@@ -45,7 +45,7 @@ func addDictionary(c *cli.Context) error {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	dict, err := core.ReadDictionary(path)
+	dict, err := core.ReadDictionary(path, nil)
 
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func setDictionary(c *cli.Context) error {
 		cli.ShowSubcommandHelpAndExit(c, 1)
 	}
 
-	dict, err := core.ReadDictionary(path)
+	dict, err := core.ReadDictionary(path, nil)
 
 	if err != nil {
 		return err

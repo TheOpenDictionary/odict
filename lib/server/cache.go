@@ -24,7 +24,7 @@ func (c *dictionaryCache) getDictionary(pathOrAlias string) (*types.Dictionary, 
 	defer c.mu.Unlock()
 
 	if _, ok := c.data[pathOrAlias]; !ok {
-		dict, err := core.ReadDictionary(pathOrAlias)
+		dict, err := core.ReadDictionary(pathOrAlias, nil)
 
 		if err != nil {
 			return nil, err

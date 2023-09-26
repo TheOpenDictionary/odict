@@ -23,11 +23,11 @@ type TestLookupSuite struct {
 func (suite *TestLookupSuite) SetupTest() {
 	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
-	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
 	suite.path = "../../examples/example1.odict"
 
-	dict, err := core.ReadDictionary(suite.path)
+	dict, err := core.ReadDictionary(suite.path, nil)
 
 	suite.Equal(nil, err)
 

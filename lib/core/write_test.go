@@ -8,8 +8,8 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
-	CompileDictionary("../../examples/empty.xml", "../../examples/empty.odict")
-	dict, err := ReadDictionary("../../examples/empty.odict")
+	CompileDictionary("../../examples/empty.xml", "../../examples/empty.odict", nil)
+	dict, err := ReadDictionary("../../examples/empty.odict", nil)
 	assert.Equal(t, nil, err)
 	// Ensure a UUID ID is generated for the dictionary
 	assert.Regexp(t, "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$", string(dict.Id()))

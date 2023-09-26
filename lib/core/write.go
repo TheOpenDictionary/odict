@@ -45,9 +45,21 @@ func GetDictionaryFromXML(xmlStr string) *types.DictionaryRepresentable {
 	return &dictionary
 }
 
-func WriteDictionaryFromExisting(outputPath string, dictionary *types.DictionaryRepresentable) (int, error) {
+func WriteDictionaryFromExisting(outputPath string, dictionary *types.DictionaryRepresentable, encryptionKey *string) (int, error) {
 	dictionaryBytes := types.Serialize(dictionary)
+
+	if encryptionKey != nil {
+		bytes, err := utils.EncryptData(*encryptionKey, dictionaryBytes)
+
+		if err != nil {
+			return 0, err
+		}
+
+		dictionaryBytes = bytes
+	}
+
 	compressed := snappy.Encode(nil, dictionaryBytes)
+
 	file, err := os.Create(outputPath)
 
 	if err != nil {
@@ -68,6 +80,12 @@ func WriteDictionaryFromExisting(outputPath string, dictionary *types.Dictionary
 
 	compressedSize := uint64(len(compressed))
 
+	encryptedFlag := 0
+
+	if encryptionKey != nil {
+		encryptedFlag = 1
+	}
+
 	compressedSizeBytes := utils.Uint64ToBytes(compressedSize)
 
 	writer := bufio.NewWriter(file)
@@ -84,6 +102,12 @@ func WriteDictionaryFromExisting(outputPath string, dictionary *types.Dictionary
 		return 0, versionErr
 	}
 
+	encryptedBytes, encryptedErr := writer.Write(utils.Uint16ToBytes(uint16(encryptedFlag)))
+
+	if encryptedErr != nil {
+		return 0, encryptedErr
+	}
+
 	contentSizeBytes, contentCountErr := writer.Write(compressedSizeBytes)
 
 	if contentCountErr != nil {
@@ -96,7 +120,7 @@ func WriteDictionaryFromExisting(outputPath string, dictionary *types.Dictionary
 		return 0, contentErr
 	}
 
-	total := sigBytes + versionBytes + contentSizeBytes + contentBytes
+	total := sigBytes + versionBytes + encryptedBytes + contentSizeBytes + contentBytes
 
 	if sigBytes != 5 {
 		return 0, errors.New("signature bytes do not equal 5")
@@ -121,6 +145,6 @@ func WriteDictionaryFromExisting(outputPath string, dictionary *types.Dictionary
 
 // WriteDictionary generates an ODict binary file given
 // a ODXML input file path
-func WriteDictionaryFromXML(xmlStr, outputPath string) (int, error) {
-	return WriteDictionaryFromExisting(outputPath, GetDictionaryFromXML(xmlStr))
+func WriteDictionaryFromXML(xmlStr, outputPath string, encryptionKey *string) (int, error) {
+	return WriteDictionaryFromExisting(outputPath, GetDictionaryFromXML(xmlStr), encryptionKey)
 }

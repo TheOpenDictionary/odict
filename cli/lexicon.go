@@ -11,7 +11,7 @@ func lexicon(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 
 	return t(c, func() error {
-		dict, err := core.ReadDictionary(inputFile)
+		dict, err := core.ReadDictionary(inputFile, nil)
 
 		if err != nil {
 			return err

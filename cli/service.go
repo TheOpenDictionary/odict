@@ -40,7 +40,7 @@ func service(c *cli.Context) error {
 		if len(dictPath) > 0 {
 			var err error
 
-			dict, err = core.ReadDictionary(dictPath)
+			dict, err = core.ReadDictionary(dictPath, nil)
 
 			if err != nil {
 				ipc.Send(EnumNamesODictMethod[ODictMethodReady], nil, fmt.Sprint(err))
@@ -57,7 +57,7 @@ func service(c *cli.Context) error {
 				ipc.Reply(reply, nil, err)
 			} else {
 				payload := GetRootAsWritePayload(buf, 0)
-				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()))
+				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()), nil)
 				ipc.Reply(reply, true, nil)
 			}
 		})
@@ -159,7 +159,7 @@ func service(c *cli.Context) error {
 				ipc.Reply(reply, nil, err)
 			} else {
 				payload := GetRootAsCompilePayload(buf, 0)
-				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
+				core.CompileDictionary(string(payload.Path()), string(payload.Out()), nil)
 				ipc.Reply(reply, true, nil)
 			}
 		})

@@ -8,6 +8,7 @@ import (
 
 	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/TheOpenDictionary/odict/lib/utils"
 	"github.com/golang/snappy"
 )
 
@@ -17,7 +18,7 @@ type ODictFile struct {
 	Content   []byte
 }
 
-func readODictFile(path string) (*ODictFile, error) {
+func readODictFile(path string, decryptionKey *string) (*ODictFile, error) {
 	// Read input file
 	file, err := os.Open(path)
 
@@ -43,6 +44,12 @@ func readODictFile(path string) (*ODictFile, error) {
 		return nil, versionError
 	}
 
+	encryptedBytes := make([]byte, 2)
+
+	if _, encryptedError := file.Read(versionBytes); encryptedError != nil {
+		return nil, encryptedError
+	}
+
 	// Read the compressed content size in bytes
 	file.Seek(7, 0)
 
@@ -57,6 +64,7 @@ func readODictFile(path string) (*ODictFile, error) {
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
 	readVersion := binary.LittleEndian.Uint16(versionBytes)
+	encryptedFlag := binary.LittleEndian.Uint16(encryptedBytes)
 	contentSize := binary.LittleEndian.Uint64(contentSizeBytes)
 	expectedVersion, parseErr := strconv.Atoi(version)
 
@@ -71,7 +79,12 @@ func readODictFile(path string) (*ODictFile, error) {
 
 	// Assert version
 	if readVersion != uint16(expectedVersion) {
-		return nil, errors.New("this file is not compatible with the latest version of the ODict schema")
+		return nil, errors.New("This file is not compatible with the latest version of the ODict schema")
+	}
+
+	// Assert version
+	if encryptedFlag == uint16(1) && decryptionKey == nil {
+		return nil, errors.New("This dictionary is encrypted. Please pass in a valid decryption key.")
 	}
 
 	// Read compressed buffer content as bytes
@@ -87,14 +100,24 @@ func readODictFile(path string) (*ODictFile, error) {
 		return nil, decodedError
 	}
 
+	if decryptionKey != nil {
+		bytes, err := utils.DecryptData(*decryptionKey, decoded)
+
+		if err != nil {
+			return nil, err
+		}
+
+		decoded = bytes
+	}
+
 	return &ODictFile{Signature: signature, Version: readVersion, Content: decoded}, nil
 }
 
 // ReadDictionary loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
-	dict, err := readODictFile(path)
+func ReadDictionaryFromPath(path string, decryptionKey *string) (*types.Dictionary, error) {
+	dict, err := readODictFile(path, decryptionKey)
 
 	if err != nil {
 		return nil, err
@@ -106,8 +129,8 @@ func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
 // ReadDictionary loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
-	dict, err := ReadDictionaryFromPath(pathOrAlias)
+func ReadDictionary(pathOrAlias string, decryptionKey *string) (*types.Dictionary, error) {
+	dict, err := ReadDictionaryFromPath(pathOrAlias, nil)
 
 	if os.IsNotExist(err) {
 		path, err := config.GetDictionaryPathFromAlias(pathOrAlias)
@@ -116,7 +139,7 @@ func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
 			return nil, err
 		}
 
-		return ReadDictionaryFromPath(path)
+		return ReadDictionaryFromPath(path, nil)
 	}
 
 	return dict, err

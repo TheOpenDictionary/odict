@@ -2,15 +2,15 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: 
+@setup: 
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "build")
+@build: (cli "build")
 
 @run +args="": (cli "run" args)
 
-@test: deps (go "test") (jvm "test") (python "test") (js "test") clean
+@test: (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 

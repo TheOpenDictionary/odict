@@ -8,9 +8,9 @@ import (
 )
 
 func TestDictionaryToXML(t *testing.T) {
-	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
-	dict, err := core.ReadDictionary("../../examples/example1.odict")
+	dict, err := core.ReadDictionary("../../examples/example1.odict", nil)
 
 	assert.Equal(t, nil, err)
 
@@ -19,9 +19,9 @@ func TestDictionaryToXML(t *testing.T) {
 
 	assert.Equal(t, nil, err)
 
-	core.WriteDictionaryFromXML(dump, "../../examples/example1_generated.odict")
+	core.WriteDictionaryFromXML(dump, "../../examples/example1_generated.odict", nil)
 
-	newdict, err := core.ReadDictionary("../../examples/example1_generated.odict")
+	newdict, err := core.ReadDictionary("../../examples/example1_generated.odict", nil)
 
 	assert.Equal(t, nil, err)
 

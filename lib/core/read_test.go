@@ -23,7 +23,7 @@ func (suite *TestReadSuite) SetupTest() {
 	suite.dict = GetDictionaryFromXML("<dictionary><entry term=\"run\" /></dictionary>")
 	suite.path = "../../examples/read.odict"
 
-	WriteDictionaryFromExisting(suite.path, suite.dict)
+	WriteDictionaryFromExisting(suite.path, suite.dict, nil)
 }
 
 func (suite *TestReadSuite) TearDownSuite() {
@@ -31,7 +31,7 @@ func (suite *TestReadSuite) TearDownSuite() {
 }
 
 func (suite *TestReadSuite) TestFromPath() {
-	dict, err := ReadDictionary(suite.path)
+	dict, err := ReadDictionary(suite.path, nil)
 
 	assert.Equal(suite.T(), nil, err)
 	assert.Equal(suite.T(), suite.dict.ID, string(dict.Id()))
@@ -40,7 +40,7 @@ func (suite *TestReadSuite) TestFromPath() {
 func (suite *TestReadSuite) TestFromAlias() {
 	config.AddDictionaryAlias("test", suite.path)
 
-	dict, err := ReadDictionary("test")
+	dict, err := ReadDictionary("test", nil)
 
 	assert.Equal(suite.T(), nil, err)
 	assert.Equal(suite.T(), suite.dict.ID, string(dict.Id()))

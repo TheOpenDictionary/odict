@@ -17,13 +17,13 @@ func merge(c *cli.Context) error {
 	}
 
 	return t(c, func() error {
-		dict1, err := core.ReadDictionary(inputFile1)
+		dict1, err := core.ReadDictionary(inputFile1, nil)
 
 		if err != nil {
 			return err
 		}
 
-		dict2, err := core.ReadDictionary(inputFile2)
+		dict2, err := core.ReadDictionary(inputFile2, nil)
 
 		if err != nil {
 			return err
@@ -35,7 +35,7 @@ func merge(c *cli.Context) error {
 			return err
 		}
 
-		core.WriteDictionaryFromExisting(outputFile, result)
+		core.WriteDictionaryFromExisting(outputFile, result, nil)
 
 		return nil
 	})

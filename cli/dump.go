@@ -30,7 +30,7 @@ func dump(c *cli.Context) error {
 	}
 
 	return t(c, func() error {
-		dict, readErr := core.ReadDictionary(inputFile)
+		dict, readErr := core.ReadDictionary(inputFile, nil)
 
 		if readErr != nil {
 			return readErr

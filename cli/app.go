@@ -30,6 +30,11 @@ var App = &cli.App{
 					Aliases: []string{"o"},
 					Usage:   "Path to generate dictionary",
 				},
+				&cli.BoolFlag{
+					Name:    "encrypt",
+					Aliases: []string{"e"},
+					Usage:   "Encrypt the dictionary with a 32-bit AES-256 key",
+				},
 			},
 			Action: compile,
 		},

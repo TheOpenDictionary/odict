@@ -8,9 +8,9 @@ import (
 )
 
 func TestLexicon(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
-	dict, err := ReadDictionary("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict", nil)
 
 	assert.Equal(t, err, nil)
 	assert.Equal(t, Lexicon(dict), []string{"cat", "dog", "poo", "ran", "run"})

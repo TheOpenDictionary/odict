@@ -17,7 +17,7 @@ func index(c *cli.Context) error {
 	}
 
 	return t(c, func() error {
-		dict, err := core.ReadDictionary(inputFile)
+		dict, err := core.ReadDictionary(inputFile, nil)
 
 		if err != nil {
 			return err

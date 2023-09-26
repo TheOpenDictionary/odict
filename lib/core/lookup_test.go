@@ -10,9 +10,9 @@ import (
 )
 
 func TestLookup(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
-	dict, err := ReadDictionary("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict", nil)
 
 	assert.Equal(t, nil, err)
 
@@ -81,9 +81,9 @@ func TestLookup(t *testing.T) {
 }
 
 func TestLookupSplitting(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
-	dict, err := ReadDictionary("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict", nil)
 
 	assert.Equal(t, nil, err)
 
@@ -105,9 +105,9 @@ func TestLookupSplitting(t *testing.T) {
 }
 
 func TestFallbacks(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict", nil)
 
-	dict, err := ReadDictionary("../../examples/example1.odict")
+	dict, err := ReadDictionary("../../examples/example1.odict", nil)
 
 	assert.Equal(t, nil, err)
 
@@ -139,9 +139,9 @@ func TestFallbacks(t *testing.T) {
 }
 
 func TestFollow(t *testing.T) {
-	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
+	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict", nil)
 
-	dict, err := ReadDictionary("../../examples/example2.odict")
+	dict, err := ReadDictionary("../../examples/example2.odict", nil)
 
 	assert.Equal(t, nil, err)
 
