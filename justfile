@@ -22,6 +22,9 @@
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
 
+@publish +args="--auto-snapshot --clean":
+  goreleaser release {{args}}
+
 @sync:
   go work sync 
 
