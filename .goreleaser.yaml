@@ -1,0 +1,37 @@
+before:
+  hooks:
+    - go work sync
+
+dist: bin 
+ 
+project_name: odict
+
+git:
+  ignore_tags:
+    - js-*
+    - python-*
+    - jvm-*
+
+builds:
+  - id: all
+    main: ./odict.go
+    binary: '{{.ProjectName}}-{{.Os}}-{{.Arch}}'
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
+    goos:
+      - linux
+      - darwin
+      - windows 
+    no_unique_dist_dir: true
+  - id: single
+    main: ./odict.go
+    binary: odict
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
+    no_unique_dist_dir: true
+
+brews:
+  - name: odict
+    repository:
+      owner: TheOpenDictionary
+      name: homebrew-odict

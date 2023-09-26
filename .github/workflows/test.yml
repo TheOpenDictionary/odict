@@ -1,4 +1,4 @@
-name: Test
+name: Build & Test
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,6 +34,8 @@ jobs:
             ${{ runner.os }}-poetry-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Run build 
+        run: just build-all --snapshot
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true

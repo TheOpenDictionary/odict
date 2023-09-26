@@ -6,16 +6,24 @@
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "build")
+@build: deps (cli "schema") sync
+  goreleaser build --id single --clean --snapshot --single-target
 
-@run +args="": (cli "run" args)
+@build-all +args="": deps (cli "schema") sync
+  goreleaser build --id all --clean {{args}}
 
+@schema: (go "schema") (cli "schema") (js "schema")
+
+@run +args="": build
+  ./bin/odict {{args}}
+  
 @test: deps (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
 
-@schema: (go "schema") (cli "schema") (js "schema")
+@publish +args="--auto-snapshot --clean":
+  goreleaser release {{args}}
 
 @sync:
   go work sync 

@@ -26,8 +26,8 @@
 
 @test +args="": install
   rm -rf *.log
-  just ../cli/build
-  just dlx tsc 
+  just ../build
+  just dlx tsc
   RUNTIME_ENV=test just dlx jest {{args}}
 
 @publish: build

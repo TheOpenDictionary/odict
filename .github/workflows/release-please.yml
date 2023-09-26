@@ -12,6 +12,8 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4      
       - id: release
@@ -35,6 +37,9 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Publish CLI
+        if: steps.release.outputs.release_created
+        run: just publish --clean
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:
