@@ -1,9 +1,2 @@
-@build binary="odict":
-  just ../lib/schema
-  go build -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" -o ../bin/{{binary}} ../odict.go
-
 @schema:
   flatc -g --gen-onefile --go-namespace cli -o . ../flatbuffers/service.fbs ../flatbuffers/enums.fbs && $(go env GOPATH)/bin/goimports -w *.go
-
-@run +args="": build
-  ../bin/odict {{args}}

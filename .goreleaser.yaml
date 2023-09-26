@@ -10,13 +10,25 @@ before:
   hooks:
     - go work sync
 
+dist: bin 
+
 builds:
-  - env:
-      - CGO_ENABLED=0
+  - id: all
+    main: ./odict.go
+    binary: 'odict-{{.Os}}-{{.Arch}}'
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
     goos:
       - linux
-      - windows
       - darwin
+      - windows 
+    no_unique_dist_dir: true 
+  - id: single
+    main: ./odict.go
+    binary: odict
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
+    no_unique_dist_dir: true 
 
 archives:
   - format: tar.gz

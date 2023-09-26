@@ -8,3 +8,4 @@ nodejs 18.18.0
 just 1.14.0
 flatc 23.3.3
 pnpm 8.7.6
+goreleaser 1.21.1

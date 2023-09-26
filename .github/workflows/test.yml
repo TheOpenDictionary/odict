@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build-win:
+  build:
     name: Build
     runs-on: ubuntu-latest
     strategy:
@@ -36,6 +36,7 @@ jobs:
       - name: Build artifacts
         run: just build odict-${{ matrix.os }}-${{ matrix.arch }}
   test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
