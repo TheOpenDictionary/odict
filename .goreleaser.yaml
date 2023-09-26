@@ -32,6 +32,8 @@ builds:
 
 brews:
   - name: odict
+    homepage: "https://odict.org/"
+    description: "A lightning-fast dictionary compiler and toolchain"
     folder: Formula
     repository:
       owner: TheOpenDictionary

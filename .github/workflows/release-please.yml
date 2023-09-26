@@ -15,7 +15,10 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v4      
+      - name: Checkout code
+        uses: actions/checkout@v4      
+        with:
+          fetch-depth: 0
       - id: release
         name: Release please
         uses: google-github-actions/release-please-action@v3.7.6
@@ -37,11 +40,12 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Fetch Tags 
+        run: git fetch --force --tags
       - name: Publish CLI
         uses: goreleaser/goreleaser-action@v5
+        if: steps.release.outputs.release_created
         with:
-          distribution: goreleaser
-          version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
