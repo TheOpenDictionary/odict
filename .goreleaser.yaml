@@ -13,7 +13,7 @@ git:
     - jvm-*
 
 builds:
-  - id: all
+  - id: odict
     main: ./odict.go
     ldflags:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
@@ -21,7 +21,6 @@ builds:
       - linux
       - darwin
       - windows 
-    no_unique_dist_dir: true
   - id: single
     main: ./odict.go
     binary: odict
@@ -31,7 +30,7 @@ builds:
 
 archives:
   - builds:
-      - all
+      - odict
       
 brews:
   - name: odict

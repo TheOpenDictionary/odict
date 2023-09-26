@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
-      - name: Fetch Tags 
+      - name: Fetch tags 
         run: git fetch --force --tags
       - name: Publish CLI
         uses: goreleaser/goreleaser-action@v5
