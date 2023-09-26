@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.2](https://github.com/TheOpenDictionary/odict/compare/v1.19.1...v1.19.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* Fix Goreleaser config ([127b253](https://github.com/TheOpenDictionary/odict/commit/127b2531f7f0df0ec6d3ebad200858172a120f30))
+
 ## [1.19.1](https://github.com/TheOpenDictionary/odict/compare/v1.19.0...v1.19.1) (2023-09-26)
 
 
