@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
-      - name: Build artifacts
+      - name: Build artifacts for all platforms
         if: steps.release.outputs.release_created
         run: just build-all
       - name: Upload artifacts to release 
