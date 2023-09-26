@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.8.1...js-v0.9.0) (2023-09-26)
+
+
+### Features
+
+* Add Markdown support to description and value attributes ([#462](https://github.com/TheOpenDictionary/odict/issues/462)) ([5a2111f](https://github.com/TheOpenDictionary/odict/commit/5a2111f6aa2f4817028e2fa9c8fec0314569f360))
+* Prebuild binaries ([#463](https://github.com/TheOpenDictionary/odict/issues/463)) ([123bfd7](https://github.com/TheOpenDictionary/odict/commit/123bfd7102be53438f74b7eb9a8542ebb2e2137b))
+
 ## [0.8.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.8.0...js-v0.8.1) (2023-09-23)
 
 
