@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.19.1](https://github.com/TheOpenDictionary/odict/compare/v1.19.0...v1.19.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* **ci:** Fix GoReleaser? ([203031e](https://github.com/TheOpenDictionary/odict/commit/203031e5188af350cdeb3278577aec85c54618be))
+* **ci:** Use GoReleaser action ([28852e3](https://github.com/TheOpenDictionary/odict/commit/28852e30316e2e124253a4ca6e85a8560b50ddcd))
+* **goreleaser:** Add formula to Formula directory ([6fe51c9](https://github.com/TheOpenDictionary/odict/commit/6fe51c9926eb4803c1ea955aefacab13bab5d916))
+* **goreleaser:** Don't include two binaries in archive ([ad7ec2c](https://github.com/TheOpenDictionary/odict/commit/ad7ec2c1ac84e8d15631dfec71ce13986ae93e6e))
+
 ## [1.19.0](https://github.com/TheOpenDictionary/odict/compare/v1.18.1...v1.19.0) (2023-09-26)
 
 
