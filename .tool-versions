@@ -7,4 +7,4 @@ java adoptopenjdk-17.0.8+101
 nodejs 18.18.0
 just 1.14.0
 flatc 23.3.3
-pnpm 8.7.6
+pnpm 8.8.0
