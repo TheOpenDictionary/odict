@@ -79,42 +79,58 @@ exports[`Dictionary can index and search a dictionary 1`] = `
 ]
 `;
 
-exports[`Dictionary can lookup terms properly 1`] = `
+exports[`Dictionary can split terms properly 1`] = `
 [
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "n": {
-              "definitions": [
-                {
-                  "examples": [
-                    "There goes a cat!",
-                  ],
-                  "notes": [
-                    {
-                      "examples": [
-                        "Some example",
-                      ],
-                      "value": "Some definition note",
-                    },
-                  ],
-                  "value": "a cat",
-                },
-              ],
-            },
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "n": {
+            "definitions": [
+              {
+                "examples": [
+                  "There goes a cat!",
+                ],
+                "notes": [
+                  {
+                    "examples": [
+                      "Some example",
+                    ],
+                    "value": "Some definition note",
+                  },
+                ],
+                "value": "a cat",
+              },
+            ],
           },
         },
-      ],
-      "term": "cat",
-    },
-  ],
+      },
+    ],
+    "term": "cat",
+  },
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "un": {
+            "definitions": [
+              {
+                "value": "a dog",
+              },
+            ],
+          },
+        },
+      },
+    ],
+    "pronunciation": "dooooog",
+    "term": "dog",
+  },
 ]
 `;
 
-exports[`Dictionary can split terms during lookup 1`] = `
+exports[`Dictionary lookup can split terms 1`] = `
 [
   [
     {
@@ -167,54 +183,86 @@ exports[`Dictionary can split terms during lookup 1`] = `
 ]
 `;
 
-exports[`Dictionary can split terms properly 1`] = `
+exports[`Dictionary lookup looks up terms properly 1`] = `
 [
-  {
-    "etymologies": [
-      {
-        "description": "Latin root",
-        "senses": {
-          "n": {
-            "definitions": [
-              {
-                "examples": [
-                  "There goes a cat!",
-                ],
-                "notes": [
-                  {
-                    "examples": [
-                      "Some example",
-                    ],
-                    "value": "Some definition note",
-                  },
-                ],
-                "value": "a cat",
-              },
-            ],
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    "There goes a cat!",
+                  ],
+                  "notes": [
+                    {
+                      "examples": [
+                        "Some example",
+                      ],
+                      "value": "Some definition note",
+                    },
+                  ],
+                  "value": "a cat",
+                },
+              ],
+            },
           },
         },
-      },
-    ],
-    "term": "cat",
-  },
-  {
-    "etymologies": [
-      {
-        "description": "Latin root",
-        "senses": {
-          "un": {
-            "definitions": [
-              {
-                "value": "a dog",
-              },
-            ],
+      ],
+      "term": "cat",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup skips markdown processing if specified 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This <strong>is</strong> a <em>markdown</em> test",
+                },
+              ],
+            },
           },
         },
-      },
-    ],
-    "pronunciation": "dooooog",
-    "term": "dog",
-  },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup skips markdown processing if specified 2`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This **is** a _markdown_ test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
 ]
 `;
 

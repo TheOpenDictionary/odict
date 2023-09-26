@@ -14,7 +14,7 @@ def exec(*args: List[str]):
         ],
         capture_output=True,
     )
-    
+
     if out.stderr:
         raise Exception(out.stderr)
 
@@ -42,7 +42,7 @@ class Dictionary:
     def lexicon(self):
         list = exec("lexicon", self.__path)
         return list.splitlines()
-    
+
     def search(self, query, index: bool = False):
         if index:
             return loads(exec("search", "-i", self.__path, query))
@@ -54,6 +54,9 @@ class Dictionary:
 
     def lookup(self, *terms, **kwargs):
         args = ["lookup", "-f", "json"]
+
+        if kwargs.get("skip_processing"):
+            args.append("--no-process")
 
         if kwargs.get("follow"):
             args.append("-F")

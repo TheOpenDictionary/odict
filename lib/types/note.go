@@ -7,7 +7,7 @@ import (
 
 type NoteRepresentable struct {
 	ID       string   `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Value    string   `json:"value,omitempty" xml:"value,attr"`
+	Value    MDString `json:"value,omitempty" xml:"value,attr"`
 	Examples []string `json:"examples,omitempty" xml:"example"`
 }
 
@@ -20,14 +20,14 @@ func (note *Note) AsRepresentable() NoteRepresentable {
 
 	return NoteRepresentable{
 		ID:       string(note.Id()),
-		Value:    string(note.Value()),
+		Value:    MDString(note.Value()),
 		Examples: examples,
 	}
 }
 
 func (note *NoteRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(note.ID)
-	value := builder.CreateString(note.Value)
+	value := builder.CreateString(note.Value.String())
 	examples := note.buildExampleVector(builder)
 
 	NoteStart(builder)

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
 	cli "github.com/urfave/cli/v2"
 )
 
@@ -131,6 +132,15 @@ var App = &cli.App{
 					Aliases: []string{"s"},
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
+				},
+				&cli.BoolFlag{
+					Name:  "no-process",
+					Usage: "Skip converting Markdown to HTML",
+					Value: false,
+					Action: func(c *cli.Context, value bool) error {
+						types.SetMarkdownProcessingEnabled(!value)
+						return nil
+					},
 				},
 				&cli.StringFlag{
 					Name:    "format",

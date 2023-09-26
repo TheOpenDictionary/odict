@@ -7,7 +7,7 @@ import (
 
 type DefinitionRepresentable struct {
 	ID       string              `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Value    string              `json:"value,omitempty" xml:"value,attr"`
+	Value    MDString            `json:"value,omitempty" xml:"value,attr"`
 	Examples []string            `json:"examples,omitempty" xml:"example"`
 	Notes    []NoteRepresentable `json:"notes,omitempty" xml:"note"`
 }
@@ -29,7 +29,7 @@ func (definition *Definition) AsRepresentable() DefinitionRepresentable {
 
 	return DefinitionRepresentable{
 		ID:       string(definition.Id()),
-		Value:    string(definition.Value()),
+		Value:    MDString(definition.Value()),
 		Examples: examples,
 		Notes:    notes,
 	}
@@ -37,7 +37,7 @@ func (definition *Definition) AsRepresentable() DefinitionRepresentable {
 
 func (def *DefinitionRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(def.ID)
-	value := builder.CreateString(def.Value)
+	value := builder.CreateString(string(def.Value))
 	examples := def.buildExampleVector(builder)
 	notes := def.buildNoteVector(builder)
 

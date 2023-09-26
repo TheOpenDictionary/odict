@@ -13,6 +13,7 @@ enum ODictMethod:byte {
 table LookupPayload {
   follow:bool;
   split:int;
+  no_process:bool;
   queries:[string];
 }
 
