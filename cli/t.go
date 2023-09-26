@@ -16,7 +16,7 @@ func t(c *cli.Context, cb closure) error {
 
 	err := cb()
 
-	if !c.Bool("quiet") {
+	if !c.Bool("quiet") && err == nil {
 		fmt.Printf("\n✨ Completed in %s\n", time.Since(start).String())
 	}
 
