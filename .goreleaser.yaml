@@ -15,7 +15,6 @@ git:
 builds:
   - id: all
     main: ./odict.go
-    binary: '{{.ProjectName}}-{{.Os}}-{{.Arch}}'
     ldflags:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
     goos:
@@ -30,6 +29,10 @@ builds:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
     no_unique_dist_dir: true
 
+archives:
+  - builds:
+      - all
+      
 brews:
   - name: odict
     homepage: "https://odict.org/"
