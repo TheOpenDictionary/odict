@@ -6,10 +6,10 @@
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "schema")
+@build: deps (cli "schema") sync
   goreleaser build --id single --clean --snapshot --single-target
 
-@build-all +args="": deps (cli "schema")
+@build-all +args="": deps (cli "schema") sync
   goreleaser build --id all --clean {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")

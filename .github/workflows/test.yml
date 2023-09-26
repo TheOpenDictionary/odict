@@ -7,34 +7,6 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: 
-        arch: ["arm64", "amd64", "386", "arm"]
-        os: ["darwin", "linux", "windows"]
-    env:
-      GOOS: ${{ matrix.os }}
-      GOARCH: ${{ matrix.arch }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup asdf
-        uses: asdf-vm/actions/setup@v2
-      - name: Cache asdf
-        id: cache-asdf
-        uses: actions/cache@v3
-        with:
-          path: |
-            /home/runner/.asdf
-          key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
-          restore-keys: |
-            ${{ runner.os }}-asdf-
-      - name: Install dependencies in .tool-versions
-        uses: asdf-vm/actions/install@v2
-      - name: Build artifacts
-        run: just build odict-${{ matrix.os }}-${{ matrix.arch }}
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -62,6 +34,8 @@ jobs:
             ${{ runner.os }}-poetry-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Run build 
+        run: just build-all --snapshot
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true

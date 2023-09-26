@@ -35,22 +35,9 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
-      - name: Build artifacts for Unix
+      - name: Build artifacts
         if: steps.release.outputs.release_created
-        strategy:
-          matrix: 
-            arch: ["arm64", "amd64", "386", "arm"]
-            os: ["darwin", "linux"]
-        run: just build odict-${{ matrix.os }}-${{ matrix.arch }}
-      - name: Build artifacts for Windows
-        if: steps.release.outputs.release_created
-        strategy:
-          matrix: 
-            arch: ["arm64", "amd64", "386", "arm"]
-        run: just build odict-win32-${{ matrix.arch }}
-        env:
-          GOOS: windows
-          GOARCH: ${{ matrix.arch }}
+        run: just build-all
       - name: Upload artifacts to release 
         if: steps.release.outputs.release_created
         env:
