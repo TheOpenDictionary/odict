@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.3](https://github.com/TheOpenDictionary/odict/compare/v1.19.2...v1.19.3) (2023-09-27)
+
+
+### Bug Fixes
+
+* **build:** Disable CGO ([90530f5](https://github.com/TheOpenDictionary/odict/commit/90530f5d75cea0f8e0bc945cdeeb60f39344bc59))
+
 ## [1.19.2](https://github.com/TheOpenDictionary/odict/compare/v1.19.1...v1.19.2) (2023-09-26)
 
 
