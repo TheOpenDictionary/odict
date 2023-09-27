@@ -10,7 +10,7 @@
   goreleaser build --id single --clean --snapshot --single-target
 
 @build-all +args="": deps (cli "schema") sync
-  goreleaser build --id all --clean {{args}}
+  goreleaser build --id odict --clean {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
