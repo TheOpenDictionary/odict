@@ -44,3 +44,4 @@ brews:
     repository:
       owner: TheOpenDictionary
       name: homebrew-odict
+      token: "{{ .Env.HOMEBREW_GH_TOKEN }}"

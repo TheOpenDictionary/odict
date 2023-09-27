@@ -45,10 +45,10 @@ jobs:
       - name: Publish CLI
         uses: goreleaser/goreleaser-action@v5
         if: steps.release.outputs.release_created
+        env: 
+          HOMEBREW_GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
         with:
           args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:
