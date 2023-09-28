@@ -133,12 +133,17 @@ var App = &cli.App{
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
 				},
-				&cli.BoolFlag{
-					Name:  "no-process",
-					Usage: "Skip converting Markdown to HTML",
-					Value: false,
-					Action: func(c *cli.Context, value bool) error {
-						types.SetMarkdownProcessingEnabled(!value)
+				&cli.StringFlag{
+					Name:  "markdown",
+					Usage: "strategy for rendering Markdown strings",
+					Value: "html",
+					Action: func(c *cli.Context, value string) error {
+						if value != "text" && value != "html" && value != "disable" {
+							return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
+						}
+
+						types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
+
 						return nil
 					},
 				},

@@ -55,8 +55,9 @@ class Dictionary:
     def lookup(self, *terms, **kwargs):
         args = ["lookup", "-f", "json"]
 
-        if kwargs.get("skip_processing"):
-            args.append("--no-process")
+        if kwargs.get("markdown"):
+            args.append("--markdown")
+            args.append(kwargs.get("markdown"))
 
         if kwargs.get("follow"):
             args.append("-F")

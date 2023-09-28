@@ -6,21 +6,32 @@ import (
 
 type MDString string
 
-var markdownEnabled = true
+var markdownStrategy = MarkdownStrategyHTML
 
-func IsMarkdownProcessingEnabled() bool {
-	return markdownEnabled
+type MarkdownStrategy string
+
+const (
+	MarkdownStrategyHTML    MarkdownStrategy = "html"
+	MarkdownStrategyText    MarkdownStrategy = "text"
+	MarkdownStrategyDisable MarkdownStrategy = "disable"
+)
+
+func GetMarkdownStrategy() MarkdownStrategy {
+	return markdownStrategy
 }
 
-func SetMarkdownProcessingEnabled(enabled bool) {
-	markdownEnabled = enabled
+func SetMarkdownProcessingStrategy(strategy MarkdownStrategy) {
+	markdownStrategy = strategy
 }
 
 func (mds MDString) MarshalText() ([]byte, error) {
 	output := []byte(mds)
 
-	if IsMarkdownProcessingEnabled() {
-		output = utils.MarkdownToHTML([]byte(mds))
+	switch markdownStrategy {
+	case MarkdownStrategyHTML:
+		output = utils.MarkdownToHTML(output)
+	case MarkdownStrategyText:
+		output = utils.MarkdownToText(output)
 	}
 
 	return output, nil

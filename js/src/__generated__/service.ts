@@ -2,6 +2,7 @@
 
 export { CompilePayload } from './compile-payload.js';
 export { LookupPayload } from './lookup-payload.js';
+export { MarkdownStrategy } from './markdown-strategy.js';
 export { ODictMethod } from './odict-method.js';
 export { SearchPayload } from './search-payload.js';
 export { SplitPayload } from './split-payload.js';

@@ -70,9 +70,11 @@ def test_write_lookup_dictionary_no_markdown():
 
     expected1 = "This <strong>is</strong> a <em>markdown</em> test"
     expected2 = "This **is** a _markdown_ test"
+    expected3 = "This is a markdown test"
 
     output1 = dict.lookup("markdown")
-    output2 = dict.lookup("markdown", skip_processing=True)
+    output2 = dict.lookup("markdown", markdown="disable")
+    output3 = dict.lookup("markdown", markdown="text")
 
     actual1 = (
         output1[0][0]
@@ -92,6 +94,15 @@ def test_write_lookup_dictionary_no_markdown():
         .get("value")
     )
 
+    actual3 = (
+        output3[0][0]
+        .get("etymologies")[0]
+        .get("senses")
+        .get("v")
+        .get("definitions")[0]
+        .get("value")
+    )
+
     assert actual1 == expected1, "definition should be %s, received: %s" % (
         expected1,
         actual1,
@@ -100,4 +111,9 @@ def test_write_lookup_dictionary_no_markdown():
     assert actual2 == expected2, "definition should be %s, received: %s" % (
         expected2,
         actual2,
+    )
+
+    assert actual3 == expected3, "definition should be %s, received: %s" % (
+        expected3,
+        actual3,
     )

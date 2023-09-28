@@ -12,16 +12,14 @@ import kotlin.io.path.writeText
 
 class Dictionary constructor(private val path: String) {
 
-    fun lookup(vararg queries: String, follow: Boolean = false, split: Int = 0, skipProcessing: Boolean = false): List<List<Entry>> {
+    fun lookup(vararg queries: String, follow: Boolean = false, split: Int = 0, markdownStrategy: String = "html"): List<List<Entry>> {
         var args = arrayOf("lookup", "-f", "json")
         
         if (follow) {
           args += "-F"
         }
 
-        if (skipProcessing) {
-          args += "--no-process"
-        }
+        args += arrayOf("--markdown", markdownStrategy)
 
         args += arrayOf("-s", split.toString(), path)
 

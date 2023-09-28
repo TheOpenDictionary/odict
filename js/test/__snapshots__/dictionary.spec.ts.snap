@@ -183,6 +183,78 @@ exports[`Dictionary lookup can split terms 1`] = `
 ]
 `;
 
+exports[`Dictionary lookup considers markdown strategies correctly 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This **is** a _markdown_ test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup considers markdown strategies correctly 2`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This is a markdown test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup considers markdown strategies correctly 3`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This <strong>is</strong> a <em>markdown</em> test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
 exports[`Dictionary lookup looks up terms properly 1`] = `
 [
   [
@@ -213,54 +285,6 @@ exports[`Dictionary lookup looks up terms properly 1`] = `
         },
       ],
       "term": "cat",
-    },
-  ],
-]
-`;
-
-exports[`Dictionary lookup skips markdown processing if specified 1`] = `
-[
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "v": {
-              "definitions": [
-                {
-                  "value": "This <strong>is</strong> a <em>markdown</em> test",
-                },
-              ],
-            },
-          },
-        },
-      ],
-      "term": "markdown",
-    },
-  ],
-]
-`;
-
-exports[`Dictionary lookup skips markdown processing if specified 2`] = `
-[
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "v": {
-              "definitions": [
-                {
-                  "value": "This **is** a _markdown_ test",
-                },
-              ],
-            },
-          },
-        },
-      ],
-      "term": "markdown",
     },
   ],
 ]
