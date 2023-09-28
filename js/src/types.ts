@@ -2,13 +2,15 @@ import { POS } from "./__generated__";
 
 export type Query = { word: string; fallback: string } | string;
 
+type MarkdownStrategy = "disable" | "html" | "text";
+
 export interface DictionaryOptions {
   defaultSplitThreshold?: number;
 }
 
 export interface LookupOptions {
   split?: number;
-  skipProcessing?: boolean;
+  markdownStrategy?: MarkdownStrategy;
   follow?: boolean;
 }
 

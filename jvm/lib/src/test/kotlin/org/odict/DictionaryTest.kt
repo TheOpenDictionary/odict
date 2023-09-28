@@ -17,9 +17,18 @@ class DictionaryTest {
         Dictionary.compile("../../examples/example2.xml")
 
         val dict = Dictionary("../../examples/example2.odict")
-        val entry = dict.lookup("markdown", skipProcessing = true)
+        val entry = dict.lookup("markdown", markdownStrategy = "disable")
 
         assertEquals("This **is** a _markdown_ test", entry[0][0].etymologies?.get(0)?.senses?.get("v")?.definitions?.get(0)?.value);
+    }
+
+        @Test fun testLookupWithPlainText() {
+        Dictionary.compile("../../examples/example2.xml")
+
+        val dict = Dictionary("../../examples/example2.odict")
+        val entry = dict.lookup("markdown", markdownStrategy = "text")
+
+        assertEquals("This is a markdown test", entry[0][0].etymologies?.get(0)?.senses?.get("v")?.definitions?.get(0)?.value);
     }
 
     @Test fun testLexicon() {

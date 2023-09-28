@@ -50,6 +50,33 @@ func (v ODictMethod) String() string {
 	return "ODictMethod(" + strconv.FormatInt(int64(v), 10) + ")"
 }
 
+type MarkdownStrategy int16
+
+const (
+	MarkdownStrategyDisable MarkdownStrategy = 0
+	MarkdownStrategyText    MarkdownStrategy = 1
+	MarkdownStrategyHTML    MarkdownStrategy = 2
+)
+
+var EnumNamesMarkdownStrategy = map[MarkdownStrategy]string{
+	MarkdownStrategyDisable: "Disable",
+	MarkdownStrategyText:    "Text",
+	MarkdownStrategyHTML:    "HTML",
+}
+
+var EnumValuesMarkdownStrategy = map[string]MarkdownStrategy{
+	"Disable": MarkdownStrategyDisable,
+	"Text":    MarkdownStrategyText,
+	"HTML":    MarkdownStrategyHTML,
+}
+
+func (v MarkdownStrategy) String() string {
+	if s, ok := EnumNamesMarkdownStrategy[v]; ok {
+		return s
+	}
+	return "MarkdownStrategy(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
 type LookupPayload struct {
 	_tab flatbuffers.Table
 }
@@ -101,16 +128,16 @@ func (rcv *LookupPayload) MutateSplit(n int32) bool {
 	return rcv._tab.MutateInt32Slot(6, n)
 }
 
-func (rcv *LookupPayload) NoProcess() bool {
+func (rcv *LookupPayload) Markdown() MarkdownStrategy {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetBool(o + rcv._tab.Pos)
+		return MarkdownStrategy(rcv._tab.GetInt16(o + rcv._tab.Pos))
 	}
-	return false
+	return 0
 }
 
-func (rcv *LookupPayload) MutateNoProcess(n bool) bool {
-	return rcv._tab.MutateBoolSlot(8, n)
+func (rcv *LookupPayload) MutateMarkdown(n MarkdownStrategy) bool {
+	return rcv._tab.MutateInt16Slot(8, int16(n))
 }
 
 func (rcv *LookupPayload) Queries(j int) []byte {
@@ -139,8 +166,8 @@ func LookupPayloadAddFollow(builder *flatbuffers.Builder, follow bool) {
 func LookupPayloadAddSplit(builder *flatbuffers.Builder, split int32) {
 	builder.PrependInt32Slot(1, split, 0)
 }
-func LookupPayloadAddNoProcess(builder *flatbuffers.Builder, noProcess bool) {
-	builder.PrependBoolSlot(2, noProcess, false)
+func LookupPayloadAddMarkdown(builder *flatbuffers.Builder, markdown MarkdownStrategy) {
+	builder.PrependInt16Slot(2, int16(markdown), 0)
 }
 func LookupPayloadAddQueries(builder *flatbuffers.Builder, queries flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(queries), 0)

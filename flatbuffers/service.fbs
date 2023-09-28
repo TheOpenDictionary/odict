@@ -9,11 +9,16 @@ enum ODictMethod:byte {
   Ready = 8
 }
 
+enum MarkdownStrategy:short {
+  Disable = 0,
+  Text = 1,
+  HTML = 2
+}
 
 table LookupPayload {
   follow:bool;
   split:int;
-  no_process:bool;
+  markdown:MarkdownStrategy;
   queries:[string];
 }
 

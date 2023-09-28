@@ -77,11 +77,22 @@ describe("Dictionary", () => {
       expect(result).toMatchSnapshot();
     });
 
-    it("skips markdown processing if specified", async () => {
-      const result1 = await dict2.lookup("markdown", { skipProcessing: false });
-      const result2 = await dict2.lookup("markdown", { skipProcessing: true });
+    it("considers markdown strategies correctly", async () => {
+      const result1 = await dict2.lookup("markdown", {
+        markdownStrategy: "disable",
+      });
+
+      const result2 = await dict2.lookup("markdown", {
+        markdownStrategy: "text",
+      });
+
+      const result3 = await dict2.lookup("markdown", {
+        markdownStrategy: "html",
+      });
+
       expect(result1).toMatchSnapshot();
       expect(result2).toMatchSnapshot();
+      expect(result3).toMatchSnapshot();
     });
   });
 

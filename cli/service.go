@@ -131,10 +131,15 @@ func service(c *cli.Context) error {
 				queries := make([]string, payload.QueriesLength())
 				follow := payload.Follow()
 				split := int(payload.Split())
-				noProcess := payload.NoProcess()
+				markdown := payload.Markdown()
 
-				if noProcess {
-					types.SetMarkdownProcessingEnabled(false)
+				switch markdown {
+				case MarkdownStrategyHTML:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyHTML)
+				case MarkdownStrategyText:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyText)
+				case MarkdownStrategyDisable:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyDisable)
 				}
 
 				for i := 0; i < payload.QueriesLength(); i++ {

@@ -15,10 +15,24 @@ func TestMDString(t *testing.T) {
 	assert.Equal(t, expected, string(output))
 }
 
-func TestMDStringDisabled(t *testing.T) {
-	oldValue := IsMarkdownProcessingEnabled()
+func TestMDStringText(t *testing.T) {
+	oldValue := GetMarkdownStrategy()
 
-	SetMarkdownProcessingEnabled(false)
+	SetMarkdownProcessingStrategy(MarkdownStrategyText)
+
+	str := "**This** is a ^test^ of the _parser_"
+	output, err := MDString(str).MarshalText()
+
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "This is a test of the parser", string(output))
+
+	SetMarkdownProcessingStrategy(oldValue)
+}
+
+func TestMDStringDisabled(t *testing.T) {
+	oldValue := GetMarkdownStrategy()
+
+	SetMarkdownProcessingStrategy(MarkdownStrategyDisable)
 
 	str := "**This** is a ^test^ of the _parser_"
 	output, err := MDString(str).MarshalText()
@@ -26,5 +40,5 @@ func TestMDStringDisabled(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, str, string(output))
 
-	SetMarkdownProcessingEnabled(oldValue)
+	SetMarkdownProcessingStrategy(oldValue)
 }

@@ -3,6 +3,7 @@ import { Builder } from "flatbuffers";
 import { CompilePayload } from "./__generated__/compile-payload.js";
 import {
   LookupPayload,
+  MarkdownStrategy,
   SearchPayload,
   SplitPayload,
   WritePayload,
@@ -163,11 +164,28 @@ class Dictionary {
 
     const queriesV = LookupPayload.createQueriesVector(builder, queriesS);
 
+    let markdown: MarkdownStrategy | undefined;
+
+    if (options.markdownStrategy === "html") {
+      markdown = MarkdownStrategy.HTML;
+    }
+
+    if (options.markdownStrategy === "disable") {
+      markdown = MarkdownStrategy.Disable;
+    }
+
+    if (options.markdownStrategy === "text") {
+      markdown = MarkdownStrategy.Text;
+    }
+
     LookupPayload.startLookupPayload(builder);
     LookupPayload.addQueries(builder, queriesV);
     LookupPayload.addFollow(builder, follow ?? false);
     LookupPayload.addSplit(builder, split ?? 0);
-    LookupPayload.addNoProcess(builder, options.skipProcessing ?? false);
+
+    if (markdown) {
+      LookupPayload.addMarkdown(builder, markdown);
+    }
 
     const payload = LookupPayload.endLookupPayload(builder);
 
