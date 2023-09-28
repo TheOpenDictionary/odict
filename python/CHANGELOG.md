@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.8.0...python-v0.9.0) (2023-09-28)
+
+
+### Features
+
+* Add option to output Markdown as plain-text ([#470](https://github.com/TheOpenDictionary/odict/issues/470)) ([71ca0d5](https://github.com/TheOpenDictionary/odict/commit/71ca0d5c6f22c660fdd51e098a66e2e1f4acf47c))
+
 ## [0.8.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.7.0...python-v0.8.0) (2023-09-26)
 
 
