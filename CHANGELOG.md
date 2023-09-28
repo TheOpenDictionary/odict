@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.20.0](https://github.com/TheOpenDictionary/odict/compare/v1.19.3...v1.20.0) (2023-09-28)
+
+
+### Features
+
+* Add option to output Markdown as plain-text ([#470](https://github.com/TheOpenDictionary/odict/issues/470)) ([71ca0d5](https://github.com/TheOpenDictionary/odict/commit/71ca0d5c6f22c660fdd51e098a66e2e1f4acf47c))
+
+
+### Bug Fixes
+
+* **build:** Update build-all command ([5686f95](https://github.com/TheOpenDictionary/odict/commit/5686f9599aa48c1b60d6f5fff1e883e82f97aeaa))
+
 ## [1.19.3](https://github.com/TheOpenDictionary/odict/compare/v1.19.2...v1.19.3) (2023-09-27)
 
 
