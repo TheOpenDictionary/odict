@@ -25,6 +25,10 @@ func SetMarkdownProcessingStrategy(strategy MarkdownStrategy) {
 }
 
 func (mds MDString) MarshalText() ([]byte, error) {
+	return []byte(mds.String()), nil
+}
+
+func (mds MDString) String() string {
 	output := []byte(mds)
 
 	switch markdownStrategy {
@@ -34,9 +38,5 @@ func (mds MDString) MarshalText() ([]byte, error) {
 		output = utils.MarkdownToText(output)
 	}
 
-	return output, nil
-}
-
-func (mds MDString) String() string {
-	return string(mds)
+	return string(output)
 }

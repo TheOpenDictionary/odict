@@ -14,7 +14,7 @@ func TestMarkdownToHTML(t *testing.T) {
 }
 
 func TestMarkdownToText(t *testing.T) {
-	str := "**This** [is](google.com) a ^test^ ~of~ the _parser_"
+	str := "**This** [is](google.com) <span class=\"hi\">a</span> ^test^ ~of~ the _parser_"
 	expected := "This is a test of the parser"
 	output := MarkdownToText([]byte(str))
 	assert.Equal(t, expected, string(output))
