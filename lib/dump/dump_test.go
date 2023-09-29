@@ -32,5 +32,17 @@ func TestDictionaryToXML(t *testing.T) {
 	newdict_r.ID = dict_r.ID
 
 	assert.Equal(t, dict_r, newdict_r)
+}
 
+func TestDictionaryToSQL(t *testing.T) {
+	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+
+	dict, err := core.ReadDictionary("../../examples/example1.odict")
+
+	assert.Equal(t, nil, err)
+
+	dump, err := AsSQL(dict, "postgres")
+
+	assert.Equal(t, nil, err)
+	assert.Greater(t, len(dump), 0)
 }

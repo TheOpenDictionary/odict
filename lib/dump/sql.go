@@ -151,7 +151,7 @@ func sqlInsertEtymologies(sqlDialect SqlDialect, etymologies []types.EtymologyRe
 		insertQuery := sq.
 			InsertInto(ety).
 			Columns(ety.ID, ety.DESCRIPTION, ety.ENTRY_ID).
-			Values(sq.Literal(sqlEtymologyId), sq.Literal(etymology.Description), sq.Literal(sqlEntryId))
+			Values(sq.Literal(sqlEtymologyId), sq.Literal(etymology.Description.String()), sq.Literal(sqlEntryId))
 
 		ety_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
@@ -217,7 +217,7 @@ func sqlInsertGroups(sqlDialect SqlDialect, groups []types.GroupRepresentable) (
 		insertQuery := sq.
 			InsertInto(grp).
 			Columns(grp.ID, grp.DESCRIPTION, grp.SENSE_ID).
-			Values(sq.Literal(sqlGroupId), sq.Literal(group.Description), sq.Literal(sqlSenseId))
+			Values(sq.Literal(sqlGroupId), sq.Literal(group.Description.String()), sq.Literal(sqlSenseId))
 
 		grp_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
@@ -250,7 +250,7 @@ func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []types.DefinitionR
 		insertQuery := sq.
 			InsertInto(def).
 			Columns(def.ID, def.TEXT, def.SENSE_ID, def.GROUP_ID).
-			Values(sq.Literal(sqlDefinitionId), sq.Literal(definition.Value), sq.Literal(sqlSenseId), sq.Literal(sqlGroupId))
+			Values(sq.Literal(sqlDefinitionId), sq.Literal(definition.Value.String()), sq.Literal(sqlSenseId), sq.Literal(sqlGroupId))
 
 		def_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
 
