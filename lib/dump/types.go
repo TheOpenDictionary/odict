@@ -45,9 +45,23 @@ type DEFINITIONS struct {
 	GROUP_ID sq.NumberField `ddl:"type=BIGINT references=groups.id"`
 }
 
-type EXAMPLES struct {
+type NOTES struct {
+	sq.TableStruct
+	ID            sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
+	TEXT          sq.StringField `ddl:"notnull"`
+	DEFINITION_ID sq.NumberField `ddl:"type=BIGINT references=definitions.id"`
+}
+
+type DEFINITION_EXAMPLES struct {
 	sq.TableStruct
 	ID            sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
 	TEXT          sq.StringField `ddl:"notnull"`
 	DEFINITION_ID sq.NumberField `ddl:"type=BIGINT notnull references=definitions.id"`
+}
+
+type NOTE_EXAMPLES struct {
+	sq.TableStruct
+	ID      sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
+	TEXT    sq.StringField `ddl:"notnull"`
+	NOTE_ID sq.NumberField `ddl:"type=BIGINT notnull references=notes.id"`
 }

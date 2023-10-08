@@ -8,10 +8,10 @@ import (
 )
 
 type DictionaryRepresentable struct {
-	ID      string                            `json:"id" xml:"id,attr"`
-	Name    string                            `json:"name" xml:"name,attr,omitempty"`
-	Entries KVMap[string, EntryRepresentable] `json:"entries" xml:"entry"`
-	XMLName xml.Name                          `json:"-" xml:"dictionary"`
+	ID      string                            `json:"id" xml:"id,attr" db:"id" fieldtag:"pk"`
+	Name    string                            `json:"name" xml:"name,attr,omitempty" db:"name" fieldtag:"unique"`
+	Entries KVMap[string, EntryRepresentable] `json:"entries" xml:"entry" db:"-"`
+	XMLName xml.Name                          `json:"-" xml:"dictionary" db:"-"`
 }
 
 func (dict *Dictionary) AsRepresentable() DictionaryRepresentable {

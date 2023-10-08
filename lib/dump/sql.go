@@ -3,10 +3,12 @@ package dump
 import (
 	"bytes"
 	"embed"
-
+	"fmt"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/bokwoon95/sq"
 	"github.com/bokwoon95/sqddl/ddl"
+	"github.com/huandu/go-sqlbuilder"
+	"reflect"
 )
 
 //go:embed sql.go
@@ -16,13 +18,56 @@ var sqlDictionaryId int = 1
 var sqlEntryId int = 1
 var sqlEtymologyId int = 1
 var sqlSenseId int = 1
+var sqlNoteId int = 1
 var sqlGroupId int = 1
 var sqlDefinitionId int = 1
 var sqlExampleId int = 1
 
-func sql(dict types.DictionaryRepresentable, sqlDialect SqlDialect) (string, error) {
-	var sqlCmds string
+func printSchema(obj interface{}) {
+	printSchemaRecursive(reflect.ValueOf(obj), 0)
+}
 
+func printSchemaRecursive(val reflect.Value, depth int) {
+	if val.Kind() != reflect.Struct {
+		return
+	}
+
+	typ := val.Type()
+	indent := ""
+	for i := 0; i < depth; i++ {
+		indent += "  "
+	}
+
+	for i := 0; i < val.NumField(); i++ {
+		field := val.Field(i)
+		fieldType := typ.Field(i)
+
+		print(fieldType.Tag.Get("db"))
+		fmt.Printf("%sField Name: %s\n", indent, fieldType.Name)
+		fmt.Printf("%sField Type: %s\n", indent, fieldType.Type)
+
+		if field.Kind() == reflect.Map {
+
+			fmt.Printf("%sSub-Struct:\n", indent)
+			printSchemaRecursive(field, depth+1)
+		}
+	}
+}
+
+func sql(dict types.DictionaryRepresentable, sqlDialect SqlDialect) (string, error) {
+	printSchema(dict)
+	var sqlCmds string
+	// v := sqlbuilder.InsertBuilder()
+	s := sqlbuilder.NewStruct(new(types.DictionaryRepresentable))
+	v := s.Flavor.NewCreateTableBuilder().CreateTable("dictionary")
+	s4, _ := v.Build()
+	print(s4)
+	db := s.InsertInto("dictionaries", dict)
+
+	sql, args := db.BuildWithFlavor(sqlbuilder.PostgreSQL)
+
+	s2, _ := sqlbuilder.PostgreSQL.Interpolate(sql, args)
+	print(s2)
 	create, createErr := sqlCreate(sqlDialect)
 	insert, insertErr := sqlInsert(sqlDialect, dict)
 
@@ -258,7 +303,7 @@ func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []types.DefinitionR
 			return "", err
 		}
 
-		insertExamples, insertErr := sqlInsertExamples(sqlDialect, definition.Examples)
+		insertExamples, insertErr := sqlInsertDefinitionExamples(sqlDialect, definition.Examples)
 
 		if insertErr != nil {
 			return "", insertErr
@@ -273,12 +318,45 @@ func sqlInsertDefinitions(sqlDialect SqlDialect, definitions []types.DefinitionR
 	return sqlCmds, nil
 }
 
-func sqlInsertExamples(sqlDialect SqlDialect, examples []string) (string, error) {
+func sqlInsertNotes(sqlDialect SqlDialect, notes []types.NoteRepresentable) (string, error) {
+	var sqlCmds string
+
+	// Insert definitions w/ relation to current sense/group
+	for _, note := range notes {
+		def := sq.New[NOTES]("")
+
+		insertQuery := sq.
+			InsertInto(def).
+			Columns(def.ID, def.TEXT, def.DEFINITION_ID).
+			Values(sq.Literal(sqlNoteId), sq.Literal(note.Value.String()), sq.Literal(sqlDefinitionId))
+
+		note_query, _, err := sq.ToSQL(sqlDialect, insertQuery, nil)
+
+		if err != nil {
+			return "", err
+		}
+
+		insertExamples, insertErr := sqlInsertDefinitionExamples(sqlDialect, note.Examples)
+
+		if insertErr != nil {
+			return "", insertErr
+		}
+
+		sqlCmds += note_query + ";\n"
+		sqlCmds += insertExamples
+
+		sqlNoteId++
+	}
+
+	return sqlCmds, nil
+}
+
+func sqlInsertDefinitionExamples(sqlDialect SqlDialect, examples []string) (string, error) {
 	var sqlCmds string
 
 	// Insert examples w/ relation to current definition
 	for _, example := range examples {
-		ex := sq.New[EXAMPLES]("")
+		ex := sq.New[DEFINITION_EXAMPLES]("")
 
 		insertQuery := sq.
 			InsertInto(ex).

@@ -2,7 +2,7 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: 
+@deps:
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
@@ -14,19 +14,19 @@
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
-@run +args="": build
-  ./bin/odict {{args}}
-  
+@run +args="":
+  go run odict.go -- {{args}}
+
 @test: deps (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
-  rm -rf **/*.odict 
+  rm -rf **/*.odict
 
 @publish +args="--auto-snapshot --clean":
   goreleaser release {{args}}
 
 @sync:
-  go work sync 
+  go work sync
 
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
