@@ -24,10 +24,10 @@
   just dlx swc -d dist ./src/*.ts ./src/**/*.ts & \
   just dlx tsc
 
-@test: install && clean
-  just ../cli/build
+@test +args="": install && clean
+  just ../build
   just dlx tsc
-  RUNTIME_ENV=test just dlx jest --detectOpenHandles
+  RUNTIME_ENV=test just dlx jest {{args}}
 
 @publish: build
 	pnpm publish

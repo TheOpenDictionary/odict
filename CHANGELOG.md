@@ -1,5 +1,124 @@
 # Changelog
 
+## [1.20.0](https://github.com/TheOpenDictionary/odict/compare/v1.19.3...v1.20.0) (2023-09-28)
+
+
+### Features
+
+* Add option to output Markdown as plain-text ([#470](https://github.com/TheOpenDictionary/odict/issues/470)) ([71ca0d5](https://github.com/TheOpenDictionary/odict/commit/71ca0d5c6f22c660fdd51e098a66e2e1f4acf47c))
+
+
+### Bug Fixes
+
+* **build:** Update build-all command ([5686f95](https://github.com/TheOpenDictionary/odict/commit/5686f9599aa48c1b60d6f5fff1e883e82f97aeaa))
+
+## [1.19.3](https://github.com/TheOpenDictionary/odict/compare/v1.19.2...v1.19.3) (2023-09-27)
+
+
+### Bug Fixes
+
+* **build:** Disable CGO ([90530f5](https://github.com/TheOpenDictionary/odict/commit/90530f5d75cea0f8e0bc945cdeeb60f39344bc59))
+
+## [1.19.2](https://github.com/TheOpenDictionary/odict/compare/v1.19.1...v1.19.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* Fix Goreleaser config ([127b253](https://github.com/TheOpenDictionary/odict/commit/127b2531f7f0df0ec6d3ebad200858172a120f30))
+
+## [1.19.1](https://github.com/TheOpenDictionary/odict/compare/v1.19.0...v1.19.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* **ci:** Fix GoReleaser? ([203031e](https://github.com/TheOpenDictionary/odict/commit/203031e5188af350cdeb3278577aec85c54618be))
+* **ci:** Use GoReleaser action ([28852e3](https://github.com/TheOpenDictionary/odict/commit/28852e30316e2e124253a4ca6e85a8560b50ddcd))
+* **goreleaser:** Add formula to Formula directory ([6fe51c9](https://github.com/TheOpenDictionary/odict/commit/6fe51c9926eb4803c1ea955aefacab13bab5d916))
+* **goreleaser:** Don't include two binaries in archive ([ad7ec2c](https://github.com/TheOpenDictionary/odict/commit/ad7ec2c1ac84e8d15631dfec71ce13986ae93e6e))
+
+## [1.19.0](https://github.com/TheOpenDictionary/odict/compare/v1.18.1...v1.19.0) (2023-09-26)
+
+
+### Features
+
+* Add Markdown support to description and value attributes ([#462](https://github.com/TheOpenDictionary/odict/issues/462)) ([5a2111f](https://github.com/TheOpenDictionary/odict/commit/5a2111f6aa2f4817028e2fa9c8fec0314569f360))
+* Prebuild binaries ([#463](https://github.com/TheOpenDictionary/odict/issues/463)) ([123bfd7](https://github.com/TheOpenDictionary/odict/commit/123bfd7102be53438f74b7eb9a8542ebb2e2137b))
+
+
+### Bug Fixes
+
+* **cli:** Only show completed text if command did not error ([ada10e0](https://github.com/TheOpenDictionary/odict/commit/ada10e010d0d34c5c9a670fd57e053f25efe93ec))
+
+## [1.18.1](https://github.com/TheOpenDictionary/odict/compare/v1.18.0...v1.18.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* **ci:** Update release-please setup ([a372e48](https://github.com/TheOpenDictionary/odict/commit/a372e4826f043f5fa6abfa90162fc1f9aa665009))
+* **deps:** Disable renovate upgrades of GH actions ([6a02948](https://github.com/TheOpenDictionary/odict/commit/6a02948a106b1129d22090219d4cea149dfa3def))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.2 ([05af8cd](https://github.com/TheOpenDictionary/odict/commit/05af8cdf4c176af5a107142df5f83ea2ec4c8e70))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.3 ([382f35d](https://github.com/TheOpenDictionary/odict/commit/382f35dbfa3655acfb05171a20f08e455058b224))
+* **js:** Add ready check for service ([#458](https://github.com/TheOpenDictionary/odict/issues/458)) ([ed984ba](https://github.com/TheOpenDictionary/odict/commit/ed984bad21af2c57f8e8c421a8ffe81c1b3fb8fe))
+* **js:** Make notes optional ([ee72c66](https://github.com/TheOpenDictionary/odict/commit/ee72c6666cfc37f740946b801dc68190a46b22e4))
+* **print:** Add line break after etymologies ([e2cb252](https://github.com/TheOpenDictionary/odict/commit/e2cb2527d99827536fff3ef8e37128aa3f063d64))
+
+## [1.18.0](https://github.com/TheOpenDictionary/odict/compare/v1.17.1...v1.18.0) (2023-09-18)
+
+
+### Features
+
+* **merge:** simplify merging logic ([#455](https://github.com/TheOpenDictionary/odict/issues/455)) ([2e0b218](https://github.com/TheOpenDictionary/odict/commit/2e0b2186543d065272a3996c3edef8421c427280))
+
+
+### Bug Fixes
+
+* **print:** add line break after printing notes ([329e788](https://github.com/TheOpenDictionary/odict/commit/329e788a71e094a9ebaa0af9386bfa739eb899ac))
+
+## [1.17.1](https://github.com/TheOpenDictionary/odict/compare/v1.17.0...v1.17.1) (2023-09-17)
+
+
+### Bug Fixes
+
+* **cli:** remove ODict dependencies from go.mod ([aaca7d4](https://github.com/TheOpenDictionary/odict/commit/aaca7d4de126f72e2ab4100cedccd493ff6eff15))
+
+## [1.17.0](https://github.com/TheOpenDictionary/odict/compare/v1.16.1...v1.17.0) (2023-09-17)
+
+
+### Features
+
+* **core:** add DefinitionNote type ([#450](https://github.com/TheOpenDictionary/odict/issues/450)) ([08bcac4](https://github.com/TheOpenDictionary/odict/commit/08bcac4b0710112166d6a43429fbb2f0c784c241))
+* **js:** remove detectOpenHandles from test run ([2eed906](https://github.com/TheOpenDictionary/odict/commit/2eed906830a569a89b9f74d4a5058f71fde8dd10))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32.1.1-jre ([57633a4](https://github.com/TheOpenDictionary/odict/commit/57633a471cbc92a7c5c64ca497e53c5f8db78b8b))
+* **deps:** update dependency com.google.guava:guava to v32.1.2-jre ([ee29572](https://github.com/TheOpenDictionary/odict/commit/ee2957265f48d7041a01dc238e555ad6aa6d27c8))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.10 ([4f8082d](https://github.com/TheOpenDictionary/odict/commit/4f8082d8a48933fc9a1dd8693eea57763e3ee70b))
+* **deps:** update module github.com/blevesearch/bleve/v2 to v2.3.9 ([3e50eec](https://github.com/TheOpenDictionary/odict/commit/3e50eec8268e25a5f122c58e1802c6a97e70136b))
+* **deps:** update module github.com/bokwoon95/sq to v0.4.0 ([5c7add6](https://github.com/TheOpenDictionary/odict/commit/5c7add66de99e0e0b8074fb16470a2e2db15f940))
+* **deps:** update module github.com/bokwoon95/sq to v0.4.1 ([24ab925](https://github.com/TheOpenDictionary/odict/commit/24ab92554cced324a31eac266778c43b05caa87a))
+* **deps:** update module github.com/bokwoon95/sqddl to v0.4.6 ([7694773](https://github.com/TheOpenDictionary/odict/commit/76947734f3a704d9970e40662e492ce0b36ac904))
+* **deps:** update module github.com/google/uuid to v1.3.1 ([985f897](https://github.com/TheOpenDictionary/odict/commit/985f897345e924636976f7897039aa19a8153958))
+* remove local dependencies ([de4805a](https://github.com/TheOpenDictionary/odict/commit/de4805a008d706326c3be317311c5092cd4ee43f))
+
+## [1.16.1](https://github.com/TheOpenDictionary/odict/compare/v1.16.0...v1.16.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32.1.0-jre ([a72fdcf](https://github.com/TheOpenDictionary/odict/commit/a72fdcfb6752319e7560f61db484c7ed4190502f))
+* fix ODict imports ([e31dcdd](https://github.com/TheOpenDictionary/odict/commit/e31dcddc11006e6b2895f2516c592d660101cf83))
+* sync workspace ([a399eae](https://github.com/TheOpenDictionary/odict/commit/a399eaee8f8d12ee537ed68a87487c12c3387237))
+
+## [1.16.0](https://github.com/TheOpenDictionary/odict/compare/v1.15.0...v1.16.0) (2023-06-28)
+
+
+### Features
+
+* add `serve` command ([#393](https://github.com/TheOpenDictionary/odict/issues/393)) ([cc7ef5c](https://github.com/TheOpenDictionary/odict/commit/cc7ef5c69811a4554e3b62bf492090de65ae86ea))
+* add support for dictionary aliasing ([#391](https://github.com/TheOpenDictionary/odict/issues/391)) ([c6f1a04](https://github.com/TheOpenDictionary/odict/commit/c6f1a0495136817065007acc4414194f4e8445ad))
+
 ## [1.15.0](https://github.com/TheOpenDictionary/odict/compare/v1.14.1...v1.15.0) (2023-06-19)
 
 

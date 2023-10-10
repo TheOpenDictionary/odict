@@ -7,6 +7,10 @@
   "updateLockFiles": true,
   "packageRules": [
     {
+      "matchManagers": ["github-actions"],
+      "enabled": false
+    },
+    {
       "matchPackagePrefixes": ["github.com/TheOpenDictionary/odict"],
       "enabled": false
     }

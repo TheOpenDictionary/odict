@@ -1,7 +1,7 @@
 package core
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 )
 
@@ -15,7 +15,7 @@ func CompileDictionary(xmlPath string, outputPath string) (int, error) {
 
 	defer xmlFile.Close()
 
-	xmlStr, err := ioutil.ReadAll(xmlFile)
+	xmlStr, err := io.ReadAll(xmlFile)
 
 	if err != nil {
 		return 0, err

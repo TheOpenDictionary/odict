@@ -9,61 +9,61 @@ import (
 
 type EtymologyRepresentable struct {
 	ID          string                                  `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Description string                                  `json:"description,omitempty" xml:"description,attr,omitempty"`
-	Usages      KVMap[PartOfSpeech, UsageRepresentable] `json:"usages" xml:"usage"`
+	Description MDString                                `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Senses      KVMap[PartOfSpeech, SenseRepresentable] `json:"senses" xml:"sense"`
 }
 
 func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
-	var usage Usage
-	usages := make(map[PartOfSpeech]UsageRepresentable)
+	var sense Sense
+	senses := make(map[PartOfSpeech]SenseRepresentable)
 
-	for u := 0; u < etymology.UsagesLength(); u++ {
-		etymology.Usages(&usage, u)
-		representable := usage.AsRepresentable()
-		usages[representable.POS] = representable
+	for u := 0; u < etymology.SensesLength(); u++ {
+		etymology.Senses(&sense, u)
+		representable := sense.AsRepresentable()
+		senses[representable.POS] = representable
 	}
 
 	return EtymologyRepresentable{
 		ID:          string(etymology.Id()),
-		Description: string(etymology.Description()),
-		Usages:      usages,
+		Description: MDString(etymology.Description()),
+		Senses:      senses,
 	}
 }
 
 func (ety *EtymologyRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(ety.ID)
-	description := builder.CreateString(ety.Description)
-	usages := ety.buildUsageVector(builder)
+	description := builder.CreateString(ety.Description.String())
+	senses := ety.buildSenseVector(builder)
 
 	EtymologyStart(builder)
 	EtymologyAddId(builder, id)
 	EtymologyAddDescription(builder, description)
-	EtymologyAddUsages(builder, usages)
+	EtymologyAddSenses(builder, senses)
 
 	return EtymologyEnd(builder)
 }
 
-func (ety *EtymologyRepresentable) buildUsageVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	usages := ety.Usages
-	usageCount := len(usages)
-	keys := make([]string, 0, usageCount)
+func (ety *EtymologyRepresentable) buildSenseVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	senses := ety.Senses
+	senseCount := len(senses)
+	keys := make([]string, 0, senseCount)
 
-	for key := range usages {
+	for key := range senses {
 		keys = append(keys, key.Tag)
 	}
 
 	sort.Strings(keys)
 
-	usageBuffers := lo.Map(keys, func(key string, _ int) flatbuffers.UOffsetT {
-		usage := usages[strToPartOfSpeech(key)]
-		return usage.AsBuffer(builder)
+	senseBuffers := lo.Map(keys, func(key string, _ int) flatbuffers.UOffsetT {
+		sense := senses[strToPartOfSpeech(key)]
+		return sense.AsBuffer(builder)
 	})
 
-	EtymologyStartUsagesVector(builder, usageCount)
+	EtymologyStartSensesVector(builder, senseCount)
 
-	for i := usageCount - 1; i >= 0; i-- {
-		builder.PrependUOffsetT(usageBuffers[i])
+	for i := senseCount - 1; i >= 0; i-- {
+		builder.PrependUOffsetT(senseBuffers[i])
 	}
 
-	return builder.EndVector(usageCount)
+	return builder.EndVector(senseCount)
 }

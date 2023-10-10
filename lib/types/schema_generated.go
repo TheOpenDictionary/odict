@@ -8,6 +8,85 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
+type Note struct {
+	_tab flatbuffers.Table
+}
+
+func GetRootAsNote(buf []byte, offset flatbuffers.UOffsetT) *Note {
+	n := flatbuffers.GetUOffsetT(buf[offset:])
+	x := &Note{}
+	x.Init(buf, n+offset)
+	return x
+}
+
+func GetSizePrefixedRootAsNote(buf []byte, offset flatbuffers.UOffsetT) *Note {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Note{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
+func (rcv *Note) Init(buf []byte, i flatbuffers.UOffsetT) {
+	rcv._tab.Bytes = buf
+	rcv._tab.Pos = i
+}
+
+func (rcv *Note) Table() flatbuffers.Table {
+	return rcv._tab
+}
+
+func (rcv *Note) Id() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Note) Value() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Note) Examples(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
+	}
+	return nil
+}
+
+func (rcv *Note) ExamplesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
+func NoteStart(builder *flatbuffers.Builder) {
+	builder.StartObject(3)
+}
+func NoteAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
+}
+func NoteAddValue(builder *flatbuffers.Builder, value flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(value), 0)
+}
+func NoteAddExamples(builder *flatbuffers.Builder, examples flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(examples), 0)
+}
+func NoteStartExamplesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func NoteEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	return builder.EndObject()
+}
+
 type Definition struct {
 	_tab flatbuffers.Table
 }
@@ -68,8 +147,28 @@ func (rcv *Definition) ExamplesLength() int {
 	return 0
 }
 
+func (rcv *Definition) Notes(obj *Note, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		x := rcv._tab.Vector(o)
+		x += flatbuffers.UOffsetT(j) * 4
+		x = rcv._tab.Indirect(x)
+		obj.Init(rcv._tab.Bytes, x)
+		return true
+	}
+	return false
+}
+
+func (rcv *Definition) NotesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func DefinitionStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func DefinitionAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -81,6 +180,12 @@ func DefinitionAddExamples(builder *flatbuffers.Builder, examples flatbuffers.UO
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(examples), 0)
 }
 func DefinitionStartExamplesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(4, numElems, 4)
+}
+func DefinitionAddNotes(builder *flatbuffers.Builder, notes flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(notes), 0)
+}
+func DefinitionStartNotesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func DefinitionEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -130,7 +235,7 @@ func (rcv *Etymology) Description() []byte {
 	return nil
 }
 
-func (rcv *Etymology) Usages(obj *Usage, j int) bool {
+func (rcv *Etymology) Senses(obj *Sense, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -142,7 +247,7 @@ func (rcv *Etymology) Usages(obj *Usage, j int) bool {
 	return false
 }
 
-func (rcv *Etymology) UsagesByKey(obj *Usage, key POS) bool {
+func (rcv *Etymology) SensesByKey(obj *Sense, key POS) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -151,7 +256,7 @@ func (rcv *Etymology) UsagesByKey(obj *Usage, key POS) bool {
 	return false
 }
 
-func (rcv *Etymology) UsagesLength() int {
+func (rcv *Etymology) SensesLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -168,10 +273,10 @@ func EtymologyAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 func EtymologyAddDescription(builder *flatbuffers.Builder, description flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(description), 0)
 }
-func EtymologyAddUsages(builder *flatbuffers.Builder, usages flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(usages), 0)
+func EtymologyAddSenses(builder *flatbuffers.Builder, senses flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(senses), 0)
 }
-func EtymologyStartUsagesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func EtymologyStartSensesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
 func EtymologyEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
@@ -260,34 +365,34 @@ func GroupEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
 
-type Usage struct {
+type Sense struct {
 	_tab flatbuffers.Table
 }
 
-func GetRootAsUsage(buf []byte, offset flatbuffers.UOffsetT) *Usage {
+func GetRootAsSense(buf []byte, offset flatbuffers.UOffsetT) *Sense {
 	n := flatbuffers.GetUOffsetT(buf[offset:])
-	x := &Usage{}
+	x := &Sense{}
 	x.Init(buf, n+offset)
 	return x
 }
 
-func GetSizePrefixedRootAsUsage(buf []byte, offset flatbuffers.UOffsetT) *Usage {
+func GetSizePrefixedRootAsSense(buf []byte, offset flatbuffers.UOffsetT) *Sense {
 	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
-	x := &Usage{}
+	x := &Sense{}
 	x.Init(buf, n+offset+flatbuffers.SizeUint32)
 	return x
 }
 
-func (rcv *Usage) Init(buf []byte, i flatbuffers.UOffsetT) {
+func (rcv *Sense) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i
 }
 
-func (rcv *Usage) Table() flatbuffers.Table {
+func (rcv *Sense) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Usage) Pos() POS {
+func (rcv *Sense) Pos() POS {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return POS(rcv._tab.GetInt8(o + rcv._tab.Pos))
@@ -295,25 +400,25 @@ func (rcv *Usage) Pos() POS {
 	return 0
 }
 
-func (rcv *Usage) MutatePos(n POS) bool {
+func (rcv *Sense) MutatePos(n POS) bool {
 	return rcv._tab.MutateInt8Slot(4, int8(n))
 }
 
-func UsageKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
-	obj1 := &Usage{}
-	obj2 := &Usage{}
+func SenseKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
+	obj1 := &Sense{}
+	obj2 := &Sense{}
 	obj1.Init(buf, flatbuffers.UOffsetT(len(buf))-o1)
 	obj2.Init(buf, flatbuffers.UOffsetT(len(buf))-o2)
 	return obj1.Pos() < obj2.Pos()
 }
 
-func (rcv *Usage) LookupByKey(key POS, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
+func (rcv *Sense) LookupByKey(key POS, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
 	span := flatbuffers.GetUOffsetT(buf[vectorLocation-4:])
 	start := flatbuffers.UOffsetT(0)
 	for span != 0 {
 		middle := span / 2
 		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+4*(start+middle))
-		obj := &Usage{}
+		obj := &Sense{}
 		obj.Init(buf, tableOffset)
 		val := obj.Pos()
 		comp := 0
@@ -336,7 +441,7 @@ func (rcv *Usage) LookupByKey(key POS, vectorLocation flatbuffers.UOffsetT, buf 
 	return false
 }
 
-func (rcv *Usage) Definitions(obj *Definition, j int) bool {
+func (rcv *Sense) Definitions(obj *Definition, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -348,7 +453,7 @@ func (rcv *Usage) Definitions(obj *Definition, j int) bool {
 	return false
 }
 
-func (rcv *Usage) DefinitionsLength() int {
+func (rcv *Sense) DefinitionsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -356,7 +461,7 @@ func (rcv *Usage) DefinitionsLength() int {
 	return 0
 }
 
-func (rcv *Usage) Groups(obj *Group, j int) bool {
+func (rcv *Sense) Groups(obj *Group, j int) bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
@@ -368,7 +473,7 @@ func (rcv *Usage) Groups(obj *Group, j int) bool {
 	return false
 }
 
-func (rcv *Usage) GroupsLength() int {
+func (rcv *Sense) GroupsLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -376,25 +481,25 @@ func (rcv *Usage) GroupsLength() int {
 	return 0
 }
 
-func UsageStart(builder *flatbuffers.Builder) {
+func SenseStart(builder *flatbuffers.Builder) {
 	builder.StartObject(3)
 }
-func UsageAddPos(builder *flatbuffers.Builder, pos POS) {
+func SenseAddPos(builder *flatbuffers.Builder, pos POS) {
 	builder.PrependInt8Slot(0, int8(pos), 0)
 }
-func UsageAddDefinitions(builder *flatbuffers.Builder, definitions flatbuffers.UOffsetT) {
+func SenseAddDefinitions(builder *flatbuffers.Builder, definitions flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(definitions), 0)
 }
-func UsageStartDefinitionsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func SenseStartDefinitionsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func UsageAddGroups(builder *flatbuffers.Builder, groups flatbuffers.UOffsetT) {
+func SenseAddGroups(builder *flatbuffers.Builder, groups flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(groups), 0)
 }
-func UsageStartGroupsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func SenseStartGroupsVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func UsageEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func SenseEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }
 

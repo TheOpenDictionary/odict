@@ -1,15 +1,22 @@
 include "enums.fbs";
 
-table Definition {
+table Note {
     id:string;
     value:string;
     examples:[string];
 }
 
+table Definition {
+    id:string;
+    value:string;
+    examples:[string];
+    notes:[Note];
+}
+
 table Etymology {
     id:string;
     description:string;
-    usages:[Usage];
+    senses:[Sense];
 }
 
 table Group {
@@ -18,7 +25,7 @@ table Group {
     definitions:[Definition];
 }
 
-table Usage {
+table Sense {
     pos:POS (key);
     definitions:[Definition];
     groups:[Group];

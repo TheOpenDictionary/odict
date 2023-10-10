@@ -1,10 +1,17 @@
 <dictionary name="Example Dictionary 2">
   <entry term="runner">
     <ety description="Latin root">
-      <usage pos="v">
+      <sense pos="v">
         <definition value="An additional definition" />
-      </usage>
+      </sense>
     </ety>
   </entry>
   <entry term="runners" see="runner" />
+  <entry term="markdown">
+    <ety description="Latin root">
+      <sense pos="v">
+        <definition value="This **is** a _markdown_ test" />
+      </sense>
+    </ety>
+  </entry>
 </dictionary>

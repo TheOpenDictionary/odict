@@ -1,5 +1,5 @@
 test: && clean
-  just ../cli/build
+  just ../build
   RUNTIME_ENV=test ./gradlew test --info
 
 build:

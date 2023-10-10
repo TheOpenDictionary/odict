@@ -10,89 +10,129 @@ import { Dictionary } from "../src";
 import { teardownServices } from "../src/service";
 
 describe("Dictionary", () => {
-	let dict1: Dictionary;
+  let dict1: Dictionary;
+  let dict2: Dictionary;
 
-	afterAll(() => {
-		teardownServices();
-	});
+  afterAll(() => {
+    teardownServices();
+  });
 
-	beforeAll(async () => {
-		dict1 = await Dictionary.compile(
-			join(
-				fileURLToPath(new URL(import.meta.url)),
-				"../../../examples/example1.xml",
-			),
-		);
+  beforeAll(async () => {
+    dict1 = await Dictionary.compile(
+      join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.xml",
+      ),
+    );
 
-		const stats = await stat(dict1.path);
+    dict2 = await Dictionary.compile(
+      join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example2.xml",
+      ),
+    );
 
-		expect(stats.isFile).toBeTruthy();
-	});
+    const stat1 = await stat(dict1.path);
+    const stat2 = await stat(dict2.path);
 
-	it("restarts if the process was killed", async () => {
-		const result1 = await dict1.lookup({
-			word: "dog",
-			fallback: "dog",
-		});
+    expect(stat1.isFile).toBeTruthy();
+    expect(stat2.isFile).toBeTruthy();
+  });
 
-		expect(result1[0][0].term).toBe("dog");
+  it("restarts if the process was killed", async () => {
+    const result1 = await dict1.lookup({
+      word: "dog",
+      fallback: "dog",
+    });
 
-		const processes = await findProcess("name", "odict", true);
+    expect(result1).toMatchSnapshot();
 
-		processes.forEach((p) => process.kill(p.pid));
+    const processes = await findProcess("name", "odict", true);
 
-		await new Promise((r) => setTimeout(r, 0)); // Not sure why this is needed...
+    processes.forEach((p) => process.kill(p.pid));
 
-		const result2 = await dict1.lookup({
-			word: "run",
-			fallback: "run",
-		});
+    await new Promise((r) => setTimeout(r, 0)); // Not sure why this is needed...
 
-		expect(result2[0][0].term).toBe("run");
-	});
+    const result2 = await dict1.lookup({
+      word: "run",
+      fallback: "run",
+    });
 
-	it("can lookup terms properly", async () => {
-		const result = await dict1.lookup({ word: "run", fallback: "run" });
-		expect(result[0][0].term).toBe("run");
-	});
+    expect(result2).toMatchSnapshot();
+  });
 
-	it("doesn't split unless specified", async () => {
-		const result = await dict1.lookup("catdog");
-		expect(result[0].length).toBe(0);
-	});
+  describe("lookup", () => {
+    it("looks up terms properly", async () => {
+      const result = await dict1.lookup({ word: "cat", fallback: "cat" });
+      expect(result).toMatchSnapshot();
+    });
 
-	it("can return the lexicon", async () => {
-		const result = await dict1.lexicon();
-		expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
-	});
-  
+    it("doesn't split unless specified", async () => {
+      const result = await dict1.lookup("catdog");
+      expect(result[0].length).toBe(0);
+    });
+
+    it("can split terms", async () => {
+      const result = await dict1.lookup("catdog", { split: 3 });
+      expect(result).toMatchSnapshot();
+    });
+
+    it("considers markdown strategies correctly", async () => {
+      const result1 = await dict2.lookup("markdown", {
+        markdownStrategy: "disable",
+      });
+
+      const result2 = await dict2.lookup("markdown", {
+        markdownStrategy: "text",
+      });
+
+      const result3 = await dict2.lookup("markdown", {
+        markdownStrategy: "html",
+      });
+
+      expect(result1).toMatchSnapshot();
+      expect(result2).toMatchSnapshot();
+      expect(result3).toMatchSnapshot();
+    });
+  });
+
+  it("can return the lexicon", async () => {
+    const result = await dict1.lexicon();
+    expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
+  });
+
   it("can write raw XML", async () => {
     await Dictionary.write(
-      '<dictionary><entry term="hello"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry><entry term="world"><ety><usage pos="v"><definition>hello world</definition></usage></ety></entry></dictionary>"    )',
+      '<dictionary><entry term="hello"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry><entry term="world"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry></dictionary>"    )',
       "test.odict",
     );
+
     expect(existsSync("test.odict")).toBeTruthy();
+
     await rm("test.odict");
   });
 
-	it("can split terms during lookup", async () => {
-		const result = await dict1.lookup("catdog", { split: 3 });
-		expect(result[0][0].term).toBe("cat");
-		expect(result[0][1].term).toBe("dog");
-	});
+  it("can split terms properly", async () => {
+    const result = await dict1.split("catdog", 2);
+    expect(result).toMatchSnapshot();
+  });
 
-	it("can split terms properly", async () => {
-		const result = await dict1.split("catdog", 2);
-		expect(result[0].term).toBe("cat");
-		expect(result[1].term).toBe("dog");
-	});
+  it("can index and search a dictionary", async () => {
+    await dict1.index();
 
-	it("can index and search a dictionary", async () => {
-		await dict1.index();
-		
     const results = await dict1.search("run");
-		
-    expect(results[0][0].term).toBe("ran");
-    expect(results[0][1].term).toBe("run");
-	});
+
+    expect(results).toMatchSnapshot();
+  });
+
+  it("throws errors inside JavaScript", async () => {
+    try {
+      const dict = new Dictionary("fake-alias");
+      await dict.lookup("dog");
+    } catch (e) {
+      expect(e as Error).toEqual(
+        'Encountered an error starting the ODict service for path "fake-alias": open : no such file or directory',
+      );
+    }
+  });
 });

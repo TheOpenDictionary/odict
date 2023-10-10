@@ -34,19 +34,23 @@ func service(c *cli.Context) error {
 	ipc := NewIPC()
 	dictPath := c.Args().Get(0)
 
-	var dict *types.Dictionary
-
-	if len(dictPath) > 0 {
-		var err error
-
-		dict, err = core.ReadDictionary(dictPath)
-
-		if err != nil {
-			return err
-		}
-	}
-
 	go func() {
+		var dict *types.Dictionary
+
+		if len(dictPath) > 0 {
+			var err error
+
+			dict, err = core.ReadDictionary(dictPath)
+
+			if err != nil {
+				ipc.Send(EnumNamesODictMethod[ODictMethodReady], nil, fmt.Sprint(err))
+			} else {
+				ipc.Send(EnumNamesODictMethod[ODictMethodReady], true, nil)
+			}
+		} else {
+			ipc.Send(EnumNamesODictMethod[ODictMethodReady], true, nil)
+		}
+
 		// Write
 		ipc.OnReceiveAndReply(EnumNamesODictMethod[ODictMethodWrite], func(reply replyChannel, payload interface{}) {
 			if buf, err := decodePayload(payload); err != nil {
@@ -127,6 +131,16 @@ func service(c *cli.Context) error {
 				queries := make([]string, payload.QueriesLength())
 				follow := payload.Follow()
 				split := int(payload.Split())
+				markdown := payload.Markdown()
+
+				switch markdown {
+				case MarkdownStrategyHTML:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyHTML)
+				case MarkdownStrategyText:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyText)
+				case MarkdownStrategyDisable:
+					types.SetMarkdownProcessingStrategy(types.MarkdownStrategyDisable)
+				}
 
 				for i := 0; i < payload.QueriesLength(); i++ {
 					queries[i] = string(payload.Queries(i))

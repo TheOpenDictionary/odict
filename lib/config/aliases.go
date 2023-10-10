@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"sort"
@@ -34,10 +33,10 @@ func getDictionariesConfig() (map[string]string, error) {
 		return nil, err
 	}
 
-	dictionariesFileBytes, err := ioutil.ReadFile(dictionariesFile)
+	dictionariesFileBytes, err := os.ReadFile(dictionariesFile)
 
 	if os.IsNotExist(err) {
-		writeErr := ioutil.WriteFile(dictionariesFile, []byte("{}"), 0644)
+		writeErr := os.WriteFile(dictionariesFile, []byte("{}"), 0644)
 
 		if writeErr != nil {
 			return nil, writeErr
@@ -70,7 +69,7 @@ func writeDictionaryConfig(config map[string]string) error {
 		return marshalErr
 	}
 
-	writeErr := ioutil.WriteFile(dictionariesFile, configBytes, 0644)
+	writeErr := os.WriteFile(dictionariesFile, configBytes, 0644)
 
 	if writeErr != nil {
 		return writeErr

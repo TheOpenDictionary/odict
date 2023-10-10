@@ -1,21 +1,24 @@
 {
+  "plugins": [
+    {
+      "type": "sentence-case"
+    }
+  ],
   "packages": {
     ".": {
-      "release-type": "simple"
+      "release-type": "simple",
+      "exclude-paths": ["js", "python", "jvm"]
     },
     "js": {
       "release-type": "node",
-      "path": "./js",
       "component": "js"
     },
     "python": {
       "release-type": "python",
-      "path": "./python",
       "component": "python"
     },
     "jvm": {
       "release-type": "java",
-      "path": "./jvm",
       "component": "jvm"
     }
   }

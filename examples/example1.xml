@@ -1,8 +1,8 @@
 <dictionary name="Example Dictionary 1">
   <entry term="run">
     <ety description="Latin root">
-      <usage pos="v">
-        <group description="A number of verb usages">
+      <sense pos="v">
+        <group description="A number of verb senses">
           <definition value="(vertebrates) To move swiftly (figuratively)">
             <example>The dog runs after the cat.</example>
             <example>The horse ran away.</example>
@@ -13,8 +13,8 @@
           <definition value="To extend or persist, statically or dynamically, through space or time." />
           <definition value="(transitive) To execute or carry out a plan, procedure or program." />
         </group>
-      </usage>
-      <usage pos="n">
+      </sense>
+      <sense pos="n">
         <definition value="(vertebrates) To move swiftly">
           <example>The dog runs after the cat.</example>
           <example>The horse ran away.</example>
@@ -24,33 +24,36 @@
         <definition value="Flight, instance or period of fleeing." />
         <definition value="Migration (of fish)." />
         <definition value="A group of fish that migrate, or ascend a river for the purpose of spawning." />
-      </usage>
+      </sense>
     </ety>
   </entry>
   <entry term="poo">
     <ety description="Latin root">
-      <usage>
-        <group description="A number of verb usages">
+      <sense>
+        <group description="A number of verb senses">
           <definition value="crap, shit" />
         </group>
-      </usage>
+      </sense>
     </ety>
   </entry>
   <entry term="dog" pronunciation="dooooog">
     <ety description="Latin root">
-      <usage>
+      <sense>
         <definition value="a dog" />
-      </usage>
+      </sense>
     </ety>
   </entry>
   <entry term="ran" see="run" />
   <entry term="cat">
     <ety description="Latin root">
-      <usage pos="n">
+      <sense pos="n">
         <definition value="a cat">
           <example>There goes a cat!</example>
+          <note value="Some definition note">
+            <example>Some example</example>
+          </note>
         </definition>
-      </usage>
+      </sense>
     </ety>
   </entry>
 </dictionary>

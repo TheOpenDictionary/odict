@@ -5,13 +5,20 @@ enum ODictMethod:byte {
   Search = 4,
   Compile = 5,
   Write = 6,
-  Lexicon = 7
+  Lexicon = 7,
+  Ready = 8
 }
 
+enum MarkdownStrategy:short {
+  Disable = 0,
+  Text = 1,
+  HTML = 2
+}
 
 table LookupPayload {
   follow:bool;
   split:int;
+  markdown:MarkdownStrategy;
   queries:[string];
 }
 

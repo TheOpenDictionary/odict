@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/core"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"

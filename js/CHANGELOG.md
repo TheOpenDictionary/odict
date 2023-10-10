@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.10.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.9.0...js-v0.10.0) (2023-09-28)
+
+
+### Features
+
+* Add option to output Markdown as plain-text ([#470](https://github.com/TheOpenDictionary/odict/issues/470)) ([71ca0d5](https://github.com/TheOpenDictionary/odict/commit/71ca0d5c6f22c660fdd51e098a66e2e1f4acf47c))
+
+## [0.9.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.8.1...js-v0.9.0) (2023-09-26)
+
+
+### Features
+
+* Add Markdown support to description and value attributes ([#462](https://github.com/TheOpenDictionary/odict/issues/462)) ([5a2111f](https://github.com/TheOpenDictionary/odict/commit/5a2111f6aa2f4817028e2fa9c8fec0314569f360))
+* Prebuild binaries ([#463](https://github.com/TheOpenDictionary/odict/issues/463)) ([123bfd7](https://github.com/TheOpenDictionary/odict/commit/123bfd7102be53438f74b7eb9a8542ebb2e2137b))
+
+## [0.8.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.8.0...js-v0.8.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* **js:** Add ready check for service ([#458](https://github.com/TheOpenDictionary/odict/issues/458)) ([ed984ba](https://github.com/TheOpenDictionary/odict/commit/ed984bad21af2c57f8e8c421a8ffe81c1b3fb8fe))
+* **js:** Make notes optional ([ee72c66](https://github.com/TheOpenDictionary/odict/commit/ee72c6666cfc37f740946b801dc68190a46b22e4))
+
+## [0.8.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.7.0...js-v0.8.0) (2023-09-17)
+
+
+### Features
+
+* **core:** add DefinitionNote type ([#450](https://github.com/TheOpenDictionary/odict/issues/450)) ([08bcac4](https://github.com/TheOpenDictionary/odict/commit/08bcac4b0710112166d6a43429fbb2f0c784c241))
+* **js:** remove detectOpenHandles from test run ([2eed906](https://github.com/TheOpenDictionary/odict/commit/2eed906830a569a89b9f74d4a5058f71fde8dd10))
+
+## [0.7.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.6.1...js-v0.7.0) (2023-06-28)
+
+
+### Features
+
+* add `serve` command ([#393](https://github.com/TheOpenDictionary/odict/issues/393)) ([cc7ef5c](https://github.com/TheOpenDictionary/odict/commit/cc7ef5c69811a4554e3b62bf492090de65ae86ea))
+* add support for dictionary aliasing ([#391](https://github.com/TheOpenDictionary/odict/issues/391)) ([c6f1a04](https://github.com/TheOpenDictionary/odict/commit/c6f1a0495136817065007acc4414194f4e8445ad))
+
 ## [0.6.1](https://github.com/TheOpenDictionary/odict/compare/js-v0.6.0...js-v0.6.1) (2023-05-31)
 
 

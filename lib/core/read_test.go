@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TheOpenDictionary/lib/config"
+	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/test"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/stretchr/testify/assert"

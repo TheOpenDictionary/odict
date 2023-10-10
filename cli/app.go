@@ -4,15 +4,23 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/TheOpenDictionary/odict/lib/types"
 	cli "github.com/urfave/cli/v2"
 )
 
 var version string
 
+const (
+	managing  string = "Writing & Managing"
+	searching string = "Searching"
+	utilities string = "Utilities"
+)
+
 var App = &cli.App{
-	Name:    "odict",
-	Version: version,
-	Usage:   "lighting-fast open-source dictionary compiler",
+	Name:     "odict",
+	Version:  version,
+	HideHelp: true,
+	Usage:    "lighting-fast open-source dictionary compiler",
 	Flags: []cli.Flag{
 		&cli.BoolFlag{
 			Name:  "quiet",
@@ -21,9 +29,10 @@ var App = &cli.App{
 	},
 	Commands: []*cli.Command{
 		{
-			Name:    "compile",
-			Aliases: []string{"c"},
-			Usage:   "compiles a dictionary from ODXML",
+			Name:     "compile",
+			Aliases:  []string{"c"},
+			Category: managing,
+			Usage:    "compiles a dictionary from ODXML",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
 					Name:    "output",
@@ -39,14 +48,16 @@ var App = &cli.App{
 			Hidden: true,
 		},
 		{
-			Name:    "index",
-			Aliases: []string{"i"},
-			Usage:   "index a compiled dictionary",
-			Action:  index,
+			Name:     "index",
+			Category: searching,
+			Aliases:  []string{"i"},
+			Usage:    "index a compiled dictionary",
+			Action:   index,
 		},
 		{
-			Name:    "serve",
-			Aliases: []string{"srv"},
+			Name:     "serve",
+			Aliases:  []string{"w"},
+			Category: utilities,
 			Flags: []cli.Flag{
 				&cli.IntFlag{
 					Name:    "port",
@@ -59,15 +70,17 @@ var App = &cli.App{
 			Action: serve,
 		},
 		{
-			Name:    "lexicon",
-			Aliases: []string{"e"},
-			Usage:   "lists all words defined in a dictionary",
-			Action:  lexicon,
+			Name:     "lexicon",
+			Aliases:  []string{"e"},
+			Category: utilities,
+			Usage:    "lists all words defined in a dictionary",
+			Action:   lexicon,
 		},
 		{
-			Name:    "alias",
-			Aliases: []string{"ds"},
-			Usage:   "manage dictionary aliases",
+			Name:     "alias",
+			Aliases:  []string{"a"},
+			Category: managing,
+			Usage:    "manage dictionary aliases",
 			Subcommands: []*cli.Command{
 				{
 					Name:        "add",
@@ -109,9 +122,10 @@ var App = &cli.App{
 			},
 		},
 		{
-			Name:    "lookup",
-			Aliases: []string{"l"},
-			Usage:   "looks up an entry in a compiled dictionary without indexing",
+			Name:     "lookup",
+			Aliases:  []string{"l"},
+			Category: searching,
+			Usage:    "looks up an entry in a compiled dictionary without indexing",
 			Flags: []cli.Flag{
 				&cli.IntFlag{
 					Name:    "split",
@@ -120,10 +134,24 @@ var App = &cli.App{
 					Value:   0,
 				},
 				&cli.StringFlag{
+					Name:  "markdown",
+					Usage: "strategy for rendering Markdown strings",
+					Value: "html",
+					Action: func(c *cli.Context, value string) error {
+						if value != "text" && value != "html" && value != "disable" {
+							return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
+						}
+
+						types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
+
+						return nil
+					},
+				},
+				&cli.StringFlag{
 					Name:    "format",
 					Aliases: []string{"f"},
 					Usage:   "Output format of the entries.",
-					Value:   ppFormat,
+					Value:   printFormat,
 				},
 				&cli.BoolFlag{
 					Name:    "follow",
@@ -135,8 +163,9 @@ var App = &cli.App{
 			Action: lookup,
 		},
 		{
-			Name:    "search",
-			Aliases: []string{"f"},
+			Name:     "search",
+			Aliases:  []string{"s"},
+			Category: searching,
 			Flags: []cli.Flag{
 				&cli.BoolFlag{
 					Name:    "index",
@@ -155,8 +184,9 @@ var App = &cli.App{
 			Action: search,
 		},
 		{
-			Name:    "split",
-			Aliases: []string{"x"},
+			Name:     "split",
+			Aliases:  []string{"x"},
+			Category: searching,
 			Flags: []cli.Flag{
 				&cli.IntFlag{
 					Name:    "threshold",
@@ -169,9 +199,10 @@ var App = &cli.App{
 			Action: split,
 		},
 		{
-			Name:    "dump",
-			Aliases: []string{"d"},
-			Usage:   "dumps a previously compiled dictionary",
+			Name:     "dump",
+			Aliases:  []string{"d"},
+			Category: managing,
+			Usage:    "dumps a previously compiled dictionary",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
 					Name:     "format",
@@ -192,10 +223,11 @@ var App = &cli.App{
 			Action: dump,
 		},
 		{
-			Name:    "merge",
-			Aliases: []string{"m"},
-			Usage:   "merge two dictionaries",
-			Action:  merge,
+			Name:     "merge",
+			Category: managing,
+			Aliases:  []string{"m"},
+			Usage:    "merge two dictionaries",
+			Action:   merge,
 		},
 	},
 }

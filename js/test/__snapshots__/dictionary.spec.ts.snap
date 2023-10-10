@@ -1,0 +1,390 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dictionary can index and search a dictionary 1`] = `
+[
+  [
+    {
+      "etymologies": null,
+      "see": "run",
+      "term": "ran",
+    },
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    "The dog runs after the cat.",
+                    "The horse ran away.",
+                  ],
+                  "value": "(vertebrates) To move swiftly",
+                },
+                {
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.",
+                },
+                {
+                  "value": "A pleasure trip.",
+                },
+                {
+                  "value": "Flight, instance or period of fleeing.",
+                },
+                {
+                  "value": "Migration (of fish).",
+                },
+                {
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning.",
+                },
+              ],
+            },
+            "v": {
+              "groups": [
+                {
+                  "definitions": [
+                    {
+                      "examples": [
+                        "The dog runs after the cat.",
+                        "The horse ran away.",
+                      ],
+                      "value": "(vertebrates) To move swiftly (figuratively)",
+                    },
+                    {
+                      "value": "(fluids) To flow.",
+                    },
+                    {
+                      "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled.",
+                    },
+                    {
+                      "value": "(social) To carry out an activity.",
+                    },
+                    {
+                      "value": "To extend or persist, statically or dynamically, through space or time.",
+                    },
+                    {
+                      "value": "(transitive) To execute or carry out a plan, procedure or program.",
+                    },
+                  ],
+                  "description": "A number of verb senses",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "run",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary can split terms properly 1`] = `
+[
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "n": {
+            "definitions": [
+              {
+                "examples": [
+                  "There goes a cat!",
+                ],
+                "notes": [
+                  {
+                    "examples": [
+                      "Some example",
+                    ],
+                    "value": "Some definition note",
+                  },
+                ],
+                "value": "a cat",
+              },
+            ],
+          },
+        },
+      },
+    ],
+    "term": "cat",
+  },
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "un": {
+            "definitions": [
+              {
+                "value": "a dog",
+              },
+            ],
+          },
+        },
+      },
+    ],
+    "pronunciation": "dooooog",
+    "term": "dog",
+  },
+]
+`;
+
+exports[`Dictionary lookup can split terms 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    "There goes a cat!",
+                  ],
+                  "notes": [
+                    {
+                      "examples": [
+                        "Some example",
+                      ],
+                      "value": "Some definition note",
+                    },
+                  ],
+                  "value": "a cat",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "cat",
+    },
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "un": {
+              "definitions": [
+                {
+                  "value": "a dog",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "pronunciation": "dooooog",
+      "term": "dog",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup considers markdown strategies correctly 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This **is** a _markdown_ test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup considers markdown strategies correctly 2`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This is a markdown test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup considers markdown strategies correctly 3`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "v": {
+              "definitions": [
+                {
+                  "value": "This <strong>is</strong> a <em>markdown</em> test",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "markdown",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup looks up terms properly 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    "There goes a cat!",
+                  ],
+                  "notes": [
+                    {
+                      "examples": [
+                        "Some example",
+                      ],
+                      "value": "Some definition note",
+                    },
+                  ],
+                  "value": "a cat",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "cat",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary restarts if the process was killed 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "un": {
+              "definitions": [
+                {
+                  "value": "a dog",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "pronunciation": "dooooog",
+      "term": "dog",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary restarts if the process was killed 2`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    "The dog runs after the cat.",
+                    "The horse ran away.",
+                  ],
+                  "value": "(vertebrates) To move swiftly",
+                },
+                {
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.",
+                },
+                {
+                  "value": "A pleasure trip.",
+                },
+                {
+                  "value": "Flight, instance or period of fleeing.",
+                },
+                {
+                  "value": "Migration (of fish).",
+                },
+                {
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning.",
+                },
+              ],
+            },
+            "v": {
+              "groups": [
+                {
+                  "definitions": [
+                    {
+                      "examples": [
+                        "The dog runs after the cat.",
+                        "The horse ran away.",
+                      ],
+                      "value": "(vertebrates) To move swiftly (figuratively)",
+                    },
+                    {
+                      "value": "(fluids) To flow.",
+                    },
+                    {
+                      "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled.",
+                    },
+                    {
+                      "value": "(social) To carry out an activity.",
+                    },
+                    {
+                      "value": "To extend or persist, statically or dynamically, through space or time.",
+                    },
+                    {
+                      "value": "(transitive) To execute or carry out a plan, procedure or program.",
+                    },
+                  ],
+                  "description": "A number of verb senses",
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "term": "run",
+    },
+  ],
+]
+`;

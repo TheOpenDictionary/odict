@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/TheOpenDictionary/lib/server"
+	"github.com/TheOpenDictionary/odict/lib/server"
 	cli "github.com/urfave/cli/v2"
 )
 

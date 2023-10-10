@@ -1,8 +1,13 @@
 install: update
 	poetry install 
 
+<<<<<<< HEAD
 test: install && clean
   just ../cli/build
+=======
+test: install
+  just ../build
+>>>>>>> main
   RUNTIME_ENV=test poetry run pytest ./theopendictionary
 
 clean:

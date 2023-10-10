@@ -12,11 +12,16 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3      
+      - name: Checkout code
+        uses: actions/checkout@v4      
+        with:
+          fetch-depth: 0
       - id: release
         name: Release please
-        uses: google-github-actions/release-please-action@v3
+        uses: google-github-actions/release-please-action@v3.7.6
         with:
           command: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -35,6 +40,15 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
+      - name: Fetch tags 
+        run: git fetch --force --tags
+      - name: Publish CLI
+        uses: goreleaser/goreleaser-action@v5
+        if: steps.release.outputs.release_created
+        env: 
+          HOMEBREW_GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
+        with:
+          args: release --clean
       - name: Publish to NPM
         if: steps.release.outputs.js--release_created
         env:

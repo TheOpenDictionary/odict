@@ -18,6 +18,7 @@ const (
 	ODictMethodCompile ODictMethod = 5
 	ODictMethodWrite   ODictMethod = 6
 	ODictMethodLexicon ODictMethod = 7
+	ODictMethodReady   ODictMethod = 8
 )
 
 var EnumNamesODictMethod = map[ODictMethod]string{
@@ -28,6 +29,7 @@ var EnumNamesODictMethod = map[ODictMethod]string{
 	ODictMethodCompile: "Compile",
 	ODictMethodWrite:   "Write",
 	ODictMethodLexicon: "Lexicon",
+	ODictMethodReady:   "Ready",
 }
 
 var EnumValuesODictMethod = map[string]ODictMethod{
@@ -38,6 +40,7 @@ var EnumValuesODictMethod = map[string]ODictMethod{
 	"Compile": ODictMethodCompile,
 	"Write":   ODictMethodWrite,
 	"Lexicon": ODictMethodLexicon,
+	"Ready":   ODictMethodReady,
 }
 
 func (v ODictMethod) String() string {
@@ -45,6 +48,33 @@ func (v ODictMethod) String() string {
 		return s
 	}
 	return "ODictMethod(" + strconv.FormatInt(int64(v), 10) + ")"
+}
+
+type MarkdownStrategy int16
+
+const (
+	MarkdownStrategyDisable MarkdownStrategy = 0
+	MarkdownStrategyText    MarkdownStrategy = 1
+	MarkdownStrategyHTML    MarkdownStrategy = 2
+)
+
+var EnumNamesMarkdownStrategy = map[MarkdownStrategy]string{
+	MarkdownStrategyDisable: "Disable",
+	MarkdownStrategyText:    "Text",
+	MarkdownStrategyHTML:    "HTML",
+}
+
+var EnumValuesMarkdownStrategy = map[string]MarkdownStrategy{
+	"Disable": MarkdownStrategyDisable,
+	"Text":    MarkdownStrategyText,
+	"HTML":    MarkdownStrategyHTML,
+}
+
+func (v MarkdownStrategy) String() string {
+	if s, ok := EnumNamesMarkdownStrategy[v]; ok {
+		return s
+	}
+	return "MarkdownStrategy(" + strconv.FormatInt(int64(v), 10) + ")"
 }
 
 type LookupPayload struct {
@@ -98,8 +128,20 @@ func (rcv *LookupPayload) MutateSplit(n int32) bool {
 	return rcv._tab.MutateInt32Slot(6, n)
 }
 
-func (rcv *LookupPayload) Queries(j int) []byte {
+func (rcv *LookupPayload) Markdown() MarkdownStrategy {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return MarkdownStrategy(rcv._tab.GetInt16(o + rcv._tab.Pos))
+	}
+	return 0
+}
+
+func (rcv *LookupPayload) MutateMarkdown(n MarkdownStrategy) bool {
+	return rcv._tab.MutateInt16Slot(8, int16(n))
+}
+
+func (rcv *LookupPayload) Queries(j int) []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
 		return rcv._tab.ByteVector(a + flatbuffers.UOffsetT(j*4))
@@ -108,7 +150,7 @@ func (rcv *LookupPayload) Queries(j int) []byte {
 }
 
 func (rcv *LookupPayload) QueriesLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -116,7 +158,7 @@ func (rcv *LookupPayload) QueriesLength() int {
 }
 
 func LookupPayloadStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func LookupPayloadAddFollow(builder *flatbuffers.Builder, follow bool) {
 	builder.PrependBoolSlot(0, follow, false)
@@ -124,8 +166,11 @@ func LookupPayloadAddFollow(builder *flatbuffers.Builder, follow bool) {
 func LookupPayloadAddSplit(builder *flatbuffers.Builder, split int32) {
 	builder.PrependInt32Slot(1, split, 0)
 }
+func LookupPayloadAddMarkdown(builder *flatbuffers.Builder, markdown MarkdownStrategy) {
+	builder.PrependInt16Slot(2, int16(markdown), 0)
+}
 func LookupPayloadAddQueries(builder *flatbuffers.Builder, queries flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(queries), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(queries), 0)
 }
 func LookupPayloadStartQueriesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
