@@ -7,5 +7,5 @@ java adoptopenjdk-17.0.8+101
 nodejs 18.18.1
 just 1.15.0
 flatc 23.3.3
-pnpm 8.9.1
+pnpm 8.9.2
 goreleaser 1.21.1
