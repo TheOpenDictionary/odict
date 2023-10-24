@@ -8,6 +8,8 @@ github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230921060249-e2cb2527d998 
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230921060249-e2cb2527d998/go.mod h1:J+wpUCVDLh4i6YWJPMFVNMT/rK/6H08fNpzgxrrdTtY=
 github.com/bokwoon95/sq v0.4.3 h1:p4QXouKlKyhS8qtdgnbedTo62Ri1dh/qMMqqQhPsh/U=
 github.com/bokwoon95/sq v0.4.3/go.mod h1:E3X8ARaXQ77XGMvjS0sQrcA1F5BZvq4Ck/91dPsMKR4=
+github.com/bokwoon95/sq v0.4.4 h1:acamwojQCmtJOFR8V9P9Srd8xepoG1aDAO2VBx6jrGc=
+github.com/bokwoon95/sq v0.4.4/go.mod h1:E3X8ARaXQ77XGMvjS0sQrcA1F5BZvq4Ck/91dPsMKR4=
 github.com/bokwoon95/sqddl v0.4.6 h1:E8wbTNf0650nuaZtIzagunYyzLq0aSXvk06/K5SoUso=
 github.com/bokwoon95/sqddl v0.4.6/go.mod h1:gdCZ/YncGycaXDhmr2toCSfk7EHS3WcmFOCgkuAsp5E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
