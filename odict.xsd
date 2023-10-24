@@ -1,0 +1,41 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="dictionary" type="dictionaryType" />
+  <xs:complexType name="noteType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="example" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="definitionType">
+    <xs:all>
+      <xs:element type="xs:string" name="example" minOccurs="0"/>
+      <xs:element type="noteType" name="note" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="senseType">
+    <xs:all>
+      <xs:element type="definitionType" name="definition" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute type="xs:string" name="pos"/>
+  </xs:complexType>
+  <xs:complexType name="etyType">
+    <xs:all>
+      <xs:element type="senseType" name="sense" />
+    </xs:all>
+    <xs:attribute type="xs:string" name="description"/>
+  </xs:complexType>
+  <xs:complexType name="entryType">
+    <xs:all>
+      <xs:element type="etyType" name="ety"/>
+    </xs:all>
+    <xs:attribute type="xs:string" name="term"/>
+  </xs:complexType>
+  <xs:complexType name="dictionaryType">
+    <xs:all>
+      <xs:element type="entryType" name="entry" minOccurs="1" />
+    </xs:all>
+    <xs:attribute type="xs:string" name="name"/>
+  </xs:complexType>
+</xs:schema>
