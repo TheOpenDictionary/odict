@@ -9,8 +9,8 @@ import (
 
 type SenseRepresentable struct {
 	POS         PartOfSpeech              `json:"-" xml:"pos,attr"`
-	Definitions []DefinitionRepresentable `json:"definitions,omitempty" xml:"definition"`
 	Groups      []GroupRepresentable      `json:"groups,omitempty" xml:"group"`
+	Definitions []DefinitionRepresentable `json:"definitions,omitempty" xml:"definition"`
 	XMLName     xml.Name                  `json:"-" xml:"sense"`
 }
 

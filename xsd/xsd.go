@@ -19,20 +19,12 @@ func generateXSD(tagName string, attribute bool, t reflect.Type, indent int) str
 		return generateXSD(tagName, attribute, reflect.TypeOf(""), indent)
 	}
 
-	if t.Kind() == reflect.Map {
-		return generateXSD(tagName, attribute, t.Elem(), indent+2)
-	}
-
-	if t.Kind() == reflect.Slice {
-		xsd := fmt.Sprintf("%s<xs:sequence>\n", strings.Repeat(" ", indent))
-		xsd += generateXSD(tagName, attribute, t.Elem(), indent+2)
-		xsd += fmt.Sprintf("%s</xs:sequence>\n", strings.Repeat(" ", indent))
-		return xsd
-	}
-
 	if t.Kind() == reflect.Struct {
 		xsd := fmt.Sprintf("%s<xs:element name=\"%s\">\n", strings.Repeat(" ", indent), tagName)
 		xsd += fmt.Sprintf("%s<xs:complexType>\n", strings.Repeat(" ", indent+2))
+
+		var sequences []string = []string{}
+		var attributes []string = []string{}
 
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
@@ -41,7 +33,23 @@ func generateXSD(tagName string, attribute bool, t reflect.Type, indent int) str
 			tagName := strings.Split(tag, ",")[0]
 			attr := strings.Contains(tag, "attr")
 
-			xsd += generateXSD(tagName, attr, fieldType, indent+4)
+			if fieldType.Kind() == reflect.Map || fieldType.Kind() == reflect.Slice {
+				sequences = append(sequences, generateXSD(tagName, attr, fieldType.Elem(), indent+6))
+			} else if attr {
+				attributes = append(attributes, generateXSD(tagName, attr, fieldType, indent+4))
+			} else {
+				xsd += generateXSD(tagName, attr, fieldType, indent+4)
+			}
+		}
+
+		if len(sequences) > 0 {
+			xsd += fmt.Sprintf("%s<xs:sequence>\n", strings.Repeat(" ", indent+4))
+			xsd += strings.Join(sequences, "")
+			xsd += fmt.Sprintf("%s</xs:sequence>\n", strings.Repeat(" ", indent+4))
+		}
+
+		if len(attributes) > 0 {
+			xsd += strings.Join(attributes, "")
 		}
 
 		xsd += fmt.Sprintf("%s</xs:complexType>\n", strings.Repeat(" ", indent+2))
@@ -60,7 +68,9 @@ func generateXSD(tagName string, attribute bool, t reflect.Type, indent int) str
 }
 
 func main() {
-	xsd := generateXSD("dictionary", false, reflect.TypeOf(types.DictionaryRepresentable{}), 0)
+	xsd := "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n"
+	xsd += generateXSD("dictionary", false, reflect.TypeOf(types.DictionaryRepresentable{}), 2)
+	xsd += "</xs:schema>"
 
 	print(xsd)
 }
