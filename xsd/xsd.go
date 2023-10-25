@@ -2,75 +2,155 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
+	"github.com/go-xmlfmt/xmlfmt"
 )
 
-func generateXSD(tagName string, attribute bool, t reflect.Type, indent int) string {
+type XSDOptions struct {
+	TagName     string
+	IsItem      bool
+	IsAttribute bool
+	isRequired  bool
+}
+
+func generateStruct(t reflect.Type, opts XSDOptions) string {
+	tagName := opts.TagName
+	isItem := opts.IsItem
+	isRequired := opts.isRequired
+	minMax := ""
+
+	if isItem {
+		minOccurs := 0
+
+		if isRequired {
+			minOccurs = 1
+		}
+
+		minMax = fmt.Sprintf(" minOccurs=\"%d\" maxOccurs=\"unbounded\"", minOccurs)
+	} else if isRequired {
+		minMax = " use=\"required\""
+	}
+
+	var sequences []string = []string{}
+	var attributes []string = []string{}
+	var children []string = []string{}
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		fieldType := field.Type
+		tag := field.Tag.Get("xml")
+		isAttribute := strings.Contains(tag, "attr")
+		isCollection := fieldType.Kind() == reflect.Map || fieldType.Kind() == reflect.Slice
+		isItem := false
+		isRequired := !strings.Contains(tag, "omitempty")
+		name := strings.Split(tag, ",")[0]
+
+		if fieldType.Name() == "Name" {
+			tagName = name
+			continue
+		}
+
+		if isCollection {
+			fieldType = fieldType.Elem()
+			isItem = true
+		}
+
+		value := generateXSD(fieldType, XSDOptions{
+			TagName:     name,
+			IsItem:      isItem,
+			IsAttribute: isAttribute,
+			isRequired:  isRequired,
+		})
+
+		if isCollection {
+			sequences = append(sequences, value)
+			continue
+		}
+
+		if isAttribute {
+			attributes = append(attributes, value)
+			continue
+		}
+
+		children = append(children, value)
+	}
+
+	xsd := fmt.Sprintf("<xs:element%s name=\"%s\">\n", minMax, tagName)
+	xsd += "<xs:complexType>\n"
+
+	if len(sequences) > 0 {
+		xsd += "<xs:sequence>\n"
+		xsd += strings.Join(sequences, "")
+		xsd += "</xs:sequence>\n"
+	}
+
+	if len(children) > 0 {
+		xsd += strings.Join(children, "")
+	}
+
+	if len(attributes) > 0 {
+		xsd += strings.Join(attributes, "")
+	}
+
+	xsd += "</xs:complexType>\n"
+	xsd += "</xs:element>\n"
+
+	return xsd
+}
+
+func generateXSD(t reflect.Type, opts XSDOptions) string {
+	tagName := opts.TagName
+	isAttribute := opts.IsAttribute
+	isItem := opts.IsItem
+	isRequired := opts.isRequired
 	name := t.Name()
+	minOccurs := 0
 
 	if name == "Name" {
 		return ""
 	}
 
 	if name == "PartOfSpeech" || name == "MDString" {
-		return generateXSD(tagName, attribute, reflect.TypeOf(""), indent)
+		return generateXSD(reflect.TypeOf(""), opts)
 	}
 
 	if t.Kind() == reflect.Struct {
-		xsd := fmt.Sprintf("%s<xs:element name=\"%s\">\n", strings.Repeat(" ", indent), tagName)
-		xsd += fmt.Sprintf("%s<xs:complexType>\n", strings.Repeat(" ", indent+2))
-
-		var sequences []string = []string{}
-		var attributes []string = []string{}
-
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
-			fieldType := field.Type
-			tag := field.Tag.Get("xml")
-			tagName := strings.Split(tag, ",")[0]
-			attr := strings.Contains(tag, "attr")
-
-			if fieldType.Kind() == reflect.Map || fieldType.Kind() == reflect.Slice {
-				sequences = append(sequences, generateXSD(tagName, attr, fieldType.Elem(), indent+6))
-			} else if attr {
-				attributes = append(attributes, generateXSD(tagName, attr, fieldType, indent+4))
-			} else {
-				xsd += generateXSD(tagName, attr, fieldType, indent+4)
-			}
-		}
-
-		if len(sequences) > 0 {
-			xsd += fmt.Sprintf("%s<xs:sequence>\n", strings.Repeat(" ", indent+4))
-			xsd += strings.Join(sequences, "")
-			xsd += fmt.Sprintf("%s</xs:sequence>\n", strings.Repeat(" ", indent+4))
-		}
-
-		if len(attributes) > 0 {
-			xsd += strings.Join(attributes, "")
-		}
-
-		xsd += fmt.Sprintf("%s</xs:complexType>\n", strings.Repeat(" ", indent+2))
-		xsd += fmt.Sprintf("%s</xs:element>\n", strings.Repeat(" ", indent))
-
-		return xsd
+		return generateStruct(t, opts)
 	}
 
 	tag := "element"
+	minMax := ""
 
-	if attribute {
+	if isAttribute {
 		tag = "attribute"
 	}
 
-	return fmt.Sprintf("%s<xs:%s name=\"%s\" type=\"xs:%s\" />\n", strings.Repeat(" ", indent), tag, tagName, name)
+	if isRequired {
+		minOccurs = 1
+	}
+
+	if isItem {
+		minMax = fmt.Sprintf(" minOccurs=\"%d\" maxOccurs=\"unbounded\"", minOccurs)
+	} else if isRequired {
+		minMax = " use=\"required\""
+	}
+
+	return fmt.Sprintf("<xs:%s%s name=\"%s\" type=\"xs:%s\" />\n", tag, minMax, tagName, name)
+}
+
+func generateSchema() string {
+	xsd := "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n"
+	xsd += generateXSD(reflect.TypeOf(types.DictionaryRepresentable{}), XSDOptions{TagName: "dictionary"})
+	xsd += "</xs:schema>"
+	return xsd
 }
 
 func main() {
-	xsd := "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n"
-	xsd += generateXSD("dictionary", false, reflect.TypeOf(types.DictionaryRepresentable{}), 2)
-	xsd += "</xs:schema>"
-
-	print(xsd)
+	xsd := xmlfmt.FormatXML(generateSchema(), "\t", "  ")
+	os.WriteFile("odict.xsd", []byte(xsd), 0644)
+	os.WriteFile("./lib/validator/.odict.xsd", []byte(xsd), 0644)
 }
