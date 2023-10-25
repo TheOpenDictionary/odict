@@ -14,6 +14,9 @@
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
+@xsd: 
+  go run xsd/xsd.go 
+
 @run +args="": build
   ./bin/odict {{args}}
   
