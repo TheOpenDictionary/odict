@@ -2,7 +2,7 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: 
+@deps: xsd
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
@@ -17,8 +17,8 @@
 @xsd: 
   go run xsd/xsd.go 
 
-@run +args="": build
-  ./bin/odict {{args}}
+@run +args="":
+  go run odict.go {{args}}
   
 @test: deps (go "test") (jvm "test") (python "test") (js "test") clean
 
