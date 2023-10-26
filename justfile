@@ -12,7 +12,7 @@ GOLANG_CROSS_VERSION := "v1.21.3"
   goreleaser build --id single --clean --snapshot --single-target
 
 @build-all +args="": deps (cli "schema") sync
-  goreleaser build --snapshot --clean
+  goreleaser build --snapshot --clean {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
