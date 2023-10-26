@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
       - name: Install cross-compiler toolchain
-        run: sudo apt-get -y install gcc-aarch64-linux-gnu
+        run: sudo apt-get -y install gcc-aarch64-linux-gnu libxml2-dev
       - name: Run build
         run: just build-all --id linux
       - uses: actions/upload-artifact@v3
