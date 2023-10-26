@@ -4,7 +4,7 @@ poetry 1.6.1
 gradle 7.5.1
 kotlin 1.9.10
 java adoptopenjdk-17.0.9+9
-nodejs 18.18.2
+nodejs 20.9.0
 just 1.15.0
 flatc 23.3.3
 pnpm 8.9.2
