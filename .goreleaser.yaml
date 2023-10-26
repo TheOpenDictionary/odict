@@ -12,29 +12,50 @@ git:
     - python-*
     - jvm-*
 
+env:
+  - CGO_ENABLED=1
+
 builds:
-  - id: odict
+  - id: darwin
+    binary: odict
+    main: ./odict.go
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
+    goos:
+      - darwin
+    flags:
+      - -trimpath
+  - id: windows
+    binary: odict
+    main: ./odict.go
+    ldflags:
+      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
+    goos:
+      - windows
+    flags:
+      - -trimpath
+  - id: linux
+    binary: odict
     main: ./odict.go
     ldflags:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
     goos:
       - linux
-      - darwin
-      - windows
-    env:
-      - CGO_ENABLED=1
-  - id: single
-    main: ./odict.go
-    binary: odict
-    ldflags:
-      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-    no_unique_dist_dir: true
-    env:
-      - CGO_ENABLED=1
+    flags:
+      - -trimpath
+    overrides:
+      - goos: linux 
+        goarch: arm64 
+        env:
+          - CC=aarch64-linux-gnu-gcc
+      - goos: linux 
+        goarch: amd64 
+        env:
+          - CC=gcc
 
 archives:
   - builds:
-      - odict
+      - darwin
       
 brews:
   - name: odict
