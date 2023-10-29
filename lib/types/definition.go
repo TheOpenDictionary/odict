@@ -8,8 +8,8 @@ import (
 type DefinitionRepresentable struct {
 	ID       string              `json:"id,omitempty" xml:"id,attr,omitempty"`
 	Value    MDString            `json:"value,omitempty" xml:"value,attr"`
-	Examples []string            `json:"examples,omitempty" xml:"example"`
-	Notes    []NoteRepresentable `json:"notes,omitempty" xml:"note"`
+	Examples []string            `json:"examples,omitempty" xml:"example,omitempty"`
+	Notes    []NoteRepresentable `json:"notes,omitempty" xml:"note,omitempty"`
 }
 
 func (definition *Definition) AsRepresentable() DefinitionRepresentable {

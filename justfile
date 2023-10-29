@@ -1,23 +1,27 @@
+GOLANG_CROSS_VERSION := "v1.21.3"
+
 # ---------------------------------------------------------------------------- #
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: 
-  asdf install > /dev/null
+@deps:
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "schema") sync
+@build: deps xsd (cli "schema") sync
   goreleaser build --id single --clean --snapshot --single-target
 
 @build-all +args="": deps (cli "schema") sync
-  goreleaser build --id odict --clean {{args}}
+  docker-compose up builder {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
-@run +args="": build
-  ./bin/odict {{args}}
+@xsd: 
+  go run xsd/xsd.go 
+
+@run +args="":
+  go run odict.go {{args}}
   
-@test: deps (go "test") (jvm "test") (python "test") (js "test") clean
+@test: deps xsd (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 

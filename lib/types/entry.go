@@ -11,7 +11,7 @@ type EntryRepresentable struct {
 	Term          string                   `json:"term" xml:"term,attr"`
 	Pronunciation string                   `json:"pronunciation,omitempty" xml:"pronunciation,attr,omitempty"`
 	SeeAlso       string                   `json:"see,omitempty" xml:"see,attr,omitempty"`
-	Etymologies   []EtymologyRepresentable `json:"etymologies" xml:"ety"`
+	Etymologies   []EtymologyRepresentable `json:"etymologies" xml:"ety,omitempty"`
 	XMLName       xml.Name                 `json:"-" xml:"entry"`
 }
 

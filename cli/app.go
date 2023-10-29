@@ -43,6 +43,13 @@ var App = &cli.App{
 			Action: compile,
 		},
 		{
+			Name:     "validate",
+			Aliases:  []string{"v"},
+			Category: managing,
+			Usage:    "validates an ODXML file",
+			Action:   validate,
+		},
+		{
 			Name:   "service",
 			Action: service,
 			Hidden: true,
