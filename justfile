@@ -2,12 +2,12 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: 
+@deps: xsd 
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
 @build: deps (cli "schema") sync
-  goreleaser build --id single --clean --snapshot --single-target
+  go build -o bin/odict odict.go
 
 @build-all +args="": deps (cli "schema") sync
   goreleaser build --id odict --clean {{args}}
@@ -15,7 +15,10 @@
 @schema: (go "schema") (cli "schema") (js "schema")
 
 @run +args="": build
-  ./bin/odict {{args}}
+  go run odict {{args}}
+  
+@xsd: 
+  go run xsd/xsd.go 
   
 @test: deps (go "test") (jvm "test") (python "test") (js "test") clean
 
