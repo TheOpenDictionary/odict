@@ -1,4 +1,4 @@
-go 1.20
+go 1.21.3
 
 use (
 	./cli
@@ -10,4 +10,5 @@ use (
 	./lib/test
 	./lib/types
 	./lib/utils
+	./xsd
 )
