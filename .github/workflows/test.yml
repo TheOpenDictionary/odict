@@ -1,0 +1,47 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v2
+      - name: Cache asdf
+        id: cache-asdf
+        uses: actions/cache@v3
+        with:
+          path: |
+            /home/runner/.asdf
+          key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
+          restore-keys: |
+            ${{ runner.os }}-asdf-
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            /home/runner/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/python/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+      - name: Install dependencies in .tool-versions
+        uses: asdf-vm/actions/install@v2
+      - name: Run build 
+        run: just build-all --snapshot
+      - name: Run tests
+        env:
+          POETRY_VIRTUALENVS_IN_PROJECT: true
+        run: just test
+      - uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: code
+          path: /home/runner/work/odict

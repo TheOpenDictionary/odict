@@ -12,113 +12,29 @@ git:
     - python-*
     - jvm-*
 
-env:
-  - CGO_ENABLED=1
-  
 builds:
-  - id: darwin-amd64
-    binary: odict
+  - id: odict
     main: ./odict.go
-    goos: 
-      - darwin 
-    goarch:
-      - amd64
-    env:
-      - CC=o64-clang
-      - CXX=o64-clang++ 
     ldflags:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-    flags:
-      - -trimpath
-  - id: darwin-arm64
-    binary: odict
-    main: ./odict.go
-    goos: 
-      - darwin 
-    goarch:
-      - arm64
+    goos:
+      - linux
+      - darwin
+      - windows
     env:
-      - CC=oa64-clang
-      - CXX=oa64-clang++
+      - CGO_ENABLED=0 
+  - id: single
+    main: ./odict.go
+    binary: odict
     ldflags:
       - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-    flags:
-      - -trimpath
-  - id: linux-amd64
-    binary: odict
-    main: ./odict.go
-    goos: 
-      - linux 
-    goarch:
-      - amd64
-      # - 386
+    no_unique_dist_dir: true
     env:
-      - CC=x86_64-linux-gnu-gcc
-      - CXX=x86_64-linux-gnu-g++
-    ldflags:
-      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-    flags:
-      - -trimpath
-  - id: linux-arm64
-    binary: odict
-    main: ./odict.go
-    goos: 
-      - linux 
-    goarch:
-      - arm64
-    env:
-      - CC=aarch64-linux-gnu-gcc
-      - CXX=aarch64-linux-gnu-g++
-    ldflags:
-      - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-    flags:
-      - -trimpath
-  # - id: windows-amd64
-  #   binary: odict
-  #   main: ./odict.go
-  #   ldflags:
-  #     - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-  #   env: 
-  #     - CC=x86_64-w64-mingw32-gcc
-  #     - CXX=x86_64-w64-mingw32-g++
-  #   goos:
-  #     - windows
-  #   goarch:
-  #     - amd64 
-  #   flags:
-  #     - -trimpath
-  # - id: linux
-  #   binary: odict
-  #   main: ./odict.go
-  #   ldflags:
-  #     - -X 'github.com/TheOpenDictionary/odict/cli.version={{.Version}}'
-  #   goos:
-  #     - linux
-  #   goarch:
-  #     - arm64
-  #     # - 386
-  #     - amd64
-  #   flags:
-  #     - -trimpath
-  #   overrides:
-  #     - goos: linux 
-  #       goarch: arm64 
-  #       env:
-  #         - CC=aarch64-linux-gnu-gcc
-  #     - goos: linux 
-  #       goarch: 386 
-  #       env:
-  #         - CC=aarch64-linux-gnu-gcc
-  #     - goos: linux 
-  #       goarch: amd64 
-  #       env:
-  #         - CC=gcc
+      - CGO_ENABLED=0
 
 archives:
   - builds:
-      - darwin-arm64
-      - linux-amd64
-      - windows-amd64
+      - odict
       
 brews:
   - name: odict

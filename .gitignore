@@ -747,5 +747,3 @@ TSWLatexianTemp*
 
 # glossaries
 *.glstex
-
-./lib/validator/odict.xsd

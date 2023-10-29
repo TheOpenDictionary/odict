@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   release-please:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
