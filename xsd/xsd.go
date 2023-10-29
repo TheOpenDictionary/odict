@@ -152,5 +152,4 @@ func generateSchema() string {
 func main() {
 	xsd := xmlfmt.FormatXML(generateSchema(), "\t", "  ")
 	os.WriteFile("odict.xsd", []byte(xsd), 0644)
-	os.WriteFile("./lib/validator/.odict.xsd", []byte(xsd), 0644)
 }
