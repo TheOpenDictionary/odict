@@ -12,7 +12,7 @@ GOLANG_CROSS_VERSION := "v1.21.3"
   go build -o bin/odict odict.go
 
 @build-all +args="": deps (cli "schema") sync
-  docker-compose up builder {{args}}
+  goreleaser build --id odict --clean {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
