@@ -3,7 +3,7 @@
 <img src="https://raw.githubusercontent.com/odict/odict/master/logo.jpg" width="250" />
 <br/><br/>
 
-![Go](https://github.com/TheOpenDictionary/odict/workflows/Go/badge.svg?branch=master)
+![Go](https://img.shields.io/github/v/release/TheOpenDictionary/odict?style=flat-square)
 
 </div>
 
