@@ -6,38 +6,20 @@
 	        <xs:element minOccurs="1" maxOccurs="unbounded" name="entry">
 	          <xs:complexType>
 	            <xs:sequence>
-	              <xs:element minOccurs="1" maxOccurs="unbounded" name="ety">
+	              <xs:element minOccurs="0" maxOccurs="unbounded" name="ety">
 	                <xs:complexType>
 	                  <xs:sequence>
 	                    <xs:element minOccurs="1" maxOccurs="unbounded" name="sense">
 	                      <xs:complexType>
 	                        <xs:sequence>
-	                          <xs:element minOccurs="1" maxOccurs="unbounded" name="definition">
-	                            <xs:complexType>
-	                              <xs:sequence>
-	                                <xs:element minOccurs="1" maxOccurs="unbounded" name="example" type="xs:string" />
-	                                <xs:element minOccurs="1" maxOccurs="unbounded" name="note">
-	                                  <xs:complexType>
-	                                    <xs:sequence>
-	                                      <xs:element minOccurs="1" maxOccurs="unbounded" name="example" type="xs:string" />
-	                                    </xs:sequence>
-	                                    <xs:attribute name="id" type="xs:string" />
-	                                    <xs:attribute use="required" name="value" type="xs:string" />
-	                                  </xs:complexType>
-	                                </xs:element>
-	                              </xs:sequence>
-	                              <xs:attribute name="id" type="xs:string" />
-	                              <xs:attribute use="required" name="value" type="xs:string" />
-	                            </xs:complexType>
-	                          </xs:element>
-	                          <xs:element minOccurs="1" maxOccurs="unbounded" name="group">
+	                          <xs:element minOccurs="0" maxOccurs="unbounded" name="group">
 	                            <xs:complexType>
 	                              <xs:sequence>
 	                                <xs:element minOccurs="1" maxOccurs="unbounded" name="definition">
 	                                  <xs:complexType>
 	                                    <xs:sequence>
-	                                      <xs:element minOccurs="1" maxOccurs="unbounded" name="example" type="xs:string" />
-	                                      <xs:element minOccurs="1" maxOccurs="unbounded" name="note">
+	                                      <xs:element minOccurs="0" maxOccurs="unbounded" name="example" type="xs:string" />
+	                                      <xs:element minOccurs="0" maxOccurs="unbounded" name="note">
 	                                        <xs:complexType>
 	                                          <xs:sequence>
 	                                            <xs:element minOccurs="1" maxOccurs="unbounded" name="example" type="xs:string" />
@@ -53,11 +35,29 @@
 	                                </xs:element>
 	                              </xs:sequence>
 	                              <xs:attribute name="id" type="xs:string" />
-	                              <xs:attribute use="required" name="description" type="xs:string" />
+	                              <xs:attribute name="description" type="xs:string" />
+	                            </xs:complexType>
+	                          </xs:element>
+	                          <xs:element minOccurs="0" maxOccurs="unbounded" name="definition">
+	                            <xs:complexType>
+	                              <xs:sequence>
+	                                <xs:element minOccurs="0" maxOccurs="unbounded" name="example" type="xs:string" />
+	                                <xs:element minOccurs="0" maxOccurs="unbounded" name="note">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element minOccurs="1" maxOccurs="unbounded" name="example" type="xs:string" />
+	                                    </xs:sequence>
+	                                    <xs:attribute name="id" type="xs:string" />
+	                                    <xs:attribute use="required" name="value" type="xs:string" />
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:sequence>
+	                              <xs:attribute name="id" type="xs:string" />
+	                              <xs:attribute use="required" name="value" type="xs:string" />
 	                            </xs:complexType>
 	                          </xs:element>
 	                        </xs:sequence>
-	                        <xs:attribute use="required" name="pos" type="xs:string" />
+	                        <xs:attribute name="pos" type="xs:string" />
 	                      </xs:complexType>
 	                    </xs:element>
 	                  </xs:sequence>
@@ -72,7 +72,7 @@
 	          </xs:complexType>
 	        </xs:element>
 	      </xs:sequence>
-	      <xs:attribute use="required" name="id" type="xs:string" />
+	      <xs:attribute name="id" type="xs:string" />
 	      <xs:attribute name="name" type="xs:string" />
 	    </xs:complexType>
 	  </xs:element>

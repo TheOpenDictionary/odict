@@ -1,3 +1,5 @@
+GOLANG_CROSS_VERSION := "v1.21.3"
+
 # ---------------------------------------------------------------------------- #
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
@@ -14,13 +16,13 @@
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
-@run +args="": build
-  go run odict {{args}}
+@xsd:
+  go run xsd/xsd.go
+
+@run +args="":
+  go run odict.go {{args}}
   
-@xsd: 
-  go run xsd/xsd.go 
-  
-@test: deps (go "test") (jvm "test") (python "test") (js "test") clean
+@test: deps xsd (go "test") (jvm "test") (python "test") (js "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
   rm -rf **/*.odict 
