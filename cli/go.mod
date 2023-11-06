@@ -10,7 +10,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/server v0.0.0-20231024210539-d4e83ae7bfdc
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20231024210539-d4e83ae7bfdc
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20231024210539-d4e83ae7bfdc
-	github.com/fatih/color v1.15.0
+	github.com/fatih/color v1.16.0
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/google/uuid v1.4.0
 	github.com/samber/lo v1.38.1
@@ -46,7 +46,7 @@ require (
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/json-iterator/go v0.0.0-20171115153421-f7279a603ede // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
@@ -57,7 +57,7 @@ require (
 	go.etcd.io/bbolt v1.3.7 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/term v0.8.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 )
