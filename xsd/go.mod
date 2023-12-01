@@ -9,7 +9,7 @@ require (
 
 require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20231024210539-d4e83ae7bfdc // indirect
-	github.com/gomarkdown/markdown v0.0.0-20230922112808-5421fefb8386 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
 	github.com/samber/lo v1.38.1 // indirect
