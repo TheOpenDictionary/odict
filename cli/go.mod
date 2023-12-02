@@ -14,7 +14,7 @@ require (
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/google/uuid v1.4.0
 	github.com/samber/lo v1.39.0
-	github.com/urfave/cli/v2 v2.25.7
+	github.com/urfave/cli/v2 v2.26.0
 )
 
 require (
