@@ -13,7 +13,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/google/flatbuffers v23.5.26+incompatible
 	github.com/google/uuid v1.4.0
-	github.com/samber/lo v1.38.1
+	github.com/samber/lo v1.39.0
 	github.com/urfave/cli/v2 v2.25.7
 )
 
