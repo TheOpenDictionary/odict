@@ -12,7 +12,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20231024210539-d4e83ae7bfdc
 	github.com/fatih/color v1.16.0
 	github.com/google/flatbuffers v23.5.26+incompatible
-	github.com/google/uuid v1.4.0
+	github.com/google/uuid v1.5.0
 	github.com/samber/lo v1.39.0
 	github.com/urfave/cli/v2 v2.26.0
 )
