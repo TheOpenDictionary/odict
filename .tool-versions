@@ -9,3 +9,4 @@ just 1.16.0
 flatc 23.3.3
 pnpm 8.12.1
 goreleaser 1.21.1
+make 4.4.1
