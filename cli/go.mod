@@ -37,7 +37,7 @@ require (
 	github.com/blevesearch/zapx/v14 v14.3.10 // indirect
 	github.com/blevesearch/zapx/v15 v15.3.13 // indirect
 	github.com/bokwoon95/sq v0.4.4 // indirect
-	github.com/bokwoon95/sqddl v0.4.6 // indirect
+	github.com/bokwoon95/sqddl v0.4.9 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/golang/geo v0.0.0-20210211234256-740aa86cb551 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
