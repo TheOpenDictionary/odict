@@ -3,7 +3,7 @@ module github.com/TheOpenDictionary/odict/lib/utils
 go 1.20
 
 require (
-	github.com/gomarkdown/markdown v0.0.0-20231115200524-a660076da3fd
+	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47
 	github.com/stretchr/testify v1.8.4
 )
 
