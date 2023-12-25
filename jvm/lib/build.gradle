@@ -13,7 +13,7 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id "java-library"
 
-    id("com.google.devtools.ksp").version("1.9.21-1.0.16")
+    id("com.google.devtools.ksp").version("1.9.22-1.0.16")
 }
 
 repositories {
