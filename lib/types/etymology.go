@@ -49,7 +49,7 @@ func (ety *EtymologyRepresentable) buildSenseVector(builder *flatbuffers.Builder
 	keys := make([]string, 0, senseCount)
 
 	for key := range senses {
-		keys = append(keys, key.Tag)
+		keys = append(keys, key.Tag())
 	}
 
 	sort.Strings(keys)
