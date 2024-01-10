@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.21.0](https://github.com/TheOpenDictionary/odict/compare/v1.20.0...v1.21.0) (2024-01-10)
+
+
+### Features
+
+* Add XSD generation ([#494](https://github.com/TheOpenDictionary/odict/issues/494)) ([bfe8ad4](https://github.com/TheOpenDictionary/odict/commit/bfe8ad47f1817c5d1a0733df421229207b7f6833))
+* **cli:** Respect markdown setting when pretty printing ([7291d28](https://github.com/TheOpenDictionary/odict/commit/7291d280b85e68528053e29a6c1971d1f3c40a28))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency com.google.guava:guava to v32.1.3-jre ([a49f0a6](https://github.com/TheOpenDictionary/odict/commit/a49f0a6157fd9ab7edaff713957de1a3d97ee9b1))
+* **deps:** Update dependency com.google.guava:guava to v33 ([de5f639](https://github.com/TheOpenDictionary/odict/commit/de5f6392d096c0f96354f1965d5e11d41fffaaf8))
+* **deps:** Update github.com/gomarkdown/markdown digest to 1d6d208 ([33630d3](https://github.com/TheOpenDictionary/odict/commit/33630d3a9017b695c3ac4f5ce1c3f487d3cd84f9))
+* **deps:** Update github.com/gomarkdown/markdown digest to a660076 ([96df6cb](https://github.com/TheOpenDictionary/odict/commit/96df6cbc38d9280b5f7da48973d3a2f8cf39fd67))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.0 ([e016381](https://github.com/TheOpenDictionary/odict/commit/e0163812b45daa535b42a5b7552b2af91cd71d53))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.2 ([c9e0fd9](https://github.com/TheOpenDictionary/odict/commit/c9e0fd9c8e27b8fcea5166e79dff01055cae492a))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.3 ([c355ce8](https://github.com/TheOpenDictionary/odict/commit/c355ce8b68744f91931ad7559b6e0078bf763633))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.4 ([0e79b82](https://github.com/TheOpenDictionary/odict/commit/0e79b8252e4d0e113dfef53af8b7c908ae170d42))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.4 ([ecfd7b1](https://github.com/TheOpenDictionary/odict/commit/ecfd7b15af0efa6633d335e83c37bed344f1739d))
+* **deps:** Update module github.com/bokwoon95/sq to v0.4.5 ([f0c0321](https://github.com/TheOpenDictionary/odict/commit/f0c03217210c1869697ccef28edf4afe23a1578f))
+* **deps:** Update module github.com/bokwoon95/sqddl to v0.4.9 ([4bc88a5](https://github.com/TheOpenDictionary/odict/commit/4bc88a5a7495a86674886b53e4face5b3b519eee))
+* **deps:** Update module github.com/fatih/color to v1.16.0 ([b4c745d](https://github.com/TheOpenDictionary/odict/commit/b4c745db538da6cab3e2ab64c50b38d24aa93ba7))
+* **deps:** Update module github.com/google/uuid to v1.4.0 ([9ebf6ce](https://github.com/TheOpenDictionary/odict/commit/9ebf6cedfe5d6abd1e649ea2345e584d2b7adb18))
+* **deps:** Update module github.com/google/uuid to v1.5.0 ([186d585](https://github.com/TheOpenDictionary/odict/commit/186d58543030e56182bf2b8359140280bbec0b4d))
+* **deps:** Update module github.com/samber/lo to v1.39.0 ([365b6cd](https://github.com/TheOpenDictionary/odict/commit/365b6cda03793f6920e24c5ac0ae1a678d1252eb))
+* **deps:** Update module github.com/schollz/progressbar/v3 to v3.14.0 ([c727887](https://github.com/TheOpenDictionary/odict/commit/c7278877104f76c390e9e3773405625b23bf0e06))
+* **deps:** Update module github.com/schollz/progressbar/v3 to v3.14.1 ([5e1346e](https://github.com/TheOpenDictionary/odict/commit/5e1346e084aa111fb868ec46ccf0292669ca5c74))
+* **deps:** Update module github.com/urfave/cli/v2 to v2.26.0 ([4451fbb](https://github.com/TheOpenDictionary/odict/commit/4451fbbb61722c4d3c100ce106ba00e8af0c84a5))
+* **deps:** Update module github.com/urfave/cli/v2 to v2.27.1 ([d8e0648](https://github.com/TheOpenDictionary/odict/commit/d8e0648b196bb2786d5335746abe558cf7ffd462))
+* Fix XSD generation ([#495](https://github.com/TheOpenDictionary/odict/issues/495)) ([8dd4218](https://github.com/TheOpenDictionary/odict/commit/8dd42182cd9730eb7294d8f68468fd1f9b49a2cf))
+* **pos:** Fix mismatch between buffer strings and POS tags ([#555](https://github.com/TheOpenDictionary/odict/issues/555)) ([fe190f1](https://github.com/TheOpenDictionary/odict/commit/fe190f1c983202b68f8a9cc1bc59ab5ead312eef))
+* **README:** Update badge ([53dacbc](https://github.com/TheOpenDictionary/odict/commit/53dacbcb995f7136351a67d1444a72481ff7cc8e))
+* **test:** Add test cleanup ([eaf2ded](https://github.com/TheOpenDictionary/odict/commit/eaf2ded8c5631512af4f0f7abde3a33fb3c44a95))
+* Update lockfiles ([056ce84](https://github.com/TheOpenDictionary/odict/commit/056ce84877575fc92ff142c562be35e2fc513cc5))
+
 ## [1.20.0](https://github.com/TheOpenDictionary/odict/compare/v1.19.3...v1.20.0) (2023-09-28)
 
 
