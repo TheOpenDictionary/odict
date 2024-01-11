@@ -40,7 +40,7 @@ type GROUPS struct {
 type DEFINITIONS struct {
 	sq.TableStruct
 	ID       sq.NumberField `ddl:"type=BIGINT primarykey auto_increment autoincrement identity"`
-	TEXT     sq.StringField `ddl:"notnull"`
+	VALUE    sq.StringField `ddl:"notnull"`
 	SENSE_ID sq.NumberField `ddl:"type=BIGINT references=senses.id"`
 	GROUP_ID sq.NumberField `ddl:"type=BIGINT references=groups.id"`
 }
