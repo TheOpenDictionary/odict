@@ -1,17 +1,18 @@
 package dump
 
 import (
+	"github.com/TheOpenDictionary/odict/lib/sql"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/TheOpenDictionary/odict/lib/utils"
 )
 
-type SqlDialect = string
+type SQLDialect = string
 
 const (
-	Postgres  SqlDialect = "postgres"
-	Sqlite    SqlDialect = "sqlite"
-	Mysql     SqlDialect = "mysql"
-	Sqlserver SqlDialect = "sqlserver"
+	Postgres  SQLDialect = "postgres"
+	Sqlite    SQLDialect = "sqlite"
+	Mysql     SQLDialect = "mysql"
+	Sqlserver SQLDialect = "sqlserver"
 )
 
 // AsXML converts an Dictionary struct
@@ -22,6 +23,6 @@ func AsXML(dict *types.Dictionary) (string, error) {
 
 // AsSQL converts an Dictionary struct
 // to SQL output to seed a database
-func AsSQL(dict *types.Dictionary, sqlDialect SqlDialect) (string, error) {
-	return sql(dict.AsRepresentable(), sqlDialect)
+func AsSQL(dict *types.Dictionary, dialect SQLDialect) (string, error) {
+	return sql.DictionaryToSQL(dict.AsRepresentable(), dialect)
 }

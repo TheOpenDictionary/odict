@@ -16,6 +16,21 @@ const (
 	utilities string = "Utilities"
 )
 
+var markdownFlag *cli.StringFlag = &cli.StringFlag{
+	Name:  "markdown",
+	Usage: "strategy for rendering Markdown strings",
+	Value: "html",
+	Action: func(c *cli.Context, value string) error {
+		if value != "text" && value != "html" && value != "disable" {
+			return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
+		}
+
+		types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
+
+		return nil
+	},
+}
+
 var App = &cli.App{
 	Name:     "odict",
 	Version:  version,
@@ -133,20 +148,7 @@ var App = &cli.App{
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
 				},
-				&cli.StringFlag{
-					Name:  "markdown",
-					Usage: "strategy for rendering Markdown strings",
-					Value: "html",
-					Action: func(c *cli.Context, value string) error {
-						if value != "text" && value != "html" && value != "disable" {
-							return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
-						}
-
-						types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
-
-						return nil
-					},
-				},
+				markdownFlag,
 				&cli.StringFlag{
 					Name:    "format",
 					Aliases: []string{"f"},
@@ -210,6 +212,7 @@ var App = &cli.App{
 					Usage:    "output format of the dump (ODXML or SQL)",
 					Required: true,
 				},
+				markdownFlag,
 			},
 			Before: cli.BeforeFunc(func(c *cli.Context) error {
 				s := c.String("format")
