@@ -3,12 +3,17 @@ package types
 import (
 	"bytes"
 	"encoding/gob"
+	"strings"
 
 	"github.com/samber/lo"
 )
 
+func formatPOSTag(tag string) string {
+	return strings.ReplaceAll(tag, "_", "-")
+}
+
 func strToPartOfSpeech(str string) PartOfSpeech {
-	if val, ok := posTagPartOfSpeechMap[str]; ok {
+	if val, ok := posTagPartOfSpeechMap[formatPOSTag(str)]; ok {
 		return val
 	}
 

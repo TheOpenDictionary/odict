@@ -13,17 +13,18 @@ import (
 type DumpFormat = string
 
 const (
-	Xml       DumpFormat = "xml"
+	XML       DumpFormat = "xml"
 	Postgres  DumpFormat = "postgres"
-	Sqlite    DumpFormat = "sqlite"
-	Mysql     DumpFormat = "mysql"
-	Sqlserver DumpFormat = "sqlserver"
+	SQLite    DumpFormat = "sqlite"
+	MySQL     DumpFormat = "mysql"
+	SQLServer DumpFormat = "sqlserver"
 )
 
 func dump(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	outputFile := c.Args().Get(1)
 	format := c.String("format")
+	includeSchema := !c.Bool("no-schema")
 
 	if len(inputFile) == 0 || len(outputFile) == 0 {
 		return errors.New("usage: odict dump [input file] [output file]")
@@ -38,23 +39,16 @@ func dump(c *cli.Context) error {
 
 		// All SQL formats and XML
 		var dumped string
-		var dumpErr error
+		var err error
 
-		switch format {
-		case Xml:
-			dumped, dumpErr = dump_.AsXML(dict)
-		case Postgres:
-			dumped, dumpErr = dump_.AsSQL(dict, Postgres)
-		case Sqlite:
-			dumped, dumpErr = dump_.AsSQL(dict, Sqlite)
-		case Mysql:
-			dumped, dumpErr = dump_.AsSQL(dict, Mysql)
-		case Sqlserver:
-			dumped, dumpErr = dump_.AsSQL(dict, Sqlserver)
+		if format == XML {
+			dumped, err = dump_.AsXML(dict)
+		} else {
+			dumped, err = dump_.AsSQL(dict, format, includeSchema)
 		}
 
-		if dumpErr != nil {
-			return dumpErr
+		if err != nil {
+			return err
 		}
 
 		file, writeErr := os.Create(outputFile)

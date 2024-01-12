@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.9.0...python-v0.10.0) (2024-01-10)
+
+
+### Features
+
+* Add XSD generation ([#494](https://github.com/TheOpenDictionary/odict/issues/494)) ([bfe8ad4](https://github.com/TheOpenDictionary/odict/commit/bfe8ad47f1817c5d1a0733df421229207b7f6833))
+
+
+### Bug Fixes
+
+* Update lockfiles ([056ce84](https://github.com/TheOpenDictionary/odict/commit/056ce84877575fc92ff142c562be35e2fc513cc5))
+
 ## [0.9.0](https://github.com/TheOpenDictionary/odict/compare/python-v0.8.0...python-v0.9.0) (2023-09-28)
 
 

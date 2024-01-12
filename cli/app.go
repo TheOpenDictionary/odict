@@ -16,6 +16,21 @@ const (
 	utilities string = "Utilities"
 )
 
+var markdownFlag *cli.StringFlag = &cli.StringFlag{
+	Name:  "markdown",
+	Usage: "strategy for rendering Markdown strings",
+	Value: "html",
+	Action: func(c *cli.Context, value string) error {
+		if value != "text" && value != "html" && value != "disable" {
+			return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
+		}
+
+		types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
+
+		return nil
+	},
+}
+
 var App = &cli.App{
 	Name:     "odict",
 	Version:  version,
@@ -133,20 +148,7 @@ var App = &cli.App{
 					Usage:   "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow.",
 					Value:   0,
 				},
-				&cli.StringFlag{
-					Name:  "markdown",
-					Usage: "strategy for rendering Markdown strings",
-					Value: "html",
-					Action: func(c *cli.Context, value string) error {
-						if value != "text" && value != "html" && value != "disable" {
-							return fmt.Errorf("Invalid markdown strategy: %s. Must be one of: text, html, disable", value)
-						}
-
-						types.SetMarkdownProcessingStrategy(types.MarkdownStrategy(value))
-
-						return nil
-					},
-				},
+				markdownFlag,
 				&cli.StringFlag{
 					Name:    "format",
 					Aliases: []string{"f"},
@@ -210,13 +212,20 @@ var App = &cli.App{
 					Usage:    "output format of the dump (ODXML or SQL)",
 					Required: true,
 				},
+				&cli.BoolFlag{
+					Name:     "no-schema",
+					Aliases:  []string{"ns"},
+					Usage:    "skips generating schema scaffolding commands when dumping SQL files",
+					Required: false,
+				},
+				markdownFlag,
 			},
 			Before: cli.BeforeFunc(func(c *cli.Context) error {
 				s := c.String("format")
-				if s == Xml || s == Postgres || s == Sqlite || s == Mysql || s == Sqlserver {
+				if s == XML || s == Postgres || s == SQLite || s == MySQL || s == SQLServer {
 					return nil
 				} else {
-					validFormats := strings.Join([]string{Xml, Postgres, Sqlite, Mysql, Sqlserver}, " ")
+					validFormats := strings.Join([]string{XML, Postgres, SQLite, MySQL, SQLServer}, " ")
 					return fmt.Errorf("invalid format: %s, valid formats are: %s", s, validFormats)
 				}
 			}),

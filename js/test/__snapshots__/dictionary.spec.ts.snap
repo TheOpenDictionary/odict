@@ -113,6 +113,7 @@ exports[`Dictionary can split terms properly 1`] = `
     "etymologies": [
       {
         "description": "Latin root",
+        "pronunciation": "dooooog",
         "senses": {
           "un": {
             "definitions": [
@@ -124,7 +125,6 @@ exports[`Dictionary can split terms properly 1`] = `
         },
       },
     ],
-    "pronunciation": "dooooog",
     "term": "dog",
   },
 ]
@@ -165,6 +165,7 @@ exports[`Dictionary lookup can split terms 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciation": "dooooog",
           "senses": {
             "un": {
               "definitions": [
@@ -176,7 +177,6 @@ exports[`Dictionary lookup can split terms 1`] = `
           },
         },
       ],
-      "pronunciation": "dooooog",
       "term": "dog",
     },
   ],
@@ -297,6 +297,7 @@ exports[`Dictionary restarts if the process was killed 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciation": "dooooog",
           "senses": {
             "un": {
               "definitions": [
@@ -308,7 +309,6 @@ exports[`Dictionary restarts if the process was killed 1`] = `
           },
         },
       ],
-      "pronunciation": "dooooog",
       "term": "dog",
     },
   ],

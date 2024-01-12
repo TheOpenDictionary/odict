@@ -28,11 +28,11 @@ func TestLookup(t *testing.T) {
 	})
 
 	assert.EqualValues(t, types.EntryRepresentable{
-		Term:          "dog",
-		Pronunciation: "dooooog",
+		Term: "dog",
 		Etymologies: []types.EtymologyRepresentable{
 			{
-				Description: "Latin root",
+				Description:   "Latin root",
+				Pronunciation: "dooooog",
 				Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
 					types.Unknown: types.SenseRepresentable{
 						POS:    types.Unknown,

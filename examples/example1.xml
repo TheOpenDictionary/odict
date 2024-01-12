@@ -1,4 +1,6 @@
-<dictionary name="Example Dictionary 1">
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary name="Example Dictionary 1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
   <entry term="run">
     <ety description="Latin root">
       <sense pos="v">
@@ -36,8 +38,8 @@
       </sense>
     </ety>
   </entry>
-  <entry term="dog" pronunciation="dooooog">
-    <ety description="Latin root">
+  <entry term="dog">
+    <ety description="Latin root" pronunciation="dooooog">
       <sense>
         <definition value="a dog" />
       </sense>
