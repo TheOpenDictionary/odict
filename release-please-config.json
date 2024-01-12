@@ -7,11 +7,15 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "exclude-paths": ["js", "python", "jvm"]
+      "exclude-paths": ["js", "wasm", "python", "jvm"]
     },
     "js": {
       "release-type": "node",
       "component": "js"
+    },
+    "wasm": {
+      "release-type": "node",
+      "component": "wasm"
     },
     "python": {
       "release-type": "python",
