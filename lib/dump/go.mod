@@ -7,8 +7,6 @@ require (
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20240109012151-688e6c29aa28
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20230921060249-e2cb2527d998
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20230921060249-e2cb2527d998
-	github.com/bokwoon95/sq v0.4.5
-	github.com/bokwoon95/sqddl v0.4.9
 	github.com/stretchr/testify v1.8.4
 )
 
@@ -23,8 +21,5 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/samber/lo v1.39.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
-	golang.org/x/sync v0.2.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
-	golang.org/x/tools v0.9.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
