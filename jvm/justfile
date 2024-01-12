@@ -1,4 +1,4 @@
-test:
+test: && clean
   just ../build
   RUNTIME_ENV=test ./gradlew test --info
 
@@ -6,4 +6,4 @@ build:
   ./gradlew build
   
 clean:
-  ./gradlew clean
+  rm -rf ../**/*.odict && ./gradlew clean

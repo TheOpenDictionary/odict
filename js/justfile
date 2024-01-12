@@ -1,34 +1,29 @@
 @install:
-	pnpm install
+	npm install
 
 @add +args:
-  pnpm add {{args}}
+  npm install {{args}}
 
 @clean:
-  rm -rf coverage dist 
+  rm -rf coverage dist ../**/*.odict  ../**/*.log
 
-[private]
-@dlx +args:
-  ./node_modules/.bin/{{args}}
-  
 @schema:
   flatc --ts -o ./src/__generated__ ../flatbuffers/service.fbs ../flatbuffers/enums.fbs
 
 @check +args="":
-  just dlx rome check {{args}} .
+  npx biome check {{args}} .
 
 @format +args="":
-  just dlx rome format {{args}} .
+  npx biome format {{args}} .
 
 @build: install
-  just dlx swc -d dist ./src/*.ts ./src/**/*.ts & \
-  just dlx tsc
+  npx swc -d dist ./src/*.ts ./src/**/*.ts & \
+  npx tsc
 
-@test +args="": install
-  rm -rf *.log
+@test +args="": install && clean
   just ../build
-  just dlx tsc
-  RUNTIME_ENV=test just dlx jest {{args}}
+  npx tsc
+  RUNTIME_ENV=test npx jest {{args}}
 
 @publish: build
-	pnpm publish
+	npm publish

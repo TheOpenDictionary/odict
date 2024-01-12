@@ -49,11 +49,16 @@ jobs:
           HOMEBREW_GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
         with:
           args: release --clean
-      - name: Publish to NPM
+      - name: Publish Node library to NPM
         if: steps.release.outputs.js--release_created
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: just js publish
+      - name: Publish WASM library to NPM
+        if: steps.release.outputs.wasm--release_created
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: just wasm publish
       - name: Publish to Pypi
         if: steps.release.outputs.python--release_created
         env:

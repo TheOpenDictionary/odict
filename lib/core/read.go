@@ -1,8 +1,10 @@
 package core
 
 import (
+	"bytes"
 	"encoding/binary"
 	"errors"
+	"io/ioutil"
 	"os"
 	"strconv"
 
@@ -17,42 +19,39 @@ type ODictFile struct {
 	Content   []byte
 }
 
-func readODictFile(path string) (*ODictFile, error) {
-	// Read input file
-	file, err := os.Open(path)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer file.Close()
+func readODictBytes(data []byte) (*ODictFile, error) {
+	// Create a bytes reader
+	reader := bytes.NewReader(data)
 
 	// Read file signature as bytes
 	sigBytes := make([]byte, 5)
+	_, sigErr := reader.Read(sigBytes)
 
-	if _, sigErr := file.Read(sigBytes); sigErr != nil {
+	if sigErr != nil {
 		return nil, sigErr
 	}
 
 	// Read ODict version as bytes
-	file.Seek(5, 0)
+	reader.Seek(5, 0)
 
 	versionBytes := make([]byte, 2)
+	_, versionError := reader.Read(versionBytes)
 
-	if _, versionError := file.Read(versionBytes); versionError != nil {
+	if versionError != nil {
 		return nil, versionError
 	}
 
 	// Read the compressed content size in bytes
-	file.Seek(7, 0)
+	reader.Seek(7, 0)
 
 	contentSizeBytes := make([]byte, 8)
+	_, contentSizeError := reader.Read(contentSizeBytes)
 
-	if _, contentSizeError := file.Read(contentSizeBytes); contentSizeError != nil {
+	if contentSizeError != nil {
 		return nil, contentSizeError
 	}
 
-	file.Seek(15, 0)
+	reader.Seek(15, 0)
 
 	// Decode bytes for signature, version, and contentSize
 	signature := string(sigBytes)
@@ -77,7 +76,9 @@ func readODictFile(path string) (*ODictFile, error) {
 	// Read compressed buffer content as bytes
 	contentBytes := make([]byte, contentSize)
 
-	if _, contentError := file.Read(contentBytes); contentError != nil {
+	_, contentError := reader.Read(contentBytes)
+
+	if contentError != nil {
 		return nil, contentError
 	}
 
@@ -90,7 +91,28 @@ func readODictFile(path string) (*ODictFile, error) {
 	return &ODictFile{Signature: signature, Version: readVersion, Content: decoded}, nil
 }
 
-// ReadDictionary loads a compiled ODict dictionary from the provided
+func readODictFile(path string) (*ODictFile, error) {
+	// Read input file
+	file, err := os.Open(path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	// Read file contents as bytes
+	fileBytes, readErr := ioutil.ReadAll(file)
+
+	if readErr != nil {
+		return nil, readErr
+	}
+
+	// Parse bytes using readODictBytes function
+	return readODictBytes(fileBytes)
+}
+
+// ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
 func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
@@ -120,4 +142,17 @@ func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
 	}
 
 	return dict, err
+}
+
+// ReadDictionaryFromBytes loads a compiled ODict dictionary from the provided
+// bytes and returns a Dictionary model, with the ability to forcibly re-index
+// the dictionary when it loads
+func ReadDictionaryFromBytes(bytes []byte) (*types.Dictionary, error) {
+	file, err := readODictBytes(bytes)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return types.GetRootAsDictionary(file.Content, 0), nil
 }

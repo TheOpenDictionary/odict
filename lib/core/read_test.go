@@ -23,7 +23,7 @@ func (suite *TestReadSuite) SetupTest() {
 	suite.dict = GetDictionaryFromXML("<dictionary><entry term=\"run\" /></dictionary>")
 	suite.path = "../../examples/read.odict"
 
-	WriteDictionaryFromExisting(suite.path, suite.dict)
+	WriteDictionaryToDisk(suite.path, suite.dict)
 }
 
 func (suite *TestReadSuite) TearDownSuite() {

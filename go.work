@@ -11,5 +11,6 @@ use (
 	./lib/test
 	./lib/types
 	./lib/utils
+	./wasm
 	./xsd
 )

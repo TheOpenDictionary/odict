@@ -22,10 +22,9 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 @run +args="":
   go run odict.go {{args}}
   
-@test: deps xsd (go "test") (jvm "test") (python "test") (js "test") clean
+@test: deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
-  rm -rf **/*.odict 
 
 @publish +args="--auto-snapshot --clean":
   goreleaser release {{args}}
@@ -51,3 +50,6 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @python +command:
 	just python/{{command}}
+
+@wasm +command:
+	just wasm/{{command}}

@@ -750,3 +750,9 @@ TSWLatexianTemp*
 
 # glossaries
 *.glstex
+
+# WASM files
+*.wasm
+
+# WASM preview
+.preview
