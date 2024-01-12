@@ -15,6 +15,7 @@ table Definition {
 
 table Etymology {
     id:string;
+    pronunciation:string;    
     description:string;
     senses:[Sense];
 }
@@ -34,7 +35,6 @@ table Sense {
 table Entry {
     key:string (key);
     term:string;
-    pronunciation:string;
     see:string;
     etymologies:[Etymology];
 }

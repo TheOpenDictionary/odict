@@ -38,8 +38,8 @@
       </sense>
     </ety>
   </entry>
-  <entry term="dog" pronunciation="dooooog">
-    <ety description="Latin root">
+  <entry term="dog">
+    <ety description="Latin root" pronunciation="dooooog">
       <sense>
         <definition value="a dog" />
       </sense>

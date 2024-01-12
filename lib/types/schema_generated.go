@@ -227,7 +227,7 @@ func (rcv *Etymology) Id() []byte {
 	return nil
 }
 
-func (rcv *Etymology) Description() []byte {
+func (rcv *Etymology) Pronunciation() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -235,8 +235,16 @@ func (rcv *Etymology) Description() []byte {
 	return nil
 }
 
-func (rcv *Etymology) Senses(obj *Sense, j int) bool {
+func (rcv *Etymology) Description() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Etymology) Senses(obj *Sense, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		x += flatbuffers.UOffsetT(j) * 4
@@ -248,7 +256,7 @@ func (rcv *Etymology) Senses(obj *Sense, j int) bool {
 }
 
 func (rcv *Etymology) SensesByKey(obj *Sense, key POS) bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		return obj.LookupByKey(key, x, rcv._tab.Bytes)
@@ -257,7 +265,7 @@ func (rcv *Etymology) SensesByKey(obj *Sense, key POS) bool {
 }
 
 func (rcv *Etymology) SensesLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -265,16 +273,19 @@ func (rcv *Etymology) SensesLength() int {
 }
 
 func EtymologyStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func EtymologyAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
 }
+func EtymologyAddPronunciation(builder *flatbuffers.Builder, pronunciation flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(pronunciation), 0)
+}
 func EtymologyAddDescription(builder *flatbuffers.Builder, description flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(description), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(description), 0)
 }
 func EtymologyAddSenses(builder *flatbuffers.Builder, senses flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(senses), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(senses), 0)
 }
 func EtymologyStartSensesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
@@ -578,7 +589,7 @@ func (rcv *Entry) Term() []byte {
 	return nil
 }
 
-func (rcv *Entry) Pronunciation() []byte {
+func (rcv *Entry) See() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
@@ -586,16 +597,8 @@ func (rcv *Entry) Pronunciation() []byte {
 	return nil
 }
 
-func (rcv *Entry) See() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
-}
-
 func (rcv *Entry) Etymologies(obj *Etymology, j int) bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		x += flatbuffers.UOffsetT(j) * 4
@@ -607,7 +610,7 @@ func (rcv *Entry) Etymologies(obj *Etymology, j int) bool {
 }
 
 func (rcv *Entry) EtymologiesLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -615,7 +618,7 @@ func (rcv *Entry) EtymologiesLength() int {
 }
 
 func EntryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(5)
+	builder.StartObject(4)
 }
 func EntryAddKey(builder *flatbuffers.Builder, key flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(key), 0)
@@ -623,14 +626,11 @@ func EntryAddKey(builder *flatbuffers.Builder, key flatbuffers.UOffsetT) {
 func EntryAddTerm(builder *flatbuffers.Builder, term flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(term), 0)
 }
-func EntryAddPronunciation(builder *flatbuffers.Builder, pronunciation flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(pronunciation), 0)
-}
 func EntryAddSee(builder *flatbuffers.Builder, see flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(see), 0)
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(see), 0)
 }
 func EntryAddEtymologies(builder *flatbuffers.Builder, etymologies flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(4, flatbuffers.UOffsetT(etymologies), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(etymologies), 0)
 }
 func EntryStartEtymologiesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
