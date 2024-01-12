@@ -23,6 +23,6 @@ func AsXML(dict *types.Dictionary) (string, error) {
 
 // AsSQL converts an Dictionary struct
 // to SQL output to seed a database
-func AsSQL(dict *types.Dictionary, dialect SQLDialect) (string, error) {
-	return sql.DictionaryToSQL(dict.AsRepresentable(), dialect)
+func AsSQL(dict *types.Dictionary, dialect SQLDialect, includeSchema bool) (string, error) {
+	return sql.DictionaryToSQL(dict.AsRepresentable(), dialect, includeSchema)
 }

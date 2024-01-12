@@ -212,14 +212,20 @@ var App = &cli.App{
 					Usage:    "output format of the dump (ODXML or SQL)",
 					Required: true,
 				},
+				&cli.BoolFlag{
+					Name:     "no-schema",
+					Aliases:  []string{"ns"},
+					Usage:    "skips generating schema scaffolding commands when dumping SQL files",
+					Required: false,
+				},
 				markdownFlag,
 			},
 			Before: cli.BeforeFunc(func(c *cli.Context) error {
 				s := c.String("format")
-				if s == Xml || s == Postgres || s == Sqlite || s == Mysql || s == Sqlserver {
+				if s == XML || s == Postgres || s == SQLite || s == MySQL || s == SQLServer {
 					return nil
 				} else {
-					validFormats := strings.Join([]string{Xml, Postgres, Sqlite, Mysql, Sqlserver}, " ")
+					validFormats := strings.Join([]string{XML, Postgres, SQLite, MySQL, SQLServer}, " ")
 					return fmt.Errorf("invalid format: %s, valid formats are: %s", s, validFormats)
 				}
 			}),

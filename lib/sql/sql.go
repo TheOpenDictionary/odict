@@ -45,16 +45,10 @@ func createSchema(dialect SQLDialect) (string, error) {
 	return buf.String(), nil
 }
 
-func DictionaryToSQL(dict types.DictionaryRepresentable, dialect SQLDialect) (string, error) {
+func DictionaryToSQL(dict types.DictionaryRepresentable, dialect SQLDialect, includeSchema bool) (string, error) {
 	builder := createSQLBuilder(dialect)
 
 	insertDictionary(&builder, dict)
-
-	schema, err := createSchema(dialect)
-
-	if err != nil {
-		return "", err
-	}
 
 	insert, err := builder.Build(dialect)
 
@@ -62,5 +56,17 @@ func DictionaryToSQL(dict types.DictionaryRepresentable, dialect SQLDialect) (st
 		return "", err
 	}
 
-	return strings.Join([]string{schema, insert}, ";\n\n"), nil
+	cmds := []string{insert}
+
+	if includeSchema {
+		schema, err := createSchema(dialect)
+
+		if err != nil {
+			return "", err
+		}
+
+		cmds = append([]string{schema}, cmds...)
+	}
+
+	return strings.Join(cmds, ";\n\n"), nil
 }
