@@ -10,7 +10,7 @@ type EXAMPLES struct {
 	ID            sq.StringField `ddl:"primarykey"`
 	TEXT          sq.StringField `ddl:"notnull"`
 	DEFINITION_ID sq.UUIDField   `ddl:"references=definitions.id"`
-	NOTE_ID       sq.UUIDField   `ddl:"references=definitions.id"`
+	NOTE_ID       sq.UUIDField   `ddl:"references=notes.id"`
 }
 
 // Insert examples w/ relation to current definition

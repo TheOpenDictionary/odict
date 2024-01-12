@@ -30,6 +30,6 @@ func insertNotes(builder *SQLBuilder, definitionID string, notes []types.NoteRep
 				),
 		)
 
-		insertExamples(builder, "", note.ID, note.Examples)
+		insertExamples(builder, "", id, note.Examples)
 	}
 }

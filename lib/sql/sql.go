@@ -29,8 +29,8 @@ func createSchema(dialect SQLDialect) (string, error) {
 			"senses.go",
 			"groups.go",
 			"definitions.go",
-			"examples.go",
 			"notes.go",
+			"examples.go",
 		},
 		DryRun: true,
 		Stdout: &buf,
@@ -68,5 +68,5 @@ func DictionaryToSQL(dict types.DictionaryRepresentable, dialect SQLDialect, inc
 		cmds = append([]string{schema}, cmds...)
 	}
 
-	return strings.Join(cmds, ";\n\n"), nil
+	return strings.Join(cmds, ";\n\n") + ";", nil
 }
