@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -70,7 +71,7 @@ func readODictBytes(data []byte) (*ODictFile, error) {
 
 	// Assert version
 	if readVersion != uint16(expectedVersion) {
-		return nil, errors.New("this file is not compatible with the latest version of the ODict schema")
+		return nil, errors.New(fmt.Sprintf("this file is not compatible with the latest version of the ODict schema. This file uses version %d of the specification, while your CLI uses version %d. Please upgrade.", readVersion, expectedVersion))
 	}
 
 	// Read compressed buffer content as bytes
