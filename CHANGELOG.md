@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.22.0](https://github.com/TheOpenDictionary/odict/compare/v1.21.0...v1.22.0) (2024-01-15)
+
+
+### Features
+
+* Add basic WASM support ([#394](https://github.com/TheOpenDictionary/odict/issues/394)) ([8df4e85](https://github.com/TheOpenDictionary/odict/commit/8df4e851c175dc5677d9580a29e9d38927f796a6))
+
+
+### Bug Fixes
+
+* **read:** Improve incompatibility error message ([39a7103](https://github.com/TheOpenDictionary/odict/commit/39a7103bbeb902dc380dd4963799556bd86ba85a))
+* **sql:** Fix types.md to convert to string on sql dump ([#520](https://github.com/TheOpenDictionary/odict/issues/520)) ([f018e00](https://github.com/TheOpenDictionary/odict/commit/f018e00bcbb36a529adfefe57be9405cf593d9b2))
+* **sql:** Important SQL fixes ([82538a0](https://github.com/TheOpenDictionary/odict/commit/82538a0e84ae3e5e0b91b1c3e15e063b56e09cbd))
+* **wasm:** Change wasm package to pre-release ([d8540d8](https://github.com/TheOpenDictionary/odict/commit/d8540d848aefce9e6663989d3098edca15fbba22))
+* **wasm:** Manually set version ([19d5691](https://github.com/TheOpenDictionary/odict/commit/19d56915d5e9b5e2b2dd9713b1cb5d34fd559374))
+
 ## [1.21.0](https://github.com/TheOpenDictionary/odict/compare/v1.20.0...v1.21.0) (2024-01-10)
 
 
