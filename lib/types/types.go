@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"io"
 
+	"dario.cat/mergo"
 	flatbuffers "github.com/google/flatbuffers/go"
-	"github.com/imdario/mergo"
 )
 
 func Serialize(b Serializable) []byte {
