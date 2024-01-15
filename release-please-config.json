@@ -15,7 +15,9 @@
     },
     "wasm": {
       "release-type": "node",
-      "component": "wasm"
+      "component": "wasm",
+      "prerelease-type": "beta",
+      "prerelease": true
     },
     "python": {
       "release-type": "python",
