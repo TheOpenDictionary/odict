@@ -39,13 +39,9 @@ jobs:
       - name: Run tests
         env:
           POETRY_VIRTUALENVS_IN_PROJECT: true
-<<<<<<< HEAD
-        run: just test
-=======
         run: just test
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
           name: code
           path: /home/runner/work/odict
->>>>>>> main
