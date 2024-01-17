@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.22.1](https://github.com/TheOpenDictionary/odict/compare/v1.22.0...v1.22.1) (2024-01-17)
+
+
+### Bug Fixes
+
+* **build:** Except wasm from GoReleaser config ([68df180](https://github.com/TheOpenDictionary/odict/commit/68df1802d3de47f02b7cb47fcbbe503d82a00880))
+* **ci:** Fix merge conflict ([50f8bf8](https://github.com/TheOpenDictionary/odict/commit/50f8bf880bd27cc85e336101e85b7706d19dd6d5))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.5 ([f2c7869](https://github.com/TheOpenDictionary/odict/commit/f2c7869f55621f3e093976f53384fc9a1919dde4))
+* **deps:** Update module github.com/imdario/mergo to v1 ([#388](https://github.com/TheOpenDictionary/odict/issues/388)) ([de31bb5](https://github.com/TheOpenDictionary/odict/commit/de31bb52c3719fb687eb61f4e9d50455f992560e))
+
 ## [1.22.0](https://github.com/TheOpenDictionary/odict/compare/v1.21.0...v1.22.0) (2024-01-15)
 
 
