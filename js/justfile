@@ -25,5 +25,5 @@
   npx tsc
   RUNTIME_ENV=test npx jest {{args}}
 
-@publish: build
-	npm publish
+@publish +args="": build
+	npm publish {{args}}

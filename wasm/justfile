@@ -18,8 +18,8 @@
 @clean:
   rm -rf ../**/*.odict 
 
-@publish:
-  npm publish
+@publish +args="":
+  npm publish {{args}}
 
 @test: copy-exec install wasm && clean
   npx tsc && npx jest --detectOpenHandles
