@@ -11,6 +11,7 @@ import (
 func index(c *cli.Context) error {
 	inputFile := c.Args().Get(0)
 	quiet := c.Bool("quiet")
+	batchSize := c.Int("batch-size")
 
 	if len(inputFile) == 0 {
 		return errors.New("the path to a compiled ODict file is required")
@@ -23,7 +24,14 @@ func index(c *cli.Context) error {
 			return err
 		}
 
-		ods.Index(ods.IndexRequest{Dictionary: dict, Overwrite: true, Quiet: quiet})
+		ods.Index(
+			ods.IndexRequest{
+				Dictionary: dict,
+				BatchSize:  batchSize,
+				Overwrite:  true,
+				Quiet:      quiet,
+			},
+		)
 
 		return nil
 	})

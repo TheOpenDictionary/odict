@@ -1,10 +1,8 @@
 package search
 
 import (
-	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/blevesearch/bleve/v2"
@@ -43,11 +41,10 @@ func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
 	var query query.Query = bleve.NewMatchQuery(request.Query)
 
 	if request.Exact {
-		query = bleve.NewDocIDQuery([]string{strings.ToLower(request.Query)})
+		query = bleve.NewDocIDQuery([]string{request.Query})
 	}
 
 	search := bleve.NewSearchRequest(query)
-	search.Fields = []string{"_source"}
 	searchResults, searchErr := index.Search(search)
 
 	if searchErr != nil {
@@ -59,11 +56,7 @@ func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
 	entries := make([]types.Entry, len(hits))
 
 	for i, x := range hits {
-		b, ok := x.Fields["_source"]
-
-		if ok {
-			entries[i] = *types.GetRootAsEntry([]byte(fmt.Sprintf("%v", b)), 0)
-		}
+		request.Dictionary.EntriesByKey(&entries[i], x.ID)
 	}
 
 	return entries, nil

@@ -541,8 +541,16 @@ func (rcv *Entry) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Entry) Key() []byte {
+func (rcv *Entry) Language() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Entry) Term() []byte {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.ByteVector(o + rcv._tab.Pos)
 	}
@@ -554,7 +562,7 @@ func EntryKeyCompare(o1, o2 flatbuffers.UOffsetT, buf []byte) bool {
 	obj2 := &Entry{}
 	obj1.Init(buf, flatbuffers.UOffsetT(len(buf))-o1)
 	obj2.Init(buf, flatbuffers.UOffsetT(len(buf))-o2)
-	return string(obj1.Key()) < string(obj2.Key())
+	return string(obj1.Term()) < string(obj2.Term())
 }
 
 func (rcv *Entry) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, buf []byte) bool {
@@ -566,7 +574,7 @@ func (rcv *Entry) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, b
 		tableOffset := flatbuffers.GetIndirectOffset(buf, vectorLocation+4*(start+middle))
 		obj := &Entry{}
 		obj.Init(buf, tableOffset)
-		comp := bytes.Compare(obj.Key(), bKey)
+		comp := bytes.Compare(obj.Term(), bKey)
 		if comp > 0 {
 			span = middle
 		} else if comp < 0 {
@@ -579,14 +587,6 @@ func (rcv *Entry) LookupByKey(key string, vectorLocation flatbuffers.UOffsetT, b
 		}
 	}
 	return false
-}
-
-func (rcv *Entry) Term() []byte {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
-	if o != 0 {
-		return rcv._tab.ByteVector(o + rcv._tab.Pos)
-	}
-	return nil
 }
 
 func (rcv *Entry) See() []byte {
@@ -620,8 +620,8 @@ func (rcv *Entry) EtymologiesLength() int {
 func EntryStart(builder *flatbuffers.Builder) {
 	builder.StartObject(4)
 }
-func EntryAddKey(builder *flatbuffers.Builder, key flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(key), 0)
+func EntryAddLanguage(builder *flatbuffers.Builder, language flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(language), 0)
 }
 func EntryAddTerm(builder *flatbuffers.Builder, term flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(term), 0)
@@ -682,8 +682,16 @@ func (rcv *Dictionary) Name() []byte {
 	return nil
 }
 
-func (rcv *Dictionary) Entries(obj *Entry, j int) bool {
+func (rcv *Dictionary) Language() []byte {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	if o != 0 {
+		return rcv._tab.ByteVector(o + rcv._tab.Pos)
+	}
+	return nil
+}
+
+func (rcv *Dictionary) Entries(obj *Entry, j int) bool {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		x += flatbuffers.UOffsetT(j) * 4
@@ -695,7 +703,7 @@ func (rcv *Dictionary) Entries(obj *Entry, j int) bool {
 }
 
 func (rcv *Dictionary) EntriesByKey(obj *Entry, key string) bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Vector(o)
 		return obj.LookupByKey(key, x, rcv._tab.Bytes)
@@ -704,7 +712,7 @@ func (rcv *Dictionary) EntriesByKey(obj *Entry, key string) bool {
 }
 
 func (rcv *Dictionary) EntriesLength() int {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
 	}
@@ -712,7 +720,7 @@ func (rcv *Dictionary) EntriesLength() int {
 }
 
 func DictionaryStart(builder *flatbuffers.Builder) {
-	builder.StartObject(3)
+	builder.StartObject(4)
 }
 func DictionaryAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(id), 0)
@@ -720,8 +728,11 @@ func DictionaryAddId(builder *flatbuffers.Builder, id flatbuffers.UOffsetT) {
 func DictionaryAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(name), 0)
 }
+func DictionaryAddLanguage(builder *flatbuffers.Builder, language flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(language), 0)
+}
 func DictionaryAddEntries(builder *flatbuffers.Builder, entries flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(2, flatbuffers.UOffsetT(entries), 0)
+	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(entries), 0)
 }
 func DictionaryStartEntriesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)

@@ -27,6 +27,7 @@ func search(c *cli.Context) error {
 	force := c.Bool("index")
 	exact := c.Bool("exact")
 	quiet := c.Bool("quiet")
+	batchSize := c.Int("batch-size")
 
 	if len(inputFile) == 0 || len(searchTerm) == 0 {
 		return errors.New("usage: odict search [odict file] [search term]")
@@ -48,7 +49,14 @@ func search(c *cli.Context) error {
 			PrettyPrint: true,
 		}
 
-		ods.Index(ods.IndexRequest{Dictionary: request.Dictionary, Overwrite: request.Force, Quiet: request.Quiet})
+		ods.Index(
+			ods.IndexRequest{
+				BatchSize:  batchSize,
+				Dictionary: request.Dictionary,
+				Overwrite:  request.Force,
+				Quiet:      request.Quiet,
+			},
+		)
 
 		results, err := ods.SearchDictionary(
 			ods.SearchDictionaryRequest{

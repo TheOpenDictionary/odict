@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dictionary name="Example Dictionary 1"
+<dictionary name="Example Dictionary 1" lang="en"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
   <entry term="run">
     <ety description="Latin root">

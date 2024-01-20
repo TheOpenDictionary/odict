@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/TheOpenDictionary/odict/lib/config"
 	"github.com/TheOpenDictionary/odict/lib/types"
 	"github.com/blevesearch/bleve/v2"
-	"github.com/blevesearch/bleve/v2/document"
 	"github.com/blevesearch/bleve/v2/index/scorch"
-	idx "github.com/blevesearch/bleve_index_api"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -20,6 +17,7 @@ type IndexRequest struct {
 	Dictionary *types.Dictionary
 	Overwrite  bool
 	Quiet      bool
+	BatchSize  int
 }
 
 func getIndexPath(dictionaryID string) (string, error) {
@@ -49,6 +47,10 @@ func Index(request IndexRequest) (string, error) {
 
 		mapping := bleve.NewIndexMapping()
 
+		if dictionary.Language != "" {
+			mapping.DefaultAnalyzer = dictionary.Language
+		}
+
 		index, indexErr := bleve.NewUsing(indexPath, mapping, scorch.Name, scorch.Name, nil)
 
 		if indexErr != nil {
@@ -67,19 +69,24 @@ func Index(request IndexRequest) (string, error) {
 
 		batch := index.NewBatch()
 		batchCount := 0
-		batchSize := 100
+		batchSize := request.BatchSize
 
 		for key := range dictionary.Entries {
 			entry := dictionary.Entries[key]
-			doc := document.NewDocument(strings.ToLower(entry.Term))
+			// doc, err := index.Document(entry.Term)
 
-			mapping.MapDocument(doc, entry)
+			field := bleve.NewTextFieldMapping()
+			doc := bleve.NewDocumentMapping()
 
-			enc := types.Serialize(&entry)
-			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
-			nd := doc.AddField(field)
+			doc.AddFieldMappingsAt("term", field)
 
-			batch.IndexAdvanced(nd)
+			if entry.Language != "" {
+				field.Analyzer = entry.Language
+			}
+
+			doc := bleve.NewDocumentMapping()
+
+			batch.Index(entry.Term, entry)
 
 			batchCount++
 

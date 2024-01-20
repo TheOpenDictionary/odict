@@ -8,10 +8,11 @@ import (
 )
 
 type DictionaryRepresentable struct {
-	ID      string                            `json:"id" xml:"id,attr,omitempty"`
-	Name    string                            `json:"name" xml:"name,attr,omitempty"`
-	Entries KVMap[string, EntryRepresentable] `json:"entries" xml:"entry"`
-	XMLName xml.Name                          `json:"-" xml:"dictionary"`
+	ID       string                            `json:"id" xml:"id,attr,omitempty"`
+	Language string                            `json:"lang" xml:"lang,attr"`
+	Name     string                            `json:"name" xml:"name,attr,omitempty"`
+	Entries  KVMap[string, EntryRepresentable] `json:"entries" xml:"entry"`
+	XMLName  xml.Name                          `json:"-" xml:"dictionary"`
 }
 
 func (dict *Dictionary) AsRepresentable() DictionaryRepresentable {
@@ -22,23 +23,26 @@ func (dict *Dictionary) AsRepresentable() DictionaryRepresentable {
 	for a := 0; a < dict.EntriesLength(); a++ {
 		dict.Entries(&entry, a)
 		representable := entry.AsRepresentable()
-		entries[representable.Key()] = representable
+		entries[representable.Term] = representable
 	}
 
 	return DictionaryRepresentable{
-		ID:      string(dict.Id()),
-		Name:    string(dict.Name()),
-		Entries: entries,
+		ID:       string(dict.Id()),
+		Name:     string(dict.Name()),
+		Language: string(dict.Language()),
+		Entries:  entries,
 	}
 }
 
 func (dict *DictionaryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(dict.ID)
 	name := builder.CreateString(dict.Name)
+	language := builder.CreateString(dict.Language)
 	entries := dict.buildEntryVector(builder)
 
 	DictionaryStart(builder)
 	DictionaryAddId(builder, id)
+	DictionaryAddLanguage(builder, language)
 	DictionaryAddName(builder, name)
 	DictionaryAddEntries(builder, entries)
 

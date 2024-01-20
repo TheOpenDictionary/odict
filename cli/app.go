@@ -31,6 +31,13 @@ var markdownFlag *cli.StringFlag = &cli.StringFlag{
 	},
 }
 
+var batchSizeFlag *cli.IntFlag = &cli.IntFlag{
+	Name:    "batch-size",
+	Aliases: []string{"b"},
+	Usage:   "Size of each index batch. Increasing this value may speed up indexing, but will use more memory.",
+	Value:   100,
+}
+
 var App = &cli.App{
 	Name:     "odict",
 	Version:  version,
@@ -68,6 +75,7 @@ var App = &cli.App{
 			Aliases:  []string{"i"},
 			Usage:    "index a compiled dictionary",
 			Action:   index,
+			Flags:    []cli.Flag{batchSizeFlag},
 		},
 		{
 			Name:     "serve",
@@ -169,6 +177,7 @@ var App = &cli.App{
 			Aliases:  []string{"s"},
 			Category: searching,
 			Flags: []cli.Flag{
+				batchSizeFlag,
 				&cli.BoolFlag{
 					Name:    "index",
 					Aliases: []string{"i"},

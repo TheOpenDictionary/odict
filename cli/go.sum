@@ -8,7 +8,7 @@ github.com/TheOpenDictionary/odict/lib/types v0.0.0-20231024210539-d4e83ae7bfdc 
 github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20231024210539-d4e83ae7bfdc h1:oVwda5G0bJrj/NYI2GbDlOjbU1CqduXFjTSzSwwjNSk=
 github.com/bits-and-blooms/bitset v1.2.0 h1:Kn4yilvwNtMACtf1eYDlG8H77R07mZSPbMjLyS07ChA=
 github.com/blevesearch/bleve/v2 v2.3.10 h1:z8V0wwGoL4rp7nG/O3qVVLYxUqCbEwskMt4iRJsPLgg=
-github.com/blevesearch/bleve_index_api v1.1.4 h1:n9Ilxlb80g9DAhchR95IcVrzohamDSri0wPnkKnva50=
+github.com/blevesearch/bleve_index_api v1.1.5 h1:0q05mzu6GT/kebzqKywCpou/eUea9wTKa7kfqX7QX+k=
 github.com/blevesearch/geo v0.1.18 h1:Np8jycHTZ5scFe7VEPLrDoHnnb9C4j636ue/CGrhtDw=
 github.com/blevesearch/go-porterstemmer v1.0.3 h1:GtmsqID0aZdCSNiY8SkuPJ12pD4jI+DdXTAn4YRcHCo=
 github.com/blevesearch/gtreap v0.1.1 h1:2JWigFrzDMR+42WGIN/V2p0cUvn4UP3C4Q5nmaZGW8Y=

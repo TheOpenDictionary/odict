@@ -9,6 +9,7 @@ import (
 
 type EntryRepresentable struct {
 	Term        string                   `json:"term" xml:"term,attr"`
+	Language    string                   `json:"lang" xml:"lang,attr"`
 	SeeAlso     string                   `json:"see,omitempty" xml:"see,attr,omitempty"`
 	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety,omitempty"`
 	XMLName     xml.Name                 `json:"-" xml:"entry"`
@@ -31,19 +32,20 @@ func (entry *Entry) AsRepresentable() EntryRepresentable {
 	return EntryRepresentable{
 		Term:        string(entry.Term()),
 		SeeAlso:     string(entry.See()),
+		Language:    string(entry.Language()),
 		Etymologies: etymologies,
 	}
 }
 
 func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	key := builder.CreateString(entry.Key())
 	term := builder.CreateString(entry.Term)
 	see := builder.CreateString(entry.SeeAlso)
 	etymologies := entry.buildEtymologyVector(builder)
+	language := builder.CreateString(entry.Language)
 
 	EntryStart(builder)
-	EntryAddKey(builder, key)
 	EntryAddSee(builder, see)
+	EntryAddLanguage(builder, language)
 	EntryAddTerm(builder, term)
 	EntryAddEtymologies(builder, etymologies)
 
