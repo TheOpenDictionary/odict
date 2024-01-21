@@ -22,7 +22,7 @@ var fmtNoteTitle = color.New(color.Underline, color.Bold).SprintfFunc()
 var fmtPartOfSpeech = color.New(color.Italic).SprintfFunc()
 var fmtEntry = color.New(color.Bold).SprintfFunc()
 
-var parentheticalRegex = regexp.MustCompile(`^(\(.*?\))`)
+var parentheticalRegex = regexp.MustCompile(`^(\(.*?\)\s*)`)
 
 type PrintFormat = string
 
@@ -132,7 +132,7 @@ func printSense(sense types.SenseRepresentable, entry types.EntryRepresentable) 
 
 func printEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.EntryRepresentable) {
 	if showTitle {
-		fmt.Printf("%s\n", fmtEtymology("Etymology #%d", i+1))
+		fmt.Printf("%s\n\n", fmtEtymology("Etymology #%d", i+1))
 	}
 
 	if len(ety.Description) > 0 {
