@@ -19,13 +19,14 @@ func insertDefinitions(builder *SQLBuilder, senseID string, groupID string, defi
 	for _, definition := range definitions {
 		def := sq.New[DEFINITIONS]("")
 		id := uuid.New().String()
+		value := definition.Value.String()
 
 		builder.AddCommand(
 			sq.
 				InsertInto(def).
 				ColumnValues(func(col *sq.Column) {
 					col.Set(def.ID, sq.Literal(id))
-					col.Set(def.VALUE, sq.Literal(definition.Value.String()))
+					col.Set(def.VALUE, sq.Literal(value))
 
 					if len(senseID) > 0 {
 						col.Set(def.SENSE_ID, sq.Literal(senseID))

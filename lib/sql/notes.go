@@ -18,6 +18,7 @@ func insertNotes(builder *SQLBuilder, definitionID string, notes []types.NoteRep
 	for _, note := range notes {
 		nt := sq.New[NOTES]("")
 		id := utils.CreateUUID()
+		value := note.Value.String()
 
 		builder.AddCommand(
 			sq.
@@ -25,7 +26,7 @@ func insertNotes(builder *SQLBuilder, definitionID string, notes []types.NoteRep
 				Columns(nt.ID, nt.VALUE, nt.DEFINITION_ID).
 				Values(
 					sq.Literal(id),
-					sq.Literal(note.Value.String()),
+					sq.Literal(value),
 					sq.Literal(definitionID),
 				),
 		)

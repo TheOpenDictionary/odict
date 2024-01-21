@@ -18,12 +18,13 @@ func insertEtymologies(builder *SQLBuilder, entryID string, etymologies []types.
 	for _, etymology := range etymologies {
 		ety := sq.New[ETYMOLOGIES]("")
 		id := utils.CreateUUID()
+		description := etymology.Description.String()
 
 		builder.AddCommand(
 			sq.
 				InsertInto(ety).
 				Columns(ety.ID, ety.DESCRIPTION, ety.ENTRY_ID).
-				Values(sq.Literal(id), sq.Literal(etymology.Description.String()), sq.Literal(entryID)),
+				Values(sq.Literal(id), sq.Literal(description), sq.Literal(entryID)),
 		)
 
 		insertSenses(builder, id, etymology.Senses)

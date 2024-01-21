@@ -18,6 +18,7 @@ func insertGroups(builder *SQLBuilder, senseID string, groups []types.GroupRepre
 	for _, group := range groups {
 		grp := sq.New[GROUPS]("")
 		id := utils.CreateUUID()
+		value := group.Description.String()
 
 		builder.AddCommand(
 			sq.
@@ -25,7 +26,7 @@ func insertGroups(builder *SQLBuilder, senseID string, groups []types.GroupRepre
 				Columns(grp.ID, grp.DESCRIPTION, grp.SENSE_ID).
 				Values(
 					sq.Literal(id),
-					sq.Literal(group.Description.String()),
+					sq.Literal(value),
 					sq.Literal(senseID),
 				),
 		)
