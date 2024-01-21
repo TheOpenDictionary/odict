@@ -6,6 +6,7 @@ import (
 
 	"dario.cat/mergo"
 	flatbuffers "github.com/google/flatbuffers/go"
+	"github.com/samber/lo"
 )
 
 func Serialize(b Serializable) []byte {
@@ -30,6 +31,14 @@ type Representable interface {
 }
 
 type KVMap[K comparable, V Keyable[K]] map[K]V
+
+func (m KVMap[K, V]) Keys() []K {
+	return lo.Keys[K, V](m)
+}
+
+func (m KVMap[K, V]) Values() []V {
+	return lo.Values[K, V](m)
+}
 
 func (m KVMap[K, V]) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	for key := range m {

@@ -18,13 +18,14 @@ func insertExamples(builder *SQLBuilder, definitionID string, noteID string, exa
 	for _, example := range examples {
 		ex := sq.New[EXAMPLES]("")
 		id := utils.CreateUUID()
+		value := example
 
 		builder.AddCommand(
 			sq.
 				InsertInto(ex).
 				ColumnValues(func(col *sq.Column) {
 					col.Set(ex.ID, sq.Literal(id))
-					col.Set(ex.TEXT, sq.Literal(example))
+					col.Set(ex.TEXT, sq.Literal(value))
 
 					if len(definitionID) > 0 {
 						col.Set(ex.DEFINITION_ID, sq.Literal(definitionID))

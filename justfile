@@ -29,6 +29,9 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 @publish +args="--auto-snapshot --clean":
   goreleaser release {{args}}
 
+@snaps: 
+  UPDATE_SNAPS=true just go test
+  
 @sync:
   go work sync 
 
