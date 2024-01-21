@@ -9,8 +9,8 @@ require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20240121002644-e3f52802057f
 	github.com/bokwoon95/sq v0.4.5
 	github.com/bokwoon95/sqddl v0.4.9
+	github.com/gkampitakis/go-snaps v0.4.12
 	github.com/google/uuid v1.5.0
-	github.com/kanmu/go-sqlfmt v0.0.1
 	github.com/stretchr/testify v1.8.4
 )
 
@@ -20,14 +20,12 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gkampitakis/ciinfo v0.3.0 // indirect
 	github.com/gkampitakis/go-diff v1.3.2 // indirect
-	github.com/gkampitakis/go-snaps v0.4.12 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20231222211730-1d6d20845b47 // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/maruel/natural v1.1.0 // indirect
-	github.com/pkg/errors v0.8.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.11.0 // indirect
 	github.com/samber/lo v1.39.0 // indirect
