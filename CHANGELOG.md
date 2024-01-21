@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.23.0](https://github.com/TheOpenDictionary/odict/compare/v1.22.1...v1.23.0) (2024-01-21)
+
+
+### Features
+
+* Allow args for wasm and js publish commands ([c86d052](https://github.com/TheOpenDictionary/odict/commit/c86d0526f1a18338b678b4aa01831890ef9b9aef))
+
+
+### Bug Fixes
+
+* **print:** Fix formatting ([e3f5280](https://github.com/TheOpenDictionary/odict/commit/e3f52802057fe2c53d18fb3cbeed578cd0dbef0c))
+* **sql:** Fix duplicate values in generated SQL ([#590](https://github.com/TheOpenDictionary/odict/issues/590)) ([30c0c9f](https://github.com/TheOpenDictionary/odict/commit/30c0c9f61e4b7ce2c794e9b717c0a385dd184381))
+
 ## [1.22.1](https://github.com/TheOpenDictionary/odict/compare/v1.22.0...v1.22.1) (2024-01-17)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.11.0...js-v0.12.0) (2024-01-21)
+
+
+### Features
+
+* Allow args for wasm and js publish commands ([c86d052](https://github.com/TheOpenDictionary/odict/commit/c86d0526f1a18338b678b4aa01831890ef9b9aef))
+
 ## [0.11.0](https://github.com/TheOpenDictionary/odict/compare/js-v0.10.0...js-v0.11.0) (2024-01-15)
 
 
