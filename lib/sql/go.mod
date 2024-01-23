@@ -10,7 +10,7 @@ require (
 	github.com/bokwoon95/sq v0.4.5
 	github.com/bokwoon95/sqddl v0.4.9
 	github.com/gkampitakis/go-snaps v0.5.0
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.8.4
 )
 
