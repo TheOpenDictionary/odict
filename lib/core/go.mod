@@ -8,7 +8,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20231024210539-d4e83ae7bfdc
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20231024210539-d4e83ae7bfdc
 	github.com/golang/snappy v0.0.4
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	github.com/samber/lo v1.39.0
 	github.com/stretchr/testify v1.8.4
 )
