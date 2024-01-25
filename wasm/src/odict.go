@@ -9,7 +9,7 @@ import (
 	"github.com/TheOpenDictionary/odict/lib/utils"
 )
 
-var dictMap = make(map[string]*types.Dictionary)
+var dictMap = make(map[string]*types.DictionaryBuffer)
 
 func jsArrayToGo(jsArray js.Value) []string {
 	goArray := make([]string, jsArray.Length())
@@ -79,9 +79,9 @@ func lookup() js.Func {
 				Follow:     follow,
 			})
 
-			representable := types.NestedEntriesToRepresentables(entries)
+			s := types.NestedEntriesStructs(entries)
 
-			json, err := utils.SerializeToJSON(representable, false)
+			json, err := utils.SerializeToJSON(s, false)
 
 			if err != nil {
 				fmt.Printf("Error serializing lookup result: %s", err)
@@ -129,7 +129,7 @@ func split() js.Func {
 
 		if dict, ok := dictMap[name]; ok {
 			result := core.Split(core.SplitRequest{Dictionary: dict, Query: query, Threshold: threshold})
-			serialized, err := utils.SerializeToJSON(types.EntriesToRepresentables(result), false)
+			serialized, err := utils.SerializeToJSON(types.EntriesStructs(result), false)
 
 			if err != nil {
 				fmt.Printf("Error serializing split result: %s", err)
@@ -149,7 +149,7 @@ func split() js.Func {
 func compile() js.Func {
 	compileFunc := js.FuncOf(func(this js.Value, args []js.Value) any {
 		xml := args[0].String()
-		bytes, err := core.GetDictionaryBytesFromXML(xml)
+		bytes, err := core.CompileXML(xml)
 
 		if err != nil {
 			fmt.Printf("Error compiling dictionary: %s", err)

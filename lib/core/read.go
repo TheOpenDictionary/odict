@@ -116,20 +116,20 @@ func readODictFile(path string) (*ODictFile, error) {
 // ReadDictionaryFromPath loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionaryFromPath(path string) (*types.Dictionary, error) {
+func ReadDictionaryFromPath(path string) (*types.DictionaryBuffer, error) {
 	dict, err := readODictFile(path)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return types.GetRootAsDictionary(dict.Content, 0), nil
+	return types.GetRootAsDictionaryBuffer(dict.Content, 0), nil
 }
 
 // ReadDictionary loads a compiled ODict dictionary from the provided
 // path and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
+func ReadDictionary(pathOrAlias string) (*types.DictionaryBuffer, error) {
 	dict, err := ReadDictionaryFromPath(pathOrAlias)
 
 	if os.IsNotExist(err) {
@@ -148,12 +148,12 @@ func ReadDictionary(pathOrAlias string) (*types.Dictionary, error) {
 // ReadDictionaryFromBytes loads a compiled ODict dictionary from the provided
 // bytes and returns a Dictionary model, with the ability to forcibly re-index
 // the dictionary when it loads
-func ReadDictionaryFromBytes(bytes []byte) (*types.Dictionary, error) {
+func ReadDictionaryFromBytes(bytes []byte) (*types.DictionaryBuffer, error) {
 	file, err := readODictBytes(bytes)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return types.GetRootAsDictionary(file.Content, 0), nil
+	return types.GetRootAsDictionaryBuffer(file.Content, 0), nil
 }

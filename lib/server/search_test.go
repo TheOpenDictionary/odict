@@ -18,13 +18,13 @@ import (
 type TestSearchSuite struct {
 	suite.Suite
 	path string
-	dict *types.Dictionary
+	dict *types.DictionaryBuffer
 }
 
 func (suite *TestSearchSuite) SetupTest() {
 	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
-	core.CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
+	core.CompilePath("../../examples/example2.xml", "../../examples/example2.odict")
 
 	suite.path = "../../examples/example2.odict"
 
@@ -59,9 +59,9 @@ func (suite *TestSearchSuite) TestSearchSingleDictionary() {
 
 	suite.Equal(nil, err)
 
-	representable := types.EntriesToRepresentables(entries)
+	s := types.EntriesStructs(entries)
 
-	json, err := utils.SerializeToJSON(representable, false)
+	json, err := utils.SerializeToJSON(s, false)
 
 	suite.Equal(nil, err)
 

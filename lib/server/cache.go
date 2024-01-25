@@ -10,15 +10,15 @@ import (
 )
 
 type dictionaryCache struct {
-	data map[string]*types.Dictionary
+	data map[string]*types.DictionaryBuffer
 	mu   sync.Mutex
 }
 
 var cache = dictionaryCache{
-	data: make(map[string]*types.Dictionary),
+	data: make(map[string]*types.DictionaryBuffer),
 }
 
-func (c *dictionaryCache) getDictionary(pathOrAlias string) (*types.Dictionary, error) {
+func (c *dictionaryCache) getDictionary(pathOrAlias string) (*types.DictionaryBuffer, error) {
 	c.mu.Lock()
 
 	defer c.mu.Unlock()
@@ -36,10 +36,10 @@ func (c *dictionaryCache) getDictionary(pathOrAlias string) (*types.Dictionary, 
 	return c.data[pathOrAlias], nil
 }
 
-func getDictionary(pathOrAlias string, r *http.Request) (*types.Dictionary, error) {
+func getDictionary(pathOrAlias string, r *http.Request) (*types.DictionaryBuffer, error) {
 	dictionary := r.URL.Query().Get("dictionary")
 
-	var dict *types.Dictionary
+	var dict *types.DictionaryBuffer
 	var err error
 
 	if len(pathOrAlias) > 0 && len(dictionary) > 0 {

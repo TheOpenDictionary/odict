@@ -15,7 +15,7 @@ type DEFINITIONS struct {
 }
 
 // Insert definitions w/ relation to current sense/group
-func insertDefinitions(builder *SQLBuilder, senseID string, groupID string, definitions []types.DefinitionRepresentable) {
+func insertDefinitions(builder *SQLBuilder, senseID string, groupID string, definitions []types.Definition) {
 	for _, definition := range definitions {
 		def := sq.New[DEFINITIONS]("")
 		id := uuid.New().String()

@@ -14,7 +14,7 @@ type GROUPS struct {
 }
 
 // Insert groups w/ relation to current sense
-func insertGroups(builder *SQLBuilder, senseID string, groups []types.GroupRepresentable) {
+func insertGroups(builder *SQLBuilder, senseID string, groups []types.Group) {
 	for _, group := range groups {
 		grp := sq.New[GROUPS]("")
 		id := utils.CreateUUID()

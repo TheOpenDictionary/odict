@@ -8,7 +8,7 @@ import (
 )
 
 func TestSplit(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict1, err := ReadDictionary("../../examples/example1.odict")
 
@@ -30,7 +30,7 @@ func TestSplit(t *testing.T) {
 }
 
 func TestSplitWithNumbers(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict1, err := ReadDictionary("../../examples/example1.odict")
 

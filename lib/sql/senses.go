@@ -16,7 +16,7 @@ type SENSES struct {
 }
 
 // Insert senses w/ relation to current ety
-func insertSenses(builder *SQLBuilder, etymologyID string, senseMap types.KVMap[types.PartOfSpeech, types.SenseRepresentable]) {
+func insertSenses(builder *SQLBuilder, etymologyID string, senseMap types.KVMap[types.PartOfSpeech, types.Sense]) {
 	senses := senseMap.Values()
 
 	sort.Slice(senses, func(i, j int) bool {

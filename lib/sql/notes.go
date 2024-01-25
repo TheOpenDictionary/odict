@@ -14,7 +14,7 @@ type NOTES struct {
 }
 
 // Insert notes w/ relation to current definition
-func insertNotes(builder *SQLBuilder, definitionID string, notes []types.NoteRepresentable) {
+func insertNotes(builder *SQLBuilder, definitionID string, notes []types.Note) {
 	for _, note := range notes {
 		nt := sq.New[NOTES]("")
 		id := utils.CreateUUID()

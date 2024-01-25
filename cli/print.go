@@ -57,7 +57,7 @@ func printDivider() {
 	fmt.Println(strings.Repeat("─", 32))
 }
 
-func printNote(note types.NoteRepresentable, targetWord string, numbering string, indent int) {
+func printNote(note types.Note, targetWord string, numbering string, indent int) {
 	fmtNumbering := "%" + fmt.Sprint(indent) + "s."
 
 	fmt.Printf(fmtNumbering+" %s\n", numbering, note.Value)
@@ -69,7 +69,7 @@ func printNote(note types.NoteRepresentable, targetWord string, numbering string
 	fmt.Println()
 }
 
-func printDefinition(definition types.DefinitionRepresentable, numbering string, entry types.EntryRepresentable, indent int) {
+func printDefinition(definition types.Definition, numbering string, entry types.Entry, indent int) {
 	value := definition.Value
 	matches := parentheticalRegex.FindAllStringIndex(string(value), -1)
 	fmtNumbering := "%" + fmt.Sprint(indent) + "s."
@@ -106,7 +106,7 @@ func printDefinition(definition types.DefinitionRepresentable, numbering string,
 	}
 }
 
-func printGroup(group types.GroupRepresentable, i int, entry types.EntryRepresentable) {
+func printGroup(group types.Group, i int, entry types.Entry) {
 	fmt.Printf("%4d. %s\n", i+1, group.Description)
 
 	for j, definition := range group.Definitions {
@@ -114,7 +114,7 @@ func printGroup(group types.GroupRepresentable, i int, entry types.EntryRepresen
 	}
 }
 
-func printSense(sense types.SenseRepresentable, entry types.EntryRepresentable) {
+func printSense(sense types.Sense, entry types.Entry) {
 	fmt.Printf("\n%s\n\n", fmtPartOfSpeech(sense.POS.Label))
 
 	var i = 0
@@ -130,7 +130,7 @@ func printSense(sense types.SenseRepresentable, entry types.EntryRepresentable) 
 	}
 }
 
-func printEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry types.EntryRepresentable) {
+func printEty(ety types.Etymology, i int, showTitle bool, entry types.Entry) {
 	if showTitle {
 		fmt.Printf("%s\n\n", fmtEtymology("Etymology #%d", i+1))
 	}
@@ -146,7 +146,7 @@ func printEty(ety types.EtymologyRepresentable, i int, showTitle bool, entry typ
 	fmt.Println()
 }
 
-func printEntry(entry types.EntryRepresentable) {
+func printEntry(entry types.Entry) {
 	printDivider()
 
 	fmt.Println(fmtEntry(entry.Term))
@@ -163,7 +163,7 @@ func printEntry(entry types.EntryRepresentable) {
 
 }
 
-func prettyPrint(entries [][]types.EntryRepresentable) error {
+func prettyPrint(entries [][]types.Entry) error {
 	fmt.Println()
 
 	hasEntries := false
@@ -182,7 +182,7 @@ func prettyPrint(entries [][]types.EntryRepresentable) error {
 	return nil
 }
 
-func PrintEntries(entries [][]types.EntryRepresentable, format PrintFormat, indent bool) error {
+func PrintEntries(entries [][]types.Entry, format PrintFormat, indent bool) error {
 	switch {
 	case format == "json":
 		json, err := utils.SerializeToJSON(entries, indent)

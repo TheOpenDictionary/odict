@@ -5,29 +5,29 @@ import (
 	"github.com/samber/lo"
 )
 
-type DefinitionRepresentable struct {
-	ID       string              `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Value    MDString            `json:"value,omitempty" xml:"value,attr"`
-	Examples []string            `json:"examples,omitempty" xml:"example,omitempty"`
-	Notes    []NoteRepresentable `json:"notes,omitempty" xml:"note,omitempty"`
+type Definition struct {
+	ID       string   `json:"id,omitempty" xml:"id,attr,omitempty"`
+	Value    MDString `json:"value,omitempty" xml:"value,attr"`
+	Examples []string `json:"examples,omitempty" xml:"example,omitempty"`
+	Notes    []Note   `json:"notes,omitempty" xml:"note,omitempty"`
 }
 
-func (definition *Definition) AsRepresentable() DefinitionRepresentable {
-	var note Note
+func (definition *DefinitionBuffer) Struct() Definition {
+	var note NoteBuffer
 
 	examples := []string{}
-	notes := []NoteRepresentable{}
+	notes := []Note{}
 
 	for n := 0; n < definition.NotesLength(); n++ {
 		definition.Notes(&note, n)
-		notes = append(notes, note.AsRepresentable())
+		notes = append(notes, note.Struct())
 	}
 
 	for e := 0; e < definition.ExamplesLength(); e++ {
 		examples = append(examples, string(definition.Examples(e)))
 	}
 
-	return DefinitionRepresentable{
+	return Definition{
 		ID:       string(definition.Id()),
 		Value:    MDString(definition.Value()),
 		Examples: examples,
@@ -35,22 +35,22 @@ func (definition *Definition) AsRepresentable() DefinitionRepresentable {
 	}
 }
 
-func (def *DefinitionRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (def *Definition) Table(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(def.ID)
 	value := builder.CreateString(string(def.Value))
 	examples := def.buildExampleVector(builder)
 	notes := def.buildNoteVector(builder)
 
-	DefinitionStart(builder)
-	DefinitionAddId(builder, id)
-	DefinitionAddValue(builder, value)
-	DefinitionAddExamples(builder, examples)
-	DefinitionAddNotes(builder, notes)
+	DefinitionBufferStart(builder)
+	DefinitionBufferAddId(builder, id)
+	DefinitionBufferAddValue(builder, value)
+	DefinitionBufferAddExamples(builder, examples)
+	DefinitionBufferAddNotes(builder, notes)
 
-	return DefinitionEnd(builder)
+	return DefinitionBufferEnd(builder)
 }
 
-func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (def *Definition) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	examples := def.Examples
 
 	exampleCount := len(examples)
@@ -59,7 +59,7 @@ func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Buil
 		return builder.CreateString(example)
 	})
 
-	DefinitionStartExamplesVector(builder, exampleCount)
+	DefinitionBufferStartExamplesVector(builder, exampleCount)
 
 	for i := exampleCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(exampleBuffers[i])
@@ -68,16 +68,16 @@ func (def *DefinitionRepresentable) buildExampleVector(builder *flatbuffers.Buil
 	return builder.EndVector(exampleCount)
 }
 
-func (def *DefinitionRepresentable) buildNoteVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (def *Definition) buildNoteVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	notes := def.Notes
 
 	noteCount := len(notes)
 
-	noteBuffers := lo.Map(notes, func(note NoteRepresentable, _ int) flatbuffers.UOffsetT {
-		return note.AsBuffer(builder)
+	noteBuffers := lo.Map(notes, func(note Note, _ int) flatbuffers.UOffsetT {
+		return note.Table(builder)
 	})
 
-	DefinitionStartNotesVector(builder, noteCount)
+	DefinitionBufferStartNotesVector(builder, noteCount)
 
 	for i := noteCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(noteBuffers[i])

@@ -1,48 +1,48 @@
 include "enums.fbs";
 
-table Note {
+table NoteBuffer {
     id:string;
     value:string;
     examples:[string];
 }
 
-table Definition {
+table DefinitionBuffer {
     id:string;
     value:string;
     examples:[string];
-    notes:[Note];
+    notes:[NoteBuffer];
 }
 
-table Etymology {
+table EtymologyBuffer {
     id:string;
     pronunciation:string;    
     description:string;
-    senses:[Sense];
+    senses:[SenseBuffer];
 }
 
-table Group {
+table GroupBuffer {
     id:string;
     description:string;
-    definitions:[Definition];
+    definitions:[DefinitionBuffer];
 }
 
-table Sense {
+table SenseBuffer {
     pos:POS (key);
-    definitions:[Definition];
-    groups:[Group];
+    definitions:[DefinitionBuffer];
+    groups:[GroupBuffer];
 }
 
-table Entry {
+table EntryBuffer {
     key:string (key);
     term:string;
     see:string;
-    etymologies:[Etymology];
+    etymologies:[EtymologyBuffer];
 }
 
-table Dictionary {
+table DictionaryBuffer {
     id:string;
     name:string;
-    entries:[Entry];
+    entries:[EntryBuffer];
 }
 
-root_type Dictionary;
+root_type DictionaryBuffer;

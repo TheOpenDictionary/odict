@@ -3,7 +3,7 @@ package search
 // func TestSearch(t *testing.T) {
 // 	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
-// 	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+// 	core.CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 // 	dict, err := core.ReadDictionary("../../examples/example1.odict")
 

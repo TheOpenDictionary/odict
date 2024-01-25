@@ -5,29 +5,15 @@ import (
 	"io"
 
 	"dario.cat/mergo"
-	flatbuffers "github.com/google/flatbuffers/go"
 	"github.com/samber/lo"
 )
-
-func Serialize(b Serializable) []byte {
-	builder := flatbuffers.NewBuilder(0)
-	buffer := b.AsBuffer(builder)
-
-	builder.Finish(buffer)
-
-	return builder.FinishedBytes()
-}
 
 type Keyable[T comparable] interface {
 	Key() T
 }
 
-type Serializable interface {
-	AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT
-}
-
-type Representable interface {
-	AsRepresentable() interface{}
+type Struct interface {
+	Struct() interface{}
 }
 
 type KVMap[K comparable, V Keyable[K]] map[K]V

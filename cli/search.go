@@ -13,7 +13,7 @@ import (
 )
 
 type SearchRequest struct {
-	Dictionary  *types.Dictionary
+	Dictionary  *types.DictionaryBuffer
 	Force       bool
 	Exact       bool
 	Query       string
@@ -62,11 +62,11 @@ func search(c *cli.Context) error {
 			return err
 		}
 
-		representable := lo.Map(results, func(entry types.Entry, _ int) types.EntryRepresentable {
-			return entry.AsRepresentable()
+		s := lo.Map(results, func(entry types.EntryBuffer, _ int) types.Entry {
+			return entry.Struct()
 		})
 
-		json, err := utils.SerializeToJSON(representable, request.PrettyPrint)
+		json, err := utils.SerializeToJSON(s, request.PrettyPrint)
 
 		if err != nil {
 			return err

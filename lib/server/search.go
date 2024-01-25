@@ -32,11 +32,11 @@ func handleSearch(pathOrAlias string) http.HandlerFunc {
 			return
 		}
 
-		representable := types.EntriesToRepresentables(entries)
+		s := types.EntriesStructs(entries)
 
 		// Return the result as JSON
 		w.Header().Set("Content-Type", "application/json")
 
-		json.NewEncoder(w).Encode(representable)
+		json.NewEncoder(w).Encode(s)
 	}
 }

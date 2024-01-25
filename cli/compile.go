@@ -26,7 +26,7 @@ func compile(c *cli.Context) error {
 	}
 
 	return t(c, func() error {
-		bytes, err := core.CompileDictionary(inputFile, outputFile)
+		bytes, err := core.CompilePath(inputFile, outputFile)
 
 		if err != nil {
 			return err

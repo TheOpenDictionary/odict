@@ -9,16 +9,16 @@ import (
 )
 
 type LookupRequest struct {
-	Dictionary *types.Dictionary
+	Dictionary *types.DictionaryBuffer
 	Queries    []string
 	Follow     bool
 	Split      int
 }
 
-func lookup(dict *types.Dictionary, query string, fallback string, split int, follow bool) []types.Entry {
-	entries := []types.Entry{}
+func lookup(dict *types.DictionaryBuffer, query string, fallback string, split int, follow bool) []types.EntryBuffer {
+	entries := []types.EntryBuffer{}
 
-	var entry types.Entry
+	var entry types.EntryBuffer
 	var found = dict.EntriesByKey(&entry, query)
 
 	if !found && fallback != "" {
@@ -46,14 +46,14 @@ func lookup(dict *types.Dictionary, query string, fallback string, split int, fo
 	return entries
 }
 
-func Lookup(request LookupRequest) [][]types.Entry {
-	entries := make([][]types.Entry, len(request.Queries))
+func Lookup(request LookupRequest) [][]types.EntryBuffer {
+	entries := make([][]types.EntryBuffer, len(request.Queries))
 	r, _ := regexp.Compile(`\((.+)\)$`)
 
 	// Create a channel to receive results
 	resultChan := make(chan struct {
 		index   int
-		entries []types.Entry
+		entries []types.EntryBuffer
 	})
 
 	var wg sync.WaitGroup
@@ -74,7 +74,7 @@ func Lookup(request LookupRequest) [][]types.Entry {
 
 			resultChan <- struct {
 				index   int
-				entries []types.Entry
+				entries []types.EntryBuffer
 			}{idx, lookup(request.Dictionary, strings.Trim(query, " "), fallback, request.Split, request.Follow)}
 		}(i, query)
 	}

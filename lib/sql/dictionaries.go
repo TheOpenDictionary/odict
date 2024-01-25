@@ -13,7 +13,7 @@ type DICTIONARIES struct {
 }
 
 // Insert dictionary
-func insertDictionary(builder *SQLBuilder, dict types.DictionaryRepresentable) {
+func insertDictionary(builder *SQLBuilder, dict types.Dictionary) {
 	d := sq.New[DICTIONARIES]("")
 	id := utils.CreateUUID()
 	name := dict.Name

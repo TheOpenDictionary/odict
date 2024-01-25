@@ -14,16 +14,16 @@ import (
 type TestReadSuite struct {
 	suite.Suite
 	path string
-	dict *types.DictionaryRepresentable
+	dict *types.Dictionary
 }
 
 func (suite *TestReadSuite) SetupTest() {
 	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
-	suite.dict = GetDictionaryFromXML("<dictionary><entry term=\"run\" /></dictionary>")
+	suite.dict = types.NewDictionary("<dictionary><entry term=\"run\" /></dictionary>")
 	suite.path = "../../examples/read.odict"
 
-	WriteDictionaryToDisk(suite.path, suite.dict)
+	WriteDictionary(suite.dict, suite.path)
 }
 
 func (suite *TestReadSuite) TearDownSuite() {

@@ -3,17 +3,17 @@ package core
 import "github.com/TheOpenDictionary/odict/lib/types"
 
 type SplitRequest struct {
-	Dictionary *types.Dictionary
+	Dictionary *types.DictionaryBuffer
 	Query      string
 	Threshold  int
 }
 
 // Split splits a query into definable tokens greater than or equal to the specified threshold
 // Example: household -> house + hold
-func Split(request SplitRequest) []types.Entry {
-	entries := []types.Entry{}
+func Split(request SplitRequest) []types.EntryBuffer {
+	entries := []types.EntryBuffer{}
 
-	var entry types.Entry
+	var entry types.EntryBuffer
 	var found bool
 
 	start := 0

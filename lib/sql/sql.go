@@ -45,7 +45,7 @@ func createSchema(dialect SQLDialect) (string, error) {
 	return buf.String(), nil
 }
 
-func DictionaryToSQL(dict types.DictionaryRepresentable, dialect SQLDialect, includeSchema bool) (string, error) {
+func DictionaryToSQL(dict types.Dictionary, dialect SQLDialect, includeSchema bool) (string, error) {
 	builder := createSQLBuilder(dialect)
 
 	insertDictionary(&builder, dict)

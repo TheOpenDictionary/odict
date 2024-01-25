@@ -33,9 +33,9 @@ func lookup(c *cli.Context) error {
 
 		entries := core.Lookup(request)
 
-		representables := types.NestedEntriesToRepresentables(entries)
+		ss := types.NestedEntriesStructs(entries)
 
-		PrintEntries(representables, format, true)
+		PrintEntries(ss, format, true)
 
 		return nil
 	})

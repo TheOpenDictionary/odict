@@ -12,14 +12,14 @@ import (
 )
 
 type SearchDictionaryRequest struct {
-	Dictionary *types.Dictionary
+	Dictionary *types.DictionaryBuffer
 	Query      string
 	Exact      bool
 }
 
 // SearchDictionary searches a dictionary model using Bleve using
 // it's unique dictionary ID
-func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
+func SearchDictionary(request SearchDictionaryRequest) ([]types.EntryBuffer, error) {
 	indexPath, err := getIndexPath(string(request.Dictionary.Id()))
 
 	if err != nil {
@@ -56,13 +56,13 @@ func SearchDictionary(request SearchDictionaryRequest) ([]types.Entry, error) {
 
 	hits := searchResults.Hits
 
-	entries := make([]types.Entry, len(hits))
+	entries := make([]types.EntryBuffer, len(hits))
 
 	for i, x := range hits {
 		b, ok := x.Fields["_source"]
 
 		if ok {
-			entries[i] = *types.GetRootAsEntry([]byte(fmt.Sprintf("%v", b)), 0)
+			entries[i] = *types.GetRootAsEntryBuffer([]byte(fmt.Sprintf("%v", b)), 0)
 		}
 	}
 

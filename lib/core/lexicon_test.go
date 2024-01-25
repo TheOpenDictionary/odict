@@ -8,7 +8,7 @@ import (
 )
 
 func TestLexicon(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict, err := ReadDictionary("../../examples/example1.odict")
 

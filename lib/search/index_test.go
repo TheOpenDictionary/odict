@@ -11,7 +11,7 @@ import (
 )
 
 func TestIndex(t *testing.T) {
-	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	core.CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict, err := core.ReadDictionary("../../examples/example1.odict")
 

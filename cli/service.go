@@ -35,7 +35,7 @@ func service(c *cli.Context) error {
 	dictPath := c.Args().Get(0)
 
 	go func() {
-		var dict *types.Dictionary
+		var dict *types.DictionaryBuffer
 
 		if len(dictPath) > 0 {
 			var err error
@@ -57,7 +57,7 @@ func service(c *cli.Context) error {
 				ipc.Reply(reply, nil, err)
 			} else {
 				payload := GetRootAsWritePayload(buf, 0)
-				core.WriteDictionaryFromXML(string(payload.Xml()), string(payload.Out()))
+				core.WriteXML(string(payload.Xml()), string(payload.Out()))
 				ipc.Reply(reply, true, nil)
 			}
 		})
@@ -79,9 +79,9 @@ func service(c *cli.Context) error {
 					Threshold:  threshold,
 				})
 
-				representable := types.EntriesToRepresentables(entries)
+				s := types.EntriesStructs(entries)
 
-				ipc.Reply(reply, representable, nil)
+				ipc.Reply(reply, s, nil)
 			}
 		})
 
@@ -104,11 +104,11 @@ func service(c *cli.Context) error {
 					return
 				}
 
-				representable := lo.Map(results, func(entry types.Entry, _ int) types.EntryRepresentable {
-					return entry.AsRepresentable()
+				s := lo.Map(results, func(entry types.EntryBuffer, _ int) types.Entry {
+					return entry.Struct()
 				})
 
-				ipc.Reply(reply, representable, nil)
+				ipc.Reply(reply, s, nil)
 			}
 		})
 
@@ -153,9 +153,9 @@ func service(c *cli.Context) error {
 					Split:      split,
 				})
 
-				representable := types.NestedEntriesToRepresentables(entries)
+				s := types.NestedEntriesStructs(entries)
 
-				ipc.Reply(reply, representable, nil)
+				ipc.Reply(reply, s, nil)
 			} else if err != nil {
 				ipc.Reply(reply, nil, err)
 			} else {
@@ -169,7 +169,7 @@ func service(c *cli.Context) error {
 				ipc.Reply(reply, nil, err)
 			} else {
 				payload := GetRootAsCompilePayload(buf, 0)
-				core.CompileDictionary(string(payload.Path()), string(payload.Out()))
+				core.CompilePath(string(payload.Path()), string(payload.Out()))
 				ipc.Reply(reply, true, nil)
 			}
 		})

@@ -39,11 +39,11 @@ func handleLookup(pathOrAlias string) http.HandlerFunc {
 			Follow:     follow,
 		})
 
-		representable := types.NestedEntriesToRepresentables(entries)
+		s := types.NestedEntriesStructs(entries)
 
 		// Return the result as JSON
 		w.Header().Set("Content-Type", "application/json")
 
-		json.NewEncoder(w).Encode(representable)
+		json.NewEncoder(w).Encode(s)
 	}
 }

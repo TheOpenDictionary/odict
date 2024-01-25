@@ -8,7 +8,7 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
-	CompileDictionary("../../examples/empty.xml", "../../examples/empty.odict")
+	CompilePath("../../examples/empty.xml", "../../examples/empty.odict")
 	dict, err := ReadDictionary("../../examples/empty.odict")
 	assert.Equal(t, nil, err)
 	// Ensure a UUID ID is generated for the dictionary

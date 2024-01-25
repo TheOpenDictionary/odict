@@ -18,7 +18,7 @@ type ENTRIES struct {
 }
 
 // Insert entries w/ relation to dictionary
-func insertEntries(builder *SQLBuilder, dictionaryID string, entryMap types.KVMap[string, types.EntryRepresentable]) {
+func insertEntries(builder *SQLBuilder, dictionaryID string, entryMap types.KVMap[string, types.Entry]) {
 	entries := entryMap.Values()
 
 	sort.Slice(entries, func(i, j int) bool {

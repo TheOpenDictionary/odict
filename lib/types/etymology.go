@@ -7,24 +7,24 @@ import (
 	"github.com/samber/lo"
 )
 
-type EtymologyRepresentable struct {
-	ID            string                                  `json:"id,omitempty" xml:"id,attr,omitempty"`
-	Pronunciation string                                  `json:"pronunciation,omitempty" xml:"pronunciation,attr,omitempty"`
-	Description   MDString                                `json:"description,omitempty" xml:"description,attr,omitempty"`
-	Senses        KVMap[PartOfSpeech, SenseRepresentable] `json:"senses" xml:"sense"`
+type Etymology struct {
+	ID            string                     `json:"id,omitempty" xml:"id,attr,omitempty"`
+	Pronunciation string                     `json:"pronunciation,omitempty" xml:"pronunciation,attr,omitempty"`
+	Description   MDString                   `json:"description,omitempty" xml:"description,attr,omitempty"`
+	Senses        KVMap[PartOfSpeech, Sense] `json:"senses" xml:"sense"`
 }
 
-func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
-	var sense Sense
-	senses := make(map[PartOfSpeech]SenseRepresentable)
+func (etymology *EtymologyBuffer) Struct() Etymology {
+	var sense SenseBuffer
+	senses := make(map[PartOfSpeech]Sense)
 
 	for u := 0; u < etymology.SensesLength(); u++ {
 		etymology.Senses(&sense, u)
-		representable := sense.AsRepresentable()
-		senses[representable.POS] = representable
+		s := sense.Struct()
+		senses[s.POS] = s
 	}
 
-	return EtymologyRepresentable{
+	return Etymology{
 		ID:            string(etymology.Id()),
 		Pronunciation: string(etymology.Pronunciation()),
 		Description:   MDString(etymology.Description()),
@@ -32,22 +32,22 @@ func (etymology *Etymology) AsRepresentable() EtymologyRepresentable {
 	}
 }
 
-func (ety *EtymologyRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (ety *Etymology) Table(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(ety.ID)
 	description := builder.CreateString(ety.Description.String())
 	senses := ety.buildSenseVector(builder)
 	pronunciation := builder.CreateString(ety.Pronunciation)
 
-	EtymologyStart(builder)
-	EtymologyAddId(builder, id)
-	EtymologyAddPronunciation(builder, pronunciation)
-	EtymologyAddDescription(builder, description)
-	EtymologyAddSenses(builder, senses)
+	EtymologyBufferStart(builder)
+	EtymologyBufferAddId(builder, id)
+	EtymologyBufferAddPronunciation(builder, pronunciation)
+	EtymologyBufferAddDescription(builder, description)
+	EtymologyBufferAddSenses(builder, senses)
 
-	return EtymologyEnd(builder)
+	return EtymologyBufferEnd(builder)
 }
 
-func (ety *EtymologyRepresentable) buildSenseVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (ety *Etymology) buildSenseVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	senses := ety.Senses
 	senseCount := len(senses)
 	keys := make([]string, 0, senseCount)
@@ -60,10 +60,10 @@ func (ety *EtymologyRepresentable) buildSenseVector(builder *flatbuffers.Builder
 
 	senseBuffers := lo.Map(keys, func(key string, _ int) flatbuffers.UOffsetT {
 		sense := senses[strToPartOfSpeech(key)]
-		return sense.AsBuffer(builder)
+		return sense.Table(builder)
 	})
 
-	EtymologyStartSensesVector(builder, senseCount)
+	EtymologyBufferStartSensesVector(builder, senseCount)
 
 	for i := senseCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(senseBuffers[i])

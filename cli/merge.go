@@ -35,7 +35,7 @@ func merge(c *cli.Context) error {
 			return err
 		}
 
-		core.WriteDictionaryToDisk(outputFile, result)
+		core.WriteDictionary(result, outputFile)
 
 		return nil
 	})

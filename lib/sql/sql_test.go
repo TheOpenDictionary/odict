@@ -12,7 +12,7 @@ import (
 )
 
 func TestDictionaryToSQL(t *testing.T) {
-	_, err := core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	_, err := core.CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	assert.Equal(t, nil, err)
 
@@ -20,7 +20,7 @@ func TestDictionaryToSQL(t *testing.T) {
 
 	assert.Equal(t, nil, err)
 
-	dict_r := dict.AsRepresentable()
+	dict_r := dict.Struct()
 
 	assert.Equal(t, nil, err)
 

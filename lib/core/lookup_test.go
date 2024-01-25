@@ -10,7 +10,7 @@ import (
 )
 
 func TestLookup(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict, err := ReadDictionary("../../examples/example1.odict")
 
@@ -23,25 +23,25 @@ func TestLookup(t *testing.T) {
 			Split:      0,
 			Follow:     false,
 		},
-	), func(entryList []types.Entry, _ int) []types.EntryRepresentable {
-		return types.EntriesToRepresentables(entryList)
+	), func(entryList []types.EntryBuffer, _ int) []types.Entry {
+		return types.EntriesStructs(entryList)
 	})
 
-	assert.EqualValues(t, types.EntryRepresentable{
+	assert.EqualValues(t, types.Entry{
 		Term: "dog",
-		Etymologies: []types.EtymologyRepresentable{
+		Etymologies: []types.Etymology{
 			{
 				Description:   "Latin root",
 				Pronunciation: "dooooog",
-				Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-					types.Unknown: types.SenseRepresentable{
+				Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+					types.Unknown: types.Sense{
 						POS:    types.Unknown,
-						Groups: []types.GroupRepresentable{},
-						Definitions: []types.DefinitionRepresentable{
+						Groups: []types.Group{},
+						Definitions: []types.Definition{
 							{
 								Value:    "a dog",
 								Examples: []string{},
-								Notes:    []types.NoteRepresentable{},
+								Notes:    []types.Note{},
 							},
 						},
 					},
@@ -50,20 +50,20 @@ func TestLookup(t *testing.T) {
 		},
 	}, entries[0][0])
 
-	assert.EqualValues(t, types.EntryRepresentable{
+	assert.EqualValues(t, types.Entry{
 		Term: "cat",
-		Etymologies: []types.EtymologyRepresentable{
+		Etymologies: []types.Etymology{
 			{
 				Description: "Latin root",
-				Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-					types.Noun: types.SenseRepresentable{
+				Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+					types.Noun: types.Sense{
 						POS:    types.Noun,
-						Groups: []types.GroupRepresentable{},
-						Definitions: []types.DefinitionRepresentable{
+						Groups: []types.Group{},
+						Definitions: []types.Definition{
 							{
 								Value:    "a cat",
 								Examples: []string{"There goes a cat!"},
-								Notes: []types.NoteRepresentable{
+								Notes: []types.Note{
 									{
 										Value:    "Some definition note",
 										Examples: []string{"Some example"},
@@ -81,7 +81,7 @@ func TestLookup(t *testing.T) {
 }
 
 func TestLookupSplitting(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict, err := ReadDictionary("../../examples/example1.odict")
 
@@ -105,7 +105,7 @@ func TestLookupSplitting(t *testing.T) {
 }
 
 func TestFallbacks(t *testing.T) {
-	CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	dict, err := ReadDictionary("../../examples/example1.odict")
 
@@ -139,7 +139,7 @@ func TestFallbacks(t *testing.T) {
 }
 
 func TestFollow(t *testing.T) {
-	CompileDictionary("../../examples/example2.xml", "../../examples/example2.odict")
+	CompilePath("../../examples/example2.xml", "../../examples/example2.odict")
 
 	dict, err := ReadDictionary("../../examples/example2.odict")
 

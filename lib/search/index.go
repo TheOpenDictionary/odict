@@ -17,7 +17,7 @@ import (
 )
 
 type IndexRequest struct {
-	Dictionary *types.Dictionary
+	Dictionary *types.DictionaryBuffer
 	Overwrite  bool
 	Quiet      bool
 }
@@ -33,7 +33,7 @@ func getIndexPath(dictionaryID string) (string, error) {
 }
 
 func Index(request IndexRequest) (string, error) {
-	dictionary := request.Dictionary.AsRepresentable()
+	dictionary := request.Dictionary.Struct()
 	indexPath, err := getIndexPath(dictionary.ID)
 
 	if err != nil {
@@ -75,7 +75,7 @@ func Index(request IndexRequest) (string, error) {
 
 			mapping.MapDocument(doc, entry)
 
-			enc := types.Serialize(&entry)
+			enc := (&entry).Bytes()
 			field := document.NewTextFieldWithIndexingOptions("_source", nil, enc, idx.StoreField)
 			nd := doc.AddField(field)
 

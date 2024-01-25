@@ -34,9 +34,9 @@ func split(c *cli.Context) error {
 
 		entries := core.Split(request)
 
-		representable := types.EntriesToRepresentables(entries)
+		s := types.EntriesStructs(entries)
 
-		fmt.Print(utils.SerializeToJSON(representable, true))
+		fmt.Print(utils.SerializeToJSON(s, true))
 
 		return nil
 	})

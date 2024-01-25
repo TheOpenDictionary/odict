@@ -8,15 +8,15 @@ import (
 )
 
 func TestMerge(t *testing.T) {
-	dict1 := types.DictionaryRepresentable{
-		Entries: types.KVMap[string, types.EntryRepresentable]{
-			"dog": types.EntryRepresentable{
+	dict1 := types.Dictionary{
+		Entries: types.KVMap[string, types.Entry]{
+			"dog": types.Entry{
 				Term: "dog",
-				Etymologies: []types.EtymologyRepresentable{
-					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-						types.Noun: types.SenseRepresentable{
+				Etymologies: []types.Etymology{
+					{Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+						types.Noun: types.Sense{
 							POS: types.Noun,
-							Definitions: []types.DefinitionRepresentable{
+							Definitions: []types.Definition{
 								{Value: "some definition"},
 							},
 						},
@@ -27,15 +27,15 @@ func TestMerge(t *testing.T) {
 		},
 	}
 
-	dict2 := types.DictionaryRepresentable{
-		Entries: types.KVMap[string, types.EntryRepresentable]{
-			"cat": types.EntryRepresentable{
+	dict2 := types.Dictionary{
+		Entries: types.KVMap[string, types.Entry]{
+			"cat": types.Entry{
 				Term: "cat",
-				Etymologies: []types.EtymologyRepresentable{
-					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-						types.Noun: types.SenseRepresentable{
+				Etymologies: []types.Etymology{
+					{Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+						types.Noun: types.Sense{
 							POS: types.Noun,
-							Definitions: []types.DefinitionRepresentable{
+							Definitions: []types.Definition{
 								{Value: "some other definition"},
 							},
 						},
@@ -46,41 +46,41 @@ func TestMerge(t *testing.T) {
 		},
 	}
 
-	expected := types.DictionaryRepresentable{
-		Entries: types.KVMap[string, types.EntryRepresentable]{
-			"cat": types.EntryRepresentable{
+	expected := types.Dictionary{
+		Entries: types.KVMap[string, types.Entry]{
+			"cat": types.Entry{
 				Term: "cat",
-				Etymologies: []types.EtymologyRepresentable{
-					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-						types.Noun: types.SenseRepresentable{
+				Etymologies: []types.Etymology{
+					{Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+						types.Noun: types.Sense{
 							POS: types.Noun,
-							Definitions: []types.DefinitionRepresentable{
+							Definitions: []types.Definition{
 								{
 									Value:    "some other definition",
 									Examples: []string{},
-									Notes:    []types.NoteRepresentable{},
+									Notes:    []types.Note{},
 								},
 							},
-							Groups: []types.GroupRepresentable{},
+							Groups: []types.Group{},
 						},
 					},
 					},
 				},
 			},
-			"dog": types.EntryRepresentable{
+			"dog": types.Entry{
 				Term: "dog",
-				Etymologies: []types.EtymologyRepresentable{
-					{Senses: types.KVMap[types.PartOfSpeech, types.SenseRepresentable]{
-						types.Noun: types.SenseRepresentable{
+				Etymologies: []types.Etymology{
+					{Senses: types.KVMap[types.PartOfSpeech, types.Sense]{
+						types.Noun: types.Sense{
 							POS: types.Noun,
-							Definitions: []types.DefinitionRepresentable{
+							Definitions: []types.Definition{
 								{
 									Value:    "some definition",
 									Examples: []string{},
-									Notes:    []types.NoteRepresentable{},
+									Notes:    []types.Note{},
 								},
 							},
-							Groups: []types.GroupRepresentable{},
+							Groups: []types.Group{},
 						},
 					},
 					},
@@ -89,8 +89,8 @@ func TestMerge(t *testing.T) {
 		},
 	}
 
-	dict1_b := types.GetRootAsDictionary(types.Serialize(&dict1), 0)
-	dict2_b := types.GetRootAsDictionary(types.Serialize(&dict2), 0)
+	dict1_b := (&dict1).Buffer()
+	dict2_b := (&dict2).Buffer()
 
 	merged, err := MergeDictionaries(dict1_b, dict2_b)
 

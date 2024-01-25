@@ -144,7 +144,7 @@ func generateXSD(t reflect.Type, opts XSDOptions) string {
 
 func generateSchema() string {
 	xsd := "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n"
-	xsd += generateXSD(reflect.TypeOf(types.DictionaryRepresentable{}), XSDOptions{TagName: "dictionary"})
+	xsd += generateXSD(reflect.TypeOf(types.Dictionary{}), XSDOptions{TagName: "dictionary"})
 	xsd += "</xs:schema>"
 	return xsd
 }

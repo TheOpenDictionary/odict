@@ -5,40 +5,40 @@ import (
 	"github.com/samber/lo"
 )
 
-type NoteRepresentable struct {
+type Note struct {
 	ID       string   `json:"id,omitempty" xml:"id,attr,omitempty"`
 	Value    MDString `json:"value,omitempty" xml:"value,attr"`
 	Examples []string `json:"examples,omitempty" xml:"example"`
 }
 
-func (note *Note) AsRepresentable() NoteRepresentable {
+func (note *NoteBuffer) Struct() Note {
 	examples := []string{}
 
 	for e := 0; e < note.ExamplesLength(); e++ {
 		examples = append(examples, string(note.Examples(e)))
 	}
 
-	return NoteRepresentable{
+	return Note{
 		ID:       string(note.Id()),
 		Value:    MDString(note.Value()),
 		Examples: examples,
 	}
 }
 
-func (note *NoteRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (note *Note) Table(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	id := builder.CreateString(note.ID)
 	value := builder.CreateString(note.Value.String())
 	examples := note.buildExampleVector(builder)
 
-	NoteStart(builder)
-	NoteAddId(builder, id)
-	NoteAddValue(builder, value)
-	NoteAddExamples(builder, examples)
+	NoteBufferStart(builder)
+	NoteBufferAddId(builder, id)
+	NoteBufferAddValue(builder, value)
+	NoteBufferAddExamples(builder, examples)
 
-	return NoteEnd(builder)
+	return NoteBufferEnd(builder)
 }
 
-func (note *NoteRepresentable) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (note *Note) buildExampleVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	examples := note.Examples
 	exampleCount := len(examples)
 
@@ -46,7 +46,7 @@ func (note *NoteRepresentable) buildExampleVector(builder *flatbuffers.Builder) 
 		return builder.CreateString(example)
 	})
 
-	NoteStartExamplesVector(builder, exampleCount)
+	NoteBufferStartExamplesVector(builder, exampleCount)
 
 	for i := exampleCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(exampleBuffers[i])

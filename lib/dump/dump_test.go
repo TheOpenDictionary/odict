@@ -9,7 +9,7 @@ import (
 )
 
 func TestDictionaryToXML(t *testing.T) {
-	_, err := core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	_, err := core.CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	assert.Equal(t, nil, err)
 
@@ -17,18 +17,18 @@ func TestDictionaryToXML(t *testing.T) {
 
 	assert.Equal(t, nil, err)
 
-	dict_r := dict.AsRepresentable()
+	dict_r := dict.Struct()
 	dump, err := AsXML(dict)
 
 	assert.Equal(t, nil, err)
 
-	core.WriteDictionaryFromXML(dump, "../../examples/example1_generated.odict")
+	core.WriteXML(dump, "../../examples/example1_generated.odict")
 
 	newdict, err := core.ReadDictionary("../../examples/example1_generated.odict")
 
 	assert.Equal(t, nil, err)
 
-	newdict_r := newdict.AsRepresentable()
+	newdict_r := newdict.Struct()
 
 	// We need the IDs to match seeing they will definitely be different
 	// due to dictionary regeneration

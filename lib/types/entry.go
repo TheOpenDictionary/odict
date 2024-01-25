@@ -7,57 +7,61 @@ import (
 	"github.com/samber/lo"
 )
 
-type EntryRepresentable struct {
-	Term        string                   `json:"term" xml:"term,attr"`
-	SeeAlso     string                   `json:"see,omitempty" xml:"see,attr,omitempty"`
-	Etymologies []EtymologyRepresentable `json:"etymologies" xml:"ety,omitempty"`
-	XMLName     xml.Name                 `json:"-" xml:"entry"`
+type Entry struct {
+	Term        string      `json:"term" xml:"term,attr"`
+	SeeAlso     string      `json:"see,omitempty" xml:"see,attr,omitempty"`
+	Etymologies []Etymology `json:"etymologies" xml:"ety,omitempty"`
+	XMLName     xml.Name    `json:"-" xml:"entry"`
 }
 
-func (entry EntryRepresentable) Key() string {
+func (entry Entry) Key() string {
 	return entry.Term
 }
 
-func (entry *Entry) AsRepresentable() EntryRepresentable {
-	var ety Etymology
-	var etymologies []EtymologyRepresentable
+func (entry *Entry) Bytes() []byte {
+	return getBytes(entry)
+}
+
+func (entry *EntryBuffer) Struct() Entry {
+	var ety EtymologyBuffer
+	var etymologies []Etymology
 
 	for b := 0; b < entry.EtymologiesLength(); b++ {
 		entry.Etymologies(&ety, b)
-		representable := ety.AsRepresentable()
-		etymologies = append(etymologies, representable)
+		s := ety.Struct()
+		etymologies = append(etymologies, s)
 	}
 
-	return EntryRepresentable{
+	return Entry{
 		Term:        string(entry.Term()),
 		SeeAlso:     string(entry.See()),
 		Etymologies: etymologies,
 	}
 }
 
-func (entry *EntryRepresentable) AsBuffer(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func (entry *Entry) Table(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	key := builder.CreateString(entry.Key())
 	term := builder.CreateString(entry.Term)
 	see := builder.CreateString(entry.SeeAlso)
 	etymologies := entry.buildEtymologyVector(builder)
 
-	EntryStart(builder)
-	EntryAddKey(builder, key)
-	EntryAddSee(builder, see)
-	EntryAddTerm(builder, term)
-	EntryAddEtymologies(builder, etymologies)
+	EntryBufferStart(builder)
+	EntryBufferAddKey(builder, key)
+	EntryBufferAddSee(builder, see)
+	EntryBufferAddTerm(builder, term)
+	EntryBufferAddEtymologies(builder, etymologies)
 
-	return EntryEnd(builder)
+	return EntryBufferEnd(builder)
 }
 
-func (entry *EntryRepresentable) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
-	etymologies := lo.Map(entry.Etymologies, func(ety EtymologyRepresentable, _ int) flatbuffers.UOffsetT {
-		return ety.AsBuffer(builder)
+func (entry *Entry) buildEtymologyVector(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+	etymologies := lo.Map(entry.Etymologies, func(ety Etymology, _ int) flatbuffers.UOffsetT {
+		return ety.Table(builder)
 	})
 
 	etymologiesCount := len(etymologies)
 
-	EntryStartEtymologiesVector(builder, etymologiesCount)
+	EntryBufferStartEtymologiesVector(builder, etymologiesCount)
 
 	for i := etymologiesCount - 1; i >= 0; i-- {
 		builder.PrependUOffsetT(etymologies[i])

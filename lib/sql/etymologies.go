@@ -14,7 +14,7 @@ type ETYMOLOGIES struct {
 }
 
 // Insert etymologies w/ relation to current entry
-func insertEtymologies(builder *SQLBuilder, entryID string, etymologies []types.EtymologyRepresentable) {
+func insertEtymologies(builder *SQLBuilder, entryID string, etymologies []types.Etymology) {
 	for _, etymology := range etymologies {
 		ety := sq.New[ETYMOLOGIES]("")
 		id := utils.CreateUUID()

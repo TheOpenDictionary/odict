@@ -17,13 +17,13 @@ import (
 type TestLookupSuite struct {
 	suite.Suite
 	path string
-	dict *types.Dictionary
+	dict *types.DictionaryBuffer
 }
 
 func (suite *TestLookupSuite) SetupTest() {
 	os.Setenv("ODICT_CONFIG_DIR", ".odict")
 
-	core.CompileDictionary("../../examples/example1.xml", "../../examples/example1.odict")
+	core.CompilePath("../../examples/example1.xml", "../../examples/example1.odict")
 
 	suite.path = "../../examples/example1.odict"
 
@@ -50,9 +50,9 @@ func (suite *TestLookupSuite) TestLookupSingleDictionary() {
 		},
 	)
 
-	representable := types.NestedEntriesToRepresentables(entries)
+	s := types.NestedEntriesStructs(entries)
 
-	json, err := utils.SerializeToJSON(representable, false)
+	json, err := utils.SerializeToJSON(s, false)
 
 	suite.Equal(nil, err)
 
@@ -81,9 +81,9 @@ func (suite *TestLookupSuite) TestLookupMultiDictionary() {
 		},
 	)
 
-	representable := types.NestedEntriesToRepresentables(entries)
+	s := types.NestedEntriesStructs(entries)
 
-	json, err := utils.SerializeToJSON(representable, false)
+	json, err := utils.SerializeToJSON(s, false)
 
 	suite.Equal(nil, err)
 

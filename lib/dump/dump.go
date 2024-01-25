@@ -17,12 +17,12 @@ const (
 
 // AsXML converts an Dictionary struct
 // to its original ODXML
-func AsXML(dict *types.Dictionary) (string, error) {
-	return utils.SerializeToXML(dict.AsRepresentable(), true)
+func AsXML(dict *types.DictionaryBuffer) (string, error) {
+	return utils.SerializeToXML(dict.Struct(), true)
 }
 
 // AsSQL converts an Dictionary struct
 // to SQL output to seed a database
-func AsSQL(dict *types.Dictionary, dialect SQLDialect, includeSchema bool) (string, error) {
-	return sql.DictionaryToSQL(dict.AsRepresentable(), dialect, includeSchema)
+func AsSQL(dict *types.DictionaryBuffer, dialect SQLDialect, includeSchema bool) (string, error) {
+	return sql.DictionaryToSQL(dict.Struct(), dialect, includeSchema)
 }
