@@ -29,6 +29,8 @@ github.com/gkampitakis/go-snaps v0.5.0 h1:Qpk1+V1WJszsDvYMgrI15XbUvWqpsFvFxgaXKV
 github.com/gkampitakis/go-snaps v0.5.0/go.mod h1:gX47VYsnvqHsjBrTrpaXfm1Dm1Xg+nREZPKRT8xifV8=
 github.com/gkampitakis/go-snaps v0.5.1 h1:lLf6BhcUu8VqRgy4mMq5YKa+eQp/0MBhkKd5ZYMMNpE=
 github.com/gkampitakis/go-snaps v0.5.1/go.mod h1:gX47VYsnvqHsjBrTrpaXfm1Dm1Xg+nREZPKRT8xifV8=
+github.com/gkampitakis/go-snaps v0.5.2 h1:ay/6f7WHwRkOgpBec9DjMLRBAApziJommZ21NkOOCwY=
+github.com/gkampitakis/go-snaps v0.5.2/go.mod h1:ZABkO14uCuVxBHAXAfKG+bqNz+aa1bGPAg8jkI0Nk8Y=
 github.com/go-sql-driver/mysql v1.7.1 h1:lUIinVbN1DY0xBg0eMOzmmtGoHwWBbvnWubQUrtU8EI=
 github.com/go-sql-driver/mysql v1.7.1/go.mod h1:OXbVy3sEdcQ2Doequ6Z5BW6fXNQTmx+9S1MCJN5yJMI=
 github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 h1:au07oEsX2xN0ktxqI+Sida1w446QrXBRJ0nee3SNZlA=
