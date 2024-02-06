@@ -4,15 +4,15 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: xsd 
+@deps:
   asdf install > /dev/null
   go install golang.org/x/tools/cmd/goimports@latest
 
-@build: deps (cli "schema") sync
-  go build -o bin/odict odict.go
+@build +args="": deps
+  cargo build {{args}}
 
-@build-all +args="": deps (cli "schema") sync
-  goreleaser build --id odict --clean {{args}}
+# @build-all +args="": deps (cli "schema") sync
+#   goreleaser build --id odict --clean {{args}}
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
@@ -20,14 +20,14 @@ GOLANG_CROSS_VERSION := "v1.21.3"
   go run xsd/xsd.go
 
 @run +args="":
-  go run odict.go {{args}}
+  cargo run {{args}}
   
 @test: deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")
 
-@publish +args="--auto-snapshot --clean":
-  goreleaser release {{args}}
+# @publish +args="--auto-snapshot --clean":
+#   goreleaser release {{args}}
 
 @snaps: 
   UPDATE_SNAPS=true just go test
@@ -40,7 +40,7 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 # ------------------------------------------------------------------------------ #
 
 @go +command:
-	just lib/{{command}}
+	just go/lib/{{command}}
 
 @cli +command:
 	just cli/{{command}}
