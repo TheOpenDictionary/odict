@@ -1,7 +1,9 @@
-use std::{error::Error, fs::File, io::Write, path::PathBuf};
+use std::fs::read_to_string;
+use std::path::Path;
+use std::{error::Error, fs::File, io::Write};
 
 use crate::utils::compress;
-use crate::Dictionary;
+use crate::{Dictionary, ToDictionary};
 
 use super::constants::*;
 
@@ -52,16 +54,44 @@ impl DictionaryWriter {
         Ok(output)
     }
 
-    pub fn write_to_path(
+    pub fn write_to_path<P: AsRef<Path>>(
         &self,
         dictionary: &Dictionary,
-        path: &PathBuf,
+        path: P,
     ) -> Result<(), Box<dyn Error>> {
         let bytes = self.write_to_bytes(dictionary)?;
         let mut file = File::create(path)?;
 
         file.write_all(&bytes)?;
 
+        Ok(())
+    }
+
+    /// Compiles an XML file to an ODict dictionary file
+    ///
+    /// # Arguments
+    ///
+    /// * `input_path` - The path to the XML file
+    /// * `output_path` - The path to the output dictionary file
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use odict::DictionaryWriter;
+    /// use std::path::PathBuf;
+    ///
+    /// let writer = DictionaryWriter::new();
+    ///
+    /// writer.compile_xml("path/to/input.xml", "path/to/output.odict");
+    /// ```
+    ///
+    pub fn compile_xml<P: AsRef<Path>>(
+        &self,
+        input_path: P,
+        output_path: P,
+    ) -> Result<(), Box<dyn Error>> {
+        let dict = read_to_string(input_path)?.to_dictionary()?;
+        self.write_to_path(&dict, output_path)?;
         Ok(())
     }
 }

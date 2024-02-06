@@ -694,6 +694,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tantivy",
+ "uuid",
  "validation",
 ]
 

@@ -1,4 +1,4 @@
-use std::{error::Error, path::PathBuf};
+use std::{error::Error, fs::read_to_string, path::PathBuf};
 
 use clap::{arg, command, Args};
 use odict::Dictionary;
@@ -36,7 +36,9 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error
         );
     }
 
-    let dict = Dictionary::from(input);
+    let contents = read_to_string(input).unwrap();
+    let xml = contents.as_str();
+    let dict = Dictionary::from(xml);
 
     ctx.writer.write_to_path(&dict, &out.unwrap())?;
 

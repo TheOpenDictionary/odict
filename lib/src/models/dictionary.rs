@@ -1,19 +1,19 @@
 use quick_xml::de::from_str;
 use rkyv::to_bytes;
-use std::{collections::HashMap, error::Error, fs::read_to_string, path::PathBuf};
+use std::{collections::HashMap, error::Error};
 
-use super::entry::Entry;
+use super::{entry::Entry, id::ID};
 use crate::serializable;
 
 serializable! {
   pub struct Dictionary {
-      #[serde(rename = "@id")]
-     pub id: Option<String>,
+      #[serde(default, rename = "@id", )]
+     pub id: ID,
 
       #[serde(rename = "@name")]
      pub name: Option<String>,
 
-      #[serde(rename = "entry", with = "entries")]
+      #[serde(default, rename = "entry", with = "entries")]
      pub entries: HashMap<String, Entry>,
   }
 }
@@ -62,10 +62,12 @@ impl From<&str> for Dictionary {
     }
 }
 
-impl From<&PathBuf> for Dictionary {
-    fn from(path: &PathBuf) -> Self {
-        // TODO: add support for reading .odict files in addition to XML
-        let contents = read_to_string(path).unwrap();
-        from_str(contents.as_str()).unwrap()
+pub trait ToDictionary {
+    fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>>;
+}
+
+impl ToDictionary for String {
+    fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
+        Ok(Dictionary::from(self.as_str()))
     }
 }
