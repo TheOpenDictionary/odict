@@ -1,6 +1,15 @@
-use odict::read::DictionaryReader;
+use odict::{read::DictionaryReader, DictionaryWriter};
 
 pub struct CLIContext {
     pub reader: DictionaryReader,
-    // writer: DictionaryWriter,
+    pub writer: DictionaryWriter,
+}
+
+impl CLIContext {
+    pub fn default() -> Self {
+        Self {
+            reader: DictionaryReader::default(),
+            writer: DictionaryWriter::default(),
+        }
+    }
 }

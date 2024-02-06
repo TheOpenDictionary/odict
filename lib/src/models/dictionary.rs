@@ -1,5 +1,6 @@
 use quick_xml::de::from_str;
-use std::{collections::HashMap, fs::read_to_string, path::PathBuf};
+use rkyv::to_bytes;
+use std::{collections::HashMap, error::Error, fs::read_to_string, path::PathBuf};
 
 use super::entry::Entry;
 use crate::serializable;
@@ -45,6 +46,13 @@ mod entries {
         }
 
         Ok(map)
+    }
+}
+
+impl Dictionary {
+    pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
+        let bytes = to_bytes::<_, 4096>(self)?;
+        Ok(bytes.to_vec())
     }
 }
 

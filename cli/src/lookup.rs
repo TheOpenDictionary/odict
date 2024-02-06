@@ -45,7 +45,7 @@ pub fn lookup(ctx: &CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Error>>
     let LookupArgs {
         dictionary_path: path,
         queries,
-        format,
+        format: _,
         follow,
         split,
     } = args;

@@ -1,5 +1,4 @@
 use clap::{command, crate_version, Parser, Subcommand};
-use odict::DictionaryReader;
 
 mod compile;
 mod context;
@@ -40,16 +39,17 @@ enum Commands {
 
 fn main() {
     let cli = CLI::parse();
+    let ctx = CLIContext::default();
 
-    let ctx = CLIContext {
-        reader: DictionaryReader::default(),
-    };
-
-    t(
+    let result = t(
         || match cli.command {
-            Commands::Compile(ref args) => compile(&args),
+            Commands::Compile(ref args) => compile(&ctx, &args),
             Commands::Lookup(ref args) => lookup(&ctx, &args),
         },
         cli.quiet,
     );
+
+    if let Err(e) = result {
+        eprintln!("Error: {}", e);
+    }
 }

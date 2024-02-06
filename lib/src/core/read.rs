@@ -7,14 +7,34 @@ use std::{
 use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::{archived_root, Deserialize, Infallible};
 
-use super::version::FILE_VERSION;
+use super::constants::FILE_VERSION;
 use crate::{utils::decompress, ArchivedDictionary, Dictionary};
+
+/* -------------------------------------------------------------------------- */
+/*                               DictionaryFile                               */
+/* -------------------------------------------------------------------------- */
 
 pub struct DictionaryFile {
     pub signature: String,
     pub version: u16,
     content: Vec<u8>,
 }
+
+impl DictionaryFile {
+    pub fn to_archive(&self) -> Result<&ArchivedDictionary, Box<dyn Error>> {
+        let archived = unsafe { archived_root::<Dictionary>(&self.content[..]) };
+        Ok(archived)
+    }
+
+    pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
+        let dict: Dictionary = self.to_archive()?.deserialize(&mut Infallible)?;
+        Ok(dict)
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              DictionaryReader                              */
+/* -------------------------------------------------------------------------- */
 
 pub struct DictionaryReader {}
 
@@ -74,17 +94,5 @@ impl DictionaryReader {
         let result = self.read_from_bytes(&buffer)?;
 
         Ok(result)
-    }
-}
-
-impl DictionaryFile {
-    pub fn to_archive(&self) -> Result<&ArchivedDictionary, Box<dyn Error>> {
-        let archived = unsafe { archived_root::<Dictionary>(&self.content[..]) };
-        Ok(archived)
-    }
-
-    pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        let dict: Dictionary = self.to_archive()?.deserialize(&mut Infallible)?;
-        Ok(dict)
     }
 }

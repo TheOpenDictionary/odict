@@ -42,7 +42,7 @@ impl From<&str> for MDString {
 }
 
 impl MDString {
-    pub fn parse(&self, strategy: MarkdownStrategy) -> String {
+    pub fn parse(&self, _strategy: MarkdownStrategy) -> String {
         // output := []byte(mds)
 
         // switch markdownStrategy {

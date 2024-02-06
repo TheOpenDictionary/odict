@@ -3,7 +3,7 @@ use std::{error::Error, path::PathBuf};
 use clap::{arg, command, Args};
 use odict::Dictionary;
 
-use crate::CLI;
+use crate::CLIContext;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -16,7 +16,7 @@ pub struct CompileArgs {
     output: Option<PathBuf>,
 }
 
-pub fn compile(args: &CompileArgs) -> Result<(), Box<dyn Error>> {
+pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error>> {
     let CompileArgs { input, output } = args;
 
     let mut out = output.clone();
@@ -38,7 +38,7 @@ pub fn compile(args: &CompileArgs) -> Result<(), Box<dyn Error>> {
 
     let dict = Dictionary::from(input);
 
-    dict.write_to_path(&out.unwrap())?;
+    ctx.writer.write_to_path(&dict, &out.unwrap())?;
 
     Ok(())
 }
