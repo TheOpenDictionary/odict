@@ -1,4 +1,4 @@
-use odict::{read::DictionaryReader, DictionaryWriter};
+use odict::{DictionaryReader, DictionaryWriter};
 
 pub struct CLIContext {
     pub reader: DictionaryReader,

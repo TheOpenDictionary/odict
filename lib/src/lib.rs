@@ -1,8 +1,10 @@
 mod core;
+mod ext;
 mod models;
 mod utils;
 
 pub use self::core::*;
+pub use self::ext::*;
 pub use self::models::*;
 
 pub fn add(left: usize, right: usize) -> usize {

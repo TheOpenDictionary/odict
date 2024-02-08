@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize, Serializer};
 
-use crate::{serializable, serializable_custom};
+use crate::serializable_custom;
 
 pub enum MarkdownStrategy {
     HTML,

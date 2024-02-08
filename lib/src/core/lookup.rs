@@ -1,6 +1,6 @@
 use std::{error::Error, sync::OnceLock};
 
-use crate::{ArchivedDictionary, Dictionary, Entry};
+use crate::{ArchivedDictionary, Dictionary, Entry, SplitOptions};
 
 use rayon::prelude::*;
 
@@ -109,9 +109,8 @@ macro_rules! lookup {
                             );
                         }
                     } else if *split > 0 {
-                        // TODO: revisit
-                        // let split = dictionary.split(term, &SplitOptions::default().threshold(*split))?;
-                        // entries.extend_from_slice(&split);
+                        let split = self.split(term, &SplitOptions::default().threshold(*split))?;
+                        entries.extend_from_slice(&split);
                     } else {
                         entries.push(entry);
                     }

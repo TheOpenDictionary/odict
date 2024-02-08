@@ -61,13 +61,3 @@ impl From<&str> for Dictionary {
         from_str(xml).unwrap()
     }
 }
-
-pub trait ToDictionary {
-    fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>>;
-}
-
-impl ToDictionary for String {
-    fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        Ok(Dictionary::from(self.as_str()))
-    }
-}

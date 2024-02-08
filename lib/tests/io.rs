@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+mod io_tests {
 
     use odict::{DictionaryReader, DictionaryWriter, ID};
     use regex::Regex;

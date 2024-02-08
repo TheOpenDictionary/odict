@@ -4,7 +4,6 @@ serializable! {
   #[derive(Hash)]
   #[archive_attr(derive(PartialEq, Eq, Hash))]
   #[repr(u8)]
-  #[allow(non_camel_case_types)]
   pub enum PartOfSpeech {
       /* -------------------------------------------------------------------------- */
       /*                            Japanese-specific POS                           */

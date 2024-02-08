@@ -8,4 +8,4 @@ nodejs 20.11.0
 just 1.23.0 
 goreleaser 1.21.1
 make 4.4.1
-rust 1.75.0
+rust 1.76.0

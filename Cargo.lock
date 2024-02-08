@@ -687,6 +687,7 @@ dependencies = [
  "byteorder",
  "lz4_flex",
  "markdown",
+ "once_cell",
  "quick-xml",
  "rayon",
  "regex",

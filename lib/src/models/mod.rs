@@ -7,6 +7,7 @@ mod group;
 mod id;
 mod mdstring;
 mod note;
+#[allow(non_camel_case_types)]
 mod pos;
 mod sense;
 

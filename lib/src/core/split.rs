@@ -1,10 +1,10 @@
+use std::error::Error;
+
+use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+
 /* -------------------------------------------------------------------------- */
 /*                                Split Options                               */
 /* -------------------------------------------------------------------------- */
-
-use std::error::Error;
-
-use crate::{schema::EntryBuffer, DictionaryFile};
 
 pub struct SplitOptions {
     threshold: usize,
@@ -21,36 +21,45 @@ impl SplitOptions {
     }
 }
 
-impl DictionaryFile<'_> {
-    pub fn split(
-        &self,
-        query: &str,
-        options: &SplitOptions,
-    ) -> Result<Vec<EntryBuffer>, Box<dyn Error>> {
-        let buf = self.as_buffer();
+/* -------------------------------------------------------------------------- */
+/*                               Implementation                               */
+/* -------------------------------------------------------------------------- */
 
-        let mut entries: Vec<EntryBuffer> = Vec::new();
-        let mut start = 0;
-        let mut end = query.len();
+macro_rules! split {
+    ($t:ty, $r:ty) => {
+        impl $t {
+            pub fn split(
+                &self,
+                query: &str,
+                options: &SplitOptions,
+            ) -> Result<Vec<&$r>, Box<dyn Error + Send>> {
+                let mut entries: Vec<&$r> = Vec::new();
+                let mut start = 0;
+                let mut end = query.len();
 
-        let SplitOptions { threshold } = options;
+                let SplitOptions { threshold } = options;
 
-        while start < end {
-            let substr = &query[start..end];
-            let entry_option = buf.entries_by_key(substr);
+                while start < end {
+                    let substr = &query[start..end];
+                    let entry = self.entries.get(substr);
 
-            if let Some(entry) = entry_option {
-                entries.push(entry.clone());
-            }
+                    if entry.is_some() {
+                        entries.push(entry.unwrap());
+                    }
 
-            if entry_option != None || substr.len() <= *threshold {
-                start = end;
-                end = query.len();
-            } else {
-                end -= 1;
+                    if entry.is_some() || substr.len() <= *threshold {
+                        start = end;
+                        end = query.len();
+                    } else {
+                        end -= 1;
+                    }
+                }
+
+                Ok(entries)
             }
         }
-
-        Ok(entries)
-    }
+    };
 }
+
+split!(Dictionary, Entry);
+split!(ArchivedDictionary, ArchivedEntry);
