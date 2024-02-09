@@ -41,7 +41,7 @@ pub struct LookupArgs {
     split: usize,
 }
 
-pub fn lookup(ctx: &CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Error>> {
+pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Error>> {
     let LookupArgs {
         dictionary_path: path,
         queries,

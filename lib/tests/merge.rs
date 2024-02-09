@@ -119,7 +119,7 @@ fn test_merge() {
 
     let mut result = dict1;
 
-    result.merge_in(&vec![&dict2]);
+    result.merge(&dict2);
     result.id = expected.id.clone(); // Prevent failures based solely on UUIDs
 
     assert_eq!(expected, result);

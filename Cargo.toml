@@ -2,7 +2,9 @@
 
 resolver = "2"
 
-members = [
-    "cli",
-    "lib"
-]
+members = ["cli", "lib"]
+
+[profile.release]
+strip = true
+codegen-units = 1
+lto = true
