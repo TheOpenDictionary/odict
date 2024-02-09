@@ -5,15 +5,15 @@ use super::{example::Example, note::Note, MDString};
 serializable! {
   pub struct Definition {
     #[serde(rename = "@id")]
-    id: Option<String>,
+    pub id: Option<String>,
 
     #[serde(rename = "@value")]
-    value: MDString,
+    pub value: MDString,
 
     #[serde(default)]
-    examples: Vec<Example>,
+    pub examples: Vec<Example>,
 
     #[serde(default)]
-    notes: Vec<Note>,
+    pub notes: Vec<Note>,
   }
 }

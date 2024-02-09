@@ -7,16 +7,16 @@ use super::{pos::PartOfSpeech, sense::Sense, MDString};
 serializable! {
   pub struct Etymology {
     #[serde(rename = "@id")]
-    id: Option<String>,
+    pub id: Option<String>,
 
     #[serde(rename = "@pronunciation")]
-    pronunciation: Option<String>,
+    pub pronunciation: Option<String>,
 
     #[serde(rename = "@description")]
-    description: Option<MDString>,
+    pub description: Option<MDString>,
 
     #[serde(rename = "sense", with = "senses")]
-    senses: HashMap<PartOfSpeech, Sense>,
+    pub senses: HashMap<PartOfSpeech, Sense>,
   }
 }
 

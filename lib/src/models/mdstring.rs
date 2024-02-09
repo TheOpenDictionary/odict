@@ -1,6 +1,9 @@
 use serde::{Deserialize, Serialize, Serializer};
 
-use crate::serializable_custom;
+use crate::{
+    md::{to_html, to_text},
+    serializable_custom,
+};
 
 pub enum MarkdownStrategy {
     HTML,
@@ -42,18 +45,33 @@ impl From<&str> for MDString {
 }
 
 impl MDString {
-    pub fn parse(&self, _strategy: MarkdownStrategy) -> String {
-        // output := []byte(mds)
+    pub fn parse(&self, strategy: MarkdownStrategy) -> String {
+        match strategy {
+            MarkdownStrategy::HTML => to_html(&self.value),
+            MarkdownStrategy::Text => to_text(&self.value),
+            MarkdownStrategy::Disabled => self.value.to_owned(),
+        }
+    }
+}
 
-        // switch markdownStrategy {
-        // case MarkdownStrategyHTML:
-        //   output = utils.MarkdownToHTML(output)
-        // case MarkdownStrategyText:
-        //   output = utils.MarkdownToText(output)
-        // }
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-        // TODO:implement
+    #[test]
+    fn test_parse() {
+        let md = MDString::from("**This** is a <sup>test</sup> of the _parser_!");
 
-        self.value.clone()
+        assert_eq!(
+            md.parse(MarkdownStrategy::HTML),
+            "<strong>This</strong> is a <sup>test</sup> of the <em>parser</em>!"
+        );
+
+        assert_eq!(
+            md.parse(MarkdownStrategy::Text),
+            "This is a test of the parser!"
+        );
+
+        assert_eq!(md.parse(MarkdownStrategy::Disabled), md.value);
     }
 }

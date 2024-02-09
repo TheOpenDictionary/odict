@@ -8,7 +8,7 @@ use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::{archived_root, Deserialize, Infallible};
 
 use super::constants::FILE_VERSION;
-use crate::{utils::decompress, ArchivedDictionary, Dictionary};
+use crate::{lz4::decompress, ArchivedDictionary, Dictionary};
 
 /* -------------------------------------------------------------------------- */
 /*                               DictionaryFile                               */

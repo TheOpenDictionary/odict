@@ -8,9 +8,15 @@ serializable! {
   pub struct ID(String);
 }
 
+impl ID {
+    pub fn new() -> Self {
+        ID(Uuid::new_v4().to_string())
+    }
+}
+
 impl Default for ID {
     fn default() -> Self {
-        ID(Uuid::new_v4().to_string())
+        ID::new()
     }
 }
 
