@@ -1,6 +1,6 @@
 use map_macro::hash_map;
 
-use odict::{Definition, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID};
+use odict::{Definition, DefinitionType, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID};
 
 #[test]
 fn test_merge() {
@@ -20,14 +20,15 @@ fn test_merge() {
                   PartOfSpeech::n => Sense {
                     pos: PartOfSpeech::n,
                     definitions: vec![
-                      Definition {
-                        id: None,
-                        value: "some definition".into(),
-                        examples: vec![],
-                        notes: vec![],
-                      }
+                    DefinitionType::Definition(
+                        Definition {
+                          id: None,
+                          value: "some definition".into(),
+                          examples: vec![],
+                          notes: vec![],
+                        }
+                      )
                     ],
-                    groups: vec![],
                   }
                 }
               }
@@ -52,13 +53,16 @@ fn test_merge() {
                       PartOfSpeech::n=>
                       Sense {
                           pos: PartOfSpeech::n,
-                          definitions: vec![Definition {
-                              id: None,
-                              value: "some other definition".into(),
-                              examples: vec![],
-                              notes: vec![],
-                          }],
-                          groups: vec![],
+                          definitions: vec![
+                            DefinitionType::Definition(
+                              Definition {
+                                id: None,
+                                value: "some other definition".into(),
+                                examples: vec![],
+                                notes: vec![],
+                            }
+                          )
+                        ],
                       },
                     }
               }],
@@ -70,7 +74,7 @@ fn test_merge() {
         id: ID::new(),
         name: None,
         entries: hash_map! {
-          "dog".to_string() =>          Entry {
+          "dog".to_string() => Entry {
               see_also: None,
               term: "dog".to_string(),
               etymologies: vec![Etymology {
@@ -78,21 +82,24 @@ fn test_merge() {
                 pronunciation: None,
                 description: None,
                   senses:hash_map! {
-                      PartOfSpeech::n=>
-                      Sense {
-                          pos: PartOfSpeech::n,
-                          definitions: vec![Definition {
+                    PartOfSpeech::n=>
+                    Sense {
+                        pos: PartOfSpeech::n,
+                        definitions: vec![
+                          DefinitionType::Definition(
+                            Definition {
                               id: None,
                               value: "some definition".into(),
                               examples: vec![],
                               notes: vec![],
-                          }],
-                          groups: vec![],
-                      },
-                    }
+                          }
+                        )
+                      ],
+                    },
+                  }
               }],
           },
-          "cat".to_string() =>          Entry {
+          "cat".to_string() => Entry {
               see_also: None,
               term: "cat".to_string(),
               etymologies: vec![Etymology {
@@ -103,13 +110,14 @@ fn test_merge() {
                       PartOfSpeech::n=>
                       Sense {
                           pos: PartOfSpeech::n,
-                          definitions: vec![Definition {
+                          definitions: vec![DefinitionType::Definition(
+                            Definition{
                               id: None,
                               value: "some other definition".into(),
                               examples: vec![],
                               notes: vec![],
-                          }],
-                          groups: vec![],
+                            }
+                          )],
                       },
                     }
               }],

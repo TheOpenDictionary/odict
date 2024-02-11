@@ -10,9 +10,9 @@ where
     let err = cb(ctx);
 
     if let Err(msg) = err {
-        ctx.print(format!("{}", msg));
+        ctx.println(format!("{}", msg));
     } else if !ctx.cli.quiet {
-        ctx.print(format!("✨ Completed in {:?}", start.elapsed()));
+        ctx.println(format!("\n✨ Completed in {:?}", start.elapsed()));
     }
 
     Ok(())

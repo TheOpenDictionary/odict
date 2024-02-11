@@ -1,6 +1,6 @@
 use clap::{command, crate_version, Parser, Subcommand};
 
-use crate::{CompileArgs, LookupArgs, MergeArgs};
+use crate::{CompileArgs, LexiconArgs, LookupArgs, MergeArgs};
 
 #[derive(Debug, Parser)]
 #[command(name = "odict", about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
@@ -30,4 +30,8 @@ pub enum Commands {
     /// Merge entries from multiple dictionaries into a destination dictionary
     #[command(arg_required_else_help = true)]
     Merge(MergeArgs),
+
+    /// Lists all words defined in a dictionary
+    #[command(arg_required_else_help = true)]
+    Lexicon(LexiconArgs),
 }

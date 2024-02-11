@@ -22,7 +22,9 @@ impl<'a> CLIContext<'a> {
         }
     }
 
-    pub fn print(&mut self, msg: String) {
-        self.stdout.write_all(msg.as_bytes()).unwrap();
+    pub fn println(&mut self, msg: String) {
+        self.stdout
+            .write_all(format!("{}\n", msg).as_bytes())
+            .unwrap();
     }
 }

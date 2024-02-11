@@ -1,5 +1,5 @@
 use clap::Parser;
-use cli::{compile, lookup, merge, t, CLIContext, Commands, CLI};
+use cli::{compile, lexicon, lookup, merge, t, CLIContext, Commands, CLI};
 
 fn main() {
     let cli = CLI::parse();
@@ -10,6 +10,7 @@ fn main() {
             Commands::Compile(ref args) => compile(c, &args),
             Commands::Lookup(ref args) => lookup(c, &args),
             Commands::Merge(ref args) => merge(c, &args),
+            Commands::Lexicon(ref args) => lexicon(c, &args),
         },
         &mut ctx,
     );
