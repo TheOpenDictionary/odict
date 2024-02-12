@@ -1,6 +1,9 @@
 #[cfg(feature = "config")]
 pub mod config;
 
+#[cfg(feature = "search")]
+pub mod search;
+
 mod core;
 mod ext;
 mod lz4;
