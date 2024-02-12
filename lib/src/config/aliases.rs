@@ -13,6 +13,7 @@ pub struct AliasManager {
 }
 
 impl AliasManager {
+    // May be used in the future?
     pub fn new<S: AsRef<OsStr> + ?Sized>(config_path: &S) -> Result<Self, Box<dyn Error>> {
         Ok(Self {
             config: get_config(Some(config_path))?,
@@ -35,18 +36,11 @@ impl AliasManager {
         Ok(())
     }
 
-    pub fn create(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
-        match &file.path {
-            Some(path) => {
-                self.config
-                    .aliases
-                    .insert(name.to_string(), path.to_string_lossy().to_string());
-
-                self.save_to_disk()?;
-
-                Ok(())
-            }
-            None => Err("This dictionary has no path!".into()),
+    pub fn add(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
+        if self.get(alias).is_none() {
+            self.set(alias, file)
+        } else {
+            Err("An alias with this name already exists!".into())
         }
     }
 
@@ -55,26 +49,27 @@ impl AliasManager {
             Some(path) => {
                 self.config
                     .aliases
-                    .insert(name.to_string(), path.to_string_lossy().to_string());
-
-                self.save_to_disk()?;
-
-                Ok(())
+                    .insert(alias.to_string(), path.to_string_lossy().to_string());
+                self.save_to_disk()
             }
             None => Err("This dictionary has no path!".into()),
         }
     }
 
-    pub fn delete(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
-        match &file.path {
-            Some(path) => {
-                self.config.aliases.remove(alias.to_string());
+    pub fn delete(&mut self, alias: &str) -> Result<(), Box<dyn Error>> {
+        self.config.aliases.remove(alias);
+        self.save_to_disk()?;
+        Ok(())
+    }
 
-                self.save_to_disk()?;
+    pub fn get(&self, alias: &str) -> Option<&String> {
+        self.config.aliases.get(alias)
+    }
+}
 
-                Ok(())
-            }
-            None => Err("This dictionary has no path!".into()),
-        }
+impl DictionaryFile {
+    pub fn alias_to(&self, name: &str) -> Result<(), Box<dyn Error>> {
+        let mut manager = AliasManager::default();
+        manager.add(name, self)
     }
 }

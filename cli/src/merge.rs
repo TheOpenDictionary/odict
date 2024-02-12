@@ -28,7 +28,11 @@ pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> Result<(), Box<dyn Error>> {
         .to_dictionary()?;
 
     for source in &args.sources {
-        let source_dict = ctx.reader.read_from_path(source)?.to_dictionary()?;
+        let source_dict = ctx
+            .reader
+            .read_from_path_or_alias_with_manager(source, &ctx.alias_manager)?
+            .to_dictionary()?;
+
         dict.merge(&source_dict);
     }
 

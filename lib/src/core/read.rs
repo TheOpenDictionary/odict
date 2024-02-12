@@ -1,9 +1,8 @@
 use std::{
     error::Error,
-    ffi::OsStr,
     fs::File,
     io::{Cursor, Read, Seek},
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
