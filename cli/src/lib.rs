@@ -11,6 +11,7 @@ mod utils;
 pub use cli::*;
 pub use compile::*;
 pub use context::*;
+pub use enums::*;
 pub use lexicon::*;
 pub use lookup::*;
 pub use merge::*;

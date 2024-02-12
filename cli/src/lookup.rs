@@ -1,8 +1,8 @@
 use std::error::Error;
 
-use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
 use crate::{context::CLIContext, print_entries};
+use crate::{deserialize_nested_entries, MarkdownStrategy};
 use clap::{arg, command, Args};
 use odict::LookupOptions;
 
@@ -15,6 +15,10 @@ pub struct LookupArgs {
 
     #[arg(required = true, help = "Words to look up")]
     queries: Vec<String>,
+
+    // Strategy for rendering Markdown strings
+    #[arg(default_value_t = MarkdownStrategy::HTML, help = "Words to look up")]
+    markdown: MarkdownStrategy,
 
     #[arg(
       short,
@@ -49,6 +53,7 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Err
         format,
         follow,
         split,
+        markdown,
     } = args;
 
     let file = ctx.reader.read_from_path(&path)?;

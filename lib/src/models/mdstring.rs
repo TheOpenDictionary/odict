@@ -5,6 +5,7 @@ use crate::{
     serializable_custom,
 };
 
+#[derive(Debug, Copy, Clone)]
 pub enum MarkdownStrategy {
     HTML,
     Text,
@@ -12,9 +13,7 @@ pub enum MarkdownStrategy {
 }
 
 serializable_custom! {
-  pub struct MDString {
-    value: String,
-  }
+  pub struct MDString(String);
 }
 
 impl<'de> Deserialize<'de> for MDString {
@@ -23,7 +22,7 @@ impl<'de> Deserialize<'de> for MDString {
         D: serde::Deserializer<'de>,
     {
         let value = String::deserialize(deserializer)?;
-        Ok(MDString { value })
+        Ok(MDString(value))
     }
 }
 
@@ -32,24 +31,22 @@ impl Serialize for MDString {
     where
         S: Serializer,
     {
-        serializer.serialize_str(&self.value)
+        serializer.serialize_str(&self.0)
     }
 }
 
 impl From<&str> for MDString {
     fn from(value: &str) -> MDString {
-        MDString {
-            value: value.to_string(),
-        }
+        MDString(value.to_string())
     }
 }
 
 impl MDString {
     pub fn parse(&self, strategy: MarkdownStrategy) -> String {
         match strategy {
-            MarkdownStrategy::HTML => to_html(&self.value),
-            MarkdownStrategy::Text => to_text(&self.value),
-            MarkdownStrategy::Disabled => self.value.to_owned(),
+            MarkdownStrategy::HTML => to_html(&self.0),
+            MarkdownStrategy::Text => to_text(&self.0),
+            MarkdownStrategy::Disabled => self.0.to_owned(),
         }
     }
 }
@@ -72,6 +69,6 @@ mod tests {
             "This is a test of the parser!"
         );
 
-        assert_eq!(md.parse(MarkdownStrategy::Disabled), md.value);
+        assert_eq!(md.parse(MarkdownStrategy::Disabled), md.0);
     }
 }

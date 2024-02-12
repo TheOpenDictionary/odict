@@ -1,6 +1,7 @@
 use std::io::Write;
 
 use crate::CLI;
+use console::Term;
 use odict::{DictionaryReader, DictionaryWriter};
 
 pub struct CLIContext<'a> {
@@ -17,8 +18,8 @@ impl<'a> CLIContext<'a> {
             cli,
             reader: DictionaryReader::default(),
             writer: DictionaryWriter::default(),
-            stdout: Box::new(std::io::stdout()),
-            stderr: Box::new(std::io::stderr()),
+            stdout: Box::new(Term::stdout()),
+            stderr: Box::new(Term::stderr()),
         }
     }
 
@@ -26,5 +27,15 @@ impl<'a> CLIContext<'a> {
         self.stdout
             .write_all(format!("{}\n", msg).as_bytes())
             .unwrap();
+    }
+
+    pub fn print(&mut self, msg: String) {
+        self.stdout
+            .write_all(format!("{}", msg).as_bytes())
+            .unwrap();
+    }
+
+    pub fn newln(&mut self) {
+        self.stdout.write_all("\n".as_bytes()).unwrap();
     }
 }
