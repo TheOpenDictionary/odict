@@ -25,6 +25,7 @@ tantivy = "0.21.1"
 validation = "0.0.1"
 uuid = "1.7.0"
 pulldown-cmark = "0.10.0"
+dirs = "5.0.1"
 
 [dev-dependencies]
 map-macro = "0.3.0"
