@@ -1,7 +1,8 @@
 use std::error::Error;
 
-use crate::context::CLIContext;
+use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
+use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
 use odict::LookupOptions;
 
@@ -45,18 +46,25 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Err
     let LookupArgs {
         dictionary_path: path,
         queries,
-        format: _,
+        format,
         follow,
         split,
     } = args;
 
     let file = ctx.reader.read_from_path(&path)?;
 
-    let entries = file.to_archive()?.lookup(
+    let result = file.to_archive()?.lookup(
         queries,
         &LookupOptions::default().follow(*follow).split(*split),
     );
 
-    println!("{:?}", entries);
-    Ok(())
+    match result {
+        Ok(entries) => {
+            print_entries(ctx, &deserialize_nested_entries(entries), format)?;
+            Ok(())
+        }
+        Err(err) => {
+            return Err(err);
+        }
+    }
 }

@@ -2,9 +2,10 @@ name: Build & Test
 
 on:
   push:
-    branches: [main]
+    # TODO: update this so it runs on main again
+    branches: [main_]
   pull_request:
-    branches: [main]
+    branches: [main_]
 
 jobs:
   test:

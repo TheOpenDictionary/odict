@@ -5,6 +5,7 @@ mod enums;
 mod lexicon;
 mod lookup;
 mod merge;
+mod print;
 mod utils;
 
 pub use cli::*;
@@ -13,4 +14,5 @@ pub use context::*;
 pub use lexicon::*;
 pub use lookup::*;
 pub use merge::*;
+pub use print::*;
 pub use utils::*;

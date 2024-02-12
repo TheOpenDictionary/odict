@@ -1,3 +1,7 @@
+use std::error::Error;
+
+use rkyv::{Deserialize, Infallible};
+
 use crate::serializable;
 
 use super::Etymology;
@@ -13,4 +17,11 @@ serializable! {
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
   }
+}
+
+impl ArchivedEntry {
+    pub fn to_entry(&self) -> Result<Entry, Box<dyn Error>> {
+        let entry: Entry = self.deserialize(&mut Infallible)?;
+        Ok(entry)
+    }
 }

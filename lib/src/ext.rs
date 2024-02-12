@@ -11,3 +11,9 @@ impl ToDictionary for String {
         Ok(Dictionary::from(self.as_str()))
     }
 }
+
+impl ToDictionary for str {
+    fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
+        Ok(Dictionary::from(self))
+    }
+}
