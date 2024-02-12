@@ -51,7 +51,9 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Err
         split,
     } = args;
 
-    let file = ctx.reader.read_from_path(&path)?;
+    let file = ctx
+        .reader
+        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
 
     let result = file.to_archive()?.lookup(
         queries,

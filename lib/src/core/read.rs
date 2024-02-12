@@ -2,6 +2,7 @@ use std::{
     error::Error,
     fs::File,
     io::{Cursor, Read, Seek},
+    path::PathBuf,
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
@@ -17,6 +18,7 @@ use crate::{lz4::decompress, ArchivedDictionary, Dictionary};
 pub struct DictionaryFile {
     pub signature: String,
     pub version: u16,
+    pub path: Option<PathBuf>,
     content: Vec<u8>,
 }
 
@@ -82,6 +84,7 @@ impl DictionaryReader {
             signature,
             version,
             content,
+            path: None,
         })
     }
 
@@ -91,7 +94,9 @@ impl DictionaryReader {
 
         file.read_to_end(&mut buffer)?;
 
-        let result = self.read_from_bytes(&buffer)?;
+        let mut result = self.read_from_bytes(&buffer)?;
+
+        result.path = Some(PathBuf::from(path));
 
         Ok(result)
     }

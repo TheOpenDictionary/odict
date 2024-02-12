@@ -15,7 +15,7 @@ pub struct LexiconArgs {
 pub fn lexicon(ctx: &mut CLIContext, args: &LexiconArgs) -> Result<(), Box<dyn Error>> {
     let dict = ctx
         .reader
-        .read_from_path(&args.dictionary)?
+        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?
         .to_dictionary()?;
 
     let lexicon = dict.lexicon();

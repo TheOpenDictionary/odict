@@ -1,3 +1,6 @@
+#[cfg(feature = "config")]
+pub mod config;
+
 mod core;
 mod ext;
 mod lz4;

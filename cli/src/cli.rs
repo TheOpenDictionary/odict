@@ -1,5 +1,6 @@
 use clap::{command, crate_version, Parser, Subcommand};
 
+use crate::alias::AliasCommands;
 use crate::{CompileArgs, LexiconArgs, LookupArgs, MergeArgs};
 
 #[derive(Debug, Parser)]
@@ -19,6 +20,10 @@ pub struct CLI {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
+    /// Manage dictionary aliases
+    #[command(subcommand, arg_required_else_help = true)]
+    Alias(AliasCommands),
+
     /// Compiles a dictionary from ODXML
     #[command(arg_required_else_help = true)]
     Compile(CompileArgs),

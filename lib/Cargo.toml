@@ -3,7 +3,8 @@ name = "odict"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+config = ["dep:dirs"]
 
 [dependencies]
 lz4_flex = { version = "0.11.2", default-features = false, features = [
@@ -19,12 +20,12 @@ rkyv = { version = "0.7.43", features = [
   "alloc",
   "archive_le",
 ] }
-serde = "1.0.196"
+serde = { version = "1.0.196", features = ["serde_derive"] }
 serde_json = "1.0.113"
-tantivy = "0.21.1"
 validation = "0.0.1"
-uuid = "1.7.0"
+uuid = { version = "1.7.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 pulldown-cmark = "0.10.0"
+dirs = { version = "5.0.1", optional = true }
 
 [dev-dependencies]
 map-macro = "0.3.0"

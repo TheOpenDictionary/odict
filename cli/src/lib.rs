@@ -1,3 +1,4 @@
+mod alias;
 mod cli;
 mod compile;
 mod context;
@@ -8,6 +9,7 @@ mod merge;
 mod print;
 mod utils;
 
+pub use alias::*;
 pub use cli::*;
 pub use compile::*;
 pub use context::*;
