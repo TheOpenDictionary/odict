@@ -1,7 +1,7 @@
 use crate::Dictionary;
 
 impl Dictionary {
-    pub fn merge_multi(&mut self, dictionaries: &[&Dictionary]) {
+    pub fn merge_multi(&mut self, dictionaries: Vec<&Dictionary>) {
         for src in dictionaries {
             self.merge(src);
         }

@@ -6,7 +6,6 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @deps:
   asdf install > /dev/null
-  go install golang.org/x/tools/cmd/goimports@latest
 
 @build +args="": deps
   cargo build {{args}}
@@ -21,8 +20,8 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @run +args="":
   cargo run {{args}}
-  
-@test: 
+
+@test:
   cargo test
 # deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
@@ -31,11 +30,11 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 # @publish +args="--auto-snapshot --clean":
 #   goreleaser release {{args}}
 
-@snaps: 
+@snaps:
   UPDATE_SNAPS=true just go test
-  
+
 @sync:
-  go work sync 
+  go work sync
 
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #

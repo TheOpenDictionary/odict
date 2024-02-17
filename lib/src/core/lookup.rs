@@ -69,7 +69,7 @@ fn parse_query(query: &str) -> LookupQuery {
 
 fn get_regex() -> &'static Regex {
     static R: OnceLock<Regex> = OnceLock::new();
-    return R.get_or_init(|| Regex::new(r"\((.+)\)$").unwrap());
+    R.get_or_init(|| Regex::new(r"\((.+)\)$").unwrap())
 }
 
 /* -------------------------------------------------------------------------- */
