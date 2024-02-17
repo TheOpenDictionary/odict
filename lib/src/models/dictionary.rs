@@ -2,7 +2,7 @@ use quick_xml::de::from_str;
 use rkyv::to_bytes;
 use std::{collections::HashMap, error::Error};
 
-use crate::{serializable, serializable_custom};
+use crate::{serializable};
 
 use super::{entry::Entry, id::ID};
 
