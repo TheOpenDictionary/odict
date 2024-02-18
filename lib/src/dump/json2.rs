@@ -7,6 +7,7 @@ use serde::{
     },
     Serialize, Serializer,
 };
+
 use serde_json::{
     ser::{CompactFormatter, Formatter, PrettyFormatter},
     to_string_pretty,
@@ -372,8 +373,7 @@ pub fn to_json<S>(value: S) -> Result<String, Box<dyn Error>>
 where
     S: Serialize,
 {
-    let s = to_string_pretty(&value)?;
-    Ok(s)
+    stringify(&value, false)
 }
 
 // pub fn to_json_pretty<S: ?Sized + Serialize>(value: S) -> Result<String, Box<dyn Error>> {

@@ -1,12 +1,13 @@
 use quick_xml::de::from_str;
 use rkyv::to_bytes;
+use serde::ser::SerializeStruct;
 use std::{collections::HashMap, error::Error};
 
-use crate::{serializable};
+use crate::{serializable, serializable_test};
 
 use super::{entry::Entry, id::ID};
 
-serializable! {
+serializable_test! {
   pub struct Dictionary {
       #[serde(default, rename = "@id")]
       pub id: ID,
@@ -17,6 +18,21 @@ serializable! {
       #[serde(default, rename = "entry", with = "entries")]
       pub entries: HashMap<String, Entry>,
   }
+}
+
+impl serde::ser::Serialize for Dictionary {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut v = serializer.serialize_struct("dictionary", 3)?;
+
+        v.serialize_field("id", &self.id)?;
+        v.serialize_field("name", &self.name)?;
+        v.serialize_field("entries", &self.entries)?;
+
+        v.end()
+    }
 }
 
 mod entries {

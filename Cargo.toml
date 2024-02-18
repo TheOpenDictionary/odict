@@ -2,9 +2,10 @@
 
 resolver = "2"
 
-members = ["cli", "lib", "macros"]
+members = ["cli", "lib"]
 
 [profile.release]
 strip = true
 codegen-units = 1
 lto = true
+panic = "abort"
