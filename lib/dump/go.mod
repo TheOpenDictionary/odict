@@ -1,6 +1,6 @@
 module github.com/TheOpenDictionary/odict/lib/dump
 
-go 1.21.0
+go 1.22.0
 
 toolchain go1.21.6
 
