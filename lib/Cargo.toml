@@ -5,7 +5,7 @@ edition = "2021"
 
 [features]
 config = ["dep:dirs"]
-search = ["dep:tantivy", "dep:charabia", "dep:once-cell"]
+search = ["dep:tantivy", "dep:charabia"]
 
 [dependencies]
 lz4_flex = { version = "0.11.2", default-features = false, features = [
@@ -28,8 +28,7 @@ pulldown-cmark = "0.10.0"
 dirs = { version = "5.0.1", optional = true }
 tantivy = { version = "0.21.1", optional = true }
 charabia = { version = "0.8.6", optional = true }
-once_cell = { version = "1.19.0", optional = true }
+once-cell = "1.19.0"
 
 [dev-dependencies]
 map-macro = "0.3.0"
-once-cell = "1.19.0"
