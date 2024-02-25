@@ -1,22 +1,22 @@
 use std::error::Error;
 
 use odict::{
-    dump::{to_json, to_xml},
+    dump::{ToJSON, ToXML},
     Entry,
 };
 
 use crate::{enums::PrintFormat, CLIContext};
 
-fn print_json(ctx: &mut CLIContext, entries: &Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
-    ctx.println(to_json(entries)?);
+fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
+    ctx.println(entries.to_json(false)?);
     Ok(())
 }
 
-fn print_xml(ctx: &mut CLIContext, entries: &Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
+fn print_xml(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
     let xml: Vec<String> = entries
         .iter()
         .flatten()
-        .map(|v| to_xml(v).unwrap())
+        .map(|v| v.to_xml().unwrap())
         .collect();
 
     ctx.println(xml.join("\n"));
@@ -26,7 +26,7 @@ fn print_xml(ctx: &mut CLIContext, entries: &Vec<Vec<Entry>>) -> Result<(), Box<
 
 pub fn print_entries(
     ctx: &mut CLIContext,
-    entries: &Vec<Vec<Entry>>,
+    entries: Vec<Vec<Entry>>,
     format: &PrintFormat,
 ) -> Result<(), Box<dyn Error>> {
     match format {

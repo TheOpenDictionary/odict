@@ -62,7 +62,7 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Err
 
     match result {
         Ok(entries) => {
-            print_entries(ctx, &deserialize_nested_entries(entries), format)?;
+            print_entries(ctx, deserialize_nested_entries(entries), format)?;
             Ok(())
         }
         Err(err) => {

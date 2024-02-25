@@ -1,13 +1,10 @@
 use std::error::Error;
 
 use rkyv::{Deserialize, Infallible};
-use serde::ser::SerializeStruct;
 
-use crate::serializable_test;
+use crate::{serializable, Etymology};
 
-use super::Etymology;
-
-serializable_test! {
+serializable! {
   pub struct Entry {
     #[serde(rename = "@term")]
     pub term: String,
@@ -18,21 +15,6 @@ serializable_test! {
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
   }
-}
-
-impl serde::ser::Serialize for Entry {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        let mut v = serializer.serialize_struct("entry", 3)?;
-
-        v.serialize_field("@term", &self.term)?;
-        v.serialize_field("@see", &self.see_also)?;
-        v.serialize_field("ety", &self.etymologies)?;
-
-        v.end()
-    }
 }
 
 impl ArchivedEntry {
