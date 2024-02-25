@@ -5,12 +5,14 @@ use super::{definition::Definition, mdstring::MDString};
 serializable! {
   pub struct Group {
     #[serde(rename = "@id")]
-    id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
 
     #[serde(rename = "@description")]
-    description: Option<MDString>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<MDString>,
 
     #[serde(default, rename = "definition")]
-    definitions: Vec<Definition>,
+    pub definitions: Vec<Definition>,
   }
 }

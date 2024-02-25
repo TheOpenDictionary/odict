@@ -2,9 +2,7 @@ use std::error::Error;
 
 use rkyv::{Deserialize, Infallible};
 
-use crate::serializable;
-
-use super::Etymology;
+use crate::{serializable, Etymology};
 
 serializable! {
   pub struct Entry {
@@ -12,6 +10,7 @@ serializable! {
     pub term: String,
 
     #[serde(rename = "@see")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<String>,
 
     #[serde(default, rename = "ety")]

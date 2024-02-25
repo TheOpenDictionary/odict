@@ -1,7 +1,7 @@
 use crate::serializable;
 
 serializable! {
-  #[derive(Hash)]
+  #[derive(Hash, Ord, PartialOrd)]
   #[archive_attr(derive(PartialEq, Eq, Hash))]
   #[repr(u8)]
   pub enum PartOfSpeech {
