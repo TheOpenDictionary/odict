@@ -16,11 +16,8 @@ expression: dumped
               "pos": "n",
               "definitions": [
                 {
-                  "Definition": {
-                    "value": "a cat",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "a cat"
                 }
               ]
             }
@@ -39,11 +36,8 @@ expression: dumped
               "pos": "un",
               "definitions": [
                 {
-                  "Definition": {
-                    "value": "a dog",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "a dog"
                 }
               ]
             }
@@ -61,16 +55,13 @@ expression: dumped
               "pos": "un",
               "definitions": [
                 {
-                  "Group": {
-                    "description": "A number of verb senses",
-                    "definitions": [
-                      {
-                        "value": "crap, shit",
-                        "examples": [],
-                        "notes": []
-                      }
-                    ]
-                  }
+                  "type": "group",
+                  "description": "A number of verb senses",
+                  "definitions": [
+                    {
+                      "value": "crap, shit"
+                    }
+                  ]
                 }
               ]
             }
@@ -80,8 +71,7 @@ expression: dumped
     },
     "ran": {
       "term": "ran",
-      "see_also": "run",
-      "etymologies": []
+      "see_also": "run"
     },
     "run": {
       "term": "run",
@@ -93,46 +83,28 @@ expression: dumped
               "pos": "n",
               "definitions": [
                 {
-                  "Definition": {
-                    "value": "(vertebrates) To move swiftly",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "(vertebrates) To move swiftly"
                 },
                 {
-                  "Definition": {
-                    "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
                 },
                 {
-                  "Definition": {
-                    "value": "A pleasure trip.",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "A pleasure trip."
                 },
                 {
-                  "Definition": {
-                    "value": "Flight, instance or period of fleeing.",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "Flight, instance or period of fleeing."
                 },
                 {
-                  "Definition": {
-                    "value": "Migration (of fish).",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "Migration (of fish)."
                 },
                 {
-                  "Definition": {
-                    "value": "A group of fish that migrate, or ascend a river for the purpose of spawning.",
-                    "examples": [],
-                    "notes": []
-                  }
+                  "type": "definition",
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
                 }
               ]
             },
@@ -140,41 +112,28 @@ expression: dumped
               "pos": "v",
               "definitions": [
                 {
-                  "Group": {
-                    "description": "A number of verb senses",
-                    "definitions": [
-                      {
-                        "value": "(vertebrates) To move swiftly (figuratively)",
-                        "examples": [],
-                        "notes": []
-                      },
-                      {
-                        "value": "(fluids) To flow.",
-                        "examples": [],
-                        "notes": []
-                      },
-                      {
-                        "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled.",
-                        "examples": [],
-                        "notes": []
-                      },
-                      {
-                        "value": "(social) To carry out an activity.",
-                        "examples": [],
-                        "notes": []
-                      },
-                      {
-                        "value": "To extend or persist, statically or dynamically, through space or time.",
-                        "examples": [],
-                        "notes": []
-                      },
-                      {
-                        "value": "(transitive) To execute or carry out a plan, procedure or program.",
-                        "examples": [],
-                        "notes": []
-                      }
-                    ]
-                  }
+                  "type": "group",
+                  "description": "A number of verb senses",
+                  "definitions": [
+                    {
+                      "value": "(vertebrates) To move swiftly (figuratively)"
+                    },
+                    {
+                      "value": "(fluids) To flow."
+                    },
+                    {
+                      "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled."
+                    },
+                    {
+                      "value": "(social) To carry out an activity."
+                    },
+                    {
+                      "value": "To extend or persist, statically or dynamically, through space or time."
+                    },
+                    {
+                      "value": "(transitive) To execute or carry out a plan, procedure or program."
+                    }
+                  ]
                 }
               ]
             }
