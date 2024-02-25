@@ -6,8 +6,13 @@ use super::DefinitionJSON;
 
 #[derive(Serialize)]
 pub struct GroupJSON {
+    #[serde(skip_serializing_if = "Option::is_none")]
     id: Option<String>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<MDString>,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     definitions: Vec<DefinitionJSON>,
 }
 

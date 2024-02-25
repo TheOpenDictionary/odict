@@ -19,7 +19,7 @@ pub struct CompileArgs {
 pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error>> {
     let CompileArgs { input, output } = args;
 
-    let mut out = output.clone();
+    let mut out = output.to_owned();
 
     if out.is_none() {
         let name = input

@@ -15,6 +15,9 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
+@insta +args="": 
+  cargo insta {{args}}
+
 @xsd:
   go run xsd/xsd.go
 

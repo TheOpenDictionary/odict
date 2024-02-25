@@ -8,7 +8,7 @@ use odict::{
 use crate::{enums::PrintFormat, CLIContext};
 
 fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
-    ctx.println(entries.to_json(false)?);
+    ctx.println(entries.to_json(true)?);
     Ok(())
 }
 
@@ -16,7 +16,7 @@ fn print_xml(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<d
     let xml: Vec<String> = entries
         .iter()
         .flatten()
-        .map(|v| v.to_xml().unwrap())
+        .map(|v| v.to_xml(true).unwrap())
         .collect();
 
     ctx.println(xml.join("\n"));

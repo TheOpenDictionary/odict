@@ -10,6 +10,7 @@ serializable! {
     pub term: String,
 
     #[serde(rename = "@see")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<String>,
 
     #[serde(default, rename = "ety")]

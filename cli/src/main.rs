@@ -12,6 +12,7 @@ fn main() {
             Commands::Merge(ref args) => merge(c, args),
             Commands::Lexicon(ref args) => lexicon(c, args),
             Commands::Alias(ref args) => alias(c, args),
+            Commands::Dump(ref args) => cli::dump(c, args),
         },
         &mut ctx,
     );

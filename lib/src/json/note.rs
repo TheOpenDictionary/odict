@@ -4,8 +4,12 @@ use crate::{MDString, Note};
 
 #[derive(Serialize)]
 pub struct NoteJSON {
+    #[serde(skip_serializing_if = "Option::is_none")]
     id: Option<String>,
+
     value: MDString,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     examples: Vec<String>,
 }
 

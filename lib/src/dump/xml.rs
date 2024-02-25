@@ -1,18 +1,34 @@
 use std::error::Error;
 
-use quick_xml::se::to_string;
+use quick_xml::se::{to_string, Serializer};
 use serde::Serialize;
 
-pub trait ToXML {
-    fn to_xml(self) -> Result<String, Box<dyn Error>>;
-}
+use crate::{Dictionary, Entry};
 
-impl<S> ToXML for S
-where
-    S: Serialize,
-{
-    fn to_xml(self) -> Result<String, Box<dyn Error>> {
-        let v = to_string(&self)?;
-        Ok(v)
+pub trait ToXML {
+    fn to_xml(self, pretty: bool) -> Result<String, Box<dyn Error>>
+    where
+        Self: Sized + Serialize,
+    {
+        match pretty {
+            true => {
+                // See https://github.com/tafia/quick-xml/issues/361#issuecomment-1509724435
+                let mut buffer = String::new();
+                let mut ser = Serializer::new(&mut buffer);
+
+                ser.indent(' ', 2);
+
+                self.serialize(ser)?;
+
+                Ok(format!("{}", buffer))
+            }
+            false => Ok(to_string(&self)?),
+        }
     }
 }
+
+impl ToXML for Dictionary {}
+
+impl ToXML for Entry {}
+
+impl ToXML for &Entry {}

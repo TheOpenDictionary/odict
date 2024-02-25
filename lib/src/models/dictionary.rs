@@ -7,11 +7,13 @@ use crate::serializable;
 use super::{entry::Entry, id::ID};
 
 serializable! {
+  #[serde(rename = "dictionary")]
   pub struct Dictionary {
       #[serde(default, rename = "@id")]
       pub id: ID,
 
       #[serde(rename = "@name")]
+      #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
       #[serde(default, rename = "entry", with = "entries")]

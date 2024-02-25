@@ -5,8 +5,12 @@ use crate::{DefinitionType, PartOfSpeech, Sense};
 use super::{DefinitionJSON, GroupJSON};
 
 #[derive(Serialize)]
+#[serde(tag = "type")]
 pub enum DefinitionTypeJSON {
+    #[serde(rename = "group")]
     Group(GroupJSON),
+
+    #[serde(rename = "definition")]
     Definition(DefinitionJSON),
 }
 
@@ -24,6 +28,8 @@ impl From<DefinitionType> for DefinitionTypeJSON {
 #[derive(Serialize)]
 pub struct SenseJSON {
     pub pos: PartOfSpeech,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub definitions: Vec<DefinitionTypeJSON>,
 }
 
