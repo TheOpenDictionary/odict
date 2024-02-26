@@ -1,6 +1,6 @@
 use crate::{DefinitionType, Entry, Etymology, MarkdownStrategy, Sense};
 
-fn flatten_definition_type(value: &DefinitionType, strategy: MarkdownStrategy) -> Vec<String> {
+fn flatten_definition_type(value: &DefinitionType, strategy: &MarkdownStrategy) -> Vec<String> {
     match value {
         DefinitionType::Definition(d) => vec![d.value.parse(strategy)],
         DefinitionType::Group(g) => g
@@ -11,7 +11,7 @@ fn flatten_definition_type(value: &DefinitionType, strategy: MarkdownStrategy) -
     }
 }
 
-fn flatten_sense(value: &Sense, strategy: MarkdownStrategy) -> Vec<String> {
+fn flatten_sense(value: &Sense, strategy: &MarkdownStrategy) -> Vec<String> {
     value
         .definitions
         .iter()
@@ -19,7 +19,7 @@ fn flatten_sense(value: &Sense, strategy: MarkdownStrategy) -> Vec<String> {
         .collect()
 }
 
-fn flatten_etymology(value: &Etymology, strategy: MarkdownStrategy) -> Vec<String> {
+fn flatten_etymology(value: &Etymology, strategy: &MarkdownStrategy) -> Vec<String> {
     value
         .senses
         .values()
@@ -27,7 +27,7 @@ fn flatten_etymology(value: &Etymology, strategy: MarkdownStrategy) -> Vec<Strin
         .collect()
 }
 
-fn flatten_entry(entry: &Entry, strategy: MarkdownStrategy) -> Vec<String> {
+fn flatten_entry(entry: &Entry, strategy: &MarkdownStrategy) -> Vec<String> {
     entry
         .etymologies
         .iter()
@@ -63,7 +63,7 @@ impl PreviewOptions {
 
 impl Entry {
     pub fn preview(&self, options: PreviewOptions) -> String {
-        let definitions = flatten_entry(self, options.strategy);
+        let definitions = flatten_entry(self, &options.strategy);
         definitions.join(&options.delimiter)
     }
 }

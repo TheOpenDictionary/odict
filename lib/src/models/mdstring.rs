@@ -17,6 +17,12 @@ impl Default for MarkdownStrategy {
     }
 }
 
+impl AsRef<MarkdownStrategy> for MarkdownStrategy {
+    fn as_ref(&self) -> &MarkdownStrategy {
+        self
+    }
+}
+
 serializable_custom! {
   pub struct MDString {
     value: String,
@@ -51,9 +57,10 @@ impl From<&str> for MDString {
 }
 
 impl MDString {
-    pub fn parse(&self, strategy: MarkdownStrategy) -> String {
-        match strategy {
+    pub fn parse<S: AsRef<MarkdownStrategy>>(&self, strategy: S) -> String {
+        match strategy.as_ref() {
             MarkdownStrategy::HTML => to_html(&self.value),
+            // MarkdownStrategy::HTML => to_html(&self.value),
             MarkdownStrategy::Text => to_text(&self.value),
             MarkdownStrategy::Disabled => self.value.to_owned(),
         }
