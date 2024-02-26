@@ -8,3 +8,8 @@ members = ["cli", "lib"]
 strip = true
 codegen-units = 1
 lto = true
+panic = "abort"
+
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3

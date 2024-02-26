@@ -8,6 +8,9 @@ pub mod search;
 #[cfg(feature = "dump")]
 pub mod dump;
 
+#[cfg(feature = "dump")]
+pub(self) mod json;
+
 mod core;
 mod ext;
 mod lz4;

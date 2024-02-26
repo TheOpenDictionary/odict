@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::{error::Error, ops::Deref};
 
 use uuid::Uuid;
 
@@ -11,6 +11,10 @@ serializable! {
 impl ID {
     pub fn new() -> Self {
         ID(Uuid::new_v4().to_string())
+    }
+
+    pub fn parse(value: &str) -> Result<Self, Box<dyn Error>> {
+        Ok(ID(Uuid::parse_str(value)?.to_string()))
     }
 }
 
