@@ -45,6 +45,8 @@ struct LookupQuery {
     fallback: String,
 }
 
+const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\((.+)\)$").unwrap());
+
 fn parse_query(query: &str) -> LookupQuery {
     let term: String;
 
@@ -62,8 +64,6 @@ fn parse_query(query: &str) -> LookupQuery {
 
     LookupQuery { term, fallback }
 }
-
-const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\((.+)\)$").unwrap());
 
 /* -------------------------------------------------------------------------- */
 /*                                   Methods                                  */

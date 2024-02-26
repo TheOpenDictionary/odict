@@ -2,19 +2,20 @@ use quick_xml::de::from_str;
 use rkyv::to_bytes;
 use std::{collections::HashMap, error::Error};
 
+use crate::{serializable};
+
 use super::{entry::Entry, id::ID};
-use crate::serializable;
 
 serializable! {
   pub struct Dictionary {
-      #[serde(default, rename = "@id", )]
-     pub id: ID,
+      #[serde(default, rename = "@id")]
+      pub id: ID,
 
       #[serde(rename = "@name")]
-     pub name: Option<String>,
+      pub name: Option<String>,
 
       #[serde(default, rename = "entry", with = "entries")]
-     pub entries: HashMap<String, Entry>,
+      pub entries: HashMap<String, Entry>,
   }
 }
 

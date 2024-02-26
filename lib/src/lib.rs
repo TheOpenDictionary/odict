@@ -5,6 +5,9 @@ pub mod config;
 #[cfg(feature = "search")]
 pub mod search;
 
+#[cfg(feature = "dump")]
+pub mod dump;
+
 mod core;
 mod ext;
 mod lz4;
