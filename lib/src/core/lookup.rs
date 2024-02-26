@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::{ArchivedDictionary, Dictionary, Entry, SplitOptions};
+use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry, SplitOptions};
 
 use once_cell::sync::Lazy;
 use rayon::prelude::*;
@@ -70,7 +70,7 @@ fn parse_query(query: &str) -> LookupQuery {
 /* -------------------------------------------------------------------------- */
 
 macro_rules! lookup {
-    ($tys:ty, $ret:ty) => {
+    ($tys:ident, $ret:ident) => {
         impl $tys {
             fn lookup_(
                 &self,
@@ -127,4 +127,4 @@ macro_rules! lookup {
 }
 
 lookup!(Dictionary, Entry);
-lookup!(ArchivedDictionary, Archived<Entry>);
+lookup!(ArchivedDictionary, ArchivedEntry);

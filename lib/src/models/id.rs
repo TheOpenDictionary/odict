@@ -1,5 +1,6 @@
 use std::{error::Error, ops::Deref};
 
+use rkyv::string::ArchivedString;
 use uuid::Uuid;
 
 use crate::serializable;
@@ -26,6 +27,14 @@ impl Default for ID {
 
 impl Deref for ID {
     type Target = String;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl Deref for ArchivedID {
+    type Target = ArchivedString;
 
     fn deref(&self) -> &Self::Target {
         &self.0

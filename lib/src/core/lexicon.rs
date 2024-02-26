@@ -1,8 +1,8 @@
 use crate::{ArchivedDictionary, Dictionary};
 
 macro_rules! lexicon {
-    ($type:ty) => {
-        impl $type {
+    ($t:ident) => {
+        impl $t {
             pub fn lexicon(&self) -> Vec<&str> {
                 let mut vec: Vec<&str> = self
                     .entries

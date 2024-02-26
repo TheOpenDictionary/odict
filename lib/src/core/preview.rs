@@ -1,39 +1,6 @@
-use crate::{DefinitionType, Entry, Etymology, MarkdownStrategy, Sense};
+use rkyv::string::ArchivedString;
 
-fn flatten_definition_type(value: &DefinitionType, strategy: &MarkdownStrategy) -> Vec<String> {
-    match value {
-        DefinitionType::Definition(d) => vec![d.value.parse(strategy)],
-        DefinitionType::Group(g) => g
-            .definitions
-            .iter()
-            .map(|d| d.value.parse(strategy))
-            .collect(),
-    }
-}
-
-fn flatten_sense(value: &Sense, strategy: &MarkdownStrategy) -> Vec<String> {
-    value
-        .definitions
-        .iter()
-        .flat_map(|d| flatten_definition_type(d, strategy))
-        .collect()
-}
-
-fn flatten_etymology(value: &Etymology, strategy: &MarkdownStrategy) -> Vec<String> {
-    value
-        .senses
-        .values()
-        .flat_map(|s| flatten_sense(s, strategy))
-        .collect()
-}
-
-fn flatten_entry(entry: &Entry, strategy: &MarkdownStrategy) -> Vec<String> {
-    entry
-        .etymologies
-        .iter()
-        .flat_map(|e| flatten_etymology(e, strategy))
-        .collect()
-}
+use crate::{ArchivedDefinitionType, ArchivedEntry, DefinitionType, Entry, MarkdownStrategy};
 
 pub struct PreviewOptions {
     strategy: MarkdownStrategy,
@@ -61,9 +28,44 @@ impl PreviewOptions {
     }
 }
 
-impl Entry {
-    pub fn preview(&self, options: PreviewOptions) -> String {
-        let definitions = flatten_entry(self, &options.strategy);
-        definitions.join(&options.delimiter)
-    }
+macro_rules! preview {
+    ($t:ident, $d:ident) => {
+        impl $t {
+            pub fn preview(&self, options: PreviewOptions) -> String {
+                let strategy = &options.strategy;
+
+                let definitions: Vec<String> = self
+                    .etymologies
+                    .iter()
+                    .flat_map(|e| -> Vec<String> {
+                        e.senses
+                            .values()
+                            .flat_map(|s| -> Vec<String> {
+                                s.definitions
+                                    .iter()
+                                    .flat_map(|value| -> Vec<String> {
+                                        match value {
+                                            $d::Definition(d) => {
+                                                vec![d.value.parse(strategy)]
+                                            }
+                                            $d::Group(g) => g
+                                                .definitions
+                                                .iter()
+                                                .map(|d| d.value.parse(strategy))
+                                                .collect(),
+                                        }
+                                    })
+                                    .collect()
+                            })
+                            .collect()
+                    })
+                    .collect();
+
+                definitions.join(&options.delimiter)
+            }
+        }
+    };
 }
+
+preview!(Entry, DefinitionType);
+preview!(ArchivedEntry, ArchivedDefinitionType);

@@ -1,24 +1,15 @@
 use dirs::home_dir;
-use std::{collections::HashMap, env::var, error::Error, fs::create_dir, path::PathBuf};
-
-pub(super) struct ODictConfig {
-    pub(super) path: PathBuf,
-    pub(super) aliases: HashMap<String, String>,
-}
+use std::{env::var, error::Error, fs::create_dir, path::PathBuf};
 
 pub fn get_config_dir() -> Result<PathBuf, Box<dyn Error>> {
     let dir_name = var("ODICT_CONFIG_DIR").ok().unwrap_or_else(|| {
-        let home_dir = home_dir().expect("Failed to get home directory");
-        let mut config_dir = PathBuf::from(home_dir).join(".odict");
-
-        config_dir.to_string_lossy().to_string()
+        PathBuf::from(home_dir().expect("Failed to get home directory"))
+            .join(".odict")
+            .to_string_lossy()
+            .to_string()
     });
 
-    get_dir(dir_name.as_str())
-}
-
-pub(super) fn get_dir(name: &str) -> Result<PathBuf, Box<dyn Error>> {
-    let path = PathBuf::from(&name);
+    let path = PathBuf::from(&dir_name.as_str());
 
     if !path.exists() {
         create_dir(&path)?;
@@ -30,18 +21,15 @@ pub(super) fn get_dir(name: &str) -> Result<PathBuf, Box<dyn Error>> {
 #[cfg(test)]
 mod test {
     use dirs::home_dir;
-    use std::path::PathBuf;
 
     use super::get_config_dir;
 
     #[test]
     fn test_get_config_dir() {
         let home_dir = home_dir().expect("Failed to get home directory");
-        let mut config_dir = PathBuf::from(home_dir);
-        let config_dir = get_config_dir().unwrap().join(".odict");
-        let actual = config_dir.to_str().unwrap();
-        let expected = config_dir.to_string_lossy().to_string();
+        let actual = get_config_dir().unwrap();
+        let expected = home_dir.join(".odict");
 
-        assert_eq!(actual, expected);
+        assert_eq!(actual.to_str().unwrap(), expected.to_str().unwrap());
     }
 }

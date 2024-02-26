@@ -56,16 +56,22 @@ impl From<&str> for MDString {
     }
 }
 
-impl MDString {
-    pub fn parse<S: AsRef<MarkdownStrategy>>(&self, strategy: S) -> String {
-        match strategy.as_ref() {
-            MarkdownStrategy::HTML => to_html(&self.value),
-            // MarkdownStrategy::HTML => to_html(&self.value),
-            MarkdownStrategy::Text => to_text(&self.value),
-            MarkdownStrategy::Disabled => self.value.to_owned(),
+macro_rules! parse {
+    ($t:ident) => {
+        impl $t {
+            pub fn parse<S: AsRef<MarkdownStrategy>>(&self, strategy: S) -> String {
+                match strategy.as_ref() {
+                    MarkdownStrategy::HTML => to_html(&self.value),
+                    MarkdownStrategy::Text => to_text(&self.value),
+                    MarkdownStrategy::Disabled => self.value.to_owned(),
+                }
+            }
         }
-    }
+    };
 }
+
+parse!(MDString);
+parse!(ArchivedMDString);
 
 #[cfg(test)]
 mod tests {

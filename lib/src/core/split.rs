@@ -26,7 +26,7 @@ impl SplitOptions {
 /* -------------------------------------------------------------------------- */
 
 macro_rules! split {
-    ($t:ty, $r:ty) => {
+    ($t:ident, $r:ident) => {
         impl $t {
             pub fn split(
                 &self,
