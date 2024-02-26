@@ -1,38 +1,43 @@
-use std::{error::Error, ffi::OsStr};
-
 use serde_json::to_vec;
+use std::{collections::HashMap, error::Error, ffi::OsStr, fs, fs::read_to_string, path::PathBuf};
 
 use crate::DictionaryFile;
 
-use super::config::{get_config, ODictConfig};
-
-use std::fs;
+use super::config::get_config_dir;
 
 pub struct AliasManager {
-    config: ODictConfig,
+    path: PathBuf,
+    aliases: HashMap<String, String>,
 }
 
 impl AliasManager {
-    // May be used in the future?
-    pub fn new<S: AsRef<OsStr> + ?Sized>(config_path: &S) -> Result<Self, Box<dyn Error>> {
-        Ok(Self {
-            config: get_config(Some(config_path))?,
-        })
+    pub fn new<S: AsRef<OsStr> + ?Sized>(
+        config_path: &S, // May be used in the future?
+    ) -> Result<Self, Box<dyn Error>> {
+        let path = PathBuf::from(config_path);
+
+        if !path.exists() {
+            fs::write(&path, "{}")?;
+        }
+
+        let config = read_to_string(&path)?;
+        let aliases: HashMap<String, String> = serde_json::from_str(&config)?;
+
+        Ok(Self { path, aliases })
     }
 }
 
 impl Default for AliasManager {
     fn default() -> Self {
-        Self {
-            config: get_config::<String>(None).unwrap(),
-        }
+        let config_path = get_config_dir().unwrap().join("aliases.json");
+        Self::new(&config_path).unwrap()
     }
 }
 
 impl AliasManager {
     fn save_to_disk(&self) -> Result<(), Box<dyn Error>> {
-        let config_bytes = to_vec(&self.config.aliases)?;
-        fs::write(&self.config.path, config_bytes)?;
+        let config_bytes = to_vec(&self.aliases)?;
+        fs::write(&self.path, config_bytes)?;
         Ok(())
     }
 
@@ -47,8 +52,7 @@ impl AliasManager {
     pub fn set(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
         match &file.path {
             Some(path) => {
-                self.config
-                    .aliases
+                self.aliases
                     .insert(alias.to_string(), path.to_string_lossy().to_string());
                 self.save_to_disk()
             }
@@ -57,13 +61,13 @@ impl AliasManager {
     }
 
     pub fn delete(&mut self, alias: &str) -> Result<(), Box<dyn Error>> {
-        self.config.aliases.remove(alias);
+        self.aliases.remove(alias);
         self.save_to_disk()?;
         Ok(())
     }
 
     pub fn get(&self, alias: &str) -> Option<&String> {
-        self.config.aliases.get(alias)
+        self.aliases.get(alias)
     }
 }
 

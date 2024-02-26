@@ -13,3 +13,4 @@ clio = "0.3.5"
 quick-xml = { version = "0.31.0", features = ["serde", "serialize"] }
 regex = "1.10.3"
 once_cell = "1.19.0"
+indicatif = "0.17.8"

@@ -11,6 +11,12 @@ pub enum MarkdownStrategy {
     Disabled,
 }
 
+impl Default for MarkdownStrategy {
+    fn default() -> Self {
+        MarkdownStrategy::HTML
+    }
+}
+
 serializable_custom! {
   pub struct MDString {
     value: String,

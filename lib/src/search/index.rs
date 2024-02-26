@@ -1,21 +1,47 @@
-use once_cell::sync::Lazy;
-use tantivy::schema::{Schema, STORED, TEXT};
+use std::error::Error;
 
-const SCHEMA: Lazy<Schema> = Lazy::new(|| {
-    let mut schema_builder = Schema::builder();
+use rayon::iter::{ParallelBridge, ParallelIterator};
+use tantivy::schema::Schema;
+use tantivy::{doc, Index};
 
-    schema_builder.add_text_field("title", TEXT | STORED);
+use crate::config::get_config_dir;
+use crate::{Dictionary, PreviewOptions};
 
-    schema_builder.build()
-});
+use super::schema::{FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
+
+pub struct IndexOptions {
+    batch_size: usize,
+}
+
+impl IndexOptions {
+    pub fn default() -> Self {
+        Self { batch_size: 10_000 }
+    }
+
+    pub fn batch_size(mut self, batch_size: usize) -> Self {
+        self.batch_size = batch_size;
+        self
+    }
+}
 
 impl Dictionary {
-    pub fn index() {
-        // let index_path = TempDir::new()?;
+    pub fn index(&self, options: &IndexOptions) -> Result<(), Box<dyn Error>> {
+        let index_path = get_config_dir()?.join(".idx").join(self.id.as_str());
+        let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
+
         let mut schema_builder = Schema::builder();
-        let index = Index::create_in_dir(&index_path, schema.clone())?;
-        schema_builder.add_text_field("title", TEXT | STORED);
+        let mut index_writer = index.writer(options.batch_size)?;
+
+        self.entries.values().par_bridge().for_each(|entry| {
+            let mut document = doc!(
+              *FIELD_TERM => entry.term.as_str(),
+              *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default())
+            );
+        });
+
         // schema_builder.
         let schema = schema_builder.build();
+
+        Ok(())
     }
 }
