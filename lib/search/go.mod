@@ -10,7 +10,7 @@ require (
 	github.com/blevesearch/bleve/v2 v2.3.10
 	github.com/blevesearch/bleve_index_api v1.1.6
 	github.com/schollz/progressbar/v3 v3.14.2
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
