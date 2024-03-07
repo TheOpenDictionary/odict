@@ -33,7 +33,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "flatbuffers": "^23.5.9",
+    "flatbuffers": "^24.0.0",
     "uuid": "^9.0.0"
   }
 }
