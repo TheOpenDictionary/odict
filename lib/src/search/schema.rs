@@ -1,5 +1,5 @@
 use once_cell::sync::Lazy;
-use tantivy::schema::{Field, Schema, TextFieldIndexing, TextOptions, STORED, TEXT};
+use tantivy::schema::{Field, Schema, STORED, TEXT};
 
 pub(super) const SCHEMA: Lazy<Schema> = Lazy::new(|| {
     let mut schema_builder = Schema::builder();

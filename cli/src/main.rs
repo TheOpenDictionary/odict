@@ -1,7 +1,7 @@
 use std::io::Write;
 
 use clap::Parser;
-use cli::{alias, compile, lexicon, lookup, merge, t, CLIContext, Commands, CLI};
+use cli::{alias, compile, lexicon, lookup, merge, search, t, CLIContext, Commands, CLI};
 
 fn main() {
     let cli = CLI::parse();
@@ -16,6 +16,7 @@ fn main() {
             Commands::Lexicon(ref args) => lexicon(c, args),
             Commands::Lookup(ref args) => lookup(c, args),
             Commands::Merge(ref args) => merge(c, args),
+            Commands::Search(ref args) => search(c, args),
         },
         &mut ctx,
     );
