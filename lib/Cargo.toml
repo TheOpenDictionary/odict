@@ -6,7 +6,7 @@ edition = "2021"
 [features]
 dump = ["dep:serde_json"]
 config = ["dep:dirs"]
-search = ["dep:tantivy", "dep:charabia"]
+search = ["dep:tantivy", "dep:charabia", "dep:tantivy-tokenizer-api"]
 serve = ["dep:actix-web"]
 
 
@@ -34,6 +34,7 @@ validation = "0.0.1"
 actix-web = { version = "4.5.1", optional = true }
 tantivy = { version = "0.21.1", optional = true }
 charabia = { version = "0.8.7", optional = true }
+tantivy-tokenizer-api = { version = "0.2.0", optional = true }
 
 [dev-dependencies]
 insta = "1.35.1"

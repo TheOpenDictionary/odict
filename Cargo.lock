@@ -1823,6 +1823,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tantivy",
+ "tantivy-tokenizer-api",
  "uuid",
  "validation",
 ]

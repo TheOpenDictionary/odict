@@ -2,7 +2,11 @@ use std::{error::Error, ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use rkyv::{archived_root, Deserialize, Infallible};
-use tantivy::{collector::TopDocs, query::QueryParser, Index, ReloadPolicy};
+use tantivy::{
+    collector::TopDocs,
+    query::{PhraseQuery, QueryParser},
+    Index, ReloadPolicy, Term,
+};
 
 use crate::{Dictionary, Entry};
 
