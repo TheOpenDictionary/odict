@@ -57,6 +57,11 @@ impl Dictionary {
         let bytes = to_bytes::<_, 4096>(self)?;
         Ok(bytes.to_vec())
     }
+
+    pub fn from(xml: &str) -> Result<Self, Box<dyn Error>> {
+        let dict = from_str(xml)?;
+        Ok(dict)
+    }
 }
 
 impl From<&str> for Dictionary {

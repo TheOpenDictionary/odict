@@ -38,9 +38,15 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error
 
     let contents = read_to_string(input).unwrap();
     let xml = contents.as_str();
-    let dict = Dictionary::from(xml);
 
-    ctx.writer.write_to_path(&dict, &out.unwrap())?;
+    match Dictionary::from(xml) {
+        Ok(dict) => {
+            ctx.writer.write_to_path(&dict, &out.unwrap())?;
+        }
+        Err(e) => {
+            return Err(format!("\nAn error occurred parsing your XML: \n\n{}", e).into());
+        }
+    }
 
     Ok(())
 }

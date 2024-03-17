@@ -1,5 +1,3 @@
-use rkyv::string::ArchivedString;
-
 use crate::{ArchivedDefinitionType, ArchivedEntry, DefinitionType, Entry, MarkdownStrategy};
 
 pub struct PreviewOptions {

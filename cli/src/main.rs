@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use clap::Parser;
 use cli::{alias, compile, lexicon, lookup, merge, t, CLIContext, Commands, CLI};
 

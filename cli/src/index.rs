@@ -1,7 +1,8 @@
 use std::{error::Error, path::PathBuf};
 
 use clap::{arg, command, Args};
-use odict::search::IndexOptions;
+use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
+use odict::search::{get_default_index_dir, IndexOptions};
 
 use crate::CLIContext;
 
@@ -31,16 +32,34 @@ pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> Result<(), Box<dyn Error
         .reader
         .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;
 
+    ctx.println("".to_string());
+
     let archive = file.to_archive()?;
+
+    let progress1 = ProgressBar::new(archive.entries.len() as u64).with_style(
+        ProgressStyle::with_template("[{eta_precise}] {bar} {pos}/{len} entries indexed").unwrap(),
+    );
+
+    progress1.set_draw_target(ProgressDrawTarget::term(ctx.stdout.clone(), 20));
+
+    let progress2 = progress1.clone();
 
     let options = IndexOptions::default()
         .overwrite(args.overwrite)
         .memory(args.memory)
-        .on_item(|i, _| {
-            println!("{}", i);
+        .dir(args.directory.as_ref().unwrap_or(&get_default_index_dir()))
+        .on_item(move |_, _| {
+            progress2.inc(1);
         });
 
     archive.index(&options)?;
+
+    progress1.finish();
+
+    ctx.println(format!(
+        "\n\nSuccessfully wrote index to {}",
+        options.dir.as_path().to_str().unwrap()
+    ));
 
     Ok(())
 }

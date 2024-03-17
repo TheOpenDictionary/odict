@@ -15,10 +15,10 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @schema: (go "schema") (cli "schema") (js "schema")
 
-@insta +args="": 
+@insta +args="":
   cargo insta {{args}}
 
-@update-snaps: 
+@update-snaps:
   cargo insta accept
 
 @xsd:
@@ -29,6 +29,7 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 
 @test:
   cargo test
+  rm -rf **/.odict
 # deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
 @clean: (python "clean") (jvm "clean") (js "clean")

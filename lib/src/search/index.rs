@@ -8,10 +8,14 @@ use crate::{ArchivedDictionary, Dictionary, PreviewOptions};
 use super::schema::{FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
 
 pub struct IndexOptions {
-    memory: usize,
-    dir: PathBuf,
-    overwrite: bool,
-    cb_on_item: Box<dyn Fn(usize, &str) + Send + Sync>,
+    pub memory: usize,
+    pub dir: PathBuf,
+    pub overwrite: bool,
+    pub cb_on_item: Box<dyn Fn(usize, &str) + Send + Sync>,
+}
+
+pub fn get_default_index_dir() -> PathBuf {
+    get_config_dir().unwrap().join(".idx")
 }
 
 impl IndexOptions {
@@ -19,7 +23,7 @@ impl IndexOptions {
         Self {
             memory: 50_000_000,
             overwrite: false,
-            dir: get_config_dir().unwrap().join(".idx"),
+            dir: get_default_index_dir(),
             cb_on_item: Box::new(|_, _| {}),
         }
     }

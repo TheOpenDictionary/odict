@@ -6,7 +6,6 @@ use once_cell::sync::Lazy;
 use rayon::prelude::*;
 
 use regex::Regex;
-use rkyv::Archived;
 
 /* -------------------------------------------------------------------------- */
 /*                               Structs & Enums                              */
