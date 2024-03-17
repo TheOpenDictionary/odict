@@ -1,91 +1,118 @@
-// Adapted from the Cangjia tantivy tokenizer
-// https://raw.githubusercontent.com/DCjanus/cang-jie/master/src/tokenizer.rs
+#![forbid(unsafe_code)]
 
 use charabia::Tokenize;
+use tantivy_tokenizer_api::{Token, TokenStream, Tokenizer};
 
-use super::stream::CharabiaTokenStream;
-
-#[derive(Clone, Debug)]
-pub struct CharabiaTokenizer {}
+#[derive(Clone)]
+pub struct CharabiaTokenizer;
 
 impl Default for CharabiaTokenizer {
     fn default() -> Self {
-        CharabiaTokenizer {}
+        CharabiaTokenizer
     }
 }
 
-impl ::tantivy::tokenizer::Tokenizer for CharabiaTokenizer {
-    type TokenStream<'a> = CharabiaTokenStream<'a>;
+pub struct CharabiaTokenStream {
+    tokens: Vec<Token>,
+    index: usize,
+}
 
-    /// Cut text into tokens
-    fn token_stream<'a>(&mut self, text: &'a str) -> CharabiaTokenStream<'a> {
-        let tokens: Vec<String> = text
-            .tokenize()
-            .map(|tok| text[tok.byte_start..tok.byte_end].to_string())
-            .collect();
+impl TokenStream for CharabiaTokenStream {
+    fn advance(&mut self) -> bool {
+        if self.index < self.tokens.len() {
+            self.index += 1;
+            true
+        } else {
+            false
+        }
+    }
 
-        CharabiaTokenStream::new(text, tokens)
+    fn token(&self) -> &Token {
+        &self.tokens[self.index - 1]
+    }
+
+    fn token_mut(&mut self) -> &mut Token {
+        &mut self.tokens[self.index - 1]
     }
 }
 
-// Adapted from the Cangjia tokenizer test
-// https://raw.githubusercontent.com/DCjanus/cang-jie/master/tests/position.rs
+impl Tokenizer for CharabiaTokenizer {
+    type TokenStream<'a> = CharabiaTokenStream;
+
+    fn token_stream(&mut self, text: &str) -> CharabiaTokenStream {
+        let orig_tokens = text.tokenize();
+        let mut tokens = Vec::new();
+
+        for token in orig_tokens {
+            tokens.push(Token {
+                offset_from: token.byte_start,
+                offset_to: token.byte_end,
+                position: token.char_start,
+                text: String::from(&text[token.byte_start..token.byte_end]),
+                position_length: token.char_end - token.char_start,
+            });
+        }
+
+        CharabiaTokenStream { tokens, index: 0 }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-
-    use tantivy::{
-        collector::TopDocs,
-        doc,
-        query::QueryParser,
-        schema::{IndexRecordOption, SchemaBuilder, TextFieldIndexing, TextOptions},
-        Index, SnippetGenerator,
-    };
-
-    use crate::search::constants::CHARABIA;
-
-    use super::CharabiaTokenizer;
+    use crate::search::tokenizer::CharabiaTokenizer;
+    use tantivy::tokenizer::*;
 
     #[test]
-    fn test_tokenizer_position() -> tantivy::Result<()> {
-        let mut schema_builder = SchemaBuilder::default();
+    fn it_works() {
+        let mut tokenizer = CharabiaTokenizer {};
 
-        let text_indexing = TextFieldIndexing::default()
-            .set_tokenizer(CHARABIA) // Set custom tokenizer
-            .set_index_option(IndexRecordOption::WithFreqsAndPositions);
+        let mut token_stream = tokenizer.token_stream(
+            "张华考上了北京大学；李萍进了中等技术学校；我在百货公司当售货员：我们都有光明的前途",
+        );
 
-        let text_options = TextOptions::default()
-            .set_indexing_options(text_indexing)
-            .set_stored();
+        let mut tokens = Vec::new();
+        let mut token_text = Vec::new();
 
-        let title = schema_builder.add_text_field("title", text_options);
-        let schema = schema_builder.build();
-
-        let index = Index::create_in_ram(schema);
-        index.tokenizers().register(CHARABIA, tokenizer()); // Build cang-jie Tokenizer
-
-        let mut index_writer = index.writer(50 * 1024 * 1024)?;
-
-        index_writer.add_document(doc! { title => "南京大桥" })?;
-        index_writer.add_document(doc! { title => "这个是长江" })?;
-        index_writer.add_document(doc! { title => "这个是南京长" })?;
-        index_writer.commit()?;
-
-        let reader = index.reader()?;
-        let searcher = reader.searcher();
-
-        let query = QueryParser::for_index(&index, vec![title]).parse_query("南京")?;
-        let top_docs = searcher.search(query.as_ref(), &TopDocs::with_limit(10000))?;
-
-        let snippet = SnippetGenerator::create(&searcher, &query, title).unwrap();
-
-        for doc in top_docs.iter() {
-            let s = snippet.snippet_from_doc(&searcher.doc(doc.1).unwrap());
-            dbg!(s.to_html());
+        while let Some(token) = token_stream.next() {
+            tokens.push(token.clone());
+            token_text.push(token.text.clone());
         }
-        Ok(())
-    }
 
-    fn tokenizer() -> CharabiaTokenizer {
-        CharabiaTokenizer::default()
+        // offset should be byte-indexed
+        assert_eq!(tokens[0].offset_from, 0);
+        assert_eq!(tokens[0].offset_to, "张".bytes().len());
+        assert_eq!(tokens[1].offset_from, "张".bytes().len());
+
+        // check tokenized text
+        assert_eq!(
+            token_text,
+            vec![
+                "张",
+                "华",
+                "考上",
+                "了",
+                "北京大学",
+                "；",
+                "李",
+                "萍",
+                "进",
+                "了",
+                "中等",
+                "技术学校",
+                "；",
+                "我",
+                "在",
+                "百货公司",
+                "当",
+                "售货员",
+                "：",
+                "我们",
+                "都",
+                "有",
+                "光明",
+                "的",
+                "前途"
+            ]
+        );
     }
 }

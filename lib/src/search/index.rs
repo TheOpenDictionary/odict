@@ -5,7 +5,9 @@ use tantivy::{doc, Index};
 use crate::config::get_config_dir;
 use crate::{Dictionary, PreviewOptions};
 
+use super::constants::CHARABIA;
 use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
+use super::tokenizer::CharabiaTokenizer;
 
 pub struct IndexOptions {
     pub memory: usize,
@@ -75,6 +77,10 @@ impl Dictionary {
         }
 
         let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
+
+        index
+            .tokenizers()
+            .register(CHARABIA, CharabiaTokenizer::default());
 
         let mut index_writer = index.writer(opts.memory)?;
 
