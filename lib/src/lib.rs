@@ -1,5 +1,9 @@
 #[cfg(feature = "config")]
+#[cfg(feature = "search")]
 pub mod config;
+
+#[cfg(feature = "search")]
+pub mod search;
 
 #[cfg(feature = "dump")]
 pub mod dump;

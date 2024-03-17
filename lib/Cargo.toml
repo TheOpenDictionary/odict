@@ -9,6 +9,7 @@ config = ["dep:dirs"]
 search = ["dep:tantivy", "dep:charabia"]
 serve = ["dep:actix-web"]
 
+
 [dependencies]
 lz4_flex = { version = "0.11.2", default-features = false, features = [
   "frame",
@@ -24,11 +25,12 @@ rkyv = { version = "0.7.43", features = [
   "archive_le",
 ] }
 serde = { version = "1.0.196", features = ["serde_derive"] }
-serde_json = { version = "1.0.113", optional = true }
-validation = "0.0.1"
 uuid = { version = "1.7.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 pulldown-cmark = "0.10.0"
 dirs = { version = "5.0.1", optional = true }
+once_cell = "1.19.0"
+serde_json = { version = "1.0.113", optional = true }
+validation = "0.0.1"
 actix-web = { version = "4.5.1", optional = true }
 tantivy = { version = "0.21.1", optional = true }
 charabia = { version = "0.8.7", optional = true }
@@ -36,4 +38,3 @@ charabia = { version = "0.8.7", optional = true }
 [dev-dependencies]
 insta = "1.35.1"
 map-macro = "0.3.0"
-once_cell = "1.19.0"

@@ -4,6 +4,7 @@ mod config;
 use std::error::Error;
 
 pub use aliases::*;
+pub use config::*;
 
 use crate::{DictionaryFile, DictionaryReader};
 

@@ -1,7 +1,7 @@
 use clap::{command, crate_version, Parser, Subcommand};
 
 use crate::alias::AliasCommands;
-use crate::{CompileArgs, DumpArgs, LexiconArgs, LookupArgs, MergeArgs};
+use crate::{CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs};
 
 #[derive(Debug, Parser)]
 #[command(name = "odict", about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
@@ -31,6 +31,10 @@ pub enum Commands {
     /// Outputs a dictionary in a human-readable format
     #[command(arg_required_else_help = true)]
     Dump(DumpArgs),
+
+    /// Creates a full-text index of a compiled dictionary
+    #[command(arg_required_else_help = true)]
+    Index(IndexArgs),
 
     /// Lists all words defined in a dictionary
     #[command(arg_required_else_help = true)]

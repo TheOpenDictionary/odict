@@ -15,7 +15,7 @@ mod dump_tests {
     fn test_xml() {
         let dictionary1 = EXAMPLE_DICTIONARY_1.to_dictionary().unwrap();
         let dumped = dictionary1.clone().to_xml(true).unwrap();
-        let mut dictionary2 = Dictionary::from(dumped.as_str());
+        let mut dictionary2 = Dictionary::from(dumped.as_str()).unwrap();
 
         dictionary2.id = dictionary1.id.clone();
 

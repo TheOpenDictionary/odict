@@ -1,22 +1,17 @@
-use std::{error::Error, sync::OnceLock};
+use std::error::Error;
 
-use crate::{ArchivedDictionary, Dictionary, Entry, SplitOptions};
+use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry, SplitOptions};
 
+use once_cell::sync::Lazy;
 use rayon::prelude::*;
 
 use regex::Regex;
-use rkyv::Archived;
 
 /* -------------------------------------------------------------------------- */
 /*                               Structs & Enums                              */
 /* -------------------------------------------------------------------------- */
 
 /* ----------------------------- Lookup Options ----------------------------- */
-
-pub enum LookupOption {
-    Follow(bool),
-    Split(u16),
-}
 
 pub struct LookupOptions {
     follow: bool,
@@ -49,10 +44,12 @@ struct LookupQuery {
     fallback: String,
 }
 
+const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\((.+)\)$").unwrap());
+
 fn parse_query(query: &str) -> LookupQuery {
     let term: String;
 
-    let fallback = match get_regex().captures(&query) {
+    let fallback = match PARENTHETICAL_REGEX.captures(&query) {
         Some(caps) => {
             let fallback = &caps[1];
             term = query.replace(&caps[0], "");
@@ -67,17 +64,12 @@ fn parse_query(query: &str) -> LookupQuery {
     LookupQuery { term, fallback }
 }
 
-fn get_regex() -> &'static Regex {
-    static R: OnceLock<Regex> = OnceLock::new();
-    R.get_or_init(|| Regex::new(r"\((.+)\)$").unwrap())
-}
-
 /* -------------------------------------------------------------------------- */
 /*                                   Methods                                  */
 /* -------------------------------------------------------------------------- */
 
 macro_rules! lookup {
-    ($tys:ty, $ret:ty) => {
+    ($tys:ident, $ret:ident) => {
         impl $tys {
             fn lookup_(
                 &self,
@@ -134,4 +126,4 @@ macro_rules! lookup {
 }
 
 lookup!(Dictionary, Entry);
-lookup!(ArchivedDictionary, Archived<Entry>);
+lookup!(ArchivedDictionary, ArchivedEntry);

@@ -1,3 +1,4 @@
+use console::Term;
 use once_cell::sync::Lazy;
 use std::io::Write;
 
@@ -9,8 +10,8 @@ pub struct CLIContext<'a> {
     pub alias_manager: Lazy<AliasManager>,
     pub reader: Lazy<DictionaryReader>,
     pub writer: Lazy<DictionaryWriter>,
-    pub stdout: Box<dyn Write>,
-    pub stderr: Box<dyn Write>,
+    pub stdout: Term,
+    pub stderr: Term,
 }
 
 impl<'a> CLIContext<'a> {
@@ -20,8 +21,8 @@ impl<'a> CLIContext<'a> {
             alias_manager: Lazy::new(|| AliasManager::default()),
             reader: Lazy::new(|| DictionaryReader::default()),
             writer: Lazy::new(|| DictionaryWriter::default()),
-            stdout: Box::new(std::io::stdout()),
-            stderr: Box::new(std::io::stderr()),
+            stdout: Term::stdout(),
+            stderr: Term::stderr(),
         }
     }
 
