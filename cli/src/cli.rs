@@ -1,7 +1,7 @@
 use clap::{command, crate_version, Parser, Subcommand};
 
 use crate::alias::AliasCommands;
-use crate::{CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs};
+use crate::{CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs, SearchArgs};
 
 #[derive(Debug, Parser)]
 #[command(name = "odict", about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
@@ -47,4 +47,8 @@ pub enum Commands {
     /// Merge entries from multiple dictionaries into a destination dictionary
     #[command(arg_required_else_help = true)]
     Merge(MergeArgs),
+
+    /// Run a full-text query on a compiled dictionary
+    #[command(arg_required_else_help = true)]
+    Search(SearchArgs),
 }

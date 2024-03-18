@@ -17,6 +17,16 @@ pub enum DumpFormat {
     MySQL,
 }
 
+impl Display for PrintFormat {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PrintFormat::Print => write!(f, "print"),
+            PrintFormat::JSON => write!(f, "json"),
+            PrintFormat::XML => write!(f, "xml"),
+        }
+    }
+}
+
 impl Display for DumpFormat {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

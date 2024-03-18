@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use rkyv::{Deserialize, Infallible};
+use rkyv::{to_bytes, Deserialize, Infallible};
 
 use crate::{serializable, Etymology};
 
@@ -16,6 +16,13 @@ serializable! {
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
   }
+}
+
+impl Entry {
+    pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
+        let bytes = to_bytes::<_, 4096>(self)?;
+        Ok(bytes.to_vec())
+    }
 }
 
 impl ArchivedEntry {

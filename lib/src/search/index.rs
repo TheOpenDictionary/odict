@@ -3,9 +3,11 @@ use std::{error::Error, ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path
 use tantivy::{doc, Index};
 
 use crate::config::get_config_dir;
-use crate::{ArchivedDictionary, Dictionary, PreviewOptions};
+use crate::{Dictionary, PreviewOptions};
 
-use super::schema::{FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
+use super::constants::CHARABIA;
+use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
+use super::tokenizer::CharabiaTokenizer;
 
 pub struct IndexOptions {
     pub memory: usize,
@@ -58,45 +60,46 @@ impl AsRef<IndexOptions> for IndexOptions {
     }
 }
 
-macro_rules! index {
-	($t:ident) => {
-		impl $t {
-		    pub fn index<Options: AsRef<IndexOptions>>(&self, options: Options) -> Result<(), Box<dyn Error>> {
-				let opts = options.as_ref();
-		        let index_path = opts.dir.join(self.id.as_str());
+impl Dictionary {
+    pub fn index<Options: AsRef<IndexOptions>>(
+        &self,
+        options: Options,
+    ) -> Result<(), Box<dyn Error>> {
+        let opts = options.as_ref();
+        let index_path = opts.dir.join(self.id.as_str());
 
-				if opts.overwrite && index_path.exists() {
-					remove_dir_all(&index_path)?;
-				}
+        if opts.overwrite && index_path.exists() {
+            remove_dir_all(&index_path)?;
+        }
 
-				if !index_path.exists() {
-		            create_dir_all(&index_path)?;
-		        }
+        if !index_path.exists() {
+            create_dir_all(&index_path)?;
+        }
 
-		        let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
+        let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
 
-		        let mut index_writer = index.writer(opts.memory)?;
+        index
+            .tokenizers()
+            .register(CHARABIA, CharabiaTokenizer::default());
 
-		        self.entries.values().enumerate().for_each(|(i, entry)| {
-		            let document = doc!(
-		              *FIELD_TERM => entry.term.as_str(),
-		              *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default())
-		            );
+        let mut index_writer = index.writer(opts.memory)?;
 
-		            if index_writer.add_document(document).is_ok() {
-		                let cb = opts.cb_on_item.as_ref();
-		                cb(i, entry.term.as_str());
-		            }
-		        });
+        self.entries.values().enumerate().for_each(|(i, entry)| {
+            let document = doc!(
+              *FIELD_TERM => entry.term.as_str(),
+              *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default()),
+              *FIELD_BUFFER => entry.serialize().unwrap()
+            );
 
-		        index_writer.commit()?;
-		        index_writer.wait_merging_threads()?;
+            if index_writer.add_document(document).is_ok() {
+                let cb = opts.cb_on_item.as_ref();
+                cb(i, entry.term.as_str());
+            }
+        });
 
-		        Ok(())
-		    }
-		}
-	};
+        index_writer.commit()?;
+        index_writer.wait_merging_threads()?;
+
+        Ok(())
+    }
 }
-
-index!(Dictionary);
-index!(ArchivedDictionary);

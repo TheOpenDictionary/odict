@@ -9,6 +9,7 @@ mod lexicon;
 mod lookup;
 mod merge;
 mod print;
+mod search;
 mod utils;
 
 pub use alias::*;
@@ -21,4 +22,5 @@ pub use lexicon::*;
 pub use lookup::*;
 pub use merge::*;
 pub use print::*;
+pub use search::*;
 pub use utils::*;

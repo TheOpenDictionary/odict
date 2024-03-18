@@ -6,25 +6,27 @@ use odict::search::{get_default_index_dir, IndexOptions};
 
 use crate::CLIContext;
 
+pub(super) static DEFAULT_INDEX_MEMORY: usize = 15000000;
+
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
 #[command(flatten_help = true)]
 pub struct IndexArgs {
-    /// Path to a compiled dictionary
+    /// Path to a compiled dictionary or an alias
     #[arg(required = true)]
-    dictionary: String,
+    pub(super) dictionary: String,
 
     /// Custom directory to store the index
     #[arg(short)]
-    directory: Option<PathBuf>,
+    pub(super) directory: Option<PathBuf>,
 
     /// Whether to overwrite the index if it already exists
     #[arg(short = 'f', default_value_t = false)]
-    overwrite: bool,
+    pub(super) overwrite: bool,
 
     /// Memory arena per thread in bytes. Must be above 15MB.
-    #[arg(short, default_value_t = 15000000)]
-    memory: usize,
+    #[arg(short, default_value_t = DEFAULT_INDEX_MEMORY)]
+    pub(super) memory: usize,
 }
 
 pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> Result<(), Box<dyn Error>> {
@@ -34,9 +36,9 @@ pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> Result<(), Box<dyn Error
 
     ctx.println("".to_string());
 
-    let archive = file.to_archive()?;
+    let dict = file.to_dictionary()?;
 
-    let progress1 = ProgressBar::new(archive.entries.len() as u64).with_style(
+    let progress1 = ProgressBar::new(dict.entries.len() as u64).with_style(
         ProgressStyle::with_template("[{eta_precise}] {bar} {pos}/{len} entries indexed").unwrap(),
     );
 
@@ -52,7 +54,7 @@ pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> Result<(), Box<dyn Error
             progress2.inc(1);
         });
 
-    archive.index(&options)?;
+    dict.index(&options)?;
 
     progress1.finish();
 
