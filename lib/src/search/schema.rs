@@ -10,7 +10,11 @@ pub(super) const SCHEMA: Lazy<Schema> = Lazy::new(|| {
         .set_tokenizer(CHARABIA) // Set custom tokenizer
         .set_index_option(IndexRecordOption::WithFreqsAndPositions);
 
+    #[cfg(feature = "charabia")]
     let text_options = TextOptions::default().set_indexing_options(text_indexing);
+
+    #[cfg(not(feature = "charabia"))]
+    let text_options = TextOptions::default();
 
     schema_builder.add_text_field("term", text_options.clone().set_stored());
     schema_builder.add_text_field("definitions", text_options);

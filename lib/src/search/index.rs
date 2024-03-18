@@ -78,6 +78,7 @@ impl Dictionary {
 
         let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
 
+        #[cfg(feature = "charabia")]
         index
             .tokenizers()
             .register(CHARABIA, CharabiaTokenizer::default());
