@@ -16,6 +16,7 @@ use super::{
 pub struct SearchOptions {
     pub dir: PathBuf,
     pub threshold: u32,
+    pub limit: usize,
 }
 
 impl SearchOptions {
@@ -23,7 +24,13 @@ impl SearchOptions {
         Self {
             dir: get_default_index_dir(),
             threshold: 1,
+            limit: 10,
         }
+    }
+
+    pub fn limit(mut self, limit: usize) -> Self {
+        self.limit = limit;
+        self
     }
 
     pub fn threshold(mut self, threshold: u32) -> Self {
@@ -65,7 +72,7 @@ impl Dictionary {
         let searcher = reader.searcher();
         let query_parser = QueryParser::for_index(&index, vec![*FIELD_TERM, *FIELD_DEFINITIONS]);
         let query_obj = query_parser.parse_query(query)?;
-        let top_docs = searcher.search(&query_obj, &TopDocs::with_limit(10))?;
+        let top_docs = searcher.search(&query_obj, &TopDocs::with_limit(opts.limit))?;
         let entries = top_docs
             .par_iter()
             .filter(|(score, _)| score >= &(opts.threshold as f32))

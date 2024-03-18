@@ -1,0 +1,26 @@
+---
+source: lib/tests/search.rs
+expression: result.unwrap().to_json(true).unwrap()
+---
+[
+  {
+    "term": "dog",
+    "etymologies": [
+      {
+        "pronunciation": "dooooog",
+        "description": "Latin root",
+        "senses": {
+          "un": {
+            "pos": "un",
+            "definitions": [
+              {
+                "type": "definition",
+                "value": "a dog"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
