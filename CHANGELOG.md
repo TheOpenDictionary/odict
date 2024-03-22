@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.23.1](https://github.com/TheOpenDictionary/odict/compare/v1.23.0...v1.23.1) (2024-03-22)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency com.google.guava:guava to v33.1.0-jre ([5d09fa9](https://github.com/TheOpenDictionary/odict/commit/5d09fa963ce0bbca3ef88fa27c4d191f3e0f8971))
+* **deps:** Update dependency com.squareup.moshi:moshi to v1.15.1 ([c2a4353](https://github.com/TheOpenDictionary/odict/commit/c2a435343caacd25a86f22ca06d8cf388c0f92b9))
+* **deps:** Update dependency com.squareup.moshi:moshi-kotlin to v1.15.1 ([b09e8d1](https://github.com/TheOpenDictionary/odict/commit/b09e8d1cc00a826801f44005cf5af1cd97011b74))
+* **deps:** Update dependency com.squareup.moshi:moshi-kotlin-codegen to v1.15.1 ([60cdcd5](https://github.com/TheOpenDictionary/odict/commit/60cdcd5c52d580815e6538f8cc8fb3ae16309553))
+* **deps:** Update dependency flatbuffers to v24 ([efd88e5](https://github.com/TheOpenDictionary/odict/commit/efd88e5d4edcd48bc8d0539e7b0a9d11a83abd37))
+* **deps:** Update dependency flatbuffers to v24.3.7 ([4ae91dd](https://github.com/TheOpenDictionary/odict/commit/4ae91ddfedfdd0e8dabf37aa5cafd2e477cfb15c))
+* **deps:** Update module github.com/blevesearch/bleve_index_api to v1.1.6 ([17158be](https://github.com/TheOpenDictionary/odict/commit/17158bec25d2b5dbb2cfce611a3a41acbc8a477f))
+* **deps:** Update module github.com/blevesearch/bleve/v2 to v2.4.0 ([911283c](https://github.com/TheOpenDictionary/odict/commit/911283cae2ced80f4438075dec618bf06c3b3483))
+* **deps:** Update module github.com/bokwoon95/sqddl to v0.4.10 ([5afadcc](https://github.com/TheOpenDictionary/odict/commit/5afadccb084e096b2e8ef2035d9e273f78b5dacb))
+* **deps:** Update module github.com/bokwoon95/sqddl to v0.4.11 ([649f4fc](https://github.com/TheOpenDictionary/odict/commit/649f4fc37ff3051b5d04242e94a7b45a21bc75cc))
+* **deps:** Update module github.com/gkampitakis/go-snaps to v0.5.0 ([16af56f](https://github.com/TheOpenDictionary/odict/commit/16af56f724d83519fab209bec71032e238f310aa))
+* **deps:** Update module github.com/gkampitakis/go-snaps to v0.5.1 ([e0c776c](https://github.com/TheOpenDictionary/odict/commit/e0c776c1b0842314abdfc415141093c13fb50096))
+* **deps:** Update module github.com/gkampitakis/go-snaps to v0.5.2 ([e25509a](https://github.com/TheOpenDictionary/odict/commit/e25509ae396ad6dcf86debe44a27fd2962d5339c))
+* **deps:** Update module github.com/google/flatbuffers to v24 ([aa73d33](https://github.com/TheOpenDictionary/odict/commit/aa73d33d6685f6b15d4223943967c748d1bae8bd))
+* **deps:** Update module github.com/google/flatbuffers to v24.3.7+incompatible ([2e9a949](https://github.com/TheOpenDictionary/odict/commit/2e9a949bc475bd11e294717b7e81ed4c48023138))
+* **deps:** Update module github.com/google/uuid to v1.6.0 ([6a036b1](https://github.com/TheOpenDictionary/odict/commit/6a036b190d750096fd888fb2580988b41473762e))
+* **deps:** Update module github.com/schollz/progressbar/v3 to v3.14.2 ([44b3987](https://github.com/TheOpenDictionary/odict/commit/44b3987fdb45cc1dfbe4a69a60597e256fb7accd))
+* **deps:** Update module github.com/stretchr/testify to v1.9.0 ([6a2232d](https://github.com/TheOpenDictionary/odict/commit/6a2232d2b060dcdc7d426d1bd4b1bc3c76ef16d9))
+* **pos:** Fix incorrect and missing POS labels ([b55fca0](https://github.com/TheOpenDictionary/odict/commit/b55fca011375b8a1cbf97d2b7b2fc934c7defac3))
+
 ## [1.23.0](https://github.com/TheOpenDictionary/odict/compare/v1.22.1...v1.23.0) (2024-01-21)
 
 
