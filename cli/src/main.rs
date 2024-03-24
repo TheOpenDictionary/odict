@@ -16,6 +16,7 @@ fn main() {
             Commands::Lexicon(ref args) => lexicon(c, args),
             Commands::Lookup(ref args) => lookup(c, args),
             Commands::Merge(ref args) => merge(c, args),
+            Commands::New(ref args) => cli::new(c, args),
             Commands::Search(ref args) => search(c, args),
         },
         &mut ctx,

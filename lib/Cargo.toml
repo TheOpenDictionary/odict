@@ -6,7 +6,8 @@ edition = "2021"
 [features]
 dump = ["dep:serde_json"]
 config = ["dep:dirs"]
-search = ["dep:tantivy", "dep:charabia", "dep:tantivy-tokenizer-api"]
+charabia = ["dep:charabia"]
+search = ["dep:tantivy", "dep:tantivy-tokenizer-api"]
 serve = ["dep:actix-web"]
 
 

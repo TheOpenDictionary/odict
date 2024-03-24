@@ -6,11 +6,12 @@ use tantivy::{collector::TopDocs, query::QueryParser, Index, ReloadPolicy};
 
 use crate::{Dictionary, Entry};
 
+#[cfg(feature = "charabia")]
+use super::{constants::CHARABIA, tokenizer::CharabiaTokenizer};
+
 use super::{
-    constants::CHARABIA,
     get_default_index_dir,
     schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM},
-    tokenizer::CharabiaTokenizer,
 };
 
 pub struct SearchOptions {
@@ -60,6 +61,7 @@ impl Dictionary {
         let index_path = opts.dir.join(self.id.as_str());
         let index = Index::open_in_dir(&index_path)?;
 
+        #[cfg(feature = "charabia")]
         index
             .tokenizers()
             .register(CHARABIA, CharabiaTokenizer::default());
