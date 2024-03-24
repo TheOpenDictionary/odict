@@ -10,7 +10,7 @@ pub struct NoteJSON {
     value: MDString,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<String>,
+    examples: Vec<MDString>,
 }
 
 impl From<Note> for NoteJSON {

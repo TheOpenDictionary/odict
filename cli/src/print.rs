@@ -1,11 +1,15 @@
-use std::error::Error;
+use std::{error::Error, io::Write};
 
+use console::style;
+use indicatif::TermLike;
 use odict::{
     dump::{ToJSON, ToXML},
-    Entry,
+    Definition, DefinitionType, Entry, Group, MarkdownStrategy,
 };
 
-use crate::{enums::PrintFormat, CLIContext};
+use termimad::{crossterm::style::Stylize, minimad::TextTemplate, MadSkin};
+
+use crate::{enums::PrintFormat, pprint::pretty_print, CLIContext};
 
 fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
     ctx.println(entries.to_json(true)?);
@@ -30,7 +34,7 @@ pub fn print_entries(
     format: &PrintFormat,
 ) -> Result<(), Box<dyn Error>> {
     match format {
-        PrintFormat::Print => {}
+        PrintFormat::Print => pretty_print(ctx, entries)?,
         PrintFormat::JSON => print_json(ctx, entries)?,
         PrintFormat::XML => print_xml(ctx, entries)?,
     }

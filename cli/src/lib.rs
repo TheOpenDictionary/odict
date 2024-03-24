@@ -9,6 +9,7 @@ mod lexicon;
 mod lookup;
 mod merge;
 mod new;
+mod pprint;
 mod print;
 mod search;
 mod utils;
