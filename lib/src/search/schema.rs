@@ -1,11 +1,16 @@
 use once_cell::sync::Lazy;
-use tantivy::schema::{Field, IndexRecordOption, Schema, TextFieldIndexing, TextOptions, STORED};
+use tantivy::schema::{Field, Schema, TextOptions, STORED};
 
+#[cfg(feature = "charabia")]
+use tantivy::schema::{IndexRecordOption, TextFieldIndexing};
+
+#[cfg(feature = "charabia")]
 use super::constants::CHARABIA;
 
 pub(super) const SCHEMA: Lazy<Schema> = Lazy::new(|| {
     let mut schema_builder = Schema::builder();
 
+    #[cfg(feature = "charabia")]
     let text_indexing = TextFieldIndexing::default()
         .set_tokenizer(CHARABIA) // Set custom tokenizer
         .set_index_option(IndexRecordOption::WithFreqsAndPositions);

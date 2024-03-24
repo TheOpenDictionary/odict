@@ -5,8 +5,12 @@ use tantivy::{doc, Index};
 use crate::config::get_config_dir;
 use crate::{Dictionary, PreviewOptions};
 
+#[cfg(feature = "charabia")]
 use super::constants::CHARABIA;
+
 use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
+
+#[cfg(feature = "charabia")]
 use super::tokenizer::CharabiaTokenizer;
 
 pub struct IndexOptions {

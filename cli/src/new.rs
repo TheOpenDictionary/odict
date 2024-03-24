@@ -35,7 +35,7 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> Result<(), Box<dyn Error>> {
 </dictionary>",
     );
 
-    let output = canonicalize(PathBuf::from(format!("{}.xml", args.file_name)))?;
+    let output = PathBuf::from(format!("{}.xml", args.file_name));
 
     if output.exists() {
         return Err("\n🚫️ A file already exists with this name! Please choose another one.".into());
@@ -47,7 +47,7 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> Result<(), Box<dyn Error>> {
 
     ctx.println(format!(
         "\n✨ Created a new dictionary at {}!",
-        output.display()
+        canonicalize(output)?.display()
     ));
 
     Ok(())
