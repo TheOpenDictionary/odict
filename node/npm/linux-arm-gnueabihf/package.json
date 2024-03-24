@@ -1,0 +1,18 @@
+{
+  "name": "@odict/node-linux-arm-gnueabihf",
+  "version": "0.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm"
+  ],
+  "main": "node.linux-arm-gnueabihf.node",
+  "files": [
+    "node.linux-arm-gnueabihf.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  }
+}
