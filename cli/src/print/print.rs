@@ -1,15 +1,12 @@
-use std::{error::Error, io::Write};
+use std::error::Error;
 
-use console::style;
-use indicatif::TermLike;
 use odict::{
     dump::{ToJSON, ToXML},
-    Definition, DefinitionType, Entry, Group, MarkdownStrategy,
+    Entry,
 };
 
-use termimad::{crossterm::style::Stylize, minimad::TextTemplate, MadSkin};
-
-use crate::{enums::PrintFormat, pprint::pretty_print, CLIContext};
+use super::pprint::pretty_print;
+use crate::{enums::PrintFormat, CLIContext};
 
 fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
     ctx.println(entries.to_json(true)?);

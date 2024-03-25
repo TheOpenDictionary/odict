@@ -624,6 +624,7 @@ dependencies = [
  "indicatif",
  "odict",
  "once_cell",
+ "pulldown-cmark",
  "termimad",
 ]
 

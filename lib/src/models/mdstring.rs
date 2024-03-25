@@ -58,7 +58,7 @@ impl From<&str> for MDString {
     }
 }
 
-const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\(.+\))").unwrap());
+const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\(.+?\))").unwrap());
 
 macro_rules! parse {
     ($t:ident) => {
@@ -104,15 +104,15 @@ mod tests {
 
     #[test]
     fn test_parenthetical() {
-        let md = MDString::from("(This) is a test");
+        let md = MDString::from("(This) is a (test)");
 
         assert_eq!(
             md.parse(MarkdownStrategy::HTML),
-            "<em>(This)</em> is a test"
+            "<em>(This)</em> is a (test)"
         );
 
-        assert_eq!(md.parse(MarkdownStrategy::Text), "(This) is a test");
+        assert_eq!(md.parse(MarkdownStrategy::Text), "(This) is a (test)");
 
-        assert_eq!(md.parse(MarkdownStrategy::Disabled), "*(This)* is a test");
+        assert_eq!(md.parse(MarkdownStrategy::Disabled), "*(This)* is a (test)");
     }
 }
