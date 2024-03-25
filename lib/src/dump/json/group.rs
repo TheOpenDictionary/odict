@@ -1,8 +1,8 @@
 use serde::Serialize;
 
-use crate::{Group, MDString};
-
 use super::DefinitionJSON;
+
+use crate::{Group, MDString};
 
 #[derive(Serialize)]
 pub struct GroupJSON {

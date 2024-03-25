@@ -1,7 +1,7 @@
 use std::{error::Error, fs};
 
 use clap::{arg, command, Args};
-use odict::dump::ToXML;
+use odict::ToXML;
 
 use crate::{enums::DumpFormat, CLIContext};
 
