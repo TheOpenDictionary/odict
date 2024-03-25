@@ -1,3 +1,5 @@
+use once_cell::sync::Lazy;
+use regex::Regex;
 use serde::{Deserialize, Serialize, Serializer};
 
 use crate::{
@@ -56,14 +58,20 @@ impl From<&str> for MDString {
     }
 }
 
+const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\(.+?\))").unwrap());
+
 macro_rules! parse {
     ($t:ident) => {
         impl $t {
             pub fn parse<S: AsRef<MarkdownStrategy>>(&self, strategy: S) -> String {
+                let repl = PARENTHETICAL_REGEX
+                    .replace_all(&self.value, "*${1}*")
+                    .to_string();
+
                 match strategy.as_ref() {
-                    MarkdownStrategy::HTML => to_html(&self.value),
-                    MarkdownStrategy::Text => to_text(&self.value),
-                    MarkdownStrategy::Disabled => self.value.to_owned(),
+                    MarkdownStrategy::HTML => to_html(&repl),
+                    MarkdownStrategy::Text => to_text(&repl),
+                    MarkdownStrategy::Disabled => repl.to_owned(),
                 }
             }
         }
@@ -92,5 +100,19 @@ mod tests {
         );
 
         assert_eq!(md.parse(MarkdownStrategy::Disabled), md.value);
+    }
+
+    #[test]
+    fn test_parenthetical() {
+        let md = MDString::from("(This) is a (test)");
+
+        assert_eq!(
+            md.parse(MarkdownStrategy::HTML),
+            "<em>(This)</em> is a (test)"
+        );
+
+        assert_eq!(md.parse(MarkdownStrategy::Text), "(This) is a (test)");
+
+        assert_eq!(md.parse(MarkdownStrategy::Disabled), "*(This)* is a (test)");
     }
 }

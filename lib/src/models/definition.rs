@@ -11,10 +11,10 @@ serializable! {
     #[serde(rename = "@value")]
     pub value: MDString,
 
-    #[serde(default)]
+    #[serde(default, rename="example")]
     pub examples: Vec<Example>,
 
-    #[serde(default)]
+    #[serde(default, rename="note")]
     pub notes: Vec<Note>,
   }
 }

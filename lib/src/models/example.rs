@@ -1,8 +1,8 @@
-use crate::serializable;
+use crate::{serializable, MDString};
 
 serializable! {
   pub struct Example {
     #[serde(rename = "$text")]
-    pub value: String,
+    pub value: MDString,
   }
 }

@@ -17,7 +17,18 @@ expression: dumped
               "definitions": [
                 {
                   "type": "definition",
-                  "value": "a cat"
+                  "value": "a cat",
+                  "examples": [
+                    "There goes a cat!"
+                  ],
+                  "notes": [
+                    {
+                      "value": "Some definition note",
+                      "examples": [
+                        "Some example"
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -84,7 +95,11 @@ expression: dumped
               "definitions": [
                 {
                   "type": "definition",
-                  "value": "(vertebrates) To move swiftly"
+                  "value": "(vertebrates) To move swiftly",
+                  "examples": [
+                    "The dog runs after the cat.",
+                    "The horse ran away."
+                  ]
                 },
                 {
                   "type": "definition",
@@ -116,7 +131,11 @@ expression: dumped
                   "description": "A number of verb senses",
                   "definitions": [
                     {
-                      "value": "(vertebrates) To move swiftly (figuratively)"
+                      "value": "(vertebrates) To move swiftly (figuratively)",
+                      "examples": [
+                        "The dog runs after the cat.",
+                        "The horse ran away."
+                      ]
                     },
                     {
                       "value": "(fluids) To flow."
