@@ -8,6 +8,8 @@ use once_cell::sync::Lazy;
 
 use crate::CLIContext;
 
+use super::md::print_md;
+
 const STYLE_POS: Lazy<Style> = Lazy::new(|| Style::new().italic());
 const STYLE_TITLE: Lazy<Style> = Lazy::new(|| Style::new().bold().underlined());
 const STYLE_EXAMPLE_BULLET: Lazy<Style> = Lazy::new(|| Style::new().dim());
@@ -123,11 +125,7 @@ fn print_definition(
         true => index_to_alpha(index).to_string(),
     };
 
-    let text = &format!(
-        "{}. {}",
-        numbering,
-        &definition.value.parse(MarkdownStrategy::Disabled)
-    );
+    let text = &format!("{}. {}", numbering, print_md(&definition.value));
 
     out.write_line(&indent(text, indent_width))?;
 
@@ -222,7 +220,7 @@ pub(super) fn pretty_print(
             if ety_count > 1 {
                 out.write_line(
                     &STYLE_TITLE
-                        .apply_to(&format!("Etymology #{}", idx + 1))
+                        .apply_to(&format!("\nEtymology #{}", idx + 1))
                         .to_string(),
                 )?;
             }
