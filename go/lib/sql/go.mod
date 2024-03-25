@@ -1,6 +1,6 @@
 module github.com/TheOpenDictionary/odict/lib/sql
 
-go 1.21.6
+go 1.22.1
 
 require (
 	github.com/TheOpenDictionary/odict/lib/core v0.0.0-20240121002644-e3f52802057f
