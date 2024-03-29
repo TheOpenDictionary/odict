@@ -16,6 +16,8 @@ github.com/bokwoon95/sqddl v0.4.9 h1:ELZB4osci3LrjPZZyhKgnFvX7HtOk2stq+eBpzD+SME
 github.com/bokwoon95/sqddl v0.4.9/go.mod h1:OKDpMxJCGMMtn52HdgltLH7M7zHrLo/lxGbnIkG6nQo=
 github.com/bokwoon95/sqddl v0.4.10 h1:kPyRnWw8N2G0bla9wq+Gy08QFOs1vxhuhEmSghHd8mM=
 github.com/bokwoon95/sqddl v0.4.10/go.mod h1:OKDpMxJCGMMtn52HdgltLH7M7zHrLo/lxGbnIkG6nQo=
+github.com/bokwoon95/sqddl v0.4.12 h1:DdEuRHZ/oZzflb/9DVwi0IPdn2RN9BMNVOztgomdTVI=
+github.com/bokwoon95/sqddl v0.4.12/go.mod h1:OKDpMxJCGMMtn52HdgltLH7M7zHrLo/lxGbnIkG6nQo=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
