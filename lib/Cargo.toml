@@ -12,7 +12,7 @@ serve = ["dep:actix-web"]
 
 
 [dependencies]
-lz4_flex = { version = "0.11.2", default-features = false, features = [
+lz4_flex = { version = "0.11.3", default-features = false, features = [
     "frame",
 ] }
 byteorder = "1.5.0"
