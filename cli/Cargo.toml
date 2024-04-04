@@ -16,4 +16,4 @@ clap = { version = "4.5.4", features = ["derive", "cargo"] }
 console = "0.15.8"
 once_cell = "1.19.0"
 indicatif = "0.17.8"
-pulldown-cmark = "0.10.0"
+pulldown-cmark = "0.10.2"
