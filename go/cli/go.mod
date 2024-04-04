@@ -1,6 +1,6 @@
 module github.com/TheOpenDictionary/odict/cli
 
-go 1.22.1
+go 1.22.2
 
 require (
 	github.com/TheOpenDictionary/odict/lib/config v0.0.0-20231024210539-d4e83ae7bfdc
