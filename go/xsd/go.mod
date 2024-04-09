@@ -1,6 +1,6 @@
 module github.com/TheOpenDictionary/odict/xsd
 
-go 1.21.6
+go 1.22.2
 
 require (
 	github.com/TheOpenDictionary/odict/lib/types v0.0.0-20231024210539-d4e83ae7bfdc

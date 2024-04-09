@@ -2,6 +2,7 @@ use std::error::Error;
 
 use odict::{Entry, ToJSON, ToXML};
 
+use super::pprint::pretty_print;
 use crate::{enums::PrintFormat, CLIContext};
 
 fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
@@ -27,7 +28,7 @@ pub fn print_entries(
     format: &PrintFormat,
 ) -> Result<(), Box<dyn Error>> {
     match format {
-        PrintFormat::Print => {}
+        PrintFormat::Print => pretty_print(ctx, entries)?,
         PrintFormat::JSON => print_json(ctx, entries)?,
         PrintFormat::XML => print_xml(ctx, entries)?,
     }

@@ -18,6 +18,7 @@ pub use self::definition::*;
 pub use self::dictionary::*;
 pub use self::entry::*;
 pub use self::etymology::*;
+pub use self::example::*;
 pub use self::group::*;
 pub use self::id::*;
 pub use self::mdstring::*;

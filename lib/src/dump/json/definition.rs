@@ -12,7 +12,7 @@ pub struct DefinitionJSON {
     pub value: MDString,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub examples: Vec<String>,
+    pub examples: Vec<MDString>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<NoteJSON>,

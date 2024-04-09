@@ -9,8 +9,7 @@ serializable! {
     pub id: Option<String>,
 
     #[serde(rename = "@description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<MDString>,
+    pub description: MDString,
 
     #[serde(default, rename = "definition")]
     pub definitions: Vec<Definition>,
