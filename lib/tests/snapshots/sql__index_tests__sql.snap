@@ -1,0 +1,6 @@
+---
+source: lib/tests/sql.rs
+expression: result.unwrap()
+---
+CREATE TABLE IF NOT EXISTS "dictionaries" ( "id" uuid NOT NULL PRIMARY KEY, "name" varchar );
+INSERT INTO "dictionaries" ("id", "name") VALUES ('2ee2a1ae-f7ff-4590-ba2d-de857ba7857f', 'Example Dictionary 1')
