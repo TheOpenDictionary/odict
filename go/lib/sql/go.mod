@@ -9,7 +9,7 @@ require (
 	github.com/TheOpenDictionary/odict/lib/utils v0.0.0-20240121002644-e3f52802057f
 	github.com/bokwoon95/sq v0.4.5
 	github.com/bokwoon95/sqddl v0.4.12
-	github.com/gkampitakis/go-snaps v0.5.2
+	github.com/gkampitakis/go-snaps v0.5.3
 	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.8.4
 )
