@@ -175,7 +175,7 @@ fn print_sense(ctx: &CLIContext, sense: &Sense, entry: &Entry) -> Result<(), Box
 
     out.write_line(&format!(
         "\n{}\n",
-        STYLE_POS.apply_to(sense.pos.to_string()).italic()
+        STYLE_POS.apply_to(sense.pos.description()).italic()
     ))?;
 
     for (idx, dt) in sense.definitions.iter().enumerate() {

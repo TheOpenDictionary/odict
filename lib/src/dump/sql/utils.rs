@@ -18,12 +18,12 @@ impl SQLBuilder {
         }
     }
 
-    pub fn add_table(&mut self, cmd: TableCreateStatement) {
-        self.schema.push(cmd);
+    pub fn add_table(&mut self, cmd: &TableCreateStatement) {
+        self.schema.push(cmd.to_owned());
     }
 
-    pub fn add_insert(&mut self, cmd: InsertStatement) {
-        self.queries.push(cmd);
+    pub fn add_insert(&mut self, cmd: &InsertStatement) {
+        self.queries.push(cmd.to_owned());
     }
 
     pub fn build(&self) -> Result<String, Box<dyn std::error::Error>> {

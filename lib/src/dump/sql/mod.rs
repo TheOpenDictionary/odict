@@ -1,4 +1,11 @@
+mod definitions;
 mod dictionaries;
+mod entries;
+mod etymologies;
+mod examples;
+mod groups;
+mod notes;
+mod senses;
 mod sql;
 mod utils;
 

@@ -1,6 +1,42 @@
 ---
 source: lib/tests/sql.rs
-expression: result.unwrap()
+expression: "re.replace_all(result.unwrap().as_str(), \"\")"
 ---
 CREATE TABLE IF NOT EXISTS "dictionaries" ( "id" uuid NOT NULL PRIMARY KEY, "name" varchar );
-INSERT INTO "dictionaries" ("id", "name") VALUES ('2ee2a1ae-f7ff-4590-ba2d-de857ba7857f', 'Example Dictionary 1')
+CREATE TABLE IF NOT EXISTS "entries" ( "id" uuid NOT NULL PRIMARY KEY, "term" varchar NOT NULL, "dictionary_id" uuid NOT NULL, FOREIGN KEY ("dictionary_id") REFERENCES "dictionaries" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "etymologies" ( "id" uuid NOT NULL PRIMARY KEY, "description" varchar, "entry_id" uuid NOT NULL, FOREIGN KEY ("entry_id") REFERENCES "entries" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "senses" ( "id" uuid NOT NULL PRIMARY KEY, "pos" varchar, "etymology_id" uuid NOT NULL, FOREIGN KEY ("etymology_id") REFERENCES "etymologies" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "groups" ( "id" uuid NOT NULL PRIMARY KEY, "description" varchar, "index" integer NOT NULL, "sense_id" uuid NOT NULL, FOREIGN KEY ("sense_id") REFERENCES "senses" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "definitions" ( "id" uuid NOT NULL PRIMARY KEY, "value" varchar NOT NULL, "index" integer NOT NULL, "sense_id" uuid, "group_id" uuid, FOREIGN KEY ("sense_id") REFERENCES "senses" ("id") ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "notes" ( "id" uuid NOT NULL PRIMARY KEY, "value" varchar, "index" integer NOT NULL, "definition_id" uuid NOT NULL, FOREIGN KEY ("definition_id") REFERENCES "definitions" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+CREATE TABLE IF NOT EXISTS "examples" ( "id" uuid NOT NULL PRIMARY KEY, "value" varchar, "index" integer NOT NULL, "definition_id" uuid, "note_id" uuid, FOREIGN KEY ("definition_id") REFERENCES "definitions" ("id") ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY ("definition_id") REFERENCES "notes" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
+INSERT INTO "dictionaries" ("id", "name") VALUES ('', 'Example Dictionary 1');
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'cat', '');
+INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'noun', '');
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'a cat', 0, '', NULL);
+INSERT INTO "notes" ("id", "value", "index", "definition_id") VALUES ('', 'Some definition note', 0, '');
+INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'Some example', 0, NULL, '');
+INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'There goes a cat!', 0, '', NULL);
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'dog', '');
+INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'unknown', '');
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'a dog', 0, '', NULL);
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'poo', '');
+INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'unknown', '');
+INSERT INTO "groups" ("id", "description", "index", "sense_id") VALUES ('', 'A number of verb senses', 0, '');
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'ran', '');
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'run', '');
+INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'noun', '');
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', '*(vertebrates)* To move swiftly', 0, '', NULL);
+INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'The dog runs after the cat.', 0, '', NULL);
+INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'The horse ran away.', 1, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.', 1, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'A pleasure trip.', 2, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Flight, instance or period of fleeing.', 3, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Migration (of fish).', 4, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'A group of fish that migrate, or ascend a river for the purpose of spawning.', 5, '', NULL);
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'verb', '');
+INSERT INTO "groups" ("id", "description", "index", "sense_id") VALUES ('', 'A number of verb senses', 0, '')
