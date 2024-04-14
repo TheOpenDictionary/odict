@@ -11,6 +11,7 @@ mod merge;
 mod new;
 mod print;
 mod search;
+mod serve;
 mod utils;
 
 pub use alias::*;
@@ -25,4 +26,5 @@ pub use merge::*;
 pub use new::*;
 pub use print::*;
 pub use search::*;
+pub use serve::*;
 pub use utils::*;

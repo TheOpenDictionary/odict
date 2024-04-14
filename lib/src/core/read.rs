@@ -1,6 +1,6 @@
 use std::{
     error::Error,
-    fs::File,
+    fs::{canonicalize, File},
     io::{Cursor, Read, Seek},
     path::PathBuf,
 };
@@ -96,7 +96,7 @@ impl DictionaryReader {
 
         let mut result = self.read_from_bytes(&buffer)?;
 
-        result.path = Some(PathBuf::from(path));
+        result.path = Some(canonicalize(PathBuf::from(path))?);
 
         Ok(result)
     }
