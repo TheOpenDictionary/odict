@@ -10,6 +10,7 @@ config = ["dep:dirs"]
 charabia = ["dep:charabia"]
 search = ["dep:tantivy", "dep:tantivy-tokenizer-api"]
 serve = ["dep:actix-web"]
+default = ["json", "sql", "config"]
 
 
 [dependencies]

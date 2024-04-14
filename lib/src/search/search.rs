@@ -2,12 +2,13 @@ use std::{error::Error, ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use rkyv::{archived_root, Deserialize, Infallible};
-use tantivy::{collector::TopDocs, query::QueryParser, Index, ReloadPolicy};
+use tantivy::{
+    collector::TopDocs, query::QueryParser, tokenizer::TextAnalyzer, Index, ReloadPolicy,
+};
 
 use crate::{Dictionary, Entry};
 
-#[cfg(feature = "charabia")]
-use super::{constants::CHARABIA, tokenizer::CharabiaTokenizer};
+use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 
 use super::{
     get_default_index_dir,
@@ -18,6 +19,7 @@ pub struct SearchOptions {
     pub dir: PathBuf,
     pub threshold: u32,
     pub limit: usize,
+    pub tokenizer: TextAnalyzer,
 }
 
 impl SearchOptions {
@@ -26,11 +28,20 @@ impl SearchOptions {
             dir: get_default_index_dir(),
             threshold: 1,
             limit: 10,
+            tokenizer: DEFAULT_TOKENIZER.to_owned(),
         }
     }
 
     pub fn limit(mut self, limit: usize) -> Self {
         self.limit = limit;
+        self
+    }
+
+    pub fn tokenizer<T>(mut self, tokenizer: T) -> Self
+    where
+        TextAnalyzer: From<T>,
+    {
+        self.tokenizer = tokenizer.into();
         self
     }
 
@@ -61,10 +72,9 @@ impl Dictionary {
         let index_path = opts.dir.join(self.id.as_str());
         let index = Index::open_in_dir(&index_path)?;
 
-        #[cfg(feature = "charabia")]
         index
             .tokenizers()
-            .register(CHARABIA, CharabiaTokenizer::default());
+            .register(CUSTOM_TOKENIZER, opts.tokenizer.to_owned());
 
         let reader = index
             .reader_builder()

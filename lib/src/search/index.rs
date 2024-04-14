@@ -1,22 +1,19 @@
 use std::{error::Error, ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path::PathBuf};
 
+use tantivy::tokenizer::TextAnalyzer;
 use tantivy::{doc, Index};
 
 use crate::config::get_config_dir;
 use crate::{Dictionary, PreviewOptions};
 
-#[cfg(feature = "charabia")]
-use super::constants::CHARABIA;
-
+use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
-
-#[cfg(feature = "charabia")]
-use super::tokenizer::CharabiaTokenizer;
 
 pub struct IndexOptions {
     pub memory: usize,
     pub dir: PathBuf,
     pub overwrite: bool,
+    pub tokenizer: TextAnalyzer,
     pub cb_on_item: Box<dyn Fn(usize, &str) + Send + Sync>,
 }
 
@@ -29,9 +26,18 @@ impl IndexOptions {
         Self {
             memory: 50_000_000,
             overwrite: false,
+            tokenizer: DEFAULT_TOKENIZER.to_owned(),
             dir: get_default_index_dir(),
             cb_on_item: Box::new(|_, _| {}),
         }
+    }
+
+    pub fn tokenizer<T>(mut self, tokenizer: T) -> Self
+    where
+        TextAnalyzer: From<T>,
+    {
+        self.tokenizer = tokenizer.into();
+        self
     }
 
     pub fn overwrite(mut self, overwrite: bool) -> Self {
@@ -82,10 +88,9 @@ impl Dictionary {
 
         let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
 
-        #[cfg(feature = "charabia")]
         index
             .tokenizers()
-            .register(CHARABIA, CharabiaTokenizer::default());
+            .register(CUSTOM_TOKENIZER, opts.tokenizer.clone());
 
         let mut index_writer = index.writer(opts.memory)?;
 

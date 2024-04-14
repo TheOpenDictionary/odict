@@ -59,7 +59,7 @@ impl Tokenizer for CharabiaTokenizer {
 
 #[cfg(test)]
 mod tests {
-    use crate::search::tokenizer::CharabiaTokenizer;
+    use crate::search::charabia::CharabiaTokenizer;
     use tantivy::tokenizer::*;
 
     #[test]
