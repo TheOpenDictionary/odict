@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/TheOpenDictionary/odict/lib/test v0.0.0-20231201204918-056ce8487757
 	github.com/samber/lo v1.39.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (

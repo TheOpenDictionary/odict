@@ -11,7 +11,7 @@ require (
 	github.com/bokwoon95/sqddl v0.4.12
 	github.com/gkampitakis/go-snaps v0.5.3
 	github.com/google/uuid v1.6.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
