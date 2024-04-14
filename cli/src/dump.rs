@@ -1,7 +1,7 @@
 use std::{error::Error, fs};
 
 use clap::{arg, command, Args};
-use odict::dump::ToXML;
+use odict::{SQLDialect, ToSQL, ToXML};
 
 use crate::{enums::DumpFormat, CLIContext};
 
@@ -33,9 +33,9 @@ pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> Result<(), Box<dyn Error>>
 
     let contents = match format {
         DumpFormat::XML => dict.to_xml(true)?,
-        DumpFormat::SQLite => todo!(),
-        DumpFormat::Postgres => todo!(),
-        DumpFormat::MySQL => todo!(),
+        DumpFormat::SQLite => dict.to_sql(SQLDialect::SQLite)?,
+        DumpFormat::Postgres => dict.to_sql(SQLDialect::Postgres)?,
+        DumpFormat::MySQL => dict.to_sql(SQLDialect::MySQL)?,
     };
 
     match output {

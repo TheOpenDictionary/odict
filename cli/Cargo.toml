@@ -8,9 +8,10 @@ publish = false
 odict = { path = "../lib", features = [
   "config",
   "charabia",
+  "sql",
   "search",
   "serve",
-  "dump",
+  "json",
 ] }
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
 console = "0.15.8"

@@ -3,7 +3,9 @@ use std::error::Error;
 use serde::Serialize;
 use serde_json::{to_string, to_string_pretty};
 
-use crate::json::{DictionaryJSON, EntryJSON};
+use super::dictionary::DictionaryJSON;
+use super::entry::EntryJSON;
+
 use crate::{Dictionary, Entry};
 
 pub struct JSONSerializer {}
