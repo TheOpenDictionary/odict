@@ -6,7 +6,7 @@ use std::{
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
-use rkyv::{archived_root, Deserialize, Infallible};
+use rkyv::archived_root;
 
 use super::constants::FILE_VERSION;
 use crate::{lz4::decompress, ArchivedDictionary, Dictionary};

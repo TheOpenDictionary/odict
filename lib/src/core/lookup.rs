@@ -106,6 +106,8 @@ macro_rules! lookup {
                                 },
                                 options,
                             );
+                        } else {
+                            entries.push(entry);
                         }
                     } else if *split > 0 {
                         let split = self.split(term, &SplitOptions::default().threshold(*split))?;

@@ -1,10 +1,9 @@
 use std::{error::Error, ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path::PathBuf};
+use tantivy::{doc, tokenizer::TextAnalyzer, Index};
 
-use tantivy::tokenizer::TextAnalyzer;
-use tantivy::{doc, Index};
-
-use crate::config::get_config_dir;
-use crate::{Dictionary, PreviewOptions};
+use crate::{
+    config::get_config_dir, ArchivedDictionary, ArchivedEntry, Dictionary, PreviewOptions,
+};
 
 use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
@@ -70,46 +69,65 @@ impl AsRef<IndexOptions> for IndexOptions {
     }
 }
 
-impl Dictionary {
-    pub fn index<Options: AsRef<IndexOptions>>(
-        &self,
-        options: Options,
-    ) -> Result<(), Box<dyn Error>> {
-        let opts = options.as_ref();
-        let index_path = opts.dir.join(self.id.as_str());
+macro_rules! index {
+    ($name:ident) => {
+      impl $name {
+        pub fn index<Options: AsRef<IndexOptions>>(
+            &self,
+            options: Options,
+        ) -> Result<(), Box<dyn Error>> {
+            let opts = options.as_ref();
+            let index_path = opts.dir.join(self.id.as_str());
 
-        if opts.overwrite && index_path.exists() {
-            remove_dir_all(&index_path)?;
-        }
-
-        if !index_path.exists() {
-            create_dir_all(&index_path)?;
-        }
-
-        let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
-
-        index
-            .tokenizers()
-            .register(CUSTOM_TOKENIZER, opts.tokenizer.clone());
-
-        let mut index_writer = index.writer(opts.memory)?;
-
-        self.entries.values().enumerate().for_each(|(i, entry)| {
-            let document = doc!(
-              *FIELD_TERM => entry.term.as_str(),
-              *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default()),
-              *FIELD_BUFFER => entry.serialize().unwrap()
-            );
-
-            if index_writer.add_document(document).is_ok() {
-                let cb = opts.cb_on_item.as_ref();
-                cb(i, entry.term.as_str());
+            if opts.overwrite && index_path.exists() {
+                remove_dir_all(&index_path)?;
             }
-        });
 
-        index_writer.commit()?;
-        index_writer.wait_merging_threads()?;
+            if !index_path.exists() {
+                create_dir_all(&index_path)?;
+            }
 
-        Ok(())
+            let index = Index::create_in_dir(&index_path, SCHEMA.to_owned())?;
+
+            index
+                .tokenizers()
+                .register(CUSTOM_TOKENIZER, opts.tokenizer.clone());
+
+            let mut index_writer = index.writer(opts.memory)?;
+
+            self.entries.values().enumerate().for_each(|(i, entry)| {
+                let document = doc!(
+                  *FIELD_TERM => entry.term.as_str(),
+                  *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default()),
+                  *FIELD_BUFFER => entry.serialize().unwrap()
+                );
+
+                if index_writer.add_document(document).is_ok() {
+                    let cb = options.as_ref().cb_on_item.as_ref();
+                    cb(i, entry.term.as_str());
+                }
+            });
+
+            index_writer.commit()?;
+            index_writer.wait_merging_threads()?;
+
+            Ok(())
+        }
+    }
+    };
+}
+
+// Workaround
+
+trait SerializeEntry {
+    fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>>;
+}
+
+impl SerializeEntry for &ArchivedEntry {
+    fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
+        self.to_entry().unwrap().serialize()
     }
 }
+
+index!(Dictionary);
+index!(ArchivedDictionary);

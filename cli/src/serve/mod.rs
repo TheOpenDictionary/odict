@@ -2,16 +2,19 @@ use std::{
     collections::HashMap,
     error::Error,
     fmt::{self, Display, Formatter},
+    path::PathBuf,
 };
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
 use clap::{command, Args, ValueEnum};
+use console::style;
 use env_logger::Env;
-use odict::DictionaryFile;
+use odict::{config::AliasManager, DictionaryFile, DictionaryReader};
 
 use crate::CLIContext;
 
 mod lookup;
+mod search;
 
 #[derive(Debug, Clone, ValueEnum)]
 enum LogLevel {
@@ -41,13 +44,36 @@ pub struct ServeArgs {
     #[arg(short, default_value_t = 5005, help = "Port to listen on")]
     port: u16,
 
-    // Log level
+    // Sets the default log level
     #[arg(short, long)]
     level: Option<LogLevel>,
 
     // List of dictionary paths or aliases to serve
     #[arg()]
     dictionaries: Vec<String>,
+}
+
+pub(self) fn get_dictionary_map(
+    reader: &DictionaryReader,
+    alias_manager: &AliasManager,
+    dictionaries: &Vec<String>,
+) -> Result<HashMap<String, DictionaryFile>, Box<dyn Error>> {
+    let mut dictionary_map = HashMap::<String, DictionaryFile>::new();
+
+    for dictionary in dictionaries {
+        let dict = reader.read_from_path_or_alias_with_manager(&dictionary, &alias_manager)?;
+
+        dictionary_map.insert(
+            PathBuf::from(dictionary)
+                .file_stem()
+                .unwrap()
+                .to_string_lossy()
+                .to_string(),
+            dict,
+        );
+    }
+
+    Ok(dictionary_map)
 }
 
 #[actix_web::main]
@@ -64,26 +90,38 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> Result<(), Box<dyn
         ..
     } = ctx;
 
-    let mut dictionary_map = HashMap::<String, DictionaryFile>::new();
+    let dictionary_map = get_dictionary_map(reader, alias_manager, &dictionaries)?;
+    let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
 
-    for dictionary in dictionaries {
-        let dict = reader.read_from_path_or_alias_with_manager(&dictionary, &alias_manager)?;
-        dictionary_map.insert(dictionary.to_owned(), dict);
+    ctx.println(format!(
+        "\n🟢  Serving the following dictionaries on port {} with log level \"{}\":\n",
+        port, log_level
+    ));
+
+    for (name, dict) in &dictionary_map {
+        ctx.println(format!(
+            "   • {} {}",
+            style(name).bold(),
+            style(format!(
+                "({})",
+                dict.path.as_ref().unwrap().to_string_lossy()
+            ))
+            .dim()
+        ));
     }
 
-    ctx.println(format!("\n🟢 Listening on port {}\n", port));
+    ctx.println("");
 
-    env_logger::init_from_env(
-        Env::new().filter(format!("{}", level.as_ref().unwrap_or(&LogLevel::Info))),
-    );
+    env_logger::init_from_env(Env::new().default_filter_or(log_level));
 
     let data = Data::new(dictionary_map);
 
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::clone(&data))
             .wrap(Logger::default())
+            .app_data(Data::clone(&data))
             .service(lookup::handle_lookup)
+            .service(search::handle_search)
     })
     .bind(("127.0.0.1", *port))?
     .run()

@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use rkyv::{archived_root, to_bytes, Deserialize, Infallible};
+use rkyv::{to_bytes, Deserialize, Infallible};
 
 use crate::{serializable, Etymology};
 

@@ -4,7 +4,7 @@ use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
     web::{Data, Path, Query},
-    HttpRequest, HttpResponse, Responder, ResponseError,
+    HttpResponse, Responder, ResponseError,
 };
 use derive_more::{Display, Error};
 use odict::{DictionaryFile, LookupOptions, ToJSON};
@@ -12,7 +12,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct LookupRequest {
-    queries: Vec<String>,
+    queries: String,
     follow: Option<bool>,
     split: Option<usize>,
 }
@@ -27,6 +27,9 @@ enum LookupError {
 
     #[display(fmt = "Lookup error: {}", message)]
     LookupError { message: String },
+
+    #[display(fmt = "Failed to serialize response")]
+    SerializeError,
 }
 
 impl ResponseError for LookupError {
@@ -40,47 +43,59 @@ impl ResponseError for LookupError {
         match *self {
             LookupError::DictionaryNotFound { .. } => StatusCode::NOT_FOUND,
             LookupError::DictionaryReadError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
+            LookupError::LookupError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
+            LookupError::SerializeError => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }
 
-#[get("/lookup/{name}")]
+#[get("/{name}/lookup")]
 async fn handle_lookup(
-    req: HttpRequest,
     params: Query<LookupRequest>,
     dict: Path<String>,
     dictionary_map: Data<HashMap<String, DictionaryFile>>,
 ) -> Result<impl Responder, LookupError> {
     let LookupRequest {
-        queries,
+        queries: raw_queries,
         follow,
         split,
     } = params.0;
 
-    let dictionary_name = &dict.into_inner();
+    let queries = raw_queries
+        .split(',')
+        .map(|s| s.to_string())
+        .collect::<Vec<_>>();
 
-    if let Some(file) = dictionary_map.get(dictionary_name) {
-        let dictionary = file
-            .to_archive()
-            .map_err(|_e| LookupError::DictionaryReadError {
-                name: dictionary_name.to_string(),
-            })?;
+    let dictionary_name = dict.into_inner();
 
-        let entries = dictionary
-            .lookup(
-                &queries,
-                LookupOptions::default()
-                    .follow(follow.unwrap_or(false))
-                    .split(split.unwrap_or(0)),
-            )
-            .map_err(|e| LookupError::LookupError {
-                message: e.to_string(),
-            })?;
+    let file = dictionary_map
+        .get(&dictionary_name)
+        .ok_or(LookupError::DictionaryNotFound {
+            name: dictionary_name.to_string(),
+        })?;
 
-        entries.to_json(true);
+    let dictionary = file
+        .to_archive()
+        .map_err(|_e| LookupError::DictionaryReadError {
+            name: dictionary_name.to_string(),
+        })?;
 
-        return Ok(HttpResponse::Ok().body(format!("{:?}", params)));
-    } else {
-        return Ok(HttpResponse::NotFound().body("Dictionary not found"));
-    }
+    let entries = dictionary
+        .lookup(
+            &queries,
+            LookupOptions::default()
+                .follow(follow.unwrap_or(false))
+                .split(split.unwrap_or(0)),
+        )
+        .map_err(|e| LookupError::LookupError {
+            message: e.to_string(),
+        })?;
+
+    let json = entries
+        .to_json(true)
+        .map_err(|_e| LookupError::SerializeError)?;
+
+    Ok(HttpResponse::Ok()
+        .content_type("application/json")
+        .body(json))
 }
