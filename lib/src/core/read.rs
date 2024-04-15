@@ -89,14 +89,15 @@ impl DictionaryReader {
     }
 
     pub fn read_from_path(&self, path: &str) -> Result<DictionaryFile, Box<dyn Error>> {
-        let mut file = File::open(path)?;
+        let pb = canonicalize(PathBuf::from(path))?;
+        let mut file = File::open(&pb)?;
         let mut buffer = Vec::new();
 
         file.read_to_end(&mut buffer)?;
 
         let mut result = self.read_from_bytes(&buffer)?;
 
-        result.path = Some(canonicalize(PathBuf::from(path))?);
+        result.path = Some(pb);
 
         Ok(result)
     }

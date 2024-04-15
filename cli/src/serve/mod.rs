@@ -1,7 +1,11 @@
-use std::{collections::HashMap, error::Error, fs::canonicalize, ops::Deref, path::PathBuf};
+use std::{
+    collections::HashMap, error::Error, fs::canonicalize, ops::Deref, path::PathBuf, rc::Rc,
+    sync::Arc,
+};
 
 use actix_web::{App, HttpServer};
 use clap::{command, Args};
+use odict::ArchivedDictionary;
 
 use crate::CLIContext;
 
@@ -20,35 +24,32 @@ pub struct ServeArgs {
 
 #[actix_web::main]
 pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> Result<(), Box<dyn Error>> {
-    let port = args.port;
-    let dictionaries = &args.dictionaries;
-    let mut dictionary_map = HashMap::<String, String>::new();
-    let alias_manager = &ctx.alias_manager;
+    let ServeArgs { port, dictionaries } = args;
 
-    for dictionary in dictionaries {
-        let path = alias_manager.get(&dictionary);
+    let CLIContext {
+        alias_manager,
+        reader,
+        ..
+    } = ctx;
 
-        if let Some(p) = path {
-            dictionary_map.insert(dictionary.to_owned(), p.to_owned());
-        } else {
-            let pb = PathBuf::from(dictionary);
-
-            if let Some(name) = pb.file_stem().map(|s| s.to_string_lossy().to_string()) {
-                let p = canonicalize(&pb)?.to_string_lossy().to_string();
-                dictionary_map.insert(name, p);
-            }
-        }
-    }
+    let mut dictionary_map = HashMap::<String, ArchivedDictionary>::new();
 
     println!("{:?}", dictionary_map);
+    for dictionary in dictionaries {
+        let dict = reader.read_from_path_or_alias_with_manager(&dictionary, &alias_manager)?;
+        dictionary_map.insert(dictionary.to_owned(), dict.to_archive()?);
+    }
+
     ctx.println(format!("\n🟢 Listening on port {}\n", port));
+
+    let r = Arc::new(dictionary_map);
 
     HttpServer::new(move || {
         App::new()
-            .app_data(dictionary_map.to_owned())
+            .app_data(r.clone())
             .service(lookup::handle_lookup)
     })
-    .bind(("127.0.0.1", port))?
+    .bind(("127.0.0.1", *port))?
     .run()
     .await?;
 
