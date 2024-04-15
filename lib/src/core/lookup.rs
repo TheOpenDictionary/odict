@@ -4,6 +4,7 @@ use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry, SplitOptions};
 
 use once_cell::sync::Lazy;
 use rayon::prelude::*;
+use std::marker::{Send, Sync};
 
 use regex::Regex;
 
@@ -16,6 +17,12 @@ use regex::Regex;
 pub struct LookupOptions {
     follow: bool,
     split: usize,
+}
+
+impl AsRef<LookupOptions> for LookupOptions {
+    fn as_ref(&self) -> &Self {
+        self
+    }
 }
 
 impl LookupOptions {
@@ -71,15 +78,15 @@ fn parse_query(query: &str) -> LookupQuery {
 macro_rules! lookup {
     ($tys:ident, $ret:ident) => {
         impl $tys {
-            fn lookup_(
+            fn lookup_<Options: AsRef<LookupOptions> + Send + Sync>(
                 &self,
                 query: &LookupQuery,
-                options: &LookupOptions,
+                options: Options,
             ) -> Result<Vec<&$ret>, Box<dyn Error + Send>> {
                 let mut entries: Vec<&$ret> = Vec::new();
 
                 let LookupQuery { term, fallback } = query;
-                let LookupOptions { follow, split } = options;
+                let LookupOptions { follow, split } = options.as_ref();
 
                 let mut found = self.entries.get(term.as_str());
 
@@ -99,6 +106,8 @@ macro_rules! lookup {
                                 },
                                 options,
                             );
+                        } else {
+                            entries.push(entry);
                         }
                     } else if *split > 0 {
                         let split = self.split(term, &SplitOptions::default().threshold(*split))?;
@@ -111,14 +120,14 @@ macro_rules! lookup {
                 Ok(entries)
             }
 
-            pub fn lookup(
+            pub fn lookup<Options: AsRef<LookupOptions> + Send + Sync>(
                 &self,
                 queries: &Vec<String>,
-                options: &LookupOptions,
+                options: Options,
             ) -> Result<Vec<Vec<&$ret>>, Box<dyn Error + Send>> {
                 queries
                     .par_iter()
-                    .map(|query| self.lookup_(&parse_query(query), options))
+                    .map(|query| self.lookup_(&parse_query(query), &options))
                     .collect()
             }
         }

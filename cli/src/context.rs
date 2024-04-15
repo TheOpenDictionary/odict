@@ -26,10 +26,14 @@ impl<'a> CLIContext<'a> {
         }
     }
 
-    pub fn println(&mut self, msg: String) {
+    pub fn println<S>(&mut self, msg: S)
+    where
+        S: AsRef<str>,
+    {
         self.stdout
-            .write_all(format!("{}\n", msg).as_bytes())
+            .write_all(format!("{}\n", msg.as_ref()).as_bytes())
             .unwrap();
+
         self.stdout.flush().unwrap();
     }
 }

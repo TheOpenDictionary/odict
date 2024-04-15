@@ -1,5 +1,5 @@
 use quick_xml::de::from_str;
-use rkyv::to_bytes;
+use rkyv::{to_bytes, Deserialize, Infallible};
 use std::{collections::HashMap, error::Error};
 
 use crate::serializable;
@@ -67,5 +67,12 @@ impl Dictionary {
 impl From<&str> for Dictionary {
     fn from(xml: &str) -> Self {
         from_str(xml).unwrap()
+    }
+}
+
+impl ArchivedDictionary {
+    pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
+        let dict: Dictionary = self.deserialize(&mut Infallible)?;
+        Ok(dict)
     }
 }
