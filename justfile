@@ -1,5 +1,3 @@
-GOLANG_CROSS_VERSION := "v1.21.3"
-
 # ---------------------------------------------------------------------------- #
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
@@ -13,16 +11,13 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 # @build-all +args="": deps (cli "schema") sync
 #   goreleaser build --id odict --clean {{args}}
 
-@schema: (go "schema") (cli "schema") (js "schema")
+@schema: (cli "schema") (js "schema")
 
 @insta +args="":
   cargo insta {{args}}
 
 @update-snaps:
   cargo insta accept
-
-@xsd:
-  go run xsd/xsd.go
 
 @run +args="":
   cargo run {{args}}
@@ -37,15 +32,9 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 # @publish +args="--auto-snapshot --clean":
 #   goreleaser release {{args}}
 
-@sync:
-  go work sync
-
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
 # ------------------------------------------------------------------------------ #
-
-@go +command:
-	just go/lib/{{command}}
 
 @rust +command:
   just lib/{{command}}
