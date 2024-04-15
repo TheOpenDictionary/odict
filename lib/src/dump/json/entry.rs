@@ -1,4 +1,4 @@
-use crate::Entry;
+use crate::{ArchivedEntry, Entry};
 
 use serde::Serialize;
 
@@ -31,5 +31,11 @@ impl From<Entry> for EntryJSON {
                 .map(|e| EtymologyJSON::from(e))
                 .collect(),
         }
+    }
+}
+
+impl From<&ArchivedEntry> for EntryJSON {
+    fn from(entry: &ArchivedEntry) -> Self {
+        EntryJSON::from(entry.to_entry().unwrap())
     }
 }

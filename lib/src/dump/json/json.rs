@@ -6,7 +6,7 @@ use serde_json::{to_string, to_string_pretty};
 use super::dictionary::DictionaryJSON;
 use super::entry::EntryJSON;
 
-use crate::{Dictionary, Entry};
+use crate::{ArchivedEntry, Dictionary, Entry};
 
 pub struct JSONSerializer {}
 
@@ -50,6 +50,35 @@ impl ToJSON for Vec<Entry> {
 }
 
 impl ToJSON for Vec<Vec<Entry>> {
+    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+        let json = self
+            .into_iter()
+            .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())
+            .collect::<Vec<Vec<EntryJSON>>>();
+
+        stringify(&json, pretty)
+    }
+}
+
+impl ToJSON for &ArchivedEntry {
+    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+        let json = EntryJSON::from(self.to_entry().unwrap());
+        stringify(&json, pretty)
+    }
+}
+
+impl ToJSON for Vec<&ArchivedEntry> {
+    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+        let json = self
+            .into_iter()
+            .map(|v| EntryJSON::from(v))
+            .collect::<Vec<EntryJSON>>();
+
+        stringify(&json, pretty)
+    }
+}
+
+impl ToJSON for Vec<Vec<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
         let json = self
             .into_iter()

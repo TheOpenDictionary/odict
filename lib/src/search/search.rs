@@ -98,9 +98,8 @@ impl Dictionary {
                     .unwrap();
 
                 let archive = unsafe { archived_root::<Entry>(&bytes[..]) };
-                let entry: Entry = archive.deserialize(&mut Infallible).unwrap();
 
-                entry
+                archive.to_entry().unwrap()
             })
             .collect();
 

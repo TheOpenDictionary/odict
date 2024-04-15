@@ -29,7 +29,7 @@ impl DictionaryFile {
     }
 
     pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        let dict: Dictionary = self.to_archive()?.deserialize(&mut Infallible)?;
+        let dict: Dictionary = self.to_archive()?.to_dictionary()?;
         Ok(dict)
     }
 }
