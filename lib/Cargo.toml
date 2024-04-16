@@ -4,38 +4,40 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-dump = ["dep:serde_json"]
+json = ["dep:serde_json"]
+sql = ["dep:sea-query"]
 config = ["dep:dirs"]
-search = ["dep:tantivy", "dep:charabia", "dep:tantivy-tokenizer-api"]
-serve = ["dep:actix-web"]
+charabia = ["dep:charabia"]
+search = ["dep:tantivy", "dep:tantivy-tokenizer-api"]
+default = ["json", "sql", "config"]
 
 
 [dependencies]
-lz4_flex = { version = "0.11.2", default-features = false, features = [
-    "frame",
+lz4_flex = { version = "0.11.3", default-features = false, features = [
+  "frame",
 ] }
 byteorder = "1.5.0"
 quick-xml = { version = "0.31.0", features = ["serialize"] }
-rayon = "1.8.1"
-regex = "1.10.3"
-rkyv = { version = "0.7.43", features = [
-    "size_32",
-    "strict",
-    "alloc",
-    "archive_le",
+rayon = "1.10.0"
+regex = "1.10.4"
+rkyv = { version = "0.7.44", features = [
+  "size_32",
+  "strict",
+  "alloc",
+  "archive_le",
 ] }
-serde = { version = "1.0.196", features = ["serde_derive"] }
-uuid = { version = "1.7.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-pulldown-cmark = "0.10.0"
+serde = { version = "1.0.197", features = ["serde_derive"] }
+uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+pulldown-cmark = "0.10.2"
 dirs = { version = "5.0.1", optional = true }
 once_cell = "1.19.0"
-serde_json = { version = "1.0.113", optional = true }
+serde_json = { version = "1.0.115", optional = true }
 validation = "0.0.1"
-actix-web = { version = "4.5.1", optional = true }
 tantivy = { version = "0.21.1", optional = true }
-charabia = { version = "0.8.7", optional = true }
+charabia = { version = "0.8.8", optional = true }
 tantivy-tokenizer-api = { version = "0.2.0", optional = true }
+sea-query = { version = "0.30.7", optional = true }
 
 [dev-dependencies]
-insta = "1.35.1"
+insta = "1.38.0"
 map-macro = "0.3.0"

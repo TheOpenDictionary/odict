@@ -1,7 +1,10 @@
 use clap::{command, crate_version, Parser, Subcommand};
 
 use crate::alias::AliasCommands;
-use crate::{CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs, SearchArgs};
+use crate::{
+    CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs, SearchArgs,
+    ServeArgs,
+};
 
 #[derive(Debug, Parser)]
 #[command(name = "odict", about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
@@ -48,7 +51,15 @@ pub enum Commands {
     #[command(arg_required_else_help = true)]
     Merge(MergeArgs),
 
+    /// Scaffolds a new ODict XML dictionary
+    #[command(arg_required_else_help = true)]
+    New(NewArgs),
+
     /// Run a full-text query on a compiled dictionary
     #[command(arg_required_else_help = true)]
     Search(SearchArgs),
+
+    /// Start a local web server to serve one or several dictionaries
+    #[command(arg_required_else_help = true)]
+    Serve(ServeArgs),
 }

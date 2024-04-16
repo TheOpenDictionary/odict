@@ -2,7 +2,12 @@ mod constants;
 mod index;
 mod schema;
 mod search;
-mod tokenizer;
+
+#[cfg(feature = "charabia")]
+mod charabia;
+
+#[cfg(feature = "charabia")]
+pub use self::charabia::*;
 
 pub use self::index::*;
 pub use self::search::*;

@@ -19,6 +19,12 @@ impl ID {
     }
 }
 
+impl Into<String> for ID {
+    fn into(self) -> String {
+        self.0
+    }
+}
+
 impl Default for ID {
     fn default() -> Self {
         ID::new()

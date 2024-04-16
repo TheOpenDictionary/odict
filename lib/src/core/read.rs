@@ -1,12 +1,12 @@
 use std::{
     error::Error,
-    fs::File,
+    fs::{canonicalize, File},
     io::{Cursor, Read, Seek},
     path::PathBuf,
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
-use rkyv::{archived_root, Deserialize, Infallible};
+use rkyv::archived_root;
 
 use super::constants::FILE_VERSION;
 use crate::{lz4::decompress, ArchivedDictionary, Dictionary};
@@ -29,7 +29,7 @@ impl DictionaryFile {
     }
 
     pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        let dict: Dictionary = self.to_archive()?.deserialize(&mut Infallible)?;
+        let dict: Dictionary = self.to_archive()?.to_dictionary()?;
         Ok(dict)
     }
 }
@@ -89,14 +89,15 @@ impl DictionaryReader {
     }
 
     pub fn read_from_path(&self, path: &str) -> Result<DictionaryFile, Box<dyn Error>> {
-        let mut file = File::open(path)?;
+        let pb = canonicalize(PathBuf::from(path))?;
+        let mut file = File::open(&pb)?;
         let mut buffer = Vec::new();
 
         file.read_to_end(&mut buffer)?;
 
         let mut result = self.read_from_bytes(&buffer)?;
 
-        result.path = Some(PathBuf::from(path));
+        result.path = Some(pb);
 
         Ok(result)
     }

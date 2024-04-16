@@ -1,5 +1,0 @@
-@schema:
-	flatc -g --gen-onefile --go-namespace types -o ./types ../flatbuffers/schema.fbs ../flatbuffers/enums.fbs && $(go env GOPATH)/bin/goimports -w ./types/*.go
-
-test:
-  go test -ldflags "-X 'github.com/TheOpenDictionary/odict/cli.version=$(cat ../version.txt)'" ./**/
