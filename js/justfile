@@ -17,7 +17,7 @@
   npx biome format {{args}} .
 
 @build: install
-  npx swc -d dist ./src/*.ts ./src/**/*.ts & \
+  npx swc -d dist  --strip-leading-paths ./src & \
   npx tsc
 
 @test +args="": install && clean
