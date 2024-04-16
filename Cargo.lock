@@ -1940,6 +1940,7 @@ dependencies = [
  "napi",
  "napi-build",
  "napi-derive",
+ "odict",
 ]
 
 [[package]]

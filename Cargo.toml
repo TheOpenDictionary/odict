@@ -5,10 +5,10 @@ resolver = "2"
 members = ["cli", "lib", "node"]
 
 [profile.release]
-strip = true
 codegen-units = 1
 lto = true
 panic = "abort"
+strip = "symbols"
 
 [profile.dev.package]
 insta.opt-level = 3
