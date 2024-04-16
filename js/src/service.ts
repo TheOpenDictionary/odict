@@ -1,10 +1,8 @@
-import { v4 as uuid } from "uuid";
-
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ODictMethod } from "./__generated__";
-import { IPC } from "./ipc";
+import { ODictMethod } from "./__generated__/odict-method.js";
+import { IPC } from "./ipc.js";
 
 type ProcessWrapper = {
   run: <T>(method: ODictMethod, buffer?: Uint8Array) => Promise<T>;

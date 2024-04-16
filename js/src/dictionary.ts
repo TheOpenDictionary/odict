@@ -1,13 +1,6 @@
 import { Builder } from "flatbuffers";
 
 import { CompilePayload } from "./__generated__/compile-payload.js";
-import {
-  LookupPayload,
-  MarkdownStrategy,
-  SearchPayload,
-  SplitPayload,
-  WritePayload,
-} from "./__generated__/index.js";
 import { ODictMethod } from "./__generated__/odict-method.js";
 import { startService } from "./service.js";
 import type {
@@ -18,6 +11,11 @@ import type {
   SearchOptions,
 } from "./types.js";
 import { generateOutputPath, queryToString } from "./utils.js";
+import { SearchPayload } from "./__generated__/search-payload.js";
+import { MarkdownStrategy } from "./__generated__/markdown-strategy.js";
+import { LookupPayload } from "./__generated__/lookup-payload.js";
+import { SplitPayload } from "./__generated__/split-payload.js";
+import { WritePayload } from "./__generated__/write-payload.js";
 
 function createBuilder() {
   return new Builder(1024);

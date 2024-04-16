@@ -1,4 +1,4 @@
-import { POS } from "./__generated__";
+import { POS } from "./__generated__/pos.js";
 
 export type WordWithFallback = { word: string; fallback: string };
 
