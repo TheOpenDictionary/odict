@@ -31,7 +31,7 @@ uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 pulldown-cmark = "0.10.2"
 dirs = { version = "5.0.1", optional = true }
 once_cell = "1.19.0"
-serde_json = { version = "1.0.115", optional = true }
+serde_json = { version = "1.0.116", optional = true }
 validation = "0.0.1"
 tantivy = { version = "0.21.1", optional = true }
 charabia = { version = "0.8.8", optional = true }
