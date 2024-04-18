@@ -41,5 +41,22 @@
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
+  },
+  "optionalDependencies": {
+    "@odict/node-win32-x64-msvc": "0.0.0",
+    "@odict/node-darwin-x64": "0.0.0",
+    "@odict/node-linux-x64-gnu": "0.0.0",
+    "@odict/node-darwin-arm64": "0.0.0",
+    "@odict/node-android-arm64": "0.0.0",
+    "@odict/node-linux-arm64-gnu": "0.0.0",
+    "@odict/node-linux-arm64-musl": "0.0.0",
+    "@odict/node-win32-arm64-msvc": "0.0.0",
+    "@odict/node-linux-arm-gnueabihf": "0.0.0",
+    "@odict/node-linux-x64-musl": "0.0.0",
+    "@odict/node-freebsd-x64": "0.0.0",
+    "@odict/node-win32-ia32-msvc": "0.0.0",
+    "@odict/node-android-arm-eabi": "0.0.0",
+    "@odict/node-darwin-universal": "0.0.0",
+    "@odict/node-linux-riscv64-gnu": "0.0.0"
   }
 }

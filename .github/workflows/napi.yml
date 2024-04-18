@@ -1,8 +1,11 @@
-name: CI
+name: Node
 env:
   DEBUG: napi:*
   APP_NAME: node
   MACOSX_DEPLOYMENT_TARGET: '10.13'
+defaults:
+  run:
+    working-directory: ./node
 permissions:
   contents: write
   id-token: write
@@ -161,7 +164,7 @@ jobs:
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
           shell: bash
-          prepare: |
+          run: |
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g yarn --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
