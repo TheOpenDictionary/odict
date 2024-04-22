@@ -12,6 +12,8 @@ mod lz4;
 mod md;
 mod models;
 
+pub mod fs;
+
 pub use self::core::*;
 pub use self::dump::*;
 pub use self::ext::*;

@@ -1,0 +1,29 @@
+@install:
+	npm install
+
+@add +args:
+  npm install {{args}}
+
+@clean:
+  rm -rf coverage ../**/*.odict  ../**/*.log
+
+@artifacts +args="":
+  napi artifacts {{args}}
+
+@build: 
+  npx napi build --release --platform ./dist
+
+@debug: 
+  npx napi build --platform ./dist
+
+@universal +args="": 
+  napi universal {{args}}
+
+@version +args="":  
+  napi version {{args}}
+
+@test +args="": build && clean
+  npx jest {{args}}
+
+@publish +args="":
+	npm publish {{args}}

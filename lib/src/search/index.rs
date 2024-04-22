@@ -2,7 +2,7 @@ use std::{error::Error, ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path
 use tantivy::{doc, tokenizer::TextAnalyzer, Index};
 
 use crate::{
-    config::get_config_dir, ArchivedDictionary, ArchivedEntry, Dictionary, PreviewOptions,
+    config::get_config_dir, preview::PreviewOptions, ArchivedDictionary, ArchivedEntry, Dictionary,
 };
 
 use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};

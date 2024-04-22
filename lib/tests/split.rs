@@ -2,7 +2,7 @@ mod helpers;
 
 #[cfg(test)]
 mod split_tests {
-    use odict::SplitOptions;
+    use odict::split::SplitOptions;
 
     use crate::helpers::EXAMPLE_DICTIONARY_1;
 

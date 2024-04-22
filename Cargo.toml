@@ -12,4 +12,3 @@ strip = "symbols"
 
 [profile.dev.package]
 insta.opt-level = 3
-similar.opt-level = 3

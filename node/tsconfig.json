@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "declarationDir": "dist",
+    "sourceMap": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["tests"]
+}

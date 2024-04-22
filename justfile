@@ -6,7 +6,7 @@
   asdf install > /dev/null
 
 @build +args="": deps
-  cargo build {{args}}
+  cargo build -p cli {{args}}
 
 # @build-all +args="": deps (cli "schema") sync
 #   goreleaser build --id odict --clean {{args}}
@@ -47,6 +47,9 @@
 
 @js +command:
 	just js/{{command}}
+
+@node +command:
+	just node/{{command}}
 
 @python +command:
 	just python/{{command}}

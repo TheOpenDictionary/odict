@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry, SplitOptions};
+use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 use once_cell::sync::Lazy;
 use rayon::prelude::*;
@@ -15,8 +15,8 @@ use regex::Regex;
 /* ----------------------------- Lookup Options ----------------------------- */
 
 pub struct LookupOptions {
-    follow: bool,
-    split: usize,
+    pub follow: bool,
+    pub split: usize,
 }
 
 impl AsRef<LookupOptions> for LookupOptions {
@@ -46,29 +46,45 @@ impl LookupOptions {
 
 /* --------------------------------- Queries -------------------------------- */
 
-struct LookupQuery {
-    term: String,
-    fallback: String,
+#[derive(Debug, Clone)]
+pub struct LookupQuery {
+    pub term: String,
+    pub fallback: String,
+}
+
+impl AsRef<LookupQuery> for LookupQuery {
+    fn as_ref(&self) -> &Self {
+        self
+    }
 }
 
 const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\((.+)\)$").unwrap());
 
-fn parse_query(query: &str) -> LookupQuery {
-    let term: String;
+impl From<&LookupQuery> for LookupQuery {
+    fn from(query: &LookupQuery) -> Self {
+        query.to_owned()
+    }
+}
 
-    let fallback = match PARENTHETICAL_REGEX.captures(&query) {
-        Some(caps) => {
-            let fallback = &caps[1];
-            term = query.replace(&caps[0], "");
-            fallback.to_string()
-        }
-        None => {
-            term = query.to_string();
-            "".to_string()
-        }
-    };
+impl<S: AsRef<str>> From<S> for LookupQuery {
+    fn from(query: S) -> Self {
+        let term: String;
+        let q = query.as_ref();
 
-    LookupQuery { term, fallback }
+        let fallback = match PARENTHETICAL_REGEX.captures(q) {
+            Some(caps) => {
+                let fallback = &caps[1];
+                term = q.replace(&caps[0], "");
+                fallback.to_string()
+            }
+            None => {
+                term = q.to_string();
+                "".to_string()
+            }
+        };
+
+        LookupQuery { term, fallback }
+    }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -120,14 +136,19 @@ macro_rules! lookup {
                 Ok(entries)
             }
 
-            pub fn lookup<Options: AsRef<LookupOptions> + Send + Sync>(
+            pub fn lookup<'a, Query, Options>(
                 &self,
-                queries: &Vec<String>,
+                queries: &'a Vec<Query>,
                 options: Options,
-            ) -> Result<Vec<Vec<&$ret>>, Box<dyn Error + Send>> {
+            ) -> Result<Vec<Vec<&$ret>>, Box<dyn Error + Send>>
+            where
+                Query: Into<LookupQuery> + Send + Sync,
+                Options: AsRef<LookupOptions> + Send + Sync,
+                LookupQuery: From<&'a Query>,
+            {
                 queries
                     .par_iter()
-                    .map(|query| self.lookup_(&parse_query(query), &options))
+                    .map(|query| self.lookup_(&query.into(), &options))
                     .collect()
             }
         }

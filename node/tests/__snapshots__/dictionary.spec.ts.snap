@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dictionary lookup looks up terms properly 1`] = `undefined`;
