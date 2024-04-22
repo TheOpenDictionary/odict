@@ -1,7 +1,7 @@
 use std::{borrow::BorrowMut, path::PathBuf, vec};
 
 use napi::{bindgen_prelude::Either3, Either};
-use odict::{lookup, DictionaryReader, DictionaryWriter};
+use odict::{lookup, DictionaryReader, DictionaryWriter, MarkdownStrategy};
 
 use crate::{
   constants::{DICT_READER, DICT_WRITER},
@@ -100,9 +100,14 @@ impl Dictionary {
       opts = opts.split(s.try_into().unwrap_or(0));
     }
 
-    let entries = dict.lookup(queries, &opts);
+    let entries = dict.lookup(queries, &opts).map_err(|e| cast_error(e))?;
 
-    println!("{:?}", entries);
+    let mapped = entries.iter().map(|i| {
+      i.iter()
+        .map(|e| crate::types::JSEntry::from_archive(e, &MarkdownStrategy::Disabled))
+    });
+
+    println!("{:?}", mapped);
 
     Ok(())
   }

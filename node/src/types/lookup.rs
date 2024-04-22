@@ -1,26 +1,4 @@
-use merge::Merge;
-use odict::lookup;
-
-#[napi]
-pub enum MarkdownStrategy {
-  Disable,
-  HTML,
-  Text,
-}
-
-#[napi(object)]
-#[derive(PartialEq, Merge, Clone, Eq)]
-pub struct DictionaryOptions {
-  pub default_split_threshold: Option<u32>,
-}
-
-impl Default for DictionaryOptions {
-  fn default() -> Self {
-    DictionaryOptions {
-      default_split_threshold: None,
-    }
-  }
-}
+use super::MarkdownStrategy;
 
 #[napi(object)]
 pub struct LookupOptions {
@@ -45,9 +23,9 @@ pub struct LookupQuery {
   pub fallback: String,
 }
 
-impl From<LookupQuery> for lookup::LookupQuery {
+impl From<LookupQuery> for odict::lookup::LookupQuery {
   fn from(q: LookupQuery) -> Self {
-    lookup::LookupQuery {
+    odict::lookup::LookupQuery {
       term: q.term,
       fallback: q.fallback,
     }
