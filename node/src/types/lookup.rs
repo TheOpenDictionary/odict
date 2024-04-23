@@ -1,9 +1,11 @@
-use super::MarkdownStrategy;
+use merge::Merge;
 
 #[napi(object)]
+#[derive(Merge)]
 pub struct LookupOptions {
   pub split: Option<u32>,
-  pub markdown_strategy: Option<MarkdownStrategy>,
+  #[napi(ts_type = "'disable' | 'html' | 'text'")]
+  pub markdown_strategy: Option<String>,
   pub follow: Option<bool>,
 }
 

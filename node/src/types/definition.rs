@@ -1,13 +1,15 @@
+use super::note::Note;
+
 #[napi(object)]
 pub struct Definition {
   pub id: Option<String>,
   pub value: String,
   pub examples: Vec<String>,
-  pub notes: Vec<NoteJSON>,
+  pub notes: Vec<Note>,
 }
 
 impl Definition {
-  fn from(definition: odict::Definition, mds: odict::MarkdownStrategy) -> Self {
+  pub fn from(definition: odict::Definition, mds: &odict::MarkdownStrategy) -> Self {
     let odict::Definition {
       id,
       value,
@@ -19,7 +21,7 @@ impl Definition {
       id,
       value: value.parse(mds),
       examples: examples.into_iter().map(|e| e.value.parse(mds)).collect(),
-      notes: notes.into_iter().map(|n| NoteJSON::from(n)).collect(),
+      notes: notes.into_iter().map(|n| Note::from(n, mds)).collect(),
     }
   }
 }

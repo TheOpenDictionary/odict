@@ -14,6 +14,7 @@ use regex::Regex;
 
 /* ----------------------------- Lookup Options ----------------------------- */
 
+#[derive(Debug, Clone)]
 pub struct LookupOptions {
     pub follow: bool,
     pub split: usize,
@@ -50,6 +51,20 @@ impl LookupOptions {
 pub struct LookupQuery {
     pub term: String,
     pub fallback: String,
+}
+
+impl LookupQuery {
+    pub fn new(term: &str) -> Self {
+        Self {
+            term: term.to_string(),
+            fallback: term.to_string(),
+        }
+    }
+
+    pub fn with_fallback(mut self, fallback: &str) -> Self {
+        self.fallback = fallback.to_string();
+        self
+    }
 }
 
 impl AsRef<LookupQuery> for LookupQuery {
@@ -125,12 +140,12 @@ macro_rules! lookup {
                         } else {
                             entries.push(entry);
                         }
-                    } else if *split > 0 {
-                        let split = self.split(term, &SplitOptions::default().threshold(*split))?;
-                        entries.extend_from_slice(&split);
                     } else {
                         entries.push(entry);
                     }
+                } else if *split > 0 {
+                    let split = self.split(term, &SplitOptions::default().threshold(*split))?;
+                    entries.extend_from_slice(&split);
                 }
 
                 Ok(entries)

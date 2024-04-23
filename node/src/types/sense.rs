@@ -5,16 +5,22 @@ use super::{definition::Definition, group::Group};
 #[napi(object)]
 pub struct Sense {
   pub pos: String,
-  pub definitions: Vec<Either<Group, Either<Definition, Group>>>,
+  pub definitions: Vec<Either<Definition, Group>>,
 }
 
 impl Sense {
-  fn from(sense: odict::Sense, mds: odict::MarkdownStrategy) -> Self {
+  pub fn from(sense: odict::Sense, mds: &odict::MarkdownStrategy) -> Self {
     let odict::Sense { pos, definitions } = sense;
 
     Self {
-      pos,
-      definitions: definitions.into_iter().map(|d| Either::from(d)).collect(),
+      pos: pos.to_string(),
+      definitions: definitions
+        .into_iter()
+        .map(|d| match d {
+          odict::DefinitionType::Definition(d) => Either::A(Definition::from(d, mds)),
+          odict::DefinitionType::Group(g) => Either::B(Group::from(g, mds)),
+        })
+        .collect(),
     }
   }
 }

@@ -25,7 +25,7 @@ impl Etymology {
       description: description.map(|d| d.parse(mds)),
       senses: senses
         .into_iter()
-        .map(|(k, v)| (k, SenseJSON::from(v, mds)))
+        .map(|(k, v)| (k.to_string(), Sense::from(v, mds)))
         .collect(),
     }
   }

@@ -1,13 +1,12 @@
+#[napi(object)]
 pub struct Note {
   pub id: Option<String>,
-
   pub value: String,
-
   pub examples: Vec<String>,
 }
 
 impl Note {
-  fn from(note: odict::Note, mds: odict::MarkdownStrategy) -> Self {
+  pub fn from(note: odict::Note, mds: &odict::MarkdownStrategy) -> Self {
     let odict::Note {
       id,
       value,

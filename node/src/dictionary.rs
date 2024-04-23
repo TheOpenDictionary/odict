@@ -1,10 +1,10 @@
 use std::{borrow::BorrowMut, path::PathBuf, vec};
 
+use merge::Merge;
 use napi::{bindgen_prelude::Either3, Either};
-use odict::{lookup, DictionaryReader, DictionaryWriter, MarkdownStrategy};
 
 use crate::{
-  types::{self, DictionaryOptions, LookupOptions, LookupQuery},
+  types::{self, DictionaryOptions, Entry, LookupOptions, LookupQuery, MarkdownStrategy},
   utils::{cast_error, resolve_options, to_lookup_query},
 };
 
@@ -13,24 +13,42 @@ pub struct Dictionary {
   pub path: String,
   options: Option<DictionaryOptions>,
   file: odict::DictionaryFile,
-  reader: DictionaryReader,
-  writer: DictionaryWriter,
 }
 
 #[napi]
 impl Dictionary {
   #[napi(constructor)]
   pub fn new(path: String, options: Option<DictionaryOptions>) -> napi::Result<Self> {
-    let reader = DictionaryReader::default();
-    let writer = DictionaryWriter::default();
+    let reader = odict::DictionaryReader::default();
 
     let file = reader.read_from_path(&path).map_err(cast_error)?;
 
     let dict = Dictionary {
       path,
       options,
-      reader,
-      writer,
+      file,
+    };
+
+    Ok(dict)
+  }
+
+  #[napi(factory)]
+  pub fn write(
+    xml_str: String,
+    out_path: String,
+    options: Option<DictionaryOptions>,
+  ) -> napi::Result<Self> {
+    let dict = odict::Dictionary::from(&xml_str).map_err(cast_error)?;
+    let reader = odict::DictionaryReader::default();
+    let writer = odict::DictionaryWriter::default();
+
+    writer.write_to_path(&dict, &out_path).map_err(cast_error)?;
+
+    let file = reader.read_from_path(&out_path).map_err(cast_error)?;
+
+    let dict = Dictionary {
+      path: out_path,
+      options,
       file,
     };
 
@@ -51,8 +69,8 @@ impl Dictionary {
         .to_string()
     });
 
-    let reader = DictionaryReader::default();
-    let writer = DictionaryWriter::default();
+    let reader = odict::DictionaryReader::default();
+    let writer = odict::DictionaryWriter::default();
 
     writer
       .compile_xml(&in_file, &out_file)
@@ -63,8 +81,6 @@ impl Dictionary {
     let dict = Dictionary {
       path: out_file,
       options,
-      reader,
-      writer,
       file,
     };
 
@@ -79,14 +95,18 @@ impl Dictionary {
     &self,
     queries: &Vec<odict::lookup::LookupQuery>,
     options: Option<LookupOptions>,
-  ) -> napi::Result<()> {
+  ) -> napi::Result<Vec<Vec<Entry>>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
+
+    let mut lookup_options = options.unwrap_or(LookupOptions::default());
+
+    lookup_options.merge(LookupOptions::default());
 
     let LookupOptions {
       follow,
       split,
       markdown_strategy,
-    } = options.unwrap_or(LookupOptions::default());
+    } = lookup_options;
 
     let global_opts = self.options();
     let mut opts = odict::lookup::LookupOptions::default();
@@ -101,14 +121,20 @@ impl Dictionary {
 
     let entries = dict.lookup(queries, &opts).map_err(|e| cast_error(e))?;
 
-    let mapped = entries.iter().map(|i| {
-      i.iter()
-        .map(|e| crate::types::JSEntry::from_archive(e, &MarkdownStrategy::Disabled))
-    });
+    let mds = markdown_strategy
+      .map(|m| MarkdownStrategy::from(m.as_str()).into())
+      .unwrap_or(odict::MarkdownStrategy::Disabled);
 
-    println!("{:?}", mapped);
+    let mapped = entries
+      .iter()
+      .map(|i| {
+        i.iter()
+          .map(|e| Entry::from_archive(e, mds.as_ref()))
+          .collect()
+      })
+      .collect();
 
-    Ok(())
+    Ok(mapped)
   }
 
   #[napi]
@@ -116,7 +142,7 @@ impl Dictionary {
     &self,
     query: Either3<types::LookupQuery, String, Vec<Either<LookupQuery, String>>>,
     options: Option<LookupOptions>,
-  ) -> napi::Result<()> {
+  ) -> napi::Result<Vec<Vec<Entry>>> {
     let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
 
     match query {
@@ -131,5 +157,13 @@ impl Dictionary {
     }
 
     self._lookup(&queries, options)
+  }
+
+  #[napi]
+  pub fn lexicon(&self) -> napi::Result<Vec<&str>> {
+    let dict = self.file.to_archive().map_err(cast_error)?;
+    let lexicon = dict.lexicon();
+
+    Ok(lexicon)
   }
 }

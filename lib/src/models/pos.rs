@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::serializable;
 
 macro_rules! create_pos {
@@ -15,6 +17,12 @@ macro_rules! create_pos {
           $( stringify!($variant), )*
       ];
   }
+}
+
+impl fmt::Display for PartOfSpeech {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 create_pos!({

@@ -8,7 +8,7 @@ pub struct Group {
 }
 
 impl Group {
-  fn from(group: odict::Group, mds: odict::MarkdownStrategy) -> Self {
+  pub fn from(group: odict::Group, mds: &odict::MarkdownStrategy) -> Self {
     let odict::Group {
       id,
       description,
@@ -20,7 +20,7 @@ impl Group {
       description: description.parse(mds),
       definitions: definitions
         .into_iter()
-        .map(|d| DefinitionJSON::from(d))
+        .map(|d| Definition::from(d, mds))
         .collect(),
     }
   }
