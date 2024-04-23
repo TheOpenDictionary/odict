@@ -1,48 +1,20 @@
-use serde::Serialize;
+use napi::Either;
 
-use crate::{DefinitionType, PartOfSpeech, Sense};
+use super::{definition::Definition, group::Group};
 
-use super::{DefinitionJSON, GroupJSON};
-
-#[derive(Serialize)]
-#[serde(tag = "type")]
-pub enum DefinitionTypeJSON {
-    #[serde(rename = "group")]
-    Group(GroupJSON),
-
-    #[serde(rename = "definition")]
-    Definition(DefinitionJSON),
+#[napi(object)]
+pub struct Sense {
+  pub pos: String,
+  pub definitions: Vec<Either<Group, Either<Definition, Group>>>,
 }
 
-impl From<DefinitionType> for DefinitionTypeJSON {
-    fn from(definition: DefinitionType) -> Self {
-        match definition {
-            DefinitionType::Group(g) => DefinitionTypeJSON::Group(GroupJSON::from(g)),
-            DefinitionType::Definition(d) => {
-                DefinitionTypeJSON::Definition(DefinitionJSON::from(d))
-            }
-        }
+impl Sense {
+  fn from(sense: odict::Sense, mds: odict::MarkdownStrategy) -> Self {
+    let odict::Sense { pos, definitions } = sense;
+
+    Self {
+      pos,
+      definitions: definitions.into_iter().map(|d| Either::from(d)).collect(),
     }
-}
-
-#[derive(Serialize)]
-pub struct SenseJSON {
-    pub pos: PartOfSpeech,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub definitions: Vec<DefinitionTypeJSON>,
-}
-
-impl From<Sense> for SenseJSON {
-    fn from(sense: Sense) -> Self {
-        let Sense { pos, definitions } = sense;
-
-        Self {
-            pos,
-            definitions: definitions
-                .into_iter()
-                .map(|d| DefinitionTypeJSON::from(d))
-                .collect(),
-        }
-    }
+  }
 }

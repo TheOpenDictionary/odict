@@ -4,7 +4,6 @@ use napi::{bindgen_prelude::Either3, Either};
 use odict::{lookup, DictionaryReader, DictionaryWriter, MarkdownStrategy};
 
 use crate::{
-  constants::{DICT_READER, DICT_WRITER},
   types::{self, DictionaryOptions, LookupOptions, LookupQuery},
   utils::{cast_error, resolve_options, to_lookup_query},
 };

@@ -1,37 +1,25 @@
-use serde::Serialize;
-
-use crate::{Definition, MDString};
-
-use super::NoteJSON;
-
-#[derive(Serialize)]
-pub struct DefinitionJSON {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
-
-    pub value: MDString,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub examples: Vec<MDString>,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub notes: Vec<NoteJSON>,
+#[napi(object)]
+pub struct Definition {
+  pub id: Option<String>,
+  pub value: String,
+  pub examples: Vec<String>,
+  pub notes: Vec<NoteJSON>,
 }
 
-impl From<Definition> for DefinitionJSON {
-    fn from(definition: Definition) -> Self {
-        let Definition {
-            id,
-            value,
-            examples,
-            notes,
-        } = definition;
+impl Definition {
+  fn from(definition: odict::Definition, mds: odict::MarkdownStrategy) -> Self {
+    let odict::Definition {
+      id,
+      value,
+      examples,
+      notes,
+    } = definition;
 
-        Self {
-            id,
-            value,
-            examples: examples.into_iter().map(|e| e.value).collect(),
-            notes: notes.into_iter().map(|n| NoteJSON::from(n)).collect(),
-        }
+    Self {
+      id,
+      value: value.parse(mds),
+      examples: examples.into_iter().map(|e| e.value.parse(mds)).collect(),
+      notes: notes.into_iter().map(|n| NoteJSON::from(n)).collect(),
     }
+  }
 }

@@ -4,7 +4,7 @@ mod helpers;
 mod index_tests {
     use super::helpers::EXAMPLE_DICTIONARY_1;
     use insta::assert_snapshot;
-    use odict::{SQLDialect, ToSQL};
+    use odict::sql::{SQLDialect, ToSQL};
     use regex::Regex;
 
     #[test]

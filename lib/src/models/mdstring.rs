@@ -2,10 +2,9 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::{Deserialize, Serialize, Serializer};
 
-use crate::{
-    md::{to_html, to_text},
-    serializable_custom,
-};
+use crate::md::{to_html, to_text};
+
+use crate::serializable_custom;
 
 pub enum MarkdownStrategy {
     HTML,

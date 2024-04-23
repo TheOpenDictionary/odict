@@ -1,13 +1,13 @@
-use super::etymology::JSEtymology;
+use super::Etymology;
 
 #[napi(object)]
-pub struct JSEntry {
+pub struct Entry {
   pub term: String,
   pub see_also: Option<String>,
-  pub etymologies: Vec<JSEtymology>,
+  pub etymologies: Vec<Etymology>,
 }
 
-impl JSEntry {
+impl Entry {
   pub fn from_entry(entry: odict::Entry, mds: &odict::MarkdownStrategy) -> Self {
     let odict::Entry {
       term,
@@ -20,12 +20,12 @@ impl JSEntry {
       see_also,
       etymologies: etymologies
         .into_iter()
-        .map(|e| JSEtymology::from(e, mds))
+        .map(|e| Etymology::from(e, mds))
         .collect(),
     }
   }
 
   pub fn from_archive(entry: &odict::ArchivedEntry, mds: &odict::MarkdownStrategy) -> Self {
-    JSEntry::from_entry(entry.to_entry().unwrap(), mds)
+    Entry::from_entry(entry.to_entry().unwrap(), mds)
   }
 }

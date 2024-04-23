@@ -4,7 +4,7 @@ mod dump_tests {
 
     use insta::assert_snapshot;
 
-    use odict::{Dictionary, ToJSON, ToXML, ID};
+    use odict::{json::ToJSON, xml::ToXML, Dictionary, ID};
 
     use crate::helpers::EXAMPLE_DICTIONARY_1;
 

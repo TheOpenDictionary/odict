@@ -1,30 +1,23 @@
-use serde::Serialize;
+pub struct Note {
+  pub id: Option<String>,
 
-use crate::{MDString, Note};
+  pub value: String,
 
-#[derive(Serialize)]
-pub struct NoteJSON {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    id: Option<String>,
-
-    value: MDString,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<MDString>,
+  pub examples: Vec<String>,
 }
 
-impl From<Note> for NoteJSON {
-    fn from(note: Note) -> Self {
-        let Note {
-            id,
-            value,
-            examples,
-        } = note;
+impl Note {
+  fn from(note: odict::Note, mds: odict::MarkdownStrategy) -> Self {
+    let odict::Note {
+      id,
+      value,
+      examples,
+    } = note;
 
-        Self {
-            id,
-            value,
-            examples: examples.into_iter().map(|e| e.value).collect(),
-        }
+    Self {
+      id,
+      value: value.parse(mds),
+      examples: examples.into_iter().map(|e| e.value.parse(mds)).collect(),
     }
+  }
 }

@@ -5,7 +5,7 @@ mod index_tests {
 
     use super::helpers::EXAMPLE_DICTIONARY_1;
     use insta::assert_snapshot;
-    use odict::ToJSON;
+    use odict::json::ToJSON;
     use odict::search::{IndexOptions, SearchOptions};
 
     #[test]
