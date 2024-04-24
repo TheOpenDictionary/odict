@@ -1,10 +1,12 @@
-use std::{borrow::BorrowMut, path::PathBuf, vec};
+use std::{borrow::BorrowMut, option, path::PathBuf, vec};
+
+use napi::bindgen_prelude::*;
 
 use merge::Merge;
-use napi::{bindgen_prelude::Either3, Either};
+use odict::lookup;
 
 use crate::{
-  types::{self, DictionaryOptions, Entry, LookupOptions, LookupQuery, MarkdownStrategy},
+  types::{self, DictionaryOptions, Entry, IndexOptions, LookupOptions, LookupQuery, SplitOptions},
   utils::{cast_error, resolve_options, to_lookup_query},
 };
 
@@ -18,7 +20,7 @@ pub struct Dictionary {
 #[napi]
 impl Dictionary {
   #[napi(constructor)]
-  pub fn new(path: String, options: Option<DictionaryOptions>) -> napi::Result<Self> {
+  pub fn new(path: String, options: Option<DictionaryOptions>) -> Result<Self> {
     let reader = odict::DictionaryReader::default();
 
     let file = reader.read_from_path(&path).map_err(cast_error)?;
@@ -37,7 +39,7 @@ impl Dictionary {
     xml_str: String,
     out_path: String,
     options: Option<DictionaryOptions>,
-  ) -> napi::Result<Self> {
+  ) -> Result<Self> {
     let dict = odict::Dictionary::from(&xml_str).map_err(cast_error)?;
     let reader = odict::DictionaryReader::default();
     let writer = odict::DictionaryWriter::default();
@@ -60,7 +62,7 @@ impl Dictionary {
     xml_path: String,
     out_path: Option<String>,
     options: Option<DictionaryOptions>,
-  ) -> napi::Result<Self> {
+  ) -> Result<Self> {
     let in_file = PathBuf::from(xml_path.to_owned());
 
     let out_file = out_path.unwrap_or_else(|| {
@@ -93,46 +95,33 @@ impl Dictionary {
 
   pub fn _lookup(
     &self,
+    env: napi::Env,
     queries: &Vec<odict::lookup::LookupQuery>,
     options: Option<LookupOptions>,
-  ) -> napi::Result<Vec<Vec<Entry>>> {
+  ) -> Result<Vec<Vec<Entry>>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
 
-    let mut lookup_options = options.unwrap_or(LookupOptions::default());
+    let mut opts = options.unwrap_or(LookupOptions::default());
 
-    lookup_options.merge(LookupOptions::default());
-
-    let LookupOptions {
-      follow,
-      split,
-      markdown_strategy,
-    } = lookup_options;
-
-    let global_opts = self.options();
-    let mut opts = odict::lookup::LookupOptions::default();
-
-    if let Some(follow) = follow {
-      opts = opts.follow(follow);
+    if let Some(split) = opts
+      .split
+      .or(self.options().split.map(|s| s.threshold).flatten())
+    {
+      opts.split = Some(split);
     }
 
-    if let Some(s) = split.or(global_opts.default_split_threshold) {
-      opts = opts.split(s.try_into().unwrap_or(0));
-    }
-
-    let entries = dict.lookup(queries, &opts).map_err(|e| cast_error(e))?;
-
-    let mds = markdown_strategy
-      .map(|m| MarkdownStrategy::from(m.as_str()).into())
-      .unwrap_or(odict::MarkdownStrategy::Disabled);
+    let entries = dict
+      .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
+      .map_err(|e| cast_error(e))?;
 
     let mapped = entries
       .iter()
       .map(|i| {
         i.iter()
-          .map(|e| Entry::from_archive(e, mds.as_ref()))
-          .collect()
+          .map(|e| Entry::from_archive(env, e))
+          .collect::<Result<Vec<Entry>, _>>()
       })
-      .collect();
+      .collect::<Result<Vec<Vec<Entry>>, _>>()?;
 
     Ok(mapped)
   }
@@ -140,9 +129,10 @@ impl Dictionary {
   #[napi]
   pub fn lookup(
     &self,
+    env: Env,
     query: Either3<types::LookupQuery, String, Vec<Either<LookupQuery, String>>>,
     options: Option<LookupOptions>,
-  ) -> napi::Result<Vec<Vec<Entry>>> {
+  ) -> Result<Vec<Vec<Entry>>> {
     let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
 
     match query {
@@ -156,14 +146,86 @@ impl Dictionary {
       ),
     }
 
-    self._lookup(&queries, options)
+    self._lookup(env, &queries, options)
   }
 
   #[napi]
-  pub fn lexicon(&self) -> napi::Result<Vec<&str>> {
+  pub fn lexicon(&self) -> Result<Vec<&str>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
     let lexicon = dict.lexicon();
 
     Ok(lexicon)
+  }
+
+  #[napi]
+  pub fn split(
+    &self,
+    env: Env,
+    query: String,
+    options: Option<SplitOptions>,
+  ) -> Result<Vec<Entry>> {
+    let dict = self.file.to_archive().map_err(cast_error)?;
+
+    let mut opts = options;
+
+    opts.merge(self.options().split);
+
+    let result = dict
+      .split::<&odict::split::SplitOptions>(&query, &opts.unwrap().into())
+      .map_err(|e| cast_error(e))?;
+
+    Ok(
+      result
+        .iter()
+        .map(|e| Entry::from_archive(env, e))
+        .collect::<Result<Vec<Entry>, _>>()?,
+    )
+  }
+
+  #[napi]
+  pub fn index(&self, options: Option<IndexOptions>) -> Result<()> {
+    let dict = self.file.to_archive().map_err(cast_error)?;
+    let mut opts = options;
+
+    opts.merge(self.options().index);
+
+    dict
+      .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
+      .map_err(cast_error)?;
+
+    Ok(())
+  }
+}
+
+#[cfg(test)]
+mod test {
+  use merge::Merge;
+
+  fn test_options_merging() {
+    let opts1 = crate::types::DictionaryOptions {
+      index: Some(crate::types::IndexOptions {
+        directory: Some("test".to_string()),
+        memory: Some(1234),
+        overwrite: Some(false),
+      }),
+      split: { Some(crate::types::SplitOptions { threshold: Some(5) }) },
+    };
+
+    let mut opts2: Option<crate::types::IndexOptions> = None;
+
+    let mut opts3: Option<crate::types::SplitOptions> = Some(crate::types::SplitOptions {
+      threshold: Some(10),
+    });
+
+    opts2.merge(opts1.index);
+    opts3.merge(opts1.split);
+
+    let result1 = opts2.unwrap();
+    let result2 = opts3.unwrap();
+
+    assert_eq!(result1.directory.unwrap(), "test".to_string());
+    assert_eq!(result1.memory.unwrap(), 1234);
+    assert_eq!(result1.overwrite.unwrap(), false);
+    assert_eq!(result2.threshold.unwrap(), 10);
   }
 }

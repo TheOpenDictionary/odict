@@ -4,8 +4,6 @@ use merge::Merge;
 #[derive(Merge)]
 pub struct LookupOptions {
   pub split: Option<u32>,
-  #[napi(ts_type = "'disable' | 'html' | 'text'")]
-  pub markdown_strategy: Option<String>,
   pub follow: Option<bool>,
 }
 
@@ -13,9 +11,24 @@ impl Default for LookupOptions {
   fn default() -> Self {
     LookupOptions {
       split: None,
-      markdown_strategy: None,
       follow: None,
     }
+  }
+}
+
+impl From<LookupOptions> for odict::lookup::LookupOptions {
+  fn from(opts: LookupOptions) -> Self {
+    let mut s = odict::lookup::LookupOptions::default();
+
+    if let Some(split) = opts.split {
+      s = s.split(split.try_into().unwrap());
+    }
+
+    if let Some(follow) = opts.follow {
+      s = s.follow(follow);
+    }
+
+    s
   }
 }
 

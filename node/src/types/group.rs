@@ -1,27 +1,29 @@
-use super::definition::Definition;
+use napi::bindgen_prelude::*;
+
+use super::{definition::Definition, MDString};
 
 #[napi(object)]
 pub struct Group {
   pub id: Option<String>,
-  pub description: String,
+  pub description: ClassInstance<MDString>,
   pub definitions: Vec<Definition>,
 }
 
 impl Group {
-  pub fn from(group: odict::Group, mds: &odict::MarkdownStrategy) -> Self {
+  pub fn from(env: napi::Env, group: odict::Group) -> Result<Self> {
     let odict::Group {
       id,
       description,
       definitions,
     } = group;
 
-    Self {
+    Ok(Self {
       id,
-      description: description.parse(mds),
+      description: MDString::from(description).into_instance(env)?,
       definitions: definitions
         .into_iter()
-        .map(|d| Definition::from(d, mds))
-        .collect(),
-    }
+        .map(|d| Definition::from(env, d))
+        .collect::<Result<Vec<Definition>, _>>()?,
+    })
   }
 }

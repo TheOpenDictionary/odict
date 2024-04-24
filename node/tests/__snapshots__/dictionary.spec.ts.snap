@@ -90,12 +90,16 @@ exports[`Dictionary can split terms properly 1`] = `
             "definitions": [
               {
                 "examples": [
-                  "There goes a cat!",
+                  {
+                    "value": "There goes a cat!",
+                  },
                 ],
                 "notes": [
                   {
                     "examples": [
-                      "Some example",
+                      {
+                        "value": "Some example",
+                      },
                     ],
                     "value": "Some definition note",
                   },
@@ -103,6 +107,7 @@ exports[`Dictionary can split terms properly 1`] = `
                 "value": "a cat",
               },
             ],
+            "pos": "n",
           },
         },
       },
@@ -118,9 +123,12 @@ exports[`Dictionary can split terms properly 1`] = `
           "un": {
             "definitions": [
               {
+                "examples": [],
+                "notes": [],
                 "value": "a dog",
               },
             ],
+            "pos": "un",
           },
         },
       },
@@ -142,12 +150,16 @@ exports[`Dictionary lookup can split terms 1`] = `
               "definitions": [
                 {
                   "examples": [
-                    "There goes a cat!",
+                    {
+                      "value": "There goes a cat!",
+                    },
                   ],
                   "notes": [
                     {
                       "examples": [
-                        "Some example",
+                        {
+                          "value": "Some example",
+                        },
                       ],
                       "value": "Some definition note",
                     },
@@ -187,87 +199,6 @@ exports[`Dictionary lookup can split terms 1`] = `
 ]
 `;
 
-exports[`Dictionary lookup considers markdown strategies correctly 1`] = `
-[
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "v": {
-              "definitions": [
-                {
-                  "examples": [],
-                  "notes": [],
-                  "value": "This **is** a _markdown_ test",
-                },
-              ],
-              "pos": "v",
-            },
-          },
-        },
-      ],
-      "term": "markdown",
-    },
-  ],
-]
-`;
-
-exports[`Dictionary lookup considers markdown strategies correctly 2`] = `
-[
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "v": {
-              "definitions": [
-                {
-                  "examples": [],
-                  "notes": [],
-                  "value": "This is a markdown test",
-                },
-              ],
-              "pos": "v",
-            },
-          },
-        },
-      ],
-      "term": "markdown",
-    },
-  ],
-]
-`;
-
-exports[`Dictionary lookup considers markdown strategies correctly 3`] = `
-[
-  [
-    {
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "v": {
-              "definitions": [
-                {
-                  "examples": [],
-                  "notes": [],
-                  "value": "This <strong>is</strong> a <em>markdown</em> test",
-                },
-              ],
-              "pos": "v",
-            },
-          },
-        },
-      ],
-      "term": "markdown",
-    },
-  ],
-]
-`;
-
 exports[`Dictionary lookup looks up terms properly 1`] = `
 [
   [
@@ -280,12 +211,16 @@ exports[`Dictionary lookup looks up terms properly 1`] = `
               "definitions": [
                 {
                   "examples": [
-                    "There goes a cat!",
+                    {
+                      "value": "There goes a cat!",
+                    },
                   ],
                   "notes": [
                     {
                       "examples": [
-                        "Some example",
+                        {
+                          "value": "Some example",
+                        },
                       ],
                       "value": "Some definition note",
                     },

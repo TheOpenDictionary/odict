@@ -23,6 +23,7 @@
   napi version {{args}}
 
 @test +args="": build && clean
+  cargo test
   npx jest {{args}}
 
 @publish +args="":

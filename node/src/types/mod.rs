@@ -1,15 +1,20 @@
 mod definition;
 mod dictionary;
 mod entry;
-mod enums;
 mod etymology;
+mod example;
 mod group;
+mod index;
 mod lookup;
+mod mdstring;
 mod note;
 mod sense;
+mod split;
 
 pub use dictionary::*;
 pub use entry::*;
-pub use enums::*;
-pub use etymology::*;
+pub use example::*;
+pub use index::*;
 pub use lookup::*;
+pub use mdstring::*;
+pub use split::*;

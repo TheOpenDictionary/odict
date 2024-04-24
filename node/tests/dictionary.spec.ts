@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "@jest/globals";
- 
+
 import { existsSync } from "node:fs";
 import { rm, stat } from "node:fs/promises";
 import { join } from "node:path";
@@ -8,22 +8,27 @@ import { fileURLToPath } from "node:url";
 import { Dictionary } from "../dist/index.js";
 
 describe("Dictionary", () => {
+  expect.addSnapshotSerializer({
+    test: (t) => typeof t.value === "string",
+    serialize: (t) => `"${t.value}"`,
+  });
+
   let dict1: Dictionary;
-  let dict2: Dictionary; 
+  let dict2: Dictionary;
 
   beforeAll(async () => {
     dict1 = await Dictionary.compile(
       join(
         fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example1.xml",
-      ),
+        "../../../examples/example1.xml"
+      )
     );
 
     dict2 = await Dictionary.compile(
       join(
         fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example2.xml",
-      ),
+        "../../../examples/example2.xml"
+      )
     );
 
     const stat1 = await stat(dict1.path);
@@ -32,10 +37,11 @@ describe("Dictionary", () => {
     expect(stat1.isFile).toBeTruthy();
     expect(stat2.isFile).toBeTruthy();
   });
- 
+
   describe("lookup", () => {
     it("looks up terms properly", async () => {
       const result = await dict1.lookup({ term: "cat", fallback: "cat" });
+
       expect(result).toMatchSnapshot();
     });
 
@@ -48,24 +54,6 @@ describe("Dictionary", () => {
       const result = await dict1.lookup("catdog", { split: 3 });
       expect(result).toMatchSnapshot();
     });
-
-    it("considers markdown strategies correctly", async () => {
-      const result1 = await dict2.lookup("markdown", {
-        markdownStrategy: "disable",
-      });
-
-      const result2 = await dict2.lookup("markdown", {
-        markdownStrategy: "text",
-      });
-
-      const result3 = await dict2.lookup("markdown", {
-        markdownStrategy: "html",
-      });
-
-      expect(result1).toMatchSnapshot();
-      expect(result2).toMatchSnapshot();
-      expect(result3).toMatchSnapshot();
-    });
   });
 
   it("can return the lexicon", async () => {
@@ -76,7 +64,7 @@ describe("Dictionary", () => {
   it("can write raw XML", async () => {
     await Dictionary.write(
       '<dictionary><entry term="hello"><ety><sense pos="v"><definition value="hello world" /></sense></ety></entry><entry term="world"><ety><sense pos="v"><definition value="hello world" /></sense></ety></entry></dictionary>"    )',
-      "test.odict",
+      "test.odict"
     );
 
     expect(existsSync("test.odict")).toBeTruthy();
@@ -88,8 +76,8 @@ describe("Dictionary", () => {
     await rm("test.odict");
   });
 
-  it.skip("can split terms properly", async () => {
-    const result = await dict1.split("catdog", 2);
+  it("can split terms properly", async () => {
+    const result = await dict1.split("catdog", { threshold: 2 });
     expect(result).toMatchSnapshot();
   });
 
@@ -107,7 +95,7 @@ describe("Dictionary", () => {
       await dict.lookup("dog");
     } catch (e) {
       expect(e as Error).toEqual(
-        'Encountered an error starting the ODict service for path "fake-alias": open : no such file or directory',
+        'Encountered an error starting the ODict service for path "fake-alias": open : no such file or directory'
       );
     }
   });

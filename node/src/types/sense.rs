@@ -1,4 +1,4 @@
-use napi::Either;
+use napi::bindgen_prelude::*;
 
 use super::{definition::Definition, group::Group};
 
@@ -9,18 +9,20 @@ pub struct Sense {
 }
 
 impl Sense {
-  pub fn from(sense: odict::Sense, mds: &odict::MarkdownStrategy) -> Self {
+  pub fn from(env: napi::Env, sense: odict::Sense) -> Result<Self> {
     let odict::Sense { pos, definitions } = sense;
 
-    Self {
+    Ok(Self {
       pos: pos.to_string(),
       definitions: definitions
         .into_iter()
-        .map(|d| match d {
-          odict::DefinitionType::Definition(d) => Either::A(Definition::from(d, mds)),
-          odict::DefinitionType::Group(g) => Either::B(Group::from(g, mds)),
+        .map(|d| -> Result<Either<Definition, Group>> {
+          match d {
+            odict::DefinitionType::Definition(d) => Ok(Either::A(Definition::from(env, d)?)),
+            odict::DefinitionType::Group(g) => Ok(Either::B(Group::from(env, g)?)),
+          }
         })
-        .collect(),
-    }
+        .collect::<Result<Vec<Either<Definition, Group>>, _>>()?,
+    })
   }
 }
