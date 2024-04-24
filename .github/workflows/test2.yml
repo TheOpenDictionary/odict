@@ -13,19 +13,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup asdf
-        uses: asdf-vm/actions/setup@v2
-      - name: Cache asdf
-        id: cache-asdf
-        uses: actions/cache@v3
-        with:
-          path: |
-            /home/runner/.asdf
-          key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
-          restore-keys: |
-            ${{ runner.os }}-asdf-
-      - name: Install dependencies in .tool-versions
-        uses: asdf-vm/actions/install@v2
+      - name: Setup Mise
+        uses: jdx/mise-action@v2            
       - name: Run tests
         run: just test
       - uses: actions/upload-artifact@v4
