@@ -3,7 +3,10 @@
 # ---------------------------------------------------------------------------- #
 
 @deps:
-  asdf install > /dev/null
+  mise install
+  corepack enable 
+  corepack install -g pnpm 
+  just python deps
 
 @build +args="": deps
   cargo build -p cli {{args}}
