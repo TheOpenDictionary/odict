@@ -1,18 +1,19 @@
-use std::{borrow::BorrowMut, option, path::PathBuf, vec};
+use std::{borrow::BorrowMut, path::PathBuf, vec};
 
 use napi::bindgen_prelude::*;
 
 use merge::Merge;
-use odict::lookup;
 
 use crate::{
-  types::{self, DictionaryOptions, Entry, IndexOptions, LookupOptions, LookupQuery, SplitOptions},
+  types::{
+    self, DictionaryOptions, Entry, IndexOptions, LookupOptions, LookupQuery, SearchOptions,
+    SplitOptions,
+  },
   utils::{cast_error, resolve_options, to_lookup_query},
 };
 
 #[napi]
 pub struct Dictionary {
-  pub path: String,
   options: Option<DictionaryOptions>,
   file: odict::DictionaryFile,
 }
@@ -20,16 +21,14 @@ pub struct Dictionary {
 #[napi]
 impl Dictionary {
   #[napi(constructor)]
-  pub fn new(path: String, options: Option<DictionaryOptions>) -> Result<Self> {
+  pub fn new(path_or_alias: String, options: Option<DictionaryOptions>) -> Result<Self> {
     let reader = odict::DictionaryReader::default();
 
-    let file = reader.read_from_path(&path).map_err(cast_error)?;
+    let file = reader
+      .read_from_path_or_alias(&path_or_alias)
+      .map_err(cast_error)?;
 
-    let dict = Dictionary {
-      path,
-      options,
-      file,
-    };
+    let dict = Dictionary { options, file };
 
     Ok(dict)
   }
@@ -48,11 +47,7 @@ impl Dictionary {
 
     let file = reader.read_from_path(&out_path).map_err(cast_error)?;
 
-    let dict = Dictionary {
-      path: out_path,
-      options,
-      file,
-    };
+    let dict = Dictionary { options, file };
 
     Ok(dict)
   }
@@ -80,17 +75,25 @@ impl Dictionary {
 
     let file = reader.read_from_path(&out_file).map_err(cast_error)?;
 
-    let dict = Dictionary {
-      path: out_file,
-      options,
-      file,
-    };
+    let dict = Dictionary { options, file };
 
     Ok(dict)
   }
 
   pub fn options(&self) -> DictionaryOptions {
     resolve_options(&self.options)
+  }
+
+  #[napi(getter)]
+  pub fn path(&self) -> napi::Result<String> {
+    let path = self
+      .file
+      .path
+      .as_ref()
+      .map(|p| p.to_string_lossy().to_string())
+      .unwrap();
+
+    Ok(path)
   }
 
   pub fn _lookup(
@@ -195,14 +198,40 @@ impl Dictionary {
 
     Ok(())
   }
+
+  #[napi]
+  pub fn search(
+    &self,
+    env: Env,
+    query: String,
+    options: Option<SearchOptions>,
+  ) -> Result<Vec<Entry>> {
+    let dict = self.file.to_archive().map_err(cast_error)?;
+    let mut opts = options;
+
+    opts.merge(self.options().search);
+
+    let results = dict
+      .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
+      .map_err(cast_error)?;
+
+    let entries = results
+      .iter()
+      .map(|e| Entry::from_entry(env, e.clone()))
+      .collect::<Result<Vec<Entry>, _>>()?;
+
+    Ok(entries)
+  }
 }
 
 #[cfg(test)]
 mod test {
   use merge::Merge;
 
+  #[test]
   fn test_options_merging() {
     let opts1 = crate::types::DictionaryOptions {
+      search: None,
       index: Some(crate::types::IndexOptions {
         directory: Some("test".to_string()),
         memory: Some(1234),

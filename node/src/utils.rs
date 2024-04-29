@@ -4,7 +4,7 @@ use napi::Either;
 use crate::types::{DictionaryOptions, LookupQuery};
 
 pub fn cast_error(e: Box<dyn std::error::Error>) -> napi::Error {
-  napi::Error::new(napi::Status::GenericFailure, e.to_string())
+  napi::Error::new(napi::Status::GenericFailure, format!("{}", e))
 }
 
 pub fn resolve_options(options: &Option<DictionaryOptions>) -> DictionaryOptions {

@@ -13,23 +13,25 @@ describe("Dictionary", () => {
     serialize: (t) => `"${t.value}"`,
   });
 
+  let dict1Path: string;
+  let dict2Path: string;
   let dict1: Dictionary;
   let dict2: Dictionary;
 
   beforeAll(async () => {
-    dict1 = await Dictionary.compile(
-      join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example1.xml"
-      )
+    dict1Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example1.xml"
     );
 
-    dict2 = await Dictionary.compile(
-      join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example2.xml"
-      )
+    dict1 = await Dictionary.compile(dict1Path);
+
+    dict2Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example2.xml"
     );
+
+    dict2 = await Dictionary.compile(dict2Path);
 
     const stat1 = await stat(dict1.path);
     const stat2 = await stat(dict2.path);
@@ -38,10 +40,14 @@ describe("Dictionary", () => {
     expect(stat2.isFile).toBeTruthy();
   });
 
+  it("returns the path correctly", () => {
+    expect(dict1.path).toBe(dict1Path.replace(".xml", ".odict"));
+    expect(dict2.path).toBe(dict2Path.replace(".xml", ".odict"));
+  });
+
   describe("lookup", () => {
     it("looks up terms properly", async () => {
       const result = await dict1.lookup({ term: "cat", fallback: "cat" });
-
       expect(result).toMatchSnapshot();
     });
 
@@ -81,7 +87,7 @@ describe("Dictionary", () => {
     expect(result).toMatchSnapshot();
   });
 
-  it.skip("can index and search a dictionary", async () => {
+  it("can index and search a dictionary", async () => {
     await dict1.index();
 
     const results = await dict1.search("run");
@@ -89,13 +95,13 @@ describe("Dictionary", () => {
     expect(results).toMatchSnapshot();
   });
 
-  it.skip("throws errors inside JavaScript", async () => {
+  it("throws errors inside JavaScript", async () => {
     try {
       const dict = new Dictionary("fake-alias");
       await dict.lookup("dog");
     } catch (e) {
-      expect(e as Error).toEqual(
-        'Encountered an error starting the ODict service for path "fake-alias": open : no such file or directory'
+      expect((e as Error).message).toEqual(
+        "No such file or directory (os error 2)"
       );
     }
   });

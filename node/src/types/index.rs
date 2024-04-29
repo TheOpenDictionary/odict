@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use merge::Merge;
 
 #[napi(object)]

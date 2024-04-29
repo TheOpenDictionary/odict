@@ -8,7 +8,7 @@
   corepack install -g pnpm 
   just python deps
 
-@build +args="": deps
+@build +args="":
   cargo build -p cli {{args}}
 
 # @build-all +args="": deps (cli "schema") sync

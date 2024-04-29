@@ -8,6 +8,7 @@ mod index;
 mod lookup;
 mod mdstring;
 mod note;
+mod search;
 mod sense;
 mod split;
 
@@ -17,4 +18,5 @@ pub use example::*;
 pub use index::*;
 pub use lookup::*;
 pub use mdstring::*;
+pub use search::*;
 pub use split::*;
