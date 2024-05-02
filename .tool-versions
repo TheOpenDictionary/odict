@@ -4,4 +4,4 @@ kotlin 1.9.23
 java adoptopenjdk-21.0.3+9.0.LTS
 nodejs 20.12.2
 just 1.24.0
-rust 1.77.2
+rust 1.78.0
