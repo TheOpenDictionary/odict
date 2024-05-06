@@ -2,6 +2,8 @@ use std::{error::Error, ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use rkyv::archived_root;
+use tantivy::schema::Value;
+use tantivy::TantivyDocument;
 use tantivy::{
     collector::TopDocs, query::QueryParser, tokenizer::TextAnalyzer, Index, ReloadPolicy,
 };
@@ -95,7 +97,7 @@ macro_rules! search {
 
                 let reader = index
                     .reader_builder()
-                    .reload_policy(ReloadPolicy::OnCommit)
+                    .reload_policy(ReloadPolicy::OnCommitWithDelay)
                     .try_into()?;
 
                 let searcher = reader.searcher();
@@ -107,7 +109,7 @@ macro_rules! search {
                     .par_iter()
                     .filter(|(score, _)| score >= &(opts.threshold as f32))
                     .map(|(_, doc_address)| -> Entry {
-                        let retrieved_doc = searcher.doc(*doc_address).unwrap();
+                        let retrieved_doc: TantivyDocument = searcher.doc(*doc_address).unwrap();
 
                         let bytes = retrieved_doc
                             .get_first(*FIELD_BUFFER)
