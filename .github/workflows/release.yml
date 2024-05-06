@@ -1,10 +1,10 @@
-name: Release Please 
+name: Release Please
 
 on:
-   push:
-     branches:
-       - main
-       
+  push:
+    branches:
+      - main
+
 permissions:
   contents: write
   pull-requests: write
@@ -16,7 +16,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4      
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: release
@@ -24,6 +24,7 @@ jobs:
         uses: google-github-actions/release-please-action@v3.7.6
         with:
           command: manifest
+          release-type: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
           monorepo-tags: true
           bump-patch-for-minor-pre-major: true
@@ -40,12 +41,12 @@ jobs:
             ${{ runner.os }}-asdf-
       - name: Install dependencies in .tool-versions
         uses: asdf-vm/actions/install@v2
-      - name: Fetch tags 
+      - name: Fetch tags
         run: git fetch --force --tags
       - name: Publish CLI
         uses: goreleaser/goreleaser-action@v5
         if: steps.release.outputs.release_created
-        env: 
+        env:
           HOMEBREW_GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
         with:
           args: release --clean

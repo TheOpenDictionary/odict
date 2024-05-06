@@ -11,6 +11,9 @@ charabia = ["dep:charabia"]
 search = ["dep:tantivy", "dep:tantivy-tokenizer-api"]
 default = ["json", "sql", "config"]
 
+[[bench]]
+name = "lib"
+harness = false
 
 [dependencies]
 lz4_flex = { version = "0.11.3", default-features = false, features = [
@@ -46,3 +49,4 @@ sea-query = { version = "0.30.7", optional = true }
 [dev-dependencies]
 insta = "1.38.0"
 map-macro = "0.3.0"
+criterion = { version = "0.5.1", features = ["html_reports"] }
