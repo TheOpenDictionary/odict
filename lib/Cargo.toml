@@ -35,7 +35,7 @@ serde_json = { version = "1.0.116", optional = true }
 validation = "0.0.1"
 tantivy = { version = "0.21.1", optional = true }
 charabia = { version = "0.8.10", optional = true }
-tantivy-tokenizer-api = { version = "0.2.0", optional = true }
+tantivy-tokenizer-api = { version = "0.3.0", optional = true }
 sea-query = { version = "0.30.7", optional = true }
 
 [dev-dependencies]
