@@ -17,6 +17,8 @@ jobs:
           lfs: true
       - name: Setup Mise
         uses: jdx/mise-action@v2
+      - name: Setup dependencies
+        run: just deps
       - name: Run tests
         run: just test
       - uses: actions/upload-artifact@v4

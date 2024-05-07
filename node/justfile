@@ -1,30 +1,26 @@
-@install:
-	npm install
+@deps: 
+  pnpm install
 
 @add +args:
-  npm install {{args}}
+  pnpm add {{args}}
+
+@npm +args:
+  pnpm npm {{args}}
 
 @clean:
   rm -rf coverage ../**/*.odict  ../**/*.log
 
-@artifacts +args="":
-  napi artifacts {{args}}
+@build:
+  pnpm build 
 
-@build: 
-  npx napi build --release --platform ./dist
+@universal: 
+  pnpm universal
 
-@debug: 
-  npx napi build --platform ./dist
+@version:  
+  pnpm version
 
-@universal +args="": 
-  napi universal {{args}}
-
-@version +args="":  
-  napi version {{args}}
-
-@test +args="": build && clean
-  cargo test
-  npx jest {{args}}
+@test: build && clean
+  pnpm test
 
 @publish +args="":
-	npm publish {{args}}
+	just npm publish {{args}}

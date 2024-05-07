@@ -2,14 +2,14 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps:
+@deps: && (node "deps")
   mise install
   corepack enable
 
 @bench +args="":
   cargo bench {{args}}
 
-@build +args="":
+build +args="":
   cargo build -p cli {{args}}
 
 # @build-all +args="": deps (cli "schema") sync
@@ -24,7 +24,7 @@
 @run +args="":
   cargo run {{args}}
 
-@test: && (node "test")
+test: && (node "test")
   cargo test
   rm -rf **/.odict
 # deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean

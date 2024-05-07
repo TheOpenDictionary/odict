@@ -30,13 +30,16 @@
     "@types/node": "^20.12.7",
     "jest": "^29.7.0"
   },
-  "ava": {
-    "timeout": "3m"
-  },
   "engines": {
     "node": ">= 10"
   },
   "scripts": {
+    "build": "napi build --release --platform ./dist",
+    "build:debug": "napi build --platform ./dist",
+    "test": "jest",
+    "universal": "napi universal",
+    "artifacts": "napi artifacts",
+    "version": "napi version",
     "prepublishOnly": "napi prepublish -t npm"
   },
   "optionalDependencies": {
