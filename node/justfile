@@ -1,5 +1,7 @@
-@deps: 
-  pnpm install
+@deps: install
+  
+@install:
+  pnpm install --no-frozen-lockfile
 
 @add +args:
   pnpm add {{args}}
