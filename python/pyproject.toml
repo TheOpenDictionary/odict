@@ -1,20 +1,15 @@
-[tool.poetry]
-name = "theopendictionary"
-version = "0.11.0"
-description = ""
-authors = ["Tyler Nickerson <nickersoft@gmail.com>"]
-
-[tool.poetry.dependencies]
-python = "^3.8"
-
-[tool.poetry.dev-dependencies]
-black = "^24.0.0"
-pytest = "^8.0.0"
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools"]
-build-backend = "poetry.core.masonry.api"
+requires = ["maturin>=1.5,<2.0"]
+build-backend = "maturin"
 
-[[tool.poetry.source]]
-name = "test"
-url = "https://test.pypi.org/legacy/"
+[project]
+name = "python"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dynamic = ["version"]
+[tool.maturin]
+features = ["pyo3/extension-module"]
