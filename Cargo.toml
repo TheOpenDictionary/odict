@@ -2,7 +2,7 @@
 
 resolver = "2"
 
-members = ["cli", "lib", "node"]
+members = ["cli", "lib", "node", "python"]
 
 [profile.release]
 codegen-units = 1

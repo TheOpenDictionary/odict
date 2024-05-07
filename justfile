@@ -2,7 +2,7 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: && (node "deps")
+@setup: && (node "setup")
   mise install
   corepack enable
 

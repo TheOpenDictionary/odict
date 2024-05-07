@@ -1,4 +1,4 @@
-@deps: install
+@setup: install
   
 @install:
   pnpm install --no-frozen-lockfile
