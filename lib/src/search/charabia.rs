@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
 use charabia::Tokenize;
-use tantivy_tokenizer_api::{Token, TokenStream, Tokenizer};
+use tantivy::tokenizer::{Token, TokenStream, Tokenizer};
 
 #[derive(Clone)]
 pub struct CharabiaTokenizer;

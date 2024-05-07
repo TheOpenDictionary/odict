@@ -756,3 +756,6 @@ TSWLatexianTemp*
 
 # WASM preview
 .preview
+
+# Node bindings
+*.node

@@ -10,6 +10,12 @@ pub struct SplitOptions {
     threshold: usize,
 }
 
+impl AsRef<SplitOptions> for SplitOptions {
+    fn as_ref(&self) -> &SplitOptions {
+        self
+    }
+}
+
 impl SplitOptions {
     pub fn default() -> Self {
         Self { threshold: 0 }
@@ -28,16 +34,16 @@ impl SplitOptions {
 macro_rules! split {
     ($t:ident, $r:ident) => {
         impl $t {
-            pub fn split(
+            pub fn split<Options: AsRef<SplitOptions>>(
                 &self,
                 query: &str,
-                options: &SplitOptions,
+                options: Options,
             ) -> Result<Vec<&$r>, Box<dyn Error + Send>> {
                 let mut entries: Vec<&$r> = Vec::new();
                 let mut start = 0;
                 let mut end = query.len();
 
-                let SplitOptions { threshold } = options;
+                let SplitOptions { threshold } = options.as_ref();
 
                 while start < end {
                     let substr = &query[start..end];

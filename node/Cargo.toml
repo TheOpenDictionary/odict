@@ -1,0 +1,24 @@
+[package]
+edition = "2021"
+name = "odict_node"
+version = "0.0.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+merge = "0.1.0"
+# Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
+napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
+napi-derive = "2.12.2"
+odict = { path = "../lib", features = [
+  "config",
+  "charabia",
+  "sql",
+  "search",
+  "json",
+] }
+once_cell = "1.19.0"
+
+[build-dependencies]
+napi-build = "2.0.1"

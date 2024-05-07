@@ -15,3 +15,6 @@ pub fn create_archive_dict(name: &str) -> Result<DictionaryFile, Box<dyn Error>>
 
 pub static EXAMPLE_DICTIONARY_1: Lazy<DictionaryFile> =
     Lazy::new(|| create_archive_dict("example1").unwrap());
+
+pub static EXAMPLE_DICTIONARY_2: Lazy<DictionaryFile> =
+    Lazy::new(|| create_archive_dict("example2").unwrap());

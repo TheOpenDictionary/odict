@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use odict::{Entry, ToJSON, ToXML};
+use odict::{json::ToJSON, xml::ToXML, Entry};
 
 use super::pprint::pretty_print;
 use crate::{enums::PrintFormat, CLIContext};

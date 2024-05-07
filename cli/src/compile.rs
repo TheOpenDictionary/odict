@@ -1,7 +1,7 @@
-use std::{error::Error, fs::read_to_string, path::PathBuf};
+use std::{error::Error, path::PathBuf};
 
 use clap::{arg, command, Args};
-use odict::Dictionary;
+use odict::fs::infer_path;
 
 use crate::CLIContext;
 
@@ -18,35 +18,13 @@ pub struct CompileArgs {
 
 pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error>> {
     let CompileArgs { input, output } = args;
+    let out = output.to_owned().unwrap_or_else(|| infer_path(&input));
 
-    let mut out = output.to_owned();
-
-    if out.is_none() {
-        let name = input
-            .file_stem()
-            .and_then(|s| s.to_str())
-            .unwrap_or_default();
-
-        let directory = input.parent().and_then(|s| s.to_str()).unwrap_or_default();
-
-        out = Some(
-            PathBuf::new()
-                .join(directory)
-                .join(format!("{}.odict", name)),
-        );
-    }
-
-    let contents = read_to_string(input).unwrap();
-    let xml = contents.as_str();
-
-    match Dictionary::from(xml) {
-        Ok(dict) => {
-            ctx.writer.write_to_path(&dict, &out.unwrap())?;
-        }
-        Err(e) => {
-            return Err(format!("\nAn error occurred parsing your XML: \n\n{}", e).into());
-        }
-    }
+    let _ = ctx
+        .writer
+        .compile_xml(&input, &out)
+        .map(|_| ())
+        .map_err(|e| format!("An error occurred compiling your XML: {}", e))?;
 
     Ok(())
 }

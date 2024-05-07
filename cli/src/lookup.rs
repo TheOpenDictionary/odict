@@ -4,7 +4,7 @@ use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
-use odict::LookupOptions;
+use odict::lookup::LookupOptions;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]

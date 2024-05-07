@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::serializable;
 
 macro_rules! create_pos {
@@ -15,6 +17,12 @@ macro_rules! create_pos {
           $( stringify!($variant), )*
       ];
   }
+}
+
+impl fmt::Display for PartOfSpeech {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 create_pos!({
@@ -111,6 +119,7 @@ create_pos!({
   chr,
   cf,
   cls,
+  contr,
   conj,
   conj_c,
   cop,
@@ -248,6 +257,7 @@ impl PartOfSpeech {
             PartOfSpeech::cls => "classifier",
             PartOfSpeech::conj => "conjunction",
             PartOfSpeech::conj_c => "coordinating conjunction",
+            PartOfSpeech::contr => "contraction",
             PartOfSpeech::cop => "copula",
             PartOfSpeech::ctr => "counter",
             PartOfSpeech::det => "determiner",

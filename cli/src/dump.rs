@@ -1,7 +1,10 @@
 use std::{error::Error, fs};
 
 use clap::{arg, command, Args};
-use odict::{SQLDialect, ToSQL, ToXML};
+use odict::{
+    sql::{SQLDialect, ToSQL},
+    xml::ToXML,
+};
 
 use crate::{enums::DumpFormat, CLIContext};
 

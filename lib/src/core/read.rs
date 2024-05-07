@@ -40,14 +40,16 @@ impl DictionaryFile {
 
 pub struct DictionaryReader {}
 
+impl Default for DictionaryReader {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl DictionaryReader {
     pub fn new() -> Self {
         // TODO: maybe add a config?
         Self {}
-    }
-
-    pub fn default() -> Self {
-        Self::new()
     }
 
     pub fn read_from_bytes(&self, data: &[u8]) -> Result<DictionaryFile, Box<dyn Error>> {

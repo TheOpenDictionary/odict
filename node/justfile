@@ -1,0 +1,28 @@
+@deps: install
+  
+@install:
+  pnpm install --no-frozen-lockfile
+
+@add +args:
+  pnpm add {{args}}
+
+@npm +args:
+  pnpm npm {{args}}
+
+@clean:
+  rm -rf coverage ../**/*.odict  ../**/*.log
+
+@build:
+  pnpm build 
+
+@universal: 
+  pnpm universal
+
+@version:  
+  pnpm version
+
+@test: build && clean
+  pnpm test
+
+@publish +args="":
+	just npm publish {{args}}

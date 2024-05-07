@@ -1,17 +1,3 @@
-<dictionary name="Example Dictionary 2">
-  <entry term="runner">
-    <ety description="Latin root">
-      <sense pos="v">
-        <definition value="An additional definition" />
-      </sense>
-    </ety>
-  </entry>
-  <entry term="runners" see="runner" />
-  <entry term="markdown">
-    <ety description="Latin root">
-      <sense pos="v">
-        <definition value="This **is** a _markdown_ test" />
-      </sense>
-    </ety>
-  </entry>
-</dictionary>
+version https://git-lfs.github.com/spec/v1
+oid sha256:640d64e56adf958930b333d27a8e351455b92f25caa27cd2ce39032ebc53b202
+size 450

@@ -9,12 +9,14 @@ use super::constants::*;
 
 pub struct DictionaryWriter {}
 
+impl Default for DictionaryWriter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl DictionaryWriter {
     pub fn new() -> Self {
-        Self {}
-    }
-
-    pub fn default() -> Self {
         Self {}
     }
 
@@ -85,10 +87,10 @@ impl DictionaryWriter {
     /// writer.compile_xml("path/to/input.xml", "path/to/output.odict");
     /// ```
     ///
-    pub fn compile_xml<P: AsRef<Path>>(
+    pub fn compile_xml<I: AsRef<Path>, O: AsRef<Path>>(
         &self,
-        input_path: P,
-        output_path: P,
+        input_path: I,
+        output_path: O,
     ) -> Result<(), Box<dyn Error>> {
         let dict = read_to_string(input_path)?.to_dictionary()?;
         self.write_to_path(&dict, output_path)?;

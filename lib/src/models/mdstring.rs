@@ -2,10 +2,9 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::{Deserialize, Serialize, Serializer};
 
-use crate::{
-    md::{to_html, to_text},
-    serializable_custom,
-};
+use crate::md::{to_html, to_text};
+
+use crate::serializable_custom;
 
 pub enum MarkdownStrategy {
     HTML,
@@ -63,6 +62,10 @@ const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\(.+?\))").
 macro_rules! parse {
     ($t:ident) => {
         impl $t {
+            pub fn value(&self) -> &str {
+                &self.value
+            }
+
             pub fn parse<S: AsRef<MarkdownStrategy>>(&self, strategy: S) -> String {
                 let repl = PARENTHETICAL_REGEX
                     .replace_all(&self.value, "*${1}*")

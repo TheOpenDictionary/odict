@@ -7,7 +7,7 @@ use actix_web::{
     HttpResponse, Responder, ResponseError,
 };
 use derive_more::{Display, Error};
-use odict::{DictionaryFile, LookupOptions, ToJSON};
+use odict::{json::ToJSON, lookup::LookupOptions, DictionaryFile};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
