@@ -13,8 +13,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          lfs: true
       - name: Setup Mise
-        uses: jdx/mise-action@v2            
+        uses: jdx/mise-action@v2
       - name: Run tests
         run: just test
       - uses: actions/upload-artifact@v4
