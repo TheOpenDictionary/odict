@@ -2,7 +2,7 @@ from pyodict import sum_as_string
 
 
 def test_write_lookup_dictionary():
-    print(sum_as_string(1, 2))
+    assert sum_as_string(1, 2) == "3"
     # xml = '<dictionary><entry term="hello"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry></dictionary>'
 
     # Dictionary.write(xml, "test.odict")
