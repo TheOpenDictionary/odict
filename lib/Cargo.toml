@@ -10,6 +10,7 @@ config = ["dep:dirs"]
 charabia = ["dep:charabia"]
 search = ["dep:tantivy"]
 default = ["json", "sql", "config"]
+uniffi = ["dep:uniffi"]
 
 [[bench]]
 name = "lib"
@@ -34,6 +35,8 @@ uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 pulldown-cmark = "0.10.3"
 once_cell = "1.19.0"
 validation = "0.0.1"
+uniffi = { workspace = true, optional = true }
+
 # feature=json
 serde_json = { version = "1.0.116", optional = true }
 # feature=charabia
@@ -45,7 +48,14 @@ dirs = { version = "5.0.1", optional = true }
 # feature=sql
 sea-query = { version = "0.30.7", optional = true }
 
+[build-dependencies]
+uniffi = { optional = true, workspace = true, features = ["build"] }
+
 [dev-dependencies]
 insta = "1.38.0"
 map-macro = "0.3.0"
 criterion = { version = "0.5.1", features = ["html_reports"] }
+
+[lib]
+name = "odict"
+crate-type = ["cdylib", "staticlib", "lib"]

@@ -12,3 +12,4 @@ _maturin +args:
   python -m venv {{VENV_DIR}}
   sh {{VENV_DIR}}/bin/activate
   {{VENV_DIR}}/bin/pip install -r requirements-dev.txt
+

@@ -23,3 +23,6 @@ pub mod xml;
 pub use self::core::*;
 pub use self::ext::*;
 pub use self::models::*;
+
+#[cfg(feature = "uniffi")]
+uniffi::include_scaffolding!("odict");

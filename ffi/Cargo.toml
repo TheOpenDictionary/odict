@@ -1,11 +1,7 @@
 [package]
-name = "pyodict"
+name = "poopy"
 version = "0.1.0"
 edition = "2021"
-
-[lib]
-name = "pyodict"
-crate-type = ["cdylib"]
 
 [dependencies]
 uniffi.workspace = true
@@ -15,8 +11,11 @@ odict = { path = "../lib", features = [
   "sql",
   "search",
   "json",
-  "uniffi",
 ] }
 
 [build-dependencies]
 uniffi = { workspace = true, features = ["build"] }
+
+[lib]
+name = "ffi"
+crate-type = ["cdylib", "staticlib", "lib"]

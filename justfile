@@ -38,6 +38,9 @@ test: && (node "test")
 #                                    Platforms                                   #
 # ------------------------------------------------------------------------------ #
 
+@ffi +command:
+  just ffi/{{command}}
+
 @rust +command:
   just lib/{{command}}
 
