@@ -2,8 +2,8 @@ use clap::{command, crate_version, Parser, Subcommand};
 
 use crate::alias::AliasCommands;
 use crate::{
-    CompileArgs, DumpArgs, IndexArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs, SearchArgs,
-    ServeArgs,
+    CompileArgs, DumpArgs, IndexArgs, InfoArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs,
+    SearchArgs, ServeArgs,
 };
 
 #[derive(Debug, Parser)]
@@ -38,6 +38,10 @@ pub enum Commands {
     /// Creates a full-text index of a compiled dictionary
     #[command(arg_required_else_help = true)]
     Index(IndexArgs),
+
+    /// Prints the metadata info for a dictionary file
+    #[command(arg_required_else_help = true)]
+    Info(InfoArgs),
 
     /// Lists all words defined in a dictionary
     #[command(arg_required_else_help = true)]

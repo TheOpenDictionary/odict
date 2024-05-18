@@ -21,3 +21,5 @@ actix-web = "4.5.1"
 serde = { version = "1.0.200", features = ["derive"] }
 env_logger = "0.11.3"
 derive_more = "0.99.17"
+num-format = "0.4.4"
+humansize = "2.1.3"
