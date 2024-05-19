@@ -21,18 +21,24 @@ impl DictionaryWriter {
     }
 
     pub fn write_to_bytes(&self, dictionary: &Dictionary) -> Result<Vec<u8>, Box<dyn Error>> {
-        let version_bytes = FILE_VERSION.to_le_bytes();
-
         let compressed = compress(&dictionary.serialize()?)?;
+
+        let version_bytes = VERSION.as_bytes();
+        let version_size = version_bytes.len() as u64;
+        let version_size_bytes = version_size.to_le_bytes();
+
         let compressed_size = compressed.len() as u64;
         let compressed_size_bytes = compressed_size.to_le_bytes();
 
-        let total_size =
-            SIGNATURE.len() + version_bytes.len() + compressed_size_bytes.len() + compressed.len();
+        let total_size = SIGNATURE.len()
+            + version_size_bytes.len()
+            + compressed_size_bytes.len()
+            + compressed.len();
 
         let mut output = Vec::with_capacity(total_size);
 
         output.extend_from_slice(SIGNATURE);
+        output.extend_from_slice(&version_size_bytes);
         output.extend_from_slice(&version_bytes);
         output.extend_from_slice(&compressed_size_bytes);
         output.extend_from_slice(&compressed);
@@ -41,8 +47,12 @@ impl DictionaryWriter {
             return Err("Signature bytes do not equal 5".into());
         }
 
-        if version_bytes.len() != 2 {
-            return Err("Version bytes do not equal 2".into());
+        if version_size_bytes.len() != 8 {
+            return Err("Version byte count does not equal 8".into());
+        }
+
+        if version_bytes.len() != version_size as usize {
+            return Err("Version does not equal the computed byte count".into());
         }
 
         if compressed_size_bytes.len() != 8 {

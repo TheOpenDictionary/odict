@@ -2,7 +2,7 @@ use std::io::Write;
 
 use clap::Parser;
 use cli::{
-    alias, compile, dump, index, lexicon, lookup, merge, new, search, serve, t, CLIContext,
+    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, t, CLIContext,
     Commands, CLI,
 };
 
@@ -22,6 +22,7 @@ fn main() {
             Commands::New(ref args) => new(c, args),
             Commands::Search(ref args) => search(c, args),
             Commands::Serve(ref args) => serve(c, args),
+            Commands::Info(ref args) => info(c, args),
         },
         &mut ctx,
     );
