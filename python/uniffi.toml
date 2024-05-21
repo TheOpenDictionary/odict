@@ -1,1 +1,2 @@
-cdylib_name = "pyodict"
+[bindings.python]
+cdylib_name = "odict"
