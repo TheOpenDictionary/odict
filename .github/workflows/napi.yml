@@ -22,60 +22,60 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          # - host: macos-latest
-          #   target: x86_64-apple-darwin
-          #   build: pnpm build
-          # - host: windows-latest
-          #   build: pnpm build
-          #   target: x86_64-pc-windows-msvc
-          # - host: windows-latest
-          #   build: |
-          #     pnpm build --target i686-pc-windows-msvc
-          #     pnpm test
-          #   target: i686-pc-windows-msvc
-          # - host: ubuntu-latest
-          #   target: x86_64-unknown-linux-gnu
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-          #   build: pnpm build --target x86_64-unknown-linux-gnu
-          # - host: ubuntu-latest
-          #   target: x86_64-unknown-linux-musl
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-          #   build: pnpm build
-          # - host: macos-latest
-          #   target: aarch64-apple-darwin
-          #   build: pnpm build --target aarch64-apple-darwin
+          - host: macos-latest
+            target: x86_64-apple-darwin
+            build: pnpm build
+          - host: windows-latest
+            build: pnpm build
+            target: x86_64-pc-windows-msvc
+          - host: windows-latest
+            build: |
+              pnpm build --target i686-pc-windows-msvc
+              pnpm test
+            target: i686-pc-windows-msvc
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            build: pnpm build --target x86_64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: pnpm build
+          - host: macos-latest
+            target: aarch64-apple-darwin
+            build: pnpm build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: pnpm build --target aarch64-unknown-linux-gnu
-          # - host: ubuntu-latest
-          #   target: armv7-unknown-linux-gnueabihf
-          #   setup: |
-          #     sudo apt-get update
-          #     sudo apt-get install gcc-arm-linux-gnueabihf -y
-          #   build: pnpm build --target armv7-unknown-linux-gnueabihf
-          # - host: ubuntu-latest
-          #   target: aarch64-linux-android
-          #   build: pnpm build --target aarch64-linux-android
-          # - host: ubuntu-latest
-          #   target: armv7-linux-androideabi
-          #   build: pnpm build --target armv7-linux-androideabi
-          # - host: ubuntu-latest
-          #   target: aarch64-unknown-linux-musl
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-          #   build: |-
-          #     set -e &&
-          #     rustup target add aarch64-unknown-linux-musl &&
-          #     pnpm build --target aarch64-unknown-linux-musl
-          # - host: windows-latest
-          #   target: aarch64-pc-windows-msvc
-          #   build: pnpm build --target aarch64-pc-windows-msvc
-          # - host: ubuntu-latest
-          #   target: riscv64gc-unknown-linux-gnu
-          #   setup: |
-          #     sudo apt-get update
-          #     sudo apt-get install gcc-riscv64-linux-gnu -y
-          #   build: pnpm build --target riscv64gc-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-arm-linux-gnueabihf -y
+            build: pnpm build --target armv7-unknown-linux-gnueabihf
+          - host: ubuntu-latest
+            target: aarch64-linux-android
+            build: pnpm build --target aarch64-linux-android
+          - host: ubuntu-latest
+            target: armv7-linux-androideabi
+            build: pnpm build --target armv7-linux-androideabi
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: |-
+              set -e &&
+              rustup target add aarch64-unknown-linux-musl &&
+              pnpm build --target aarch64-unknown-linux-musl
+          - host: windows-latest
+            target: aarch64-pc-windows-msvc
+            build: pnpm build --target aarch64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: riscv64gc-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-riscv64-linux-gnu -y
+            build: pnpm build --target riscv64gc-unknown-linux-gnu
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -144,54 +144,54 @@ jobs:
           name: bindings-${{ matrix.settings.target }}
           path: node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
-  build-freebsd:
-    runs-on: macos-12
-    name: Build FreeBSD
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        id: build
-        uses: cross-platform-actions/action@v0.22.0
-        env:
-          DEBUG: napi:*
-          RUSTUP_IO_THREADS: 1
-        with:
-          operating_system: freebsd
-          version: "13.2"
-          memory: 8G
-          cpu_count: 3
-          environment_variables: DEBUG RUSTUP_IO_THREADS
-          shell: bash
-          run: |
-            export COREPACK_ENABLE_STRICT=0
-            sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g pnpm --ignore-scripts
-            curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain stable
-            source "$HOME/.cargo/env"
-            echo "~~~~ rustc --version ~~~~"
-            rustc --version
-            echo "~~~~ node -v ~~~~"
-            node -v
-            echo "~~~~ pnpm --version ~~~~"
-            pnpm --version
-            pwd
-            ls -lah
-            whoami
-            env
-            freebsd-version
-            pnpm install --no-frozen-lockfile 
-            pnpm --filter=node build
-            pnpm --filter=node test
-            rm -rf node_modules
-            rm -rf target
-            rm -rf .pnpm/cache
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bindings-freebsd
-          path: node/dist/${{ env.APP_NAME }}.*.node
-          if-no-files-found: error
+  # build-freebsd:
+  #   runs-on: macos-12
+  #   name: Build FreeBSD
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Build
+  #       id: build
+  #       uses: cross-platform-actions/action@v0.22.0
+  #       env:
+  #         DEBUG: napi:*
+  #         RUSTUP_IO_THREADS: 1
+  #       with:
+  #         operating_system: freebsd
+  #         version: "13.2"
+  #         memory: 8G
+  #         cpu_count: 3
+  #         environment_variables: DEBUG RUSTUP_IO_THREADS
+  #         shell: bash
+  #         run: |
+  #           export COREPACK_ENABLE_STRICT=0
+  #           sudo pkg install -y -f curl node libnghttp2 npm
+  #           sudo npm install -g pnpm --ignore-scripts
+  #           curl https://sh.rustup.rs -sSf --output rustup.sh
+  #           sh rustup.sh -y --profile minimal --default-toolchain stable
+  #           source "$HOME/.cargo/env"
+  #           echo "~~~~ rustc --version ~~~~"
+  #           rustc --version
+  #           echo "~~~~ node -v ~~~~"
+  #           node -v
+  #           echo "~~~~ pnpm --version ~~~~"
+  #           pnpm --version
+  #           pwd
+  #           ls -lah
+  #           whoami
+  #           env
+  #           freebsd-version
+  #           pnpm install --no-frozen-lockfile
+  #           pnpm --filter=node build
+  #           pnpm --filter=node test
+  #           rm -rf node_modules
+  #           rm -rf target
+  #           rm -rf .pnpm/cache
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: bindings-freebsd
+  #         path: node/dist/${{ env.APP_NAME }}.*.node
+  #         if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
     needs:
@@ -448,7 +448,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     needs:
-      - build-freebsd
+      # - build-freebsd
       - test-macOS-windows-binding
       - test-linux-x64-gnu-binding
       - test-linux-x64-musl-binding
