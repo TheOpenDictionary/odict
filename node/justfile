@@ -26,3 +26,7 @@
 
 @publish +args="":
 	just npm publish {{args}}
+
+[private]
+local-ci +args="":
+  cd .. && act napi --container-architecture linux/amd64 --job build {{args}}

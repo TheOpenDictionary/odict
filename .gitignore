@@ -759,3 +759,6 @@ TSWLatexianTemp*
 
 # Node bindings
 *.node
+
+.cargo
+!.cargo/config.toml
