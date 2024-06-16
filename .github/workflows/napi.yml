@@ -178,8 +178,8 @@ jobs:
             whoami
             env
             freebsd-version
-            pnpm install
-            pnpm --filter=node build 
+            pnpm install --no-frozen-lockfile 
+            pnpm --filter=node build
             pnpm --filter=node test
             rm -rf node_modules
             rm -rf target
