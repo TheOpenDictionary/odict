@@ -762,3 +762,5 @@ TSWLatexianTemp*
 
 .cargo
 !.cargo/config.toml
+.pnpm-store
+semicolon_delimited_script

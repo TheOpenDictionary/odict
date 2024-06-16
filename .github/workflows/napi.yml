@@ -131,13 +131,11 @@ jobs:
         with:
           image: ${{ matrix.settings.docker }}
           options: "-e COREPACK_ENABLE_STRICT=0 --user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build"
-          run: cd node && ${{ matrix.settings.build }} && ls -a /build/node
+          run: cd node && ${{ matrix.settings.build }}
       - name: Build
         run: cd node && ${{ matrix.settings.build }}
         if: ${{ !matrix.settings.docker }}
         shell: bash
-      - name: Echo workspace
-        run: ls -a "${{ github.workspace }}/node"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -163,6 +161,7 @@ jobs:
           environment_variables: DEBUG RUSTUP_IO_THREADS
           shell: bash
           run: |
+            export COREPACK_ENABLE_STRICT=0
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g pnpm --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
@@ -180,7 +179,7 @@ jobs:
             env
             freebsd-version
             pnpm install
-            pnpm --filter=node build
+            pnpm --filter=node build 
             pnpm --filter=node test
             rm -rf node_modules
             rm -rf target

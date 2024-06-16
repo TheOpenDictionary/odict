@@ -29,4 +29,4 @@
 
 [private]
 local-ci +args="":
-  cd .. && act napi --container-architecture linux/amd64 --job build {{args}}
+  cd .. && act napi --container-architecture linux/amd64 --bind --job build {{args}}
