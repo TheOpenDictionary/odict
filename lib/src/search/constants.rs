@@ -9,7 +9,6 @@ use tantivy::tokenizer::{LowerCaser, RemoveLongFilter, SimpleTokenizer};
 
 pub const CUSTOM_TOKENIZER: &str = "CUSTOM_TOKENIZER";
 
-#[cfg(feature = "charabia")]
 pub const DEFAULT_TOKENIZER: Lazy<TextAnalyzer> = Lazy::new(|| {
     #[cfg(not(feature = "charabia"))]
     return TextAnalyzer::builder(SimpleTokenizer::default())
