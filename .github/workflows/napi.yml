@@ -22,60 +22,60 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          # - host: macos-latest
-          #   target: x86_64-apple-darwin
-          #   build: pnpm build
-          # - host: windows-latest
-          #   build: pnpm build
-          #   target: x86_64-pc-windows-msvc
-          # - host: windows-latest
-          #   build: |
-          #     pnpm build --target i686-pc-windows-msvc
-          #     pnpm test
-          #   target: i686-pc-windows-msvc
-          # - host: ubuntu-latest
-          #   target: x86_64-unknown-linux-gnu
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-          #   build: pnpm build --target x86_64-unknown-linux-gnu
-          # - host: ubuntu-latest
-          #   target: x86_64-unknown-linux-musl
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-          #   build: pnpm build
-          # - host: macos-latest
-          #   target: aarch64-apple-darwin
-          #   build: pnpm build --target aarch64-apple-darwin
-          # - host: ubuntu-latest
-          #   target: aarch64-unknown-linux-gnu
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
-          #   build: pnpm build --target aarch64-unknown-linux-gnu
+          - host: macos-latest
+            target: x86_64-apple-darwin
+            build: pnpm build
+          - host: windows-latest
+            build: pnpm build
+            target: x86_64-pc-windows-msvc
+          - host: windows-latest
+            build: |
+              pnpm build --target i686-pc-windows-msvc
+              pnpm test
+            target: i686-pc-windows-msvc
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            build: pnpm build --target x86_64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: pnpm build
+          - host: macos-latest
+            target: aarch64-apple-darwin
+            build: pnpm build --target aarch64-apple-darwin
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+            build: pnpm build --target aarch64-unknown-linux-gnu
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf -y
             build: pnpm build --target armv7-unknown-linux-gnueabihf
-          # - host: ubuntu-latest
-          #   target: aarch64-linux-android
-          #   build: pnpm build --target aarch64-linux-android
-          # - host: ubuntu-latest
-          #   target: armv7-linux-androideabi
-          #   build: pnpm build --target armv7-linux-androideabi
-          # - host: ubuntu-latest
-          #   target: aarch64-unknown-linux-musl
-          #   docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-          #   build: |-
-          #     set -e &&
-          #     rustup target add aarch64-unknown-linux-musl &&
-          #     pnpm build --target aarch64-unknown-linux-musl
-          # - host: windows-latest
-          #   target: aarch64-pc-windows-msvc
-          #   build: pnpm build --target aarch64-pc-windows-msvc
-          # - host: ubuntu-latest
-          #   target: riscv64gc-unknown-linux-gnu
-          #   setup: |
-          #     sudo apt-get update
-          #     sudo apt-get install gcc-riscv64-linux-gnu -y
-          #   build: pnpm build --target riscv64gc-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: aarch64-linux-android
+            build: pnpm build --target aarch64-linux-android
+          - host: ubuntu-latest
+            target: armv7-linux-androideabi
+            build: pnpm build --target armv7-linux-androideabi
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: |-
+              set -e &&
+              rustup target add aarch64-unknown-linux-musl &&
+              pnpm build --target aarch64-unknown-linux-musl
+          - host: windows-latest
+            target: aarch64-pc-windows-msvc
+            build: pnpm build --target aarch64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: riscv64gc-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-riscv64-linux-gnu -y
+            build: pnpm build --target riscv64gc-unknown-linux-gnu
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
