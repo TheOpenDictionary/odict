@@ -20,7 +20,7 @@ lz4_flex = { version = "0.11.3", default-features = false, features = [
   "frame",
 ] }
 byteorder = "1.5.0"
-quick-xml = { version = "0.32.0", features = ["serialize"] }
+quick-xml = { version = "0.33.0", features = ["serialize"] }
 rayon = "1.10.0"
 regex = "1.10.4"
 rkyv = { version = "0.7.44", features = [
