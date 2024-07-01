@@ -1,2 +1,0 @@
-@build:
-  flatc -g --gen-onefile --go-namespace cli -o . ../flatbuffers/service.fbs ../flatbuffers/enums.fbs && $(go env GOPATH)/bin/goimports -w *.go

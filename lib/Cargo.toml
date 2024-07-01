@@ -1,0 +1,51 @@
+[package]
+name = "odict"
+version = "2.0.0-beta.0"
+edition = "2021"
+
+[features]
+json = ["dep:serde_json"]
+sql = ["dep:sea-query"]
+config = ["dep:dirs"]
+charabia = ["dep:charabia"]
+search = ["dep:tantivy"]
+default = ["json", "sql", "config"]
+
+[[bench]]
+name = "lib"
+harness = false
+
+[dependencies]
+lz4_flex = { version = "0.11.3", default-features = false, features = [
+  "frame",
+] }
+byteorder = "1.5.0"
+quick-xml = { version = "0.35.0", features = ["serialize"] }
+rayon = "1.10.0"
+regex = "1.10.4"
+rkyv = { version = "0.7.44", features = [
+  "size_32",
+  "strict",
+  "alloc",
+  "archive_le",
+] }
+serde = { version = "1.0.200", features = ["serde_derive"] }
+uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+pulldown-cmark = "0.11.0"
+once_cell = "1.19.0"
+validation = "0.0.1"
+# feature=json
+serde_json = { version = "1.0.116", optional = true }
+# feature=charabia
+charabia = { version = "0.8.10", optional = true }
+# feature=search
+tantivy = { version = "0.22.0", optional = true }
+# feature=config
+dirs = { version = "5.0.1", optional = true }
+# feature=sql
+sea-query = { version = "0.30.7", optional = true }
+
+[dev-dependencies]
+insta = "1.38.0"
+map-macro = "0.3.0"
+criterion = { version = "0.5.1", features = ["html_reports"] }
