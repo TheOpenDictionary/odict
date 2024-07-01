@@ -15,7 +15,7 @@ importers:
         version: 29.7.0
       '@napi-rs/cli':
         specifier: ^2.18.0
-        version: 2.18.3
+        version: 2.18.4
       '@swc/jest':
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.6.0)
@@ -298,8 +298,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@napi-rs/cli@2.18.3':
-    resolution: {integrity: sha512-L0f4kP0dyG8W5Qtc7MtP73VvLLrOLyRcUEBzknIfu8Jk4Jfhrsx1ItMHgyalYqMSslWdY3ojEfAaU5sx1VyeQQ==}
+  '@napi-rs/cli@2.18.4':
+    resolution: {integrity: sha512-SgJeA4df9DE2iAEpr3M2H0OKl/yjtg1BnRI5/JyowS71tUWhrfSu2LT0V3vlHET+g1hBVlrO60PmEXwUEKp8Mg==}
     engines: {node: '>= 10'}
     hasBin: true
 
@@ -1651,7 +1651,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@napi-rs/cli@2.18.3': {}
+  '@napi-rs/cli@2.18.4': {}
 
   '@sinclair/typebox@0.27.8': {}
 
