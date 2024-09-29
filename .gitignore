@@ -759,3 +759,8 @@ TSWLatexianTemp*
 
 # Node bindings
 *.node
+
+.cargo
+!.cargo/config.toml
+.pnpm-store
+semicolon_delimited_script

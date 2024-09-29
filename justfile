@@ -4,7 +4,8 @@
 
 @setup: && (node "setup")
   mise install
-  corepack enable
+  corepack install
+  corepack enable pnpm
 
 @bench +args="":
   cargo bench {{args}}
