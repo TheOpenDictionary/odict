@@ -144,54 +144,54 @@ jobs:
           name: bindings-${{ matrix.settings.target }}
           path: node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
-  # build-freebsd:
-  #   runs-on: macos-12
-  #   name: Build FreeBSD
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Build
-  #       id: build
-  #       uses: cross-platform-actions/action@v0.22.0
-  #       env:
-  #         DEBUG: napi:*
-  #         RUSTUP_IO_THREADS: 1
-  #       with:
-  #         operating_system: freebsd
-  #         version: "13.2"
-  #         memory: 8G
-  #         cpu_count: 3
-  #         environment_variables: DEBUG RUSTUP_IO_THREADS
-  #         shell: bash
-  #         run: |
-  #           export COREPACK_ENABLE_STRICT=0
-  #           sudo pkg install -y -f curl node libnghttp2 npm
-  #           sudo npm install -g pnpm --ignore-scripts
-  #           curl https://sh.rustup.rs -sSf --output rustup.sh
-  #           sh rustup.sh -y --profile minimal --default-toolchain stable
-  #           source "$HOME/.cargo/env"
-  #           echo "~~~~ rustc --version ~~~~"
-  #           rustc --version
-  #           echo "~~~~ node -v ~~~~"
-  #           node -v
-  #           echo "~~~~ pnpm --version ~~~~"
-  #           pnpm --version
-  #           pwd
-  #           ls -lah
-  #           whoami
-  #           env
-  #           freebsd-version
-  #           pnpm install --no-frozen-lockfile
-  #           pnpm --filter=node build
-  #           pnpm --filter=node test
-  #           rm -rf node_modules
-  #           rm -rf target
-  #           rm -rf .pnpm/cache
-  #     - name: Upload artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: bindings-freebsd
-  #         path: node/dist/${{ env.APP_NAME }}.*.node
-  #         if-no-files-found: error
+  build-freebsd:
+    runs-on: macos-12
+    name: Build FreeBSD
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        id: build
+        uses: cross-platform-actions/action@v0.22.0
+        env:
+          DEBUG: napi:*
+          RUSTUP_IO_THREADS: 1
+        with:
+          operating_system: freebsd
+          version: "13.2"
+          memory: 8G
+          cpu_count: 3
+          environment_variables: DEBUG RUSTUP_IO_THREADS
+          shell: bash
+          run: |
+            export COREPACK_ENABLE_STRICT=0
+            sudo pkg install -y -f curl node libnghttp2 npm
+            sudo npm install -g pnpm --ignore-scripts
+            curl https://sh.rustup.rs -sSf --output rustup.sh
+            sh rustup.sh -y --profile minimal --default-toolchain stable
+            source "$HOME/.cargo/env"
+            echo "~~~~ rustc --version ~~~~"
+            rustc --version
+            echo "~~~~ node -v ~~~~"
+            node -v
+            echo "~~~~ pnpm --version ~~~~"
+            pnpm --version
+            pwd
+            ls -lah
+            whoami
+            env
+            freebsd-version
+            pnpm install --no-frozen-lockfile
+            pnpm --filter=node build
+            pnpm --filter=node test
+            rm -rf node_modules
+            rm -rf target
+            rm -rf .pnpm/cache
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-freebsd
+          path: node/dist/${{ env.APP_NAME }}.*.node
+          if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
     needs:
