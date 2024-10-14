@@ -1,7 +1,7 @@
 use std::{error::Error, ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
-use rkyv::archived_root;
+use rkyv::access_unchecked;
 use tantivy::schema::Value;
 use tantivy::TantivyDocument;
 use tantivy::{
@@ -117,7 +117,8 @@ macro_rules! search {
                             .as_bytes()
                             .unwrap();
 
-                        let archive = unsafe { archived_root::<Entry>(&bytes[..]) };
+                        let archive =
+                            unsafe { access_unchecked::<crate::ArchivedEntry>(&bytes[..]) };
 
                         archive.to_entry().unwrap()
                     })

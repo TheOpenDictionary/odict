@@ -1,5 +1,5 @@
 use quick_xml::de::from_str;
-use rkyv::{to_bytes, Deserialize, Infallible};
+use rkyv::{deserialize, to_bytes};
 use std::{collections::HashMap, error::Error};
 
 use crate::serializable;
@@ -54,7 +54,7 @@ mod entries {
 
 impl Dictionary {
     pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
-        let bytes = to_bytes::<_, 4096>(self)?;
+        let bytes = to_bytes::<rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 
@@ -72,7 +72,7 @@ impl From<&str> for Dictionary {
 
 impl ArchivedDictionary {
     pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        let dict: Dictionary = self.deserialize(&mut Infallible)?;
+        let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)?;
         Ok(dict)
     }
 }

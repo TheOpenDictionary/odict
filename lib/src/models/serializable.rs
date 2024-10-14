@@ -12,7 +12,7 @@ macro_rules! serializable {
             rkyv::Serialize,
             rkyv::Deserialize,
         )]
-        #[archive_attr(derive(Debug))]
+        #[rkyv(derive(Debug))]
         $i
     };
 }
@@ -30,7 +30,7 @@ macro_rules! serializable_test {
             rkyv::Serialize,
             rkyv::Deserialize,
         )]
-        #[archive_attr(derive(Debug))]
+        #[rkyv(derive(Debug))]
         $i
     };
 }
@@ -41,7 +41,7 @@ macro_rules! serializable_custom {
         #[derive(
             PartialEq, Eq, Debug, Clone, rkyv::Archive, rkyv::Serialize, rkyv::Deserialize,
         )]
-        #[archive_attr(derive(Debug))]
+        #[rkyv(derive(Debug))]
         $i
     };
 }
