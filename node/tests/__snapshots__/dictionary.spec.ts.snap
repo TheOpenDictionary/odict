@@ -1,0 +1,265 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dictionary can index and search a dictionary 1`] = `
+[
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "n": {
+            "definitions": [
+              {
+                "examples": [
+                  {
+                    "value": "The dog runs after the cat.",
+                  },
+                  {
+                    "value": "The horse ran away.",
+                  },
+                ],
+                "notes": [],
+                "value": "(vertebrates) To move swiftly",
+              },
+              {
+                "examples": [],
+                "notes": [],
+                "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.",
+              },
+              {
+                "examples": [],
+                "notes": [],
+                "value": "A pleasure trip.",
+              },
+              {
+                "examples": [],
+                "notes": [],
+                "value": "Flight, instance or period of fleeing.",
+              },
+              {
+                "examples": [],
+                "notes": [],
+                "value": "Migration (of fish).",
+              },
+              {
+                "examples": [],
+                "notes": [],
+                "value": "A group of fish that migrate, or ascend a river for the purpose of spawning.",
+              },
+            ],
+            "pos": "n",
+          },
+          "v": {
+            "definitions": [
+              {
+                "definitions": [
+                  {
+                    "examples": [
+                      {
+                        "value": "The dog runs after the cat.",
+                      },
+                      {
+                        "value": "The horse ran away.",
+                      },
+                    ],
+                    "notes": [],
+                    "value": "(vertebrates) To move swiftly (figuratively)",
+                  },
+                  {
+                    "examples": [],
+                    "notes": [],
+                    "value": "(fluids) To flow.",
+                  },
+                  {
+                    "examples": [],
+                    "notes": [],
+                    "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled.",
+                  },
+                  {
+                    "examples": [],
+                    "notes": [],
+                    "value": "(social) To carry out an activity.",
+                  },
+                  {
+                    "examples": [],
+                    "notes": [],
+                    "value": "To extend or persist, statically or dynamically, through space or time.",
+                  },
+                  {
+                    "examples": [],
+                    "notes": [],
+                    "value": "(transitive) To execute or carry out a plan, procedure or program.",
+                  },
+                ],
+                "description": "A number of verb senses",
+              },
+            ],
+            "pos": "v",
+          },
+        },
+      },
+    ],
+    "term": "run",
+  },
+]
+`;
+
+exports[`Dictionary can split terms properly 1`] = `
+[
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "n": {
+            "definitions": [
+              {
+                "examples": [
+                  {
+                    "value": "There goes a cat!",
+                  },
+                ],
+                "notes": [
+                  {
+                    "examples": [
+                      {
+                        "value": "Some example",
+                      },
+                    ],
+                    "value": "Some definition note",
+                  },
+                ],
+                "value": "a cat",
+              },
+            ],
+            "pos": "n",
+          },
+        },
+      },
+    ],
+    "term": "cat",
+  },
+  {
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "pronunciation": "dooooog",
+        "senses": {
+          "un": {
+            "definitions": [
+              {
+                "examples": [],
+                "notes": [],
+                "value": "a dog",
+              },
+            ],
+            "pos": "un",
+          },
+        },
+      },
+    ],
+    "term": "dog",
+  },
+]
+`;
+
+exports[`Dictionary lookup can split terms 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    {
+                      "value": "There goes a cat!",
+                    },
+                  ],
+                  "notes": [
+                    {
+                      "examples": [
+                        {
+                          "value": "Some example",
+                        },
+                      ],
+                      "value": "Some definition note",
+                    },
+                  ],
+                  "value": "a cat",
+                },
+              ],
+              "pos": "n",
+            },
+          },
+        },
+      ],
+      "term": "cat",
+    },
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "pronunciation": "dooooog",
+          "senses": {
+            "un": {
+              "definitions": [
+                {
+                  "examples": [],
+                  "notes": [],
+                  "value": "a dog",
+                },
+              ],
+              "pos": "un",
+            },
+          },
+        },
+      ],
+      "term": "dog",
+    },
+  ],
+]
+`;
+
+exports[`Dictionary lookup looks up terms properly 1`] = `
+[
+  [
+    {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                {
+                  "examples": [
+                    {
+                      "value": "There goes a cat!",
+                    },
+                  ],
+                  "notes": [
+                    {
+                      "examples": [
+                        {
+                          "value": "Some example",
+                        },
+                      ],
+                      "value": "Some definition note",
+                    },
+                  ],
+                  "value": "a cat",
+                },
+              ],
+              "pos": "n",
+            },
+          },
+        },
+      ],
+      "term": "cat",
+    },
+  ],
+]
+`;
