@@ -2,12 +2,13 @@
   "plugins": [
     {
       "type": "sentence-case"
-    }
+    },
+    "cargo-workspace"
   ],
   "packages": {
     ".": {
-      "release-type": "simple",
-      "exclude-paths": ["js", "wasm", "python", "jvm"]
+      "release-type": "rust",
+      "exclude-paths": ["js", "node", "wasm", "python", "jvm"]
     },
     "js": {
       "release-type": "node",
