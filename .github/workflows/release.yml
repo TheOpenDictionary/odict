@@ -1,0 +1,67 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: release
+        name: Release please
+        uses: google-github-actions/release-please-action@v3.7.6
+        with:
+          command: manifest
+          release-type: manifest
+          token: ${{ secrets.GITHUB_TOKEN }}
+          monorepo-tags: true
+          bump-patch-for-minor-pre-major: true
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v2
+      - name: Cache asdf
+        id: cache-asdf
+        uses: actions/cache@v3
+        with:
+          path: |
+            /home/runner/.asdf
+          key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
+          restore-keys: |
+            ${{ runner.os }}-asdf-
+      - name: Install dependencies in .tool-versions
+        uses: asdf-vm/actions/install@v2
+      - name: Fetch tags
+        run: git fetch --force --tags
+      - name: Publish CLI
+        uses: goreleaser/goreleaser-action@v5
+        if: steps.release.outputs.release_created
+        env:
+          HOMEBREW_GH_TOKEN: ${{ secrets.HOMEBREW_GH_TOKEN }}
+        with:
+          args: release --clean
+      - name: Publish Node library to NPM
+        if: steps.release.outputs.js--release_created
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: just js publish
+      - name: Publish WASM library to NPM
+        if: steps.release.outputs.wasm--release_created
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: just wasm publish
+      - name: Publish to Pypi
+        if: steps.release.outputs.python--release_created
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: just python publish

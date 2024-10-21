@@ -1,46 +1,46 @@
-GOLANG_CROSS_VERSION := "v1.21.3"
-
 # ---------------------------------------------------------------------------- #
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: xsd 
-  asdf install > /dev/null
-  go install golang.org/x/tools/cmd/goimports@latest
+@deps: && (node "deps")
+  mise install
+  corepack install
+  corepack enable pnpm
 
-@build: deps (cli "schema") sync
-  go build -o bin/odict odict.go
+@bench +args="":
+  cargo bench {{args}}
 
-@build-all +args="": deps (cli "schema") sync
-  goreleaser build --id odict --clean {{args}}
+build +args="":
+  cargo build -p cli {{args}}
 
-@schema: (go "schema") (cli "schema") (js "schema")
+# @build-all +args="": deps (cli "schema") sync
+#   goreleaser build --id odict --clean {{args}}
 
-@xsd:
-  go run xsd/xsd.go
+@insta +args="":
+  cargo insta {{args}}
+
+@update-snaps:
+  cargo insta accept
 
 @run +args="":
-  go run odict.go {{args}}
-  
-@test: deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
+  cargo run {{args}}
 
-@clean: (python "clean") (jvm "clean") (js "clean")
+test: && (node "test")
+  cargo test
+  rm -rf **/.odict
+# deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
 
-@publish +args="--auto-snapshot --clean":
-  goreleaser release {{args}}
+@clean: (python "clean") (jvm "clean")
 
-@snaps: 
-  UPDATE_SNAPS=true just go test
-  
-@sync:
-  go work sync 
+# @publish +args="--auto-snapshot --clean":
+#   goreleaser release {{args}}
 
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
 # ------------------------------------------------------------------------------ #
 
-@go +command:
-	just lib/{{command}}
+@rust +command:
+  just lib/{{command}}
 
 @cli +command:
 	just cli/{{command}}
@@ -48,8 +48,8 @@ GOLANG_CROSS_VERSION := "v1.21.3"
 @jvm +command:
 	just jvm/{{command}}
 
-@js +command:
-	just js/{{command}}
+@node +command:
+	just node/{{command}}
 
 @python +command:
 	just python/{{command}}
