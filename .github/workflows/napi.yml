@@ -87,6 +87,8 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         if: ${{ !matrix.settings.docker }}
@@ -117,12 +119,14 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node x86
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         run: pnpm config set supportedArchitectures.cpu "ia32"
         shell: bash
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Setup node x86
         uses: actions/setup-node@v4
         if: matrix.settings.target == 'i686-pc-windows-msvc'
@@ -145,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_NAME }}.*.node
+          path: ./dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   build-freebsd:
     runs-on: macos-13
@@ -182,7 +186,7 @@ jobs:
             whoami
             env
             freebsd-version
-            pnpm install
+            pnpm install --no-frozen-lockfile
             pnpm build
             pnpm test
             rm -rf node_modules
@@ -192,7 +196,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_NAME }}.*.node
+          path: ./dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -212,6 +216,8 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -219,7 +225,7 @@ jobs:
           cache: pnpm
           architecture: x64
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -243,13 +249,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -273,6 +281,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -281,7 +291,7 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.libc "musl"
-          pnpm install
+          pnpm install --no-frozen-lockfile
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
@@ -317,7 +327,7 @@ jobs:
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
           pnpm config set supportedArchitectures.libc "glibc"
-          pnpm install
+          pnpm install --no-frozen-lockfile
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -351,7 +361,7 @@ jobs:
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
           pnpm config set supportedArchitectures.libc "musl"
-          pnpm install
+          pnpm install --no-frozen-lockfile
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -389,7 +399,7 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm"
-          pnpm install
+          pnpm install --no-frozen-lockfile
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -411,13 +421,15 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Download macOS x64 artifact
         uses: actions/download-artifact@v4
         with:
@@ -434,7 +446,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: ${{ env.APP_NAME }}.*.node
+          path: ./dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   publish:
     name: Publish
@@ -450,13 +462,15 @@ jobs:
       - universal-macOS
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:

@@ -6,7 +6,7 @@ use std::{
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
-use rkyv::archived_root;
+use rkyv::access_unchecked;
 
 use crate::{
     constants::{SIGNATURE, VERSION},
@@ -30,7 +30,7 @@ pub struct DictionaryFile {
 
 impl DictionaryFile {
     pub fn to_archive(&self) -> Result<&ArchivedDictionary, Box<dyn Error>> {
-        let archived = unsafe { archived_root::<Dictionary>(&self.content[..]) };
+        let archived = unsafe { access_unchecked::<crate::ArchivedDictionary>(&self.content[..]) };
         Ok(archived)
     }
 

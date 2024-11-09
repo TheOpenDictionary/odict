@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use rkyv::{to_bytes, Deserialize, Infallible};
+use rkyv::{deserialize, to_bytes};
 
 use crate::{serializable, Etymology};
 
@@ -20,14 +20,14 @@ serializable! {
 
 impl Entry {
     pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
-        let bytes = to_bytes::<_, 4096>(self)?;
+        let bytes = to_bytes::<rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 }
 
 impl ArchivedEntry {
     pub fn to_entry(&self) -> Result<Entry, Box<dyn Error>> {
-        let entry: Entry = self.deserialize(&mut Infallible)?;
+        let entry: Entry = deserialize::<Entry, rkyv::rancor::Error>(self)?;
         Ok(entry)
     }
 }

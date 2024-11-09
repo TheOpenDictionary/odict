@@ -3,7 +3,7 @@ mod io_tests {
 
     use odict::{DictionaryReader, DictionaryWriter, ID};
     use regex::Regex;
-    use rkyv::{Deserialize, Infallible};
+    use rkyv::deserialize;
 
     #[test]
     fn test_empty() {
@@ -20,7 +20,7 @@ mod io_tests {
 
         let archive = read.as_ref().unwrap().to_archive().unwrap();
 
-        let id: ID = archive.id.deserialize(&mut Infallible).unwrap();
+        let id: ID = deserialize::<ID, rkyv::rancor::Error>(&archive.id).unwrap();
 
         // Ensure a UUID ID is generated for the dictionary
         let id_regex = Regex::new(
