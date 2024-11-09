@@ -6,6 +6,7 @@ repository = "https://github.com/TheOpenDictionary/odict"
 version = "2.0.0-beta.0"
 edition = "2021"
 license = "MIT"
+exclude = ["benches/*", "tests/*"]
 
 [features]
 json = ["dep:serde_json"]
