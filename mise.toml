@@ -1,0 +1,7 @@
+[tools]
+node = "22.11.0"
+gradle = "7.5.1"
+kotlin = "2.0.21"
+java = "adoptopenjdk-21.0.5+11.0.LTS"
+just = "latest"
+python = "3.13.0"

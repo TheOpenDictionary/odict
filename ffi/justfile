@@ -1,9 +1,0 @@
-_build:
-  cargo build --release
-
-_bindgen +args: 
-  cargo run -p uniffi-bindgen generate src/odict.udl {{args}}
-
-# @kotlin: (_bindgen "--language kotlin")
-
-# @swift: (_bindgen "--language swift")

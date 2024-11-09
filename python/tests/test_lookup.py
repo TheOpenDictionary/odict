@@ -1,8 +1,9 @@
-from pyodict import sum_as_string
+from pyodict import DictionaryReader
 
 
 def test_write_lookup_dictionary():
-    assert sum_as_string(1, 2) == "3"
+    assert DictionaryReader == None
+    # assert sum_as_string(1, 2) == "3"
     # xml = '<dictionary><entry term="hello"><ety><sense pos="v"><definition>hello world</definition></sense></ety></entry></dictionary>'
 
     # Dictionary.write(xml, "test.odict")

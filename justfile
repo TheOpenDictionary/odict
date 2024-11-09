@@ -2,7 +2,7 @@
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@setup: && (node "setup")
+@setup: && (node "setup") (python "setup")
   mise install
   corepack install
   corepack enable pnpm
@@ -38,9 +38,6 @@ test: && (node "test")
 # ------------------------------------------------------------------------------ #
 #                                    Platforms                                   #
 # ------------------------------------------------------------------------------ #
-
-@ffi +command:
-  just ffi/{{command}}
 
 @rust +command:
   just lib/{{command}}
