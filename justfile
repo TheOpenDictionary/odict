@@ -13,6 +13,9 @@
 build +args="":
   cargo build -p cli {{args}}
 
+publish +args="":
+  cargo publish -p odict {{args}}
+
 # @build-all +args="": deps (cli "schema") sync
 #   goreleaser build --id odict --clean {{args}}
 
