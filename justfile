@@ -32,3 +32,6 @@ test:
 @clean: 
   just binding python clean 
   just binding java clean
+
+@uniffi +args="":
+  cargo run -p uniffi-bindgen {{args}}

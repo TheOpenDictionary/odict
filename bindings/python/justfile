@@ -5,6 +5,8 @@ _maturin +args:
 
 @develop: (_maturin "develop")
 
+@build: (_maturin "build")
+
 @test:
   {{VENV_DIR}}/bin/pytest
 

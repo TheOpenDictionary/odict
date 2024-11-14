@@ -25,4 +25,4 @@ pub use self::ext::*;
 pub use self::models::*;
 
 #[cfg(feature = "uniffi")]
-uniffi::include_scaffolding!("odict");
+uniffi::setup_scaffolding!();
