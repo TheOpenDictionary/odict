@@ -1,0 +1,3 @@
+mod java "./java/justfile"
+mod node "./node/justfile"
+mod python "./python/justfile"

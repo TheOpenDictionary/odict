@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 uniffi.workspace = true
-odict = { path = "../lib", features = [
+odict = { path = "../../lib", features = [
   "config",
   "charabia",
   "sql",

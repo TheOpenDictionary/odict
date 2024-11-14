@@ -1,3 +1,61 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:223ebd8f8f64fdf706435a8b7df36f3a293d1957d9aacf9d696773d7dd6c1e36
-size 2432
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary name="Example Dictionary 1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
+  <entry term="run">
+    <ety description="Latin root">
+      <sense pos="v">
+        <group description="A number of verb senses">
+          <definition value="(vertebrates) To move swiftly (figuratively)">
+            <example>The dog runs after the cat.</example>
+            <example>The horse ran away.</example>
+          </definition>
+          <definition value="(fluids) To flow." />
+          <definition value="(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled." />
+          <definition value="(social) To carry out an activity." />
+          <definition value="To extend or persist, statically or dynamically, through space or time." />
+          <definition value="(transitive) To execute or carry out a plan, procedure or program." />
+        </group>
+      </sense>
+      <sense pos="n">
+        <definition value="(vertebrates) To move swiftly">
+          <example>The dog runs after the cat.</example>
+          <example>The horse ran away.</example>
+        </definition>
+        <definition value="Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip." />
+        <definition value="A pleasure trip." />
+        <definition value="Flight, instance or period of fleeing." />
+        <definition value="Migration (of fish)." />
+        <definition value="A group of fish that migrate, or ascend a river for the purpose of spawning." />
+      </sense>
+    </ety>
+  </entry>
+  <entry term="poo">
+    <ety description="Latin root">
+      <sense>
+        <group description="A number of verb senses">
+          <definition value="crap, shit" />
+        </group>
+      </sense>
+    </ety>
+  </entry>
+  <entry term="dog">
+    <ety description="Latin root" pronunciation="dooooog">
+      <sense>
+        <definition value="a dog" />
+      </sense>
+    </ety>
+  </entry>
+  <entry term="ran" see="run" />
+  <entry term="cat">
+    <ety description="Latin root">
+      <sense pos="n">
+        <definition value="a cat">
+          <example>There goes a cat!</example>
+          <note value="Some definition note">
+            <example>Some example</example>
+          </note>
+        </definition>
+      </sense>
+    </ety>
+  </entry>
+</dictionary>
