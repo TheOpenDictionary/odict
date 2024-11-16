@@ -21,13 +21,10 @@ jobs:
           fetch-depth: 0
       - id: release
         name: Release please
-        uses: google-github-actions/release-please-action@v3.7.6
+        uses: google-github-actions/release-please-action@v4
         with:
-          command: manifest
           release-type: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
-          monorepo-tags: true
-          bump-patch-for-minor-pre-major: true
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v2
       - name: Cache asdf
