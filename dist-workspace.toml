@@ -19,3 +19,5 @@ install-path = "CARGO_HOME"
 publish-jobs = ["homebrew"]
 # Whether to install an updater program
 install-updater = false
+# A prefix git tags must include for dist to care about them
+tag-namespace = "cli"
