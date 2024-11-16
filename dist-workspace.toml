@@ -21,3 +21,5 @@ publish-jobs = ["homebrew"]
 install-updater = false
 # A prefix git tags must include for dist to care about them
 tag-namespace = "cli"
+# Whether dist should create a Github Release or use an existing draft
+create-release = false
