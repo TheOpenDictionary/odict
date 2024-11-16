@@ -1,6 +1,0 @@
-namespace odict {
-};
-
-interface DictionaryReader {
-  constructor();
-};

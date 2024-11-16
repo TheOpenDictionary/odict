@@ -28,6 +28,9 @@ test:
   rm -rf **/.odict 
   just binding node test 
 
+@changeset +args="":
+  pnpm dlx @changesets/cli {{args}}
+
 @clean: 
   just binding java clean
 
