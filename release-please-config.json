@@ -1,0 +1,22 @@
+{
+  "plugins": [
+    {
+      "type": "sentence-case"
+    },
+    "cargo-workspace"
+  ],
+  "packages": {
+    ".": {
+      "release-type": "rust",
+      "exclude-paths": ["bindings"]
+    },
+    "./bindings/node": {
+      "release-type": "node",
+      "component": "node"
+    },
+    "./bindings/java": {
+      "release-type": "java",
+      "component": "java"
+    }
+  }
+}
