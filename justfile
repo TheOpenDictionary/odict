@@ -6,8 +6,7 @@ mod binding "./bindings/justfile"
 
 @setup:
   mise install
-  just binding node setup 
-  just binding python setup
+  just binding node setup
 
 @bench +args="":
   cargo bench {{args}}
@@ -30,7 +29,6 @@ test:
   just binding node test 
 
 @clean: 
-  just binding python clean 
   just binding java clean
 
 @uniffi +args="":

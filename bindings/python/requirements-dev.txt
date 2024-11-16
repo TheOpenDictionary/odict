@@ -1,2 +1,0 @@
-maturin>=1.7.4
-pytest>=4.0
