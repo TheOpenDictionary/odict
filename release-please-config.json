@@ -6,15 +6,20 @@
     },
     "cargo-workspace"
   ],
-  "bump-patch-for-minor-pre-major": true,
+  "commit-search-depth": 5000,
+  "exclude-paths": ["package.json", "pnpm-lock.yaml", ".tool-versions"],
   "include-component-in-tag": true,
   "packages": {
     "./cli": {
       "release-type": "rust",
-      "component": "cli"
+      "component": "cli",
+      "prerelease": true,
+      "initial-version": "2.0.0-beta.1"
     },
     "./lib": {
-      "release-type": "rust"
+      "release-type": "rust",
+      "prerelease": true,
+      "initial-version": "2.0.0-beta.1"
     },
     "./bindings/node": {
       "release-type": "node",
