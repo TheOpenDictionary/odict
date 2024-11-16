@@ -22,9 +22,8 @@ jobs:
           fetch-depth: 0
       - id: release
         name: Release please
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4
         with:
-          release-type: manifest
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v2
