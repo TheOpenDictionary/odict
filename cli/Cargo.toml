@@ -2,7 +2,9 @@
 name = "cli"
 version = "2.0.0-beta.0"
 edition = "2021"
-publish = false
+description = "A lightning-fast dictionary file format and toolchain"
+homepage = "https://odict.org"
+repository = "https://github.com/TheOpenDictionary/odict"
 
 [dependencies]
 odict = { path = "../lib", features = [

@@ -18,7 +18,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./node
+    working-directory: ./bindings/node
 
 jobs:
   build:
@@ -149,7 +149,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ./dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   build-freebsd:
     runs-on: macos-13
@@ -196,7 +196,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ./dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -446,7 +446,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: ./dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   publish:
     name: Publish

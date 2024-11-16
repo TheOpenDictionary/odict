@@ -20,6 +20,7 @@ use super::semver::SemanticVersion;
 /*                               DictionaryFile                               */
 /* -------------------------------------------------------------------------- */
 
+#[cfg_attr(feature = "uniffi", derive(uniffi::Object))]
 pub struct DictionaryFile {
     pub signature: String,
     pub version: SemanticVersion,

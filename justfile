@@ -1,11 +1,12 @@
+mod binding "./bindings/justfile"
+
 # ---------------------------------------------------------------------------- #
 #                                    Global                                    #
 # ---------------------------------------------------------------------------- #
 
-@deps: && (node "deps")
+@setup:
   mise install
-  corepack install
-  corepack enable pnpm
+  just binding node setup
 
 @bench +args="":
   cargo bench {{args}}
@@ -16,9 +17,6 @@ build +args="":
 publish +args="":
   cargo publish -p odict {{args}}
 
-# @build-all +args="": deps (cli "schema") sync
-#   goreleaser build --id odict --clean {{args}}
-
 @insta +args="":
   cargo insta {{args}}
 
@@ -28,34 +26,13 @@ publish +args="":
 @run +args="":
   cargo run {{args}}
 
-test: && (node "test")
+test:
   cargo test
-  rm -rf **/.odict
-# deps xsd (go "test") (jvm "test") (python "test") (js "test") (wasm "test") clean
+  rm -rf **/.odict 
+  just binding node test 
 
-@clean: (python "clean") (jvm "clean")
+@clean: 
+  just binding java clean
 
-# @publish +args="--auto-snapshot --clean":
-#   goreleaser release {{args}}
-
-# ------------------------------------------------------------------------------ #
-#                                    Platforms                                   #
-# ------------------------------------------------------------------------------ #
-
-@rust +command:
-  just lib/{{command}}
-
-@cli +command:
-	just cli/{{command}}
-
-@jvm +command:
-	just jvm/{{command}}
-
-@node +command:
-	just node/{{command}}
-
-@python +command:
-	just python/{{command}}
-
-@wasm +command:
-	just wasm/{{command}}
+@uniffi +args="":
+  cargo run -p uniffi-bindgen {{args}}
