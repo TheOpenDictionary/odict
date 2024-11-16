@@ -14,6 +14,9 @@ mod binding "./bindings/justfile"
 build +args="":
   cargo build -p cli {{args}}
 
+publish +args="":
+  cargo publish -p odict {{args}}
+
 @insta +args="":
   cargo insta {{args}}
 
