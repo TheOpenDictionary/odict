@@ -6,9 +6,12 @@
     "cargo-workspace"
   ],
   "packages": {
-    ".": {
+    "./cli": {
       "release-type": "rust",
-      "exclude-paths": ["bindings"]
+      "component": "cli"
+    },
+    "./lib": {
+      "release-type": "rust"
     },
     "./bindings/node": {
       "release-type": "node",
