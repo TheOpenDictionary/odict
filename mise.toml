@@ -4,7 +4,6 @@ gradle = "8.11"
 kotlin = "2.0.21"
 java = "adoptopenjdk-21.0.5+11.0.LTS"
 python = "3.13.0"
-pnpm = "9.13.2"
 
 [task_config]
 includes = [

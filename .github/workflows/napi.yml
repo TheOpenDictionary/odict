@@ -93,7 +93,7 @@ jobs:
         uses: actions/setup-node@v4
         if: ${{ !matrix.settings.docker }}
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - name: Install
         uses: dtolnay/rust-toolchain@stable
@@ -133,7 +133,7 @@ jobs:
         uses: actions/setup-node@v4
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
           architecture: x86
       - name: Build in docker
@@ -434,7 +434,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
@@ -477,7 +477,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
