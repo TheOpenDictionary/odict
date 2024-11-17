@@ -1,0 +1,30 @@
+["add:node"]
+run = "pnpm add"
+dir = "bindings/node"
+
+["build:node"]
+run = "pnpm build"
+dir = "bindings/node"
+
+["clean:node"]
+run = "rm -rf coverage ../**/*.odict  ../**/*.log"
+dir = "bindings/node"
+
+["install:node"]
+run = "pnpm install --no-frozen-lockfile"
+dir = "bindings/node"
+
+["publish:node"]
+run = "pnpm npm publish"
+dir = "bindings/node"
+
+["setup:node"]
+depends = ["install:node"]
+
+["test:node"]
+run = "pnpm test"
+dir = "bindings/node"
+
+["ci:node"]
+run = "act napi --container-architecture linux/amd64 --bind --job build"
+hide = true

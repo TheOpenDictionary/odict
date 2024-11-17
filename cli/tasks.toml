@@ -1,0 +1,10 @@
+"clean:cli" = "cargo clean -p cli"
+"test:cli" = "cargo test -p cli"
+
+["build:cli"]
+run = "cargo build -p cli"
+alias = "build"
+
+["run:cli"]
+run = "cargo run -p cli"
+alias = "run"

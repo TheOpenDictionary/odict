@@ -1,0 +1,16 @@
+insta = "cargo insta"
+run = "cargo run -p cli"
+
+[clean]
+depends = ["clean:*"]
+run = "rm -rf **/*.odict"
+
+[test]
+depends = ["test:*"]
+
+[setup]
+run = ["mise install", "mise run setup:*"]
+
+["build:all"]
+alias = "default"
+depends = ["build:*"]

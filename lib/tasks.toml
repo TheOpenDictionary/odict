@@ -1,0 +1,5 @@
+"publish:lib" = "cargo publish -p odict"
+"build:lib" = "cargo build -p odict"
+"clean:lib" = "cargo clean -p odict"
+"test:lib" = "cargo test -p odict"
+"bench:lib" = "cargo bench -p odict"
