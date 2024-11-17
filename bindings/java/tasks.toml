@@ -5,9 +5,9 @@ dir = "bindings/java"
 ["build:java"]
 run = "./gradlew build"
 dir = "bindings/java"
-depends = ["build:lib"]
+depends = ["build:cli"]
 
 ["test:java"]
 dir = "bindings/java"
-run = ["RUNTIME_ENV=test ./gradlew test --info", "mise task run clean:java"]
-depends = ["build:lib"]
+run = ["RUNTIME_ENV=test ./gradlew test --info", "./gradlew clean"]
+depends = ["build:cli"]

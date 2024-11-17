@@ -12,14 +12,12 @@ import kotlin.io.path.writeText
 
 class Dictionary constructor(private val path: String) {
 
-    fun lookup(vararg queries: String, follow: Boolean = false, split: Int = 0, markdownStrategy: String = "html"): List<List<Entry>> {
+    fun lookup(vararg queries: String, follow: Boolean = false, split: Int = 0): List<List<Entry>> {
         var args = arrayOf("lookup", "-f", "json")
         
         if (follow) {
           args += "-F"
         }
-
-        args += arrayOf("--markdown", markdownStrategy)
 
         args += arrayOf("-s", split.toString(), path)
 
@@ -37,7 +35,7 @@ class Dictionary constructor(private val path: String) {
         return lexicon?.trim()?.split("\n") ?: emptyList()
     }
 
-    fun search(vararg queries: String, index: Boolean = false): List<Entry> {
+    fun search(vararg queries: String, index: Boolean = false): List<List<Entry>> {
         var args = arrayOf("search", this.path, *queries)
 
         if (index) {
@@ -45,6 +43,7 @@ class Dictionary constructor(private val path: String) {
         }
 
         val output = execute(*args)
+        
         return output?.let { searchAdapter.fromJson(it) } ?: emptyList()
     }
 
@@ -55,8 +54,10 @@ class Dictionary constructor(private val path: String) {
         private val outerLookupType = Types.newParameterizedType(MutableList::class.java, innerLookupType)
         private val lookupAdapter: JsonAdapter<List<List<Entry>>> = moshi.adapter(outerLookupType)
 
+        private val innerSearchType = Types.newParameterizedType(MutableList::class.java, Entry::class.java)
+        private val outerSearchType = Types.newParameterizedType(MutableList::class.java, innerSearchType)
         private val searchType = Types.newParameterizedType(List::class.java, Entry::class.java)
-        private val searchAdapter = moshi.adapter<List<Entry>>(searchType)
+        private val searchAdapter = moshi.adapter<List<List<Entry>>>(outerSearchType)
 
         fun compile(path: String) {
             this.execute("compile", path)
@@ -71,7 +72,7 @@ class Dictionary constructor(private val path: String) {
 
         private fun execute(vararg args: String): String? {
             return try {
-                val baseArgs = arrayOf(if (System.getenv("RUNTIME_ENV") == "test") "../../bin/odict" else "odict", "--quiet")
+                val baseArgs = arrayOf(if (System.getenv("RUNTIME_ENV") == "test") "../../../target/debug/cli" else "odict", "--quiet")
                 val proc = ProcessBuilder(*(baseArgs + args))
                         .redirectOutput(ProcessBuilder.Redirect.PIPE)
                         .start()

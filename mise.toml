@@ -9,6 +9,7 @@ pnpm = "9.13.2"
 [task_config]
 includes = [
   "tasks.toml",
+  "lib/tasks.toml",
   "cli/tasks.toml",
   "bindings/java/tasks.toml",
   "bindings/node/tasks.toml",
