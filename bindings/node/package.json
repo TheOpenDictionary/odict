@@ -35,7 +35,7 @@
   "scripts": {
     "build": "napi build --release --platform --pipe \"prettier -w\" ./dist",
     "build:debug": "napi build --platform --pipe \"prettier -w\" ./dist",
-    "test": "vitest --no-watch",
+    "test": "pnpm run build && vitest --no-watch",
     "universal": "napi universal",
     "artifacts": "napi artifacts",
     "version": "napi version",

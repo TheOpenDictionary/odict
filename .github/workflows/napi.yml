@@ -180,8 +180,8 @@ jobs:
             whoami
             env
             freebsd-version
-            yarn install
-            yarn build
+            pnpm install
+            pnpm --filter="@odict/node" build
             rm -rf node_modules
             rm -rf target
       - name: Upload artifact
