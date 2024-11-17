@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Dictionary can index and search a dictionary 1`] = `
+exports[`Dictionary > can index and search a dictionary 1`] = `
 [
   {
     "etymologies": [
@@ -104,7 +104,7 @@ exports[`Dictionary can index and search a dictionary 1`] = `
 ]
 `;
 
-exports[`Dictionary can split terms properly 1`] = `
+exports[`Dictionary > can split terms properly 1`] = `
 [
   {
     "etymologies": [
@@ -163,7 +163,7 @@ exports[`Dictionary can split terms properly 1`] = `
 ]
 `;
 
-exports[`Dictionary lookup can split terms 1`] = `
+exports[`Dictionary > lookup > can split terms 1`] = `
 [
   [
     {
@@ -224,7 +224,7 @@ exports[`Dictionary lookup can split terms 1`] = `
 ]
 `;
 
-exports[`Dictionary lookup looks up terms properly 1`] = `
+exports[`Dictionary > lookup > looks up terms properly 1`] = `
 [
   [
     {

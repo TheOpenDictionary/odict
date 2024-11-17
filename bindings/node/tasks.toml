@@ -22,7 +22,7 @@ dir = "bindings/node"
 depends = ["install:node"]
 
 ["test:node"]
-run = "pnpm test"
+run = "pnpm test -- "
 dir = "bindings/node"
 
 ["ci:node"]
