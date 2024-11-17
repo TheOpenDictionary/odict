@@ -12,12 +12,12 @@
       "release-type": "rust",
       "component": "cli",
       "prerelease": true,
-      "initial-version": "2.0.0-beta.1"
+      "initial-version": "2.0.0"
     },
     "lib": {
       "release-type": "rust",
       "prerelease": true,
-      "initial-version": "2.0.0-beta.1"
+      "initial-version": "2.0.0"
     },
     "bindings/node": {
       "release-type": "node",
