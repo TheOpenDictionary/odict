@@ -85,8 +85,10 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+      - name: Setup PNPM 
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         if: ${{ !matrix.settings.docker }}
@@ -118,7 +120,9 @@ jobs:
         if: ${{ matrix.settings.setup }}
         shell: bash
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node x86
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         run: pnpm config set supportedArchitectures.cpu "ia32"
@@ -213,7 +217,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -246,7 +252,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -278,7 +286,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -418,7 +428,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -459,7 +471,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+        uses: jdx/mise-action@v2
+        with:
+          install_args: "pnpm"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
