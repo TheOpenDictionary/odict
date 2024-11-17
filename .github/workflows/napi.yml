@@ -227,7 +227,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: pnpm test
+        run: pnpm --filter="@odict/node" test
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:
@@ -259,7 +259,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim pnpm test
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim pnpm --filter="@odict/node" test
   test-linux-x64-musl-binding:
     name: Test bindings on x86_64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
@@ -293,7 +293,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine pnpm test
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine pnpm --filter="@odict/node" test
   test-linux-aarch64-gnu-binding:
     name: Test bindings on aarch64-unknown-linux-gnu - node@${{ matrix.node }}
     needs:
@@ -332,7 +332,7 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            pnpm test
+            pnpm --filter="@odict/node" test
             ls -la
   test-linux-aarch64-musl-binding:
     name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
@@ -366,7 +366,7 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            pnpm test
+            pnpm  --filter="@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
     needs:
@@ -404,7 +404,7 @@ jobs:
           options: "--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            pnpm test
+            pnpm --filter="@odict/node" test
             ls -la
   universal-macOS:
     name: Build universal macOS binary

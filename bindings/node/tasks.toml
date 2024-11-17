@@ -11,3 +11,6 @@ depends = ["build:node"]
 ["ci:node"]
 run = "act napi --container-architecture linux/amd64 --bind --job build"
 hide = true
+
+["clean:node"]
+run = "rm -rf dist"
