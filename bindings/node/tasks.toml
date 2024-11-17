@@ -3,7 +3,7 @@ run = "pnpm build"
 dir = "bindings/node"
 
 ["clean:node"]
-run = "rm -rf coverage ../**/*.odict  ../**/*.log"
+run = "rm -rf coverage dist ../**/*.odict  ../**/*.log"
 dir = "bindings/node"
 
 ["install:node"]
@@ -19,6 +19,7 @@ depends = ["install:node"]
 
 ["test:node"]
 run = "pnpm test -- "
+depends = ["build:node"]
 dir = "bindings/node"
 
 ["ci:node"]
