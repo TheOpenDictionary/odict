@@ -6,26 +6,24 @@
     },
     "cargo-workspace"
   ],
-  "commit-search-depth": 5000,
-  "exclude-paths": ["package.json", "pnpm-lock.yaml", ".tool-versions"],
   "include-component-in-tag": true,
   "packages": {
-    "./cli": {
+    "cli": {
       "release-type": "rust",
       "component": "cli",
       "prerelease": true,
       "initial-version": "2.0.0-beta.1"
     },
-    "./lib": {
+    "lib": {
       "release-type": "rust",
       "prerelease": true,
       "initial-version": "2.0.0-beta.1"
     },
-    "./bindings/node": {
+    "bindings/node": {
       "release-type": "node",
       "component": "node"
     },
-    "./bindings/java": {
+    "bindings/java": {
       "release-type": "java",
       "component": "java"
     }
