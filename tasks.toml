@@ -9,7 +9,7 @@ run = "rm -rf **/*.odict"
 depends = ["test:*"]
 
 [setup]
-run = ["mise install", "mise run setup:*"]
+run = ["mise install", "corepack enable", "mise run setup:*"]
 
 ["build:all"]
 depends = ["build:*"]
