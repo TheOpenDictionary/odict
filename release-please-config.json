@@ -20,6 +20,7 @@
       "release-as": "2.0.0"
     },
     "bindings/node": {
+      "exclude-paths": ["Cargo.toml"],
       "release-type": "node",
       "component": "node"
     },
