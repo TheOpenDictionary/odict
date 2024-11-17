@@ -17,4 +17,4 @@ inherits = "release"
 lto = "thin"
 
 [workspace.dependencies]
-uniffi = "0.27.1"
+uniffi = "0.28.0"
