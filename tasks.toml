@@ -12,5 +12,7 @@ depends = ["test:*"]
 run = ["mise install", "mise run setup:*"]
 
 ["build:all"]
-alias = "default"
 depends = ["build:*"]
+
+["default"]
+run = "mise run build"

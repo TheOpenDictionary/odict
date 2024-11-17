@@ -1,13 +1,13 @@
 ["clean:java"]
-run = "./gradlew clean"
+run = "gradle clean"
 dir = "bindings/java"
 
 ["build:java"]
-run = "./gradlew build"
+run = "gradle assemble"
 dir = "bindings/java"
 depends = ["build:cli"]
 
 ["test:java"]
 dir = "bindings/java"
-run = ["RUNTIME_ENV=test ./gradlew test --info", "./gradlew clean"]
+run = ["RUNTIME_ENV=test gradle test --info", "gradle clean"]
 depends = ["build:cli"]

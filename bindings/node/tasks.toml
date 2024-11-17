@@ -1,7 +1,3 @@
-["add:node"]
-run = "pnpm add"
-dir = "bindings/node"
-
 ["build:node"]
 run = "pnpm build"
 dir = "bindings/node"
