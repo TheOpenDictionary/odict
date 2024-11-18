@@ -20,14 +20,14 @@ describe("Dictionary", () => {
 
   beforeAll(async () => {
     dict1Path = join(
-      fileURLToPath(new URL(import.meta.url)),
+      fileURLToPath(new URL(import.meta.url), { windows: false }),
       "../../../../examples/example1.xml"
     );
 
     dict1 = await Dictionary.compile(dict1Path);
 
     dict2Path = join(
-      fileURLToPath(new URL(import.meta.url)),
+      fileURLToPath(new URL(import.meta.url), { windows: false }),
       "../../../../examples/example2.xml"
     );
 

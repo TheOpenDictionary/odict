@@ -180,7 +180,7 @@ jobs:
             whoami
             env
             freebsd-version
-            pnpm install
+            pnpm install --no-frozen-lockfile
             pnpm --filter="@odict/node" build
             rm -rf node_modules
             rm -rf target
@@ -188,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -222,7 +222,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -254,7 +254,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -288,7 +288,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-musl
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -311,7 +311,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-gnu
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -345,7 +345,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-musl
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -366,7 +366,7 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            pnpm  --filter="@odict/node" test
+            pnpm --filter="@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
     needs:
@@ -384,7 +384,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-armv7-unknown-linux-gnueabihf
-          path: .
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -433,7 +433,7 @@ jobs:
           name: bindings-aarch64-apple-darwin
           path: artifacts
       - name: Combine binaries
-        run: pnpm universal
+        run: pnpm --filter="@odict/node" universal
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -466,9 +466,9 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: bindings/node/artifacts
       - name: Move artifacts
-        run: pnpm artifacts
+        run: pnpm --filter="@odict/node" artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
