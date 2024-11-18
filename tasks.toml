@@ -1,4 +1,3 @@
-insta = "cargo insta"
 run = "cargo run -p cli"
 
 [clean]
