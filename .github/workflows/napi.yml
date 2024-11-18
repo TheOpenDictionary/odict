@@ -315,6 +315,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
@@ -349,6 +351,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
@@ -388,6 +392,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm"
@@ -426,12 +432,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: artifacts
+          path: bindings/node/artifacts
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: artifacts
+          path: bindings/node/artifacts
       - name: Combine binaries
         run: pnpm --filter="@odict/node" universal
       - name: Upload artifact
