@@ -143,7 +143,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -188,7 +188,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -438,7 +438,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: bindings/node/dist/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist
           if-no-files-found: error
   publish:
     name: Publish
