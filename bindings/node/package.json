@@ -3,28 +3,32 @@
   "version": "0.0.1-next.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "napi": {
-    "name": "node",
-    "triples": {
-      "additional": [
-        "aarch64-apple-darwin",
-        "aarch64-linux-android",
-        "aarch64-unknown-linux-gnu",
-        "aarch64-unknown-linux-musl",
-        "aarch64-pc-windows-msvc",
-        "armv7-unknown-linux-gnueabihf",
-        "x86_64-unknown-linux-musl",
-        "x86_64-unknown-freebsd",
-        "i686-pc-windows-msvc",
-        "armv7-linux-androideabi",
-        "universal-apple-darwin",
-        "riscv64gc-unknown-linux-gnu"
-      ]
-    }
+    "binaryName": "node",
+    "targets": [
+      "x86_64-apple-darwin",
+      "aarch64-apple-darwin",
+      "x86_64-unknown-linux-gnu",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-musl",
+      "aarch64-unknown-linux-gnu",
+      "i686-pc-windows-msvc",
+      "armv7-unknown-linux-gnueabihf",
+      "aarch64-linux-android",
+      "x86_64-unknown-freebsd",
+      "aarch64-unknown-linux-musl",
+      "aarch64-pc-windows-msvc",
+      "armv7-linux-androideabi",
+      "wasm32-wasi-preview1-threads"
+    ]
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "^2.18.0",
+    "@napi-rs/cli": "3.0.0-alpha.64",
+    "@napi-rs/wasm-runtime": "^0.2.4",
     "@types/node": "^22.0.0",
     "prettier": "^3.3.2",
     "vitest": "^2.1.5"
@@ -33,29 +37,12 @@
     "node": ">= 10"
   },
   "scripts": {
-    "build": "napi build --release --platform --pipe \"prettier -w\" ./dist",
-    "build:debug": "napi build --platform --pipe \"prettier -w\" ./dist",
+    "build": "napi build --release --platform --pipe \"prettier -w\"",
+    "build:debug": "napi build --platform --pipe \"prettier -w\"",
     "test": "vitest --no-watch",
     "universal": "napi universal",
     "artifacts": "napi artifacts",
     "version": "napi version",
     "prepublishOnly": "napi prepublish -t npm"
-  },
-  "optionalDependencies": {
-    "@odict/node-android-arm-eabi": "0.0.0",
-    "@odict/node-android-arm64": "0.0.0",
-    "@odict/node-darwin-arm64": "0.0.0",
-    "@odict/node-darwin-universal": "0.0.0",
-    "@odict/node-darwin-x64": "0.0.0",
-    "@odict/node-freebsd-x64": "0.0.0",
-    "@odict/node-linux-arm-gnueabihf": "0.0.0",
-    "@odict/node-linux-arm64-gnu": "0.0.0",
-    "@odict/node-linux-arm64-musl": "0.0.0",
-    "@odict/node-linux-riscv64-gnu": "0.0.0",
-    "@odict/node-linux-x64-gnu": "0.0.0",
-    "@odict/node-linux-x64-musl": "0.0.0",
-    "@odict/node-win32-arm64-msvc": "0.0.0",
-    "@odict/node-win32-ia32-msvc": "0.0.0",
-    "@odict/node-win32-x64-msvc": "0.0.0"
   }
 }

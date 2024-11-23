@@ -13,4 +13,4 @@ run = 'act napi --container-architecture linux/amd64 --bind --job {{arg(name="jo
 hide = true
 
 ["clean:node"]
-run = "rm -rf dist"
+run = "rm -f bindings/node/*.node bindings/node/index.d.ts bindings/node/index.js bindings/node/browser.js bindings/node/*-worker.mjs bindings/node/*-worker-browser.mjs bindings/node/*.wasi.cjs bindings/node/*.wasi-browser.js"
