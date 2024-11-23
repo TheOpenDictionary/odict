@@ -27,7 +27,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@napi-rs/cli": "3.0.0-alpha.64",
+    "@napi-rs/cli": "2.18.4",
     "@napi-rs/wasm-runtime": "^0.2.4",
     "@types/node": "^22.0.0",
     "prettier": "^3.3.2",
