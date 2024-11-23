@@ -10,8 +10,9 @@ permissions:
 'on':
   workflow_dispatch:
   push:
-    tags:
-      - "node-*"
+    branches: [nickersoft/napi-alpha]
+    # tags:
+    #   - "node-*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
