@@ -19,6 +19,9 @@ importers:
       '@napi-rs/wasm-runtime':
         specifier: ^0.2.4
         version: 0.2.5
+      '@tybys/wasm-util':
+        specifier: ^0.9.0
+        version: 0.9.0
       '@types/node':
         specifier: ^22.0.0
         version: 22.9.0
