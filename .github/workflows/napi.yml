@@ -334,6 +334,7 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
+            npm i -g pnpm
             pnpm --filter="@odict/node" test
             ls -la
   test-linux-aarch64-musl-binding:
@@ -370,6 +371,7 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
+            npm i -g pnpm
             pnpm --filter="@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
@@ -410,7 +412,7 @@ jobs:
           options: "--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            npm i -g 
+            npm i -g pnpm
             pnpm --filter="@odict/node" test
             ls -la
   publish:
@@ -424,7 +426,6 @@ jobs:
       - test-linux-aarch64-gnu-binding
       - test-linux-aarch64-musl-binding
       - test-linux-arm-gnueabihf-binding
-      - universal-macOS
     steps:
       - uses: actions/checkout@v4
       - name: Setup PNPM

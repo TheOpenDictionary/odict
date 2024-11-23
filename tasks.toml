@@ -8,7 +8,7 @@ run = "rm -rf **/*.odict"
 depends = ["test:*"]
 
 [setup]
-run = ["mise install", "corepack enable", "pnpm install --no-frozen-lockfile"]
+run = ["mise install", "pnpm install --no-frozen-lockfile"]
 
 ["build-all"]
 depends = ["build:*"]
