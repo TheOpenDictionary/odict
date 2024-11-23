@@ -334,7 +334,6 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            npm i -g pnpm
             pnpm --filter="@odict/node" test
             ls -la
   test-linux-aarch64-musl-binding:

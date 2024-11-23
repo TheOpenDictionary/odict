@@ -1,9 +1,8 @@
 name: Run Tests
 
 on:
-  push:
-    branches: [v2]
   pull_request:
+  push:
     branches: [v2]
 
 jobs:
