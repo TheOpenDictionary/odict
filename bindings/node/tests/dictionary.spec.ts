@@ -41,8 +41,9 @@ describe("Dictionary", () => {
   });
 
   it("returns the path correctly", () => {
-    expect(dict1.path).toBe(dict1Path.replace(".xml", ".odict"));
-    expect(dict2.path).toBe(dict2Path.replace(".xml", ".odict"));
+    // Needs toContain instead of toBe seeing Windows paths start with \\?\
+    expect(dict1.path).toContain(dict1Path.replace(".xml", ".odict"));
+    expect(dict2.path).toContain(dict2Path.replace(".xml", ".odict"));
   });
 
   describe("lookup", () => {
@@ -100,8 +101,8 @@ describe("Dictionary", () => {
       const dict = new Dictionary("fake-alias");
       await dict.lookup("dog");
     } catch (e) {
-      expect((e as Error).message).toEqual(
-        "No such file or directory (os error 2)"
+      expect((e as Error).message).toContain(
+        "(os error 2)"
       );
     }
   });
