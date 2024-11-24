@@ -10,8 +10,9 @@ permissions:
 'on':
   workflow_dispatch:
   push:
-    tags:
-      - "node-*"
+    branches: [nickersoft/napi-alpha]
+    # tags:
+    #   - "node-*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -115,7 +116,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node/dist
+          path: bindings/node/*.node
           if-no-files-found: error
 
   build-freebsd:
@@ -163,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: bindings/node/dist
+          path: bindings/node/*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -202,7 +203,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node/dist
+          path: bindings/node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -261,7 +262,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.target }}
-          path: bindings/node/dist
+          path: bindings/node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -314,18 +315,21 @@ jobs:
       - name: Publish
         shell: bash
         run: |
-          npm config set provenance true
-          if [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+$" ]];
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --access public
-          elif [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+" ]];
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --tag next --access public
-          else
-            echo "Not a release, skipping publish"
-          fi
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          pnpm --filter="@odict/node" publish --tag next --access public
+        # run: |
+        #   npm config set provenance true
+        #   if [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+$" ]];
+        #   then
+        #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        #     pnpm --filter="@odict/node" publish --access public
+        #   elif [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+" ]];
+        #   then
+        #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        #     pnpm --filter="@odict/node" publish --tag next --access public
+        #   else
+        #     echo "Not a release, skipping publish"
+        #   fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
