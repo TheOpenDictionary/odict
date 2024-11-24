@@ -1,20 +1,20 @@
-use std::{borrow::Cow, error::Error};
+use std::{borrow::Cow, error::Error, sync::LazyLock};
 
 use console::{style, Style};
 use odict::{
     Definition, DefinitionType, Entry, Etymology, Example, Group, MarkdownStrategy, Note, Sense,
 };
-use once_cell::sync::Lazy;
 
 use crate::CLIContext;
 
 use super::md::print_md;
 
-const STYLE_POS: Lazy<Style> = Lazy::new(|| Style::new().italic());
-const STYLE_TITLE: Lazy<Style> = Lazy::new(|| Style::new().bold().underlined());
-const STYLE_EXAMPLE_BULLET: Lazy<Style> = Lazy::new(|| Style::new().dim());
-const STYLE_EXAMPLE: Lazy<Style> = Lazy::new(|| STYLE_EXAMPLE_BULLET.clone().italic().dim());
-const STYLE_EXAMPLE_TARGET: Lazy<Style> = Lazy::new(|| STYLE_EXAMPLE.clone().underlined());
+const STYLE_POS: LazyLock<Style> = LazyLock::new(|| Style::new().italic());
+const STYLE_TITLE: LazyLock<Style> = LazyLock::new(|| Style::new().bold().underlined());
+const STYLE_EXAMPLE_BULLET: LazyLock<Style> = LazyLock::new(|| Style::new().dim());
+const STYLE_EXAMPLE: LazyLock<Style> =
+    LazyLock::new(|| STYLE_EXAMPLE_BULLET.clone().italic().dim());
+const STYLE_EXAMPLE_TARGET: LazyLock<Style> = LazyLock::new(|| STYLE_EXAMPLE.clone().underlined());
 
 fn divider() -> String {
     "─".repeat(32)

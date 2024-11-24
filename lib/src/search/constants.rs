@@ -1,4 +1,5 @@
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
+
 use tantivy::tokenizer::TextAnalyzer;
 
 #[cfg(feature = "charabia")]
@@ -9,7 +10,7 @@ use tantivy::tokenizer::{LowerCaser, RemoveLongFilter, SimpleTokenizer};
 
 pub const CUSTOM_TOKENIZER: &str = "CUSTOM_TOKENIZER";
 
-pub const DEFAULT_TOKENIZER: Lazy<TextAnalyzer> = Lazy::new(|| {
+pub const DEFAULT_TOKENIZER: LazyLock<TextAnalyzer> = LazyLock::new(|| {
     #[cfg(not(feature = "charabia"))]
     return TextAnalyzer::builder(SimpleTokenizer::default())
         .filter(RemoveLongFilter::limit(40))

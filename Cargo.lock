@@ -684,7 +684,6 @@ dependencies = [
  "indicatif",
  "num-format",
  "odict",
- "once_cell",
  "pulldown-cmark",
  "serde",
 ]
@@ -2417,7 +2416,6 @@ dependencies = [
  "insta",
  "lz4_flex",
  "map-macro",
- "once_cell",
  "pulldown-cmark",
  "quick-xml",
  "rayon",
@@ -2442,7 +2440,6 @@ dependencies = [
  "napi-build",
  "napi-derive",
  "odict",
- "once_cell",
 ]
 
 [[package]]
