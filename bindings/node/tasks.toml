@@ -5,6 +5,7 @@ run = "pnpm --filter=\"@odict/node\" build"
 run = "pnpm --filter=\"@odict/node\" npm publish"
 
 ["test:node"]
+depends = ["build:node"]
 run = "pnpm --filter=\"@odict/node\" test -- "
 
 ["ci:node"]
