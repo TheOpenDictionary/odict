@@ -1,5 +1,4 @@
 "clean:cli" = "cargo clean -p cli"
-"test:cli" = "cargo test -p cli"
 
 ["build:cli"]
 run = "cargo build -p cli"

@@ -54,6 +54,7 @@ uniffi = { optional = true, workspace = true, features = ["build"] }
 insta = "1.38.0"
 map-macro = "0.3.0"
 criterion = { version = "0.5.1", features = ["html_reports"] }
+tempfile = "3.14.0"
 
 [lib]
 name = "odict"

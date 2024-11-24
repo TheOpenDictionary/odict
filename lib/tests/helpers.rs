@@ -1,19 +1,21 @@
 use std::{error::Error, sync::LazyLock};
 
 use odict::{DictionaryFile, DictionaryReader, DictionaryWriter};
+use tempfile::NamedTempFile;
 
-pub fn create_archive_dict(name: &str) -> Result<DictionaryFile, Box<dyn Error>> {
+pub fn get_example_dict(name: &str) -> Result<DictionaryFile, Box<dyn Error>> {
     let reader = DictionaryReader::default();
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);
-    let output = format!("../examples/{}.odict", name);
+    let output = NamedTempFile::new()?.path().to_str().unwrap().to_string();
 
     writer.compile_xml(&input, &output)?;
+
     reader.read_from_path(&output)
 }
 
-pub static EXAMPLE_DICTIONARY_1: LazyLock<DictionaryFile> =
-    LazyLock::new(|| create_archive_dict("example1").unwrap());
+pub static EXAMPLE_DICT_1: LazyLock<DictionaryFile> =
+    LazyLock::new(|| get_example_dict("example1").expect("Failed to get example dictionary 1"));
 
-pub static EXAMPLE_DICTIONARY_2: LazyLock<DictionaryFile> =
-    LazyLock::new(|| create_archive_dict("example2").unwrap());
+pub static EXAMPLE_DICT_2: LazyLock<DictionaryFile> =
+    LazyLock::new(|| get_example_dict("example2").expect("Failed to get example dictionary 2"));

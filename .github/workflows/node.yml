@@ -56,10 +56,7 @@ jobs:
             build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc
-          - host: ubuntu-latest
-            target: wasm32-wasip1-threads
-            build: pnpm --filter "@odict/node" build --target wasm32-wasip1-threads
+            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc            
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -116,19 +113,11 @@ jobs:
         shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: matrix.settings.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: 'bindings/node/*.node'
+          path: bindings/node/*.node
           if-no-files-found: error
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        if: matrix.settings.target == 'wasm32-wasip1-threads'
-        with:
-          name: bindings-${{ matrix.settings.target }}
-          path: '*.wasm'
-          if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
     name: Build FreeBSD
@@ -174,7 +163,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: bindings/node/${{ env.APP_NAME }}.*.node
+          path: bindings/node/*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -213,7 +202,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: bindings/node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -272,7 +261,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.target }}
-          path: .
+          path: bindings/node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -286,35 +275,7 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           options: -v ${{ steps.docker.outputs.PNPM_STORE_PATH }}:${{ steps.docker.outputs.PNPM_STORE_PATH }} -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}
-          run: npm run test
-  test-wasi:
-    name: Test WASI target
-    needs:
-      - build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: setup pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-wasm32-wasip1-threads
-          path: .
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Test bindings
-        run: pnpm --filter "@odict/node" test
-        env:
-          NAPI_RS_FORCE_WASI: 1
+          run: cd bindings/node && npm run test
   publish:
     name: Publish
     runs-on: ubuntu-latest
@@ -322,7 +283,6 @@ jobs:
       - build-freebsd
       - test-macOS-windows-binding
       - test-linux-binding
-      - test-wasi
     steps:
       - uses: actions/checkout@v4
       - name: setup pnpm
@@ -337,25 +297,32 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: bindings/node/artifacts
       - name: create npm dirs
-        run: pnpm napi create-npm-dirs
+        run: pnpm --filter="@odict/node" create-dirs
       - name: Move artifacts
-        run: pnpm artifacts
+        run: pnpm --filter="@odict/node" artifacts
       - name: List packages
-        run: ls -R ./npm
+        run: ls -R ./bindings/node/npm
         shell: bash
+      - uses: olegtarasov/get-tag@v2.1.3
+        id: tagName
+        with:
+          tagRegex: "node-(.*)"
+      - name: Print tag name 
+        run: echo $GIT_TAG_NAME
       - name: Publish
+        shell: bash
         run: |
           npm config set provenance true
-          if git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$";
+          if [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+$" ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+";
+            pnpm --filter="@odict/node" publish --no-git-checks --access public
+          elif [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+" ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+            pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
           else
             echo "Not a release, skipping publish"
           fi
