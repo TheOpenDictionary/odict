@@ -17,7 +17,8 @@
     "lib": {
       "release-type": "rust",
       "prerelease": true,
-      "release-as": "2.0.0"
+      "release-as": "2.0.0",
+      "component": "lib"
     },
     "bindings/node": {
       "exclude-paths": ["Cargo.toml"],
