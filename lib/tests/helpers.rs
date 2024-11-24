@@ -1,4 +1,3 @@
-use once_cell::sync::Lazy;
 use std::error::Error;
 
 use odict::{DictionaryFile, DictionaryReader, DictionaryWriter};

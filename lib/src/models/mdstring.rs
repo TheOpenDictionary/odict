@@ -1,4 +1,5 @@
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
+
 use regex::Regex;
 use serde::{Deserialize, Serialize, Serializer};
 
@@ -57,7 +58,7 @@ impl From<&str> for MDString {
     }
 }
 
-const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"^(\(.+?\))").unwrap());
+const PARENTHETICAL_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\(.+?\))").unwrap());
 
 macro_rules! parse {
     ($t:ident) => {

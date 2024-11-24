@@ -1,8 +1,7 @@
-use std::error::Error;
+use std::{error::Error, sync::LazyLock};
 
 use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
-use once_cell::sync::Lazy;
 use rayon::prelude::*;
 use std::marker::{Send, Sync};
 
@@ -73,7 +72,7 @@ impl AsRef<LookupQuery> for LookupQuery {
     }
 }
 
-const PARENTHETICAL_REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"\((.+)\)$").unwrap());
+const PARENTHETICAL_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\((.+)\)$").unwrap());
 
 impl From<&LookupQuery> for LookupQuery {
     fn from(query: &LookupQuery) -> Self {

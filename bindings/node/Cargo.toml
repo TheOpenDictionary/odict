@@ -13,7 +13,6 @@ merge = "0.1.0"
 napi = { version = "2.12.2", default-features = false, features = ["napi4"] }
 napi-derive = "2.12.2"
 odict = { path = "../../lib", features = ["config", "sql", "search", "json"] }
-once_cell = "1.19.0"
 
 [build-dependencies]
 napi-build = "2.0.1"
