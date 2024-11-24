@@ -40,9 +40,9 @@
     "node": ">= 10"
   },
   "scripts": {
-    "build": "napi build --release --platform --pipe \"prettier -w\"",
-    "build:debug": "napi build --platform --pipe \"prettier -w\"",
-    "test": "pnpm run build && vitest --no-watch",
+    "build": "napi build --release --platform -o dist --pipe \"prettier -w\"",
+    "build:debug": "napi build --platform -o dist --pipe \"prettier -w\"",
+    "test": "vitest --no-watch",
     "universal": "napi universal",
     "artifacts": "napi artifacts",
     "version": "napi version",

@@ -195,10 +195,3 @@ Cargo.lock
 !.yarn/versions
 
 *.node
-browser.js
-index.d.ts
-index.js 
-*.wasi-browser.js 
-*.wasi.cjs 
-*-worker-browser.mjs 
-*-worker.mjs

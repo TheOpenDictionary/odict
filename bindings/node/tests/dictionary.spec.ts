@@ -5,7 +5,7 @@ import { rm, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { Dictionary } from "../index.js";
+import { Dictionary } from "../dist/index.js";
 
 describe("Dictionary", () => {
   expect.addSnapshotSerializer({

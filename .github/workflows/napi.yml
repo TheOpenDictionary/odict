@@ -116,7 +116,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: 'bindings/node/*.node'
+          path: bindings/node/dist
           if-no-files-found: error
 
   build-freebsd:
@@ -164,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: bindings/node/${{ env.APP_NAME }}.*.node
+          path: bindings/node/dist
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -203,7 +203,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -262,7 +262,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.target }}
-          path: bindings/node
+          path: bindings/node/dist
       - name: List packages
         run: ls -R .
         shell: bash
@@ -298,11 +298,11 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: bindings/node/artifacts
       - name: create npm dirs
         run: pnpm napi create-npm-dirs
       - name: Move artifacts
-        run: pnpm artifacts
+        run: pnpm --filter="@odict/node" artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
