@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{borrow::BorrowMut, error::Error, sync::LazyLock};
 
 use clap::{arg, Args};
 
@@ -19,7 +19,7 @@ pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> Result<(), 
     let dict = ctx.reader.read_from_path(args.path.as_str())?;
 
     if overwrite {
-        ctx.alias_manager.set(args.name.as_str(), &dict)
+        LazyLock::force(ctx.alias_manager).set(args.name.as_str(), &dict)
     } else {
         ctx.alias_manager.add(args.name.as_str(), &dict)
     }
