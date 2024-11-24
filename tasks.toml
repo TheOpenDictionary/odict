@@ -1,6 +1,9 @@
 run = "cargo run -p cli"
 
 [clean]
+run = "cargo clean"
+
+["clean:all"]
 depends = ["clean:*"]
 run = "rm -rf **/*.odict"
 
