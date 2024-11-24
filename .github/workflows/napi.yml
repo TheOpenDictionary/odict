@@ -10,9 +10,8 @@ permissions:
 'on':
   workflow_dispatch:
   push:
-    branches: [nickersoft/napi-alpha]
-    # tags:
-    #   - "node-*"
+    tags:
+      - "node-*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -315,21 +314,18 @@ jobs:
       - name: Publish
         shell: bash
         run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          pnpm --filter="@odict/node" publish --no-git-checks --tag next --access public
-        # run: |
-        #   npm config set provenance true
-        #   if [[ $GIT_TAG_NAME =~ "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$" ]];
-        #   then
-        #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        #     pnpm --filter="@odict/node" publish --access public
-        #   elif [[ $GIT_TAG_NAME =~ "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+" ]];
-        #   then
-        #     echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        #     pnpm --filter="@odict/node" publish --tag next --access public
-        #   else
-        #     echo "Not a release, skipping publish"
-        #   fi
+          npm config set provenance true
+          if [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+$" ]];
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            pnpm --filter="@odict/node" publish --access public
+          elif [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+" ]];
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            pnpm --filter="@odict/node" publish --tag next --access public
+          else
+            echo "Not a release, skipping publish"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
