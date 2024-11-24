@@ -11,7 +11,7 @@
       "enabled": false
     },
     {
-      "matchPackagePrefixes": ["github.com/TheOpenDictionary/odict"],
+      "matchPackagePrefixes": ["@napi-rs"],
       "enabled": false
     }
   ] 
