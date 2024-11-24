@@ -316,7 +316,7 @@ jobs:
         shell: bash
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          pnpm --filter="@odict/node" publish --tag next --access public
+          pnpm --filter="@odict/node" publish --no-git-checks --tag next --access public
         # run: |
         #   npm config set provenance true
         #   if [[ $GIT_TAG_NAME =~ "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$" ]];
