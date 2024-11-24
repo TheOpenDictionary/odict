@@ -2,13 +2,14 @@ mod helpers;
 
 #[cfg(test)]
 mod split_tests {
+
     use odict::split::SplitOptions;
 
-    use crate::helpers::EXAMPLE_DICTIONARY_1;
+    use crate::helpers::EXAMPLE_DICT_1;
 
     #[test]
     fn test_split() {
-        let dict = EXAMPLE_DICTIONARY_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
         let result = dict.split("catdog", &SplitOptions::default().threshold(1));
 
         assert_eq!(result.is_ok(), true);
@@ -19,7 +20,7 @@ mod split_tests {
 
     #[test]
     fn test_split_with_numbers() {
-        let dict = EXAMPLE_DICTIONARY_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
         let result = dict.split("2cat8dog", &SplitOptions::default().threshold(1));
 
         assert_eq!(result.is_ok(), true);

@@ -17,7 +17,7 @@ jobs:
       - name: Setup dependencies
         run: mise run setup
       - name: Run tests
-        run: mise run test
+        run: RUST_BACKTRACE=1 mise run test-all --interleave
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
