@@ -304,7 +304,7 @@ jobs:
       - name: Move artifacts
         run: pnpm --filter="@odict/node" artifacts
       - name: List packages
-        run: ls -R ./npm
+        run: ls -R ./bindings/node/npm
         shell: bash
       - name: Publish
         run: |
@@ -312,11 +312,11 @@ jobs:
           if git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
+            pnpm --filter="@odict/node" publish --access public
           elif git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+            pnpm --filter="@odict/node" publish --tag next --access public
           else
             echo "Not a release, skipping publish"
           fi
