@@ -7,6 +7,7 @@ python = "3.13.0"
 act = "0.2.69"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
+"cargo:cargo-nextest" = "latest"
 
 [task_config]
 includes = [
