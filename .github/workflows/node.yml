@@ -1,4 +1,4 @@
-name: CI
+name: Node bindings
 env:
   DEBUG: napi:*
   APP_NAME: node
