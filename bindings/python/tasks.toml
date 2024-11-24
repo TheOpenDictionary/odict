@@ -1,0 +1,3 @@
+["dev:python"]
+run = "maturin develop"
+dir = "bindings/node"

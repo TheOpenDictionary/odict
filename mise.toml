@@ -7,7 +7,12 @@ python = "3.13.0"
 act = "0.2.69"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
-"cargo:cargo-nextest" = "latest"
+"cargo:cargo-nextest" = "0.9.84"
+"pipx:maturin" = "latest"
+
+
+[env]
+_.python.venv = { path = "bindings/python/.venv", create = true }
 
 [task_config]
 includes = [
@@ -16,4 +21,5 @@ includes = [
   "cli/tasks.toml",
   "bindings/java/tasks.toml",
   "bindings/node/tasks.toml",
+  "bindings/python/tasks.toml",
 ]
