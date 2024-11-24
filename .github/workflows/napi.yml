@@ -10,9 +10,8 @@ permissions:
 'on':
   workflow_dispatch:
   push:
-    branches: [nickersoft/napi-alpha]
-    # tags:
-    #   - "node-*"
+    tags:
+      - "node-*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -306,14 +305,19 @@ jobs:
       - name: List packages
         run: ls -R ./bindings/node/npm
         shell: bash
+      - uses: olegtarasov/get-tag@v2.1.3
+        id: tagName
+        with:
+          tagRegex: "node-(.*)"
       - name: Publish
+        shell: bash
         run: |
           npm config set provenance true
-          if git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$";
+          if [[ $GIT_TAG_NAME =~ "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+$" ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --access public
-          elif git log -1 --pretty=%B | grep "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+";
+          elif [[ $GIT_TAG_NAME =~ "^v\?[0-9]\+\.[0-9]\+\.[0-9]\+" ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --tag next --access public
@@ -323,3 +327,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
