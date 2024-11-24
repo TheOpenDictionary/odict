@@ -300,7 +300,7 @@ jobs:
         with:
           path: bindings/node/artifacts
       - name: create npm dirs
-        run: pnpm napi create-npm-dirs
+        run: pnpm --filter="@odict/node" create-dirs
       - name: Move artifacts
         run: pnpm --filter="@odict/node" artifacts
       - name: List packages
