@@ -8,11 +8,13 @@ act = "0.2.69"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
 "cargo:cargo-nextest" = "0.9.84"
-"pipx:maturin" = "latest"
+"pipx:maturin" = "1.7.4"
 
+[settings]
+python.venv_stdlib = true
 
 [env]
-_.python.venv = { path = "bindings/python/.venv", create = true }
+_.python.venv = { path = ".venv", create = true }
 
 [task_config]
 includes = [

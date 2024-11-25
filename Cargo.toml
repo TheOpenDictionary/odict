@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["cli", "lib", "bindings/node", "uniffi-bindgen"]
+members = ["cli", "lib", "bindings/python", "bindings/node", "uniffi-bindgen"]
 
 [profile.release]
 codegen-units = 1

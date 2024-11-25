@@ -1,18 +1,17 @@
 [package]
-name = "python"
+name = "pyodict"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "python"
+name = "pyodict"
 crate-type = ["cdylib"]
 
 [dependencies]
-uniffi = "0.28.0"
+uniffi.workspace = true
 odict = { path = "../../lib", features = [
   "config",
-  "charabia",
   "sql",
   "search",
   "json",
@@ -20,4 +19,4 @@ odict = { path = "../../lib", features = [
 ] }
 
 [build-dependencies]
-uniffi = { version = "0.28.0", features = ["build"] }
+uniffi = { workspace = true, features = ["build"] }

@@ -1,5 +1,7 @@
-fn add(a: u32, b: u32) -> u32 {
-    a + b
-}
+pub use odict::*;
 
-uniffi::include_scaffolding!("example");
+odict::uniffi_reexport_scaffolding!();
+
+// fn add(a: u32, b: u32) -> u32 {
+//     a + b
+// }

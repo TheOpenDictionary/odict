@@ -1,3 +1,7 @@
 ["dev:python"]
 run = "maturin develop"
-dir = "bindings/node"
+dir = "bindings/python"
+
+["setup:python"]
+run = "pip install -r requirements.txt"
+dir = "bindings/python"
