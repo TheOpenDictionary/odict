@@ -1,5 +1,5 @@
 {
   "name": "root",
   "private": true,
-  "packageManager": "pnpm@10.0.0-beta.2+sha512.d219a39dda2e29a05cc721cb9e31483a79c7b49ffafa8001a25f74ac8c0bb7eea2f2b3f415dc3b65a3a0443acff389f1058ec0efa84e7fdf420684b626004b2a"
+  "packageManager": "pnpm@10.0.0-beta.3+sha512.c80ce119df06d870c6029de0040d75ca3fad1e1e386914b691cdf663ec5aa8ab470312580b11257fddf4a340fc6a9737599fc2a489b195c13bf88c86bd3f9006"
 }
