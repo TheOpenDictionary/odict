@@ -2,23 +2,30 @@ run = "cargo run -p cli"
 
 [clean]
 run = "cargo clean"
+description = "Removes all Rust build artifacts via Cargo"
 
 ["clean:all"]
 depends = ["clean:*"]
 run = "rm -rf **/*.odict"
+description = "Recursively cleans all packages in the project"
 
 [test]
 run = "cargo nextest run --all-features --verbose"
+description = "Runs nextest on all Cargo packages"
 
 [test-all]
 depends = ["test", "test:*"]
+description = "Recursively tests all packages in the project"
 
 [setup]
 depends = ["setup:*"]
 run = ["mise install", "corepack enable", "pnpm install"]
+description = "Installs all required dependencies"
 
 ["build-all"]
 depends = ["build:*"]
+description = "Recursively builds all packages in the project"
 
 ["default"]
 run = "mise run build"
+description = "Builds the project"

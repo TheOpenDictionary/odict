@@ -8,10 +8,11 @@ act = "0.2.70"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
 "cargo:cargo-nextest" = "0.9.84"
-"pipx:maturin" = "1.7.4"
+"pipx:maturin" = "1.7.8"
 
 [settings]
 python.venv_stdlib = true
+python.default_packages_file = "default-pypi"
 
 [env]
 _.python.venv = { path = ".venv", create = true }

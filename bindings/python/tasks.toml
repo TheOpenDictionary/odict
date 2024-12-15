@@ -2,6 +2,10 @@
 run = "maturin develop"
 dir = "bindings/python"
 
+["test:python"]
+run = ".venv/bin/pytest"
+depends = ["dev:python"]
+
 ["setup:python"]
 run = "pip install -r requirements.txt"
 dir = "bindings/python"
