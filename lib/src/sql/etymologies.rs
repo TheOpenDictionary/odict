@@ -41,7 +41,7 @@ pub fn insert_etymology(
     builder: &mut SQLBuilder,
     entry_id: &str,
     etymology: &Etymology,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

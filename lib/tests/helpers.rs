@@ -3,7 +3,7 @@ use std::{error::Error, sync::LazyLock};
 use odict::{DictionaryFile, DictionaryReader, DictionaryWriter};
 use tempfile::NamedTempFile;
 
-pub fn get_example_dict(name: &str) -> Result<DictionaryFile, Box<dyn Error>> {
+pub fn get_example_dict(name: &str) -> crate::Result<DictionaryFile> {
     let reader = DictionaryReader::default();
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);

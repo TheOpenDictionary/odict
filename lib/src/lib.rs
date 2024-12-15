@@ -12,6 +12,7 @@ pub mod json;
 pub mod sql;
 
 mod core;
+mod err;
 mod ext;
 mod lz4;
 mod md;
@@ -21,6 +22,7 @@ pub mod fs;
 pub mod xml;
 
 pub use self::core::*;
+pub use self::err::*;
 pub use self::ext::*;
 pub use self::models::*;
 

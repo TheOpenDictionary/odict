@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Group, MarkdownStrategy, ID};
@@ -39,7 +37,7 @@ pub fn insert_group(
     sense_id: &str,
     index: u32,
     group: &Group,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

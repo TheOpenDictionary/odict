@@ -24,7 +24,7 @@ pub enum AliasCommands {
     Delete(DeleteArgs),
 }
 
-pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> Result<(), Box<dyn Error>> {
+pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> anyhow::Result<()> {
     match command {
         AliasCommands::Add(ref args) => set(ctx, args, false),
         AliasCommands::Set(ref args) => set(ctx, args, true),

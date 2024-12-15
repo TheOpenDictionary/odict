@@ -1,8 +1,6 @@
-use std::error::Error;
-
 use rkyv::{deserialize, to_bytes};
 
-use crate::{serializable, Etymology};
+use crate::{err::Error, serializable, Etymology};
 
 serializable! {
   pub struct Entry {
@@ -19,15 +17,19 @@ serializable! {
 }
 
 impl Entry {
-    pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
-        let bytes = to_bytes::<rkyv::rancor::Error>(self)?;
+    pub fn serialize(&self) -> crate::Result<Vec<u8>> {
+        let bytes =
+            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
+
         Ok(bytes.to_vec())
     }
 }
 
 impl ArchivedEntry {
-    pub fn to_entry(&self) -> Result<Entry, Box<dyn Error>> {
-        let entry: Entry = deserialize::<Entry, rkyv::rancor::Error>(self)?;
+    pub fn to_entry(&self) -> crate::Result<Entry> {
+        let entry: Entry = deserialize::<Entry, rkyv::rancor::Error>(self)
+            .map_err(|e| Error::Deserialize(e.to_string()))?;
+
         Ok(entry)
     }
 }

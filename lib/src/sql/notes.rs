@@ -39,7 +39,7 @@ pub fn insert_note(
     definition_id: &str,
     index: u32,
     note: &Note,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

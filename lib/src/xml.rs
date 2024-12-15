@@ -6,7 +6,7 @@ use serde::Serialize;
 use crate::{Dictionary, Entry};
 
 pub trait ToXML {
-    fn to_xml(self, pretty: bool) -> Result<String, Box<dyn Error>>
+    fn to_xml(self, pretty: bool) -> crate::Result<String>
     where
         Self: Sized + Serialize,
     {

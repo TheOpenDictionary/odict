@@ -15,7 +15,7 @@ pub struct SetArgs {
     path: String,
 }
 
-pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> Result<(), Box<dyn Error>> {
+pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
     let dict = ctx.reader.read_from_path(args.path.as_str())?;
 
     if overwrite {

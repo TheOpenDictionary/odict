@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::{sql::SQLDialect, Dictionary};
+use crate::{err::Error, sql::SQLDialect, Dictionary};
 
 use super::{
     definitions::create_definitions,
@@ -15,7 +15,7 @@ use super::{
 };
 
 pub trait ToSQL {
-    fn to_sql(self, dialect: SQLDialect) -> Result<String, Box<dyn Error>>;
+    fn to_sql(self, dialect: SQLDialect) -> crate::Result<String>;
 }
 
 fn add_schema(builder: &mut SQLBuilder) {
@@ -30,7 +30,7 @@ fn add_schema(builder: &mut SQLBuilder) {
 }
 
 impl ToSQL for Dictionary {
-    fn to_sql(self, dialect: SQLDialect) -> Result<String, Box<dyn Error>> {
+    fn to_sql(self, dialect: SQLDialect) -> crate::Result<String> {
         let mut builder = SQLBuilder::new(dialect);
 
         add_schema(&mut builder);

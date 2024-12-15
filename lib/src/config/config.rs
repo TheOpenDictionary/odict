@@ -1,7 +1,7 @@
 use dirs::home_dir;
 use std::{env::var, error::Error, fs::create_dir, path::PathBuf};
 
-pub fn get_config_dir() -> Result<PathBuf, Box<dyn Error>> {
+pub fn get_config_dir() -> crate::Result<PathBuf> {
     let dir_name = var("ODICT_CONFIG_DIR").ok().unwrap_or_else(|| {
         PathBuf::from(home_dir().expect("Failed to get home directory"))
             .join(".odict")

@@ -14,7 +14,7 @@ impl ID {
         ID(Uuid::new_v4().to_string())
     }
 
-    pub fn parse(value: &str) -> Result<Self, Box<dyn Error>> {
+    pub fn parse(value: &str) -> crate::Result<Self> {
         Ok(ID(Uuid::parse_str(value)?.to_string()))
     }
 }

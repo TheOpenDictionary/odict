@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
 use crate::{context::CLIContext, print_entries};
@@ -42,7 +40,7 @@ pub struct LookupArgs {
     split: usize,
 }
 
-pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Error>> {
+pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
     let LookupArgs {
         dictionary_path: path,
         queries,
@@ -66,7 +64,7 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> Result<(), Box<dyn Err
             Ok(())
         }
         Err(err) => {
-            return Err(err);
+            return Err(anyhow::Error::from(err));
         }
     }
 }

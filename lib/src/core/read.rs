@@ -1,5 +1,4 @@
 use std::{
-    error::Error,
     fs::{canonicalize, File},
     io::{Cursor, Read},
     path::PathBuf,
@@ -10,6 +9,7 @@ use rkyv::access_unchecked;
 
 use crate::{
     constants::{SIGNATURE, VERSION},
+    err::Error,
     lz4::decompress,
     ArchivedDictionary, Dictionary,
 };
@@ -29,12 +29,12 @@ pub struct DictionaryFile {
 }
 
 impl DictionaryFile {
-    pub fn to_archive(&self) -> Result<&ArchivedDictionary, Box<dyn Error>> {
+    pub fn to_archive(&self) -> crate::Result<&ArchivedDictionary> {
         let archived = unsafe { access_unchecked::<crate::ArchivedDictionary>(&self.content[..]) };
         Ok(archived)
     }
 
-    pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
+    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
         let dict: Dictionary = self.to_archive()?.to_dictionary()?;
         Ok(dict)
     }
@@ -44,7 +44,7 @@ impl DictionaryFile {
 /*                               Helper Methods                               */
 /* -------------------------------------------------------------------------- */
 
-fn read_signature(reader: &mut Cursor<&[u8]>) -> Result<String, Box<dyn Error>> {
+fn read_signature(reader: &mut Cursor<&[u8]>) -> crate::Result<String> {
     let mut signature_bytes = [0; 5];
 
     reader.read_exact(&mut signature_bytes)?;
@@ -52,30 +52,28 @@ fn read_signature(reader: &mut Cursor<&[u8]>) -> Result<String, Box<dyn Error>> 
     let signature = signature_bytes.to_vec();
 
     if signature != SIGNATURE {
-        return Err("This is not an ODict file".into());
+        return Err(Error::InvalidSignature);
     }
 
-    Ok(String::from_utf8(signature)?)
+    Ok(String::from_utf8(signature).map_err(|e| Error::Unknown(e.to_string()))?)
 }
 
-fn read_version(reader: &mut Cursor<&[u8]>) -> Result<SemanticVersion, Box<dyn Error>> {
+fn read_version(reader: &mut Cursor<&[u8]>) -> crate::Result<SemanticVersion> {
     let version_len = reader.read_u64::<LittleEndian>()?;
     let mut version_bytes = vec![0; version_len as usize];
 
-    reader.read_exact(&mut version_bytes).map_err(|_| {
-        "Failed to read version (is it possible this file was compiled with ODict V1?)"
-    })?;
+    reader.read_exact(&mut version_bytes)?;
 
     let version = SemanticVersion::from(version_bytes);
 
     if !version.is_compatible(&VERSION) {
-        return Err("This is not compatible with the current version of ODict".into());
+        return Err(Error::Incompatible);
     }
 
     Ok(version)
 }
 
-fn read_content(reader: &mut Cursor<&[u8]>) -> Result<Vec<u8>, Box<dyn Error>> {
+fn read_content(reader: &mut Cursor<&[u8]>) -> crate::Result<Vec<u8>> {
     let content_size = reader.read_u64::<LittleEndian>()?;
     let mut content_bytes = vec![0; content_size as usize];
 
@@ -104,7 +102,7 @@ impl DictionaryReader {
         Self {}
     }
 
-    pub fn read_from_bytes(&self, data: &[u8]) -> Result<DictionaryFile, Box<dyn Error>> {
+    pub fn read_from_bytes(&self, data: &[u8]) -> crate::Result<DictionaryFile> {
         let mut reader = Cursor::new(data);
 
         let signature = read_signature(&mut reader)?;
@@ -120,9 +118,11 @@ impl DictionaryReader {
         })
     }
 
-    pub fn read_from_path(&self, path: &str) -> Result<DictionaryFile, Box<dyn Error>> {
+    pub fn read_from_path(&self, path: &str) -> crate::Result<DictionaryFile> {
         let pb = canonicalize(PathBuf::from(path))?;
+
         let mut file = File::open(&pb)?;
+
         let mut buffer = Vec::new();
 
         file.read_to_end(&mut buffer)?;

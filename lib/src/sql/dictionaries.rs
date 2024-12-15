@@ -2,7 +2,7 @@ use std::error::Error;
 
 use sea_query::{ColumnDef, Iden, Query, Table};
 
-use crate::{Dictionary, Entry};
+use crate::{err::Error, Dictionary, Entry};
 
 use super::{entries::insert_entry, utils::SQLBuilder};
 
@@ -28,10 +28,7 @@ pub fn create_dictionaries(builder: &mut SQLBuilder) {
     )
 }
 
-pub fn insert_dictionary(
-    builder: &mut SQLBuilder,
-    dictionary: &Dictionary,
-) -> Result<(), Box<dyn Error>> {
+pub fn insert_dictionary(builder: &mut SQLBuilder, dictionary: &Dictionary) -> crate::Result<()> {
     builder.add_insert(
         Query::insert()
             .into_table(Dictionaries::Table)

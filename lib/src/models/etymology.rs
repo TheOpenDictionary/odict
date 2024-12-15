@@ -33,17 +33,14 @@ mod senses {
 
     use crate::models::{PartOfSpeech, Sense};
 
-    pub fn serialize<S>(
-        map: &HashMap<PartOfSpeech, Sense>,
-        serializer: S,
-    ) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(map: &HashMap<PartOfSpeech, Sense>, serializer: S) -> crate::Result<S::Ok>
     where
         S: Serializer,
     {
         serializer.collect_seq(map.values())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashMap<PartOfSpeech, Sense>, D::Error>
+    pub fn deserialize<'de, D>(deserializer: D) -> crate::Result<HashMap<PartOfSpeech, Sense>>
     where
         D: Deserializer<'de>,
     {

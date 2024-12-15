@@ -12,6 +12,6 @@ pub struct DeleteArgs {
     name: String,
 }
 
-pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> Result<(), Box<dyn Error>> {
+pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> anyhow::Result<()> {
     ctx.alias_manager.delete(args.name.as_str())
 }

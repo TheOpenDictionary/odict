@@ -1,9 +1,10 @@
 use merge::Merge;
 use napi::Either;
+use odict::error::Error;
 
 use crate::types::{DictionaryOptions, LookupQuery};
 
-pub fn cast_error(e: Box<dyn std::error::Error>) -> napi::Error {
+pub fn cast_error(e: Error) -> napi::Error {
   napi::Error::new(napi::Status::GenericFailure, format!("{}", e))
 }
 

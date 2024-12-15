@@ -36,7 +36,7 @@ pub fn insert_entry(
     builder: &mut SQLBuilder,
     dictionary_id: &str,
     entry: &Entry,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

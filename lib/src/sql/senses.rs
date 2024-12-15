@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{DefinitionType, Sense, ID};
@@ -39,7 +37,7 @@ pub fn insert_sense(
     builder: &mut SQLBuilder,
     etymology_id: &str,
     sense: &Sense,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

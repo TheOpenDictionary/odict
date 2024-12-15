@@ -5,7 +5,7 @@ use serde::{Serialize, Serializer};
 pub fn ordered_map<S, K: Ord + Serialize, V: Serialize>(
     value: &HashMap<K, V>,
     serializer: S,
-) -> Result<S::Ok, S::Error>
+) -> crate::Result<S::Ok>
 where
     S: Serializer,
 {

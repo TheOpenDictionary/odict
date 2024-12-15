@@ -1,6 +1,7 @@
-use std::{error::Error, ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path::PathBuf};
+use std::{ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path::PathBuf};
 use tantivy::{doc, tokenizer::TextAnalyzer, Index};
 
+use crate::err::Error;
 use crate::{
     config::get_config_dir, preview::PreviewOptions, ArchivedDictionary, ArchivedEntry, Dictionary,
 };
@@ -75,7 +76,7 @@ macro_rules! index {
         pub fn index<Options: AsRef<IndexOptions>>(
             &self,
             options: Options,
-        ) -> Result<(), Box<dyn Error>> {
+        ) -> crate::Result<()> {
             let opts = options.as_ref();
             let index_path = opts.dir.join(self.id.as_str());
 
@@ -120,11 +121,11 @@ macro_rules! index {
 // Workaround
 
 trait SerializeEntry {
-    fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>>;
+    fn serialize(&self) -> crate::Result<Vec<u8>>;
 }
 
 impl SerializeEntry for &ArchivedEntry {
-    fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
+    fn serialize(&self) -> crate::Result<Vec<u8>> {
         self.to_entry().unwrap().serialize()
     }
 }

@@ -13,7 +13,7 @@ pub struct AliasManager {
 impl AliasManager {
     pub fn new<S: AsRef<OsStr> + ?Sized>(
         config_path: &S, // May be used in the future?
-    ) -> Result<Self, Box<dyn Error>> {
+    ) -> crate::Result<Self> {
         let path = PathBuf::from(config_path);
 
         if !path.exists() {
@@ -35,13 +35,13 @@ impl Default for AliasManager {
 }
 
 impl AliasManager {
-    fn save_to_disk(&self) -> Result<(), Box<dyn Error>> {
+    fn save_to_disk(&self) -> crate::Result<()> {
         let config_bytes = to_vec(&self.aliases)?;
         fs::write(&self.path, config_bytes)?;
         Ok(())
     }
 
-    pub fn add(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
+    pub fn add(&mut self, alias: &str, file: &DictionaryFile) -> crate::Result<()> {
         if self.get(alias).is_none() {
             self.set(alias, file)
         } else {
@@ -49,7 +49,7 @@ impl AliasManager {
         }
     }
 
-    pub fn set(&mut self, alias: &str, file: &DictionaryFile) -> Result<(), Box<dyn Error>> {
+    pub fn set(&mut self, alias: &str, file: &DictionaryFile) -> crate::Result<()> {
         match &file.path {
             Some(path) => {
                 self.aliases
@@ -60,7 +60,7 @@ impl AliasManager {
         }
     }
 
-    pub fn delete(&mut self, alias: &str) -> Result<(), Box<dyn Error>> {
+    pub fn delete(&mut self, alias: &str) -> crate::Result<()> {
         self.aliases.remove(alias);
         self.save_to_disk()?;
         Ok(())
@@ -72,7 +72,7 @@ impl AliasManager {
 }
 
 impl DictionaryFile {
-    pub fn alias_to(&self, name: &str) -> Result<(), Box<dyn Error>> {
+    pub fn alias_to(&self, name: &str) -> crate::Result<()> {
         let mut manager = AliasManager::default();
         manager.add(name, self)
     }

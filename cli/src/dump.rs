@@ -22,7 +22,7 @@ pub struct DumpArgs {
     output: Option<String>,
 }
 
-pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> Result<(), Box<dyn Error>> {
+pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
     let DumpArgs {
         input,
         format,

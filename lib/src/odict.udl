@@ -1,6 +1,8 @@
 namespace odict {
 };
 
+interface DictionaryFile {};
+
 interface DictionaryReader {
   constructor();
 };

@@ -1,7 +1,8 @@
 use std::fs::read_to_string;
 use std::path::Path;
-use std::{error::Error, fs::File, io::Write};
+use std::{fs::File, io::Write};
 
+use crate::err::Error;
 use crate::lz4::compress;
 use crate::{Dictionary, ToDictionary};
 
@@ -20,8 +21,9 @@ impl DictionaryWriter {
         Self {}
     }
 
-    pub fn write_to_bytes(&self, dictionary: &Dictionary) -> Result<Vec<u8>, Box<dyn Error>> {
-        let compressed = compress(&dictionary.serialize()?)?;
+    pub fn write_to_bytes(&self, dictionary: &Dictionary) -> crate::Result<Vec<u8>> {
+        let compressed =
+            compress(&dictionary.serialize()?).map_err(|e| Error::Write(e.to_string()))?;
 
         let version_bytes = VERSION.as_bytes();
         let version_size = version_bytes.len() as u64;
@@ -44,23 +46,29 @@ impl DictionaryWriter {
         output.extend_from_slice(&compressed);
 
         if SIGNATURE.len() != 5 {
-            return Err("Signature bytes do not equal 5".into());
+            return Err(Error::Write("Signature bytes do not equal 5".into()));
         }
 
         if version_size_bytes.len() != 8 {
-            return Err("Version byte count does not equal 8".into());
+            return Err(Error::Write("Version byte count does not equal 8".into()));
         }
 
         if version_bytes.len() != version_size as usize {
-            return Err("Version does not equal the computed byte count".into());
+            return Err(Error::Write(
+                "Version byte count does not equal the computed byte count".into(),
+            ));
         }
 
         if compressed_size_bytes.len() != 8 {
-            return Err("Content byte count does not equal 8".into());
+            return Err(Error::Write(
+                "Compressed byte count does not equal 8".into(),
+            ));
         }
 
         if compressed.len() != compressed_size as usize {
-            return Err("Content does not equal the computed byte count".into());
+            return Err(Error::Write(
+                "Compressed byte count does not equal the computed byte count".into(),
+            ));
         }
 
         Ok(output)
@@ -70,7 +78,7 @@ impl DictionaryWriter {
         &self,
         dictionary: &Dictionary,
         path: P,
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> crate::Result<()> {
         let bytes = self.write_to_bytes(dictionary)?;
         let mut file = File::create(path)?;
 
@@ -101,7 +109,7 @@ impl DictionaryWriter {
         &self,
         input_path: I,
         output_path: O,
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> crate::Result<()> {
         let dict = read_to_string(input_path)?.to_dictionary()?;
         self.write_to_path(&dict, output_path)?;
         Ok(())
