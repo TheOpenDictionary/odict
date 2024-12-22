@@ -27,14 +27,28 @@ def dict2(dict2_path):
 
 
 def test_dictionary_path(dict1, dict1_path, dict2, dict2_path):
-    # Check that the compiled dictionary path contains the original XML path with .odict extension
     assert dict1.path.replace(".odict", "") in dict1_path
     assert dict2.path.replace(".odict", "") in dict2_path
 
 
 def test_lookup(dict1, snapshot):
-    # Test basic lookup
     result = dict1.lookup("cat (cat)")
-    assert (
-        result == snapshot
-    )  # You'll need to use a snapshot testing library like pytest-snapshot
+    assert result == snapshot
+
+
+def test_lookup_no_split(dict1):
+    # Test lookup without splitting
+    result = dict1.lookup("catdog")
+    assert len(result[0]) == 0
+
+
+def test_lookup_with_split(dict1, snapshot):
+    # Test lookup with splitting
+    result = dict1.lookup("catdog", split=3)
+    assert result == snapshot  # Use snapshot testing
+
+
+def test_lexicon(dict1):
+    # Test lexicon retrieval
+    result = dict1.lexicon()
+    assert result == ["cat", "dog", "poo", "ran", "run"]

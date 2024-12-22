@@ -2,8 +2,15 @@
 # name: test_lookup
   list([
     list([
-      Entry(
-      ),
+      Entry { term: "cat", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some(MDString { mds: MDString { value: "Latin root" } }), senses: {"n": Sense { pos: "n", definitions: [Left(Definition { id: None, value: MDString { mds: MDString { value: "a cat" } }, examples: [Example { value: MDString { mds: MDString { value: "There goes a cat!" } } }], notes: [Note { id: None, value: MDString { mds: MDString { value: "Some definition note" } }, examples: [Example { value: MDString { mds: MDString { value: "Some example" } } }] }] })] }} }] },
+    ]),
+  ])
+# ---
+# name: test_lookup_with_split
+  list([
+    list([
+      Entry { term: "cat", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some(MDString { mds: MDString { value: "Latin root" } }), senses: {"n": Sense { pos: "n", definitions: [Left(Definition { id: None, value: MDString { mds: MDString { value: "a cat" } }, examples: [Example { value: MDString { mds: MDString { value: "There goes a cat!" } } }], notes: [Note { id: None, value: MDString { mds: MDString { value: "Some definition note" } }, examples: [Example { value: MDString { mds: MDString { value: "Some example" } } }] }] })] }} }] },
+      Entry { term: "dog", see_also: None, etymologies: [Etymology { id: None, pronunciation: Some("dooooog"), description: Some(MDString { mds: MDString { value: "Latin root" } }), senses: {"un": Sense { pos: "un", definitions: [Left(Definition { id: None, value: MDString { mds: MDString { value: "a dog" } }, examples: [], notes: [] })] }} }] },
     ]),
   ])
 # ---

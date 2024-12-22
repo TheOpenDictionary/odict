@@ -5,10 +5,22 @@ use crate::utils::cast_error;
 use super::etymology::Etymology;
 
 #[pyclass]
+#[derive(Debug)]
 pub struct Entry {
     pub term: String,
     pub see_also: Option<String>,
     pub etymologies: Vec<Etymology>,
+}
+
+#[pymethods]
+impl Entry {
+    pub fn __repr__(&self) -> String {
+        format!("{:?}", self)
+    }
+
+    pub fn __str__(&self) -> String {
+        format!("{:?}", self)
+    }
 }
 
 impl Entry {

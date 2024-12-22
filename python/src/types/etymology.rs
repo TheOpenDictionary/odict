@@ -5,6 +5,7 @@ use pyo3::prelude::*;
 use super::{mdstring::MDString, sense::Sense};
 
 #[pyclass]
+#[derive(Debug)]
 pub struct Etymology {
     pub id: Option<String>,
     pub pronunciation: Option<String>,

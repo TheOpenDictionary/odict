@@ -29,6 +29,7 @@ impl From<&str> for MarkdownStrategy {
 }
 
 #[pyclass]
+#[derive(Debug)]
 pub struct MDString {
     mds: odict::MDString,
 }

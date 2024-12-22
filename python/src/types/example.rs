@@ -3,6 +3,7 @@ use pyo3::prelude::*;
 use super::mdstring::MDString;
 
 #[pyclass]
+#[derive(Debug)]
 pub struct Example {
     pub value: MDString,
 }

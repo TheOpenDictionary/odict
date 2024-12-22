@@ -138,12 +138,12 @@ impl Dictionary {
         lookup(&(self.file), &queries, split, follow)
     }
 
-    // pub fn lexicon(&self) -> Result<Vec<&str>> {
-    //     let dict = self.file.to_archive().map_err(cast_error)?;
-    //     let lexicon = dict.lexicon();
+    pub fn lexicon(&self) -> PyResult<Vec<&str>> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
+        let lexicon = dict.lexicon();
 
-    //     Ok(lexicon)
-    // }
+        Ok(lexicon)
+    }
 
     // #[pyo3(signature = (env, query, options=None))]
     // pub fn split(
