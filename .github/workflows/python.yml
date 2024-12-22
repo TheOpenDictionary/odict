@@ -62,6 +62,7 @@ jobs:
           source .venv/bin/activate
           pip install pyodict --find-links dist --force-reinstall
           pip install pytest
+          pip install syrupy
           cd python && pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') && matrix.platform.target != 'ppc64' }}
@@ -122,6 +123,7 @@ jobs:
             source .venv/bin/activate
             pip install pyodict --no-index --find-links dist --force-reinstall
             pip install pytest
+            pip install syrupy
             cd python && pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') }}
@@ -137,6 +139,7 @@ jobs:
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install pytest
+            pip install syrupy
             pip install pyodict --find-links dist --force-reinstall
             cd python && pytest
 
@@ -175,6 +178,7 @@ jobs:
           source .venv/Scripts/activate
           pip install pyodict --find-links dist --force-reinstall
           pip install pytest
+          pip install syrupy
           cd python && pytest
 
   macos:
@@ -209,6 +213,7 @@ jobs:
           source .venv/bin/activate
           pip install pyodict --find-links dist --force-reinstall
           pip install pytest
+          pip install syrupy
           cd python && pytest
 
   sdist:
