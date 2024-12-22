@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node/*.node
+          path: node/*.node
           if-no-files-found: error
 
   build-freebsd:
@@ -163,7 +163,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: bindings/node/*.node
+          path: node/*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -202,7 +202,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: bindings/node
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -261,7 +261,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.target }}
-          path: bindings/node
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -275,7 +275,7 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           options: -v ${{ steps.docker.outputs.PNPM_STORE_PATH }}:${{ steps.docker.outputs.PNPM_STORE_PATH }} -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}
-          run: cd bindings/node && npm run test
+          run: cd node && npm run test
   publish:
     name: Publish
     runs-on: ubuntu-latest
@@ -297,13 +297,13 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: bindings/node/artifacts
+          path: node/artifacts
       - name: create npm dirs
         run: pnpm --filter="@odict/node" create-dirs
       - name: Move artifacts
         run: pnpm --filter="@odict/node" artifacts
       - name: List packages
-        run: ls -R ./bindings/node/npm
+        run: ls -R ./node/npm
         shell: bash
       - uses: olegtarasov/get-tag@v2.1.3
         id: tagName

@@ -1,0 +1,19 @@
+["dev:python"]
+run = "maturin develop"
+dir = "python"
+
+["build:python"]
+run = "maturin build"
+dir = "python"
+
+["snapshot:python"]
+run = ".venv/bin/pytest --snapshot-update"
+depends = ["dev:python"]
+
+["test:python"]
+run = ".venv/bin/pytest"
+depends = ["dev:python"]
+
+["setup:python"]
+run = "pip install -r requirements.txt"
+dir = "python"

@@ -4,7 +4,7 @@ use serde_json::{to_string, to_string_pretty};
 use super::dictionary::DictionaryJSON;
 use super::entry::EntryJSON;
 
-use crate::{err::Error, ArchivedEntry, Dictionary, Entry};
+use crate::{ArchivedEntry, Dictionary, Entry};
 
 pub struct JSONSerializer {}
 

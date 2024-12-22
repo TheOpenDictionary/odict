@@ -1,6 +1,4 @@
-use std::error::Error;
-
-use crate::{err::Error, sql::SQLDialect, Dictionary};
+use crate::{sql::SQLDialect, Dictionary};
 
 use super::{
     definitions::create_definitions,

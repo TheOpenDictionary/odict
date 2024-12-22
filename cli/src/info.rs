@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use crate::context::CLIContext;
 use clap::{arg, command, Args};

@@ -2,7 +2,7 @@ use quick_xml::de::from_str;
 use rkyv::{deserialize, to_bytes};
 use std::collections::HashMap;
 
-use crate::{err::Error, serializable};
+use crate::{error::Error, serializable};
 
 use super::{entry::Entry, id::ID};
 
@@ -31,14 +31,14 @@ mod entries {
 
     use crate::models::Entry;
 
-    pub fn serialize<S>(map: &HashMap<String, Entry>, serializer: S) -> crate::Result<S::Ok>
+    pub fn serialize<S>(map: &HashMap<String, Entry>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
         serializer.collect_seq(map.values())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> crate::Result<HashMap<String, Entry>>
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashMap<String, Entry>, D::Error>
     where
         D: Deserializer<'de>,
     {
@@ -61,7 +61,7 @@ impl Dictionary {
     }
 
     pub fn from(xml: &str) -> crate::Result<Self> {
-        let dict = from_str(xml)?;
+        let dict = from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))?;
         Ok(dict)
     }
 }

@@ -1,8 +1,6 @@
 use std::sync::LazyLock;
 
-use crate::{
-    err::Error, split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry,
-};
+use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 use rayon::prelude::*;
 use std::marker::{Send, Sync};

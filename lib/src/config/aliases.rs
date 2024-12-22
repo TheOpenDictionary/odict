@@ -1,5 +1,5 @@
 use serde_json::to_vec;
-use std::{collections::HashMap, error::Error, ffi::OsStr, fs, fs::read_to_string, path::PathBuf};
+use std::{collections::HashMap, ffi::OsStr, fs, fs::read_to_string, path::PathBuf};
 
 use crate::DictionaryFile;
 
@@ -45,7 +45,7 @@ impl AliasManager {
         if self.get(alias).is_none() {
             self.set(alias, file)
         } else {
-            Err("An alias with this name already exists!".into())
+            Err(crate::Error::AliasExists)
         }
     }
 
@@ -56,7 +56,7 @@ impl AliasManager {
                     .insert(alias.to_string(), path.to_string_lossy().to_string());
                 self.save_to_disk()
             }
-            None => Err("This dictionary has no path!".into()),
+            None => Err(crate::Error::DictionaryMissingPath),
         }
     }
 

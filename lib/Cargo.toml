@@ -15,7 +15,6 @@ config = ["dep:dirs"]
 charabia = ["dep:charabia"]
 search = ["dep:tantivy"]
 default = ["json", "sql", "config"]
-uniffi = ["dep:uniffi"]
 
 [[bench]]
 name = "lib"
@@ -34,7 +33,6 @@ serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 pulldown-cmark = "0.12.0"
 validation = "0.0.1"
-uniffi = { workspace = true, optional = true }
 
 # feature=json
 serde_json = { version = "1.0.116", optional = true }
@@ -47,9 +45,7 @@ dirs = { version = "5.0.1", optional = true }
 # feature=sql
 sea-query = { version = "0.32.0", optional = true }
 thiserror = "2.0.7"
-
-[build-dependencies]
-uniffi = { optional = true, workspace = true, features = ["build"] }
+anyhow = "1.0.94"
 
 [dev-dependencies]
 insta = "1.38.0"

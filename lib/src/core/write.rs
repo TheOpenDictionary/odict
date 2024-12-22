@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 use std::path::Path;
 use std::{fs::File, io::Write};
 
-use crate::err::Error;
+use crate::error::Error;
 use crate::lz4::compress;
 use crate::{Dictionary, ToDictionary};
 

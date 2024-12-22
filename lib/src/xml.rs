@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use quick_xml::se::{to_string, Serializer};
 use serde::Serialize;
 
@@ -18,11 +16,12 @@ pub trait ToXML {
 
                 ser.indent(' ', 2);
 
-                self.serialize(ser)?;
+                self.serialize(ser)
+                    .map_err(|e| crate::Error::Serialize(e.to_string()))?;
 
                 Ok(format!("{}", buffer))
             }
-            false => Ok(to_string(&self)?),
+            false => Ok(to_string(&self).map_err(|e| crate::Error::Serialize(e.to_string()))?),
         }
     }
 }

@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use anyhow::Context;
 use clap::{arg, command, Args};
 use odict::fs::infer_path;
 
@@ -24,7 +25,7 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
         .writer
         .compile_xml(&input, &out)
         .map(|_| ())
-        .map_err(|e| format!("An error occurred compiling your XML: {}", e))?;
+        .with_context(|| "An error occurred compiling your XML")?;
 
     Ok(())
 }

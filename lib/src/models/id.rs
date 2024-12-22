@@ -1,4 +1,4 @@
-use std::{error::Error, ops::Deref};
+use std::ops::Deref;
 
 use rkyv::string::ArchivedString;
 use uuid::Uuid;
@@ -15,7 +15,9 @@ impl ID {
     }
 
     pub fn parse(value: &str) -> crate::Result<Self> {
-        Ok(ID(Uuid::parse_str(value)?.to_string()))
+        Ok(ID(Uuid::parse_str(value)
+            .map_err(|e| crate::Error::InvalidID(e.to_string()))?
+            .to_string()))
     }
 }
 

@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["cli", "lib", "bindings/python", "bindings/node", "uniffi-bindgen"]
+members = ["cli", "lib", "python", "node"]
 
 [profile.release]
 codegen-units = 1
@@ -15,6 +15,3 @@ insta.opt-level = 3
 [profile.dist]
 inherits = "release"
 lto = "thin"
-
-[workspace.dependencies]
-uniffi = "0.28.0"

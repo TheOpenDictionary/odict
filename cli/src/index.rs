@@ -1,4 +1,4 @@
-use std::{error::Error, path::PathBuf};
+use std::path::PathBuf;
 
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};

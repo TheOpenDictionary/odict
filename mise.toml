@@ -22,7 +22,7 @@ includes = [
   "tasks.toml",
   "lib/tasks.toml",
   "cli/tasks.toml",
-  "bindings/java/tasks.toml",
-  "bindings/node/tasks.toml",
-  "bindings/python/tasks.toml",
+  "java/tasks.toml",
+  "node/tasks.toml",
+  "python/tasks.toml",
 ]

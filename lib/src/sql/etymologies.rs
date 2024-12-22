@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Etymology, MarkdownStrategy, Sense, ID};

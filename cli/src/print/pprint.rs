@@ -2,8 +2,8 @@ use std::{borrow::Cow, sync::LazyLock};
 
 use console::{style, Style};
 use odict::{
-    error::Error, Definition, DefinitionType, Entry, Etymology, Example, Group, MarkdownStrategy,
-    Note, Sense,
+    Definition, DefinitionType, Entry, Error, Etymology, Example, Group, MarkdownStrategy, Note,
+    Sense,
 };
 
 use crate::CLIContext;
@@ -144,12 +144,7 @@ fn print_definition(
     Ok(())
 }
 
-fn print_group(
-    ctx: &CLIContext,
-    index: usize,
-    group: &Group,
-    entry: &Entry,
-) -> Result<(), Error> {
+fn print_group(ctx: &CLIContext, index: usize, group: &Group, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     let text = &format!(

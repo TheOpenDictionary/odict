@@ -8,7 +8,7 @@ use tantivy::{
     collector::TopDocs, query::QueryParser, tokenizer::TextAnalyzer, Index, ReloadPolicy,
 };
 
-use crate::{err::Error, ArchivedDictionary, Dictionary, Entry};
+use crate::{ArchivedDictionary, Dictionary, Entry};
 
 use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 use super::index::IndexOptions;

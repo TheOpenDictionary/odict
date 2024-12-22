@@ -1,4 +1,4 @@
-use odict::{error::Error, json::ToJSON, xml::ToXML, Entry};
+use odict::{json::ToJSON, xml::ToXML, Entry, Error};
 
 use super::pprint::pretty_print;
 use crate::{enums::PrintFormat, CLIContext};

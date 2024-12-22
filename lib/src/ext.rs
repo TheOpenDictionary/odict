@@ -1,4 +1,4 @@
-use crate::{err::Error, Dictionary};
+use crate::Dictionary;
 
 pub trait ToDictionary {
     fn to_dictionary(&self) -> crate::Result<Dictionary>;

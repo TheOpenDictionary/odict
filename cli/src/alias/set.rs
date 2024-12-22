@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use clap::{arg, Args};
 
@@ -19,8 +18,8 @@ pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> anyhow::Res
     let dict = ctx.reader.read_from_path(args.path.as_str())?;
 
     if overwrite {
-        ctx.alias_manager.set(args.name.as_str(), &dict)
+        anyhow::Ok(ctx.alias_manager.set(args.name.as_str(), &dict)?)
     } else {
-        ctx.alias_manager.add(args.name.as_str(), &dict)
+        anyhow::Ok(ctx.alias_manager.add(args.name.as_str(), &dict)?)
     }
 }

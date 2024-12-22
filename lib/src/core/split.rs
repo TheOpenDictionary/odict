@@ -1,4 +1,4 @@
-use crate::{err::Error, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 /* -------------------------------------------------------------------------- */
 /*                                Split Options                               */

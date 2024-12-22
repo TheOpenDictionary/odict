@@ -1,6 +1,6 @@
 use rkyv::{deserialize, to_bytes};
 
-use crate::{err::Error, serializable, Etymology};
+use crate::{error::Error, serializable, Etymology};
 
 serializable! {
   pub struct Entry {

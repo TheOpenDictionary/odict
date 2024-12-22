@@ -1,4 +1,4 @@
-use std::{error::Error, fs};
+use std::fs;
 
 use clap::{arg, command, Args};
 use odict::{

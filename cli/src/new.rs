@@ -1,10 +1,10 @@
 use std::{
-    error::Error,
     fs::{canonicalize, File},
     io::Write,
     path::PathBuf,
 };
 
+use anyhow::anyhow;
 use clap::{arg, command, Args};
 
 use crate::CLIContext;
@@ -38,7 +38,7 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
     let output = PathBuf::from(format!("{}.xml", args.file_name));
 
     if output.exists() {
-        return Err(anyhow::Error(
+        return Err(anyhow!(
             "\n🚫️ A file already exists with this name! Please choose another one.",
         ));
     }

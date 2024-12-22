@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use odict::{ArchivedEntry, Entry};
 
 use crate::CLIContext;

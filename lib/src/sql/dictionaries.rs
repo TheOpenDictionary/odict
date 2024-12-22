@@ -1,8 +1,6 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, Iden, Query, Table};
 
-use crate::{err::Error, Dictionary, Entry};
+use crate::{Dictionary, Entry};
 
 use super::{entries::insert_entry, utils::SQLBuilder};
 

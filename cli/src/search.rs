@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use clap::{arg, command, Args};
 use odict::search::{get_default_index_dir, SearchOptions};

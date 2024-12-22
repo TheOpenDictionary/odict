@@ -9,7 +9,7 @@ use rkyv::access_unchecked;
 
 use crate::{
     constants::{SIGNATURE, VERSION},
-    err::Error,
+    error::Error,
     lz4::decompress,
     ArchivedDictionary, Dictionary,
 };
@@ -55,7 +55,7 @@ fn read_signature(reader: &mut Cursor<&[u8]>) -> crate::Result<String> {
         return Err(Error::InvalidSignature);
     }
 
-    Ok(String::from_utf8(signature).map_err(|e| Error::Unknown(e.to_string()))?)
+    Ok(String::from_utf8(signature)?)
 }
 
 fn read_version(reader: &mut Cursor<&[u8]>) -> crate::Result<SemanticVersion> {
