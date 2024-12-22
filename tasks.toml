@@ -9,6 +9,10 @@ depends = ["clean:*"]
 run = "rm -rf **/*.odict"
 description = "Recursively cleans all packages in the project"
 
+[generate-ci]
+depends = ["generate-ci:*"]
+description = "Generates GitHub Actions CI workflows for all eligible packages in the project"
+
 [test]
 run = "cargo nextest run --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
@@ -19,7 +23,7 @@ description = "Recursively tests all packages in the project"
 
 [setup]
 depends = ["setup:*"]
-run = ["mise install", "corepack enable", "pnpm install"]
+run = ["mise install", "corepack enable"]
 description = "Installs all required dependencies"
 
 ["build-all"]

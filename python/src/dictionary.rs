@@ -234,38 +234,3 @@ impl Dictionary {
         Ok(entries)
     }
 }
-
-// #[cfg(test)]
-// mod test {
-//     use merge::Merge;
-
-//     #[test]
-//     fn test_options_merging() {
-//         let opts1 = crate::types::DictionaryOptions {
-//             search: None,
-//             index: Some(crate::types::IndexOptions {
-//                 directory: Some("test".to_string()),
-//                 memory: Some(1234),
-//                 overwrite: Some(false),
-//             }),
-//             split: { Some(crate::types::SplitOptions { threshold: Some(5) }) },
-//         };
-
-//         let mut opts2: Option<crate::types::IndexOptions> = None;
-
-//         let mut opts3: Option<crate::types::SplitOptions> = Some(crate::types::SplitOptions {
-//             threshold: Some(10),
-//         });
-
-//         opts2.merge(opts1.index);
-//         opts3.merge(opts1.split);
-
-//         let result1 = opts2.unwrap();
-//         let result2 = opts3.unwrap();
-
-//         assert_eq!(result1.directory.unwrap(), "test".to_string());
-//         assert_eq!(result1.memory.unwrap(), 1234);
-//         assert_eq!(result1.overwrite.unwrap(), false);
-//         assert_eq!(result2.threshold.unwrap(), 10);
-//     }
-// }

@@ -7,3 +7,7 @@ alias = "build"
 ["run:cli"]
 run = "cargo run -p cli"
 alias = "run"
+
+["generate-ci:cli"]
+run = "dist init -y"
+description = "Generate GitHub Actions CI workflow for the Rust CLI"

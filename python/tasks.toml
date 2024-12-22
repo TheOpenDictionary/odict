@@ -19,8 +19,12 @@ run = ".venv/bin/pytest --snapshot-update"
 depends = ["dev:python"]
 
 ["test:python"]
-run = ".venv/bin/pytest"
+run = ".venv/bin/pytest -vv"
 depends = ["dev:python"]
+
+["generate-ci:python"]
+description = "Generate GitHub Actions CI workflow for Python"
+run = "maturin generate-ci github -m python/Cargo.toml -o .github/workflows/python.yml --pytest"
 
 ["setup:python"]
 run = "pip install -r requirements.txt"

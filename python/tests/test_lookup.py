@@ -47,6 +47,7 @@ def test_lookup_no_split(dict1):
 def test_lookup_with_split(dict1, snapshot):
     # Test lookup with splitting
     result = dict1.lookup("catdog", split=3)
+    print(result)
     assert result == snapshot  # Use snapshot testing
 
 

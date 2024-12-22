@@ -1,9 +1,9 @@
-use std::{error::Error, sync::LazyLock};
+use std::sync::LazyLock;
 
-use odict::{DictionaryFile, DictionaryReader, DictionaryWriter};
+use odict::{DictionaryFile, DictionaryReader, DictionaryWriter, Result};
 use tempfile::NamedTempFile;
 
-pub fn get_example_dict(name: &str) -> crate::Result<DictionaryFile> {
+pub fn get_example_dict(name: &str) -> Result<DictionaryFile> {
     let reader = DictionaryReader::default();
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);
