@@ -1,9 +1,7 @@
 ["build:node"]
-depends = ["setup:node"]
 run = "pnpm --filter=\"@odict/node\" build"
 
 ["publish:node"]
-depends = ["setup:node"]
 run = "pnpm --filter=\"@odict/node\" npm publish"
 
 ["test:node"]
@@ -16,6 +14,3 @@ hide = true
 
 ["clean:node"]
 run = "rm -f **/*.node"
-
-["setup:node"]
-run = "pnpm install"

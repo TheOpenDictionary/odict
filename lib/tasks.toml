@@ -1,4 +1,8 @@
 "publish:lib" = "cargo publish -p odict"
-"build:lib" = "cargo build -p odict"
 "clean:lib" = "cargo clean -p odict"
 "bench:lib" = "cargo bench -p odict"
+
+["build:lib"]
+run = "cargo build -p odict"
+sources = ["lib/src/**/*.rs", "lib/Cargo.toml"]
+outputs = { auto = true }

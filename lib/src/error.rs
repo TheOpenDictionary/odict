@@ -48,9 +48,11 @@ pub enum Error {
     #[error("Failed to process Markdown: {0}")]
     Markdown(String),
 
+    #[cfg(feature = "search")]
     #[error(transparent)]
     InvalidQuery(#[from] tantivy::query::QueryParserError),
 
+    #[cfg(feature = "search")]
     #[error(transparent)]
     Index(#[from] tantivy::error::TantivyError),
 
