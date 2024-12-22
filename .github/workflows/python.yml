@@ -74,11 +74,11 @@ jobs:
           install: |
             apt-get update
             apt-get install -y --no-install-recommends python3 python3-pip
-            pip3 install -U pip pytest
+            pip3 install -U pip pytest syrupy
           run: |
             set -e
             pip3 install pyodict --find-links dist --force-reinstall
-            cd python && pytest
+            cd python && pytest 
 
   musllinux:
     runs-on: ${{ matrix.platform.runner }}

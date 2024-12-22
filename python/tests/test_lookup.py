@@ -29,8 +29,8 @@ def dict2(dict2_path):
 
 
 def test_dictionary_path(dict1, dict1_path, dict2, dict2_path):
-    assert dict1.path.replace(".odict", "") in dict1_path
-    assert dict2.path.replace(".odict", "") in dict2_path
+    assert dict1_path.replace(".xml", "") in dict1.path
+    assert dict2_path.replace(".xml", "") in dict2.path
 
 
 def test_lookup(dict1, snapshot):

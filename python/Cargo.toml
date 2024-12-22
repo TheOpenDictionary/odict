@@ -9,7 +9,6 @@ name = "pyodict"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.23.1", features = ["either", "serde"] }
+pyo3 = { version = "0.23.1", features = ["either"] }
 odict = { path = "../lib", features = ["config", "sql", "search", "json"] }
-either = { version = "*", features = ["serde"] }
-serde = "1.0.216"
+either = { version = "*" }
