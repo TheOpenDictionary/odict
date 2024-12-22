@@ -2662,7 +2662,6 @@ name = "pyodict"
 version = "0.1.0"
 dependencies = [
  "either",
- "merge",
  "odict",
  "pyo3",
 ]

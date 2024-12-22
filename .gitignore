@@ -764,3 +764,4 @@ TSWLatexianTemp*
 !.cargo/config.toml
 .pnpm-store
 semicolon_delimited_script
+*.pdf

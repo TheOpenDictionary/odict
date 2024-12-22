@@ -9,6 +9,8 @@ act = "0.2.70"
 "cargo:cargo-dist" = "0.25.1"
 "cargo:cargo-nextest" = "0.9.84"
 "pipx:maturin" = "1.7.8"
+"pipx:black" = "latest"
+"pipx:flake8" = "latest"
 
 [settings]
 python.venv_stdlib = true

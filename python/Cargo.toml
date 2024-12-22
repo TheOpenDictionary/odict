@@ -11,5 +11,4 @@ crate-type = ["cdylib"]
 [dependencies]
 pyo3 = { version = "0.23.1", features = ["either"] }
 odict = { path = "../lib", features = ["config", "sql", "search", "json"] }
-merge = "0.1.0"
 either = "*"

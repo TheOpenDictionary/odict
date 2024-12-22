@@ -1,7 +1,11 @@
 use std::{borrow::BorrowMut, path::PathBuf};
 
 use either::Either;
-use odict::lookup::LookupOptions;
+use odict::{
+    lookup::LookupOptions,
+    search::{IndexOptions, SearchOptions},
+    split::SplitOptions,
+};
 use pyo3::prelude::*;
 
 use crate::{types::Entry, utils::cast_error};
@@ -145,65 +149,90 @@ impl Dictionary {
         Ok(lexicon)
     }
 
-    // #[pyo3(signature = (env, query, options=None))]
-    // pub fn split(
-    //     &self,
-    //     env: Env,
-    //     query: String,
-    //     options: Option<SplitOptions>,
-    // ) -> PyResult<Vec<Entry>> {
-    //     let dict = self.file.to_archive().map_err(cast_error)?;
+    #[pyo3(signature = (query, threshold=None))]
+    pub fn split(&self, query: String, threshold: Option<usize>) -> PyResult<Vec<Entry>> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
 
-    //     let mut opts = options;
+        let mut opts = SplitOptions::default();
 
-    //     opts.merge(self.options().split);
+        if let Some(threshold) = threshold {
+            opts = opts.threshold(threshold);
+        }
 
-    //     let result = dict
-    //         .split::<&odict::split::SplitOptions>(&query, &opts.unwrap().into())
-    //         .map_err(|e| cast_error(e))?;
+        let result = dict.split(&query, &opts).map_err(|e| cast_error(e))?;
 
-    //     Ok(result
-    //         .iter()
-    //         .map(|e| Entry::from_archive(env, e))
-    //         .collect::<Result<Vec<Entry>, _>>()?)
-    // }
+        Ok(result
+            .iter()
+            .map(|e| Entry::from_archive(e))
+            .collect::<Result<Vec<Entry>, _>>()?)
+    }
 
-    // #[pyo3(signature = (options=None))]
-    // pub fn index(&self, options: Option<IndexOptions>) -> PyResult<()> {
-    //     let dict = self.file.to_archive().map_err(cast_error)?;
-    //     let mut opts = options;
+    #[pyo3(signature = (directory=None, memory=None, overwrite=None))]
+    pub fn index(
+        &self,
+        directory: Option<String>,
+        memory: Option<usize>,
+        overwrite: Option<bool>,
+    ) -> PyResult<()> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
+        let mut opts = IndexOptions::default();
 
-    //     opts.merge(self.options().index);
+        if let Some(directory) = directory {
+            opts = opts.dir(&directory);
+        }
 
-    //     dict.index::<&odict::search::IndexOptions>(&opts.unwrap().into())
-    //         .map_err(cast_error)?;
+        if let Some(memory) = memory {
+            opts = opts.memory(memory);
+        }
 
-    //     Ok(())
-    // }
+        if let Some(overwrite) = overwrite {
+            opts = opts.overwrite(overwrite);
+        }
 
-    // #[pyo3(signature = (env, query, options=None))]
-    // pub fn search(
-    //     &self,
-    //     env: Env,
-    //     query: String,
-    //     options: Option<SearchOptions>,
-    // ) -> PyResult<Vec<Entry>> {
-    //     let dict = self.file.to_archive().map_err(cast_error)?;
-    //     let mut opts = options;
+        dict.index(&opts).map_err(cast_error)?;
 
-    //     opts.merge(self.options().search);
+        Ok(())
+    }
 
-    //     let results = dict
-    //         .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
-    //         .map_err(cast_error)?;
+    #[pyo3(signature = (query, directory=None, threshold=None, autoindex=None, limit=None))]
+    pub fn search(
+        &self,
+        query: String,
+        directory: Option<String>,
+        threshold: Option<u32>,
+        autoindex: Option<bool>,
+        limit: Option<usize>,
+    ) -> PyResult<Vec<Entry>> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
+        let mut opts = SearchOptions::default();
 
-    //     let entries = results
-    //         .iter()
-    //         .map(|e| Entry::from_entry(env, e.clone()))
-    //         .collect::<Result<Vec<Entry>, _>>()?;
+        if let Some(directory) = directory {
+            opts = opts.dir(&directory);
+        }
 
-    //     Ok(entries)
-    // }
+        if let Some(threshold) = threshold {
+            opts = opts.threshold(threshold);
+        }
+
+        if let Some(autoindex) = autoindex {
+            opts = opts.autoindex(autoindex);
+        }
+
+        if let Some(limit) = limit {
+            opts = opts.limit(limit);
+        }
+
+        let results = dict
+            .search::<&odict::search::SearchOptions>(query.as_str(), &opts)
+            .map_err(cast_error)?;
+
+        let entries = results
+            .iter()
+            .map(|e| Entry::from_entry(e.clone()))
+            .collect::<Result<Vec<Entry>, _>>()?;
+
+        Ok(entries)
+    }
 }
 
 // #[cfg(test)]

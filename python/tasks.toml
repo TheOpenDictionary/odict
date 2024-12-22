@@ -6,6 +6,14 @@ dir = "python"
 run = "maturin build"
 dir = "python"
 
+["format:python"]
+run = "black ."
+dir = "python"
+
+["lint:python"]
+run = "flake8"
+dir = "python"
+
 ["snapshot:python"]
 run = ".venv/bin/pytest --snapshot-update"
 depends = ["dev:python"]

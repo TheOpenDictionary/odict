@@ -1,4 +1,6 @@
 import pytest
+import tempfile
+import os
 
 from pathlib import Path
 from pyodict import Dictionary
@@ -52,3 +54,53 @@ def test_lexicon(dict1):
     # Test lexicon retrieval
     result = dict1.lexicon()
     assert result == ["cat", "dog", "poo", "ran", "run"]
+
+
+def test_write_raw_xml():
+    # Test writing raw XML and creating a dictionary
+    xml_content = """
+    <dictionary>
+        <entry term="hello">
+            <ety>
+                <sense pos="v">
+                    <definition value="hello world" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="world">
+            <ety>
+                <sense pos="v">
+                    <definition value="hello world" />
+                </sense>
+            </ety>
+        </entry>
+    </dictionary>
+    """
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    Dictionary.write(xml_content, temp_path)
+
+    try:
+        assert os.path.exists(temp_path)
+
+        dict_instance = Dictionary(temp_path)
+        assert len(dict_instance.lookup("hello")) == 1
+
+    finally:
+        # Clean up the temporary file
+        os.unlink(temp_path)
+
+
+def test_split_terms(dict1, snapshot):
+    # Test term splitting
+    result = dict1.split("catdog", threshold=2)
+    assert result == snapshot  # Use snapshot testing
+
+
+def test_index_and_search(dict1, snapshot):
+    # Test indexing and searching
+    dict1.index()
+    results = dict1.search("run")
+    assert results == snapshot  # Use snapshot testing
