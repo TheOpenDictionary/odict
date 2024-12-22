@@ -23,7 +23,7 @@ description = "Recursively tests all packages in the project"
 
 [setup]
 depends = ["setup:*"]
-run = ["mise install", "corepack enable"]
+run = ["mise install", "corepack install", "corepack enable"]
 description = "Installs all required dependencies"
 
 ["build-all"]
