@@ -3,13 +3,12 @@
 #
 #    maturin generate-ci github -m python/Cargo.toml -o .github/workflows/python.yml --pytest
 #
-name: CI
+name: Python bindings
 
 on:
   push:
     branches:
       - main
-      - master
     tags:
       - 'python*'
   pull_request:

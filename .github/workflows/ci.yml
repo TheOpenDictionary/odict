@@ -1,10 +1,10 @@
-name: Run Tests
+name: Build & Test
 
 on:
   push:
-    branches: [v2]
+    branches:
+      - main
   pull_request:
-    branches: [v2]
 
 jobs:
   test:
@@ -32,12 +32,16 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
+      - name: Setup Mise
+        uses: jdx/mise-action@v2
       - name: Add Rust target 
         run: rustup target add ${{ matrix.target }}
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2      
       - name: Build CLI
-        run: cargo build --verbose --locked --release --target ${{ matrix.target }}
+        run: mise run build --verbose --locked --target ${{ matrix.target }}
+      - name: Run tests
+        run: mise run test --verbose --target ${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:

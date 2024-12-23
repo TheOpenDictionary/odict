@@ -13,17 +13,13 @@ description = "Recursively cleans all packages in the project"
 run = "cargo nextest run --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
 
-[test-all]
+["test-all"]
 depends = ["test", "test:*"]
 description = "Recursively tests all packages in the project"
 
 [setup]
-run = [
-  "mise install",
-  "corepack enable",
-  "pnpm install",
-  "mise run setup:python",
-]
+run = ["mise install", "corepack enable", "pnpm install"]
+depends_post = ["setup:*"]
 description = "Installs all required dependencies"
 
 ["build-all"]
