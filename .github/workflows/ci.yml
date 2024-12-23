@@ -34,6 +34,9 @@ jobs:
           targets: "${{ matrix.target }}"
       - name: Setup Mise
         uses: jdx/mise-action@v2
+        with:
+          install: true
+          install_args: "cargo:cargo-nextest"
       - name: Add Rust target 
         run: rustup target add ${{ matrix.target }}
       - name: Cache Rust
