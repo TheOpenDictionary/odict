@@ -10,7 +10,7 @@ run = "rm -rf **/*.odict"
 description = "Recursively cleans all packages in the project"
 
 [test]
-run = "cargo nextest run --all-features --verbose"
+run = "cargo nextest run -p cli -p odict --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
 
 ["test-all"]
@@ -25,6 +25,10 @@ description = "Installs all required dependencies"
 ["build-all"]
 depends = ["build:*"]
 description = "Recursively builds all packages in the project"
+
+["ci"]
+run = 'mise x act -- act ci --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+hide = true
 
 ["default"]
 run = "mise run build"
