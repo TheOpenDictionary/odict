@@ -32,19 +32,16 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
-      - name: Setup Mise
-        uses: jdx/mise-action@v2
-        with:
-          install: true
-          install_args: "cargo:cargo-nextest"
       - name: Add Rust target 
         run: rustup target add ${{ matrix.target }}
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2      
+      - name: Install Nextest
+        run: cargo install cargo-nextest
       - name: Build CLI
-        run: mise run build --verbose --locked --target ${{ matrix.target }}
+        run: cargo build -p cli --verbose --locked --target ${{ matrix.target }}
       - name: Run tests
-        run: mise run test --verbose --target ${{ matrix.target }}
+        run: cargo nextest run -p cli -p odict --all-features --verbose --target ${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
