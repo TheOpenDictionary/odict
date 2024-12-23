@@ -9,7 +9,7 @@ depends = ["build:node"]
 run = "pnpm --filter=\"@odict/node\" test -- "
 
 ["ci:node"]
-run = 'act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+run = 'mise x act -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true
 
 ["clean:node"]

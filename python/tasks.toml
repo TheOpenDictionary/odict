@@ -1,18 +1,18 @@
 ["dev:python"]
-run = "maturin develop -m ${MISE_TASK_DIR}/Cargo.toml"
+run = ".venv/bin/maturin develop -m ${MISE_TASK_DIR}/Cargo.toml"
 sources = ["python/src/**/*.rs", "python/Cargo.toml"]
 outputs = { auto = true }
 
 ["build:python"]
-run = "maturin build -m ${MISE_TASK_DIR}/Cargo.toml"
+run = ".venv/bin/maturin build -m ${MISE_TASK_DIR}/Cargo.toml"
 outputs = { auto = true }
 sources = ["python/src/**/*.rs", "python/Cargo.toml"]
 
 ["format:python"]
-run = "black $MISE_TASK_DIR"
+run = ".venv/bin/black $MISE_TASK_DIR"
 
 ["lint:python"]
-run = "flake8 $MISE_TASK_DIR"
+run = ".venv/bin/flake8 $MISE_TASK_DIR"
 
 ["snapshot:python"]
 run = ".venv/bin/pytest --snapshot-update"
