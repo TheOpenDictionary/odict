@@ -21,12 +21,13 @@
       "component": "lib"
     },
     "node": {
-      "exclude-paths": ["Cargo.toml"],
+      "release-as": "1.0.0",
       "release-type": "node",
       "component": "node"
     },
     "python": {
-      "release-type": "python",
+      "release-as": "1.0.0",
+      "release-type": "rust",
       "component": "python"
     }
   }
