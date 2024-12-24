@@ -71,7 +71,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest
           pip install syrupy
           cd python && pytest
@@ -88,7 +88,7 @@ jobs:
             pip3 install -U pip pytest syrupy
           run: |
             set -e
-            pip3 install theopendictionary --find-links dist --force-reinstall
+            pip3 install theopendictionary --no-index --find-links dist --force-reinstall
             cd python && pytest 
 
   musllinux:
@@ -132,7 +132,7 @@ jobs:
             apk add py3-pip py3-virtualenv
             python3 -m virtualenv .venv
             source .venv/bin/activate
-            pip install theopendictionary --no-index --find-links dist --force-reinstall
+            pip install theopendictionary --no-index --no-index --find-links dist --force-reinstall
             pip install pytest
             pip install syrupy
             cd python && pytest
@@ -151,7 +151,7 @@ jobs:
             source .venv/bin/activate
             pip install pytest
             pip install syrupy
-            pip install theopendictionary --find-links dist --force-reinstall
+            pip install theopendictionary --no-index --find-links dist --force-reinstall
             cd python && pytest
 
   windows:
@@ -187,7 +187,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/Scripts/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest
           pip install syrupy
           cd python && pytest
@@ -222,7 +222,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest
           pip install syrupy
           cd python && pytest
