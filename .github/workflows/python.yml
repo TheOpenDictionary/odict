@@ -9,9 +9,21 @@ on:
   push:
     branches:
       - main
+      paths:
+        - 'python/**'
+        - 'lib/**'
+        - '**/tasks.toml'
+        - 'tasks.toml'
+        - 'examples/**'
     tags:
       - 'python*'
   pull_request:
+    paths:
+      - 'python/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'
   workflow_dispatch:
 
 permissions:

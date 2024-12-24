@@ -4,8 +4,19 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'cli/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'      
   pull_request:
-
+    paths:
+      - 'cli/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'
 jobs:
   test:
     name: Build
