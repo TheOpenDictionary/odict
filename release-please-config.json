@@ -25,9 +25,9 @@
       "release-type": "node",
       "component": "node"
     },
-    "java": {
-      "release-type": "java",
-      "component": "java"
+    "python": {
+      "release-type": "python",
+      "component": "python"
     }
   }
 }

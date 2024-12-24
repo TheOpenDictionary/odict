@@ -3,7 +3,7 @@ import tempfile
 import os
 
 from pathlib import Path
-from pyodict import Dictionary
+from theopendictionary import Dictionary
 
 
 @pytest.fixture(scope="module")

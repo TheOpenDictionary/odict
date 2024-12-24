@@ -5,8 +5,7 @@ run = "cargo clean"
 description = "Removes all Rust build artifacts via Cargo"
 
 ["clean:all"]
-depends = ["clean:*"]
-run = "rm -rf **/*.odict"
+run = "git clean -xdf"
 description = "Recursively cleans all packages in the project"
 
 [test]
