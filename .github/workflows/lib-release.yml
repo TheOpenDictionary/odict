@@ -20,7 +20,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2      
-      - name: Build CLI
+      - name: Build library
         run: cargo publish -p odict
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}

@@ -1,19 +1,22 @@
 [tools]
 node = "22.12.0"
-gradle = "8.11"
-kotlin = "2.1.0"
-java = "adoptopenjdk-21.0.5+11.0.LTS"
 python = "3.13.0"
-act = "0.2.70"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
-"cargo:cargo-nextest" = "latest"
+"cargo:cargo-nextest" = "0.9.84"
+
+[settings]
+python.venv_stdlib = true
+
+[env]
+_.python.venv = { path = ".venv", create = true }
 
 [task_config]
 includes = [
   "tasks.toml",
   "lib/tasks.toml",
   "cli/tasks.toml",
-  "bindings/java/tasks.toml",
-  "bindings/node/tasks.toml",
+  "java/tasks.toml",
+  "node/tasks.toml",
+  "python/tasks.toml",
 ]

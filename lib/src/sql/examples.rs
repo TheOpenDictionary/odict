@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Example, MarkdownStrategy, ID};
@@ -49,7 +47,7 @@ pub fn insert_example(
     note_id: Option<&str>,
     index: u32,
     example: &Example,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     builder.add_insert(
         Query::insert()
             .into_table(Examples::Table)

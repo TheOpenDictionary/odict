@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Definition, MarkdownStrategy, ID};
@@ -56,7 +54,7 @@ pub fn insert_definition(
     group_id: Option<&str>,
     index: u32,
     definition: &Definition,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

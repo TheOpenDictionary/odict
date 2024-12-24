@@ -37,6 +37,7 @@ impl<'de> Deserialize<'de> for MDString {
         D: serde::Deserializer<'de>,
     {
         let value = String::deserialize(deserializer)?;
+
         Ok(MDString { value })
     }
 }

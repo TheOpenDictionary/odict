@@ -1,5 +1,6 @@
-use std::{error::Error, path::PathBuf};
+use std::path::PathBuf;
 
+use anyhow::Context;
 use clap::{arg, command, Args};
 use odict::fs::infer_path;
 
@@ -16,7 +17,7 @@ pub struct CompileArgs {
     output: Option<PathBuf>,
 }
 
-pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error>> {
+pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
     let CompileArgs { input, output } = args;
     let out = output.to_owned().unwrap_or_else(|| infer_path(&input));
 
@@ -24,7 +25,7 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> Result<(), Box<dyn Error
         .writer
         .compile_xml(&input, &out)
         .map(|_| ())
-        .map_err(|e| format!("An error occurred compiling your XML: {}", e))?;
+        .with_context(|| "An error occurred compiling your XML")?;
 
     Ok(())
 }

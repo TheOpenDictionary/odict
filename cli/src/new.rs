@@ -1,10 +1,10 @@
 use std::{
-    error::Error,
     fs::{canonicalize, File},
     io::Write,
     path::PathBuf,
 };
 
+use anyhow::anyhow;
 use clap::{arg, command, Args};
 
 use crate::CLIContext;
@@ -20,7 +20,7 @@ pub struct NewArgs {
     name: Option<String>,
 }
 
-pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> Result<(), Box<dyn Error>> {
+pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
     let mut template = String::from(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <dictionary",
@@ -38,7 +38,9 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> Result<(), Box<dyn Error>> {
     let output = PathBuf::from(format!("{}.xml", args.file_name));
 
     if output.exists() {
-        return Err("\n🚫️ A file already exists with this name! Please choose another one.".into());
+        return Err(anyhow!(
+            "\n🚫️ A file already exists with this name! Please choose another one.",
+        ));
     }
 
     let mut file = File::create(&output)?;

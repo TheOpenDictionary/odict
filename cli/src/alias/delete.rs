@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use clap::{arg, Args};
 
@@ -12,6 +11,6 @@ pub struct DeleteArgs {
     name: String,
 }
 
-pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> Result<(), Box<dyn Error>> {
-    ctx.alias_manager.delete(args.name.as_str())
+pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> anyhow::Result<()> {
+    anyhow::Ok(ctx.alias_manager.delete(args.name.as_str())?)
 }

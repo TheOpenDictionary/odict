@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use serde::Serialize;
 use serde_json::{to_string, to_string_pretty};
 
@@ -10,7 +8,7 @@ use crate::{ArchivedEntry, Dictionary, Entry};
 
 pub struct JSONSerializer {}
 
-pub fn stringify<T>(value: &T, pretty: bool) -> Result<String, Box<dyn Error>>
+pub fn stringify<T>(value: &T, pretty: bool) -> crate::Result<String>
 where
     T: ?Sized + Serialize,
 {
@@ -21,25 +19,25 @@ where
 }
 
 pub trait ToJSON {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>>;
+    fn to_json(self, pretty: bool) -> crate::Result<String>;
 }
 
 impl ToJSON for Dictionary {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = DictionaryJSON::from(self);
         stringify(&json, pretty)
     }
 }
 
 impl ToJSON for Entry {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = EntryJSON::from(self);
         stringify(&json, pretty)
     }
 }
 
 impl ToJSON for Vec<Entry> {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
             .map(|v| EntryJSON::from(v))
@@ -50,7 +48,7 @@ impl ToJSON for Vec<Entry> {
 }
 
 impl ToJSON for Vec<Vec<Entry>> {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
             .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())
@@ -61,14 +59,14 @@ impl ToJSON for Vec<Vec<Entry>> {
 }
 
 impl ToJSON for &ArchivedEntry {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = EntryJSON::from(self.to_entry().unwrap());
         stringify(&json, pretty)
     }
 }
 
 impl ToJSON for Vec<&ArchivedEntry> {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
             .map(|v| EntryJSON::from(v))
@@ -79,7 +77,7 @@ impl ToJSON for Vec<&ArchivedEntry> {
 }
 
 impl ToJSON for Vec<Vec<&ArchivedEntry>> {
-    fn to_json(self, pretty: bool) -> Result<String, Box<dyn Error>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
             .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())

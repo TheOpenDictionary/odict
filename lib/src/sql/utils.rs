@@ -26,7 +26,7 @@ impl SQLBuilder {
         self.queries.push(cmd.to_owned());
     }
 
-    pub fn build(&self) -> Result<String, Box<dyn std::error::Error>> {
+    pub fn build(&self) -> crate::Result<String> {
         let mut tables = self
             .schema
             .iter()

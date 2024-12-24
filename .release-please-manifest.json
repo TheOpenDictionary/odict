@@ -1,6 +1,6 @@
 {
-  "bindings/node": "0.0.0",
+  "node": "0.0.0",
   "cli": "0.0.0",
   "lib": "0.0.0",
-  "bindings/java": "0.0.0"
+  "java": "0.0.0"
 }

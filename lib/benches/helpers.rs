@@ -1,8 +1,8 @@
-use std::{error::Error, sync::LazyLock};
+use std::sync::LazyLock;
 
-use odict::{DictionaryFile, DictionaryReader, DictionaryWriter};
+use odict::{DictionaryFile, DictionaryReader, DictionaryWriter, Result};
 
-pub fn create_archive_dict(name: &str) -> Result<DictionaryFile, Box<dyn Error>> {
+pub fn create_archive_dict(name: &str) -> Result<DictionaryFile> {
     let reader = DictionaryReader::default();
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);

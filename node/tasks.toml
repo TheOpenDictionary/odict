@@ -1,0 +1,16 @@
+["build:node"]
+run = "pnpm --filter=\"@odict/node\" build"
+
+["publish:node"]
+run = "pnpm --filter=\"@odict/node\" npm publish"
+
+["test:node"]
+depends = ["build:node"]
+run = "pnpm --filter=\"@odict/node\" test -- "
+
+["ci:node"]
+run = 'mise x act -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+hide = true
+
+["clean:node"]
+run = "rm -f **/*.node"

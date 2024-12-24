@@ -1,0 +1,5 @@
+syrupy
+pytest
+maturin
+black
+flake8

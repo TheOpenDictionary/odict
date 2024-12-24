@@ -1,4 +1,4 @@
-use std::{error::Error, sync::LazyLock};
+use std::sync::LazyLock;
 
 use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
@@ -112,7 +112,7 @@ macro_rules! lookup {
                 &self,
                 query: &LookupQuery,
                 options: Options,
-            ) -> Result<Vec<&$ret>, Box<dyn Error + Send>> {
+            ) -> crate::Result<Vec<&$ret>> {
                 let mut entries: Vec<&$ret> = Vec::new();
 
                 let LookupQuery { term, fallback } = query;
@@ -154,7 +154,7 @@ macro_rules! lookup {
                 &self,
                 queries: &'a Vec<Query>,
                 options: Options,
-            ) -> Result<Vec<Vec<&$ret>>, Box<dyn Error + Send>>
+            ) -> crate::Result<Vec<Vec<&$ret>>>
             where
                 Query: Into<LookupQuery> + Send + Sync,
                 Options: AsRef<LookupOptions> + Send + Sync,

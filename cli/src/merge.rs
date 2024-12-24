@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use clap::{arg, command, Args};
 
 use crate::CLIContext;
@@ -21,7 +19,7 @@ pub struct MergeArgs {
     output: Option<String>,
 }
 
-pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> Result<(), Box<dyn Error>> {
+pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> anyhow::Result<()> {
     let mut dict = ctx
         .reader
         .read_from_path(&args.destination)?

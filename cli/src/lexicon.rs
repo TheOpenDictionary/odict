@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use clap::{arg, command, Args};
 
 use crate::CLIContext;
@@ -12,7 +10,7 @@ pub struct LexiconArgs {
     dictionary: String,
 }
 
-pub fn lexicon(ctx: &mut CLIContext, args: &LexiconArgs) -> Result<(), Box<dyn Error>> {
+pub fn lexicon(ctx: &mut CLIContext, args: &LexiconArgs) -> anyhow::Result<()> {
     let dict = ctx
         .reader
         .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?

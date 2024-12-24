@@ -1,8 +1,8 @@
 use quick_xml::de::from_str;
 use rkyv::{deserialize, to_bytes};
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
-use crate::serializable;
+use crate::{error::Error, serializable};
 
 use super::{entry::Entry, id::ID};
 
@@ -53,13 +53,15 @@ mod entries {
 }
 
 impl Dictionary {
-    pub fn serialize(&self) -> Result<Vec<u8>, Box<dyn Error>> {
-        let bytes = to_bytes::<rkyv::rancor::Error>(self)?;
+    pub fn serialize(&self) -> crate::Result<Vec<u8>> {
+        let bytes =
+            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
+
         Ok(bytes.to_vec())
     }
 
-    pub fn from(xml: &str) -> Result<Self, Box<dyn Error>> {
-        let dict = from_str(xml)?;
+    pub fn from(xml: &str) -> crate::Result<Self> {
+        let dict = from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))?;
         Ok(dict)
     }
 }
@@ -71,8 +73,10 @@ impl From<&str> for Dictionary {
 }
 
 impl ArchivedDictionary {
-    pub fn to_dictionary(&self) -> Result<Dictionary, Box<dyn Error>> {
-        let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)?;
+    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
+        let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
+            .map_err(|e| Error::Deserialize(e.to_string()))?;
+
         Ok(dict)
     }
 }

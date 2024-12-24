@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use crate::context::CLIContext;
 use clap::{arg, command, Args};
@@ -15,7 +14,7 @@ pub struct InfoArgs {
     dictionary_path: String,
 }
 
-pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> Result<(), Box<dyn Error>> {
+pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
     let InfoArgs {
         dictionary_path: path,
     } = args;

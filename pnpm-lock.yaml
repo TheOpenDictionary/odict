@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  bindings/node:
+  node:
     devDependencies:
       '@emnapi/core':
         specifier: ^1.3.1

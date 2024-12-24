@@ -1,12 +1,10 @@
-use std::error::Error;
-
 use odict::{ArchivedEntry, Entry};
 
 use crate::CLIContext;
 
-pub fn t<F>(cb: F, ctx: &mut CLIContext) -> Result<(), Box<dyn Error>>
+pub fn t<F>(cb: F, ctx: &mut CLIContext) -> anyhow::Result<()>
 where
-    F: FnOnce(&mut CLIContext) -> Result<(), Box<dyn Error>>,
+    F: FnOnce(&mut CLIContext) -> anyhow::Result<()>,
 {
     let err = cb(ctx);
 

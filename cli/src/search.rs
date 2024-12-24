@@ -1,4 +1,3 @@
-use std::error::Error;
 
 use clap::{arg, command, Args};
 use odict::search::{get_default_index_dir, SearchOptions};
@@ -26,7 +25,7 @@ pub struct SearchArgs {
     query: String,
 }
 
-pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> Result<(), Box<dyn Error>> {
+pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> anyhow::Result<()> {
     let file = ctx
         .reader
         .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;

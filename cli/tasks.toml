@@ -3,6 +3,8 @@
 ["build:cli"]
 run = "cargo build -p cli"
 alias = "build"
+sources = ["cli/src/**/*.rs", "cli/Cargo.toml"]
+outputs = { auto = true }
 
 ["run:cli"]
 run = "cargo run -p cli"

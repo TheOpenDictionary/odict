@@ -1,8 +1,9 @@
-use std::{borrow::Cow, error::Error, sync::LazyLock};
+use std::{borrow::Cow, sync::LazyLock};
 
 use console::{style, Style};
 use odict::{
-    Definition, DefinitionType, Entry, Etymology, Example, Group, MarkdownStrategy, Note, Sense,
+    Definition, DefinitionType, Entry, Error, Etymology, Example, Group, MarkdownStrategy, Note,
+    Sense,
 };
 
 use crate::CLIContext;
@@ -60,12 +61,7 @@ fn indent<'a>(s: &'a str, width: usize) -> Cow<'a, str> {
         .into()
 }
 
-fn print_note(
-    ctx: &CLIContext,
-    index: usize,
-    note: &Note,
-    entry: &Entry,
-) -> Result<(), Box<dyn Error>> {
+fn print_note(ctx: &CLIContext, index: usize, note: &Note, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     out.write_line(&indent(
@@ -93,7 +89,7 @@ fn print_example(
     indent_width: usize,
     example: &Example,
     entry: &Entry,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     let text = &format!(
@@ -117,7 +113,7 @@ fn print_definition(
     use_alpha: bool,
     definition: &Definition,
     entry: &Entry,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     let numbering = match use_alpha {
@@ -148,12 +144,7 @@ fn print_definition(
     Ok(())
 }
 
-fn print_group(
-    ctx: &CLIContext,
-    index: usize,
-    group: &Group,
-    entry: &Entry,
-) -> Result<(), Box<dyn Error>> {
+fn print_group(ctx: &CLIContext, index: usize, group: &Group, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     let text = &format!(
@@ -170,7 +161,7 @@ fn print_group(
 
     Ok(())
 }
-fn print_sense(ctx: &CLIContext, sense: &Sense, entry: &Entry) -> Result<(), Box<dyn Error>> {
+fn print_sense(ctx: &CLIContext, sense: &Sense, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     out.write_line(&format!(
@@ -188,7 +179,7 @@ fn print_sense(ctx: &CLIContext, sense: &Sense, entry: &Entry) -> Result<(), Box
     Ok(())
 }
 
-fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(), Box<dyn Error>> {
+fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     if let Some(desc) = &etymology.description {
@@ -202,10 +193,7 @@ fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(
     Ok(())
 }
 
-pub(super) fn pretty_print(
-    ctx: &CLIContext,
-    entries: Vec<Vec<Entry>>,
-) -> Result<(), Box<dyn Error>> {
+pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
     let out = &ctx.stdout;
 
     for entry in entries.iter().flat_map(|e| e) {

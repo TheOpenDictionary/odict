@@ -20,12 +20,12 @@
       "release-as": "2.0.0",
       "component": "lib"
     },
-    "bindings/node": {
+    "node": {
       "exclude-paths": ["Cargo.toml"],
       "release-type": "node",
       "component": "node"
     },
-    "bindings/java": {
+    "java": {
       "release-type": "java",
       "component": "java"
     }

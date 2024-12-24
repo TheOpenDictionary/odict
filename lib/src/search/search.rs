@@ -1,4 +1,4 @@
-use std::{error::Error, ffi::OsStr, path::PathBuf};
+use std::{ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use rkyv::access_unchecked;
@@ -79,7 +79,7 @@ macro_rules! search {
                 &self,
                 query: &str,
                 options: Options,
-            ) -> Result<Vec<Entry>, Box<dyn Error>> {
+            ) -> crate::Result<Vec<Entry>> {
                 let opts = options.as_ref();
                 let index_path = opts.dir.join(self.id.as_str());
 

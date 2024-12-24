@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 /* -------------------------------------------------------------------------- */
@@ -38,7 +36,7 @@ macro_rules! split {
                 &self,
                 query: &str,
                 options: Options,
-            ) -> Result<Vec<&$r>, Box<dyn Error + Send>> {
+            ) -> crate::Result<Vec<&$r>> {
                 let mut entries: Vec<&$r> = Vec::new();
                 let mut start = 0;
                 let mut end = query.len();

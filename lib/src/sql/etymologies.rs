@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Etymology, MarkdownStrategy, Sense, ID};
@@ -41,7 +39,7 @@ pub fn insert_etymology(
     builder: &mut SQLBuilder,
     entry_id: &str,
     etymology: &Etymology,
-) -> Result<(), Box<dyn Error>> {
+) -> crate::Result<()> {
     let id = ID::default();
 
     builder.add_insert(

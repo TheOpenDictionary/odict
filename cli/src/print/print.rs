@@ -1,16 +1,14 @@
-use std::error::Error;
-
-use odict::{json::ToJSON, xml::ToXML, Entry};
+use odict::{json::ToJSON, xml::ToXML, Entry, Error};
 
 use super::pprint::pretty_print;
 use crate::{enums::PrintFormat, CLIContext};
 
-fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
+fn print_json(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
     ctx.println(entries.to_json(true)?);
     Ok(())
 }
 
-fn print_xml(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Box<dyn Error>> {
+fn print_xml(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
     let xml: Vec<String> = entries
         .iter()
         .flatten()
@@ -26,7 +24,7 @@ pub fn print_entries(
     ctx: &mut CLIContext,
     entries: Vec<Vec<Entry>>,
     format: &PrintFormat,
-) -> Result<(), Box<dyn Error>> {
+) -> Result<(), Error> {
     match format {
         PrintFormat::Print => pretty_print(ctx, entries)?,
         PrintFormat::JSON => print_json(ctx, entries)?,
