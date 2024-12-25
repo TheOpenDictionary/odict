@@ -1,10 +1,10 @@
 name: Release Please
 
 on:
+  workflow_dispatch: 
   push:
     branches:
       - main
-      - v2
 
 permissions:
   contents: write
@@ -13,15 +13,9 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GH_PAC }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - id: release
         name: Release please
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAC }}
