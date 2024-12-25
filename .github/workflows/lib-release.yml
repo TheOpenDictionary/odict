@@ -13,6 +13,8 @@ jobs:
   release:
     name: Run release
     runs-on: ubuntu-latest
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

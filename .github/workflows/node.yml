@@ -324,11 +324,11 @@ jobs:
         shell: bash
         run: |
           npm config set provenance true
-          if [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+$" ]];
+          if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --no-git-checks --access public
-          elif [[ $GIT_TAG_NAME =~ "^v?[0-9]+.[0-9]+.[0-9]+" ]];
+          elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
