@@ -11,12 +11,10 @@
     "cli": {
       "release-type": "rust",
       "component": "cli",
-      "prerelease": true,
       "release-as": "2.0.0"
     },
     "lib": {
       "release-type": "rust",
-      "prerelease": true,
       "release-as": "2.0.0",
       "component": "lib"
     },
