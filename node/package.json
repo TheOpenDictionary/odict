@@ -48,6 +48,6 @@
     "universal": "napi universal",
     "artifacts": "napi artifacts",
     "version": "napi version",
-    "prepublishOnly": "napi prepublish --gh-release=false"
+    "prepublishOnly": "napi prepublish --no-gh-release"
   }
 }
