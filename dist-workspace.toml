@@ -11,7 +11,7 @@ ci = "github"
 installers = ["shell", "powershell", "homebrew"]
 # A GitHub repo to push Homebrew formulas to
 tap = "TheOpenDictionary/homebrew-odict"
-# The name of the Homebrew formula to generate
+# Customize the Homebrew formula name
 formula = "odict"
 # Target platforms to build apps for (Rust target-triple syntax)
 targets = [
@@ -31,4 +31,3 @@ install-updater = false
 tag-namespace = "cli"
 # Whether dist should create a Github Release or use an existing draft
 create-release = false
-precise-builds = true

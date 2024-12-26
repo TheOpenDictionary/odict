@@ -7,6 +7,7 @@
     "cargo-workspace"
   ],
   "include-component-in-tag": true,
+  "tag-separator": "/",
   "packages": {
     "cli": {
       "release-type": "rust",
