@@ -1,4 +1,4 @@
-run = "cargo run -p cli"
+run = "cargo run -p odict-cli"
 
 [clean]
 run = "cargo clean"
@@ -9,7 +9,7 @@ run = "git clean -xdf"
 description = "Recursively cleans all packages in the project"
 
 [test]
-run = "cargo nextest run -p cli -p odict --all-features --verbose"
+run = "cargo nextest run -p odict-cli -p odict --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
 
 ["test-all"]

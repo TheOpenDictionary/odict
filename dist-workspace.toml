@@ -1,5 +1,5 @@
 [workspace]
-members = ["cargo:."]
+members = ["cargo:cli"]
 
 # Config for 'dist'
 [dist]
@@ -11,6 +11,8 @@ ci = "github"
 installers = ["shell", "powershell", "homebrew"]
 # A GitHub repo to push Homebrew formulas to
 tap = "TheOpenDictionary/homebrew-odict"
+# The name of the Homebrew formula to generate
+formula = "odict"
 # Target platforms to build apps for (Rust target-triple syntax)
 targets = [
   "aarch64-apple-darwin",

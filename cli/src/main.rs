@@ -1,7 +1,7 @@
 use std::io::Write;
 
 use clap::Parser;
-use cli::{
+use odict_cli::{
     alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, t, CLIContext,
     Commands, CLI,
 };

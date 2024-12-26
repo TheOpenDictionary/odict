@@ -591,24 +591,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
 
 [[package]]
-name = "cli"
-version = "2.0.0"
-dependencies = [
- "actix-web",
- "anyhow",
- "clap",
- "console",
- "derive_more",
- "env_logger",
- "humansize",
- "indicatif",
- "num-format",
- "odict",
- "pulldown-cmark",
- "serde",
-]
-
-[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2335,6 +2317,24 @@ dependencies = [
  "thiserror 2.0.9",
  "uuid",
  "validation",
+]
+
+[[package]]
+name = "odict-cli"
+version = "2.0.0"
+dependencies = [
+ "actix-web",
+ "anyhow",
+ "clap",
+ "console",
+ "derive_more",
+ "env_logger",
+ "humansize",
+ "indicatif",
+ "num-format",
+ "odict",
+ "pulldown-cmark",
+ "serde",
 ]
 
 [[package]]

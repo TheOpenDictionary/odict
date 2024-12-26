@@ -50,9 +50,9 @@ jobs:
       - name: Install Nextest
         run: cargo install cargo-nextest
       - name: Build CLI
-        run: cargo build -p cli --verbose --locked --target ${{ matrix.target }}
+        run: cargo build -p odict-cli --verbose --locked --target ${{ matrix.target }}
       - name: Run tests
-        run: cargo nextest run -p cli -p odict --all-features --verbose --target ${{ matrix.target }}
+        run: cargo nextest run -p odict-cli -p odict --all-features --verbose --target ${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
