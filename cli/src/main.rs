@@ -1,10 +1,10 @@
 use std::io::Write;
 
-use cargo_odict::{
+use clap::Parser;
+use cli::{
     alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, t, CLIContext,
     Commands, CLI,
 };
-use clap::Parser;
 
 fn main() {
     let cli = CLI::parse();

@@ -1,5 +1,5 @@
 [package]
-name = "cargo-odict"
+name = "cli"
 version = "2.0.0"
 edition = "2021"
 description = "A lightning-fast dictionary file format and toolchain"
