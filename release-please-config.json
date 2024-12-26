@@ -11,16 +11,13 @@
   "packages": {
     "cli": {
       "release-type": "rust",
-      "component": "cli",
-      "release-as": "2.0.0"
+      "component": "cli"
     },
     "lib": {
       "release-type": "rust",
-      "release-as": "2.0.0",
       "component": "lib"
     },
     "node": {
-      "release-as": "1.0.0",
       "release-type": "node",
       "component": "node"
     },
