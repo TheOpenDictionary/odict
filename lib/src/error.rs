@@ -10,7 +10,7 @@ pub enum Error {
     FromUtf8(#[from] std::string::FromUtf8Error),
 
     #[error("Failed to compress: {0}")]
-    Compression(#[from] lz4_flex::frame::Error),
+    Compression(String),
 
     #[error("Failed to write the current dictionary: {0}")]
     Write(String),
