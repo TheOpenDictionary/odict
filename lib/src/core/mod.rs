@@ -1,4 +1,5 @@
 pub mod constants;
+pub mod find;
 pub mod lexicon;
 pub mod lookup;
 pub mod merge;

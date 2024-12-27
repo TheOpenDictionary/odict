@@ -3,7 +3,7 @@
 ["build:cli"]
 run = "cargo build -p odict-cli"
 alias = "build"
-sources = ["cli/src/**/*.rs", "cli/Cargo.toml"]
+sources = ["cli/src/**/*.rs", "lib/src/**/*.rs", "cli/Cargo.toml"]
 outputs = { auto = true }
 
 ["run:cli"]

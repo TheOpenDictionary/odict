@@ -25,14 +25,16 @@ impl AsRef<LookupOptions> for LookupOptions {
     }
 }
 
-impl LookupOptions {
-    pub fn default() -> Self {
+impl Default for LookupOptions {
+    fn default() -> Self {
         Self {
             follow: false,
             split: 0,
         }
     }
+}
 
+impl LookupOptions {
     pub fn follow(mut self, follow: bool) -> Self {
         self.follow = follow;
         self

@@ -8,7 +8,7 @@ outputs = { auto = true }
 depends = ["setup:python"]
 run = ".venv/bin/maturin build -m ${MISE_TASK_DIR}/Cargo.toml"
 outputs = { auto = true }
-sources = ["python/src/**/*.rs", "python/Cargo.toml"]
+sources = ["python/src/**/*.rs", "lib/src/**/*.rs", "python/Cargo.toml"]
 
 ["format:python"]
 depends = ["setup:python"]
