@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use anyhow::Context;
 use clap::{arg, command, Args};
 use odict::fs::infer_path;
 
@@ -17,15 +16,10 @@ pub struct CompileArgs {
     output: Option<PathBuf>,
 }
 
-pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
+pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> color_eyre::Result<()> {
     let CompileArgs { input, output } = args;
     let out = output.to_owned().unwrap_or_else(|| infer_path(&input));
-
-    let _ = ctx
-        .writer
-        .compile_xml(&input, &out)
-        .map(|_| ())
-        .with_context(|| "An error occurred compiling your XML")?;
+    let _ = ctx.writer.compile_xml(&input, &out).map(|_| ())?;
 
     Ok(())
 }

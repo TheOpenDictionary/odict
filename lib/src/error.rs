@@ -58,9 +58,6 @@ pub enum Error {
 
     #[error("Failed to parse ID: {0}")]
     InvalidID(String),
-
-    #[error(transparent)]
-    Other(#[from] anyhow::Error),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

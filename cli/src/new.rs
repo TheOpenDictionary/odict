@@ -4,8 +4,8 @@ use std::{
     path::PathBuf,
 };
 
-use anyhow::anyhow;
 use clap::{arg, command, Args};
+use color_eyre::eyre::eyre;
 
 use crate::CLIContext;
 
@@ -20,7 +20,7 @@ pub struct NewArgs {
     name: Option<String>,
 }
 
-pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
+pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> color_eyre::Result<()> {
     let mut template = String::from(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <dictionary",
@@ -38,7 +38,7 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
     let output = PathBuf::from(format!("{}.xml", args.file_name));
 
     if output.exists() {
-        return Err(anyhow!(
+        return Err(eyre!(
             "\n🚫️ A file already exists with this name! Please choose another one.",
         ));
     }

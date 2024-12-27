@@ -1,4 +1,3 @@
-
 use clap::{arg, Args};
 
 use crate::CLIContext;
@@ -11,6 +10,6 @@ pub struct DeleteArgs {
     name: String,
 }
 
-pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> anyhow::Result<()> {
-    anyhow::Ok(ctx.alias_manager.delete(args.name.as_str())?)
+pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> color_eyre::Result<()> {
+    Ok(ctx.alias_manager.delete(args.name.as_str())?)
 }

@@ -19,7 +19,7 @@ pub struct MergeArgs {
     output: Option<String>,
 }
 
-pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> anyhow::Result<()> {
+pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> color_eyre::Result<()> {
     let mut dict = ctx
         .reader
         .read_from_path(&args.destination)?

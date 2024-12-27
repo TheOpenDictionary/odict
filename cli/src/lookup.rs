@@ -2,6 +2,7 @@ use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
+use color_eyre::eyre::eyre;
 use odict::lookup::LookupOptions;
 
 #[derive(Debug, Args)]
@@ -40,7 +41,7 @@ pub struct LookupArgs {
     split: usize,
 }
 
-pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
+pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> color_eyre::Result<()> {
     let LookupArgs {
         dictionary_path: path,
         queries,
@@ -64,7 +65,7 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
             Ok(())
         }
         Err(err) => {
-            return Err(anyhow::Error::from(err));
+            return Err(eyre!(err));
         }
     }
 }

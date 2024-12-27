@@ -23,7 +23,7 @@ pub enum AliasCommands {
     Delete(DeleteArgs),
 }
 
-pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> anyhow::Result<()> {
+pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> color_eyre::Result<()> {
     match command {
         AliasCommands::Add(ref args) => set(ctx, args, false),
         AliasCommands::Set(ref args) => set(ctx, args, true),

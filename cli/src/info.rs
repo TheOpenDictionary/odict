@@ -1,4 +1,3 @@
-
 use crate::context::CLIContext;
 use clap::{arg, command, Args};
 use console::Style;
@@ -14,7 +13,7 @@ pub struct InfoArgs {
     dictionary_path: String,
 }
 
-pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
+pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> color_eyre::Result<()> {
     let InfoArgs {
         dictionary_path: path,
     } = args;

@@ -13,6 +13,7 @@ mod new;
 mod print;
 mod search;
 mod serve;
+pub mod ui;
 mod utils;
 
 pub use alias::*;

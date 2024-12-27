@@ -1,4 +1,3 @@
-
 use clap::{arg, Args};
 
 use crate::CLIContext;
@@ -14,12 +13,12 @@ pub struct SetArgs {
     path: String,
 }
 
-pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
+pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> color_eyre::Result<()> {
     let dict = ctx.reader.read_from_path(args.path.as_str())?;
 
     if overwrite {
-        anyhow::Ok(ctx.alias_manager.set(args.name.as_str(), &dict)?)
+        Ok(ctx.alias_manager.set(args.name.as_str(), &dict)?)
     } else {
-        anyhow::Ok(ctx.alias_manager.add(args.name.as_str(), &dict)?)
+        Ok(ctx.alias_manager.add(args.name.as_str(), &dict)?)
     }
 }

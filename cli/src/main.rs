@@ -1,17 +1,18 @@
-use std::io::Write;
-
 use clap::Parser;
 use odict_cli::{
-    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, t, CLIContext,
+    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, ui, CLIContext,
     Commands, CLI,
 };
 
-fn main() {
+fn main() -> color_eyre::Result<()> {
     let cli = CLI::parse();
     let mut ctx = CLIContext::default(&cli);
+    let c = &mut ctx;
 
-    let result = t(
-        |c| match cli.command {
+    color_eyre::install()?;
+
+    return match cli.command {
+        Some(ref cmd) => match cmd {
             Commands::Alias(ref args) => alias(c, args),
             Commands::Compile(ref args) => compile(c, args),
             Commands::Dump(ref args) => dump(c, args),
@@ -24,12 +25,6 @@ fn main() {
             Commands::Serve(ref args) => serve(c, args),
             Commands::Info(ref args) => info(c, args),
         },
-        &mut ctx,
-    );
-
-    if let Err(e) = result {
-        ctx.stderr
-            .write_all(format!("Error: {}", e).as_bytes())
-            .unwrap();
-    }
+        None => ui::find(),
+    };
 }

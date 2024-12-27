@@ -29,7 +29,7 @@ pub struct IndexArgs {
     pub(super) memory: usize,
 }
 
-pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> anyhow::Result<()> {
+pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> color_eyre::Result<()> {
     let file = ctx
         .reader
         .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;

@@ -56,7 +56,7 @@ pub(self) fn get_dictionary_map(
     reader: &DictionaryReader,
     alias_manager: &AliasManager,
     dictionaries: &Vec<String>,
-) -> anyhow::Result<HashMap<String, DictionaryFile>> {
+) -> color_eyre::Result<HashMap<String, DictionaryFile>> {
     let mut dictionary_map = HashMap::<String, DictionaryFile>::new();
 
     for dictionary in dictionaries {
@@ -76,7 +76,7 @@ pub(self) fn get_dictionary_map(
 }
 
 #[actix_web::main]
-pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()> {
+pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> color_eyre::Result<()> {
     let ServeArgs {
         port,
         dictionaries,

@@ -22,7 +22,7 @@ pub struct DumpArgs {
     output: Option<String>,
 }
 
-pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
+pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> color_eyre::Result<()> {
     let DumpArgs {
         input,
         format,
