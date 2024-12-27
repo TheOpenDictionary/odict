@@ -15,7 +15,8 @@
     },
     "lib": {
       "release-type": "rust",
-      "component": "lib"
+      "component": "lib",
+      "release-as": "2.1.0"
     },
     "node": {
       "release-type": "node",
