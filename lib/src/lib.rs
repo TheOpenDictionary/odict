@@ -11,10 +11,10 @@ pub mod json;
 #[cfg(feature = "sql")]
 pub mod sql;
 
+mod compression;
 mod core;
 mod error;
 mod ext;
-mod lz4;
 mod md;
 mod models;
 
