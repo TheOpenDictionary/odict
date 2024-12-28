@@ -95,7 +95,7 @@ mod test {
 
     #[test]
     fn test_null() {
-        let builder = &mut SQLBuilder::new(crate::sql::SQLDialect::Postgres);
+        let builder = &mut SQLBuilder::new(crate::format::sql::SQLDialect::Postgres);
 
         let definition = Definition {
             id: None,

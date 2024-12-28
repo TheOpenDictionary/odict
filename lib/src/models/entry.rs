@@ -16,6 +16,12 @@ serializable! {
   }
 }
 
+impl AsRef<Entry> for Entry {
+    fn as_ref(&self) -> &Entry {
+        self
+    }
+}
+
 impl Entry {
     pub fn serialize(&self) -> crate::Result<Vec<u8>> {
         let bytes =
