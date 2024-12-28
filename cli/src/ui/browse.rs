@@ -1,24 +1,27 @@
 use color_eyre::eyre::Result;
 
-use odict::{find::FindOptions, ArchivedDictionary};
+use odict::{find::FindOptions, ArchivedDictionary, ArchivedEntry};
 use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     init,
-    layout::{Constraint, Layout},
-    style::{Color, Modifier, Style, Stylize},
+    layout::{Constraint, Layout, Rect},
+    style::{Modifier, Stylize},
     text::{Line, Span},
-    widgets::{Block, List, ListState, Padding, Paragraph},
+    widgets::{Block, List, ListState, Paragraph, Widget},
     DefaultTerminal, Frame,
 };
 use tui_input::{backend::crossterm::EventHandler, Input};
 
 use crate::CLIContext;
 
+use super::EntryPopup;
+
 /// App holds the state of the application
 struct App<'a> {
     input: Input,
     title: String,
     dictionary: &'a ArchivedDictionary,
+    entry: Option<&'a ArchivedEntry>,
     terms: Vec<&'a str>,
 }
 
@@ -30,6 +33,7 @@ pub fn browse(ctx: &CLIContext, path_or_alias: &str) -> Result<()> {
     let archive = file.to_archive()?;
 
     let mut app = App {
+        entry: None,
         input: Input::default(),
         title: archive
             .name
@@ -60,7 +64,18 @@ fn run<'a>(mut terminal: DefaultTerminal, app: &mut App<'a>) -> Result<()> {
 
         if let Event::Key(key) = event::read()? {
             match key.code {
-                KeyCode::Esc => break Ok(()),
+                KeyCode::Enter => {
+                    let term = app.terms.get(list_state.selected().unwrap()).unwrap();
+                    let entry = app.dictionary.entries.get(*term).unwrap();
+                    app.entry = Some(entry);
+                }
+                KeyCode::Esc => {
+                    if let Some(_) = app.entry {
+                        app.entry = None;
+                    } else {
+                        break Ok(());
+                    }
+                }
                 KeyCode::Down => list_state.select_next(),
                 KeyCode::Up => list_state.select_previous(),
                 _ => {
@@ -112,10 +127,19 @@ fn draw<'a>(frame: &mut Frame, app: &App<'a>, list_state: &mut ListState) {
     frame.render_widget(title.centered(), container[0]);
     frame.render_widget(input_field, inner[1]);
     frame.render_stateful_widget(list, inner[0], list_state);
-    frame.set_cursor_position((
-        // Put cursor past the end of the input text
-        inner[1].x + ((app.input.visual_cursor().max(scroll) - scroll) as u16) + 1,
-        // Move one line down, from the border to the input line
-        inner[1].y + 1,
-    ));
+
+    if let Some(entry) = app.entry {
+        let popup = EntryPopup::default()
+            .title(entry.term.to_string())
+            .content("hey");
+
+        frame.render_widget(popup, frame.area());
+    } else {
+        frame.set_cursor_position((
+            // Put cursor past the end of the input text
+            inner[1].x + ((app.input.visual_cursor().max(scroll) - scroll) as u16) + 1,
+            // Move one line down, from the border to the input line
+            inner[1].y + 1,
+        ));
+    }
 }
