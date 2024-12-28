@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 use std::path::Path;
 use std::{fs::File, io::Write};
 
-use crate::compression::compress;
+use crate::compress::{compress, CompressOptions};
 use crate::error::Error;
 use crate::{Dictionary, ToDictionary};
 
@@ -16,14 +16,47 @@ impl Default for DictionaryWriter {
     }
 }
 
+pub struct DictionaryWriterOptions {
+    pub compress_options: CompressOptions,
+}
+
+impl AsRef<DictionaryWriterOptions> for DictionaryWriterOptions {
+    fn as_ref(&self) -> &DictionaryWriterOptions {
+        self
+    }
+}
+
+impl DictionaryWriterOptions {
+    pub fn compression(mut self, compress_options: CompressOptions) -> Self {
+        self.compress_options = compress_options;
+        self
+    }
+}
+
+impl Default for DictionaryWriterOptions {
+    fn default() -> Self {
+        Self {
+            compress_options: CompressOptions::default(),
+        }
+    }
+}
+
 impl DictionaryWriter {
     pub fn new() -> Self {
         Self {}
     }
 
     pub fn write_to_bytes(&self, dictionary: &Dictionary) -> crate::Result<Vec<u8>> {
-        let compressed =
-            compress(&dictionary.serialize()?).map_err(|e| Error::Write(e.to_string()))?;
+        self.write_to_bytes_with_opts(dictionary, DictionaryWriterOptions::default())
+    }
+
+    pub fn write_to_bytes_with_opts<Options: AsRef<DictionaryWriterOptions>>(
+        &self,
+        dictionary: &Dictionary,
+        options: Options,
+    ) -> crate::Result<Vec<u8>> {
+        let compressed = compress(&dictionary.serialize()?, &options.as_ref().compress_options)
+            .map_err(|e| Error::Write(e.to_string()))?;
 
         let version_bytes = VERSION.as_bytes();
         let version_size = version_bytes.len() as u64;
@@ -74,17 +107,26 @@ impl DictionaryWriter {
         Ok(output)
     }
 
-    pub fn write_to_path<P: AsRef<Path>>(
+    pub fn write_to_path_with_opts<P: AsRef<Path>, O: AsRef<DictionaryWriterOptions>>(
         &self,
         dictionary: &Dictionary,
         path: P,
+        options: O,
     ) -> crate::Result<()> {
-        let bytes = self.write_to_bytes(dictionary)?;
+        let bytes = self.write_to_bytes_with_opts(dictionary, options)?;
         let mut file = File::create(path)?;
 
         file.write_all(&bytes)?;
 
         Ok(())
+    }
+
+    pub fn write_to_path<P: AsRef<Path>>(
+        &self,
+        dictionary: &Dictionary,
+        path: P,
+    ) -> crate::Result<()> {
+        self.write_to_path_with_opts(dictionary, path, DictionaryWriterOptions::default())
     }
 
     /// Compiles an XML file to an ODict dictionary file
@@ -110,8 +152,21 @@ impl DictionaryWriter {
         input_path: I,
         output_path: O,
     ) -> crate::Result<()> {
+        self.compile_xml_with_opts(input_path, output_path, DictionaryWriterOptions::default())
+    }
+
+    pub fn compile_xml_with_opts<
+        I: AsRef<Path>,
+        O: AsRef<Path>,
+        Options: AsRef<DictionaryWriterOptions>,
+    >(
+        &self,
+        input_path: I,
+        output_path: O,
+        options: Options,
+    ) -> crate::Result<()> {
         let dict = read_to_string(input_path)?.to_dictionary()?;
-        self.write_to_path(&dict, output_path)?;
+        self.write_to_path_with_opts(&dict, output_path, options)?;
         Ok(())
     }
 }

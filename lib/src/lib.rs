@@ -11,7 +11,7 @@ pub mod json;
 #[cfg(feature = "sql")]
 pub mod sql;
 
-mod compression;
+mod compress;
 mod core;
 mod error;
 mod ext;
@@ -21,6 +21,7 @@ mod models;
 pub mod fs;
 pub mod xml;
 
+pub use self::compress::CompressOptions;
 pub use self::core::*;
 pub use self::error::*;
 pub use self::ext::*;
