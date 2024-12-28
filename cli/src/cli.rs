@@ -7,10 +7,14 @@ use crate::{
 };
 
 #[derive(Debug, Parser)]
-#[command(name = "odict", about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
+#[command(name = "odict",
+override_usage = "odict [OPTIONS] [COMMAND|PATH|ALIAS]",
+about = "the lighting-fast open-source dictionary compiler", version = crate_version!(), long_about = None)]
 pub struct CLI {
     #[command(subcommand)]
     pub command: Option<Commands>,
+
+    pub path: Option<String>,
 
     #[arg(
         short,

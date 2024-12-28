@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use odict_cli::{
     alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, ui, CLIContext,
     Commands, CLI,
@@ -25,6 +25,14 @@ fn main() -> color_eyre::Result<()> {
             Commands::Serve(ref args) => serve(c, args),
             Commands::Info(ref args) => info(c, args),
         },
-        None => ui::find(),
+        None => {
+            if let Some(path) = &cli.path {
+                return ui::browse(c, &path);
+            }
+
+            CLI::command().print_help()?;
+
+            Ok(())
+        }
     };
 }

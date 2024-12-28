@@ -1,3 +1,3 @@
-mod find;
+mod browse;
 
-pub use find::*;
+pub use browse::*;

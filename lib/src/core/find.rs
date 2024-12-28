@@ -1,6 +1,6 @@
 use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
-use nucleo_matcher::{pattern::Pattern, Config, Matcher};
+use crate::fuzzy::fuzzy_find;
 
 pub use nucleo_matcher::pattern::{CaseMatching, Normalization};
 
@@ -40,22 +40,30 @@ impl AsRef<FindOptions> for FindOptions {
 macro_rules! find {
     ($t:ident, $e:ident) => {
         impl $t {
-            pub fn find<Options: AsRef<FindOptions>>(
+            pub fn find_terms<Options: AsRef<FindOptions>>(
+                &self,
+                pattern: &str,
+                options: Options,
+            ) -> Vec<&str> {
+                let lexicon: Vec<&str> = self.lexicon();
+                let opts = options.as_ref();
+                let matches =
+                    fuzzy_find(&lexicon, &pattern, opts.case_matching, opts.normalization);
+
+                return matches.iter().map(|e| *e.0).collect::<Vec<&str>>();
+            }
+
+            pub fn find_entries<Options: AsRef<FindOptions>>(
                 &self,
                 pattern: &str,
                 options: Options,
             ) -> Vec<&$e> {
-                let lexicon: Vec<&str> = self.lexicon();
-                let opts = options.as_ref();
-                let mut matcher = Matcher::new(Config::DEFAULT);
-
-                let matches = Pattern::parse(&pattern, opts.case_matching, opts.normalization)
-                    .match_list(lexicon, &mut matcher);
+                let matches = self.find_terms(pattern, options);
 
                 return self
                     .entries
                     .iter()
-                    .filter(|entry| matches.iter().any(|&str| str.0 == entry.0))
+                    .filter(|entry| matches.iter().any(|str| str == entry.0))
                     .map(|e| e.1)
                     .collect::<Vec<&$e>>();
             }

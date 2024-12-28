@@ -15,6 +15,7 @@ mod compression;
 mod core;
 mod error;
 mod ext;
+mod fuzzy;
 mod md;
 mod models;
 
