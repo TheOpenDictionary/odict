@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use anyhow::Context;
 use clap::{arg, command, Args};
-use odict::fs::infer_path;
+use odict::{fs::infer_path, write::DictionaryWriterOptions, CompressOptions};
 
 use crate::CLIContext;
 
@@ -15,15 +15,35 @@ pub struct CompileArgs {
 
     #[arg(short, help = "Output path of compiled dictionary")]
     output: Option<PathBuf>,
+
+    #[arg(short, value_parser = clap::value_parser!(u32).range(0..=11), help = "Brotli compression level (between 0 and 11)", default_value_t = 11)]
+    quality: u32,
+
+    #[arg(short, value_parser = clap::value_parser!(u32).range(0..=22), help = "Brotli large window size (between 0 and 22)", default_value_t = 22)]
+    window_size: u32,
 }
 
 pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
-    let CompileArgs { input, output } = args;
+    let CompileArgs {
+        input,
+        output,
+        quality,
+        window_size,
+    } = args;
+
     let out = output.to_owned().unwrap_or_else(|| infer_path(&input));
+
+    let compress_opts = CompressOptions::default()
+        .quality(*quality)
+        .window_size(*window_size);
 
     let _ = ctx
         .writer
-        .compile_xml(&input, &out)
+        .compile_xml_with_opts(
+            &input,
+            &out,
+            DictionaryWriterOptions::default().compression(compress_opts),
+        )
         .map(|_| ())
         .with_context(|| "An error occurred compiling your XML")?;
 
