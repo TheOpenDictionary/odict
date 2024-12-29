@@ -1,3 +1,4 @@
+mod consts;
 mod definition;
 mod entry;
 mod etymology;

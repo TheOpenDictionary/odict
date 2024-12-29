@@ -7,7 +7,7 @@ pub fn write_sense(lines: &mut Vec<String>, sense: &Sense, entry: &Entry) -> cra
 
     for (idx, dt) in sense.definitions.iter().enumerate() {
         match dt {
-            DefinitionType::Definition(d) => write_definition(lines, idx, 2, d, entry)?,
+            DefinitionType::Definition(d) => write_definition(lines, idx, 1, d, entry)?,
             DefinitionType::Group(g) => write_group(lines, idx, g, entry)?,
         }
     }

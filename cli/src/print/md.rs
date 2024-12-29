@@ -1,41 +1,25 @@
-use console::Style;
-use pulldown_cmark::{Event, Parser, Tag};
+use std::env::current_dir;
 
-pub fn print_md(md: &String) -> String {
-    let parser = Parser::new(&md);
-    let mut tags_stack = Vec::new();
-    let mut buffer = String::new();
+use pulldown_cmark::Parser;
+use pulldown_cmark_mdcat::{
+    push_tty, resources::NoopResourceHandler, Environment, Settings, TerminalProgram, TerminalSize,
+    Theme,
+};
+use syntect::parsing::SyntaxSet;
 
-    for event in parser {
-        match event {
-            Event::Start(tag) => {
-                tags_stack.push(tag);
-            }
-            Event::End(_) => {
-                tags_stack.pop();
-            }
-            Event::Text(content) => {
-                let mut style = Style::new();
+pub fn render_md(md: &String) -> color_eyre::Result<String> {
+    let settings = Settings {
+        terminal_capabilities: TerminalProgram::Ansi.capabilities(),
+        terminal_size: TerminalSize::default(),
+        theme: Theme::default(),
+        syntax_set: &SyntaxSet::default(),
+    };
 
-                if tags_stack.contains(&Tag::Emphasis) {
-                    style = style.italic();
-                }
+    let parser = Parser::new(md.as_ref());
+    let mut sink = Vec::new();
+    let env = Environment::for_local_directory(&current_dir()?)?;
 
-                if tags_stack.contains(&Tag::Strong) {
-                    style = style.bold();
-                }
+    push_tty(&settings, &env, &NoopResourceHandler, &mut sink, parser).unwrap();
 
-                if tags_stack.contains(&Tag::Strikethrough) {
-                    style = style.strikethrough();
-                }
-
-                buffer.push_str(&style.apply_to(&content).to_string());
-            }
-            Event::Code(content) => buffer.push_str(&content),
-            Event::SoftBreak => buffer.push(' '),
-            _ => (),
-        }
-    }
-
-    buffer.trim().to_string()
+    Ok(String::from_utf8(sink)?)
 }

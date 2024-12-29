@@ -1,6 +1,6 @@
 use crate::{Entry, Group};
 
-use super::{definition::write_definition, utils::indent};
+use super::definition::write_definition;
 
 pub fn write_group(
     lines: &mut Vec<String>,

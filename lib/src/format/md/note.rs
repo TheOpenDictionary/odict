@@ -2,8 +2,14 @@ use crate::{error::Result, Entry, Note};
 
 use super::{example::write_example, utils::indent};
 
-pub fn write_note(lines: &mut Vec<String>, index: usize, note: &Note, entry: &Entry) -> Result<()> {
-    lines.push(indent(&format!("{}. {}", index + 1, note.value), 6).into());
+pub fn write_note(
+    lines: &mut Vec<String>,
+    level: usize,
+    index: usize,
+    note: &Note,
+    entry: &Entry,
+) -> Result<()> {
+    lines.push(indent(&format!("{}. {}", index + 1, note.value), level).into());
 
     if note.examples.len() > 0 {
         lines.push("".into());

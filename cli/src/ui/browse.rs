@@ -4,16 +4,15 @@ use odict::{find::FindOptions, format::md::ToMarkdown, ArchivedDictionary, Archi
 use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     init,
-    layout::{Constraint, Layout, Rect},
+    layout::{Constraint, Layout},
     style::{Modifier, Stylize},
     text::{Line, Span},
-    widgets::{Block, List, ListState, Paragraph, Widget},
+    widgets::{Block, List, ListState, Paragraph},
     DefaultTerminal, Frame,
 };
-use termimad::MadSkin;
 use tui_input::{backend::crossterm::EventHandler, Input};
 
-use crate::CLIContext;
+use crate::{render_md, CLIContext};
 
 use super::EntryPopup;
 
@@ -130,9 +129,8 @@ fn draw<'a>(frame: &mut Frame, app: &App<'a>, list_state: &mut ListState) {
     frame.render_stateful_widget(list, inner[0], list_state);
 
     if let Some(entry) = app.entry {
-        let skin = MadSkin::default();
         let md = entry.to_markdown().unwrap();
-        let popup = EntryPopup::default().content(format!("{}", skin.term_text(md.as_str())));
+        let popup = EntryPopup::default().content(format!("{}", render_md(&md).unwrap()));
 
         frame.render_widget(popup, frame.area());
     } else {

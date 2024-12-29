@@ -1,3 +1,5 @@
+use super::consts::INDENT_SIZE;
+
 pub fn divider() -> String {
     "-".repeat(3)
 }
@@ -22,8 +24,8 @@ pub fn underline_target(example: &str, target: &str) -> String {
     modified_string
 }
 
-pub fn indent(s: &str, width: usize) -> String {
-    let padding = " ".repeat(width);
+pub fn indent(s: &str, depth: usize) -> String {
+    let padding = " ".repeat(depth * INDENT_SIZE);
 
     s.lines()
         .into_iter()
