@@ -15,11 +15,11 @@ pub fn write_definition(
     lines.push(indent(text, indent_width));
 
     for example in (&definition).examples.iter() {
-        write_example(lines, indent_width + 3, example, entry)?;
+        write_example(lines, indent_width + 2, example, entry)?;
     }
 
     if definition.notes.len() > 0 {
-        lines.push(indent("\n**Notes**\n\n", indent_width + 3));
+        lines.push(indent("\n**Notes**\n\n", indent_width + 2));
 
         for (ndx, note) in (&definition).notes.iter().enumerate() {
             write_note(lines, ndx, note, entry)?;

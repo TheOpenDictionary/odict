@@ -10,10 +10,10 @@ pub fn write_group(
 ) -> crate::Result<()> {
     let text = &format!("{}. {}", index + 1, group.description);
 
-    lines.push(indent(text, 2));
+    lines.push(text.to_string());
 
     for (idx, definition) in group.definitions.iter().enumerate() {
-        write_definition(lines, idx, 5, definition, entry)?;
+        write_definition(lines, idx, 1, definition, entry)?;
     }
 
     Ok(())
