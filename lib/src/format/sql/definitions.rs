@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Definition, MarkdownStrategy, ID};
+use crate::{Definition, ID};
 
 use super::{
     examples::insert_example, groups::Groups, notes::insert_note, senses::Senses, utils::SQLBuilder,
@@ -69,7 +69,7 @@ pub fn insert_definition(
             ])
             .values([
                 id.as_str().into(),
-                definition.value.parse(MarkdownStrategy::Disabled).into(),
+                definition.value.as_str().into(),
                 index.into(),
                 sense_id.map_or(Expr::cust("NULL"), |s| s.into()),
                 group_id.map_or(Expr::cust("NULL"), |g| g.into()),
@@ -89,19 +89,17 @@ pub fn insert_definition(
 
 #[cfg(test)]
 mod test {
-    use crate::MDString;
-
     use super::*;
 
     #[test]
     fn test_null() {
-        let builder = &mut SQLBuilder::new(crate::sql::SQLDialect::Postgres);
+        let builder = &mut SQLBuilder::new(crate::format::sql::SQLDialect::Postgres);
 
         let definition = Definition {
             id: None,
             examples: vec![],
             notes: vec![],
-            value: MDString::from("test"),
+            value: String::from("test"),
         };
 
         let result = insert_definition(builder, None, None, 0, &definition);

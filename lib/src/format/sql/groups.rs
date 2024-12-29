@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Group, MarkdownStrategy, ID};
+use crate::{Group, ID};
 
 use super::{senses::Senses, utils::SQLBuilder};
 
@@ -51,7 +51,7 @@ pub fn insert_group(
             ])
             .values([
                 id.as_str().into(),
-                group.description.parse(MarkdownStrategy::Disabled).into(),
+                group.description.as_str().into(),
                 index.into(),
                 sense_id.into(),
             ])?,

@@ -1,18 +1,14 @@
 use napi::bindgen_prelude::*;
 
-use super::mdstring::MDString;
-
 #[napi(object)]
 pub struct Example {
-  pub value: ClassInstance<MDString>,
+  pub value: String,
 }
 
 impl Example {
-  pub fn from(env: napi::Env, note: odict::Example) -> Result<Self> {
+  pub fn from(note: odict::Example) -> Result<Self> {
     let odict::Example { value } = note;
 
-    Ok(Self {
-      value: MDString::from(value).into_instance(env).unwrap(),
-    })
+    Ok(Self { value })
   }
 }

@@ -51,12 +51,7 @@ fn pt_end_tag(tag: &TagEnd, buffer: &mut String, tags_stack: &[Tag]) {
 }
 
 pub fn to_html(md: &str) -> String {
-    let parser = Parser::new(&md).filter(|event| {
-        !matches!(
-            event,
-            Event::Start(Tag::Paragraph) | Event::End(TagEnd::Paragraph)
-        )
-    });
+    let parser = Parser::new(&md);
 
     let mut html_output = String::new();
 
@@ -104,7 +99,7 @@ mod tests {
     fn test_html() {
         let md = "**This** is a <sup>test</sup> <sub>of</sub> the _parser_";
         let expected =
-            "<strong>This</strong> is a <sup>test</sup> <sub>of</sub> the <em>parser</em>";
+            "<p><strong>This</strong> is a <sup>test</sup> <sub>of</sub> the <em>parser</em></p>\n";
         let actual = to_html(md);
 
         assert_eq!(expected, actual);

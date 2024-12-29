@@ -15,6 +15,10 @@ run = "pnpm --filter=\"@odict/node\" npm publish"
 depends = ["setup:node", "build:node"]
 run = "pnpm --filter=\"@odict/node\" test -- "
 
+["snapshot:node"]
+depends = ["setup:node", "build:node"]
+run = "pnpm --filter=\"@odict/node\" test -u -- "
+
 ["ci:node"]
 depends = ["setup:node"]
 run = 'mise x act -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'

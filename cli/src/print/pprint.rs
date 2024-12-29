@@ -1,10 +1,7 @@
 use std::{borrow::Cow, sync::LazyLock};
 
 use console::{style, Style};
-use odict::{
-    Definition, DefinitionType, Entry, Error, Etymology, Example, Group, MarkdownStrategy, Note,
-    Sense,
-};
+use odict::{Definition, DefinitionType, Entry, Error, Etymology, Example, Group, Note, Sense};
 
 use crate::CLIContext;
 
@@ -65,11 +62,7 @@ fn print_note(ctx: &CLIContext, index: usize, note: &Note, entry: &Entry) -> Res
     let out = &ctx.stdout;
 
     out.write_line(&indent(
-        &format!(
-            "{}. {}",
-            index_to_alpha(index),
-            note.value.parse(MarkdownStrategy::Disabled)
-        ),
+        &format!("{}. {}", index_to_alpha(index), note.value),
         6,
     ))?;
 
@@ -95,10 +88,7 @@ fn print_example(
     let text = &format!(
         "{} {}",
         STYLE_EXAMPLE_BULLET.apply_to("▸").to_string(),
-        &underline_target(
-            &example.value.parse(MarkdownStrategy::Disabled),
-            &entry.term
-        )
+        &underline_target(&example.value, &entry.term)
     );
 
     out.write_line(&indent(&text, indent_width))?;
@@ -147,11 +137,7 @@ fn print_definition(
 fn print_group(ctx: &CLIContext, index: usize, group: &Group, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
-    let text = &format!(
-        "{}. {}",
-        index + 1,
-        group.description.parse(MarkdownStrategy::Disabled)
-    );
+    let text = &format!("{}. {}", index + 1, group.description);
 
     out.write_line(&indent(text, 2))?;
 
@@ -183,7 +169,7 @@ fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(
     let out = &ctx.stdout;
 
     if let Some(desc) = &etymology.description {
-        out.write_line(&format!("\n{}", &desc.parse(MarkdownStrategy::Disabled)))?;
+        out.write_line(&format!("\n{}", &desc))?;
     }
 
     for sense in etymology.senses.values() {
@@ -218,7 +204,6 @@ pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Vec<Entry>>) -> Result
     }
 
     out.flush()?;
-    // skin.print_text(&output);
 
     Ok(())
 }

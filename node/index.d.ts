@@ -29,16 +29,9 @@ export declare class Dictionary {
   ): Array<Entry>;
 }
 
-export declare class MdString {
-  constructor(value: string);
-  get value(): string;
-  parse(strategy: MarkdownStrategy): string;
-}
-export type MDString = MdString;
-
 export interface Definition {
   id?: string;
-  value: MDString;
+  value: string;
   examples: Array<Example>;
   notes: Array<Note>;
 }
@@ -58,17 +51,17 @@ export interface Entry {
 export interface Etymology {
   id?: string;
   pronunciation?: string;
-  description?: MDString;
+  description?: string;
   senses: Record<string, Sense>;
 }
 
 export interface Example {
-  value: MDString;
+  value: string;
 }
 
 export interface Group {
   id?: string;
-  description: MDString;
+  description: string;
   definitions: Array<Definition>;
 }
 
@@ -88,15 +81,9 @@ export interface LookupQuery {
   fallback: string;
 }
 
-export declare const enum MarkdownStrategy {
-  Disabled = 0,
-  HTML = 1,
-  Text = 2,
-}
-
 export interface Note {
   id?: string;
-  value: MdString;
+  value: string;
   examples: Array<Example>;
 }
 

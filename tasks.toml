@@ -8,6 +8,10 @@ description = "Removes all Rust build artifacts via Cargo"
 run = "git clean -xdf"
 description = "Recursively cleans all packages in the project"
 
+["snapshot"]
+run = "cargo insta accept"
+description = "Updates all Insta snapshot tests"
+
 [test]
 run = "cargo nextest run -p odict-cli -p odict --all-features --verbose"
 description = "Runs nextest on all Cargo packages"

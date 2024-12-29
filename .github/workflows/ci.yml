@@ -48,7 +48,7 @@ jobs:
       - name: Cache Rust
         uses: Swatinem/rust-cache@v2      
       - name: Install Nextest
-        run: cargo install cargo-nextest
+        run: cargo install --force cargo-nextest
       - name: Build CLI
         run: cargo build -p odict-cli --verbose --locked --target ${{ matrix.target }}
       - name: Run tests

@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, Expr, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Example, MarkdownStrategy, ID};
+use crate::{Example, ID};
 
 use super::{definitions::Definitions, notes::Notes, utils::SQLBuilder};
 
@@ -60,7 +60,7 @@ pub fn insert_example(
             ])
             .values([
                 ID::default().as_str().into(),
-                example.value.parse(MarkdownStrategy::Disabled).into(),
+                example.value.as_str().into(),
                 index.into(),
                 definition_id.map_or(Expr::cust("NULL"), |id| id.into()),
                 note_id.map_or(Expr::cust("NULL"), |id| id.into()),
@@ -72,16 +72,15 @@ pub fn insert_example(
 
 #[cfg(test)]
 mod test {
-    use crate::MDString;
 
     use super::*;
 
     #[test]
     fn test_null() {
-        let builder = &mut SQLBuilder::new(crate::sql::SQLDialect::Postgres);
+        let builder = &mut SQLBuilder::new(crate::format::sql::SQLDialect::Postgres);
 
         let example = Example {
-            value: MDString::from("test"),
+            value: String::from("test"),
         };
 
         let result = insert_example(builder, None, None, 0, &example);

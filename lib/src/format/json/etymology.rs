@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use crate::{Etymology, MDString, PartOfSpeech};
+use crate::{Etymology, PartOfSpeech};
 
 use super::{ordered_map, SenseJSON};
 
@@ -15,7 +15,7 @@ pub struct EtymologyJSON {
     pub pronunciation: Option<String>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<MDString>,
+    pub description: Option<String>,
 
     #[serde(
         serialize_with = "ordered_map",

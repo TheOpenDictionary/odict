@@ -4,7 +4,7 @@ mod helpers;
 mod index_tests {
 
     use insta::assert_snapshot;
-    use odict::json::ToJSON;
+    use odict::format::json::ToJSON;
     use odict::search::{IndexOptions, SearchOptions};
 
     use crate::helpers::EXAMPLE_DICT_1;

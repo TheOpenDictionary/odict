@@ -1,11 +1,9 @@
 use pyo3::prelude::*;
 
-use super::mdstring::MDString;
-
 #[pyclass]
 #[derive(Debug)]
 pub struct Example {
-    pub value: MDString,
+    pub value: String,
 }
 
 impl Example {
@@ -13,7 +11,7 @@ impl Example {
         let odict::Example { value } = note;
 
         Ok(Self {
-            value: MDString::from(value),
+            value: String::from(value),
         })
     }
 }

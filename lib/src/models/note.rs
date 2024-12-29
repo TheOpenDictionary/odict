@@ -1,4 +1,4 @@
-use crate::{serializable, MDString};
+use crate::serializable;
 
 use super::example::Example;
 
@@ -9,7 +9,7 @@ serializable! {
     pub id: Option<String>,
 
     #[serde(rename = "@value")]
-    pub value: MDString,
+    pub value: String,
 
     #[serde(default, rename = "example")]
     pub examples: Vec<Example>,

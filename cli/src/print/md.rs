@@ -1,9 +1,7 @@
 use console::Style;
-use odict::{MDString, MarkdownStrategy};
 use pulldown_cmark::{Event, Parser, Tag};
 
-pub fn print_md(md_string: &MDString) -> String {
-    let md = md_string.parse(MarkdownStrategy::Disabled);
+pub fn print_md(md: &String) -> String {
     let parser = Parser::new(&md);
     let mut tags_stack = Vec::new();
     let mut buffer = String::new();

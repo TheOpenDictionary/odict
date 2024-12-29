@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-use crate::{Definition, MDString};
+use crate::Definition;
 
 use super::NoteJSON;
 
@@ -9,10 +9,10 @@ pub struct DefinitionJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
-    pub value: MDString,
+    pub value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub examples: Vec<MDString>,
+    pub examples: Vec<String>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<NoteJSON>,

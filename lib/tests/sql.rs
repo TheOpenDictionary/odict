@@ -4,7 +4,7 @@ mod helpers;
 mod index_tests {
 
     use insta::assert_snapshot;
-    use odict::sql::{SQLDialect, ToSQL};
+    use odict::format::sql::{SQLDialect, ToSQL};
     use regex::Regex;
 
     use crate::helpers::EXAMPLE_DICT_1;
