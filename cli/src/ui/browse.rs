@@ -1,6 +1,6 @@
 use color_eyre::eyre::Result;
 
-use odict::{find::FindOptions, ArchivedDictionary, ArchivedEntry};
+use odict::{find::FindOptions, format::md::ToMarkdown, ArchivedDictionary, ArchivedEntry};
 use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     init,
@@ -10,6 +10,7 @@ use ratatui::{
     widgets::{Block, List, ListState, Paragraph, Widget},
     DefaultTerminal, Frame,
 };
+use termimad::MadSkin;
 use tui_input::{backend::crossterm::EventHandler, Input};
 
 use crate::CLIContext;
@@ -129,9 +130,9 @@ fn draw<'a>(frame: &mut Frame, app: &App<'a>, list_state: &mut ListState) {
     frame.render_stateful_widget(list, inner[0], list_state);
 
     if let Some(entry) = app.entry {
-        let popup = EntryPopup::default()
-            .title(entry.term.to_string())
-            .content("hey");
+        let skin = MadSkin::default();
+        let md = entry.to_markdown().unwrap();
+        let popup = EntryPopup::default().content(format!("{}", skin.term_text(md.as_str())));
 
         frame.render_widget(popup, frame.area());
     } else {

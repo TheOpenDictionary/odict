@@ -18,8 +18,6 @@ use ratatui::{
 #[derive(Debug, Default, Setters)]
 pub struct EntryPopup<'a> {
     #[setters(into)]
-    title: Line<'a>,
-    #[setters(into)]
     content: Text<'a>,
 }
 
@@ -28,11 +26,12 @@ impl Widget for EntryPopup<'_> {
         // ensure that all cells under the popup are cleared to avoid leaking content
         Clear.render(area, buf);
 
-        let block = Block::new().title(self.title).borders(Borders::ALL);
+        let block = Block::new().borders(Borders::ALL);
 
         Paragraph::new(self.content)
             .wrap(Wrap { trim: true })
             .block(block)
+            .scroll((0 as u16, 0))
             .render(area, buf);
     }
 }

@@ -22,7 +22,7 @@ pub struct CompileArgs {
     window_size: u32,
 }
 
-pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
+pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> color_eyre::Result<()> {
     let CompileArgs {
         input,
         output,
@@ -36,15 +36,11 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
         .quality(*quality)
         .window_size(*window_size);
 
-    let _ = ctx
-        .writer
-        .compile_xml_with_opts(
-            &input,
-            &out,
-            DictionaryWriterOptions::default().compression(compress_opts),
-        )
-        .map(|_| ())
-        .with_context(|| "An error occurred compiling your XML")?;
+    let _ = ctx.writer.compile_xml_with_opts(
+        &input,
+        &out,
+        DictionaryWriterOptions::default().compression(compress_opts),
+    )?;
 
     Ok(())
 }
