@@ -8,7 +8,7 @@ description = "Removes all Rust build artifacts via Cargo"
 run = "git clean -xdf"
 description = "Recursively cleans all packages in the project"
 
-["update-snaps"]
+["snapshot"]
 run = "cargo insta accept"
 description = "Updates all Insta snapshot tests"
 

@@ -99,7 +99,7 @@ mod tests {
     fn test_html() {
         let md = "**This** is a <sup>test</sup> <sub>of</sub> the _parser_";
         let expected =
-            "<strong>This</strong> is a <sup>test</sup> <sub>of</sub> the <em>parser</em>";
+            "<p><strong>This</strong> is a <sup>test</sup> <sub>of</sub> the <em>parser</em></p>\n";
         let actual = to_html(md);
 
         assert_eq!(expected, actual);
