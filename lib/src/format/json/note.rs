@@ -1,16 +1,16 @@
 use serde::Serialize;
 
-use crate::{MDString, Note};
+use crate::{Example, Note};
 
 #[derive(Serialize)]
 pub struct NoteJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     id: Option<String>,
 
-    value: MDString,
+    value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<MDString>,
+    examples: Vec<Example>,
 }
 
 impl From<Note> for NoteJSON {
@@ -24,7 +24,7 @@ impl From<Note> for NoteJSON {
         Self {
             id,
             value,
-            examples: examples.into_iter().map(|e| e.value).collect(),
+            examples,
         }
     }
 }

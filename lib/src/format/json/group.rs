@@ -2,14 +2,14 @@ use serde::Serialize;
 
 use super::DefinitionJSON;
 
-use crate::{Group, MDString};
+use crate::Group;
 
 #[derive(Serialize)]
 pub struct GroupJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     id: Option<String>,
 
-    description: MDString,
+    description: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     definitions: Vec<DefinitionJSON>,

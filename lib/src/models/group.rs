@@ -1,6 +1,6 @@
 use crate::serializable;
 
-use super::{definition::Definition, mdstring::MDString};
+use super::definition::Definition;
 
 serializable! {
   pub struct Group {
@@ -9,7 +9,7 @@ serializable! {
     pub id: Option<String>,
 
     #[serde(rename = "@description")]
-    pub description: MDString,
+    pub description: String,
 
     #[serde(default, rename = "definition")]
     pub definitions: Vec<Definition>,

@@ -13,7 +13,9 @@ json = ["dep:serde_json"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 charabia = ["dep:charabia"]
-search = ["dep:tantivy"]
+html = ["markdown"]
+search = ["dep:tantivy", "config"]
+markdown = ["dep:pulldown-cmark"]
 default = ["json", "sql", "config"]
 
 [[bench]]
@@ -28,9 +30,13 @@ regex = "1.10.4"
 rkyv = { version = "0.8.8", features = ["alloc"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-pulldown-cmark = "0.12.0"
 validation = "0.0.1"
+thiserror = "2.0.7"
+brotli = "7.0.0"
+nucleo-matcher = "0.3.1"
 
+# feature=markdown
+pulldown-cmark = { version = "0.12.0", optional = true }
 # feature=json
 serde_json = { version = "1.0.116", optional = true }
 # feature=charabia
@@ -41,9 +47,6 @@ tantivy = { version = "0.22.0", optional = true }
 dirs = { version = "5.0.1", optional = true }
 # feature=sql
 sea-query = { version = "0.32.0", optional = true }
-thiserror = "2.0.7"
-brotli = "7.0.0"
-nucleo-matcher = "0.3.1"
 
 [dev-dependencies]
 insta = "1.38.0"

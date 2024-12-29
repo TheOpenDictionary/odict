@@ -1,0 +1,12 @@
+---
+source: lib/tests/md.rs
+expression: markdown
+snapshot_kind: text
+---
+# dog
+
+Latin root
+
+_unknown_
+
+  1. a dog

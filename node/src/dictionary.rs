@@ -98,7 +98,6 @@ impl Dictionary {
 
   pub fn _lookup(
     &self,
-    env: napi::Env,
     queries: &Vec<odict::lookup::LookupQuery>,
     options: Option<LookupOptions>,
   ) -> Result<Vec<Vec<Entry>>> {
@@ -121,7 +120,7 @@ impl Dictionary {
       .iter()
       .map(|i| {
         i.iter()
-          .map(|e| Entry::from_archive(env, e))
+          .map(|e| Entry::from_archive(e))
           .collect::<Result<Vec<Entry>, _>>()
       })
       .collect::<Result<Vec<Vec<Entry>>, _>>()?;
@@ -132,7 +131,6 @@ impl Dictionary {
   #[napi]
   pub fn lookup(
     &self,
-    env: Env,
     query: Either3<types::LookupQuery, String, Vec<Either<LookupQuery, String>>>,
     options: Option<LookupOptions>,
   ) -> Result<Vec<Vec<Entry>>> {
@@ -149,7 +147,7 @@ impl Dictionary {
       ),
     }
 
-    self._lookup(env, &queries, options)
+    self._lookup(&queries, options)
   }
 
   #[napi]
@@ -161,12 +159,7 @@ impl Dictionary {
   }
 
   #[napi]
-  pub fn split(
-    &self,
-    env: Env,
-    query: String,
-    options: Option<SplitOptions>,
-  ) -> Result<Vec<Entry>> {
+  pub fn split(&self, query: String, options: Option<SplitOptions>) -> Result<Vec<Entry>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
 
     let mut opts = options;
@@ -180,7 +173,7 @@ impl Dictionary {
     Ok(
       result
         .iter()
-        .map(|e| Entry::from_archive(env, e))
+        .map(|e| Entry::from_archive(e))
         .collect::<Result<Vec<Entry>, _>>()?,
     )
   }
@@ -200,12 +193,7 @@ impl Dictionary {
   }
 
   #[napi]
-  pub fn search(
-    &self,
-    env: Env,
-    query: String,
-    options: Option<SearchOptions>,
-  ) -> Result<Vec<Entry>> {
+  pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
     let mut opts = options;
 
@@ -217,7 +205,7 @@ impl Dictionary {
 
     let entries = results
       .iter()
-      .map(|e| Entry::from_entry(env, e.clone()))
+      .map(|e| Entry::from_entry(e.clone()))
       .collect::<Result<Vec<Entry>, _>>()?;
 
     Ok(entries)

@@ -4,7 +4,7 @@ mod helpers;
 mod lookup_tests {
 
     use insta::assert_snapshot;
-    use odict::{json::ToJSON, lookup::LookupOptions};
+    use odict::{format::json::ToJSON, lookup::LookupOptions};
 
     use crate::helpers::{EXAMPLE_DICT_1, EXAMPLE_DICT_2};
 

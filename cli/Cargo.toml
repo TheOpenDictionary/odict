@@ -16,6 +16,7 @@ odict = { path = "../lib", features = [
   "charabia",
   "sql",
   "search",
+  "html",
   "json",
 ] }
 clap = { version = "4.5.4", features = ["derive", "cargo"] }

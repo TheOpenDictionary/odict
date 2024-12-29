@@ -365,6 +365,3 @@ if (!nativeBinding) {
 }
 
 module.exports.Dictionary = nativeBinding.Dictionary;
-module.exports.MdString = nativeBinding.MdString;
-module.exports.MDString = nativeBinding.MDString;
-module.exports.MarkdownStrategy = nativeBinding.MarkdownStrategy;

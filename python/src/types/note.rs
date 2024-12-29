@@ -1,12 +1,12 @@
 use pyo3::prelude::*;
 
-use super::{mdstring::MDString, Example};
+use super::Example;
 
 #[pyclass]
 #[derive(Debug)]
 pub struct Note {
     pub id: Option<String>,
-    pub value: MDString,
+    pub value: String,
     pub examples: Vec<Example>,
 }
 
@@ -20,7 +20,7 @@ impl Note {
 
         Ok(Self {
             id,
-            value: MDString::from(value),
+            value: String::from(value),
             examples: examples
                 .into_iter()
                 .map(|e| Example::from(e))

@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Etymology, MarkdownStrategy, Sense, ID};
+use crate::{Etymology, Sense, ID};
 
 use super::{entries::Entries, senses::insert_sense, utils::SQLBuilder};
 
@@ -55,7 +55,7 @@ pub fn insert_etymology(
                 etymology
                     .description
                     .as_ref()
-                    .map_or(String::new(), |d| d.parse(MarkdownStrategy::Disabled))
+                    .unwrap_or(&String::new())
                     .into(),
                 entry_id.into(),
             ])?,

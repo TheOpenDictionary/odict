@@ -12,7 +12,7 @@ pub struct Entry {
 }
 
 impl Entry {
-  pub fn from_entry(env: napi::Env, entry: odict::Entry) -> Result<Self> {
+  pub fn from_entry(entry: odict::Entry) -> Result<Self> {
     let odict::Entry {
       term,
       see_also,
@@ -24,12 +24,12 @@ impl Entry {
       see_also,
       etymologies: etymologies
         .into_iter()
-        .map(|e| Etymology::from(env, e))
+        .map(|e| Etymology::from(e))
         .collect::<Result<Vec<Etymology>, _>>()?,
     })
   }
 
-  pub fn from_archive(env: napi::Env, entry: &odict::ArchivedEntry) -> Result<Self> {
-    Entry::from_entry(env, entry.to_entry().map_err(cast_error)?)
+  pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Self> {
+    Entry::from_entry(entry.to_entry().map_err(cast_error)?)
   }
 }

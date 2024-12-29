@@ -9,7 +9,7 @@ pub struct Sense {
 }
 
 impl Sense {
-  pub fn from(env: napi::Env, sense: odict::Sense) -> Result<Self> {
+  pub fn from(sense: odict::Sense) -> Result<Self> {
     let odict::Sense { pos, definitions } = sense;
 
     Ok(Self {
@@ -18,8 +18,8 @@ impl Sense {
         .into_iter()
         .map(|d| -> Result<Either<Definition, Group>> {
           match d {
-            odict::DefinitionType::Definition(d) => Ok(Either::A(Definition::from(env, d)?)),
-            odict::DefinitionType::Group(g) => Ok(Either::B(Group::from(env, g)?)),
+            odict::DefinitionType::Definition(d) => Ok(Either::A(Definition::from(d)?)),
+            odict::DefinitionType::Group(g) => Ok(Either::B(Group::from(g)?)),
           }
         })
         .collect::<Result<Vec<Either<Definition, Group>>, _>>()?,

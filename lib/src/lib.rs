@@ -1,27 +1,23 @@
 #[cfg(feature = "config")]
-#[cfg(feature = "search")]
 pub mod config;
 
 #[cfg(feature = "search")]
 pub mod search;
 
-#[cfg(feature = "json")]
-pub mod json;
+#[cfg(feature = "markdown")]
+mod md;
 
-#[cfg(feature = "sql")]
-pub mod sql;
-
-mod compression;
+mod compress;
 mod core;
 mod error;
 mod ext;
 mod fuzzy;
-mod md;
 mod models;
 
+pub mod format;
 pub mod fs;
-pub mod xml;
 
+pub use self::compress::CompressOptions;
 pub use self::core::*;
 pub use self::error::*;
 pub use self::ext::*;

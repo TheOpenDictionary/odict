@@ -1,7 +1,7 @@
 use std::fs;
 
 use clap::{arg, command, Args};
-use odict::{
+use odict::format::{
     sql::{SQLDialect, ToSQL},
     xml::ToXML,
 };

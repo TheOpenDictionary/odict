@@ -5,7 +5,6 @@ mod etymology;
 mod example;
 mod group;
 mod id;
-mod mdstring;
 mod note;
 #[allow(non_camel_case_types)]
 mod pos;
@@ -21,7 +20,6 @@ pub use self::etymology::*;
 pub use self::example::*;
 pub use self::group::*;
 pub use self::id::*;
-pub use self::mdstring::*;
 pub use self::note::*;
 pub use self::pos::*;
 pub use self::sense::*;

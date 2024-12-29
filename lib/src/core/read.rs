@@ -8,7 +8,7 @@ use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::access_unchecked;
 
 use crate::{
-    compression::decompress,
+    compress::decompress,
     constants::{SIGNATURE, VERSION},
     error::Error,
     ArchivedDictionary, Dictionary,

@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{MarkdownStrategy, Note, ID};
+use crate::{Note, ID};
 
 use super::{definitions::Definitions, examples::insert_example, utils::SQLBuilder};
 
@@ -46,7 +46,7 @@ pub fn insert_note(
             .columns([Notes::ID, Notes::Value, Notes::Index, Notes::DefinitionID])
             .values([
                 id.as_str().into(),
-                note.value.parse(MarkdownStrategy::Disabled).into(),
+                note.value.as_str().into(),
                 index.into(),
                 definition_id.into(),
             ])?,
