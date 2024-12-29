@@ -1,4 +1,4 @@
-use crate::{Entry, Etymology, MarkdownStrategy};
+use crate::{Entry, Etymology};
 
 use super::sense::write_sense;
 
@@ -8,7 +8,7 @@ pub fn write_ety(
     entry: &Entry,
 ) -> crate::Result<()> {
     if let Some(desc) = &etymology.description {
-        lines.push(format!("\n{}", &desc.parse(MarkdownStrategy::Disabled)));
+        lines.push(format!("\n{}", &desc));
     }
 
     for sense in etymology.senses.values() {

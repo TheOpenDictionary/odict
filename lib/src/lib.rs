@@ -1,15 +1,16 @@
 #[cfg(feature = "config")]
-#[cfg(feature = "search")]
 pub mod config;
 
 #[cfg(feature = "search")]
 pub mod search;
 
+#[cfg(feature = "markdown")]
+mod md;
+
 mod compress;
 mod core;
 mod error;
 mod ext;
-mod md;
 mod models;
 
 pub mod format;

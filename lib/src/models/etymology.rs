@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::serializable;
 
-use super::{pos::PartOfSpeech, sense::Sense, MDString};
+use super::{pos::PartOfSpeech, sense::Sense};
 
 serializable! {
   pub struct Etymology {
@@ -16,7 +16,7 @@ serializable! {
 
     #[serde(rename = "@description")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<MDString>,
+    pub description: Option<String>,
 
     #[serde(rename = "sense", with = "senses")]
     pub senses: HashMap<PartOfSpeech, Sense>,

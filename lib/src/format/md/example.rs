@@ -1,4 +1,4 @@
-use crate::{Entry, Example, MarkdownStrategy};
+use crate::{Entry, Example};
 
 use super::utils::{indent, underline_target};
 
@@ -11,10 +11,7 @@ pub fn write_example(
     let text = format!(
         "{} {}",
         "- ",
-        &underline_target(
-            &example.value.parse(MarkdownStrategy::Disabled),
-            &entry.term
-        )
+        &underline_target(&example.value, &entry.term)
     );
 
     lines.push(indent(&text, indent_width).into());

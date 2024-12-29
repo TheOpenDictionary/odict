@@ -1,5 +1,5 @@
 use odict::{
-    format::{json::ToJSON, xml::ToXML},
+    format::{html::ToHTML, json::ToJSON, md::ToMarkdown, xml::ToXML},
     Entry, Error,
 };
 
@@ -23,6 +23,30 @@ fn print_xml(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error
     Ok(())
 }
 
+fn print_markdown(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
+    let md: Vec<String> = entries
+        .iter()
+        .flatten()
+        .map(|v| v.to_markdown().unwrap())
+        .collect();
+
+    ctx.println(md.join("\n\n---\n\n"));
+
+    Ok(())
+}
+
+fn print_html(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
+    let html: Vec<String> = entries
+        .iter()
+        .flatten()
+        .map(|v| v.to_html().unwrap())
+        .collect();
+
+    ctx.println(html.join("\n\n"));
+
+    Ok(())
+}
+
 pub fn print_entries(
     ctx: &mut CLIContext,
     entries: Vec<Vec<Entry>>,
@@ -32,6 +56,8 @@ pub fn print_entries(
         PrintFormat::Print => pretty_print(ctx, entries)?,
         PrintFormat::JSON => print_json(ctx, entries)?,
         PrintFormat::XML => print_xml(ctx, entries)?,
+        PrintFormat::Markdown => print_markdown(ctx, entries)?,
+        PrintFormat::HTML => print_html(ctx, entries)?,
     }
     Ok(())
 }

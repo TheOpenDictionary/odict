@@ -1,29 +1,16 @@
-use crate::{Definition, Entry, Error, MarkdownStrategy};
+use crate::{Definition, Entry, Error};
 
-use super::{
-    example::write_example,
-    note::write_note,
-    utils::{indent, index_to_alpha},
-};
+use super::{example::write_example, note::write_note, utils::indent};
 
 pub fn write_definition(
     lines: &mut Vec<String>,
     index: usize,
     indent_width: usize,
-    use_alpha: bool,
     definition: &Definition,
     entry: &Entry,
 ) -> Result<(), Error> {
-    let numbering = match use_alpha {
-        false => (index + 1).to_string(),
-        true => index_to_alpha(index).to_string(),
-    };
-
-    let text = &format!(
-        "{}. {}",
-        numbering,
-        &definition.value.parse(MarkdownStrategy::Disabled)
-    );
+    let numbering = (index + 1).to_string();
+    let text = &format!("{}. {}", numbering, &definition.value);
 
     lines.push(indent(text, indent_width));
 

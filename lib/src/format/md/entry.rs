@@ -1,12 +1,11 @@
 use crate::Entry;
 
-use super::{etymology::write_ety, utils::divider};
+use super::etymology::write_ety;
 
 pub fn write_entry(entry: &Entry) -> crate::Result<String> {
     let mut lines: Vec<String> = vec![];
 
     lines.push(format!("\n# {}", entry.term));
-    lines.push(divider());
 
     let ety_count = entry.etymologies.len();
 

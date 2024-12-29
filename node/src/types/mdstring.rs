@@ -28,16 +28,16 @@ impl From<&str> for MarkdownStrategy {
 }
 
 #[napi]
-pub struct MDString {
-  mds: odict::MDString,
+pub struct String {
+  mds: odict::String,
 }
 
 #[napi]
-impl MDString {
+impl String {
   #[napi(constructor)]
   pub fn new(value: String) -> Result<Self> {
     Ok(Self {
-      mds: odict::MDString::from(value.as_str()),
+      mds: odict::String::from(value.as_str()),
     })
   }
 
@@ -53,8 +53,8 @@ impl MDString {
   }
 }
 
-impl From<odict::MDString> for MDString {
-  fn from(mds: odict::MDString) -> Self {
+impl From<odict::String> for String {
+  fn from(mds: odict::String) -> Self {
     Self { mds }
   }
 }

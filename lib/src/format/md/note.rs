@@ -1,22 +1,9 @@
-use crate::{error::Result, Entry, MarkdownStrategy, Note};
+use crate::{error::Result, Entry, Note};
 
-use super::{
-    example::write_example,
-    utils::{indent, index_to_alpha},
-};
+use super::{example::write_example, utils::indent};
 
 pub fn write_note(lines: &mut Vec<String>, index: usize, note: &Note, entry: &Entry) -> Result<()> {
-    lines.push(
-        indent(
-            &format!(
-                "{}. {}",
-                index_to_alpha(index),
-                note.value.parse(MarkdownStrategy::Disabled)
-            ),
-            6,
-        )
-        .into(),
-    );
+    lines.push(indent(&format!("{}. {}", index + 1, note.value), 6).into());
 
     if note.examples.len() > 0 {
         lines.push("".into());

@@ -2,13 +2,13 @@ use std::{collections::HashMap, fmt};
 
 use pyo3::prelude::*;
 
-use super::{mdstring::MDString, sense::Sense};
+use super::sense::Sense;
 
 #[pyclass]
 pub struct Etymology {
     pub id: Option<String>,
     pub pronunciation: Option<String>,
-    pub description: Option<MDString>,
+    pub description: Option<String>,
     pub senses: HashMap<String, Sense>,
 }
 
@@ -40,7 +40,7 @@ impl Etymology {
         Ok(Self {
             id,
             pronunciation,
-            description: description.map(|d| MDString::from(d)),
+            description: description.map(|d| String::from(d)),
             senses: senses
                 .into_iter()
                 .map(|(k, v)| -> PyResult<(String, Sense)> {

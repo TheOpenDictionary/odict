@@ -51,12 +51,7 @@ fn pt_end_tag(tag: &TagEnd, buffer: &mut String, tags_stack: &[Tag]) {
 }
 
 pub fn to_html(md: &str) -> String {
-    let parser = Parser::new(&md).filter(|event| {
-        !matches!(
-            event,
-            Event::Start(Tag::Paragraph) | Event::End(TagEnd::Paragraph)
-        )
-    });
+    let parser = Parser::new(&md);
 
     let mut html_output = String::new();
 

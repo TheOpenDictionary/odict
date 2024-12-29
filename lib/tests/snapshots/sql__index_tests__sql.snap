@@ -1,6 +1,7 @@
 ---
 source: lib/tests/sql.rs
 expression: "re.replace_all(result.unwrap().as_str(), \"\")"
+snapshot_kind: text
 ---
 CREATE TABLE IF NOT EXISTS "dictionaries" ( "id" uuid NOT NULL PRIMARY KEY, "name" varchar );
 CREATE TABLE IF NOT EXISTS "entries" ( "id" uuid NOT NULL PRIMARY KEY, "term" varchar NOT NULL, "dictionary_id" uuid NOT NULL, FOREIGN KEY ("dictionary_id") REFERENCES "dictionaries" ("id") ON DELETE CASCADE ON UPDATE CASCADE );
@@ -30,7 +31,7 @@ INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'ran', '');
 INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'run', '');
 INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
 INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'noun', '');
-INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', '*(vertebrates)* To move swiftly', 0, '', NULL);
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', '(vertebrates) To move swiftly', 0, '', NULL);
 INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'The dog runs after the cat.', 0, '', NULL);
 INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'The horse ran away.', 1, '', NULL);
 INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip.', 1, '', NULL);

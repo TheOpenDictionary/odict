@@ -7,6 +7,8 @@ pub enum PrintFormat {
     Print,
     JSON,
     XML,
+    Markdown,
+    HTML,
 }
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -23,6 +25,8 @@ impl Display for PrintFormat {
             PrintFormat::Print => write!(f, "print"),
             PrintFormat::JSON => write!(f, "json"),
             PrintFormat::XML => write!(f, "xml"),
+            PrintFormat::Markdown => write!(f, "markdown"),
+            PrintFormat::HTML => write!(f, "html"),
         }
     }
 }

@@ -1,17 +1,17 @@
 use napi::bindgen_prelude::*;
 
-use super::{mdstring::MDString, note::Note, Example};
+use super::{note::Note, Example};
 
 #[napi(object)]
 pub struct Definition {
   pub id: Option<String>,
-  pub value: ClassInstance<MDString>,
+  pub value: String,
   pub examples: Vec<Example>,
   pub notes: Vec<Note>,
 }
 
 impl Definition {
-  pub fn from(env: napi::Env, definition: odict::Definition) -> Result<Self> {
+  pub fn from(definition: odict::Definition) -> Result<Self> {
     let odict::Definition {
       id,
       value,
@@ -21,15 +21,12 @@ impl Definition {
 
     Ok(Self {
       id,
-      value: MDString::from(value).into_instance(env)?,
+      value,
       examples: examples
         .into_iter()
-        .map(|e| Example::from(env, e).unwrap())
+        .map(|e| Example::from(e).unwrap())
         .collect::<Vec<Example>>(),
-      notes: notes
-        .into_iter()
-        .map(|n| Note::from(env, n).unwrap())
-        .collect(),
+      notes: notes.into_iter().map(|n| Note::from(n).unwrap()).collect(),
     })
   }
 }

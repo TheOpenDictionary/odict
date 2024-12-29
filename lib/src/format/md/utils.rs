@@ -1,9 +1,5 @@
 pub fn divider() -> String {
-    "─".repeat(32)
-}
-
-pub fn index_to_alpha(i: usize) -> char {
-    (i as u8 + b'a') as char
+    "-".repeat(3)
 }
 
 pub fn underline_target(example: &str, target: &str) -> String {
