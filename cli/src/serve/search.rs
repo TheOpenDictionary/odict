@@ -18,16 +18,16 @@ pub struct SearchRequest {
 
 #[derive(Debug, Display, Error)]
 enum SearchError {
-    #[display(fmt = "Dictionary not found: {}", name)]
+    #[display("Dictionary not found: {}", name)]
     DictionaryNotFound { name: String },
 
-    #[display(fmt = "Failed to read dictionary: {}", name)]
+    #[display("Failed to read dictionary: {}", name)]
     DictionaryReadError { name: String },
 
-    #[display(fmt = "Search error: {}", message)]
+    #[display("Search error: {}", message)]
     SearchError { message: String },
 
-    #[display(fmt = "Failed to serialize response")]
+    #[display("Failed to serialize response")]
     SerializeError,
 }
 
