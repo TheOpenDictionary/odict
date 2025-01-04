@@ -2848,7 +2848,7 @@ dependencies = [
  "map-macro",
  "nucleo-matcher",
  "pulldown-cmark",
- "quick-xml 0.37.1",
+ "quick-xml 0.37.2",
  "rayon",
  "regex",
  "rkyv",
