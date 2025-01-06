@@ -1,7 +1,7 @@
 use clap::{CommandFactory, Parser};
 use odict_cli::{
-    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, ui, CLIContext,
-    Commands, CLI,
+    alias, browse, compile, dump, index, info, lexicon, lookup, merge, new, search, serve,
+    CLIContext, Commands, CLI,
 };
 
 fn main() -> color_eyre::Result<()> {
@@ -27,7 +27,7 @@ fn main() -> color_eyre::Result<()> {
         },
         None => {
             if let Some(path) = &cli.path {
-                return ui::browse(c, &path);
+                return browse(c, &path);
             }
 
             CLI::command().print_help()?;

@@ -15,3 +15,6 @@ insta.opt-level = 3
 [profile.dist]
 inherits = "release"
 lto = "thin"
+
+[profile.dev.package.backtrace]
+opt-level = 3

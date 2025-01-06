@@ -1,4 +1,5 @@
 mod alias;
+mod browse;
 mod cli;
 mod compile;
 mod context;
@@ -13,10 +14,11 @@ mod new;
 mod print;
 mod search;
 mod serve;
-pub mod ui;
+mod browser;
 mod utils;
 
 pub use alias::*;
+pub use browse::*;
 pub use cli::*;
 pub use compile::*;
 pub use context::*;
