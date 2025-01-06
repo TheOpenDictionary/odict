@@ -4,13 +4,8 @@ use ratatui::{
     buffer::Buffer,
     layout::Rect,
     text::Text,
-    widgets::{
-        Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, StatefulWidget,
-        Widget,
-    },
+    widgets::{Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, StatefulWidget, Widget},
 };
-
-use crate::print;
 
 #[derive(Debug, Default, Setters)]
 pub struct EntryPopup<'a> {

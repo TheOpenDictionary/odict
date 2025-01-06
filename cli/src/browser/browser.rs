@@ -3,7 +3,6 @@ use std::time::Duration;
 use odict::{find::FindOptions, format::md::ToMarkdown, DictionaryFile};
 use ratatui::{
     crossterm::event::{self, Event, KeyCode},
-    widgets::ScrollbarState,
     Frame,
 };
 use tui_input::backend::crossterm::EventHandler;
