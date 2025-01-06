@@ -15,6 +15,7 @@ pub struct EntryPopup {
 impl EntryPopup {
     pub fn new(content: String) -> EntryPopup {
         let lines = content.lines().count();
+
         EntryPopup {
             content,
             content_length: lines,

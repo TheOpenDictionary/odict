@@ -10,6 +10,8 @@ use ratatui::{
     },
 };
 
+use crate::print;
+
 #[derive(Debug, Default, Setters)]
 pub struct EntryPopup<'a> {
     #[setters(into)]
@@ -22,13 +24,14 @@ impl StatefulWidget for EntryPopup<'_> {
             .begin_symbol(Some("↑"))
             .end_symbol(Some("↓"));
 
-        let text = Text::from(self.content);
-        let lines = text.lines.len().clone();
-        let paragraph = Paragraph::new(text)
+        let lines = self.content.lines.len();
+
+        let paragraph = Paragraph::new(self.content)
             .scroll((state.scroll as u16, 0))
             .block(Block::new().borders(Borders::ALL));
 
-        state.scroll_state = state.scroll_state.content_length(lines);
+        state.content_length = lines.saturating_sub((area.height as usize).saturating_sub(4));
+        state.scroll_state = state.scroll_state.content_length(state.content_length);
 
         paragraph.render(area, buf);
         scrollbar.render(area, buf, &mut state.scroll_state);
