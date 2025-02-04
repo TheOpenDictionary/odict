@@ -35,7 +35,7 @@
     "@napi-rs/cli": "3.0.0-alpha.64",
     "@types/node": "^22.0.0",
     "prettier": "^3.3.2",
-    "vitest": "^2.1.5"
+    "vitest": "^3.0.0"
   },
   "engines": {
     "node": ">= 10"
