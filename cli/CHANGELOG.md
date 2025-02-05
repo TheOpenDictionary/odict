@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.0.0...cli/v2.1.0) (2025-02-05)
+
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+* Expose Brotli compression options for `compile` ([#1067](https://github.com/TheOpenDictionary/odict/issues/1067)) ([0b282cd](https://github.com/TheOpenDictionary/odict/commit/0b282cde171ee3e6b1252c59fa9fc8f050e7c4b4))
+
+
+### Bug Fixes
+
+* Fix CLI description ([52e92f7](https://github.com/TheOpenDictionary/odict/commit/52e92f7a45e620ef586217f48b1f6d93ee9104d8))
+
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/cli-v2.0.0...cli/v2.0.0) (2024-12-26)
 
 
