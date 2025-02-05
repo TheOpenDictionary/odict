@@ -1,6 +1,6 @@
 [tools]
 node = "22.13.1"
-python = "3.13.1"
+python = "3.13.2"
 "cargo:cargo-insta" = "1.41.1"
 "cargo:cargo-dist" = "0.25.1"
 "cargo:cargo-nextest" = "0.9.84"
