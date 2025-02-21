@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python/v1.0.0) (2025-02-21)
+
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python-v1.0.0) (2024-12-25)
 
 
