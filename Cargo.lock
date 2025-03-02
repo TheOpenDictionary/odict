@@ -2961,7 +2961,7 @@ dependencies = [
  "indicatif",
  "num-format",
  "odict",
- "pulldown-cmark 0.13.0",
+ "pulldown-cmark 0.12.2",
  "pulldown-cmark-mdcat",
  "ratatui",
  "serde",
@@ -3321,7 +3321,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f86ba2052aebccc42cbbb3ed234b8b13ce76f75c3551a303cb2bcffcff12bb14"
 dependencies = [
  "bitflags 2.9.0",
+ "getopts",
  "memchr",
+ "pulldown-cmark-escape",
  "unicase",
 ]
 
