@@ -29,8 +29,7 @@ fn print_markdown(ctx: &mut CLIContext, entries: Vec<Vec<Entry>>) -> color_eyre:
         .map(|v| v.to_markdown().unwrap())
         .collect();
 
-    println!("{}", render_md(&md.join("\n\n---\n\n"))?);
-
+    termimad::print_text((&md.join("\n\n---\n\n").as_str()));
     // ctx.println(format!("{}", md.join("\n\n---\n\n").as_str()));
 
     Ok(())

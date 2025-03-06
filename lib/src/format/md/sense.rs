@@ -3,7 +3,7 @@ use crate::{DefinitionType, Entry, Sense};
 use super::{definition::write_definition, group::write_group};
 
 pub fn write_sense(lines: &mut Vec<String>, sense: &Sense, entry: &Entry) -> crate::Result<()> {
-    lines.push(format!("\n_{}_\n", sense.pos.description()));
+    lines.push(format!("\n*{}*\n", sense.pos.description()));
 
     for (idx, dt) in sense.definitions.iter().enumerate() {
         match dt {

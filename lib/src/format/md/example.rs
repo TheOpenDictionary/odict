@@ -10,7 +10,7 @@ pub fn write_example(
 ) -> crate::Result<()> {
     let text = format!(
         "{} {}",
-        "- ",
+        "• ",
         &underline_target(&example.value, &entry.term)
     );
 

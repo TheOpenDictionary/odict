@@ -10,7 +10,7 @@ pub fn underline_target(example: &str, target: &str) -> String {
 
     for (index, _) in example.match_indices(target) {
         parts.push(example[last_index..index].into());
-        parts.push(format!("*{}*", target));
+        parts.push(format!("**{}**", target));
 
         last_index = index + target.len();
     }
@@ -19,7 +19,7 @@ pub fn underline_target(example: &str, target: &str) -> String {
         parts.push(example[last_index..].into());
     }
 
-    let modified_string = format!("_{}_", parts.concat());
+    let modified_string = format!("*{}*", parts.concat());
 
     modified_string
 }
