@@ -4,6 +4,15 @@
 
 
 
+## [0.0.3](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node/v0.0.3) (2025-03-22)
+
+## [1.1.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node/v1.1.0) (2025-03-22)
+
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node-v1.0.0) (2024-12-26)
 
 
