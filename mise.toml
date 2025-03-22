@@ -1,9 +1,9 @@
 [tools]
 node = "22.14.0"
 python = "3.13.2"
-"cargo:cargo-insta" = "1.41.1"
-"cargo:cargo-dist" = "0.25.1"
-"cargo:cargo-nextest" = "0.9.84"
+"cargo:cargo-insta" = "1.42.2"
+"cargo:cargo-dist" = "0.28.0"
+"cargo:cargo-nextest" = "0.9.92"
 
 [settings]
 python.venv_stdlib = true
