@@ -30,7 +30,7 @@ depends = ["build:*"]
 description = "Recursively builds all packages in the project"
 
 ["ci"]
-run = 'mise x act -- act ci --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+run = 'mise x act -- act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true
 
 ["default"]
