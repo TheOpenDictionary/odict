@@ -19,16 +19,16 @@ pub struct LookupRequest {
 
 #[derive(Debug, Display, Error)]
 enum LookupError {
-    #[display(fmt = "Dictionary not found: {}", name)]
+    #[display("Dictionary not found: {}", name)]
     DictionaryNotFound { name: String },
 
-    #[display(fmt = "Failed to read dictionary: {}", name)]
+    #[display("Failed to read dictionary: {}", name)]
     DictionaryReadError { name: String },
 
-    #[display(fmt = "Lookup error: {}", message)]
+    #[display("Lookup error: {}", message)]
     LookupError { message: String },
 
-    #[display(fmt = "Failed to serialize response")]
+    #[display("Failed to serialize response")]
     SerializeError,
 }
 
