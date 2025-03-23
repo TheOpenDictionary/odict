@@ -3,7 +3,7 @@
   "extends": [
     "config:base"
   ],
-  "automerge": true,
+  "automerge": false,
   "updateLockFiles": true,
   "packageRules": [
     {
