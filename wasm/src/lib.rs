@@ -1,13 +1,14 @@
+mod dictionary;
+mod types;
 mod utils;
 
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
+// Re-export the Dictionary and related types
+pub use dictionary::Dictionary;
+pub use types::*;
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, {{project-name}}!");
+#[wasm_bindgen(start)]
+pub fn start() {
+    utils::set_panic_hook();
 }
