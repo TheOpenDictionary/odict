@@ -78,7 +78,6 @@ fn update(model: &mut App, msg: Message) -> Option<Message> {
         Message::Lookup => {
             let term = model.entries.items.get(model.entries.state.selected()?)?;
             let entry = model.dictionary.entries.get(term.as_str()).unwrap();
-
             model.entry = Some(EntryPopup::new(entry.to_markdown().unwrap()))
         }
         Message::ScrollDown => {

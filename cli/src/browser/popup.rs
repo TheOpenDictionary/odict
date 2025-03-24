@@ -4,7 +4,7 @@ use ratatui::{
     buffer::Buffer,
     layout::Rect,
     text::Text,
-    widgets::{Block, Borders, Paragraph, Scrollbar, ScrollbarOrientation, StatefulWidget, Widget},
+    widgets::{Block, Borders, Padding, Paragraph, Scrollbar, ScrollbarOrientation, StatefulWidget, Widget},
 };
 
 #[derive(Debug, Default, Setters)]
@@ -23,7 +23,7 @@ impl StatefulWidget for EntryPopup<'_> {
 
         let paragraph = Paragraph::new(self.content)
             .scroll((state.scroll as u16, 0))
-            .block(Block::new().borders(Borders::ALL));
+            .block(Block::new().borders(Borders::ALL).padding(Padding::uniform(1)));
 
         state.content_length = lines.saturating_sub((area.height as usize).saturating_sub(4));
         state.scroll_state = state.scroll_state.content_length(state.content_length);

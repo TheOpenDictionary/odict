@@ -15,9 +15,10 @@ pub struct EntryPopup {
 impl EntryPopup {
     pub fn new(content: String) -> EntryPopup {
         let lines = content.lines().count();
+        let md = format!("{}\n", termimad::term_text(content.as_str()));
 
         EntryPopup {
-            content,
+            content:md,
             content_length: lines,
             ..Default::default()
         }
