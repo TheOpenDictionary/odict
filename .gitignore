@@ -15,6 +15,8 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+wasm/pkg
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
@@ -419,7 +421,7 @@ dist
 # TernJS port file
 .tern-port
 
-# VS-Code debugging binaries 
+# VS-Code debugging binaries
 __debug_bin
 
 # Stores VSCode versions used for testing VSCode extensions
@@ -765,3 +767,4 @@ TSWLatexianTemp*
 .pnpm-store
 semicolon_delimited_script
 *.pdf
+.aider*
