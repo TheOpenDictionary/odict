@@ -145,14 +145,14 @@ jobs:
         if: matrix.settings.target != 'wasm32-wasi-preview1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: '*.node'
+          path: 'node/*.node'
           if-no-files-found: error
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         if: matrix.settings.target == 'wasm32-wasi-preview1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: '*.wasm'
+          path: 'node/*.wasm'
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -201,7 +201,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: '*.node'
+          path: 'node/*.node'
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -405,7 +405,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: '*.node'
+          path: 'node/*.node'
           if-no-files-found: error
   test-wasi-nodejs:
     name: Test bindings on wasi - node@${{ matrix.node }}
