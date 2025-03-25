@@ -4,8 +4,23 @@ use super::{definition::Definition, either::Either, group::Group};
 
 #[wasm_bindgen]
 pub struct Sense {
+  #[wasm_bindgen(skip)]
   pub pos: String,
+  #[wasm_bindgen(skip)]
   pub definitions: Vec<JsValue>,
+}
+
+#[wasm_bindgen]
+impl Sense {
+  #[wasm_bindgen(getter)]
+  pub fn get_pos(&self) -> String {
+    self.pos.clone()
+  }
+
+  #[wasm_bindgen(getter)]
+  pub fn get_definitions(&self) -> JsValue {
+    serde_wasm_bindgen::to_value(&self.definitions).unwrap()
+  }
 }
 
 impl Sense {

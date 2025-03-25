@@ -4,7 +4,21 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Example {
+  #[wasm_bindgen(skip)]
   pub value: String,
+}
+
+#[wasm_bindgen]
+impl Example {
+  #[wasm_bindgen(getter)]
+  pub fn get_value(&self) -> String {
+    self.value.clone()
+  }
+
+  #[wasm_bindgen(setter)]
+  pub fn set_value(&mut self, value: String) {
+    self.value = value;
+  }
 }
 
 impl Example {

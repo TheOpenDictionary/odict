@@ -4,24 +4,101 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Entry {
+    #[wasm_bindgen(skip)]
     pub term: String,
+    #[wasm_bindgen(skip)]
     pub see_also: Option<String>,
+    #[wasm_bindgen(skip)]
     pub etymologies: Vec<Etymology>,
+}
+
+#[wasm_bindgen]
+impl Entry {
+    #[wasm_bindgen(getter)]
+    pub fn get_term(&self) -> String {
+        self.term.clone()
+    }
+
+    #[wasm_bindgen(setter)]
+    pub fn set_term(&mut self, term: String) {
+        self.term = term;
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn get_see_also(&self) -> Option<String> {
+        self.see_also.clone()
+    }
+
+    #[wasm_bindgen(setter)]
+    pub fn set_see_also(&mut self, see_also: Option<String>) {
+        self.see_also = see_also;
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn get_etymologies(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.etymologies).unwrap()
+    }
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Etymology {
+    #[wasm_bindgen(skip)]
     pub description: Option<String>,
+    #[wasm_bindgen(skip)]
     pub senses: Vec<Sense>,
+}
+
+#[wasm_bindgen]
+impl Etymology {
+    #[wasm_bindgen(getter)]
+    pub fn get_description(&self) -> Option<String> {
+        self.description.clone()
+    }
+
+    #[wasm_bindgen(setter)]
+    pub fn set_description(&mut self, description: Option<String>) {
+        self.description = description;
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn get_senses(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.senses).unwrap()
+    }
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Sense {
+    #[wasm_bindgen(skip)]
     pub part_of_speech: String,
+    #[wasm_bindgen(skip)]
     pub definitions: Vec<String>,
+    #[wasm_bindgen(skip)]
     pub examples: Vec<String>,
+}
+
+#[wasm_bindgen]
+impl Sense {
+    #[wasm_bindgen(getter)]
+    pub fn get_part_of_speech(&self) -> String {
+        self.part_of_speech.clone()
+    }
+
+    #[wasm_bindgen(setter)]
+    pub fn set_part_of_speech(&mut self, part_of_speech: String) {
+        self.part_of_speech = part_of_speech;
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn get_definitions(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.definitions).unwrap()
+    }
+
+    #[wasm_bindgen(getter)]
+    pub fn get_examples(&self) -> JsValue {
+        serde_wasm_bindgen::to_value(&self.examples).unwrap()
+    }
 }
 
 impl Entry {
