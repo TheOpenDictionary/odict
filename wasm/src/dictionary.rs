@@ -159,11 +159,12 @@ impl Dictionary {
   }
 
   #[wasm_bindgen]
-  pub fn lexicon(&self) -> Result<Vec<&str>, JsValue> {
+  pub fn lexicon(&self) -> Result<Vec<String>, JsValue> {
     let dict = self.file.to_archive().map_err(cast_error)?;
     let lexicon = dict.lexicon();
 
-    Ok(lexicon)
+    // Convert &str to String to avoid lifetime issues
+    Ok(lexicon.iter().map(|&s| s.to_string()).collect())
   }
 
   #[wasm_bindgen]

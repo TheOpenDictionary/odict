@@ -24,11 +24,39 @@ pub struct Sense {
     pub examples: Vec<String>,
 }
 
-impl From<&odict::models::Entry> for Entry {
-    fn from(entry: &odict::models::Entry) -> Self {
-        Entry {
-            term: entry.term.clone(),
-            see_also: entry.see_also.clone(),
+impl Entry {
+    pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Self, JsValue> {
+        let term = entry.term().to_string();
+        let see_also = entry.see_also().map(|s| s.to_string());
+        
+        let etymologies = entry
+            .etymologies()
+            .iter()
+            .map(|ety| Etymology {
+                description: ety.description().map(|d| d.to_string()),
+                senses: ety
+                    .senses()
+                    .iter()
+                    .map(|(pos, sense)| Sense {
+                        part_of_speech: pos.to_string(),
+                        definitions: sense.definitions().iter().map(|d| d.to_string()).collect(),
+                        examples: sense.examples().iter().map(|e| e.to_string()).collect(),
+                    })
+                    .collect(),
+            })
+            .collect();
+
+        Ok(Entry {
+            term,
+            see_also,
+            etymologies,
+        })
+    }
+
+    pub fn from_entry(entry: odict::Entry) -> Result<Self, JsValue> {
+        Ok(Entry {
+            term: entry.term,
+            see_also: entry.see_also,
             etymologies: entry
                 .etymologies
                 .iter()
@@ -45,6 +73,6 @@ impl From<&odict::models::Entry> for Entry {
                         .collect(),
                 })
                 .collect(),
-        }
+        })
     }
 }
