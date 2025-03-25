@@ -44,58 +44,58 @@ log(format!("{} bytes", bytes.len()).as_str());
     Ok(dict)
   }
 
-  pub fn _lookup(
-    &self,
-    queries: &Vec<odict::lookup::LookupQuery>,
-    options: Option<LookupOptions>,
-  ) -> Result<Vec<Vec<Entry>>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
+  // pub fn _lookup(
+  //   &self,
+  //   queries: &Vec<odict::lookup::LookupQuery>,
+  //   options: Option<LookupOptions>,
+  // ) -> Result<Vec<Vec<Entry>>> {
+  //   let dict = self.file.to_archive().map_err(cast_error)?;
 
-    let mut opts = options.unwrap_or(LookupOptions::default());
+  //   let mut opts = options.unwrap_or(LookupOptions::default());
 
-    if let Some(split) = opts
-      .split
-      .or(self.options().split.map(|s| s.threshold).flatten())
-    {
-      opts.split = Some(split);
-    }
+  //   if let Some(split) = opts
+  //     .split
+  //     .or(self.options().split.map(|s| s.threshold).flatten())
+  //   {
+  //     opts.split = Some(split);
+  //   }
 
-    let entries = dict
-      .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
-      .map_err(|e| cast_error(e))?;
+  //   let entries = dict
+  //     .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
+  //     .map_err(|e| cast_error(e))?;
 
-    let mapped = entries
-      .iter()
-      .map(|i| {
-        i.iter()
-          .map(|e| Entry::from_archive(e))
-          .collect::<Result<Vec<Entry>, _>>()
-      })
-      .collect::<Result<Vec<Vec<Entry>>, _>>()?;
+  //   let mapped = entries
+  //     .iter()
+  //     .map(|i| {
+  //       i.iter()
+  //         .map(|e| Entry::from_archive(e))
+  //         .collect::<Result<Vec<Entry>, _>>()
+  //     })
+  //     .collect::<Result<Vec<Vec<Entry>>, _>>()?;
 
-    Ok(mapped)
-  }
+  //   Ok(mapped)
+  // }
 
-  #[wasm_bindgen]
-  pub fn lookup(
-    &self,
-    query: JsValue,
-    options: Option<LookupOptions>,
-  ) -> Result<Vec<Vec<Entry>>, JsValue> {
-    let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
-    let queryUnion: Either3<crate::LookupQuery, String, Vec<crate::LookupQuery>> = serde_wasm_bindgen::from_value(query)?;
+  // #[wasm_bindgen]
+  // pub fn lookup(
+  //   &self,
+  //   query: JsValue,
+  //   // options: Option<LookupOptions>,
+  // ) -> Result<Vec<Vec<Entry>>, JsValue> {
+  //   let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
+  //   let queryUnion: Either3<crate::LookupQuery, String, Vec<crate::LookupQuery>> = serde_wasm_bindgen::from_value(query)?;
 
-    match queryUnion {
-      Either3::A(a) => queries.push(a.into()),
-      Either3::B(b) => queries.push(b.into()),
-      Either3::C(c) => queries.append(
-        c.into_iter()
-          .map(to_lookup_query)
-          .collect::<Vec<odict::lookup::LookupQuery>>()
-          .borrow_mut(),
-      ),
-    }
+  //   match queryUnion {
+  //     Either3::A(a) => queries.push(a.into()),
+  //     Either3::B(b) => queries.push(b.into()),
+  //     Either3::C(c) => queries.append(
+  //       c.into_iter()
+  //         .map(|q| q.into())
+  //         .collect::<Vec<odict::lookup::LookupQuery>>()
+  //         .borrow_mut(),
+  //     ),
+  //   }
 
-    self._lookup(&queries, options)
-  }
+  //   self._lookup(&queries, options)
+  // }
 }
