@@ -1,9 +1,7 @@
 name: Node bindings
 env:
   DEBUG: napi:*
-  APP_NAME: node
   MACOSX_DEPLOYMENT_TARGET: '10.13'
-  CARGO_INCREMENTAL: '1'
 permissions:
   contents: write
   id-token: write
@@ -32,40 +30,63 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target x86_64-apple-darwin
+            build: pnpm --filter "@odict/node" build --platform --target x86_64-apple-darwin
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build --target x86_64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build --platform
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build --target i686-pc-windows-msvc
+            build: |
+              pnpm --filter "@odict/node" build --platform --target i686-pc-windows-msvc
+              pnpm --filter "@odict/node" test
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-gnu --use-napi-cross
-          - host: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build --platform --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build --platform --target armv7-unknown-linux-gnueabihf --use-napi-cross
+          - host: ubuntu-latest
+            target: armv7-unknown-linux-musleabihf
+            build: pnpm --filter "@odict/node" build --platform --target armv7-unknown-linux-musleabihf -x
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: pnpm --filter "@odict/node" build --target aarch64-linux-android
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: pnpm --filter "@odict/node" build --target armv7-linux-androideabi
+            build: pnpm --filter "@odict/node" build --platform --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc            
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: riscv64gc-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-riscv64-linux-gnu -y
+            build: pnpm --filter "@odict/node" build --platform --target riscv64gc-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: powerpc64le-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-powerpc64le-linux-gnu -y
+            build: pnpm --filter "@odict/node" build --platform --target powerpc64le-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: s390x-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-s390x-linux-gnu -y
+            build: pnpm --filter "@odict/node" build --platform --target s390x-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: wasm32-wasi-preview1-threads
+            build: pnpm --filter "@odict/node" build --platform --target wasm32-wasi-preview1-threads
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -115,18 +136,24 @@ jobs:
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         with:
           node-version: 20
-          cache: pnpm
           architecture: x86
       - name: Build
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v4
+        if: matrix.settings.target != 'wasm32-wasi-preview1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: node/*.node
+          path: '*.node'
           if-no-files-found: error
-
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.settings.target == 'wasm32-wasi-preview1-threads'
+        with:
+          name: bindings-${{ matrix.settings.target }}
+          path: '*.wasm'
+          if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
     name: Build FreeBSD
@@ -143,20 +170,20 @@ jobs:
           version: '14.1'
           memory: 8G
           cpu_count: 3
-          environment_variables: 'DEBUG RUSTUP_IO_THREADS'
+          environment_variables: DEBUG RUSTUP_IO_THREADS
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
             sudo npm install -g corepack
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain beta
-            corepack prepare
-            corepack enable
+            sh rustup.sh -y --profile minimal --default-toolchain stable
             source "$HOME/.cargo/env"
             echo "~~~~ rustc --version ~~~~"
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
+            corepack prepare
+            corepack enable
             echo "~~~~ pnpm --version ~~~~"
             pnpm --version
             pwd
@@ -166,13 +193,15 @@ jobs:
             freebsd-version
             pnpm install
             pnpm --filter "@odict/node" build
+            strip -x *.node
+            pnpm --filter "@odict/node" test
             rm -rf node_modules
             rm -rf target
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: node/*.node
+          path: '*.node'
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -182,116 +211,246 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: windows-latest
-            target: x86_64-pc-windows-msvc
-            architecture: x64
           - host: macos-latest
             target: x86_64-apple-darwin
             architecture: x64
           - host: macos-latest
             target: aarch64-apple-darwin
             architecture: arm64
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+            architecture: x64
         node:
           - '18'
           - '20'
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
-      - name: setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: yarn
           architecture: ${{ matrix.settings.architecture }}
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: node
+          path: .
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
         run: pnpm --filter "@odict/node" test
-  test-linux-binding:
-    name: Test ${{ matrix.target }} - node@${{ matrix.node }}
+  test-linux-x64-gnu-binding:
+    name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:
       - build
     strategy:
       fail-fast: false
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-gnu
-          - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-gnueabihf
         node:
           - '18'
           - '20'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: setup pnpm
-        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
-      - name: Output docker params
-        id: docker
-        run: |
-          node -e "
-            if ('${{ matrix.target }}'.startsWith('aarch64')) {
-              console.log('PLATFORM=linux/arm64')
-            } else if ('${{ matrix.target }}'.startsWith('armv7')) {
-              console.log('PLATFORM=linux/arm/v7')
-            } else {
-              console.log('PLATFORM=linux/amd64')
-            }
-          " >> $GITHUB_OUTPUT
-          node -e "
-            if ('${{ matrix.target }}'.endsWith('-musl')) {
-              console.log('IMAGE=node:${{ matrix.node }}-alpine')
-            } else {
-              console.log('IMAGE=node:${{ matrix.node }}-slim')
-            }
-          " >> $GITHUB_OUTPUT
-          echo "PNPM_STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
-      # use --force to download the all platform/arch dependencies
+          cache: yarn
       - name: Install dependencies
-        run: pnpm install --force
+        run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: bindings-${{ matrix.target }}
-          path: node
+          name: bindings-x86_64-unknown-linux-gnu
+          path: .
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Test bindings
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim pnpm --filter "@odict/node" test
+  test-linux-aarch64-gnu-binding:
+    name: Test bindings on aarch64-unknown-linux-gnu - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-gnu
+          path: .
+      - name: List packages
+        run: ls -R .
+        shell: bash
+      - name: Install dependencies
+        run: pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
-          platforms: all
+          platforms: arm64
       - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Test bindings
+      - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
-          image: ${{ steps.docker.outputs.IMAGE }}
-          options: -v ${{ steps.docker.outputs.PNPM_STORE_PATH }}:${{ steps.docker.outputs.PNPM_STORE_PATH }} -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}
-          run: cd node && npm run test
+          image: node:${{ matrix.node }}-slim
+          options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
+          run: pnpm --filter "@odict/node" test
+  test-linux-aarch64-musl-binding:
+    name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '18'
+          - '20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-musl
+          path: .
+      - name: List packages
+        run: ls -R .
+        shell: bash
+      - name: Install dependencies
+        run: pnpm install
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Setup and run tests
+        uses: addnab/docker-run-action@v3
+        with:
+          image: node:${{ matrix.node }}-alpine
+          options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
+          run: pnpm --filter "@odict/node" test
+  test-linux-arm-gnueabihf-binding:
+    name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '18'
+          - '20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-armv7-unknown-linux-gnueabihf
+          path: .
+      - name: List packages
+        run: ls -R .
+        shell: bash
+      - name: Install dependencies
+        run: pnpm install
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Setup and run tests
+        uses: addnab/docker-run-action@v3
+        with:
+          image: node:${{ matrix.node }}-bullseye-slim
+          options: '--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build'
+          run: pnpm --filter "@odict/node" test
+  universal-macOS:
+    name: Build universal macOS binary
+    needs:
+      - build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Download macOS x64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-x86_64-apple-darwin
+          path: .
+      - name: Download macOS arm64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-apple-darwin
+          path: .
+      - name: Combine binaries
+        run: pnpm napi universalize
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-universal-apple-darwin
+          path: '*.node'
+          if-no-files-found: error
+  test-wasi-nodejs:
+    name: Test bindings on wasi - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - '18'
+          - '20'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-wasm32-wasi-preview1-threads
+          path: .
+      - name: List packages
+        run: ls -R .
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - name: Install dependencies
+        run: yarn install
+      - name: Test
+        run: pnpm --filter "@odict/node" test
+        env:
+          NAPI_RS_FORCE_WASI: true
   publish:
     name: Publish
     runs-on: ubuntu-latest
     needs:
       - build-freebsd
       - test-macOS-windows-binding
-      - test-linux-binding
+      - test-linux-x64-gnu-binding
+      - test-linux-aarch64-gnu-binding
+      - test-linux-aarch64-musl-binding
+      - test-linux-arm-gnueabihf-binding
+      - universal-macOS
+      - test-wasi-nodejs
     steps:
       - uses: actions/checkout@v4
       - name: setup pnpm
@@ -301,40 +460,29 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          registry-url: https://registry.npmjs.org
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: node/artifacts
-      - name: create npm dirs
-        run: pnpm --filter="@odict/node" create-dirs
+          path: artifacts
       - name: Move artifacts
-        run: pnpm --filter="@odict/node" artifacts
+        run: pnpm --filter "@odict/node" artifacts
       - name: List packages
-        run: ls -R ./node/npm
+        run: ls -R ./npm
         shell: bash
-      - uses: olegtarasov/get-tag@v2.1.3
-        id: tagName
-        with:
-          tagRegex: "node-(.*)"
-      - name: Print tag name 
-        run: echo $GIT_TAG_NAME
       - name: Publish
-        shell: bash
         run: |
-          npm config set provenance true
-          if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
+          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --no-git-checks --access public
-          elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
+            npm publish --access public --provenance
+          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
+            npm publish --tag next --access public --provenance
           else
             echo "Not a release, skipping publish"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

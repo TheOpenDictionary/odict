@@ -1,8 +1,10 @@
 {
   "name": "@odict/node",
   "version": "1.0.0",
+  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
+  "browser": "browser.js",
   "files": [
     "index.js",
     "index.d.ts"
@@ -39,12 +41,12 @@
     "vitest": "^2.1.5"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 10.16.0 < 11 || >= 11.8.0 < 12 || >= 12.0.0"
   },
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
-    "build": "napi build --release --platform --pipe \"prettier -w\"",
-    "build:debug": "napi build --platform --pipe \"prettier -w\"",
+    "build": "napi build --release --platform --strip --pipe \"prettier -w\"",
+    "build:debug": "napi build --pipe \"prettier -w\"",
     "test": "vitest --no-watch",
     "universal": "napi universalize",
     "artifacts": "napi artifacts",
