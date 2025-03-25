@@ -4,14 +4,13 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Example {
-  #[wasm_bindgen(skip)]
-  pub value: String,
+  value: String,
 }
 
 #[wasm_bindgen]
 impl Example {
   #[wasm_bindgen(getter)]
-  pub fn get_value(&self) -> String {
+  pub fn value(&self) -> String {
     self.value.clone()
   }
 

@@ -6,28 +6,25 @@ use super::Example;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Note {
-  #[wasm_bindgen(skip)]
-  pub id: Option<String>,
-  #[wasm_bindgen(skip)]
-  pub value: String,
-  #[wasm_bindgen(skip)]
-  pub examples: Vec<Example>,
+  id: Option<String>,
+  value: String,
+  examples: Vec<Example>,
 }
 
 #[wasm_bindgen]
 impl Note {
   #[wasm_bindgen(getter)]
-  pub fn get_id(&self) -> Option<String> {
+  pub fn id(&self) -> Option<String> {
     self.id.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_value(&self) -> String {
+  pub fn value(&self) -> String {
     self.value.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_examples(&self) -> JsValue {
+  pub fn examples(&self) -> JsValue {
     serde_wasm_bindgen::to_value(&self.examples).unwrap()
   }
 }

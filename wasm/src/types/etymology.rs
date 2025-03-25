@@ -8,17 +8,31 @@ use super::sense::Sense;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Etymology {
-  pub id: Option<String>,
-  pub pronunciation: Option<String>,
-  pub description: Option<String>,
-  #[wasm_bindgen(skip)]
-  pub senses: HashMap<String, Sense>,
+  id: Option<String>,
+  pronunciation: Option<String>,
+  description: Option<String>,
+  senses: HashMap<String, Sense>,
 }
 
 #[wasm_bindgen]
 impl Etymology {
   #[wasm_bindgen(getter)]
-  pub fn get_senses(&self) -> JsValue {
+  pub fn id(&self) -> Option<String> {
+    self.id.clone()
+  }
+
+  #[wasm_bindgen(getter)]
+  pub fn pronunciation(&self) -> Option<String> {
+    self.pronunciation.clone()
+  }
+
+  #[wasm_bindgen(getter)]
+  pub fn description(&self) -> Option<String> {
+    self.description.clone()
+  }
+
+  #[wasm_bindgen(getter)]
+  pub fn senses(&self) -> JsValue {
     serde_wasm_bindgen::to_value(&self.senses).unwrap()
   }
 }

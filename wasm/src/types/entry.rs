@@ -4,18 +4,15 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Entry {
-    #[wasm_bindgen(skip)]
-    pub term: String,
-    #[wasm_bindgen(skip)]
-    pub see_also: Option<String>,
-    #[wasm_bindgen(skip)]
-    pub etymologies: Vec<Etymology>,
+    term: String,
+    see_also: Option<String>,
+    etymologies: Vec<Etymology>,
 }
 
 #[wasm_bindgen]
 impl Entry {
     #[wasm_bindgen(getter)]
-    pub fn get_term(&self) -> String {
+    pub fn term(&self) -> String {
         self.term.clone()
     }
 
@@ -25,7 +22,7 @@ impl Entry {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn get_see_also(&self) -> Option<String> {
+    pub fn see_also(&self) -> Option<String> {
         self.see_also.clone()
     }
 
@@ -35,7 +32,7 @@ impl Entry {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn get_etymologies(&self) -> JsValue {
+    pub fn etymologies(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.etymologies).unwrap()
     }
 }
@@ -43,16 +40,14 @@ impl Entry {
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Etymology {
-    #[wasm_bindgen(skip)]
-    pub description: Option<String>,
-    #[wasm_bindgen(skip)]
-    pub senses: Vec<Sense>,
+    description: Option<String>,
+    senses: Vec<Sense>,
 }
 
 #[wasm_bindgen]
 impl Etymology {
     #[wasm_bindgen(getter)]
-    pub fn get_description(&self) -> Option<String> {
+    pub fn description(&self) -> Option<String> {
         self.description.clone()
     }
 
@@ -62,7 +57,7 @@ impl Etymology {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn get_senses(&self) -> JsValue {
+    pub fn senses(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.senses).unwrap()
     }
 }
@@ -70,18 +65,15 @@ impl Etymology {
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Sense {
-    #[wasm_bindgen(skip)]
-    pub part_of_speech: String,
-    #[wasm_bindgen(skip)]
-    pub definitions: Vec<String>,
-    #[wasm_bindgen(skip)]
-    pub examples: Vec<String>,
+    part_of_speech: String,
+    definitions: Vec<String>,
+    examples: Vec<String>,
 }
 
 #[wasm_bindgen]
 impl Sense {
     #[wasm_bindgen(getter)]
-    pub fn get_part_of_speech(&self) -> String {
+    pub fn part_of_speech(&self) -> String {
         self.part_of_speech.clone()
     }
 
@@ -91,12 +83,12 @@ impl Sense {
     }
 
     #[wasm_bindgen(getter)]
-    pub fn get_definitions(&self) -> JsValue {
+    pub fn definitions(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.definitions).unwrap()
     }
 
     #[wasm_bindgen(getter)]
-    pub fn get_examples(&self) -> JsValue {
+    pub fn examples(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.examples).unwrap()
     }
 }

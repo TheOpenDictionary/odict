@@ -6,28 +6,25 @@ use super::definition::Definition;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Group {
-  #[wasm_bindgen(skip)]
-  pub id: Option<String>,
-  #[wasm_bindgen(skip)]
-  pub description: String,
-  #[wasm_bindgen(skip)]
-  pub definitions: Vec<Definition>,
+  id: Option<String>,
+  description: String,
+  definitions: Vec<Definition>,
 }
 
 #[wasm_bindgen]
 impl Group {
   #[wasm_bindgen(getter)]
-  pub fn get_id(&self) -> Option<String> {
+  pub fn id(&self) -> Option<String> {
     self.id.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_description(&self) -> String {
+  pub fn description(&self) -> String {
     self.description.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_definitions(&self) -> JsValue {
+  pub fn definitions(&self) -> JsValue {
     serde_wasm_bindgen::to_value(&self.definitions).unwrap()
   }
 }

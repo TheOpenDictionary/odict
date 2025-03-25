@@ -6,35 +6,31 @@ use super::{note::Note, Example};
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
 pub struct Definition {
-  #[wasm_bindgen(skip)]
-  pub id: Option<String>,
-  #[wasm_bindgen(skip)]
-  pub value: String,
-  #[wasm_bindgen(skip)]
-  pub examples: Vec<Example>,
-  #[wasm_bindgen(skip)]
-  pub notes: Vec<Note>,
+  id: Option<String>,
+  value: String,
+  examples: Vec<Example>,
+  notes: Vec<Note>,
 }
 
 #[wasm_bindgen]
 impl Definition {
   #[wasm_bindgen(getter)]
-  pub fn get_id(&self) -> Option<String> {
+  pub fn id(&self) -> Option<String> {
     self.id.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_value(&self) -> String {
+  pub fn value(&self) -> String {
     self.value.clone()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_examples(&self) -> JsValue {
+  pub fn examples(&self) -> JsValue {
     serde_wasm_bindgen::to_value(&self.examples).unwrap()
   }
 
   #[wasm_bindgen(getter)]
-  pub fn get_notes(&self) -> JsValue {
+  pub fn notes(&self) -> JsValue {
     serde_wasm_bindgen::to_value(&self.notes).unwrap()
   }
 }
