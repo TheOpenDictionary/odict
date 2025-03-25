@@ -25,8 +25,8 @@ pub enum AliasCommands {
 
 pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> anyhow::Result<()> {
     match command {
-        AliasCommands::Add(ref args) => set(ctx, args, false),
-        AliasCommands::Set(ref args) => set(ctx, args, true),
-        AliasCommands::Delete(ref args) => delete(ctx, args),
+        AliasCommands::Add(args) => set(ctx, args, false),
+        AliasCommands::Set(args) => set(ctx, args, true),
+        AliasCommands::Delete(args) => delete(ctx, args),
     }
 }

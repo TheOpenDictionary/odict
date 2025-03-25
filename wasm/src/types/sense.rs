@@ -1,8 +1,10 @@
+use serde::Serialize;
 use wasm_bindgen::prelude::*;
 
-use super::{definition::Definition, either::Either, group::Group};
+use super::{definition::Definition, group::Group};
 
 #[wasm_bindgen]
+#[derive(Serialize)]
 pub struct Sense {
   pos: String,
   definitions: Vec<JsValue>,
