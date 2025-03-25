@@ -6,18 +6,22 @@ permissions:
   contents: write
   id-token: write
 'on':
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'node/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'
   push:
     branches:
       - main
-    tags-ignore:
-      - '**'
-    paths-ignore:
-      - '**/*.md'
-      - LICENSE
-      - '**/*.gitignore'
-      - .editorconfig
-      - docs/**
-  pull_request: null
+    tags:
+      - "node-*"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     strategy:
@@ -26,72 +30,74 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: yarn build --platform --target x86_64-apple-darwin
+            build: pnpm --filter "@odict/node" build --platform --target x86_64-apple-darwin
           - host: windows-latest
-            build: yarn build --platform
+            build: pnpm --filter "@odict/node" build --platform
             target: x86_64-pc-windows-msvc
           - host: windows-latest
             build: |
-              yarn build --platform --target i686-pc-windows-msvc
-              yarn test
+              pnpm --filter "@odict/node" build --platform --target i686-pc-windows-msvc
+              pnpm --filter "@odict/node" test
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: yarn build --platform --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build --platform --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: yarn build --platform --target aarch64-apple-darwin
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: yarn build --platform --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: yarn build --platform --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build --platform --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
-            build: yarn build --platform --target armv7-unknown-linux-musleabihf -x
+            build: pnpm --filter "@odict/node" build --platform --target armv7-unknown-linux-musleabihf -x
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: yarn build --platform --target aarch64-linux-android
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: yarn build --platform --target armv7-linux-androideabi
+            build: pnpm --filter "@odict/node" build --platform --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: yarn build --platform --target aarch64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: yarn build --platform --target aarch64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build --platform --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: riscv64gc-unknown-linux-gnu
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-riscv64-linux-gnu -y
-            build: yarn build --platform --target riscv64gc-unknown-linux-gnu
+            build: pnpm --filter "@odict/node" build --platform --target riscv64gc-unknown-linux-gnu
           - host: ubuntu-latest
             target: powerpc64le-unknown-linux-gnu
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-powerpc64le-linux-gnu -y
-            build: yarn build --platform --target powerpc64le-unknown-linux-gnu
+            build: pnpm --filter "@odict/node" build --platform --target powerpc64le-unknown-linux-gnu
           - host: ubuntu-latest
             target: s390x-unknown-linux-gnu
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-s390x-linux-gnu -y
-            build: yarn build --platform --target s390x-unknown-linux-gnu
+            build: pnpm --filter "@odict/node" build --platform --target s390x-unknown-linux-gnu
           - host: ubuntu-latest
             target: wasm32-wasi-preview1-threads
-            build: yarn build --platform --target wasm32-wasi-preview1-threads
+            build: pnpm --filter "@odict/node" build --platform --target wasm32-wasi-preview1-threads
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn
+          cache: pnpm
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -123,12 +129,8 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
-      - name: Setup node x86
-        if: matrix.settings.target == 'i686-pc-windows-msvc'
-        run: yarn config set supportedArchitectures.cpu "ia32"
-        shell: bash
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
       - name: Setup node x86
         uses: actions/setup-node@v4
         if: matrix.settings.target == 'i686-pc-windows-msvc'
@@ -172,7 +174,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g yarn --ignore-scripts
+            sudo npm install -g corepack
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain stable
             source "$HOME/.cargo/env"
@@ -180,20 +182,21 @@ jobs:
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
-            echo "~~~~ yarn --version ~~~~"
-            yarn --version
+            corepack prepare
+            corepack enable
+            echo "~~~~ pnpm --version ~~~~"
+            pnpm --version
             pwd
             ls -lah
             whoami
             env
             freebsd-version
-            yarn install
-            yarn build
+            pnpm install
+            pnpm --filter "@odict/node" build
             strip -x *.node
-            yarn test
+            pnpm --filter "@odict/node" test
             rm -rf node_modules
             rm -rf target
-            rm -rf .yarn/cache
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -240,7 +243,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn run test
+        run: pnpm --filter "@odict/node" test
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:
@@ -270,7 +273,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim yarn run test
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim pnpm --filter "@odict/node" test
   test-linux-aarch64-gnu-binding:
     name: Test bindings on aarch64-unknown-linux-gnu - node@${{ matrix.node }}
     needs:
@@ -292,10 +295,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Install dependencies
-        run: |
-          yarn config set supportedArchitectures.cpu "arm64"
-          yarn config set supportedArchitectures.libc "glibc"
-          yarn install
+        run: pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -306,7 +306,7 @@ jobs:
         with:
           image: node:${{ matrix.node }}-slim
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
-          run: yarn run test
+          run: pnpm --filter "@odict/node" test
   test-linux-aarch64-musl-binding:
     name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
@@ -329,10 +329,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Install dependencies
-        run: |
-          yarn config set supportedArchitectures.cpu "arm64"
-          yarn config set supportedArchitectures.libc "musl"
-          yarn install
+        run: pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -343,7 +340,7 @@ jobs:
         with:
           image: node:${{ matrix.node }}-alpine
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
-          run: yarn run test
+          run: pnpm --filter "@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
     needs:
@@ -366,9 +363,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Install dependencies
-        run: |
-          yarn config set supportedArchitectures.cpu "arm"
-          yarn install
+        run: pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -379,7 +374,7 @@ jobs:
         with:
           image: node:${{ matrix.node }}-bullseye-slim
           options: '--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build'
-          run: yarn test
+          run: pnpm --filter "@odict/node" test
   universal-macOS:
     name: Build universal macOS binary
     needs:
@@ -405,7 +400,7 @@ jobs:
           name: bindings-aarch64-apple-darwin
           path: .
       - name: Combine binaries
-        run: yarn napi universalize
+        run: pnpm napi universalize
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -432,14 +427,16 @@ jobs:
           path: .
       - name: List packages
         run: ls -R .
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: yarn
+          cache: pnpm
       - name: Install dependencies
         run: yarn install
       - name: Test
-        run: yarn test
+        run: pnpm --filter "@odict/node" test
         env:
           NAPI_RS_FORCE_WASI: true
   publish:
@@ -456,11 +453,13 @@ jobs:
       - test-wasi-nodejs
     steps:
       - uses: actions/checkout@v4
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn
+          cache: pnpm
           registry-url: https://registry.npmjs.org
       - name: Install dependencies
         run: yarn install
@@ -469,7 +468,7 @@ jobs:
         with:
           path: artifacts
       - name: Move artifacts
-        run: yarn artifacts
+        run: pnpm --filter "@odict/node" artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
