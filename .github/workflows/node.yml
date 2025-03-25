@@ -238,7 +238,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -268,7 +268,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -290,7 +290,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-gnu
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -324,7 +324,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-musl
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -358,7 +358,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-armv7-unknown-linux-gnueabihf
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -393,12 +393,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: .
+          path: node
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: .
+          path: node
       - name: Combine binaries
         run: pnpm napi universalize
       - name: Upload artifact
@@ -424,7 +424,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-wasm32-wasi-preview1-threads
-          path: .
+          path: node
       - name: List packages
         run: ls -R .
       - name: setup pnpm
