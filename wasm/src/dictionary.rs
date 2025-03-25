@@ -213,8 +213,8 @@ impl Dictionary {
       .map_err(cast_error)?;
 
     let entries = results
-      .iter()
-      .map(|e| Entry::from_entry(e.clone()))
+      .into_iter()  // Use into_iter() to take ownership
+      .map(|e| Entry::from_entry(e))
       .collect::<Result<Vec<Entry>, _>>()?;
 
     Ok(entries)

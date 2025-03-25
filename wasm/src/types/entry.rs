@@ -59,16 +59,16 @@ impl Entry {
             see_also: entry.see_also,
             etymologies: entry
                 .etymologies
-                .iter()
+                .into_iter()  // Use into_iter() to take ownership
                 .map(|ety| Etymology {
-                    description: ety.description.clone(),
+                    description: ety.description,
                     senses: ety
                         .senses
-                        .iter()
+                        .into_iter()  // Use into_iter() to take ownership
                         .map(|(pos, sense)| Sense {
-                            part_of_speech: pos.to_string(),
-                            definitions: sense.definitions.clone(),
-                            examples: sense.examples.clone(),
+                            part_of_speech: pos,
+                            definitions: sense.definitions,
+                            examples: sense.examples,
                         })
                         .collect(),
                 })

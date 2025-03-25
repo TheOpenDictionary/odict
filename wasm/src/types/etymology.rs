@@ -32,17 +32,19 @@ impl Etymology {
       senses,
     } = etymology;
 
+    let senses_map = senses
+        .into_iter()
+        .map(|(k, v)| -> Result<(String, Sense), JsValue> {
+          let sense = Sense::from(v)?;
+          Ok((k.to_string(), sense))
+        })
+        .collect::<Result<HashMap<String, Sense>, JsValue>>()?;
+
     Ok(Self {
       id,
       pronunciation,
       description,
-      senses: senses
-        .into_iter()
-        .map(|(k, v)| -> Result<(String, Sense), _> {
-          let sense = Sense::from(v)?;
-          Ok((k.to_string(), sense))
-        })
-        .collect::<Result<HashMap<String, Sense>, _>>()?,
+      senses: senses_map,
     })
   }
 }
