@@ -46,7 +46,7 @@
     "build": "napi build --release --platform --pipe \"prettier -w\"",
     "build:debug": "napi build --platform --pipe \"prettier -w\"",
     "test": "vitest --no-watch",
-    "universal": "napi universal",
+    "universal": "napi universalize",
     "artifacts": "napi artifacts",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
