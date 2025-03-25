@@ -17,7 +17,7 @@ includes = [
   "tasks.toml",
   "lib/tasks.toml",
   "cli/tasks.toml",
-  "java/tasks.toml",
+  "wasm/tasks.toml",
   "node/tasks.toml",
   "python/tasks.toml",
 ]

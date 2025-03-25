@@ -1,0 +1,8 @@
+["setup:wasm"]
+run = "pnpm install"
+sources = ["${MISE_TASK_DIR}/package.json"]
+outputs = { auto = true }
+
+["build:wasm"]
+depends = ["setup:node"]
+run = "pnpm --filter=\"@odict/wasm\" build"

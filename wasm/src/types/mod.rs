@@ -1,9 +1,21 @@
+mod definition;
+mod dictionary;
 mod entry;
-mod mdstring;
+mod etymology;
+mod example;
+mod either;
+mod group;
+mod index;
+mod lookup;
+mod note;
 mod search;
+mod sense;
 mod split;
 
+pub use dictionary::*;
 pub use entry::*;
-pub use mdstring::*;
+pub use example::*;
+pub use index::*;
+pub use lookup::*;
 pub use search::*;
 pub use split::*;

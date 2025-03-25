@@ -1,23 +1,46 @@
-use serde::{Deserialize, Serialize};
+use merge::Merge;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Merge, Clone, Eq)]
 pub struct SearchOptions {
-    pub directory: Option<String>,
-    pub threshold: Option<u32>,
-    pub autoindex: Option<bool>,
-    pub limit: Option<u32>,
+  pub directory: Option<String>,
+  pub threshold: Option<u32>,
+  pub autoindex: Option<bool>,
+  pub limit: Option<u32>,
 }
 
-impl Into<odict::search::SearchOptions> for SearchOptions {
-    fn into(self) -> odict::search::SearchOptions {
-        odict::search::SearchOptions {
-            dir: self.directory.map(std::path::PathBuf::from),
-            threshold: self.threshold.unwrap_or(80),
-            autoindex: self.autoindex.unwrap_or(true),
-            limit: self.limit.map(|l| l as usize).unwrap_or(10),
-            tokenizer: odict::search::TextAnalyzer::default(),
-        }
+impl Default for SearchOptions {
+  fn default() -> Self {
+    SearchOptions {
+      threshold: None,
+      directory: None,
+      autoindex: None,
+      limit: None,
     }
+  }
+}
+
+impl From<SearchOptions> for odict::search::SearchOptions {
+  fn from(opts: SearchOptions) -> Self {
+    let mut s = odict::search::SearchOptions::default();
+
+    if let Some(threshold) = opts.threshold {
+      s = s.threshold(threshold);
+    }
+
+    if let Some(directory) = opts.directory {
+      s = s.dir(&directory);
+    }
+
+    if let Some(limit) = opts.limit {
+      s = s.limit(limit.try_into().unwrap());
+    }
+
+    if let Some(autoindex) = opts.autoindex {
+      s = s.autoindex(autoindex);
+    }
+
+    s
+  }
 }
