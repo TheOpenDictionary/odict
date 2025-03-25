@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python/v1.0.0) (2025-03-25)
+
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate pyo3 to 0.24.0 ([#1141](https://github.com/TheOpenDictionary/odict/issues/1141)) ([3fb50bd](https://github.com/TheOpenDictionary/odict/commit/3fb50bd371fae1163e2f0acdb2c68e4692555d94))
+
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python-v1.0.0) (2024-12-25)
 
 
