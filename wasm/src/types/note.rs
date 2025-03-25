@@ -1,8 +1,10 @@
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 use super::Example;
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Note {
   pub id: Option<String>,
   pub value: String,

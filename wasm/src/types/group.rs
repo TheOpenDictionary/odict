@@ -1,8 +1,10 @@
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 use super::definition::Definition;
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Group {
   pub id: Option<String>,
   pub description: String,

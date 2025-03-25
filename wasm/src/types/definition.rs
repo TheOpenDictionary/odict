@@ -1,8 +1,10 @@
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 use super::{note::Note, Example};
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Definition {
   pub id: Option<String>,
   pub value: String,
@@ -11,7 +13,7 @@ pub struct Definition {
 }
 
 impl Definition {
-  pub fn from(definition: odict::Definition) -> Result<Self> {
+  pub fn from(definition: odict::Definition) -> Result<Self, JsValue> {
     let odict::Definition {
       id,
       value,

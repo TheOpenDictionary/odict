@@ -1,15 +1,26 @@
 use std::collections::HashMap;
 
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 use super::sense::Sense;
 
 #[wasm_bindgen]
+#[derive(Serialize, Deserialize)]
 pub struct Etymology {
   pub id: Option<String>,
   pub pronunciation: Option<String>,
   pub description: Option<String>,
+  #[wasm_bindgen(skip)]
   pub senses: HashMap<String, Sense>,
+}
+
+#[wasm_bindgen]
+impl Etymology {
+  #[wasm_bindgen(getter)]
+  pub fn get_senses(&self) -> JsValue {
+    serde_wasm_bindgen::to_value(&self.senses).unwrap()
+  }
 }
 
 impl Etymology {

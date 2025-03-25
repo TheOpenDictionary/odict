@@ -1,4 +1,5 @@
 use merge::Merge;
+use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -22,7 +23,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
     let mut s = odict::lookup::LookupOptions::default();
 
     if let Some(split) = opts.split {
-      s = s.split(split.try_into().unwrap());
+      s = s.split(split as usize);
     }
 
     if let Some(follow) = opts.follow {
@@ -33,7 +34,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
   }
 }
 
-#[napi(object)]
+#[derive(Serialize, Deserialize)]
 pub struct LookupQuery {
   pub term: String,
   pub fallback: String,
