@@ -6,7 +6,7 @@
 // mod either;
 // mod group;
 // mod index;
-// mod lookup;
+mod lookup;
 // mod note;
 // mod search;
 // mod sense;
@@ -16,6 +16,9 @@
 // pub use entry::*;
 // pub use example::*;
 // pub use index::*;
-// pub use lookup::*;
+pub use lookup::*;
 // pub use search::*;
 // pub use split::*;
+mod either;
+
+pub use either::*;

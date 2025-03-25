@@ -1,8 +1,14 @@
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::prelude::*;
 
 #[derive(Serialize, Deserialize)]
-pub enum Either<T, U> {
-    Left(T),
-    Right(U),
+pub enum Either<A, B> {
+    A(A),
+    B(B),
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Either3<A, B, C> {
+    A(A),
+    B(B),
+    C(C),
 }
