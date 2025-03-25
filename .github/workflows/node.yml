@@ -85,8 +85,8 @@ jobs:
               sudo apt-get install gcc-s390x-linux-gnu -y
             build: pnpm --filter "@odict/node" build --platform --target s390x-unknown-linux-gnu
           - host: ubuntu-latest
-            target: wasm32-wasi-preview1-threads
-            build: pnpm --filter "@odict/node" build --platform --target wasm32-wasi-preview1-threads
+            target: wasm32-wasip1-threads
+            build: pnpm --filter "@odict/node" build --platform --target wasm32-wasip1-threads
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -142,14 +142,14 @@ jobs:
         shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: matrix.settings.target != 'wasm32-wasi-preview1-threads'
+        if: matrix.settings.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
           path: 'node/*.node'
           if-no-files-found: error
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: matrix.settings.target == 'wasm32-wasi-preview1-threads'
+        if: matrix.settings.target == 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
           path: 'node/*.wasm'
@@ -193,7 +193,7 @@ jobs:
             freebsd-version
             pnpm install
             pnpm --filter "@odict/node" build
-            strip -x *.node
+            strip -x node/*.node
             pnpm --filter "@odict/node" test
             rm -rf node_modules
             rm -rf target
@@ -423,7 +423,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: bindings-wasm32-wasi-preview1-threads
+          name: bindings-wasm32-wasip1-threads
           path: node
       - name: List packages
         run: ls -R .
