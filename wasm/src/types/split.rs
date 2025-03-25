@@ -18,7 +18,7 @@ impl From<SplitOptions> for odict::split::SplitOptions {
     let mut s = odict::split::SplitOptions::default();
 
     if let Some(threshold) = opts.threshold {
-      s = s.threshold(threshold.try_into().unwrap());
+      s = s.threshold(threshold as usize);
     }
 
     s

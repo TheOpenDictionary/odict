@@ -29,9 +29,13 @@ pub fn resolve_options(options: &Option<DictionaryOptions>) -> DictionaryOptions
   }
 }
 
-pub fn to_lookup_query(query: Either<LookupQuery, String>) -> odict::lookup::LookupQuery {
-  match query {
-    Either::A(wwf) => wwf.into(),
-    Either::B(s) => s.into(),
-  }
+pub fn to_lookup_query(value: JsValue) -> odict::lookup::LookupQuery {
+    if let Some(s) = value.as_string() {
+        s.into()
+    } else if let Ok(lq) = serde_wasm_bindgen::from_value::<LookupQuery>(value) {
+        lq.into()
+    } else {
+        // Default to empty string if conversion fails
+        "".to_string().into()
+    }
 }

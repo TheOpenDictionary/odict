@@ -34,7 +34,7 @@ impl From<SearchOptions> for odict::search::SearchOptions {
     }
 
     if let Some(limit) = opts.limit {
-      s = s.limit(limit.try_into().unwrap());
+      s = s.limit(limit as usize);
     }
 
     if let Some(autoindex) = opts.autoindex {

@@ -24,7 +24,7 @@ impl From<IndexOptions> for odict::search::IndexOptions {
     let mut s = odict::search::IndexOptions::default();
 
     if let Some(memory) = opts.memory {
-      s = s.memory(memory.try_into().unwrap());
+      s = s.memory(memory as usize);
     }
 
     if let Some(directory) = opts.directory {

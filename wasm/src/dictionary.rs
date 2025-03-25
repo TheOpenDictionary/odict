@@ -1,6 +1,7 @@
-use std::{borrow::BorrowMut, path::PathBuf, vec};
+use std::{path::PathBuf, vec};
 
 use wasm_bindgen::prelude::*;
+use serde_wasm_bindgen;
 
 use merge::Merge;
 
@@ -52,7 +53,7 @@ impl Dictionary {
     Ok(dict)
   }
 
-  #[napi(factory)]
+  #[wasm_bindgen(factory)]
   pub fn compile(
     xml_path: String,
     out_path: Option<String>,
@@ -131,20 +132,27 @@ impl Dictionary {
   #[wasm_bindgen]
   pub fn lookup(
     &self,
-    query: Either3<types::LookupQuery, String, Vec<Either<LookupQuery, String>>>,
+    query: JsValue,
     options: Option<LookupOptions>,
   ) -> Result<Vec<Vec<Entry>>, JsValue> {
     let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
 
-    match query {
-      Either3::A(a) => queries.push(a.into()),
-      Either3::B(b) => queries.push(b.into()),
-      Either3::C(c) => queries.append(
-        c.into_iter()
-          .map(to_lookup_query)
-          .collect::<Vec<odict::lookup::LookupQuery>>()
-          .borrow_mut(),
-      ),
+    // Handle different types of input through JsValue
+    if let Some(q) = query.as_string() {
+      // String case
+      queries.push(q.into());
+    } else if let Ok(q) = serde_wasm_bindgen::from_value::<LookupQuery>(query.clone()) {
+      // LookupQuery case
+      queries.push(q.into());
+    } else if let Ok(q_vec) = serde_wasm_bindgen::from_value::<Vec<JsValue>>(query) {
+      // Array case
+      for q in q_vec {
+        if let Some(s) = q.as_string() {
+          queries.push(s.into());
+        } else if let Ok(lq) = serde_wasm_bindgen::from_value::<LookupQuery>(q) {
+          queries.push(lq.into());
+        }
+      }
     }
 
     self._lookup(&queries, options)
@@ -178,8 +186,8 @@ impl Dictionary {
     )
   }
 
-  #[napi]
-  pub fn index(&self, options: Option<IndexOptions>) -> Result<()> {
+  #[wasm_bindgen]
+  pub fn index(&self, options: Option<IndexOptions>) -> Result<(), JsValue> {
     let dict = self.file.to_archive().map_err(cast_error)?;
     let mut opts = options;
 
@@ -192,8 +200,8 @@ impl Dictionary {
     Ok(())
   }
 
-  #[napi]
-  pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>> {
+  #[wasm_bindgen]
+  pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>, JsValue> {
     let dict = self.file.to_archive().map_err(cast_error)?;
     let mut opts = options;
 
