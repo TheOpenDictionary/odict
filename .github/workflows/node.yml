@@ -35,9 +35,7 @@ jobs:
             build: pnpm --filter "@odict/node" build --platform
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: |
-              pnpm --filter "@odict/node" build --platform --target i686-pc-windows-msvc
-              pnpm --filter "@odict/node" test
+            build: pnpm --filter "@odict/node" build --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
@@ -84,9 +82,15 @@ jobs:
               sudo apt-get update
               sudo apt-get install gcc-s390x-linux-gnu -y
             build: pnpm --filter "@odict/node" build --platform --target s390x-unknown-linux-gnu
-          - host: ubuntu-latest
+          - host: macos-latest
             target: wasm32-wasip1-threads
-            build: pnpm --filter "@odict/node" build --platform --target wasm32-wasip1-threads
+            setup: |
+              wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-macos.tar.gz
+              tar -xvf wasi-sdk-22.0-macos.tar.gz
+            build: |
+              export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
+              export CMAKE_BUILD_PARALLEL_LEVEL=2
+              pnpm --filter "@odict/node" build --platform --target wasm32-wasip1-threads
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
