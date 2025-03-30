@@ -180,35 +180,43 @@ impl Dictionary {
 
   #[napi]
   pub fn index(&self, options: Option<IndexOptions>) -> Result<()> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
-    let mut opts = options;
+    #[cfg(feature = "search")]
+    {
+      let dict = self.file.to_archive().map_err(cast_error)?;
+      let mut opts = options;
 
-    opts.merge(self.options().index);
+      opts.merge(self.options().index);
 
-    dict
-      .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
-      .map_err(cast_error)?;
+      dict
+        .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
+        .map_err(cast_error)?;
+    }
 
-    Ok(())
+    unimplemented!("index() is not available in browser environments. Maybe try IndexedDB?");
   }
 
   #[napi]
   pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
-    let mut opts = options;
+    #[cfg(feature = "search")]
+    {
+      let dict = self.file.to_archive().map_err(cast_error)?;
+      let mut opts = options;
 
-    opts.merge(self.options().search);
+      opts.merge(self.options().search);
 
-    let results = dict
-      .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
-      .map_err(cast_error)?;
+      let results = dict
+        .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
+        .map_err(cast_error)?;
 
-    let entries = results
-      .iter()
-      .map(|e| Entry::from_entry(e.clone()))
-      .collect::<Result<Vec<Entry>, _>>()?;
+      let entries = results
+        .iter()
+        .map(|e| Entry::from_entry(e.clone()))
+        .collect::<Result<Vec<Entry>, _>>()?;
 
-    Ok(entries)
+      return Ok(entries);
+    }
+
+    unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
 }
 

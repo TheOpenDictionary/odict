@@ -4,17 +4,19 @@ mod entry;
 mod etymology;
 mod example;
 mod group;
-mod index;
 mod lookup;
 mod note;
-mod search;
 mod sense;
 mod split;
 
 pub use dictionary::*;
 pub use entry::*;
 pub use example::*;
-pub use index::*;
 pub use lookup::*;
-pub use search::*;
 pub use split::*;
+
+mod index;
+mod search;
+
+pub use index::*;
+pub use search::*;
