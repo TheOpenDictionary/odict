@@ -231,6 +231,10 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -432,6 +436,8 @@ jobs:
           path: node
       - name: List packages
         run: ls -R .
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
       - name: setup pnpm
         uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
