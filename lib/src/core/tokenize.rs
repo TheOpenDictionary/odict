@@ -1,4 +1,4 @@
-use charabia::Tokenize;
+use charabia::{normalizer::NormalizedTokenIter, Tokenize};
 
 use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
@@ -61,11 +61,16 @@ impl TokenizeOptions {
 
 use rayon::prelude::*;
 
+use super::split::SplitOptions;
+
 struct Token<T> {
     token: String,
     lemma: String,
     entries: Vec<T>,
 }
+
+unsafe impl Send for NormalizedTokenIter<'_> {}
+unsafe impl Sync for NormalizedTokenIter<'_> {}
 
 impl Dictionary {
     pub fn tokenize<Options: AsRef<TokenizeOptions>>(
@@ -76,9 +81,13 @@ impl Dictionary {
         let tokens = text.tokenize();
 
         let results = tokens
-            .par_iter()
+            .par_bridge()
+            .into_par_iter()
             .map(|token| {
-                let split_entries = self.split(token.text(), options.as_ref())?;
+                let split_entries = self.split(
+                    token.text(),
+                    SplitOptions::default().threshold(options.as_ref().threshold),
+                )?;
 
                 Ok(Token {
                     token: token.text().to_string(),
