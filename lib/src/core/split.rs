@@ -39,13 +39,14 @@ macro_rules! split {
             ) -> crate::Result<Vec<&$r>> {
                 let mut entries: Vec<&$r> = Vec::new();
                 let mut start = 0;
-                let mut end = query.len();
+                let chars: Vec<_> = query.chars().collect();
+                let mut end = chars.len();
 
                 let SplitOptions { threshold } = options.as_ref();
 
                 while start < end {
-                    let substr = &query[start..end];
-                    let entry = self.entries.get(substr);
+                    let substr: String = chars[start..end].iter().collect();
+                    let entry = self.entries.get(substr.as_str());
 
                     if entry.is_some() {
                         entries.push(entry.unwrap());
@@ -53,7 +54,7 @@ macro_rules! split {
 
                     if entry.is_some() || substr.len() <= *threshold {
                         start = end;
-                        end = query.len();
+                        end = chars.len();
                     } else {
                         end -= 1;
                     }
