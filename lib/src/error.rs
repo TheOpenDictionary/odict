@@ -39,9 +39,11 @@ pub enum Error {
     /* -------------------------------------------------------------------------- */
     /*                                 Formatting                                 */
     /* -------------------------------------------------------------------------- */
+    #[cfg(feature = "json")]
     #[error(transparent)]
     Json(#[from] serde_json::Error),
 
+    #[cfg(feature = "sql")]
     #[error(transparent)]
     Sql(#[from] sea_query::error::Error),
 
