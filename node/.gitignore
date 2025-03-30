@@ -195,6 +195,10 @@ Cargo.lock
 !.yarn/versions
 
 artifacts
-*.{wasm,node}
-*.{js,ts,cjs,mjs,d.ts}
+*.wasm
+*.js
+*.node
+*.cjs
+*.mjs
+*.d.ts
 !vite.config.js

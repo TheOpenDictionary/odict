@@ -8,13 +8,15 @@ import { compile, Dictionary } from "../index.js";
 
 async function getDictionary(name: string) {
   return new Dictionary(
-    compile(
-      await readFile(
-        join(
-          fileURLToPath(new URL(import.meta.url)),
-          `../../../examples/${name}.xml`,
+    new Uint8Array(
+      compile(
+        await readFile(
+          join(
+            fileURLToPath(new URL(import.meta.url)),
+            `../../../examples/${name}.xml`,
+          ),
+          "utf-8",
         ),
-        "utf-8",
       ),
     ),
   );

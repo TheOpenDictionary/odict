@@ -40,6 +40,7 @@
     "buffer": "^6.0.3",
     "prettier": "^3.3.2",
     "vite": "^6.2.2",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "vitest": "^3.0.9"
   },
   "engines": {

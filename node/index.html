@@ -5,8 +5,12 @@
   <body>
     <button class="pick-file">Pick File</button>
     <script type="module">
-      import { Dictionary } from "./node.wasi-browser.js";
-      const dictionary = new Dictionary("test", {});
+      import { Buffer } from "buffer";
+
+      global.Buffer = Buffer;
+
+      import { compile, Dictionary } from "./node.wasi-browser.js";
+
       // console.log(compile("<xml></xml>"));
       let fileHandles;
 
@@ -32,6 +36,8 @@
             return content;
           }),
         );
+        const dictionary = new Dictionary(new Buffer(allContent[0]), {});
+
         console.log(allContent[0]);
 
         console.log(dictionary);
@@ -40,7 +46,7 @@
         //     '<dictionary><entry term="dog"/></entry></dictionary>'
         //   )
         // );
-        // console.log(dictionary.lookup("dog"));
+        console.log(dictionary.lookup("dog"));
         // console.log(dictionary.lexicon());
       };
     </script>
