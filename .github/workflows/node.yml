@@ -499,7 +499,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: node/artifacts
       - name: Move artifacts
         run: pnpm --filter "@odict/node" artifacts
       - name: List packages
