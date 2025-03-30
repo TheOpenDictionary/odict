@@ -12,11 +12,23 @@ exclude = ["benches/*", "tests/*"]
 json = ["dep:serde_json"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
-charabia = ["dep:charabia"]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
 default = ["json", "sql", "config"]
+
+# Language-specific support
+tokenizer-chinese = ["charabia/chinese"]
+tokenizer-hebrew = ["charabia/hebrew"]
+tokenizer-japanese = ["charabia/japanese"]
+tokenizer-thai = ["charabia/thai"]
+tokenizer-korean = ["charabia/korean"]
+tokenizer-greek = ["charabia/greek"]
+tokenizer-khmer = ["charabia/khmer"]
+tokenizer-vietnamese = ["charabia/vietnamese"]
+tokenizer-swedish = ["charabia/swedish-recomposition"]
+tokenizer-turkish = ["charabia/turkish"]
+tokenizer-german = ["charabia/german-segmentation"]
 
 [[bench]]
 name = "lib"
@@ -27,6 +39,7 @@ byteorder = "1.5.0"
 quick-xml = { version = "0.37.0", features = ["serialize"] }
 rayon = "1.10.0"
 regex = "1.10.4"
+charabia = { version = "0.9.3", default-features = false }
 rkyv = { version = "0.8.8", features = ["alloc"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
@@ -38,8 +51,6 @@ brotli = "7.0.0"
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=json
 serde_json = { version = "1.0.116", optional = true }
-# feature=charabia
-charabia = { version = "0.9.0", optional = true }
 # feature=search
 tantivy = { version = "0.22.0", optional = true }
 # feature=config
