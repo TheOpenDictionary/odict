@@ -196,9 +196,4 @@ Cargo.lock
 
 artifacts
 *.wasm
-*.js
 *.node
-*.cjs
-*.mjs
-*.d.ts
-!vite.config.js

@@ -768,5 +768,3 @@ TSWLatexianTemp*
 semicolon_delimited_script
 *.pdf
 .aider*
-
-node/*.js
