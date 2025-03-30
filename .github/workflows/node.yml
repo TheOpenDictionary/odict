@@ -500,6 +500,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: node/artifacts
+      - name: Create dirs
+        run: pnpm --filter "@odict/node" create-dirs
       - name: Move artifacts
         run: pnpm --filter "@odict/node" artifacts
       - name: List packages
