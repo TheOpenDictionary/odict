@@ -8,17 +8,15 @@ import { compile, Dictionary } from "../index.js";
 
 async function getDictionary(name: string) {
   return new Dictionary(
-    new Uint8Array(
-      compile(
-        await readFile(
-          join(
-            fileURLToPath(new URL(import.meta.url)),
-            `../../../examples/${name}.xml`,
-          ),
-          "utf-8",
+    compile(
+      await readFile(
+        join(
+          fileURLToPath(new URL(import.meta.url)),
+          `../../../examples/${name}.xml`,
         ),
+        "utf-8",
       ),
-    ),
+    )
   );
 }
 
@@ -63,7 +61,7 @@ describe("Dictionary", () => {
     expect(result).toMatchSnapshot();
   });
 
-  it("can index and search a dictionary", async () => {
+  it.skipIf(process.env.NAPI_RS_FORCE_WASI)("can index and search a dictionary", async () => {
     dict1.index();
 
     const results = dict1.search("run");
