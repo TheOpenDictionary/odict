@@ -14,10 +14,9 @@ _.python.venv = { path = ".venv", create = true }
 
 [task_config]
 includes = [
-  "tasks.toml",
-  "lib/tasks.toml",
-  "cli/tasks.toml",
-  "wasm/tasks.toml",
-  "node/tasks.toml",
-  "python/tasks.toml",
+    "tasks.toml",
+    "lib/tasks.toml",
+    "cli/tasks.toml",
+    "node/tasks.toml",
+    "python/tasks.toml",
 ]

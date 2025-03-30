@@ -1,5 +1,5 @@
 use std::{
-    fs::{canonicalize, File},
+    fs::{File, canonicalize},
     io::{Cursor, Read},
     path::PathBuf,
 };
@@ -8,10 +8,10 @@ use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::access_unchecked;
 
 use crate::{
+    ArchivedDictionary, Dictionary,
     compress::decompress,
     constants::{SIGNATURE, VERSION},
     error::Error,
-    ArchivedDictionary, Dictionary,
 };
 
 use super::semver::SemanticVersion;
@@ -44,7 +44,10 @@ impl DictionaryFile {
 /*                               Helper Methods                               */
 /* -------------------------------------------------------------------------- */
 
-fn read_signature(reader: &mut Cursor<&[u8]>) -> crate::Result<String> {
+fn read_signature<T>(reader: &mut Cursor<T>) -> crate::Result<String>
+where
+    T: AsRef<[u8]>,
+{
     let mut signature_bytes = [0; 5];
 
     reader.read_exact(&mut signature_bytes)?;
@@ -58,7 +61,10 @@ fn read_signature(reader: &mut Cursor<&[u8]>) -> crate::Result<String> {
     Ok(String::from_utf8(signature)?)
 }
 
-fn read_version(reader: &mut Cursor<&[u8]>) -> crate::Result<SemanticVersion> {
+fn read_version<T>(reader: &mut Cursor<T>) -> crate::Result<SemanticVersion>
+where
+    T: AsRef<[u8]>,
+{
     let version_len = reader.read_u64::<LittleEndian>()?;
     let mut version_bytes = vec![0; version_len as usize];
 
@@ -73,7 +79,10 @@ fn read_version(reader: &mut Cursor<&[u8]>) -> crate::Result<SemanticVersion> {
     Ok(version)
 }
 
-fn read_content(reader: &mut Cursor<&[u8]>) -> crate::Result<Vec<u8>> {
+fn read_content<T>(reader: &mut Cursor<T>) -> crate::Result<Vec<u8>>
+where
+    T: AsRef<[u8]>,
+{
     let content_size = reader.read_u64::<LittleEndian>()?;
     let mut content_bytes = vec![0; content_size as usize];
 
@@ -102,7 +111,10 @@ impl DictionaryReader {
         Self {}
     }
 
-    pub fn read_from_bytes(&self, data: &[u8]) -> crate::Result<DictionaryFile> {
+    pub fn read_from_bytes<T>(&self, data: T) -> crate::Result<DictionaryFile>
+    where
+        T: AsRef<[u8]>,
+    {
         let mut reader = Cursor::new(data);
 
         let signature = read_signature(&mut reader)?;
