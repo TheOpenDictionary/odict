@@ -6,7 +6,8 @@
     <button class="pick-file">Pick File</button>
     <script type="module">
       import { Dictionary } from "./node.wasi-browser.js";
-
+      const dictionary = new Dictionary("test", {});
+      // console.log(compile("<xml></xml>"));
       let fileHandles;
 
       const options = {
@@ -32,7 +33,6 @@
           }),
         );
         console.log(allContent[0]);
-        const dictionary = new Dictionary(allContent[0], {});
 
         console.log(dictionary);
         // console.log(
