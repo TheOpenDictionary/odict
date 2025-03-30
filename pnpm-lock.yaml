@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  rollup: npm:@rollup/wasm-node
+
 importers:
 
   .: {}
@@ -814,11 +817,19 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@rollup/wasm-node@4.38.0':
+    resolution: {integrity: sha512-WgdJf6XyQ5x4qaHbjGjsqWqgg2L4WNNRsQPl80agmFX6Kdobe+FsUn116lnR7lbtiAucgI4ywGYuAoew8RHb8w==}
+    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
+    hasBin: true
+
   '@tybys/wasm-util@0.9.0':
     resolution: {integrity: sha512-6+7nlbMVX/PVDCwaIQ8nTOPveOcFLSt8GcXdx8hD0bt39uWxYT88uXzqTd4fTvqta7oeUJqudepapKNt2DYJFw==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
+
+  '@types/estree@1.0.7':
+    resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
   '@types/node@22.9.0':
     resolution: {integrity: sha512-vuyHg81vvWA1Z1ELfvLko2c8f34gyA0zaic0+Rllc5lbCnbSyuvb2Oxpm6TAUAC/2xZN3QGqxBNggD1nNR2AfQ==}
@@ -2227,11 +2238,19 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.37.0':
     optional: true
 
+  '@rollup/wasm-node@4.38.0':
+    dependencies:
+      '@types/estree': 1.0.7
+    optionalDependencies:
+      fsevents: 2.3.3
+
   '@tybys/wasm-util@0.9.0':
     dependencies:
       tslib: 2.8.1
 
   '@types/estree@1.0.6': {}
+
+  '@types/estree@1.0.7': {}
 
   '@types/node@22.9.0':
     dependencies:
@@ -2934,6 +2953,7 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.37.0
       '@rollup/rollup-win32-x64-msvc': 4.37.0
       fsevents: 2.3.3
+    optional: true
 
   safe-buffer@5.1.2: {}
 
@@ -3115,7 +3135,7 @@ snapshots:
     dependencies:
       esbuild: 0.25.1
       postcss: 8.5.3
-      rollup: 4.37.0
+      rollup: '@rollup/wasm-node@4.38.0'
     optionalDependencies:
       '@types/node': 22.9.0
       fsevents: 2.3.3
