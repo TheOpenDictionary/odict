@@ -310,6 +310,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install
       - name: Set up QEMU
@@ -347,6 +349,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install
       - name: Set up QEMU
@@ -359,7 +363,10 @@ jobs:
         with:
           image: node:${{ matrix.node }}-alpine
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
-          run: pnpm --filter "@odict/node" test
+          run: |
+            corepack prepare
+            corepack enable
+            pnpm --filter "@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
     needs:
@@ -423,7 +430,7 @@ jobs:
           name: bindings-aarch64-apple-darwin
           path: node
       - name: Combine binaries
-        run: pnpm napi universalize
+        run: pnpm --filter="@odict/node" universalize
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

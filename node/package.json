@@ -53,7 +53,7 @@
     "build:debug": "napi build --pipe \"prettier -w\"",
     "dev:wasm": "vite dev",
     "test": "vitest --no-watch",
-    "universal": "napi universalize",
+    "universalize": "napi universalize",
     "artifacts": "napi artifacts",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
