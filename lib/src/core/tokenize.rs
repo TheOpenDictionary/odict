@@ -1,4 +1,4 @@
-use charabia::Tokenize;
+use charabia::Segment;
 use rayon::prelude::*;
 
 use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
@@ -7,6 +7,7 @@ use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, 
 /*                                Tokenize Options                               */
 /* ----------------------------------------------------------------------------- */
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Token<T> {
     pub lemma: String,
     pub entries: Vec<T>,
@@ -48,21 +49,21 @@ macro_rules! tokenize {
             where
                 Options: AsRef<TokenizeOptions> + Send + Sync,
             {
-                let tokens = text
-                    .tokenize()
-                    .map(|token| token.lemma().to_string())
-                    .collect::<Vec<String>>();
-
-                let results = tokens
+                let results = text
+                    .segment()
+                    .filter(|token| !token.is_separator() && !token.lemma().trim().is_empty())
+                    .collect::<Vec<_>>()
                     .par_iter()
                     .map(|token| {
+                        let lemma = token.lemma();
+
                         let split_entries = self.split(
-                            token,
+                            lemma,
                             SplitOptions::default().threshold(options.as_ref().threshold),
                         )?;
 
                         Ok(Token {
-                            lemma: token.to_string(),
+                            lemma: lemma.to_string(),
                             entries: split_entries,
                         })
                     })
