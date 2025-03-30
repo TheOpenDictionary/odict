@@ -5,6 +5,7 @@ pub mod merge;
 pub mod preview;
 pub mod read;
 pub mod split;
+pub mod tokenize;
 pub mod write;
 
 mod semver;
