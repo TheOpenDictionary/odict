@@ -402,7 +402,10 @@ jobs:
         with:
           image: node:${{ matrix.node }}-bullseye-slim
           options: "--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build"
-          run: pnpm --filter "@odict/node" test
+          run: |
+            corepack prepare
+            corepack enable
+            pnpm --filter "@odict/node" test
   universal-macOS:
     name: Build universal macOS binary
     needs:
