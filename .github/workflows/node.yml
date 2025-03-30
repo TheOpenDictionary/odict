@@ -286,7 +286,7 @@ jobs:
       - name: Test bindings
         run: |
           docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim sh -c "
-            corepack prepare &&              
+            corepack prepare &&
             corepack enable &&
             pnpm --filter '@odict/node' test
           "
@@ -310,13 +310,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: |
-          pnpm config set supportedArchitectures.cpu "arm64"
-          pnpm config set supportedArchitectures.libc "glibc"
-          pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -329,8 +322,11 @@ jobs:
           options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
           run: |
             set -e
-            corepack prepare 
+            corepack prepare
             corepack enable
+            pnpm config set supportedArchitectures.cpu "arm64"
+            pnpm config set supportedArchitectures.libc "glibc"
+            pnpm install
             pnpm --filter "@odict/node" test
             ls -la
   test-linux-aarch64-musl-binding:
@@ -354,13 +350,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: |
-          pnpm config set supportedArchitectures.cpu "arm64"
-          pnpm config set supportedArchitectures.libc "musl"
-          pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -374,6 +363,9 @@ jobs:
           run: |
             corepack prepare
             corepack enable
+            pnpm config set supportedArchitectures.cpu "arm64"
+            pnpm config set supportedArchitectures.libc "musl"
+            pnpm install
             pnpm --filter "@odict/node" test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
@@ -396,12 +388,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - name: Install dependencies
-        run: |
-          pnpm config set supportedArchitectures.cpu "arm"
-          pnpm install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -416,6 +402,8 @@ jobs:
             set -e
             corepack prepare
             corepack enable
+            pnpm config set supportedArchitectures.cpu "arm"
+            pnpm install
             pnpm --filter "@odict/node" test
             ls -la
   universal-macOS:
