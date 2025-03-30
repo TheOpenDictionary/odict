@@ -164,6 +164,8 @@ jobs:
     name: Build FreeBSD
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Build
         id: build
         uses: cross-platform-actions/action@v0.25.0
@@ -231,7 +233,7 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v4
-      - name: setup pnpm
+      - name: Setup PNPM
         uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
@@ -264,6 +266,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
         with:
@@ -335,6 +339,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install
       - name: Set up QEMU
@@ -369,6 +375,8 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
       - name: Install dependencies
         run: pnpm install
       - name: Set up QEMU
@@ -434,7 +442,7 @@ jobs:
           path: node
       - name: List packages
         run: ls -R .
-      - name: setup pnpm
+      - name: Setup PNPM
         uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -460,7 +468,7 @@ jobs:
       - test-wasi-nodejs
     steps:
       - uses: actions/checkout@v4
-      - name: setup pnpm
+      - name: Setup PNPM
         uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v4
