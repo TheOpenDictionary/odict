@@ -1,10 +1,16 @@
-use charabia::{normalizer::NormalizedTokenIter, Tokenize};
+use charabia::Tokenize;
+use rayon::prelude::*;
 
-use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
-/* -------------------------------------------------------------------------- */
-/*                                Split Options                               */
-/* -------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------- */
+/*                                Tokenize Options                               */
+/* ----------------------------------------------------------------------------- */
+
+pub struct Token<T> {
+    pub lemma: String,
+    pub entries: Vec<T>,
+}
 
 pub struct TokenizeOptions {
     threshold: usize,
@@ -31,76 +37,42 @@ impl TokenizeOptions {
 /*                               Implementation                               */
 /* -------------------------------------------------------------------------- */
 
-// macro_rules! tokenize {
-//     ($t:ident, $r:ident) => {
-//         impl $t {
-//             pub fn tokenize<Options: AsRef<TokenizeOptions>>(
-//                 &self,
-//                 text: &str,
-//                 options: Options,
-//             ) -> crate::Result<Vec<&$r>> {
-//                 let tokens = text.tokenize();
+macro_rules! tokenize {
+    ($t:ident, $r:ident) => {
+        impl $t {
+            pub fn tokenize<Options>(
+                &self,
+                text: &str,
+                options: Options,
+            ) -> crate::Result<Vec<Token<&$r>>>
+            where
+                Options: AsRef<TokenizeOptions> + Send + Sync,
+            {
+                let tokens = text
+                    .tokenize()
+                    .map(|token| token.lemma().to_string())
+                    .collect::<Vec<String>>();
 
-//                 let mut entries: Vec<&Entry> = Vec::new();
+                let results = tokens
+                    .par_iter()
+                    .map(|token| {
+                        let split_entries = self.split(
+                            token,
+                            SplitOptions::default().threshold(options.as_ref().threshold),
+                        )?;
 
-//                 for token in tokens {
-//                     let split_entries = self.split(token.text(), options.as_ref())?;
+                        Ok(Token {
+                            lemma: token.to_string(),
+                            entries: split_entries,
+                        })
+                    })
+                    .collect::<crate::Result<Vec<_>>>()?;
 
-//                     entries.push(Token {
-//                         token: token.text().to_string(),
-//                         lemma: token.lemma().to_string(),
-//                         entries: split_entries,
-//                     });
-//                 }
-
-//                 Ok(entries)
-//             }
-//         }
-//     };
-// }
-
-use rayon::prelude::*;
-
-use super::split::SplitOptions;
-
-struct Token<T> {
-    token: String,
-    lemma: String,
-    entries: Vec<T>,
+                Ok(results)
+            }
+        }
+    };
 }
 
-unsafe impl Send for NormalizedTokenIter<'_> {}
-unsafe impl Sync for NormalizedTokenIter<'_> {}
-
-impl Dictionary {
-    pub fn tokenize<Options: AsRef<TokenizeOptions>>(
-        &self,
-        text: &str,
-        options: Options,
-    ) -> crate::Result<Vec<Token<&Entry>>> {
-        let tokens = text.tokenize();
-
-        let results = tokens
-            .par_bridge()
-            .into_par_iter()
-            .map(|token| {
-                let split_entries = self.split(
-                    token.text(),
-                    SplitOptions::default().threshold(options.as_ref().threshold),
-                )?;
-
-                Ok(Token {
-                    token: token.text().to_string(),
-                    lemma: token.lemma().to_string(),
-                    entries: split_entries,
-                })
-            })
-            .collect::<crate::Result<Vec<_>>>()?
-            .into_iter();
-
-        Ok(results)
-    }
-}
-
-// split!(Dictionary, Entry);
-// split!(ArchivedDictionary, ArchivedEntry);
+tokenize!(Dictionary, Entry);
+tokenize!(ArchivedDictionary, ArchivedEntry);
