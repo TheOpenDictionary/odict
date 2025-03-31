@@ -290,7 +290,7 @@ jobs:
         shell: bash
       - name: Test bindings
         run:
-          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine -c "
+          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine sh -c "
           corepack prepare &&
           corepack enable &&
           pnpm --filter '@odict/node' test
