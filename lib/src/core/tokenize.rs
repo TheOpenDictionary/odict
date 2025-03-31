@@ -17,7 +17,9 @@ pub struct Token<T> {
 }
 
 pub struct TokenizeOptions<'a> {
-    threshold: usize,
+    // The minimum length of for an entry to be considered valid. This is passed directly to the split() method.
+    min_length: usize,
+    // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
     allow_list: Option<&'a [Language]>,
 }
 
@@ -31,12 +33,12 @@ impl<'a> TokenizeOptions<'a> {
     pub fn default() -> Self {
         Self {
             allow_list: None,
-            threshold: 0,
+            min_length: 0,
         }
     }
 
-    pub fn threshold(mut self, threshold: usize) -> Self {
-        self.threshold = threshold;
+    pub fn min_length(mut self, min_length: usize) -> Self {
+        self.min_length = min_length;
         self
     }
 
@@ -81,7 +83,7 @@ macro_rules! tokenize {
 
                         let split_entries = self.split(
                             lemma,
-                            SplitOptions::default().threshold(options.as_ref().threshold),
+                            SplitOptions::default().min_length(options.as_ref().min_length),
                         )?;
 
                         Ok(Token {

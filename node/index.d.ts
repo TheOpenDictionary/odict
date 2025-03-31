@@ -100,5 +100,5 @@ export interface Sense {
 }
 
 export interface SplitOptions {
-  threshold?: number;
+  minLength?: number;
 }

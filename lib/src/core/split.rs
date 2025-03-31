@@ -5,7 +5,7 @@ use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 /* -------------------------------------------------------------------------- */
 
 pub struct SplitOptions {
-    threshold: usize,
+    min_length: usize,
 }
 
 impl AsRef<SplitOptions> for SplitOptions {
@@ -16,11 +16,11 @@ impl AsRef<SplitOptions> for SplitOptions {
 
 impl SplitOptions {
     pub fn default() -> Self {
-        Self { threshold: 0 }
+        Self { min_length: 2 }
     }
 
-    pub fn threshold(mut self, threshold: usize) -> Self {
-        self.threshold = threshold;
+    pub fn min_length(mut self, min_length: usize) -> Self {
+        self.min_length = min_length;
         self
     }
 }
@@ -42,7 +42,7 @@ macro_rules! split {
                 let chars: Vec<_> = query.chars().collect();
                 let mut end = chars.len();
 
-                let SplitOptions { threshold } = options.as_ref();
+                let SplitOptions { min_length } = options.as_ref();
 
                 while start < end {
                     let substr: String = chars[start..end].iter().collect();
@@ -52,7 +52,7 @@ macro_rules! split {
                         entries.push(entry.unwrap());
                     }
 
-                    if entry.is_some() || substr.len() <= *threshold {
+                    if entry.is_some() || substr.len() <= *min_length {
                         start = end;
                         end = chars.len();
                     } else {

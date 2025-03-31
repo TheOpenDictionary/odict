@@ -38,8 +38,8 @@ impl LookupOptions {
         self
     }
 
-    pub fn split(mut self, threshold: usize) -> Self {
-        self.split = threshold;
+    pub fn split(mut self, min_length: usize) -> Self {
+        self.split = min_length;
         self
     }
 }
@@ -143,7 +143,7 @@ macro_rules! lookup {
                         entries.push(entry);
                     }
                 } else if *split > 0 {
-                    let split = self.split(term, &SplitOptions::default().threshold(*split))?;
+                    let split = self.split(term, &SplitOptions::default().min_length(*split))?;
                     entries.extend_from_slice(&split);
                 }
 
