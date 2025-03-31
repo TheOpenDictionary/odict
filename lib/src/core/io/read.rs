@@ -7,14 +7,10 @@ use std::{
 use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::access_unchecked;
 
-use crate::{
-    compress::decompress,
-    constants::{SIGNATURE, VERSION},
-    error::Error,
-    ArchivedDictionary, Dictionary,
-};
+use crate::{compress::decompress, error::Error, ArchivedDictionary, Dictionary};
 
-use super::semver::SemanticVersion;
+use super::consts::{SIGNATURE, VERSION};
+use crate::semver::SemanticVersion;
 
 /* -------------------------------------------------------------------------- */
 /*                               DictionaryFile                               */

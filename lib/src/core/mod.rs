@@ -1,16 +1,13 @@
-pub mod constants;
+mod io;
+
 pub mod lexicon;
 pub mod lookup;
 pub mod merge;
 pub mod preview;
-pub mod read;
-pub mod split;
-pub mod tokenize;
-pub mod write;
+// pub mod tokenize;
 
-mod semver;
+pub(crate) mod semver;
 
-pub use read::{DictionaryFile, DictionaryReader};
-pub use write::DictionaryWriter;
+pub use io::*;
 
 pub use rkyv::option::ArchivedOption;
