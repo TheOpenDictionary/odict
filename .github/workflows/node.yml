@@ -548,7 +548,7 @@ jobs:
       - name: Move artifacts
         run: pnpm --filter "@odict/node" artifacts
       - name: List packages
-        run: ls -R ./npm
+        run: ls -R ./node/npm
         shell: bash
       - name: Publish
         shell: bash
