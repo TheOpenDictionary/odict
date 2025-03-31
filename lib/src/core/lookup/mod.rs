@@ -13,7 +13,7 @@ mod options;
 
 const PARENTHETICAL_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\((.+)\)$").unwrap());
 
-struct LookupResult<E> {
+pub struct LookupResult<E> {
     entry: E,
     directed_from: Option<E>,
 }
@@ -27,13 +27,16 @@ macro_rules! lookup {
         impl $tys {
             fn find_entry<'a>(
                 &'a self,
+                follow: &bool,
                 query: &str,
                 directed_from: Option<&'a $ret>,
             ) -> $opt<LookupResult<&'a $ret>> {
                 if let Some(entry) = self.entries.get(query) {
                     // Follow an alias if it exists
-                    if let $opt::Some(also) = &entry.see_also {
-                        return self.find_entry(also, Some(entry));
+                    if *follow {
+                        if let $opt::Some(also) = &entry.see_also {
+                            return self.find_entry(follow, also, Some(entry));
+                        }
                     }
 
                     return $opt::Some(LookupResult {
@@ -49,20 +52,14 @@ macro_rules! lookup {
                 &'a self,
                 query: &'a str,
                 options: Options,
-                directed_from: Option<&$ret>,
             ) -> crate::Result<Vec<LookupResult<&$ret>>>
             where
                 Options: AsRef<LookupOptions> + Send + Sync,
             {
                 let LookupOptions { follow, strategy } = options.as_ref();
 
-                if let $opt::Some(entry) = self.find_entry(query, None) {
-                    let result = LookupResult {
-                        entry: &entry,
-                        directed_from: None,
-                    };
-
-                    return Ok(vec![]);
+                if let $opt::Some(result) = self.find_entry(follow, query, None) {
+                    return Ok(vec![result]);
                 }
 
                 if *strategy == LookupStrategy::Exact {
@@ -77,19 +74,16 @@ macro_rules! lookup {
 
                 while start < end {
                     let substr: String = chars[start..end].iter().collect();
-                    let maybe_entry = self.find_entry(substr.as_str(), None);
-
-                    if let $opt::Some(entry) = maybe_entry {
-                        let result = LookupResult {
-                            entry: &entry,
-                            directed_from: None,
-                        };
-                        results.push(entry);
-                    }
+                    let maybe_entry = self.find_entry(follow, substr.as_str(), None);
 
                     if maybe_entry.is_some() || substr.len() <= 1 {
                         start = end;
                         end = chars.len();
+
+                        if let $opt::Some(result) = maybe_entry {
+                            results.push(result);
+                        }
+
                         continue;
                     }
 
@@ -103,14 +97,14 @@ macro_rules! lookup {
                 &'a self,
                 queries: &'a Vec<&str>,
                 options: Options,
-            ) -> crate::Result<Vec<Vec<LookupResult<&'a $ret>>>>
+            ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where
                 Options: AsRef<LookupOptions> + Send + Sync,
             {
                 queries
                     .par_iter()
-                    .map(|query| self.perform_lookup(query, &options, None))
-                    .collect()
+                    .flat_map(|query| self.perform_lookup(query, &options))
+                    .collect::<Vec<LookupResult<&'a $ret>>>()
             }
         }
     };
