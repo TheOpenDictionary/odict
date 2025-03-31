@@ -14,9 +14,19 @@ use regex::Regex;
 /* ----------------------------- Lookup Options ----------------------------- */
 
 #[derive(Debug, Clone)]
+pub enum LookupMethod {
+    Exact,
+    Split,
+    Tokenize,
+}
+
+#[derive(Debug, Clone)]
 pub struct LookupOptions {
     pub follow: bool,
-    pub split: usize,
+    pub method: LookupMethod,
+    // Determines the minimal acceptable length of an entry.
+    // Does not applied when the LookupMethod is Exact.
+    pub min_length: usize,
 }
 
 impl AsRef<LookupOptions> for LookupOptions {
@@ -29,7 +39,8 @@ impl LookupOptions {
     pub fn default() -> Self {
         Self {
             follow: false,
-            split: 0,
+            method: LookupMethod::Tokenize,
+            min_length: 0,
         }
     }
 
@@ -38,8 +49,13 @@ impl LookupOptions {
         self
     }
 
-    pub fn split(mut self, min_length: usize) -> Self {
-        self.split = min_length;
+    pub fn min_length(mut self, min_length: usize) -> Self {
+        self.min_length = min_length;
+        self
+    }
+
+    pub fn method(mut self, method: LookupMethod) -> Self {
+        self.method = method;
         self
     }
 }
@@ -116,7 +132,12 @@ macro_rules! lookup {
                 let mut entries: Vec<&$ret> = Vec::new();
 
                 let LookupQuery { term, fallback } = query;
-                let LookupOptions { follow, split } = options.as_ref();
+
+                let LookupOptions {
+                    follow,
+                    method,
+                    min_length,
+                } = options.as_ref();
 
                 let mut found = self.entries.get(term.as_str());
 
