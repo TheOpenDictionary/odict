@@ -47,17 +47,6 @@ impl ToJSON for Vec<Entry> {
     }
 }
 
-impl ToJSON for Vec<Vec<Entry>> {
-    fn to_json(self, pretty: bool) -> crate::Result<String> {
-        let json = self
-            .into_iter()
-            .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())
-            .collect::<Vec<Vec<EntryJSON>>>();
-
-        stringify(&json, pretty)
-    }
-}
-
 impl ToJSON for &ArchivedEntry {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = EntryJSON::from(self.to_entry().unwrap());

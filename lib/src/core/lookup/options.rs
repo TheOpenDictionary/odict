@@ -1,8 +1,7 @@
 #[derive(Debug, PartialEq, Clone)]
 pub enum LookupStrategy {
     Exact,
-    Split,
-    Tokenize,
+    Split(usize),
 }
 
 #[derive(Debug, Clone)]
@@ -21,7 +20,7 @@ impl LookupOptions {
     pub fn default() -> Self {
         Self {
             follow: true,
-            strategy: LookupStrategy::Tokenize,
+            strategy: LookupStrategy::Exact,
         }
     }
 

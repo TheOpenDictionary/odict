@@ -1,21 +1,16 @@
-use std::{collections::HashMap, sync::LazyLock};
-
-use self::options::{LookupOptions, LookupStrategy};
 use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 use rayon::prelude::*;
 use rkyv::option::ArchivedOption;
 use std::marker::{Send, Sync};
 
-use regex::Regex;
-
 mod options;
 
-const PARENTHETICAL_REGEX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\((.+)\)$").unwrap());
+pub use options::*;
 
 pub struct LookupResult<E> {
-    entry: E,
-    directed_from: Option<E>,
+    pub entry: E,
+    pub directed_from: Option<E>,
 }
 
 /* -------------------------------------------------------------------------- */
@@ -52,7 +47,7 @@ macro_rules! lookup {
                 &'a self,
                 query: &'a str,
                 options: Options,
-            ) -> crate::Result<Vec<LookupResult<&$ret>>>
+            ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where
                 Options: AsRef<LookupOptions> + Send + Sync,
             {
@@ -62,49 +57,53 @@ macro_rules! lookup {
                     return Ok(vec![result]);
                 }
 
-                if *strategy == LookupStrategy::Exact {
-                    return Ok(vec![]);
-                }
-
-                let chars: Vec<_> = query.chars().collect();
-
                 let mut results: Vec<LookupResult<&$ret>> = Vec::new();
-                let mut start = 0;
-                let mut end = chars.len();
 
-                while start < end {
-                    let substr: String = chars[start..end].iter().collect();
-                    let maybe_entry = self.find_entry(follow, substr.as_str(), None);
+                if let LookupStrategy::Split(min_length) = strategy {
+                    let chars: Vec<_> = query.chars().collect();
+                    let mut start = 0;
+                    let mut end = chars.len();
 
-                    if maybe_entry.is_some() || substr.len() <= 1 {
-                        start = end;
-                        end = chars.len();
+                    while start < end {
+                        let substr: String = chars[start..end].iter().collect();
+                        let maybe_entry = self.find_entry(follow, substr.as_str(), None);
 
-                        if let $opt::Some(result) = maybe_entry {
-                            results.push(result);
+                        if maybe_entry.is_some() || substr.len() <= *min_length {
+                            start = end;
+                            end = chars.len();
+
+                            if let $opt::Some(result) = maybe_entry {
+                                results.push(result);
+                            }
+
+                            continue;
                         }
 
-                        continue;
+                        end -= 1;
                     }
-
-                    end -= 1;
                 }
 
                 Ok(results)
             }
 
-            pub fn lookup<'a, Options>(
+            pub fn lookup<'a, Query, Options>(
                 &'a self,
-                queries: &'a Vec<&str>,
+                queries: &'a Vec<Query>,
                 options: Options,
             ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where
+                Query: AsRef<str> + Send + Sync,
                 Options: AsRef<LookupOptions> + Send + Sync,
             {
-                queries
+                let results = queries
                     .par_iter()
-                    .flat_map(|query| self.perform_lookup(query, &options))
-                    .collect::<Vec<LookupResult<&'a $ret>>>()
+                    .map(|query| self.perform_lookup(query.as_ref(), &options))
+                    .collect::<crate::Result<Vec<_>>>()?
+                    .into_iter()
+                    .flatten()
+                    .collect::<Vec<LookupResult<&'a $ret>>>();
+
+                Ok(results)
             }
         }
     };

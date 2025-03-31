@@ -10,6 +10,8 @@ use derive_more::{Display, Error};
 use odict::{format::json::ToJSON, lookup::LookupOptions, DictionaryFile};
 use serde::Deserialize;
 
+use crate::get_lookup_entries;
+
 #[derive(Debug, Deserialize)]
 pub struct LookupRequest {
     queries: String,
@@ -83,15 +85,13 @@ async fn handle_lookup(
     let entries = dictionary
         .lookup(
             &queries,
-            LookupOptions::default()
-                .follow(follow.unwrap_or(false))
-                .split(split.unwrap_or(0)),
+            LookupOptions::default().follow(follow.unwrap_or(false)), // .method(split.unwrap_or(0)),
         )
         .map_err(|e| LookupError::LookupError {
             message: e.to_string(),
         })?;
 
-    let json = entries
+    let json = get_lookup_entries(entries)
         .to_json(true)
         .map_err(|_e| LookupError::SerializeError)?;
 

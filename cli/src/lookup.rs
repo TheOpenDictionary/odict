@@ -1,5 +1,5 @@
-use crate::deserialize_nested_entries;
 use crate::enums::PrintFormat;
+use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
 use odict::lookup::LookupOptions;
@@ -55,12 +55,12 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
 
     let result = file.to_archive()?.lookup(
         queries,
-        &LookupOptions::default().follow(*follow).split(*split),
+        &LookupOptions::default().follow(*follow), // .split(*split),
     );
 
     match result {
         Ok(entries) => {
-            print_entries(ctx, deserialize_nested_entries(entries), format)?;
+            print_entries(ctx, get_lookup_entries(entries), format)?;
             Ok(())
         }
         Err(err) => {
