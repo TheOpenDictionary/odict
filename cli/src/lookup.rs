@@ -2,7 +2,7 @@ use crate::enums::PrintFormat;
 use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
-use odict::lookup::LookupOptions;
+use odict::lookup::{LookupOptions, LookupStrategy};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -53,10 +53,13 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
         .reader
         .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
 
-    let result = file.to_archive()?.lookup(
-        queries,
-        &LookupOptions::default().follow(*follow), // .split(*split),
-    );
+    let mut opts: LookupOptions = LookupOptions::default().follow(*follow);
+
+    if *split > 0 {
+        opts = opts.strategy(LookupStrategy::Split(*split));
+    }
+
+    let result = file.to_archive()?.lookup(queries, opts);
 
     match result {
         Ok(entries) => {

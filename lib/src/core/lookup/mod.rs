@@ -5,9 +5,12 @@ use rkyv::option::ArchivedOption;
 use std::marker::{Send, Sync};
 
 mod options;
+mod tokenize;
 
 pub use options::*;
+pub use tokenize::*;
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct LookupResult<E> {
     pub entry: E,
     pub directed_from: Option<E>,

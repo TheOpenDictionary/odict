@@ -1,7 +1,12 @@
-use charabia::Segment;
+use charabia::{Script, Segment};
 use rayon::prelude::*;
 
-use crate::{split::SplitOptions, ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use super::{
+    options::{LookupOptions, LookupStrategy},
+    LookupResult,
+};
+
+use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 pub type Language = charabia::Language;
 
@@ -13,12 +18,11 @@ pub type Language = charabia::Language;
 pub struct Token<T> {
     pub lemma: String,
     pub language: Option<String>,
-    pub entries: Vec<T>,
+    pub entries: Vec<LookupResult<T>>,
 }
 
 pub struct TokenizeOptions<'a> {
-    // The minimum length of for an entry to be considered valid. This is passed directly to the split() method.
-    min_length: usize,
+    follow: bool,
     // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
     allow_list: Option<&'a [Language]>,
 }
@@ -33,12 +37,12 @@ impl<'a> TokenizeOptions<'a> {
     pub fn default() -> Self {
         Self {
             allow_list: None,
-            min_length: 0,
+            follow: true,
         }
     }
 
-    pub fn min_length(mut self, min_length: usize) -> Self {
-        self.min_length = min_length;
+    pub fn follow(mut self, follow: bool) -> Self {
+        self.follow = follow;
         self
     }
 
@@ -66,13 +70,15 @@ macro_rules! tokenize {
     ($t:ident, $r:ident) => {
         impl $t {
             pub fn tokenize<'a, Options>(
-                &self,
-                text: &str,
+                &'a self,
+                text: &'a str,
                 options: Options,
-            ) -> crate::Result<Vec<Token<&$r>>>
+            ) -> crate::Result<Vec<Token<&'a $r>>>
             where
                 Options: AsRef<TokenizeOptions<'a>> + Send + Sync,
             {
+                let opts = options.as_ref();
+
                 let results = text
                     .segment_with_option(None, options.as_ref().allow_list)
                     .filter(|token| !token.is_separator() && is_valid_token(token.lemma()))
@@ -81,15 +87,25 @@ macro_rules! tokenize {
                     .map(|token| {
                         let lemma = token.lemma();
 
-                        let split_entries = self.split(
-                            lemma,
-                            SplitOptions::default().min_length(options.as_ref().min_length),
+                        let script = token.script;
+
+                        let lookup_method = if script == Script::Cj {
+                            LookupStrategy::Split(1)
+                        } else {
+                            LookupStrategy::Exact
+                        };
+
+                        let entries = self.lookup(
+                            &vec![lemma],
+                            LookupOptions::default()
+                                .strategy(lookup_method)
+                                .follow(opts.follow),
                         )?;
 
                         Ok(Token {
                             lemma: lemma.to_string(),
                             language: token.language.map(|lang| lang.code().to_string()),
-                            entries: split_entries,
+                            entries,
                         })
                     })
                     .collect::<crate::Result<Vec<_>>>()?;
