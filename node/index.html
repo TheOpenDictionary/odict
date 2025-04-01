@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <title>Demo</title>
+  </head>
+  <body>
+    <button class="pick-file">Pick File</button>
+    <script type="module">
+      import { Buffer } from "buffer";
+
+      global.Buffer = Buffer;
+
+      import { compile, Dictionary } from "./node.wasi-browser.js";
+
+      // console.log(compile("<xml></xml>"));
+      let fileHandles;
+
+      const options = {
+        types: [
+          {
+            description: "ODict Files",
+            accept: {
+              "text/binary": ".odict",
+            },
+          },
+        ],
+        excludeAcceptAllOption: true,
+      };
+
+      document.querySelector(".pick-file").onclick = async () => {
+        fileHandles = await window.showOpenFilePicker(options);
+
+        const allContent = await Promise.all(
+          fileHandles.map(async (fileHandle) => {
+            const file = await fileHandle.getFile();
+            const content = await file.arrayBuffer();
+            return content;
+          }),
+        );
+        const dictionary = new Dictionary(new Buffer(allContent[0]), {});
+
+        console.log(allContent[0]);
+
+        console.log(dictionary);
+        // console.log(
+        //   await Dictionary.compile(
+        //     '<dictionary><entry term="dog"/></entry></dictionary>'
+        //   )
+        // );
+        console.log(dictionary.lookup("dog"));
+        // console.log(dictionary.lexicon());
+      };
+    </script>
+  </body>
+</html>

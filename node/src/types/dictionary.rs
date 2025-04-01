@@ -1,6 +1,8 @@
 use merge::Merge;
 
-use super::{IndexOptions, SearchOptions, SplitOptions};
+use super::SplitOptions;
+
+use super::{IndexOptions, SearchOptions};
 
 #[napi(object)]
 #[derive(PartialEq, Merge, Clone, Eq)]

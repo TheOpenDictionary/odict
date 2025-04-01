@@ -4,6 +4,7 @@ python = "3.13.2"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-dist" = "0.28.0"
 "cargo:cargo-nextest" = "0.9.92"
+"cargo:wasm-pack" = "latest"
 
 [settings]
 python.venv_stdlib = true
@@ -13,10 +14,9 @@ _.python.venv = { path = ".venv", create = true }
 
 [task_config]
 includes = [
-  "tasks.toml",
-  "lib/tasks.toml",
-  "cli/tasks.toml",
-  "java/tasks.toml",
-  "node/tasks.toml",
-  "python/tasks.toml",
+    "tasks.toml",
+    "lib/tasks.toml",
+    "cli/tasks.toml",
+    "node/tasks.toml",
+    "python/tasks.toml",
 ]
