@@ -1,10 +1,9 @@
-use std::{borrow::BorrowMut, path::PathBuf};
+use std::path::PathBuf;
 
 use either::Either;
 use odict::{
-    lookup::LookupOptions,
+    lookup::{LookupOptions, LookupStrategy},
     search::{IndexOptions, SearchOptions},
-    split::SplitOptions,
 };
 use pyo3::prelude::*;
 
@@ -12,16 +11,16 @@ use crate::{types::Entry, utils::cast_error};
 
 fn lookup(
     file: &odict::DictionaryFile,
-    queries: &Vec<odict::lookup::LookupQuery>,
+    queries: &Vec<String>,
     split: Option<usize>,
     follow: Option<bool>,
-) -> PyResult<Vec<Vec<Entry>>> {
+) -> PyResult<Vec<Entry>> {
     let dict = file.to_archive().map_err(cast_error)?;
 
     let mut opts = LookupOptions::default();
 
     if let Some(split) = split {
-        opts.split = split;
+        opts.strategy = LookupStrategy::Split(split);
     }
 
     if let Some(follow) = follow {
@@ -29,17 +28,13 @@ fn lookup(
     }
 
     let entries = dict
-        .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
+        .lookup(queries, &odict::lookup::LookupOptions::from(opts.into()))
         .map_err(|e| cast_error(e))?;
 
     let mapped = entries
         .iter()
-        .map(|i| {
-            i.iter()
-                .map(|e| Entry::from_archive(e))
-                .collect::<Result<Vec<Entry>, _>>()
-        })
-        .collect::<Result<Vec<Vec<Entry>>, _>>()?;
+        .map(|e| Entry::from_archive(e.entry))
+        .collect::<Result<Vec<Entry>, _>>()?;
 
     Ok(mapped)
 }
@@ -126,17 +121,12 @@ impl Dictionary {
         query: Either<String, Vec<String>>,
         split: Option<usize>,
         follow: Option<bool>,
-    ) -> PyResult<Vec<Vec<Entry>>> {
-        let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
+    ) -> PyResult<Vec<Entry>> {
+        let mut queries: Vec<String> = vec![];
 
         match query {
             Either::Left(a) => queries.push(a.into()),
-            Either::Right(c) => queries.append(
-                c.into_iter()
-                    .map(|e| e.into())
-                    .collect::<Vec<odict::lookup::LookupQuery>>()
-                    .borrow_mut(),
-            ),
+            Either::Right(mut c) => queries.append(&mut c),
         }
 
         lookup(&(self.file), &queries, split, follow)
@@ -147,24 +137,6 @@ impl Dictionary {
         let lexicon = dict.lexicon();
 
         Ok(lexicon)
-    }
-
-    #[pyo3(signature = (query, threshold=None))]
-    pub fn split(&self, query: String, threshold: Option<usize>) -> PyResult<Vec<Entry>> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
-
-        let mut opts = SplitOptions::default();
-
-        if let Some(threshold) = threshold {
-            opts = opts.threshold(threshold);
-        }
-
-        let result = dict.split(&query, &opts).map_err(|e| cast_error(e))?;
-
-        Ok(result
-            .iter()
-            .map(|e| Entry::from_archive(e))
-            .collect::<Result<Vec<Entry>, _>>()?)
     }
 
     #[pyo3(signature = (directory=None, memory=None, overwrite=None))]
