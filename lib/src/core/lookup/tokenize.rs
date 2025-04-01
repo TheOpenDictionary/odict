@@ -96,7 +96,7 @@ macro_rules! tokenize {
                         };
 
                         let entries = self.lookup(
-                            &vec![lemma],
+                            &vec!["dog"],
                             LookupOptions::default()
                                 .strategy(lookup_method)
                                 .follow(opts.follow),
