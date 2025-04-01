@@ -23,10 +23,10 @@ pub struct LookupResult<E> {
 macro_rules! lookup {
     ($tys:ident, $ret:ident, $opt:ident) => {
         impl $tys {
-            fn find_entry<'a>(
+            fn find_entry<'a, 'b>(
                 &'a self,
                 follow: &bool,
-                query: &str,
+                query: &'b str,
                 directed_from: Option<&'a $ret>,
             ) -> $opt<LookupResult<&'a $ret>> {
                 if let Some(entry) = self.entries.get(query) {
@@ -46,9 +46,9 @@ macro_rules! lookup {
                 $opt::None
             }
 
-            fn perform_lookup<'a, Options>(
+            fn perform_lookup<'a, 'b, Options>(
                 &'a self,
-                query: &'a str,
+                query: &'b str,
                 options: Options,
             ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where
@@ -89,9 +89,9 @@ macro_rules! lookup {
                 Ok(results)
             }
 
-            pub fn lookup<'a, Query, Options>(
+            pub fn lookup<'a, 'b, Query, Options>(
                 &'a self,
-                queries: &'a Vec<Query>,
+                queries: &'b Vec<Query>,
                 options: Options,
             ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where

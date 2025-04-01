@@ -69,9 +69,9 @@ fn is_valid_token(input: &str) -> bool {
 macro_rules! tokenize {
     ($t:ident, $r:ident) => {
         impl $t {
-            pub fn tokenize<'a, Options>(
+            pub fn tokenize<'a, 'b, Options>(
                 &'a self,
-                text: &'a str,
+                text: &'b str,
                 options: Options,
             ) -> crate::Result<Vec<Token<&'a $r>>>
             where
@@ -95,8 +95,10 @@ macro_rules! tokenize {
                             LookupStrategy::Exact
                         };
 
+                        let query = vec![lemma];
+
                         let entries = self.lookup(
-                            &vec!["dog"],
+                            &query,
                             LookupOptions::default()
                                 .strategy(lookup_method)
                                 .follow(opts.follow),
