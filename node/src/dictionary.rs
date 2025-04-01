@@ -1,8 +1,9 @@
 use std::{borrow::BorrowMut, path::PathBuf, vec};
 
-use napi::bindgen_prelude::*;
+use napi::{JsArrayBufferValue, bindgen_prelude::*};
 
 use merge::Merge;
+use odict::ToDictionary;
 
 use crate::{
   types::{
@@ -19,62 +20,24 @@ pub struct Dictionary {
 }
 
 #[napi]
+pub fn compile(xml: String) -> Result<Buffer> {
+  let dictionary = xml.to_dictionary().map_err(cast_error)?;
+
+  let bytes = odict::DictionaryWriter::default()
+    .write_to_bytes(&dictionary)
+    .map_err(cast_error)?;
+
+  Ok(bytes.into())
+}
+
+#[napi]
 impl Dictionary {
   #[napi(constructor)]
-  pub fn new(path_or_alias: String, options: Option<DictionaryOptions>) -> Result<Self> {
+  pub fn new(data: Buffer, options: Option<DictionaryOptions>) -> Result<Self> {
     let reader = odict::DictionaryReader::default();
-
     let file = reader
-      .read_from_path_or_alias(&path_or_alias)
+      .read_from_bytes::<Vec<u8>>(data.into())
       .map_err(cast_error)?;
-
-    let dict = Dictionary { options, file };
-
-    Ok(dict)
-  }
-
-  #[napi(factory)]
-  pub fn write(
-    xml_str: String,
-    out_path: String,
-    options: Option<DictionaryOptions>,
-  ) -> Result<Self> {
-    let dict = odict::Dictionary::from(&xml_str).map_err(cast_error)?;
-    let reader = odict::DictionaryReader::default();
-    let writer = odict::DictionaryWriter::default();
-
-    writer.write_to_path(&dict, &out_path).map_err(cast_error)?;
-
-    let file = reader.read_from_path(&out_path).map_err(cast_error)?;
-
-    let dict = Dictionary { options, file };
-
-    Ok(dict)
-  }
-
-  #[napi(factory)]
-  pub fn compile(
-    xml_path: String,
-    out_path: Option<String>,
-    options: Option<DictionaryOptions>,
-  ) -> Result<Self> {
-    let in_file = PathBuf::from(xml_path.to_owned());
-
-    let out_file = out_path.unwrap_or_else(|| {
-      odict::fs::infer_path(&xml_path)
-        .to_string_lossy()
-        .to_string()
-    });
-
-    let reader = odict::DictionaryReader::default();
-    let writer = odict::DictionaryWriter::default();
-
-    writer
-      .compile_xml(&in_file, &out_file)
-      .map_err(cast_error)?;
-
-    let file = reader.read_from_path(&out_file).map_err(cast_error)?;
-
     let dict = Dictionary { options, file };
 
     Ok(dict)
@@ -82,18 +45,6 @@ impl Dictionary {
 
   pub fn options(&self) -> DictionaryOptions {
     resolve_options(&self.options)
-  }
-
-  #[napi(getter)]
-  pub fn path(&self) -> napi::Result<String> {
-    let path = self
-      .file
-      .path
-      .as_ref()
-      .map(|p| p.to_string_lossy().to_string())
-      .unwrap();
-
-    Ok(path)
   }
 
   pub fn _lookup(
@@ -180,35 +131,45 @@ impl Dictionary {
 
   #[napi]
   pub fn index(&self, options: Option<IndexOptions>) -> Result<()> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
-    let mut opts = options;
+    #[cfg(feature = "search")]
+    {
+      let dict = self.file.to_archive().map_err(cast_error)?;
+      let mut opts = options;
 
-    opts.merge(self.options().index);
+      opts.merge(self.options().index);
 
-    dict
-      .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
-      .map_err(cast_error)?;
+      dict
+        .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
+        .map_err(cast_error)?;
 
-    Ok(())
+      return Ok(());
+    }
+
+    unimplemented!("index() is not available in browser environments. Maybe try IndexedDB?");
   }
 
   #[napi]
   pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
-    let mut opts = options;
+    #[cfg(feature = "search")]
+    {
+      let dict = self.file.to_archive().map_err(cast_error)?;
+      let mut opts = options;
 
-    opts.merge(self.options().search);
+      opts.merge(self.options().search);
 
-    let results = dict
-      .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
-      .map_err(cast_error)?;
+      let results = dict
+        .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
+        .map_err(cast_error)?;
 
-    let entries = results
-      .iter()
-      .map(|e| Entry::from_entry(e.clone()))
-      .collect::<Result<Vec<Entry>, _>>()?;
+      let entries = results
+        .iter()
+        .map(|e| Entry::from_entry(e.clone()))
+        .collect::<Result<Vec<Entry>, _>>()?;
 
-    Ok(entries)
+      return Ok(entries);
+    }
+
+    unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
 }
 

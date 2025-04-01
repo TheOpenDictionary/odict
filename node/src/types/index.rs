@@ -18,6 +18,7 @@ impl Default for IndexOptions {
   }
 }
 
+#[cfg(feature = "search")]
 impl From<IndexOptions> for odict::search::IndexOptions {
   fn from(opts: IndexOptions) -> Self {
     let mut s = odict::search::IndexOptions::default();

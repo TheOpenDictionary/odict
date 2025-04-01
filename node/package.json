@@ -1,8 +1,10 @@
 {
   "name": "@odict/node",
   "version": "1.0.0",
+  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
+  "browser": "browser.js",
   "files": [
     "index.js",
     "index.d.ts"
@@ -10,19 +12,23 @@
   "napi": {
     "binaryName": "node",
     "targets": [
-      "x86_64-apple-darwin",
-      "aarch64-apple-darwin",
+      "universal-apple-darwin",
       "x86_64-unknown-linux-gnu",
       "x86_64-pc-windows-msvc",
       "x86_64-unknown-linux-musl",
       "aarch64-unknown-linux-gnu",
+      "riscv64gc-unknown-linux-gnu",
+      "s390x-unknown-linux-gnu",
+      "powerpc64le-unknown-linux-gnu",
       "i686-pc-windows-msvc",
       "armv7-unknown-linux-gnueabihf",
       "aarch64-linux-android",
+      "armv7-unknown-linux-musleabihf",
       "x86_64-unknown-freebsd",
       "aarch64-unknown-linux-musl",
       "aarch64-pc-windows-msvc",
-      "armv7-linux-androideabi"
+      "armv7-linux-androideabi",
+      "wasm32-wasip1-threads"
     ]
   },
   "license": "MIT",
@@ -31,21 +37,26 @@
     "url": "https://github.com/TheOpenDictionary/odict"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.3.1",
-    "@napi-rs/cli": "3.0.0-alpha.64",
+    "@napi-rs/cli": "3.0.0-alpha.76",
+    "@napi-rs/wasm-runtime": "^0.2.7",
     "@types/node": "^22.0.0",
+    "buffer": "^6.0.3",
     "prettier": "^3.3.2",
-    "vitest": "^2.1.5"
+    "vite": "^6.2.2",
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "vitest": "^3.0.9"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 10.16.0 < 11 || >= 11.8.0 < 12 || >= 12.0.0"
   },
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
-    "build": "napi build --release --platform --pipe \"prettier -w\"",
-    "build:debug": "napi build --platform --pipe \"prettier -w\"",
+    "build": "napi build --release --platform --strip --pipe \"prettier -w\"",
+    "build:wasm": "pnpm run build --target wasm32-wasip1-threads --no-default-features --features json,sql",
+    "build:debug": "napi build --pipe \"prettier -w\"",
+    "dev:wasm": "vite dev",
     "test": "vitest --no-watch",
-    "universal": "napi universal",
+    "universalize": "napi universalize",
     "artifacts": "napi artifacts",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
