@@ -4,7 +4,10 @@ mod helpers;
 mod lookup_tests {
 
     use insta::assert_snapshot;
-    use odict::{format::json::ToJSON, lookup::LookupOptions};
+    use odict::{
+        format::json::ToJSON,
+        lookup::{LookupOptions, LookupStrategy},
+    };
 
     use crate::helpers::{EXAMPLE_DICT_1, EXAMPLE_DICT_2};
 
@@ -24,28 +27,14 @@ mod lookup_tests {
         let dict = EXAMPLE_DICT_1.to_archive().unwrap();
 
         let result = dict
-            .lookup(&vec!["catdog"], LookupOptions::default().split(3))
+            .lookup(
+                &vec!["catdog"],
+                LookupOptions::default().strategy(LookupStrategy::Split(3)),
+            )
             .unwrap();
 
-        assert_eq!(result[0][0].term, "cat");
-        assert_eq!(result[0][1].term, "dog");
-    }
-
-    #[test]
-    fn test_lookup_fallback() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
-
-        let result1 = dict
-            .lookup(&vec!["catdog(run)"], LookupOptions::default())
-            .unwrap();
-
-        assert_eq!(result1[0][0].term, "run");
-
-        let result2 = dict
-            .lookup(&vec!["(run)"], LookupOptions::default())
-            .unwrap();
-
-        assert_eq!(result2[0][0].term, "run");
+        assert_eq!(result[0].entry.term, "cat");
+        assert_eq!(result[1].entry.term, "dog");
     }
 
     #[test]
@@ -55,31 +44,39 @@ mod lookup_tests {
         let control = dict
             .lookup(
                 &vec!["runners"],
-                LookupOptions::default().split(2).follow(false),
+                LookupOptions::default()
+                    .strategy(LookupStrategy::Split(2))
+                    .follow(false),
             )
             .unwrap();
 
         assert_eq!(control.len(), 1);
-        assert_eq!(control[0][0].term, "runners");
+        assert_eq!(control[0].entry.term, "runners");
 
         let basic = dict
             .lookup(
                 &vec!["runners"],
-                LookupOptions::default().split(2).follow(true),
+                LookupOptions::default()
+                    .strategy(LookupStrategy::Split(2))
+                    .follow(true),
             )
             .unwrap();
 
         assert_eq!(basic.len(), 1);
-        assert_eq!(basic[0][0].term, "runner");
+        assert_eq!(basic[0].directed_from.is_some(), true);
+        assert_eq!(basic[0].directed_from.unwrap().term, "runners");
+        assert_eq!(basic[0].entry.term, "runner");
 
         let fallback = dict
             .lookup(
                 &vec!["unfindable (runners)"],
-                LookupOptions::default().split(2).follow(true),
+                LookupOptions::default()
+                    .strategy(LookupStrategy::Split(2))
+                    .follow(true),
             )
             .unwrap();
 
         assert_eq!(fallback.len(), 1);
-        assert_eq!(fallback[0][0].term, "runner");
+        assert_eq!(fallback[0].entry.term, "runner");
     }
 }

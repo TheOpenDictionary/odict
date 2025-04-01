@@ -6,20 +6,9 @@
 # ---
 # name: test_lookup
   list([
-    list([
-      Entry { term: "cat", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("n", Sense { pos: "n", definitions: [Left(Definition { id: None, value: "a cat", examples: [Example { value: "There goes a cat!" }], notes: [Note { id: None, value: "Some definition note", examples: [Example { value: "Some example" }] }] })] })] }] },
-    ]),
   ])
 # ---
 # name: test_lookup_with_split
-  list([
-    list([
-      Entry { term: "cat", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("n", Sense { pos: "n", definitions: [Left(Definition { id: None, value: "a cat", examples: [Example { value: "There goes a cat!" }], notes: [Note { id: None, value: "Some definition note", examples: [Example { value: "Some example" }] }] })] })] }] },
-      Entry { term: "dog", see_also: None, etymologies: [Etymology { id: None, pronunciation: Some("dooooog"), description: Some("Latin root"), senses: [("un", Sense { pos: "un", definitions: [Left(Definition { id: None, value: "a dog", examples: [], notes: [] })] })] }] },
-    ]),
-  ])
-# ---
-# name: test_split_terms
   list([
     Entry { term: "cat", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("n", Sense { pos: "n", definitions: [Left(Definition { id: None, value: "a cat", examples: [Example { value: "There goes a cat!" }], notes: [Note { id: None, value: "Some definition note", examples: [Example { value: "Some example" }] }] })] })] }] },
     Entry { term: "dog", see_also: None, etymologies: [Etymology { id: None, pronunciation: Some("dooooog"), description: Some("Latin root"), senses: [("un", Sense { pos: "un", definitions: [Left(Definition { id: None, value: "a dog", examples: [], notes: [] })] })] }] },

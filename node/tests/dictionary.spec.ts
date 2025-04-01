@@ -16,7 +16,7 @@ async function getDictionary(name: string) {
         ),
         "utf-8",
       ),
-    )
+    ),
   );
 }
 
@@ -36,13 +36,13 @@ describe("Dictionary", () => {
 
   describe("lookup", () => {
     it("looks up terms properly", async () => {
-      const result = dict1.lookup({ term: "cat", fallback: "cat" });
+      const result = dict1.lookup("cat");
       expect(result).toMatchSnapshot();
     });
 
     it("doesn't split unless specified", async () => {
       const result = dict1.lookup("catdog");
-      expect(result[0].length).toBe(0);
+      expect(result.length).toBe(0);
     });
 
     it("can split terms", async () => {
@@ -56,18 +56,16 @@ describe("Dictionary", () => {
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
   });
 
-  it("can split terms properly", async () => {
-    const result = dict1.split("catdog", { threshold: 2 });
-    expect(result).toMatchSnapshot();
-  });
+  it.skipIf(process.env.NAPI_RS_FORCE_WASI)(
+    "can index and search a dictionary",
+    async () => {
+      dict1.index();
 
-  it.skipIf(process.env.NAPI_RS_FORCE_WASI)("can index and search a dictionary", async () => {
-    dict1.index();
+      const results = dict1.search("run");
 
-    const results = dict1.search("run");
-
-    expect(results).toMatchSnapshot();
-  });
+      expect(results).toMatchSnapshot();
+    },
+  );
 
   it("throws errors inside JavaScript", async () => {
     try {

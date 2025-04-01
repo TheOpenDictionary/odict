@@ -14,7 +14,7 @@ mod markdown_tests {
 
         let run = dict.lookup(&vec!["dog"], LookupOptions::default()).unwrap();
 
-        let markdown = run[0][0].to_markdown().unwrap();
+        let markdown = run[0].entry.to_markdown().unwrap();
 
         assert_snapshot!(markdown);
     }

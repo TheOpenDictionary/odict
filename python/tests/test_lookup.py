@@ -41,13 +41,12 @@ def test_lookup(dict1, snapshot):
 def test_lookup_no_split(dict1):
     # Test lookup without splitting
     result = dict1.lookup("catdog")
-    assert len(result[0]) == 0
+    assert len(result) == 0
 
 
 def test_lookup_with_split(dict1, snapshot):
     # Test lookup with splitting
     result = dict1.lookup("catdog", split=3)
-    print(result)
     assert result == snapshot  # Use snapshot testing
 
 
@@ -92,13 +91,6 @@ def test_write_raw_xml():
     finally:
         # Clean up the temporary file
         os.unlink(temp_path)
-
-
-def test_split_terms(dict1, snapshot):
-    # Test term splitting
-    result = dict1.split("catdog", threshold=2)
-    assert result == snapshot  # Use snapshot testing
-
 
 def test_index_and_search(dict1, snapshot):
     # Test indexing and searching
