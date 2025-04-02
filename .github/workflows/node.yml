@@ -50,6 +50,8 @@ jobs:
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: >-
+              npm install -g corepack@latest &&
+              corepack enable &&
               set -e &&
               rm /usr/aarch64-unknown-linux-gnu/lib/llvm-18/lib/libunwind.so &&
               rm /usr/aarch64-unknown-linux-gnu/lib/llvm-18/lib/libc++.so &&
