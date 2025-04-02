@@ -1,5 +1,4 @@
 use merge::Merge;
-use napi::Either;
 use odict::Error;
 
 use crate::types::DictionaryOptions;

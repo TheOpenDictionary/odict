@@ -12,22 +12,12 @@ path = "src/main.rs"
 
 [dependencies]
 odict = { path = "../lib", features = [
-  "config",
-  "sql",
-  "search",
-  "html",
-  "json",
-  "tokenize-chinese",
-  "tokenize-hebrew",
-  "tokenize-japanese",
-  "tokenize-thai",
-  "tokenize-korean",
-  "tokenize-greek",
-  "tokenize-khmer",
-  "tokenize-vietnamese",
-  "tokenize-swedish",
-  "tokenize-turkish",
-  "tokenize-german",
+    "config",
+    "sql",
+    "search",
+    "html",
+    "json",
+    "tokenize-all",
 ] }
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
 console = "0.15.8"

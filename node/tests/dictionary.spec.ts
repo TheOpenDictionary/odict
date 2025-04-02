@@ -45,6 +45,12 @@ describe("Dictionary", () => {
       expect(result.length).toBe(0);
     });
 
+    it("follows terms properly", async () => {
+      const result = dict1.lookup("ran", { follow: true });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
+
     it("can split terms", async () => {
       const result = dict1.lookup("catdog", { split: 3 });
       expect(result).toMatchSnapshot();

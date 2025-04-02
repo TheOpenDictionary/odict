@@ -19,29 +19,24 @@ markdown = ["dep:pulldown-cmark"]
 default = ["json", "sql", "config"]
 
 # Language-specific support
+charabia = ["dep:charabia"]
+tokenize = ["dep:charabia"]
 tokenize-all = [
+    "tokenize",
     "tokenize-chinese",
-    "tokenize-hebrew",
     "tokenize-japanese",
     "tokenize-thai",
     "tokenize-korean",
-    "tokenize-greek",
     "tokenize-khmer",
-    "tokenize-vietnamese",
     "tokenize-swedish",
-    "tokenize-turkish",
     "tokenize-german",
 ]
-tokenize-chinese = ["charabia/chinese"]
-tokenize-hebrew = ["charabia/hebrew"]
-tokenize-japanese = ["charabia/japanese"]
+tokenize-chinese = ["charabia/chinese-segmentation"]
+tokenize-japanese = ["charabia/japanese-segmentation-unidic"]
 tokenize-thai = ["charabia/thai"]
 tokenize-korean = ["charabia/korean"]
-tokenize-greek = ["charabia/greek"]
 tokenize-khmer = ["charabia/khmer"]
-tokenize-vietnamese = ["charabia/vietnamese"]
 tokenize-swedish = ["charabia/swedish-recomposition"]
-tokenize-turkish = ["charabia/turkish"]
 tokenize-german = ["charabia/german-segmentation"]
 
 [[bench]]
@@ -53,7 +48,7 @@ byteorder = "1.5.0"
 quick-xml = { version = "0.37.0", features = ["serialize"] }
 rayon = "1.10.0"
 regex = "1.10.4"
-charabia = { version = "0.9.3", default-features = false }
+charabia = { version = "0.9.3", optional = true, default-features = false }
 rkyv = { version = "0.8.8", features = ["alloc"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }

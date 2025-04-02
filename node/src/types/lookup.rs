@@ -1,5 +1,4 @@
 use merge::Merge;
-use napi::bindgen_prelude::*;
 
 use super::Entry;
 
@@ -24,7 +23,9 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
     let mut s = odict::lookup::LookupOptions::default();
 
     if let Some(split) = opts.split {
-      s = s.strategy(odict::lookup::LookupStrategy::Split(split.try_into().unwrap()));
+      s = s.strategy(odict::lookup::LookupStrategy::Split(
+        split.try_into().unwrap(),
+      ));
     }
 
     if let Some(follow) = opts.follow {

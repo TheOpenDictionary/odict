@@ -8,6 +8,8 @@ mod options;
 mod tokenize;
 
 pub use options::*;
+
+#[cfg(feature = "tokenize")]
 pub use tokenize::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

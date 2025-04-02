@@ -45,37 +45,41 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
 exports[`Dictionary > lookup > can split terms 1`] = `
 [
   {
-    "etymologies": [
-      {
-        "description": "Latin root",
-        "senses": {
-          "n": {
-            "definitions": [
-              "a cat",
-            ],
-            "pos": "n",
+    "entry": {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                "a cat",
+              ],
+              "pos": "n",
+            },
           },
         },
-      },
-    ],
-    "term": "cat",
+      ],
+      "term": "cat",
+    },
   },
   {
-    "etymologies": [
-      {
-        "description": "Latin root",
-        "pronunciation": "dooooog",
-        "senses": {
-          "un": {
-            "definitions": [
-              "a dog",
-            ],
-            "pos": "un",
+    "entry": {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "pronunciation": "dooooog",
+          "senses": {
+            "un": {
+              "definitions": [
+                "a dog",
+              ],
+              "pos": "un",
+            },
           },
         },
-      },
-    ],
-    "term": "dog",
+      ],
+      "term": "dog",
+    },
   },
 ]
 `;
@@ -83,20 +87,22 @@ exports[`Dictionary > lookup > can split terms 1`] = `
 exports[`Dictionary > lookup > looks up terms properly 1`] = `
 [
   {
-    "etymologies": [
-      {
-        "description": "Latin root",
-        "senses": {
-          "n": {
-            "definitions": [
-              "a cat",
-            ],
-            "pos": "n",
+    "entry": {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "definitions": [
+                "a cat",
+              ],
+              "pos": "n",
+            },
           },
         },
-      },
-    ],
-    "term": "cat",
+      ],
+      "term": "cat",
+    },
   },
 ]
 `;
