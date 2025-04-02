@@ -1,3 +1,4 @@
+use odict::Entry;
 use pyo3::prelude::*;
 
 use super::LookupResult;
@@ -10,13 +11,21 @@ pub struct Token {
     pub entries: Vec<LookupResult>,
 }
 
-#[pymethods]
 impl Token {
-    pub fn __repr__(&self) -> String {
-        format!("{:?}", self)
-    }
+    pub fn from(note: odict::Token<Entry>) -> PyResult<Self> {
+        let odict::Token {
+            lemma,
+            language,
+            entries,
+        } = note;
 
-    pub fn __str__(&self) -> String {
-        format!("{:?}", self)
+        Ok(Self {
+            lemma,
+            language,
+            entries: entries
+                .into_iter()
+                .map(|e| LookupResult::from(e))
+                .collect::<Result<Vec<LookupResult>, _>>()?,
+        })
     }
 }

@@ -23,8 +23,8 @@ impl Entry {
     }
 }
 
-impl Entry {
-    pub fn from_entry(entry: odict::Entry) -> PyResult<Self> {
+impl From<odict::Entry> for Entry {
+    fn from(entry: odict::Entry) -> Self {
         let odict::Entry {
             term,
             see_also,
