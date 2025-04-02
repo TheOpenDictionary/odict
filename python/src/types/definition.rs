@@ -23,11 +23,8 @@ impl From<odict::Definition> for Definition {
         Self {
             id,
             value: String::from(value),
-            examples: examples
-                .into_iter()
-                .map(|e| Example::from(e).unwrap())
-                .collect::<Vec<Example>>(),
-            notes: notes.into_iter().map(|n| Note::from(n).unwrap()).collect(),
+            examples: examples.into_iter().map(Example::from).collect(),
+            notes: notes.into_iter().map(Note::from).collect(),
         }
     }
 }

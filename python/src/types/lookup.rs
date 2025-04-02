@@ -25,3 +25,15 @@ impl LookupResult {
         })
     }
 }
+
+impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+        let entry = Entry::from(result.entry);
+        let directed_from = result.directed_from.map(Entry::from);
+
+        Self {
+            entry,
+            directed_from,
+        }
+    }
+}

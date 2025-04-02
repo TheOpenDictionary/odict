@@ -10,23 +10,19 @@ pub struct Sense {
     pub definitions: Vec<Either<Definition, Group>>,
 }
 
-impl Sense {
-    pub fn from(sense: odict::Sense) -> PyResult<Self> {
+impl From<odict::Sense> for Sense {
+    fn from(sense: odict::Sense) -> Self {
         let odict::Sense { pos, definitions } = sense;
 
-        Ok(Self {
+        Self {
             pos: pos.to_string(),
             definitions: definitions
                 .into_iter()
-                .map(|d| -> PyResult<Either<Definition, Group>> {
-                    match d {
-                        odict::DefinitionType::Definition(d) => {
-                            Ok(Either::Left(Definition::from(d)?))
-                        }
-                        odict::DefinitionType::Group(g) => Ok(Either::Right(Group::from(g)?)),
-                    }
+                .map(|d| match d {
+                    odict::DefinitionType::Definition(d) => Either::Left(Definition::from(d)),
+                    odict::DefinitionType::Group(g) => Either::Right(Group::from(g)),
                 })
-                .collect::<Result<Vec<Either<Definition, Group>>, _>>()?,
-        })
+                .collect(),
+        }
     }
 }

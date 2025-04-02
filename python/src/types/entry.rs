@@ -23,6 +23,12 @@ impl Entry {
     }
 }
 
+impl Entry {
+    pub fn from_archive(entry: &odict::ArchivedEntry) -> PyResult<Self> {
+        Ok(Self::from(entry.to_entry().map_err(cast_error)?))
+    }
+}
+
 impl From<odict::Entry> for Entry {
     fn from(entry: odict::Entry) -> Self {
         let odict::Entry {
@@ -31,17 +37,13 @@ impl From<odict::Entry> for Entry {
             etymologies,
         } = entry;
 
-        Ok(Self {
+        Self {
             term,
             see_also,
             etymologies: etymologies
                 .into_iter()
                 .map(|e| Etymology::from(e))
-                .collect::<Result<Vec<Etymology>, _>>()?,
-        })
-    }
-
-    pub fn from_archive(entry: &odict::ArchivedEntry) -> PyResult<Self> {
-        Entry::from_entry(entry.to_entry().map_err(cast_error)?)
+                .collect(),
+        }
     }
 }

@@ -10,21 +10,21 @@ pub struct Group {
     pub definitions: Vec<Definition>,
 }
 
-impl Group {
-    pub fn from(group: odict::Group) -> PyResult<Self> {
+impl From<odict::Group> for Group {
+    fn from(group: odict::Group) -> Self {
         let odict::Group {
             id,
             description,
             definitions,
         } = group;
 
-        Ok(Self {
+        Self {
             id,
             description: String::from(description),
             definitions: definitions
                 .into_iter()
                 .map(|d| Definition::from(d))
-                .collect::<Result<Vec<Definition>, _>>()?,
-        })
+                .collect(),
+        }
     }
 }

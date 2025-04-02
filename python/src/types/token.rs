@@ -11,21 +11,21 @@ pub struct Token {
     pub entries: Vec<LookupResult>,
 }
 
-impl Token {
-    pub fn from(note: odict::Token<Entry>) -> PyResult<Self> {
+impl From<odict::Token<Entry>> for Token {
+    fn from(token: odict::Token<Entry>) -> Self {
         let odict::Token {
             lemma,
             language,
             entries,
-        } = note;
+        } = token;
 
-        Ok(Self {
+        Self {
             lemma,
             language,
             entries: entries
                 .into_iter()
-                .map(|e| LookupResult::from(e))
-                .collect::<Result<Vec<LookupResult>, _>>()?,
-        })
+                .map(LookupResult::from)
+                .collect(),
+        }
     }
 }
