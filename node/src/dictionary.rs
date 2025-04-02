@@ -191,7 +191,7 @@ impl Dictionary {
       return Ok(mapped);
     }
 
-    unimplemented!("tokenize() is not available in browser environments due to its large size.");
+    unimplemented!("tokenize() is not available in this environment.");
 
     Ok(vec![])
   }
