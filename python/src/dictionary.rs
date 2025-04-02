@@ -14,7 +14,7 @@ fn lookup(
     queries: &Vec<String>,
     split: Option<usize>,
     follow: Option<bool>,
-) -> PyResult<Vec<Entry>> {
+) -> PyResult<Vec<crate::types::LookupResult>> {
     let dict = file.to_archive().map_err(cast_error)?;
 
     let mut opts = LookupOptions::default();
@@ -27,14 +27,14 @@ fn lookup(
         opts.follow = follow;
     }
 
-    let entries = dict
+    let results = dict
         .lookup(queries, &odict::lookup::LookupOptions::from(opts.into()))
         .map_err(|e| cast_error(e))?;
 
-    let mapped = entries
+    let mapped = results
         .iter()
-        .map(|e| Entry::from_archive(e.entry))
-        .collect::<Result<Vec<Entry>, _>>()?;
+        .map(|result| crate::types::LookupResult::from_archive(result))
+        .collect::<Result<Vec<crate::types::LookupResult>, _>>()?;
 
     Ok(mapped)
 }
@@ -121,7 +121,7 @@ impl Dictionary {
         query: Either<String, Vec<String>>,
         split: Option<usize>,
         follow: Option<bool>,
-    ) -> PyResult<Vec<Entry>> {
+    ) -> PyResult<Vec<crate::types::LookupResult>> {
         let mut queries: Vec<String> = vec![];
 
         match query {
