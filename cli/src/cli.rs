@@ -3,7 +3,7 @@ use clap::{command, crate_version, Parser, Subcommand};
 use crate::alias::AliasCommands;
 use crate::{
     CompileArgs, DumpArgs, IndexArgs, InfoArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs,
-    SearchArgs, ServeArgs,
+    SearchArgs, ServeArgs, TokenizeArgs,
 };
 
 #[derive(Debug, Parser)]
@@ -66,4 +66,8 @@ pub enum Commands {
     /// Start a local web server to serve one or several dictionaries
     #[command(arg_required_else_help = true)]
     Serve(ServeArgs),
+    
+    /// Tokenize text and find dictionary entries for each token
+    #[command(arg_required_else_help = true)]
+    Tokenize(TokenizeArgs),
 }

@@ -2,7 +2,7 @@ use std::io::Write;
 
 use clap::Parser;
 use odict_cli::{
-    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, t, CLIContext,
+    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, tokenize, t, CLIContext,
     Commands, CLI,
 };
 
@@ -23,6 +23,7 @@ fn main() {
             Commands::Search(ref args) => search(c, args),
             Commands::Serve(ref args) => serve(c, args),
             Commands::Info(ref args) => info(c, args),
+            Commands::Tokenize(ref args) => tokenize(c, args),
         },
         &mut ctx,
     );

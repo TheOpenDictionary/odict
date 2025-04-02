@@ -13,6 +13,7 @@ mod new;
 mod print;
 mod search;
 mod serve;
+mod tokenize;
 mod utils;
 
 pub use alias::*;
@@ -29,4 +30,5 @@ pub use new::*;
 pub use print::*;
 pub use search::*;
 pub use serve::*;
+pub use tokenize::*;
 pub use utils::*;
