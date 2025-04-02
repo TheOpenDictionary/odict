@@ -51,7 +51,7 @@ impl Dictionary {
     &self,
     queries: &Vec<String>,
     options: Option<LookupOptions>,
-  ) -> Result<Vec<Entry>> {
+  ) -> Result<Vec<types::LookupResult>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
 
     let mut opts: LookupOptions = options.unwrap_or(LookupOptions::default());
@@ -63,14 +63,25 @@ impl Dictionary {
       opts.split = Some(split);
     }
 
-    let entries = dict
+    let results = dict
       .lookup(queries, &odict::lookup::LookupOptions::from(opts))
       .map_err(|e| cast_error(e))?;
 
-    let mapped = entries
+    let mapped = results
       .iter()
-      .map(|e| Entry::from_archive(e.entry))
-      .collect::<Result<Vec<Entry>, _>>()?;
+      .map(|result| {
+        let entry = Entry::from_archive(result.entry)?;
+        let directed_from = match &result.directed_from {
+          Some(from) => Some(Entry::from_archive(from)?),
+          None => None,
+        };
+        
+        Ok(types::LookupResult {
+          entry,
+          directed_from,
+        })
+      })
+      .collect::<Result<Vec<types::LookupResult>, _>>()?;
 
     Ok(mapped)
   }
@@ -80,7 +91,7 @@ impl Dictionary {
     &self,
     query: Either<String, Vec<String>>,
     options: Option<LookupOptions>,
-  ) -> Result<Vec<Entry>> {
+  ) -> Result<Vec<types::LookupResult>> {
     let mut queries: Vec<String> = vec![];
 
     match query {

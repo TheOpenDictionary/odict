@@ -5,7 +5,7 @@ export declare class Dictionary {
   lookup(
     query: string | Array<string>,
     options?: LookupOptions | undefined | null,
-  ): Array<Entry>;
+  ): Array<LookupResult>;
   lexicon(): Array<string>;
   index(options?: IndexOptions | undefined | null): void;
   search(
@@ -61,6 +61,11 @@ export interface IndexOptions {
 export interface LookupOptions {
   split?: number;
   follow?: boolean;
+}
+
+export interface LookupResult {
+  entry: Entry;
+  directed_from?: Entry | null;
 }
 
 export interface Note {
