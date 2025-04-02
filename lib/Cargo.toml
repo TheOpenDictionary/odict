@@ -20,9 +20,8 @@ default = ["json", "sql", "config"]
 
 # Language-specific support
 charabia = ["dep:charabia"]
-tokenize = ["dep:charabia"]
-tokenize-all = [
-  "tokenize",
+tokenize = [
+  "tokenize-latin",
   "tokenize-chinese",
   "tokenize-japanese",
   "tokenize-thai",
@@ -31,13 +30,14 @@ tokenize-all = [
   "tokenize-swedish",
   "tokenize-german",
 ]
-tokenize-chinese = ["charabia/chinese-segmentation"]
-tokenize-japanese = ["charabia/japanese-segmentation-unidic"]
-tokenize-thai = ["charabia/thai"]
-tokenize-korean = ["charabia/korean"]
-tokenize-khmer = ["charabia/khmer"]
-tokenize-swedish = ["charabia/swedish-recomposition"]
-tokenize-german = ["charabia/german-segmentation"]
+tokenize-latin = ["dep:charabia"]
+tokenize-chinese = ["tokenize-latin", "charabia/chinese-segmentation"]
+tokenize-japanese = ["tokenize-latin", "charabia/japanese-segmentation-unidic"]
+tokenize-thai = ["tokenize-latin", "charabia/thai"]
+tokenize-korean = ["tokenize-latin", "charabia/korean"]
+tokenize-khmer = ["tokenize-latin", "charabia/khmer"]
+tokenize-swedish = ["tokenize-latin", "charabia/swedish-recomposition"]
+tokenize-german = ["tokenize-latin", "charabia/german-segmentation"]
 
 [[bench]]
 name = "lib"

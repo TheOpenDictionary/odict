@@ -6,7 +6,7 @@ mod group;
 mod json;
 mod note;
 mod sense;
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 mod token;
 mod utils;
 

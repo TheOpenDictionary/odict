@@ -4,12 +4,12 @@ use serde_json::{to_string, to_string_pretty};
 use super::dictionary::DictionaryJSON;
 use super::entry::EntryJSON;
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 use super::token::TokenJSON;
 
-use crate::{ArchivedEntry, Dictionary, Entry, lookup::LookupResult};
+use crate::{lookup::LookupResult, ArchivedEntry, Dictionary, Entry};
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 use crate::Token;
 
 pub struct JSONSerializer {}
@@ -84,7 +84,7 @@ impl ToJSON for Vec<&ArchivedEntry> {
     }
 }
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 impl<'a> ToJSON for Token<&ArchivedEntry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = TokenJSON::from(self);
@@ -92,7 +92,7 @@ impl<'a> ToJSON for Token<&ArchivedEntry> {
     }
 }
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 impl<'a> ToJSON for Vec<Token<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self

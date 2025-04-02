@@ -6,12 +6,12 @@ use std::marker::{Send, Sync};
 
 mod options;
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 mod tokenize;
 
 pub use options::*;
 
-#[cfg(feature = "tokenize")]
+#[cfg(feature = "tokenize-latin")]
 pub use tokenize::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
