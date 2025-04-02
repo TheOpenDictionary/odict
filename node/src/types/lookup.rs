@@ -1,4 +1,7 @@
 use merge::Merge;
+use napi::bindgen_prelude::*;
+
+use super::Entry;
 
 #[napi(object)]
 #[derive(Merge)]
@@ -30,4 +33,10 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 
     s
   }
+}
+
+#[napi(object)]
+pub struct LookupResult {
+  pub entry: Entry,
+  pub directed_from: Option<Entry>,
 }
