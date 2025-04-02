@@ -4,7 +4,7 @@ description = "A blazingly-fast dictionary file format for human languages"
 homepage = "https://odict.org"
 repository = "https://github.com/TheOpenDictionary/odict"
 version = "2.0.0"
-edition = "2024"
+edition = "2021"
 license = "MIT"
 exclude = ["benches/*", "tests/*"]
 
@@ -22,14 +22,14 @@ default = ["json", "sql", "config"]
 charabia = ["dep:charabia"]
 tokenize = ["dep:charabia"]
 tokenize-all = [
-    "tokenize",
-    "tokenize-chinese",
-    "tokenize-japanese",
-    "tokenize-thai",
-    "tokenize-korean",
-    "tokenize-khmer",
-    "tokenize-swedish",
-    "tokenize-german",
+  "tokenize",
+  "tokenize-chinese",
+  "tokenize-japanese",
+  "tokenize-thai",
+  "tokenize-korean",
+  "tokenize-khmer",
+  "tokenize-swedish",
+  "tokenize-german",
 ]
 tokenize-chinese = ["charabia/chinese-segmentation"]
 tokenize-japanese = ["charabia/japanese-segmentation-unidic"]
