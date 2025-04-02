@@ -10,4 +10,7 @@ pub(crate) mod semver;
 pub use io::DictionaryWriter;
 pub use io::{DictionaryFile, DictionaryReader};
 
+#[cfg(feature = "tokenize")]
+pub use lookup::Token;
+
 pub use rkyv::option::ArchivedOption;

@@ -3,10 +3,13 @@ use pyo3::prelude::*;
 use super::definition::Definition;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Group {
+    #[pyo3(get)]
     pub id: Option<String>,
+    #[pyo3(get)]
     pub description: String,
+    #[pyo3(get)]
     pub definitions: Vec<Definition>,
 }
 

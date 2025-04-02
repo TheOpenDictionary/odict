@@ -5,10 +5,13 @@ use crate::utils::cast_error;
 use super::etymology::Etymology;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Entry {
+    #[pyo3(get)]
     pub term: String,
+    #[pyo3(get)]
     pub see_also: Option<String>,
+    #[pyo3(get)]
     pub etymologies: Vec<Etymology>,
 }
 

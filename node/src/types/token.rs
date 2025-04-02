@@ -1,5 +1,3 @@
-use napi::bindgen_prelude::*;
-
 use super::LookupResult;
 
 #[napi(object)]

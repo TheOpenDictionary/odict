@@ -1,18 +1,18 @@
 use serde::Serialize;
 
-use crate::{lookup::Token, ArchivedEntry};
+use crate::{ArchivedEntry, Entry, lookup::Token};
 
 use super::EntryJSON;
 
 #[derive(Serialize)]
 pub struct TokenJSON {
     pub lemma: String,
-    pub language: String,
+    pub language: Option<String>,
     pub entries: Vec<EntryJSON>,
 }
 
-impl From<Token<'_>> for TokenJSON {
-    fn from(token: Token) -> Self {
+impl From<Token<Entry>> for TokenJSON {
+    fn from(token: Token<Entry>) -> Self {
         let Token {
             lemma,
             language,
@@ -30,8 +30,8 @@ impl From<Token<'_>> for TokenJSON {
     }
 }
 
-impl From<Token<'_, &ArchivedEntry>> for TokenJSON {
-    fn from(token: Token<'_, &ArchivedEntry>) -> Self {
+impl From<Token<&ArchivedEntry>> for TokenJSON {
+    fn from(token: Token<&ArchivedEntry>) -> Self {
         let Token {
             lemma,
             language,

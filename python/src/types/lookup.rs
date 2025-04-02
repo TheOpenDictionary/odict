@@ -3,9 +3,11 @@ use pyo3::prelude::*;
 use super::Entry;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LookupResult {
+    #[pyo3(get)]
     pub entry: Entry,
+    #[pyo3(get)]
     pub directed_from: Option<Entry>,
 }
 

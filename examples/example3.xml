@@ -1,0 +1,16 @@
+<dictionary name="Example Dictionary 2">
+  <entry term="你">
+    <ety description="Latin root">
+      <sense pos="v">
+        <definition value="Lorem ipsum" />
+      </sense>
+    </ety>
+  </entry>
+  <entry term="好">
+    <ety description="Latin root">
+      <sense pos="v">
+        <definition value="Lorem ipsum" />
+      </sense>
+    </ety>
+  </entry>
+</dictionary>

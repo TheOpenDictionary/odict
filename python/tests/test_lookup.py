@@ -34,7 +34,8 @@ def test_dictionary_path(dict1, dict1_path, dict2, dict2_path):
 
 
 def test_lookup(dict1, snapshot):
-    result = dict1.lookup("cat (cat)")
+    result = dict1.lookup("cat")
+    assert result[0].entry.term == "cat"
     assert result == snapshot
 
 

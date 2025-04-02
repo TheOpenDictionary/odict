@@ -1,37 +1,30 @@
-import os
-import unittest
+import pytest
+from pathlib import Path
 from theopendictionary import Dictionary
 
-class TestTokenize(unittest.TestCase):
-    def setUp(self):
-        # Get the path to the test dictionary
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        self.dict_path = os.path.join(current_dir, "fixtures", "en_sample.odict")
-        
-        # Make sure the dictionary exists
-        if not os.path.exists(self.dict_path):
-            self.skipTest("Test dictionary not found")
-        
-        # Load the dictionary
-        self.dictionary = Dictionary(self.dict_path)
-    
-    def test_tokenize(self):
-        # Tokenize a sample text
-        tokens = self.dictionary.tokenize("The quick brown fox jumps over the lazy dog")
-        
-        # Verify we got some tokens
-        self.assertTrue(len(tokens) > 0)
-        
-        # Check token structure
-        token = tokens[0]
-        self.assertTrue(hasattr(token, 'lemma'))
-        self.assertTrue(hasattr(token, 'entries'))
-        
-        # If there are entries, check their structure
-        if len(token.entries) > 0:
-            result = token.entries[0]
-            self.assertTrue(hasattr(result, 'entry'))
-            self.assertTrue(hasattr(result.entry, 'term'))
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.fixture(scope="module")
+def dict3_path():
+    current_file = Path(__file__).resolve()
+    return str(current_file.parent.parent.parent / "examples" / "example3.xml")
+
+
+@pytest.fixture(scope="module")
+def dict3(dict3_path):
+    return Dictionary.compile(dict3_path)
+
+
+def test_tokenize(dict3, snapshot):
+    # Test tokenization similar to the Node.js test
+    tokens = dict3.tokenize("你好！你是谁？")
+
+    # Verify we got some tokens
+    assert len(tokens) > 0
+    print(tokens[0])
+    # Check specific token values
+    assert tokens[0].lemma == "你好"
+    assert tokens[0].entries[0].entry.term == "你"
+    assert tokens[0].entries[1].entry.term == "好"
+
+    # Use snapshot testing for the full result
+    assert tokens == snapshot

@@ -5,10 +5,15 @@ use pyo3::prelude::*;
 use super::sense::Sense;
 
 #[pyclass]
+#[derive(Clone)]
 pub struct Etymology {
+    #[pyo3(get)]
     pub id: Option<String>,
+    #[pyo3(get)]
     pub pronunciation: Option<String>,
+    #[pyo3(get)]
     pub description: Option<String>,
+    #[pyo3(get)]
     pub senses: HashMap<String, Sense>,
 }
 

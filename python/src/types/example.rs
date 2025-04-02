@@ -1,8 +1,9 @@
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Example {
+    #[pyo3(get)]
     pub value: String,
 }
 

@@ -28,10 +28,12 @@ describe("Dictionary", () => {
 
   let dict1: Dictionary;
   let dict2: Dictionary;
+  let dict3: Dictionary;
 
   beforeAll(async () => {
     dict1 = await getDictionary("example1");
     dict2 = await getDictionary("example2");
+    dict3 = await getDictionary("example3");
   });
 
   describe("lookup", () => {
@@ -60,6 +62,16 @@ describe("Dictionary", () => {
   it("can return the lexicon", async () => {
     const result = dict1.lexicon();
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
+  });
+
+  it("should tokenize text and find entries", () => {
+    const tokens = dict3.tokenize("你好！你是谁？");
+
+    expect(tokens).toMatchSnapshot();
+    expect(tokens.length).toBeGreaterThan(0);
+    expect(tokens[0].lemma).toBe("你好");
+    expect(tokens[0].entries[0].entry.term).toBe("你");
+    expect(tokens[0].entries[1].entry.term).toBe("好");
   });
 
   it.skipIf(process.env.NAPI_RS_FORCE_WASI)(

@@ -1,7 +1,7 @@
-use clap::{arg, command, Args};
-use odict::lookup::{LookupOptions, TokenizeOptions};
+use clap::{Args, arg, command};
+use odict::lookup::TokenizeOptions;
 
-use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
+use crate::{CLIContext, enums::PrintFormat, get_lookup_entries, print_entries};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -45,7 +45,7 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
 
     let opts = TokenizeOptions::default().follow(*follow);
     let archive = file.to_archive()?;
-    
+
     let result = archive.tokenize(text, opts);
 
     match result {
@@ -55,7 +55,7 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
                 .iter()
                 .flat_map(|token| token.entries.clone())
                 .collect::<Vec<_>>();
-            
+
             if all_entries.is_empty() {
                 ctx.println(format!("No entries found for the text: \"{}\"", text));
             } else {
@@ -63,8 +63,6 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
             }
             Ok(())
         }
-        Err(err) => {
-            Err(anyhow::Error::from(err))
-        }
+        Err(err) => Err(anyhow::Error::from(err)),
     }
 }

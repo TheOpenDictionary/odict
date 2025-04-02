@@ -4,9 +4,11 @@ use pyo3::prelude::*;
 use super::{definition::Definition, group::Group};
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Sense {
+    #[pyo3(get)]
     pub pos: String,
+    #[pyo3(get)]
     pub definitions: Vec<Either<Definition, Group>>,
 }
 

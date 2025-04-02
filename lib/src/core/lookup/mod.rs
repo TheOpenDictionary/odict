@@ -5,6 +5,8 @@ use rkyv::option::ArchivedOption;
 use std::marker::{Send, Sync};
 
 mod options;
+
+#[cfg(feature = "tokenize")]
 mod tokenize;
 
 pub use options::*;

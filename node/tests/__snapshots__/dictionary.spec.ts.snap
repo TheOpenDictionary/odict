@@ -106,3 +106,92 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
   },
 ]
 `;
+
+exports[`Dictionary > should tokenize text and find entries 1`] = `
+[
+  {
+    "entries": [
+      {
+        "entry": {
+          "etymologies": [
+            {
+              "description": "Latin root",
+              "senses": {
+                "v": {
+                  "definitions": [
+                    "Lorem ipsum",
+                  ],
+                  "pos": "v",
+                },
+              },
+            },
+          ],
+          "term": "你",
+        },
+      },
+      {
+        "entry": {
+          "etymologies": [
+            {
+              "description": "Latin root",
+              "senses": {
+                "v": {
+                  "definitions": [
+                    "Lorem ipsum",
+                  ],
+                  "pos": "v",
+                },
+              },
+            },
+          ],
+          "term": "好",
+        },
+      },
+    ],
+    "language": "cmn",
+    "lemma": "你好",
+  },
+  {
+    "entries": [],
+    "lemma": "！",
+  },
+  {
+    "entries": [
+      {
+        "entry": {
+          "etymologies": [
+            {
+              "description": "Latin root",
+              "senses": {
+                "v": {
+                  "definitions": [
+                    "Lorem ipsum",
+                  ],
+                  "pos": "v",
+                },
+              },
+            },
+          ],
+          "term": "你",
+        },
+      },
+    ],
+    "language": "cmn",
+    "lemma": "你",
+  },
+  {
+    "entries": [],
+    "language": "cmn",
+    "lemma": "是",
+  },
+  {
+    "entries": [],
+    "language": "cmn",
+    "lemma": "谁",
+  },
+  {
+    "entries": [],
+    "lemma": "？",
+  },
+]
+`;

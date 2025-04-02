@@ -7,7 +7,10 @@ use odict::{
 };
 use pyo3::prelude::*;
 
-use crate::{types::Entry, utils::cast_error};
+use crate::{
+    types::{Entry, LookupResult, Token},
+    utils::cast_error,
+};
 
 fn lookup(
     file: &odict::DictionaryFile,
@@ -121,7 +124,7 @@ impl Dictionary {
         query: Either<String, Vec<String>>,
         split: Option<usize>,
         follow: Option<bool>,
-    ) -> PyResult<Vec<crate::types::LookupResult>> {
+    ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
 
         match query {
@@ -200,12 +203,12 @@ impl Dictionary {
 
         let entries = results
             .iter()
-            .map(|e| Entry::from_entry(e.clone()))
-            .collect::<Result<Vec<Entry>, _>>()?;
+            .map(|e| Entry::from(e.clone()))
+            .collect::<Vec<Entry>>();
 
         Ok(entries)
     }
-    
+
     #[pyo3(signature = (text, follow=None))]
     pub fn tokenize(
         &self,
@@ -213,31 +216,32 @@ impl Dictionary {
         follow: Option<bool>,
     ) -> PyResult<Vec<crate::types::Token>> {
         let dict = self.file.to_archive().map_err(cast_error)?;
-        
+
         let mut opts = odict::lookup::TokenizeOptions::default();
-        
+
         if let Some(follow) = follow {
             opts = opts.follow(follow);
         }
-        
+
         let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
-        
+
         let mapped = tokens
             .iter()
             .map(|token| {
-                let entries = token.entries
+                let entries = token
+                    .entries
                     .iter()
                     .map(|result| crate::types::LookupResult::from_archive(result))
                     .collect::<Result<Vec<crate::types::LookupResult>, PyErr>>()?;
-                
-                Ok(crate::types::Token {
+
+                Ok(Token {
                     lemma: token.lemma.clone(),
                     language: token.language.clone(),
                     entries,
                 })
             })
             .collect::<Result<Vec<crate::types::Token>, PyErr>>()?;
-        
+
         Ok(mapped)
     }
 }
