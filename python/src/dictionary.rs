@@ -228,7 +228,7 @@ impl Dictionary {
                 let entries = token.entries
                     .iter()
                     .map(|result| crate::types::LookupResult::from_archive(result))
-                    .collect::<Result<Vec<crate::types::LookupResult>, _>>()?;
+                    .collect::<Result<Vec<crate::types::LookupResult>, PyErr>>()?;
                 
                 Ok(crate::types::Token {
                     lemma: token.lemma.clone(),
@@ -236,7 +236,7 @@ impl Dictionary {
                     entries,
                 })
             })
-            .collect::<Result<Vec<crate::types::Token>, _>>()?;
+            .collect::<Result<Vec<crate::types::Token>, PyErr>>()?;
         
         Ok(mapped)
     }
