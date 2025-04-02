@@ -65,7 +65,7 @@ export interface LookupOptions {
 
 export interface LookupResult {
   entry: Entry;
-  directed_from?: Entry | null;
+  directedFrom?: Entry;
 }
 
 export interface Note {

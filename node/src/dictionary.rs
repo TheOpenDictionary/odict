@@ -1,15 +1,12 @@
-use std::{borrow::BorrowMut, path::PathBuf, vec};
+use std::vec;
 
-use napi::{JsArrayBufferValue, bindgen_prelude::*};
+use napi::bindgen_prelude::*;
 
 use merge::Merge;
 use odict::ToDictionary;
 
 use crate::{
-  types::{
-    self, DictionaryOptions, Entry, IndexOptions, LookupOptions, SearchOptions,
-    SplitOptions,
-  },
+  types::{self, DictionaryOptions, Entry, IndexOptions, LookupOptions, SearchOptions},
   utils::{cast_error, resolve_options},
 };
 
@@ -75,7 +72,7 @@ impl Dictionary {
           Some(from) => Some(Entry::from_archive(from)?),
           None => None,
         };
-        
+
         Ok(types::LookupResult {
           entry,
           directed_from,
