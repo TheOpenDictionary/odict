@@ -47,28 +47,11 @@ jobs:
             target: aarch64-apple-darwin
             build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
-            build: >-
-              npm install -g corepack@latest &&
-              corepack enable &&
-              set -e &&
-              rm /usr/aarch64-unknown-linux-gnu/lib/llvm-18/lib/libunwind.so &&
-              rm /usr/aarch64-unknown-linux-gnu/lib/llvm-18/lib/libc++.so &&
-              export LDFLAGS="-L/usr/aarch64-unknown-linux-gnu/lib/gcc/aarch64-unknown-linux-gnu/4.8.5" &&
-              export CFLAGS="-fuse-ld=lld -mcrc -B/usr/aarch64-unknown-linux-gnu/lib/gcc/aarch64-unknown-linux-gnu/4.8.5 --sysroot=/usr/aarch64-unknown-linux-gnu/aarch64-unknown-linux-gnu/sysroot" &&
-              export CXXFLAGS="-fuse-ld=lld -mcrc -B/usr/aarch64-unknown-linux-gnu/lib/gcc/aarch64-unknown-linux-gnu/4.8.5 --sysroot=/usr/aarch64-unknown-linux-gnu/aarch64-unknown-linux-gnu/sysroot -L/usr/aarch64-unknown-linux-gnu/lib/llvm-18/lib -stdlib=libc++" &&
-              pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu &&
-              chmod -R 777 target
+            target: aarch64-unknown-linux-gnu            
+            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            setup: |
-              sudo apt-get update
-              sudo apt-get install meson gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
-            build: |
-              export CC="arm-linux-gnueabihf-gcc"
-              export CARGO_CFG_TARGET_FEATURE="neon"
-              pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
             build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-musleabihf -x
@@ -162,17 +145,9 @@ jobs:
           node-version: 20
           cache: pnpm
           architecture: x86
-      - name: Build in docker
-        uses: addnab/docker-run-action@v3
-        if: ${{ matrix.settings.docker }}
-        with:
-          image: ${{ matrix.settings.docker }}
-          options: --user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build
-          run: ${{ matrix.settings.build }}
       - name: Build
         run: ${{ matrix.settings.build }}
-        if: ${{ !matrix.settings.docker }}
-        shell: bash 
+        shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         if: matrix.settings.target != 'wasm32-wasip1-threads'
