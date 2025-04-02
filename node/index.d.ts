@@ -69,6 +69,12 @@ export interface LookupResult {
   directedFrom?: Entry;
 }
 
+export interface Token {
+  lemma: string;
+  language?: string | null;
+  entries: Array<LookupResult>;
+}
+
 export interface Note {
   id?: string;
   value: string;
