@@ -14,6 +14,7 @@ use crate::CLIContext;
 
 mod lookup;
 mod search;
+mod tokenize;
 
 #[derive(Debug, Clone, ValueEnum)]
 enum LogLevel {
@@ -121,6 +122,7 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
             .app_data(Data::clone(&data))
             .service(lookup::handle_lookup)
             .service(search::handle_search)
+            .service(tokenize::handle_tokenize)
     })
     .bind(("127.0.0.1", *port))?
     .run()

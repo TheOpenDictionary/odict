@@ -1,0 +1,108 @@
+use std::collections::HashMap;
+
+use actix_web::{
+    get,
+    http::{header::ContentType, StatusCode},
+    web::{Data, Path, Query},
+    HttpResponse, Responder, ResponseError,
+};
+use derive_more::{Display, Error};
+use odict::{
+    format::json::ToJSON,
+    lookup::TokenizeOptions,
+    DictionaryFile,
+};
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+pub struct TokenizeRequest {
+    text: String,
+    follow: Option<bool>,
+}
+
+#[derive(Debug, Display, Error)]
+enum TokenizeError {
+    #[display("Dictionary not found: {}", name)]
+    DictionaryNotFound { name: String },
+
+    #[display("Failed to read dictionary: {}", name)]
+    DictionaryReadError { name: String },
+
+    #[display("Tokenize error: {}", message)]
+    TokenizeError { message: String },
+
+    #[display("Failed to serialize response")]
+    SerializeError,
+}
+
+impl ResponseError for TokenizeError {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::build(self.status_code())
+            .insert_header(ContentType::html())
+            .body(self.to_string())
+    }
+
+    fn status_code(&self) -> StatusCode {
+        match *self {
+            TokenizeError::DictionaryNotFound { .. } => StatusCode::NOT_FOUND,
+            TokenizeError::DictionaryReadError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
+            TokenizeError::TokenizeError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
+            TokenizeError::SerializeError => StatusCode::INTERNAL_SERVER_ERROR,
+        }
+    }
+}
+
+#[get("/{name}/tokenize")]
+async fn handle_tokenize(
+    params: Query<TokenizeRequest>,
+    dict: Path<String>,
+    dictionary_map: Data<HashMap<String, DictionaryFile>>,
+) -> Result<impl Responder, TokenizeError> {
+    let TokenizeRequest { text, follow } = params.0;
+
+    let dictionary_name = dict.into_inner();
+
+    let file = dictionary_map
+        .get(&dictionary_name)
+        .ok_or(TokenizeError::DictionaryNotFound {
+            name: dictionary_name.to_string(),
+        })?;
+
+    let dictionary = file
+        .to_archive()
+        .map_err(|_e| TokenizeError::DictionaryReadError {
+            name: dictionary_name.to_string(),
+        })?;
+
+    let opts = TokenizeOptions::default().follow(follow.unwrap_or(false));
+
+    let tokens = dictionary
+        .tokenize(&text, opts)
+        .map_err(|e| TokenizeError::TokenizeError {
+            message: e.to_string(),
+        })?;
+
+    // Convert tokens to a serializable format
+    let serializable_tokens = tokens
+        .into_iter()
+        .map(|token| {
+            let entries = token.entries
+                .into_iter()
+                .map(|result| result.entry.to_entry().unwrap())
+                .collect::<Vec<_>>();
+                
+            serde_json::json!({
+                "lemma": token.lemma,
+                "language": token.language,
+                "entries": entries
+            })
+        })
+        .collect::<Vec<_>>();
+
+    let json = serde_json::to_string(&serializable_tokens)
+        .map_err(|_| TokenizeError::SerializeError)?;
+
+    Ok(HttpResponse::Ok()
+        .content_type("application/json")
+        .body(json))
+}
