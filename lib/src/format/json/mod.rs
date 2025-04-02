@@ -6,6 +6,7 @@ mod group;
 mod json;
 mod note;
 mod sense;
+mod token;
 mod utils;
 
 pub(super) use definition::*;
@@ -14,6 +15,7 @@ pub(super) use etymology::*;
 pub(super) use group::*;
 pub(super) use note::*;
 pub(super) use sense::*;
+pub(super) use token::*;
 pub(super) use utils::*;
 
 pub use json::*;

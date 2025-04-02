@@ -3,8 +3,9 @@ use serde_json::{to_string, to_string_pretty};
 
 use super::dictionary::DictionaryJSON;
 use super::entry::EntryJSON;
+use super::token::TokenJSON;
 
-use crate::{ArchivedEntry, Dictionary, Entry, lookup::LookupResult};
+use crate::{ArchivedEntry, Dictionary, Entry, lookup::{LookupResult, Token}};
 
 pub struct JSONSerializer {}
 
@@ -73,6 +74,24 @@ impl ToJSON for Vec<&ArchivedEntry> {
             .into_iter()
             .map(|v| EntryJSON::from(v))
             .collect::<Vec<EntryJSON>>();
+
+        stringify(&json, pretty)
+    }
+}
+
+impl<'a> ToJSON for Token<'a, &ArchivedEntry> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
+        let json = TokenJSON::from(self);
+        stringify(&json, pretty)
+    }
+}
+
+impl<'a> ToJSON for Vec<Token<'a, &ArchivedEntry>> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
+        let json = self
+            .into_iter()
+            .map(|v| TokenJSON::from(v))
+            .collect::<Vec<TokenJSON>>();
 
         stringify(&json, pretty)
     }

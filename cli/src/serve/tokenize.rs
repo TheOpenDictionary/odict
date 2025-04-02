@@ -82,25 +82,8 @@ async fn handle_tokenize(
             message: e.to_string(),
         })?;
 
-    // Convert tokens to a serializable format
-    let serializable_tokens = tokens
-        .into_iter()
-        .map(|token| {
-            let entries = token.entries
-                .into_iter()
-                .map(|result| result.entry.to_entry().unwrap())
-                .collect::<Vec<_>>();
-                
-            serde_json::json!({
-                "lemma": token.lemma,
-                "language": token.language,
-                "entries": entries
-            })
-        })
-        .collect::<Vec<_>>();
-
-    let json = serde_json::to_string(&serializable_tokens)
-        .map_err(|_| TokenizeError::SerializeError)?;
+    // Use the ToJSON trait to serialize tokens
+    let json = tokens.to_json(false).map_err(|_| TokenizeError::SerializeError)?;
 
     Ok(HttpResponse::Ok()
         .content_type("application/json")
