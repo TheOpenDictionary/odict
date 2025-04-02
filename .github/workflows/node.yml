@@ -47,19 +47,11 @@ jobs:
             target: aarch64-apple-darwin
             build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu    
-            setup: |
-              export CFLAGS="-march=armv8-a"
-              export CC=aarch64-linux-gnu-gcc
-              export CXX=aarch64-linux-gnu-g++
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
+            target: aarch64-unknown-linux-gnu            
+            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross --no-default-features --features json,sql
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            setup: |
-              export CFLAGS="-march=armv7-a"
-              export CC=arm-linux-gnueabihf-gcc
-              export CXX=arm-linux-gnueabihf-g++
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross --no-default-features --features json,sql
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
             build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-musleabihf -x
