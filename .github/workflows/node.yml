@@ -48,10 +48,14 @@ jobs:
             build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu            
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross --no-default-features --features json,sql
+            build: |
+              export NO_TOKENIZE=1
+              pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross --no-default-features --features json,sql
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross --no-default-features --features json,sql
+            build: |
+              export NO_TOKENIZE=1              
+              pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross --no-default-features --features json,sql
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
             build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-musleabihf -x
@@ -93,7 +97,7 @@ jobs:
             build: |
               export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
-              pnpm --filter "@odict/node" build:wasm
+              pnpm --filter "@odict/node" pnpm run build --target wasm32-wasip1-threads
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:

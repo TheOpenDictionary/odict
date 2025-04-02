@@ -64,7 +64,7 @@ describe("Dictionary", () => {
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
   });
 
-  it("should tokenize text and find entries", () => {
+  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text and find entries", () => {
     const tokens = dict3.tokenize("你好！你是谁？");
 
     expect(tokens).toMatchSnapshot();

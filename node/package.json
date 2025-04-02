@@ -52,7 +52,7 @@
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
     "build": "napi build --release --platform --strip --pipe \"prettier -w\"",
-    "build:wasm": "pnpm run build --target wasm32-wasip1-threads --no-default-features --features json,sql",
+    "build:wasm": "pnpm run build --target wasm32-wasip1-threads --no-default-features --features tokenize,json,sql",
     "build:debug": "napi build --pipe \"prettier -w\"",
     "dev:wasm": "vite dev",
     "test": "vitest --no-watch",
