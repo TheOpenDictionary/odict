@@ -12,6 +12,7 @@ export declare class Dictionary {
     query: string,
     options?: SearchOptions | undefined | null,
   ): Array<Entry>;
+  tokenize(text: string): Array<Token>;
 }
 
 export declare function compile(xml: string): Buffer;

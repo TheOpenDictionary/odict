@@ -205,4 +205,39 @@ impl Dictionary {
 
         Ok(entries)
     }
+    
+    #[pyo3(signature = (text, follow=None))]
+    pub fn tokenize(
+        &self,
+        text: String,
+        follow: Option<bool>,
+    ) -> PyResult<Vec<crate::types::Token>> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
+        
+        let mut opts = odict::lookup::TokenizeOptions::default();
+        
+        if let Some(follow) = follow {
+            opts = opts.follow(follow);
+        }
+        
+        let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
+        
+        let mapped = tokens
+            .iter()
+            .map(|token| {
+                let entries = token.entries
+                    .iter()
+                    .map(|result| crate::types::LookupResult::from_archive(result))
+                    .collect::<Result<Vec<crate::types::LookupResult>, _>>()?;
+                
+                Ok(crate::types::Token {
+                    lemma: token.lemma.clone(),
+                    language: token.language.clone(),
+                    entries,
+                })
+            })
+            .collect::<Result<Vec<crate::types::Token>, _>>()?;
+        
+        Ok(mapped)
+    }
 }

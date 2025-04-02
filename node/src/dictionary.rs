@@ -149,6 +149,44 @@ impl Dictionary {
 
     unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
+
+  #[napi]
+  pub fn tokenize(&self, text: String) -> Result<Vec<types::Token>> {
+    let dict = self.file.to_archive().map_err(cast_error)?;
+    
+    let opts = odict::lookup::TokenizeOptions::default();
+    
+    let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
+    
+    let mapped = tokens
+      .iter()
+      .map(|token| {
+        let entries = token.entries
+          .iter()
+          .map(|result| {
+            let entry = Entry::from_archive(result.entry)?;
+            let directed_from = match &result.directed_from {
+              Some(from) => Some(Entry::from_archive(from)?),
+              None => None,
+            };
+            
+            Ok(types::LookupResult {
+              entry,
+              directed_from,
+            })
+          })
+          .collect::<Result<Vec<types::LookupResult>, _>>()?;
+        
+        Ok(types::Token {
+          lemma: token.lemma.clone(),
+          language: token.language.clone(),
+          entries,
+        })
+      })
+      .collect::<Result<Vec<types::Token>, _>>()?;
+    
+    Ok(mapped)
+  }
 }
 
 #[cfg(test)]
