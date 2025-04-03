@@ -294,6 +294,7 @@ jobs:
           corepack prepare &&
           corepack enable &&
           pnpm --filter '@odict/node' test
+          "
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:

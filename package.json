@@ -5,6 +5,9 @@
   "pnpm": {
     "overrides": {
       "rollup": "npm:@rollup/wasm-node"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

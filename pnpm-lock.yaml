@@ -817,8 +817,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@rollup/wasm-node@4.38.0':
-    resolution: {integrity: sha512-WgdJf6XyQ5x4qaHbjGjsqWqgg2L4WNNRsQPl80agmFX6Kdobe+FsUn116lnR7lbtiAucgI4ywGYuAoew8RHb8w==}
+  '@rollup/wasm-node@4.39.0':
+    resolution: {integrity: sha512-hSzvI7Rd7mCw1OI/pkkmwPAlzSTJ2uspxti8yZR0ZRSoHLJuuWCTxGnbdCC3U9bSxtLQwvE0DyXSrj3BtoIl5g==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
@@ -2238,7 +2238,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.37.0':
     optional: true
 
-  '@rollup/wasm-node@4.38.0':
+  '@rollup/wasm-node@4.39.0':
     dependencies:
       '@types/estree': 1.0.7
     optionalDependencies:
@@ -3135,7 +3135,7 @@ snapshots:
     dependencies:
       esbuild: 0.25.1
       postcss: 8.5.3
-      rollup: '@rollup/wasm-node@4.38.0'
+      rollup: '@rollup/wasm-node@4.39.0'
     optionalDependencies:
       '@types/node': 22.9.0
       fsevents: 2.3.3
