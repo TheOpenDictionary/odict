@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
@@ -7,11 +5,7 @@ use actix_web::{
     HttpResponse, Responder, ResponseError,
 };
 use derive_more::{Display, Error};
-use odict::{
-    format::json::ToJSON,
-    lookup::TokenizeOptions,
-    DictionaryFile,
-};
+use odict::{format::json::ToJSON, lookup::TokenizeOptions};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -56,14 +50,17 @@ impl ResponseError for TokenizeError {
 async fn handle_tokenize(
     params: Query<TokenizeRequest>,
     dict: Path<String>,
-    dictionary_map: Data<HashMap<String, DictionaryFile>>,
+    dictionary_cache: Data<crate::serve::DictionaryCache>,
 ) -> Result<impl Responder, TokenizeError> {
     let TokenizeRequest { text, follow } = params.0;
 
     let dictionary_name = dict.into_inner();
 
-    let file = dictionary_map
+    let file = dictionary_cache
         .get(&dictionary_name)
+        .map_err(|_e| TokenizeError::DictionaryReadError {
+            name: dictionary_name.to_string(),
+        })?
         .ok_or(TokenizeError::DictionaryNotFound {
             name: dictionary_name.to_string(),
         })?;
@@ -83,7 +80,9 @@ async fn handle_tokenize(
         })?;
 
     // Use the ToJSON trait to serialize tokens
-    let json = tokens.to_json(false).map_err(|_| TokenizeError::SerializeError)?;
+    let json = tokens
+        .to_json(false)
+        .map_err(|_| TokenizeError::SerializeError)?;
 
     Ok(HttpResponse::Ok()
         .content_type("application/json")

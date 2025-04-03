@@ -5,7 +5,7 @@ use actix_web::{
     HttpResponse, Responder, ResponseError,
 };
 use derive_more::{Display, Error};
-use odict::{format::json::ToJSON, search::SearchOptions, DictionaryFile};
+use odict::{format::json::ToJSON, search::SearchOptions};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -58,7 +58,7 @@ async fn handle_search(
 
     let file = dictionary_cache
         .get(&dictionary_name)
-        .map_err(|_e| SearchError::DictionaryReadError {
+        .map_err(|_e| SearchError::DictionaryNotFound {
             name: dictionary_name.to_string(),
         })?
         .ok_or(SearchError::DictionaryNotFound {

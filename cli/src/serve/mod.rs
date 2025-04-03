@@ -4,6 +4,7 @@ use std::{
     fs,
     num::NonZero,
     path::PathBuf,
+    sync::{Arc, RwLock},
 };
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
@@ -47,6 +48,14 @@ pub struct ServeArgs {
     #[arg(short, default_value_t = 5005, help = "Port to listen on")]
     port: u16,
 
+    #[arg(
+        short,
+        long,
+        default_value_t = 5,
+        help = "Maximum number of dictionaries to keep in memory"
+    )]
+    capacity: usize,
+
     // Sets the default log level
     #[arg(short, long)]
     level: Option<LogLevel>,
@@ -58,22 +67,23 @@ pub struct ServeArgs {
 
 pub(self) fn get_dictionary_map(
     dictionaries: &Vec<String>,
-) -> odict::Result<HashMap<String, PathBuf>> {
+) -> anyhow::Result<HashMap<String, PathBuf>> {
     let mut dictionary_map = HashMap::<String, PathBuf>::new();
 
     for path in dictionaries {
         let path_buf = PathBuf::from(path);
-        let name = path_buf.file_stem().unwrap().to_string_lossy().to_string();
 
         if path_buf.is_dir() {
             for entry in fs::read_dir(path_buf)? {
                 let p = entry?.path();
+                let name = p.file_stem().unwrap().to_string_lossy().to_string();
 
                 if p.is_file() && p.extension().map_or(false, |ext| ext == "odict") {
                     dictionary_map.insert(name.clone(), p.clone());
                 }
             }
         } else {
+            let name = path_buf.file_stem().unwrap().to_string_lossy().to_string();
             dictionary_map.insert(name.clone(), path_buf.clone());
         }
     }
@@ -82,7 +92,7 @@ pub(self) fn get_dictionary_map(
 }
 
 struct DictionaryCache {
-    cache: LruCache<String, DictionaryFile>,
+    cache: RwLock<LruCache<String, Arc<DictionaryFile>>>,
     dictionaries: HashMap<String, PathBuf>,
     reader: DictionaryReader,
     alias_manager: AliasManager,
@@ -96,28 +106,40 @@ impl DictionaryCache {
         alias_manager: AliasManager,
     ) -> Self {
         DictionaryCache {
-            cache: LruCache::new(size),
+            cache: RwLock::new(LruCache::new(size)),
             dictionaries,
             reader,
             alias_manager,
         }
     }
 
-    pub fn get(&mut self, key: &str) -> odict::Result<Option<&DictionaryFile>> {
-        if !self.cache.contains(key) {
-            if let Some(path) = self.dictionaries.get(key) {
-                let dict = self.reader.read_from_path_or_alias_with_manager(
-                    path.to_string_lossy().as_ref(),
-                    &self.alias_manager,
-                )?;
-
-                self.cache.put(String::from(key), dict);
-            } else {
-                return Ok(None);
+    pub fn get(&self, key: &str) -> anyhow::Result<Option<Arc<DictionaryFile>>> {
+        {
+            let cache = self.cache.read().unwrap();
+            if let Some(file) = cache.peek(key) {
+                // Return a clone of the Arc (cheap operation)
+                return Ok(Some(Arc::clone(file)));
             }
         }
 
-        return Ok(self.cache.get(key));
+        // Not in cache, need to load it
+        if let Some(path) = self.dictionaries.get(key) {
+            let dict = self.reader.read_from_path_or_alias_with_manager(
+                path.to_string_lossy().as_ref(),
+                &self.alias_manager,
+            )?;
+
+            // Now get a write lock to update the cache
+            let mut cache = self.cache.write().unwrap();
+
+            // Wrap in Arc before putting in cache
+            let arc_dict = Arc::new(dict);
+            cache.put(String::from(key), Arc::clone(&arc_dict));
+
+            return Ok(Some(arc_dict));
+        }
+
+        Ok(None)
     }
 }
 
@@ -127,6 +149,7 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
         port,
         dictionaries,
         level,
+        capacity,
     } = args;
 
     let CLIContext {
@@ -137,6 +160,13 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
 
     let dictionary_map = get_dictionary_map(&dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
+
+    let dictionary_cache = DictionaryCache::new(
+        NonZero::new(*capacity).unwrap(),
+        dictionary_map.to_owned(),
+        reader.to_owned(),
+        alias_manager.to_owned(),
+    );
 
     if dictionary_map.is_empty() {
         ctx.println(format!(
@@ -157,13 +187,6 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
             style(format!("({})", dict.to_string_lossy())).dim()
         ));
     }
-
-    let dictionary_cache = DictionaryCache::new(
-        NonZero::new(100).unwrap(),
-        dictionary_map.to_owned(),
-        reader.to_owned(),
-        alias_manager.to_owned(),
-    );
 
     ctx.println("");
 
