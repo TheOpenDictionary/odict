@@ -15,15 +15,13 @@
     },
     "lib": {
       "release-type": "rust",
-      "component": "lib",
-      "release-as": "2.1.0"
+      "component": "lib"
     },
     "node": {
       "release-type": "node",
       "component": "node"
     },
-    "python": {
-      "release-as": "1.0.0",
+    "python": { 
       "release-type": "rust",
       "component": "python"
     }

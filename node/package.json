@@ -1,6 +1,6 @@
 {
   "name": "@odict/node",
-  "version": "0.0.3",
+  "version": "1.1.0",
   "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheOpenDictionary/odict"
+    "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
     "@napi-rs/cli": "3.0.0-alpha.76",
@@ -60,5 +60,24 @@
     "artifacts": "napi artifacts",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
+  },
+  "optionalDependencies": {
+    "@odict/node-darwin-universal": "0.0.3",
+    "@odict/node-linux-x64-gnu": "0.0.3",
+    "@odict/node-win32-x64-msvc": "0.0.3",
+    "@odict/node-linux-x64-musl": "0.0.3",
+    "@odict/node-linux-arm64-gnu": "0.0.3",
+    "@odict/node-linux-riscv64-gnu": "0.0.3",
+    "@odict/node-linux-s390x-gnu": "0.0.3",
+    "@odict/node-linux-ppc64-gnu": "0.0.3",
+    "@odict/node-win32-ia32-msvc": "0.0.3",
+    "@odict/node-linux-arm-gnueabihf": "0.0.3",
+    "@odict/node-android-arm64": "0.0.3",
+    "@odict/node-linux-arm-musleabihf": "0.0.3",
+    "@odict/node-freebsd-x64": "0.0.3",
+    "@odict/node-linux-arm64-musl": "0.0.3",
+    "@odict/node-win32-arm64-msvc": "0.0.3",
+    "@odict/node-android-arm-eabi": "0.0.3",
+    "@odict/node-wasm32-wasi": "0.0.3"
   }
 }
