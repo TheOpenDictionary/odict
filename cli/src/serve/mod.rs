@@ -1,7 +1,8 @@
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
-    path::PathBuf,
+    fs,
+    path::{Path, PathBuf},
 };
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
@@ -53,6 +54,54 @@ pub struct ServeArgs {
     dictionaries: Vec<String>,
 }
 
+fn load_dictionary_file(
+    reader: &DictionaryReader,
+    alias_manager: &AliasManager,
+    path: &str,
+    dictionary_map: &mut HashMap<String, DictionaryFile>,
+) -> anyhow::Result<()> {
+    let dict = reader.read_from_path_or_alias_with_manager(path, alias_manager)?;
+    
+    dictionary_map.insert(
+        PathBuf::from(path)
+            .file_stem()
+            .unwrap()
+            .to_string_lossy()
+            .to_string(),
+        dict,
+    );
+    
+    Ok(())
+}
+
+fn load_directory(
+    reader: &DictionaryReader,
+    alias_manager: &AliasManager,
+    dir_path: &Path,
+    dictionary_map: &mut HashMap<String, DictionaryFile>,
+) -> anyhow::Result<()> {
+    if !dir_path.is_dir() {
+        return Ok(());
+    }
+    
+    for entry in fs::read_dir(dir_path)? {
+        let entry = entry?;
+        let path = entry.path();
+        
+        if path.is_file() && 
+           path.extension().map_or(false, |ext| ext == "odict") {
+            load_dictionary_file(
+                reader,
+                alias_manager,
+                &path.to_string_lossy(),
+                dictionary_map,
+            )?;
+        }
+    }
+    
+    Ok(())
+}
+
 pub(self) fn get_dictionary_map(
     reader: &DictionaryReader,
     alias_manager: &AliasManager,
@@ -60,17 +109,16 @@ pub(self) fn get_dictionary_map(
 ) -> anyhow::Result<HashMap<String, DictionaryFile>> {
     let mut dictionary_map = HashMap::<String, DictionaryFile>::new();
 
-    for dictionary in dictionaries {
-        let dict = reader.read_from_path_or_alias_with_manager(&dictionary, &alias_manager)?;
-
-        dictionary_map.insert(
-            PathBuf::from(dictionary)
-                .file_stem()
-                .unwrap()
-                .to_string_lossy()
-                .to_string(),
-            dict,
-        );
+    for path in dictionaries {
+        let path_buf = PathBuf::from(path);
+        
+        if path_buf.is_dir() {
+            // If it's a directory, load all .odict files
+            load_directory(reader, alias_manager, &path_buf, &mut dictionary_map)?;
+        } else {
+            // Otherwise treat it as a single dictionary file or alias
+            load_dictionary_file(reader, alias_manager, path, &mut dictionary_map)?;
+        }
     }
 
     Ok(dictionary_map)
@@ -92,6 +140,13 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
 
     let dictionary_map = get_dictionary_map(reader, alias_manager, &dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
+
+    if dictionary_map.is_empty() {
+        ctx.println(format!(
+            "\n⚠️  No dictionaries found to serve. Please provide valid dictionary files or directories containing .odict files."
+        ));
+        return Ok(());
+    }
 
     ctx.println(format!(
         "\n🟢  Serving the following dictionaries on port {} with log level \"{}\":\n",
