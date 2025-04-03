@@ -11,6 +11,12 @@ on:
       - main
     tags:
       - 'python*'
+    paths:
+      - 'python/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'
   pull_request:
     paths:
       - 'python/**'
