@@ -8,6 +8,7 @@ use crate::{Dictionary, ToDictionary};
 
 use super::consts::{SIGNATURE, VERSION};
 
+#[derive(Debug, Clone)]
 pub struct DictionaryWriter {}
 
 impl Default for DictionaryWriter {

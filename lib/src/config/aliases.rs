@@ -5,6 +5,7 @@ use crate::DictionaryFile;
 
 use super::config::get_config_dir;
 
+#[derive(Debug, Clone)]
 pub struct AliasManager {
     path: PathBuf,
     aliases: HashMap<String, String>,

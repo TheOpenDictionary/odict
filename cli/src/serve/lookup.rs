@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
@@ -10,7 +8,6 @@ use derive_more::{Display, Error};
 use odict::{
     format::json::ToJSON,
     lookup::{LookupOptions, LookupStrategy},
-    DictionaryFile,
 };
 use serde::Deserialize;
 
@@ -59,7 +56,7 @@ impl ResponseError for LookupError {
 async fn handle_lookup(
     params: Query<LookupRequest>,
     dict: Path<String>,
-    dictionary_map: Data<HashMap<String, DictionaryFile>>,
+    dictionary_cache: Data<crate::serve::DictionaryCache>,
 ) -> Result<impl Responder, LookupError> {
     let LookupRequest {
         queries: raw_queries,
@@ -74,8 +71,11 @@ async fn handle_lookup(
 
     let dictionary_name = dict.into_inner();
 
-    let file = dictionary_map
+    let file = dictionary_cache
         .get(&dictionary_name)
+        .map_err(|_e| LookupError::DictionaryReadError {
+            name: dictionary_name.to_string(),
+        })?
         .ok_or(LookupError::DictionaryNotFound {
             name: dictionary_name.to_string(),
         })?;

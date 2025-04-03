@@ -1,5 +1,5 @@
 use std::{
-    fs::{File, canonicalize},
+    fs::{canonicalize, File},
     io::{Cursor, Read},
     path::PathBuf,
 };
@@ -7,14 +7,15 @@ use std::{
 use byteorder::{LittleEndian, ReadBytesExt};
 use rkyv::access_unchecked;
 
-use crate::{compress::decompress, error::Error, ArchivedDictionary, Dictionary};
 use super::consts::{SIGNATURE, VERSION};
 use crate::semver::SemanticVersion;
+use crate::{compress::decompress, error::Error, ArchivedDictionary, Dictionary};
 
 /* -------------------------------------------------------------------------- */
 /*                               DictionaryFile                               */
 /* -------------------------------------------------------------------------- */
 
+#[derive(Clone)]
 pub struct DictionaryFile {
     pub signature: String,
     pub version: SemanticVersion,
@@ -92,6 +93,7 @@ where
 /*                              DictionaryReader                              */
 /* -------------------------------------------------------------------------- */
 
+#[derive(Clone, Debug)]
 pub struct DictionaryReader {}
 
 impl Default for DictionaryReader {
