@@ -4,6 +4,17 @@
 
 
 
+## [0.0.3](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node/v0.0.3) (2025-04-03)
+
+## [1.1.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node/v1.1.0) (2025-04-03)
+
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+* Add WASM support to Node package ([#1155](https://github.com/TheOpenDictionary/odict/issues/1155)) ([3456969](https://github.com/TheOpenDictionary/odict/commit/3456969422df2530693c196bafefa7cd92fb2f12))
+* **core:** Add new tokenization feature ([#1159](https://github.com/TheOpenDictionary/odict/issues/1159)) ([d9196c1](https://github.com/TheOpenDictionary/odict/commit/d9196c1aae4c275d3c326d5803f7baf65f7b5a89))
+
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node-v1.0.0) (2024-12-26)
 
 

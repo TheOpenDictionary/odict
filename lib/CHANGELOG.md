@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/lib-v2.0.0...lib/v2.1.0) (2025-04-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lib:** change compression from lz4 to brotli ([#1064](https://github.com/TheOpenDictionary/odict/issues/1064))
+
+### Features
+
+* Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
+* Add WASM support to Node package ([#1155](https://github.com/TheOpenDictionary/odict/issues/1155)) ([3456969](https://github.com/TheOpenDictionary/odict/commit/3456969422df2530693c196bafefa7cd92fb2f12))
+* **core:** Add new tokenization feature ([#1159](https://github.com/TheOpenDictionary/odict/issues/1159)) ([d9196c1](https://github.com/TheOpenDictionary/odict/commit/d9196c1aae4c275d3c326d5803f7baf65f7b5a89))
+* Expose Brotli compression options for `compile` ([#1067](https://github.com/TheOpenDictionary/odict/issues/1067)) ([0b282cd](https://github.com/TheOpenDictionary/odict/commit/0b282cde171ee3e6b1252c59fa9fc8f050e7c4b4))
+* **lib:** Change compression from lz4 to brotli ([#1064](https://github.com/TheOpenDictionary/odict/issues/1064)) ([6dc0b9a](https://github.com/TheOpenDictionary/odict/commit/6dc0b9a05d9d7dce4aed1a29ba3b0f54532748af))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate dirs to v6 ([#1082](https://github.com/TheOpenDictionary/odict/issues/1082)) ([2b0c37d](https://github.com/TheOpenDictionary/odict/commit/2b0c37daf35a06211be5e2301a315c9262ba9a79))
+* **deps:** Update rust crate pulldown-cmark to 0.13.0 ([#1109](https://github.com/TheOpenDictionary/odict/issues/1109)) ([80bb314](https://github.com/TheOpenDictionary/odict/commit/80bb314e1fdedb11d2fe59b1ccf446628c5a1dd9))
+* **error:** Fix build failure when all default features are disabled ([215bd7b](https://github.com/TheOpenDictionary/odict/commit/215bd7becd62422bae64398b188f905bc87dd52d))
+
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/lib-v2.0.0...lib-v2.0.0) (2024-12-25)
 
 
