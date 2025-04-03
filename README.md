@@ -17,7 +17,7 @@ It is:
 
 :pinching_hand: **Tiny.** A single dictionary can store thousands of entries and stay under 1MB.
 
-:package: **Portable.** ODict is a single executable written in Go that can run almost anywhere.
+:package: **Portable.** ODict is a single executable written in Rust that can run almost anywhere.
 
 <div align="center">
 <img src="terminal.png" width="1000" />
