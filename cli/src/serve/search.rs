@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use actix_web::{
     get,
     http::{header::ContentType, StatusCode},
@@ -52,14 +50,17 @@ impl ResponseError for SearchError {
 async fn handle_search(
     params: Query<SearchRequest>,
     dict: Path<String>,
-    dictionary_map: Data<HashMap<String, DictionaryFile>>,
+    dictionary_cache: Data<crate::serve::DictionaryCache>,
 ) -> Result<impl Responder, SearchError> {
     let SearchRequest { query, limit } = params.0;
 
     let dictionary_name = dict.into_inner();
 
-    let file = dictionary_map
+    let file = dictionary_cache
         .get(&dictionary_name)
+        .map_err(|_e| SearchError::DictionaryReadError {
+            name: dictionary_name.to_string(),
+        })?
         .ok_or(SearchError::DictionaryNotFound {
             name: dictionary_name.to_string(),
         })?;

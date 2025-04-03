@@ -2,13 +2,15 @@ use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
     fs,
-    path::{Path, PathBuf},
+    num::NonZero,
+    path::PathBuf,
 };
 
 use actix_web::{middleware::Logger, web::Data, App, HttpServer};
 use clap::{command, Args, ValueEnum};
 use console::style;
 use env_logger::Env;
+use lru::LruCache;
 use odict::{config::AliasManager, DictionaryFile, DictionaryReader};
 
 use crate::CLIContext;
@@ -54,74 +56,69 @@ pub struct ServeArgs {
     dictionaries: Vec<String>,
 }
 
-fn load_dictionary_file(
-    reader: &DictionaryReader,
-    alias_manager: &AliasManager,
-    path: &str,
-    dictionary_map: &mut HashMap<String, DictionaryFile>,
-) -> anyhow::Result<()> {
-    let dict = reader.read_from_path_or_alias_with_manager(path, alias_manager)?;
-    
-    dictionary_map.insert(
-        PathBuf::from(path)
-            .file_stem()
-            .unwrap()
-            .to_string_lossy()
-            .to_string(),
-        dict,
-    );
-    
-    Ok(())
-}
-
-fn load_directory(
-    reader: &DictionaryReader,
-    alias_manager: &AliasManager,
-    dir_path: &Path,
-    dictionary_map: &mut HashMap<String, DictionaryFile>,
-) -> anyhow::Result<()> {
-    if !dir_path.is_dir() {
-        return Ok(());
-    }
-    
-    for entry in fs::read_dir(dir_path)? {
-        let entry = entry?;
-        let path = entry.path();
-        
-        if path.is_file() && 
-           path.extension().map_or(false, |ext| ext == "odict") {
-            load_dictionary_file(
-                reader,
-                alias_manager,
-                &path.to_string_lossy(),
-                dictionary_map,
-            )?;
-        }
-    }
-    
-    Ok(())
-}
-
 pub(self) fn get_dictionary_map(
-    reader: &DictionaryReader,
-    alias_manager: &AliasManager,
     dictionaries: &Vec<String>,
-) -> anyhow::Result<HashMap<String, DictionaryFile>> {
-    let mut dictionary_map = HashMap::<String, DictionaryFile>::new();
+) -> odict::Result<HashMap<String, PathBuf>> {
+    let mut dictionary_map = HashMap::<String, PathBuf>::new();
 
     for path in dictionaries {
         let path_buf = PathBuf::from(path);
-        
+        let name = path_buf.file_stem().unwrap().to_string_lossy().to_string();
+
         if path_buf.is_dir() {
-            // If it's a directory, load all .odict files
-            load_directory(reader, alias_manager, &path_buf, &mut dictionary_map)?;
+            for entry in fs::read_dir(path_buf)? {
+                let p = entry?.path();
+
+                if p.is_file() && p.extension().map_or(false, |ext| ext == "odict") {
+                    dictionary_map.insert(name.clone(), p.clone());
+                }
+            }
         } else {
-            // Otherwise treat it as a single dictionary file or alias
-            load_dictionary_file(reader, alias_manager, path, &mut dictionary_map)?;
+            dictionary_map.insert(name.clone(), path_buf.clone());
         }
     }
 
     Ok(dictionary_map)
+}
+
+struct DictionaryCache {
+    cache: LruCache<String, DictionaryFile>,
+    dictionaries: HashMap<String, PathBuf>,
+    reader: DictionaryReader,
+    alias_manager: AliasManager,
+}
+
+impl DictionaryCache {
+    fn new(
+        size: NonZero<usize>,
+        dictionaries: HashMap<String, PathBuf>,
+        reader: DictionaryReader,
+        alias_manager: AliasManager,
+    ) -> Self {
+        DictionaryCache {
+            cache: LruCache::new(size),
+            dictionaries,
+            reader,
+            alias_manager,
+        }
+    }
+
+    pub fn get(&mut self, key: &str) -> odict::Result<Option<&DictionaryFile>> {
+        if !self.cache.contains(key) {
+            if let Some(path) = self.dictionaries.get(key) {
+                let dict = self.reader.read_from_path_or_alias_with_manager(
+                    path.to_string_lossy().as_ref(),
+                    &self.alias_manager,
+                )?;
+
+                self.cache.put(String::from(key), dict);
+            } else {
+                return Ok(None);
+            }
+        }
+
+        return Ok(self.cache.get(key));
+    }
 }
 
 #[actix_web::main]
@@ -138,7 +135,7 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
         ..
     } = ctx;
 
-    let dictionary_map = get_dictionary_map(reader, alias_manager, &dictionaries)?;
+    let dictionary_map = get_dictionary_map(&dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
 
     if dictionary_map.is_empty() {
@@ -157,19 +154,22 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
         ctx.println(format!(
             "   • {} {}",
             style(name).bold(),
-            style(format!(
-                "({})",
-                dict.path.as_ref().unwrap().to_string_lossy()
-            ))
-            .dim()
+            style(format!("({})", dict.to_string_lossy())).dim()
         ));
     }
+
+    let dictionary_cache = DictionaryCache::new(
+        NonZero::new(100).unwrap(),
+        dictionary_map.to_owned(),
+        reader.to_owned(),
+        alias_manager.to_owned(),
+    );
 
     ctx.println("");
 
     env_logger::init_from_env(Env::new().default_filter_or(log_level));
 
-    let data = Data::new(dictionary_map);
+    let data = Data::new(dictionary_cache);
 
     HttpServer::new(move || {
         App::new()
