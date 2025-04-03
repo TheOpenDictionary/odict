@@ -2460,7 +2460,7 @@ dependencies = [
 
 [[package]]
 name = "odict_node"
-version = "1.1.2"
+version = "1.1.1"
 dependencies = [
  "merge",
  "napi",
