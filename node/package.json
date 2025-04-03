@@ -72,7 +72,7 @@
     "@odict/node-linux-ppc64-gnu": "0.0.3",
     "@odict/node-win32-ia32-msvc": "0.0.3",
     "@odict/node-linux-arm-gnueabihf": "0.0.3",
-    "@odict/node-android-arm64": "0.0.3",
+    "@odict/node-android-arm64": "1.0.0",
     "@odict/node-linux-arm-musleabihf": "0.0.3",
     "@odict/node-freebsd-x64": "0.0.3",
     "@odict/node-linux-arm64-musl": "0.0.3",
