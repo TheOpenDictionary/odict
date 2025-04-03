@@ -17,6 +17,12 @@ permissions:
   push:
     branches:
       - main
+    paths:
+      - "node/**"
+      - "lib/**"
+      - "**/tasks.toml"
+      - "tasks.toml"
+      - "examples/**"
     tags:
       - "node-*"
 concurrency:
@@ -47,7 +53,7 @@ jobs:
             target: aarch64-apple-darwin
             build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu            
+            target: aarch64-unknown-linux-gnu
             build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
@@ -536,7 +542,6 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          registry-url: https://registry.npmjs.org
       - name: Install dependencies
         run: pnpm install
       - name: Download all artifacts
@@ -554,23 +559,23 @@ jobs:
         id: tagName
         with:
           tagRegex: "node-(.*)"
-      - name: Print tag name 
+      - name: Print tag name
         run: echo $GIT_TAG_NAME
       - name: Publish
         shell: bash
         run: |
           npm config set provenance true
-          # if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
-          # then
+          if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
+          then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --no-git-checks --access public
-          # elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
-          # then
-          #  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          #  pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
-          # else
-          # echo "Not a release, skipping publish"
-          # fi
+          elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
+          then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
+          else
+            echo "Not a release, skipping publish"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
