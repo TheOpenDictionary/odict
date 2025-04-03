@@ -77,7 +77,7 @@
     "@odict/node-freebsd-x64": "0.0.3",
     "@odict/node-linux-arm64-musl": "0.0.3",
     "@odict/node-win32-arm64-msvc": "0.0.3",
-    "@odict/node-android-arm-eabi": "0.0.3",
+    "@odict/node-android-arm-eabi": "1.0.0",
     "@odict/node-wasm32-wasi": "0.0.3"
   }
 }
