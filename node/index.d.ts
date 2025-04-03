@@ -3,16 +3,16 @@
 export declare class Dictionary {
   constructor(data: Buffer, options?: DictionaryOptions | undefined | null);
   lookup(
-    query: LookupQuery | string | Array<LookupQuery | string>,
+    query: string | Array<string>,
     options?: LookupOptions | undefined | null,
-  ): Array<Array<Entry>>;
+  ): Array<LookupResult>;
   lexicon(): Array<string>;
-  split(query: string, options?: SplitOptions | undefined | null): Array<Entry>;
   index(options?: IndexOptions | undefined | null): void;
   search(
     query: string,
     options?: SearchOptions | undefined | null,
   ): Array<Entry>;
+  tokenize(text: string): Array<Token>;
 }
 
 export declare function compile(xml: string): Buffer;
@@ -64,9 +64,9 @@ export interface LookupOptions {
   follow?: boolean;
 }
 
-export interface LookupQuery {
-  term: string;
-  fallback: string;
+export interface LookupResult {
+  entry: Entry;
+  directedFrom?: Entry;
 }
 
 export interface Note {
@@ -88,5 +88,11 @@ export interface Sense {
 }
 
 export interface SplitOptions {
-  threshold?: number;
+  minLength?: number;
+}
+
+export interface Token {
+  lemma: string;
+  language?: string;
+  entries: Array<LookupResult>;
 }

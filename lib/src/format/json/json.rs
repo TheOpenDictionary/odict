@@ -4,7 +4,13 @@ use serde_json::{to_string, to_string_pretty};
 use super::dictionary::DictionaryJSON;
 use super::entry::EntryJSON;
 
-use crate::{ArchivedEntry, Dictionary, Entry};
+#[cfg(feature = "tokenize-latin")]
+use super::token::TokenJSON;
+
+use crate::{lookup::LookupResult, ArchivedEntry, Dictionary, Entry};
+
+#[cfg(feature = "tokenize-latin")]
+use crate::Token;
 
 pub struct JSONSerializer {}
 
@@ -47,20 +53,22 @@ impl ToJSON for Vec<Entry> {
     }
 }
 
-impl ToJSON for Vec<Vec<Entry>> {
+impl ToJSON for Vec<LookupResult<Entry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())
-            .collect::<Vec<Vec<EntryJSON>>>();
-
+            .map(|v| EntryJSON::from(v.entry))
+            .collect::<Vec<EntryJSON>>();
         stringify(&json, pretty)
     }
 }
 
-impl ToJSON for &ArchivedEntry {
+impl ToJSON for Vec<LookupResult<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
-        let json = EntryJSON::from(self.to_entry().unwrap());
+        let json = self
+            .into_iter()
+            .map(|v| EntryJSON::from(v.entry))
+            .collect::<Vec<EntryJSON>>();
         stringify(&json, pretty)
     }
 }
@@ -76,12 +84,21 @@ impl ToJSON for Vec<&ArchivedEntry> {
     }
 }
 
-impl ToJSON for Vec<Vec<&ArchivedEntry>> {
+#[cfg(feature = "tokenize-latin")]
+impl<'a> ToJSON for Token<&ArchivedEntry> {
+    fn to_json(self, pretty: bool) -> crate::Result<String> {
+        let json = TokenJSON::from(self);
+        stringify(&json, pretty)
+    }
+}
+
+#[cfg(feature = "tokenize-latin")]
+impl<'a> ToJSON for Vec<Token<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| v.into_iter().map(|v| EntryJSON::from(v)).collect())
-            .collect::<Vec<Vec<EntryJSON>>>();
+            .map(|v| TokenJSON::from(v))
+            .collect::<Vec<TokenJSON>>();
 
         stringify(&json, pretty)
     }

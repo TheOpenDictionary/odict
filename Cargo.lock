@@ -525,7 +525,6 @@ dependencies = [
  "serde",
  "slice-group-by",
  "unicode-normalization",
- "wana_kana",
  "whatlang",
 ]
 
@@ -3880,17 +3879,6 @@ checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
 dependencies = [
  "same-file",
  "winapi-util",
-]
-
-[[package]]
-name = "wana_kana"
-version = "4.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a74666202acfcb4f9b995be2e3e9f7f530deb65e05a1407b8d0b30c9c451238a"
-dependencies = [
- "fnv",
- "itertools 0.10.5",
- "lazy_static",
 ]
 
 [[package]]

@@ -16,7 +16,7 @@ async function getDictionary(name: string) {
         ),
         "utf-8",
       ),
-    )
+    ),
   );
 }
 
@@ -28,21 +28,29 @@ describe("Dictionary", () => {
 
   let dict1: Dictionary;
   let dict2: Dictionary;
+  let dict3: Dictionary;
 
   beforeAll(async () => {
     dict1 = await getDictionary("example1");
     dict2 = await getDictionary("example2");
+    dict3 = await getDictionary("example3");
   });
 
   describe("lookup", () => {
     it("looks up terms properly", async () => {
-      const result = dict1.lookup({ term: "cat", fallback: "cat" });
+      const result = dict1.lookup("cat");
       expect(result).toMatchSnapshot();
     });
 
     it("doesn't split unless specified", async () => {
       const result = dict1.lookup("catdog");
-      expect(result[0].length).toBe(0);
+      expect(result.length).toBe(0);
+    });
+
+    it("follows terms properly", async () => {
+      const result = dict1.lookup("ran", { follow: true });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
     });
 
     it("can split terms", async () => {
@@ -56,18 +64,26 @@ describe("Dictionary", () => {
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
   });
 
-  it("can split terms properly", async () => {
-    const result = dict1.split("catdog", { threshold: 2 });
-    expect(result).toMatchSnapshot();
+  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text and find entries", () => {
+    const tokens = dict3.tokenize("你好！你是谁？");
+
+    expect(tokens).toMatchSnapshot();
+    expect(tokens.length).toBeGreaterThan(0);
+    expect(tokens[0].lemma).toBe("你好");
+    expect(tokens[0].entries[0].entry.term).toBe("你");
+    expect(tokens[0].entries[1].entry.term).toBe("好");
   });
 
-  it.skipIf(process.env.NAPI_RS_FORCE_WASI)("can index and search a dictionary", async () => {
-    dict1.index();
+  it.skipIf(process.env.NAPI_RS_FORCE_WASI)(
+    "can index and search a dictionary",
+    async () => {
+      dict1.index();
 
-    const results = dict1.search("run");
+      const results = dict1.search("run");
 
-    expect(results).toMatchSnapshot();
-  });
+      expect(results).toMatchSnapshot();
+    },
+  );
 
   it("throws errors inside JavaScript", async () => {
     try {

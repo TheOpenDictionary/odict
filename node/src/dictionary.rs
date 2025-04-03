@@ -1,16 +1,13 @@
-use std::{borrow::BorrowMut, path::PathBuf, vec};
+use std::vec;
 
-use napi::{JsArrayBufferValue, bindgen_prelude::*};
+use napi::bindgen_prelude::*;
 
 use merge::Merge;
 use odict::ToDictionary;
 
 use crate::{
-  types::{
-    self, DictionaryOptions, Entry, IndexOptions, LookupOptions, LookupQuery, SearchOptions,
-    SplitOptions,
-  },
-  utils::{cast_error, resolve_options, to_lookup_query},
+  types::{self, DictionaryOptions, Entry, IndexOptions, LookupOptions, SearchOptions},
+  utils::{cast_error, resolve_options},
 };
 
 #[napi]
@@ -49,32 +46,39 @@ impl Dictionary {
 
   pub fn _lookup(
     &self,
-    queries: &Vec<odict::lookup::LookupQuery>,
+    queries: &Vec<String>,
     options: Option<LookupOptions>,
-  ) -> Result<Vec<Vec<Entry>>> {
+  ) -> Result<Vec<types::LookupResult>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
 
-    let mut opts = options.unwrap_or(LookupOptions::default());
+    let mut opts: LookupOptions = options.unwrap_or(LookupOptions::default());
 
     if let Some(split) = opts
       .split
-      .or(self.options().split.map(|s| s.threshold).flatten())
+      .or(self.options().split.map(|s| s.min_length).flatten())
     {
       opts.split = Some(split);
     }
 
-    let entries = dict
-      .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
+    let results = dict
+      .lookup(queries, &odict::lookup::LookupOptions::from(opts))
       .map_err(|e| cast_error(e))?;
 
-    let mapped = entries
+    let mapped = results
       .iter()
-      .map(|i| {
-        i.iter()
-          .map(|e| Entry::from_archive(e))
-          .collect::<Result<Vec<Entry>, _>>()
+      .map(|result| {
+        let entry = Entry::from_archive(result.entry)?;
+        let directed_from = match &result.directed_from {
+          Some(from) => Some(Entry::from_archive(from)?),
+          None => None,
+        };
+
+        Ok(types::LookupResult {
+          entry,
+          directed_from,
+        })
       })
-      .collect::<Result<Vec<Vec<Entry>>, _>>()?;
+      .collect::<Result<Vec<types::LookupResult>, _>>()?;
 
     Ok(mapped)
   }
@@ -82,20 +86,14 @@ impl Dictionary {
   #[napi]
   pub fn lookup(
     &self,
-    query: Either3<types::LookupQuery, String, Vec<Either<LookupQuery, String>>>,
+    query: Either<String, Vec<String>>,
     options: Option<LookupOptions>,
-  ) -> Result<Vec<Vec<Entry>>> {
-    let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
+  ) -> Result<Vec<types::LookupResult>> {
+    let mut queries: Vec<String> = vec![];
 
     match query {
-      Either3::A(a) => queries.push(a.into()),
-      Either3::B(b) => queries.push(b.into()),
-      Either3::C(c) => queries.append(
-        c.into_iter()
-          .map(to_lookup_query)
-          .collect::<Vec<odict::lookup::LookupQuery>>()
-          .borrow_mut(),
-      ),
+      Either::A(a) => queries.push(a.into()),
+      Either::B(mut c) => queries.append(&mut c),
     }
 
     self._lookup(&queries, options)
@@ -107,26 +105,6 @@ impl Dictionary {
     let lexicon = dict.lexicon();
 
     Ok(lexicon)
-  }
-
-  #[napi]
-  pub fn split(&self, query: String, options: Option<SplitOptions>) -> Result<Vec<Entry>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
-
-    let mut opts = options;
-
-    opts.merge(self.options().split);
-
-    let result = dict
-      .split::<&odict::split::SplitOptions>(&query, &opts.unwrap().into())
-      .map_err(|e| cast_error(e))?;
-
-    Ok(
-      result
-        .iter()
-        .map(|e| Entry::from_archive(e))
-        .collect::<Result<Vec<Entry>, _>>()?,
-    )
   }
 
   #[napi]
@@ -171,6 +149,52 @@ impl Dictionary {
 
     unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
+
+  #[napi]
+  pub fn tokenize(&self, text: String) -> Result<Vec<types::Token>> {
+    #[cfg(feature = "tokenize")]
+    {
+      let dict = self.file.to_archive().map_err(cast_error)?;
+
+      let opts = odict::lookup::TokenizeOptions::default();
+
+      let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
+
+      let mapped = tokens
+        .iter()
+        .map(|token| {
+          let entries = token
+            .entries
+            .iter()
+            .map(|result| {
+              let entry = Entry::from_archive(result.entry)?;
+              let directed_from = match &result.directed_from {
+                Some(from) => Some(Entry::from_archive(from)?),
+                None => None,
+              };
+
+              Ok(types::LookupResult {
+                entry,
+                directed_from,
+              })
+            })
+            .collect::<Result<Vec<types::LookupResult>, _>>()?;
+
+          Ok(types::Token {
+            lemma: token.lemma.clone(),
+            language: token.language.clone(),
+            entries,
+          })
+        })
+        .collect::<Result<Vec<types::Token>, _>>()?;
+
+      return Ok(mapped);
+    }
+
+    unimplemented!("tokenize() is not available in this environment.");
+
+    Ok(vec![])
+  }
 }
 
 #[cfg(test)]
@@ -186,13 +210,17 @@ mod test {
         memory: Some(1234),
         overwrite: Some(false),
       }),
-      split: { Some(crate::types::SplitOptions { threshold: Some(5) }) },
+      split: {
+        Some(crate::types::SplitOptions {
+          min_length: Some(5),
+        })
+      },
     };
 
     let mut opts2: Option<crate::types::IndexOptions> = None;
 
     let mut opts3: Option<crate::types::SplitOptions> = Some(crate::types::SplitOptions {
-      threshold: Some(10),
+      min_length: Some(10),
     });
 
     opts2.merge(opts1.index);
@@ -204,6 +232,6 @@ mod test {
     assert_eq!(result1.directory.unwrap(), "test".to_string());
     assert_eq!(result1.memory.unwrap(), 1234);
     assert_eq!(result1.overwrite.unwrap(), false);
-    assert_eq!(result2.threshold.unwrap(), 10);
+    assert_eq!(result2.min_length.unwrap(), 10);
   }
 }

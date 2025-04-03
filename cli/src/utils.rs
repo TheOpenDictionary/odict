@@ -1,4 +1,4 @@
-use odict::{ArchivedEntry, Entry};
+use odict::{lookup::LookupResult, ArchivedEntry, Entry};
 
 use crate::CLIContext;
 
@@ -15,14 +15,9 @@ where
     Ok(())
 }
 
-pub fn deserialize_nested_entries(entries: Vec<Vec<&ArchivedEntry>>) -> Vec<Vec<Entry>> {
-    entries
+pub fn get_lookup_entries(results: Vec<LookupResult<&ArchivedEntry>>) -> Vec<Entry> {
+    results
         .iter()
-        .map(|entries_inner| -> Vec<Entry> {
-            entries_inner
-                .iter()
-                .map(|entry| entry.to_entry().unwrap())
-                .collect()
-        })
+        .map(|result| result.entry.to_entry().unwrap())
         .collect()
 }

@@ -1,5 +1,5 @@
 [package]
-edition = "2024"
+edition = "2021"
 name = "odict_node"
 version = "0.0.2"
 publish = false
@@ -8,8 +8,16 @@ publish = false
 crate-type = ["cdylib"]
 
 [features]
-default = ["search", "json", "sql"]
+default = ["search", "json", "sql", "tokenize"]
 json = ["odict/json"]
+tokenize = [
+  "odict/tokenize-latin",
+  "odict/tokenize-chinese",
+  "odict/tokenize-thai",
+  "odict/tokenize-khmer",
+  "odict/tokenize-swedish",
+  "odict/tokenize-german",
+]
 sql = ["odict/sql"]
 config = ["odict/config"]
 search = ["odict/search", "config"]

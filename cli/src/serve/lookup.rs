@@ -7,8 +7,14 @@ use actix_web::{
     HttpResponse, Responder, ResponseError,
 };
 use derive_more::{Display, Error};
-use odict::{format::json::ToJSON, lookup::LookupOptions, DictionaryFile};
+use odict::{
+    format::json::ToJSON,
+    lookup::{LookupOptions, LookupStrategy},
+    DictionaryFile,
+};
 use serde::Deserialize;
+
+use crate::get_lookup_entries;
 
 #[derive(Debug, Deserialize)]
 pub struct LookupRequest {
@@ -80,18 +86,19 @@ async fn handle_lookup(
             name: dictionary_name.to_string(),
         })?;
 
+    let mut opts = LookupOptions::default().follow(follow.unwrap_or(false));
+
+    if split.is_some() {
+        opts = opts.strategy(LookupStrategy::Split(split.unwrap()));
+    }
+
     let entries = dictionary
-        .lookup(
-            &queries,
-            LookupOptions::default()
-                .follow(follow.unwrap_or(false))
-                .split(split.unwrap_or(0)),
-        )
+        .lookup(&queries, &opts)
         .map_err(|e| LookupError::LookupError {
             message: e.to_string(),
         })?;
 
-    let json = entries
+    let json = get_lookup_entries(entries)
         .to_json(true)
         .map_err(|_e| LookupError::SerializeError)?;
 

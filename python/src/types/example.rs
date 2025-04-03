@@ -1,17 +1,18 @@
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Example {
+    #[pyo3(get)]
     pub value: String,
 }
 
-impl Example {
-    pub fn from(note: odict::Example) -> PyResult<Self> {
-        let odict::Example { value } = note;
+impl From<odict::Example> for Example {
+    fn from(example: odict::Example) -> Self {
+        let odict::Example { value } = example;
 
-        Ok(Self {
+        Self {
             value: String::from(value),
-        })
+        }
     }
 }

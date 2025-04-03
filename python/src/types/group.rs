@@ -3,28 +3,31 @@ use pyo3::prelude::*;
 use super::definition::Definition;
 
 #[pyclass]
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Group {
+    #[pyo3(get)]
     pub id: Option<String>,
+    #[pyo3(get)]
     pub description: String,
+    #[pyo3(get)]
     pub definitions: Vec<Definition>,
 }
 
-impl Group {
-    pub fn from(group: odict::Group) -> PyResult<Self> {
+impl From<odict::Group> for Group {
+    fn from(group: odict::Group) -> Self {
         let odict::Group {
             id,
             description,
             definitions,
         } = group;
 
-        Ok(Self {
+        Self {
             id,
             description: String::from(description),
             definitions: definitions
                 .into_iter()
                 .map(|d| Definition::from(d))
-                .collect::<Result<Vec<Definition>, _>>()?,
-        })
+                .collect(),
+        }
     }
 }

@@ -1,45 +1,43 @@
-use std::{borrow::BorrowMut, path::PathBuf};
+use std::path::PathBuf;
 
 use either::Either;
 use odict::{
-    lookup::LookupOptions,
+    lookup::{LookupOptions, LookupStrategy},
     search::{IndexOptions, SearchOptions},
-    split::SplitOptions,
 };
 use pyo3::prelude::*;
 
-use crate::{types::Entry, utils::cast_error};
+use crate::{
+    types::{Entry, LookupResult, Token},
+    utils::cast_error,
+};
 
 fn lookup(
     file: &odict::DictionaryFile,
-    queries: &Vec<odict::lookup::LookupQuery>,
+    queries: &Vec<String>,
     split: Option<usize>,
     follow: Option<bool>,
-) -> PyResult<Vec<Vec<Entry>>> {
+) -> PyResult<Vec<crate::types::LookupResult>> {
     let dict = file.to_archive().map_err(cast_error)?;
 
     let mut opts = LookupOptions::default();
 
     if let Some(split) = split {
-        opts.split = split;
+        opts.strategy = LookupStrategy::Split(split);
     }
 
     if let Some(follow) = follow {
         opts.follow = follow;
     }
 
-    let entries = dict
-        .lookup::<odict::lookup::LookupQuery, &odict::lookup::LookupOptions>(queries, &opts.into())
+    let results = dict
+        .lookup(queries, &odict::lookup::LookupOptions::from(opts.into()))
         .map_err(|e| cast_error(e))?;
 
-    let mapped = entries
+    let mapped = results
         .iter()
-        .map(|i| {
-            i.iter()
-                .map(|e| Entry::from_archive(e))
-                .collect::<Result<Vec<Entry>, _>>()
-        })
-        .collect::<Result<Vec<Vec<Entry>>, _>>()?;
+        .map(|result| crate::types::LookupResult::from_archive(result))
+        .collect::<Result<Vec<crate::types::LookupResult>, _>>()?;
 
     Ok(mapped)
 }
@@ -126,17 +124,12 @@ impl Dictionary {
         query: Either<String, Vec<String>>,
         split: Option<usize>,
         follow: Option<bool>,
-    ) -> PyResult<Vec<Vec<Entry>>> {
-        let mut queries: Vec<odict::lookup::LookupQuery> = vec![];
+    ) -> PyResult<Vec<LookupResult>> {
+        let mut queries: Vec<String> = vec![];
 
         match query {
             Either::Left(a) => queries.push(a.into()),
-            Either::Right(c) => queries.append(
-                c.into_iter()
-                    .map(|e| e.into())
-                    .collect::<Vec<odict::lookup::LookupQuery>>()
-                    .borrow_mut(),
-            ),
+            Either::Right(mut c) => queries.append(&mut c),
         }
 
         lookup(&(self.file), &queries, split, follow)
@@ -147,24 +140,6 @@ impl Dictionary {
         let lexicon = dict.lexicon();
 
         Ok(lexicon)
-    }
-
-    #[pyo3(signature = (query, threshold=None))]
-    pub fn split(&self, query: String, threshold: Option<usize>) -> PyResult<Vec<Entry>> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
-
-        let mut opts = SplitOptions::default();
-
-        if let Some(threshold) = threshold {
-            opts = opts.threshold(threshold);
-        }
-
-        let result = dict.split(&query, &opts).map_err(|e| cast_error(e))?;
-
-        Ok(result
-            .iter()
-            .map(|e| Entry::from_archive(e))
-            .collect::<Result<Vec<Entry>, _>>()?)
     }
 
     #[pyo3(signature = (directory=None, memory=None, overwrite=None))]
@@ -228,9 +203,45 @@ impl Dictionary {
 
         let entries = results
             .iter()
-            .map(|e| Entry::from_entry(e.clone()))
-            .collect::<Result<Vec<Entry>, _>>()?;
+            .map(|e| Entry::from(e.clone()))
+            .collect::<Vec<Entry>>();
 
         Ok(entries)
+    }
+
+    #[pyo3(signature = (text, follow=None))]
+    pub fn tokenize(
+        &self,
+        text: String,
+        follow: Option<bool>,
+    ) -> PyResult<Vec<crate::types::Token>> {
+        let dict = self.file.to_archive().map_err(cast_error)?;
+
+        let mut opts = odict::lookup::TokenizeOptions::default();
+
+        if let Some(follow) = follow {
+            opts = opts.follow(follow);
+        }
+
+        let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
+
+        let mapped = tokens
+            .iter()
+            .map(|token| {
+                let entries = token
+                    .entries
+                    .iter()
+                    .map(|result| crate::types::LookupResult::from_archive(result))
+                    .collect::<Result<Vec<crate::types::LookupResult>, PyErr>>()?;
+
+                Ok(Token {
+                    lemma: token.lemma.clone(),
+                    language: token.language.clone(),
+                    entries,
+                })
+            })
+            .collect::<Result<Vec<crate::types::Token>, PyErr>>()?;
+
+        Ok(mapped)
     }
 }

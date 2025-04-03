@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use anyhow::Context;
 use clap::{arg, command, Args};
-use odict::{fs::infer_path, write::DictionaryWriterOptions, CompressOptions};
+use odict::{fs::infer_path, io::DictionaryWriterOptions, CompressOptions};
 
 use crate::CLIContext;
 

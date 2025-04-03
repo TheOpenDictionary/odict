@@ -1,0 +1,11 @@
+# serializer version: 1
+# name: test_tokenize
+  list([
+    Token { lemma: "你好", language: Some("cmn"), entries: [LookupResult { entry: Entry { term: "你", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("v", Sense { pos: "v", definitions: [Left(Definition { id: None, value: "Lorem ipsum", examples: [], notes: [] })] })] }] }, directed_from: None }, LookupResult { entry: Entry { term: "好", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("v", Sense { pos: "v", definitions: [Left(Definition { id: None, value: "Lorem ipsum", examples: [], notes: [] })] })] }] }, directed_from: None }] },
+    Token { lemma: "！", language: None, entries: [] },
+    Token { lemma: "你", language: Some("cmn"), entries: [LookupResult { entry: Entry { term: "你", see_also: None, etymologies: [Etymology { id: None, pronunciation: None, description: Some("Latin root"), senses: [("v", Sense { pos: "v", definitions: [Left(Definition { id: None, value: "Lorem ipsum", examples: [], notes: [] })] })] }] }, directed_from: None }] },
+    Token { lemma: "是", language: Some("cmn"), entries: [] },
+    Token { lemma: "谁", language: Some("cmn"), entries: [] },
+    Token { lemma: "？", language: None, entries: [] },
+  ])
+# ---

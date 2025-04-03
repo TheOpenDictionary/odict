@@ -1,63 +1,58 @@
 ---
 source: lib/tests/lookup.rs
 expression: result.to_json(true).unwrap()
-snapshot_kind: text
 ---
 [
-  [
-    {
-      "term": "dog",
-      "etymologies": [
-        {
-          "pronunciation": "dooooog",
-          "description": "Latin root",
-          "senses": {
-            "un": {
-              "pos": "un",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "a dog"
-                }
-              ]
-            }
+  {
+    "term": "dog",
+    "etymologies": [
+      {
+        "pronunciation": "dooooog",
+        "description": "Latin root",
+        "senses": {
+          "un": {
+            "pos": "un",
+            "definitions": [
+              {
+                "type": "definition",
+                "value": "a dog"
+              }
+            ]
           }
         }
-      ]
-    }
-  ],
-  [
-    {
-      "term": "cat",
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "n": {
-              "pos": "n",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "a cat",
-                  "examples": [
-                    "There goes a cat!"
-                  ],
-                  "notes": [
-                    {
-                      "value": "Some definition note",
-                      "examples": [
-                        {
-                          "$text": "Some example"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
+      }
+    ]
+  },
+  {
+    "term": "cat",
+    "etymologies": [
+      {
+        "description": "Latin root",
+        "senses": {
+          "n": {
+            "pos": "n",
+            "definitions": [
+              {
+                "type": "definition",
+                "value": "a cat",
+                "examples": [
+                  "There goes a cat!"
+                ],
+                "notes": [
+                  {
+                    "value": "Some definition note",
+                    "examples": [
+                      {
+                        "$text": "Some example"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         }
-      ]
-    }
-  ]
+      }
+    ]
+  }
 ]

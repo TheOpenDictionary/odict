@@ -1,4 +1,3 @@
-
 use clap::{arg, command, Args};
 use odict::search::{get_default_index_dir, SearchOptions};
 
@@ -50,7 +49,7 @@ pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> anyhow::Result<()> {
 
     let results = dict.search(args.query.as_str(), SearchOptions::default())?;
 
-    print_entries(ctx, vec![results], &args.format)?;
+    print_entries(ctx, results, &args.format)?;
 
     Ok(())
 }

@@ -179,10 +179,10 @@ fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(
     Ok(())
 }
 
-pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Vec<Entry>>) -> Result<(), Error> {
+pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Entry>) -> Result<(), Error> {
     let out = &ctx.stdout;
 
-    for entry in entries.iter().flat_map(|e| e) {
+    for entry in entries.iter().map(|e| e) {
         out.write_line("")?;
         out.write_line(&divider())?;
         out.write_line(&format!("{}", style(&entry.term).bold()))?;

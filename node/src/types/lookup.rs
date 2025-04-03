@@ -1,5 +1,7 @@
 use merge::Merge;
 
+use super::Entry;
+
 #[napi(object)]
 #[derive(Merge)]
 pub struct LookupOptions {
@@ -21,7 +23,9 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
     let mut s = odict::lookup::LookupOptions::default();
 
     if let Some(split) = opts.split {
-      s = s.split(split.try_into().unwrap());
+      s = s.strategy(odict::lookup::LookupStrategy::Split(
+        split.try_into().unwrap(),
+      ));
     }
 
     if let Some(follow) = opts.follow {
@@ -33,16 +37,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 }
 
 #[napi(object)]
-pub struct LookupQuery {
-  pub term: String,
-  pub fallback: String,
-}
-
-impl From<LookupQuery> for odict::lookup::LookupQuery {
-  fn from(q: LookupQuery) -> Self {
-    odict::lookup::LookupQuery {
-      term: q.term,
-      fallback: q.fallback,
-    }
-  }
+pub struct LookupResult {
+  pub entry: Entry,
+  pub directed_from: Option<Entry>,
 }

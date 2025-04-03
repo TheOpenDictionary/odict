@@ -1,8 +1,7 @@
 use merge::Merge;
-use napi::Either;
 use odict::Error;
 
-use crate::types::{DictionaryOptions, LookupQuery};
+use crate::types::DictionaryOptions;
 
 pub fn cast_error(e: Error) -> napi::Error {
   napi::Error::new(napi::Status::GenericFailure, format!("{}", e))
@@ -16,12 +15,5 @@ pub fn resolve_options(options: &Option<DictionaryOptions>) -> DictionaryOptions
       return out;
     }
     None => DictionaryOptions::default(),
-  }
-}
-
-pub fn to_lookup_query(query: Either<LookupQuery, String>) -> odict::lookup::LookupQuery {
-  match query {
-    Either::A(wwf) => wwf.into(),
-    Either::B(s) => s.into(),
   }
 }

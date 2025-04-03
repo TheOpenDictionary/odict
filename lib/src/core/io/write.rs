@@ -6,7 +6,7 @@ use crate::compress::{compress, CompressOptions};
 use crate::error::Error;
 use crate::{Dictionary, ToDictionary};
 
-use super::constants::*;
+use super::consts::{SIGNATURE, VERSION};
 
 pub struct DictionaryWriter {}
 

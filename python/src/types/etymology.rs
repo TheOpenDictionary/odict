@@ -5,10 +5,15 @@ use pyo3::prelude::*;
 use super::sense::Sense;
 
 #[pyclass]
+#[derive(Clone)]
 pub struct Etymology {
+    #[pyo3(get)]
     pub id: Option<String>,
+    #[pyo3(get)]
     pub pronunciation: Option<String>,
+    #[pyo3(get)]
     pub description: Option<String>,
+    #[pyo3(get)]
     pub senses: HashMap<String, Sense>,
 }
 
@@ -28,8 +33,8 @@ impl fmt::Debug for Etymology {
     }
 }
 
-impl Etymology {
-    pub fn from(etymology: odict::Etymology) -> PyResult<Self> {
+impl From<odict::Etymology> for Etymology {
+    fn from(etymology: odict::Etymology) -> Self {
         let odict::Etymology {
             id,
             pronunciation,
@@ -37,17 +42,14 @@ impl Etymology {
             senses,
         } = etymology;
 
-        Ok(Self {
+        Self {
             id,
             pronunciation,
             description: description.map(|d| String::from(d)),
             senses: senses
                 .into_iter()
-                .map(|(k, v)| -> PyResult<(String, Sense)> {
-                    let sense = Sense::from(v)?;
-                    Ok((k.to_string(), sense))
-                })
-                .collect::<PyResult<HashMap<String, Sense>>>()?,
-        })
+                .map(|(k, v)| (k.to_string(), Sense::from(v)))
+                .collect(),
+        }
     }
 }
