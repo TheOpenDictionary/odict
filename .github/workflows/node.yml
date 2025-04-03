@@ -47,7 +47,7 @@ jobs:
             target: aarch64-apple-darwin
             build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu            
+            target: aarch64-unknown-linux-gnu
             build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
@@ -536,7 +536,6 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          registry-url: https://registry.npmjs.org
       - name: Install dependencies
         run: pnpm install
       - name: Download all artifacts
@@ -554,13 +553,13 @@ jobs:
         id: tagName
         with:
           tagRegex: "node-(.*)"
-      - name: Print tag name 
+      - name: Print tag name
         run: echo $GIT_TAG_NAME
       - name: Publish
         shell: bash
         run: |
           npm config set provenance true
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
           pnpm --filter="@odict/node" publish --no-git-checks --json --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
