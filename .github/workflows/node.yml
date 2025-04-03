@@ -550,21 +550,27 @@ jobs:
       - name: List packages
         run: ls -R ./node/npm
         shell: bash
+      - uses: olegtarasov/get-tag@v2.1.3
+        id: tagName
+        with:
+          tagRegex: "node-(.*)"
+      - name: Print tag name 
+        run: echo $GIT_TAG_NAME
       - name: Publish
         shell: bash
         run: |
           npm config set provenance true
-          if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
-          then
+          # if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
+          # then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             pnpm --filter="@odict/node" publish --no-git-checks --access public
-          elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
-          else
-            echo "Not a release, skipping publish"
-          fi
+          # elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
+          # then
+          #  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          #  pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
+          # else
+          # echo "Not a release, skipping publish"
+          # fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
