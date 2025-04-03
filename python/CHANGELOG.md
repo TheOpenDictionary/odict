@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v1.1.0...python/v1.1.1) (2025-04-03)
+
+
+### Bug Fixes
+
+* Update Python version ([f9ec497](https://github.com/TheOpenDictionary/odict/commit/f9ec4972f3906185863dd9cdac5d02306292c483))
+
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python/v1.0.0) (2025-04-03)
 
 

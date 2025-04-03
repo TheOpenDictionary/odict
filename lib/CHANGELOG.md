@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.1.0...lib/v2.2.0) (2025-04-03)
+
+
+### Features
+
+* **serve:** Cache dictionaries ([#1170](https://github.com/TheOpenDictionary/odict/issues/1170)) ([907918b](https://github.com/TheOpenDictionary/odict/commit/907918ba12b34b44399bfa185a0dd5f8c8575ad0))
+
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/lib-v2.0.0...lib/v2.1.0) (2025-04-03)
 
 
