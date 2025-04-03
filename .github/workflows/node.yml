@@ -563,7 +563,7 @@ jobs:
           # if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
           # then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --no-git-checks --access public
+            pnpm --filter="@odict/node" publish --no-git-checks --json --access public
           # elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
           # then
           #  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
