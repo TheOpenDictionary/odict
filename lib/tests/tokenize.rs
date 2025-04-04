@@ -46,7 +46,11 @@ mod tokenize_tests {
         let dict = EXAMPLE_DICT_1.to_archive().unwrap();
         let result = dict.tokenize(
             "Chào bạn, hôm nay trời đẹp quá!",
-            &TokenizeOptions::default().allow_list(&[Language::Vie, Language::Cmn, Language::Eng]),
+            &TokenizeOptions::default().allow_list(vec![
+                Language::Vie,
+                Language::Cmn,
+                Language::Eng,
+            ]),
         );
 
         let res = result.as_ref().unwrap();
