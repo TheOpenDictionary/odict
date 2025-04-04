@@ -19,7 +19,7 @@ impl AsRef<LookupOptions> for LookupOptions {
 impl LookupOptions {
     pub fn default() -> Self {
         Self {
-            follow: true,
+            follow: false,
             strategy: LookupStrategy::Exact,
         }
     }

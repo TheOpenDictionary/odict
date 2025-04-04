@@ -37,7 +37,9 @@ macro_rules! lookup {
                     // Follow an alias if it exists
                     if *follow {
                         if let $opt::Some(also) = &entry.see_also {
-                            return self.find_entry(follow, also, Some(entry));
+                            if (also.len() > 0) {
+                                return self.find_entry(follow, also, Some(entry));
+                            }
                         }
                     }
 
