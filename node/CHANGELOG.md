@@ -4,6 +4,14 @@
 
 
 
+## [1.3.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.2.0...node/v1.3.0) (2025-04-04)
+
+
+### Features
+
+* **node:** Add support for TokenizeOptions ([e14fb17](https://github.com/TheOpenDictionary/odict/commit/e14fb17abcaa2f07bfabb482db11402cd2b41fbf))
+* **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
+
 ## [1.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.1.2...node/v1.2.0) (2025-04-04)
 
 
