@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.1.1...python/v1.2.0) (2025-04-04)
+
+
+### Features
+
+* **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
+
 ## [1.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v1.1.0...python/v1.1.1) (2025-04-03)
 
 

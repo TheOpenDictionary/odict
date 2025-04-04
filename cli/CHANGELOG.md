@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.2.0...cli/v2.3.0) (2025-04-04)
+
+
+### Features
+
+* **cli:** Add spinner to compile command ([3909dad](https://github.com/TheOpenDictionary/odict/commit/3909dad800ed9bd7cedf18437e239a9a35dc60f3))
+
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.1.0...cli/v2.2.0) (2025-04-03)
 
 
