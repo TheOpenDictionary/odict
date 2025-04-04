@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.2.0...lib/v2.3.0) (2025-04-04)
+
+
+### Features
+
+* **node:** Add support for TokenizeOptions ([e14fb17](https://github.com/TheOpenDictionary/odict/commit/e14fb17abcaa2f07bfabb482db11402cd2b41fbf))
+* **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
+
+
+### Bug Fixes
+
+* Fix tests ([a87323b](https://github.com/TheOpenDictionary/odict/commit/a87323b6ace6cfc4daafa2c3738da22a3e1ec796))
+* **lookup:** Don't follow empty strings and disable follow by default ([73ddd89](https://github.com/TheOpenDictionary/odict/commit/73ddd89798cef3b98a670d8c9c5ad8c7816f0d83))
+
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.1.0...lib/v2.2.0) (2025-04-03)
 
 
