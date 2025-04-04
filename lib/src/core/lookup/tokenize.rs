@@ -1,4 +1,4 @@
-use charabia::{Script, Segment};
+use charabia::Segment;
 use rayon::prelude::*;
 
 use super::{
@@ -9,15 +9,21 @@ use super::{
 use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 pub type Language = charabia::Language;
+pub type TokenKind = charabia::TokenKind;
+pub type Script = charabia::Script;
 
 /* ----------------------------------------------------------------------------- */
 /*                                Tokenize Options                               */
 /* ----------------------------------------------------------------------------- */
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Token<T> {
     pub lemma: String,
-    pub language: Option<String>,
+    pub start: usize,
+    pub end: usize,
+    pub kind: TokenKind,
+    pub script: Script,
+    pub language: Option<Language>,
     pub entries: Vec<LookupResult<T>>,
 }
 
@@ -109,7 +115,11 @@ macro_rules! tokenize {
 
                         Ok(Token {
                             lemma: lemma.to_string(),
-                            language: token.language.map(|lang| lang.code().to_string()),
+                            start: token.char_start,
+                            end: token.char_end,
+                            kind: token.kind,
+                            script,
+                            language: token.language,
                             entries,
                         })
                     })

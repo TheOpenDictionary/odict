@@ -189,7 +189,11 @@ impl Dictionary {
 
           Ok(types::Token {
             lemma: token.lemma.clone(),
-            language: token.language.clone(),
+            language: token.language.map(|s| s.code().to_string()).clone(),
+            script: token.script.name().to_string(),
+            kind: format!("{:?}", token.kind),
+            start: token.start as u16,
+            end: token.end as u16,
             entries,
           })
         })

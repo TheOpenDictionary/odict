@@ -36,7 +36,7 @@ mod tokenize_tests {
         assert_eq!(res.len(), expected_lemmas.len());
 
         for (i, token) in res.iter().enumerate() {
-            assert_eq!(token.language, Some("cmn".to_string()));
+            assert_eq!(token.language, Some(Language::Cmn));
             assert_eq!(token.lemma, expected_lemmas[i]);
         }
     }
@@ -60,7 +60,7 @@ mod tokenize_tests {
         assert_eq!(res.len(), expected_lemmas.len());
 
         for (i, token) in res.iter().enumerate() {
-            assert_eq!(token.language, Some("vie".to_string()));
+            assert_eq!(token.language, Some(Language::Vie));
             assert_eq!(token.lemma, expected_lemmas[i]);
         }
     }

@@ -110,6 +110,7 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
 exports[`Dictionary > should tokenize text and find entries 1`] = `
 [
   {
+    "end": 2,
     "entries": [
       {
         "entry": {
@@ -148,14 +149,22 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
         },
       },
     ],
+    "kind": "Unknown",
     "language": "cmn",
     "lemma": "你好",
+    "script": "Mandarin",
+    "start": 0,
   },
   {
+    "end": 3,
     "entries": [],
+    "kind": "Unknown",
     "lemma": "！",
+    "script": "Hangul",
+    "start": 2,
   },
   {
+    "end": 4,
     "entries": [
       {
         "entry": {
@@ -176,22 +185,37 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
         },
       },
     ],
+    "kind": "Unknown",
     "language": "cmn",
     "lemma": "你",
+    "script": "Mandarin",
+    "start": 3,
   },
   {
+    "end": 5,
     "entries": [],
+    "kind": "Unknown",
     "language": "cmn",
     "lemma": "是",
+    "script": "Mandarin",
+    "start": 4,
   },
   {
+    "end": 6,
     "entries": [],
+    "kind": "Unknown",
     "language": "cmn",
     "lemma": "谁",
+    "script": "Mandarin",
+    "start": 5,
   },
   {
+    "end": 7,
     "entries": [],
+    "kind": "Unknown",
     "lemma": "？",
+    "script": "Hangul",
+    "start": 6,
   },
 ]
 `;

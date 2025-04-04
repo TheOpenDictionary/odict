@@ -39,3 +39,18 @@ impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
         }
     }
 }
+
+impl From<odict::lookup::LookupResult<&odict::ArchivedEntry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<&odict::ArchivedEntry>) -> Self {
+        let entry = Entry::from(result.entry.to_entry().unwrap());
+
+        let directed_from = result
+            .directed_from
+            .map(|s| Entry::from(s.to_entry().unwrap()));
+
+        Self {
+            entry,
+            directed_from,
+        }
+    }
+}

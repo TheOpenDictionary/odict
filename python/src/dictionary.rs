@@ -227,19 +227,7 @@ impl Dictionary {
 
         let mapped = tokens
             .iter()
-            .map(|token| {
-                let entries = token
-                    .entries
-                    .iter()
-                    .map(|result| crate::types::LookupResult::from_archive(result))
-                    .collect::<Result<Vec<crate::types::LookupResult>, PyErr>>()?;
-
-                Ok(Token {
-                    lemma: token.lemma.clone(),
-                    language: token.language.clone(),
-                    entries,
-                })
-            })
+            .map(|token| Ok(Token::from(token.clone())))
             .collect::<Result<Vec<crate::types::Token>, PyErr>>()?;
 
         Ok(mapped)

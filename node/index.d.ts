@@ -98,6 +98,10 @@ export interface Token {
   lemma: string;
   language?: string;
   entries: Array<LookupResult>;
+  kind: string;
+  script: string;
+  start: number;
+  end: number;
 }
 
 export interface TokenizeOptions {
