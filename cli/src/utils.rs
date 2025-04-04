@@ -1,18 +1,18 @@
+use std::time::Duration;
+
 use odict::{lookup::LookupResult, ArchivedEntry, Entry};
 
-use crate::CLIContext;
-
-pub fn t<F>(cb: F, ctx: &mut CLIContext) -> anyhow::Result<()>
+pub fn t<F>(cb: F) -> anyhow::Result<Duration>
 where
-    F: FnOnce(&mut CLIContext) -> anyhow::Result<()>,
+    F: FnOnce() -> anyhow::Result<()>,
 {
-    let err = cb(ctx);
+    let start = std::time::Instant::now();
 
-    if let Err(msg) = err {
-        ctx.println(format!("{}", msg));
-    }
+    cb()?;
 
-    Ok(())
+    let end = std::time::Instant::now();
+
+    Ok(end.duration_since(start))
 }
 
 pub fn get_lookup_entries(results: Vec<LookupResult<&ArchivedEntry>>) -> Vec<Entry> {

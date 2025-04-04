@@ -1,10 +1,12 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, time::Duration};
 
 use anyhow::Context;
 use clap::{arg, command, Args};
+use humantime::format_duration;
+use indicatif::ProgressBar;
 use odict::{fs::infer_path, io::DictionaryWriterOptions, CompressOptions};
 
-use crate::CLIContext;
+use crate::{t, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -37,15 +39,27 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
         .quality(*quality)
         .window_size(*window_size);
 
-    let _ = ctx
-        .writer
-        .compile_xml_with_opts(
-            &input,
-            &out,
-            DictionaryWriterOptions::default().compression(compress_opts),
-        )
-        .map(|_| ())
-        .with_context(|| "An error occurred compiling your XML")?;
+    let spinner = ProgressBar::new_spinner();
+
+    spinner.set_message(format!(
+        "Compiling {}...",
+        input.file_stem().unwrap().to_str().unwrap()
+    ));
+
+    spinner.enable_steady_tick(Duration::from_millis(100));
+
+    let duration = t(|| {
+        ctx.writer
+            .compile_xml_with_opts(
+                &input,
+                &out,
+                DictionaryWriterOptions::default().compression(compress_opts),
+            )
+            .map(|_| ())
+            .with_context(|| "An error occurred compiling your XML")
+    })?;
+
+    spinner.finish_with_message(format!("Compiled in {}!", format_duration(duration)));
 
     Ok(())
 }
