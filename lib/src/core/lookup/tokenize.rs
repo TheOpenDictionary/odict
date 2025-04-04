@@ -21,19 +21,19 @@ pub struct Token<T> {
     pub entries: Vec<LookupResult<T>>,
 }
 
-pub struct TokenizeOptions<'a> {
-    follow: bool,
+pub struct TokenizeOptions {
+    pub follow: bool,
     // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
-    allow_list: Option<&'a [Language]>,
+    pub allow_list: Option<Vec<Language>>,
 }
 
-impl<'a> AsRef<TokenizeOptions<'a>> for TokenizeOptions<'a> {
-    fn as_ref(&self) -> &TokenizeOptions<'a> {
+impl AsRef<TokenizeOptions> for TokenizeOptions {
+    fn as_ref(&self) -> &TokenizeOptions {
         self
     }
 }
 
-impl<'a> TokenizeOptions<'a> {
+impl TokenizeOptions {
     pub fn default() -> Self {
         Self {
             allow_list: None,
@@ -46,7 +46,7 @@ impl<'a> TokenizeOptions<'a> {
         self
     }
 
-    pub fn allow_list(mut self, allow_list: &'a [Language]) -> Self {
+    pub fn allow_list(mut self, allow_list: Vec<Language>) -> Self {
         self.allow_list = Some(allow_list);
         self
     }
@@ -75,12 +75,15 @@ macro_rules! tokenize {
                 options: Options,
             ) -> crate::Result<Vec<Token<&'a $r>>>
             where
-                Options: AsRef<TokenizeOptions<'a>> + Send + Sync,
+                Options: AsRef<TokenizeOptions> + Send + Sync,
             {
                 let opts = options.as_ref();
 
                 let results = text
-                    .segment_with_option(None, options.as_ref().allow_list)
+                    .segment_with_option(
+                        None,
+                        options.as_ref().allow_list.as_ref().map(|v| v.as_slice()),
+                    )
                     .filter(|token| !token.is_separator() && is_valid_token(token.lemma()))
                     .collect::<Vec<_>>()
                     .par_iter()

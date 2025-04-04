@@ -151,12 +151,19 @@ impl Dictionary {
   }
 
   #[napi]
-  pub fn tokenize(&self, text: String) -> Result<Vec<types::Token>> {
+  pub fn tokenize(
+    &self,
+    text: String,
+    options: Option<types::TokenizeOptions>,
+  ) -> Result<Vec<types::Token>> {
     #[cfg(feature = "tokenize")]
     {
       let dict = self.file.to_archive().map_err(cast_error)?;
 
-      let opts = odict::lookup::TokenizeOptions::default();
+      let opts = match options {
+        Some(o) => o.into(),
+        None => odict::lookup::TokenizeOptions::default(),
+      };
 
       let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
 

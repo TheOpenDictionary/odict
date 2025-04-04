@@ -12,7 +12,10 @@ export declare class Dictionary {
     query: string,
     options?: SearchOptions | undefined | null,
   ): Array<Entry>;
-  tokenize(text: string): Array<Token>;
+  tokenize(
+    text: string,
+    options?: TokenizeOptions | undefined | null,
+  ): Array<Token>;
 }
 
 export declare function compile(xml: string): Buffer;
@@ -95,4 +98,9 @@ export interface Token {
   lemma: string;
   language?: string;
   entries: Array<LookupResult>;
+}
+
+export interface TokenizeOptions {
+  follow?: boolean;
+  allowList?: Array<string>;
 }
