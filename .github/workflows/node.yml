@@ -57,7 +57,11 @@ jobs:
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-aarch64-linux-gnu -y
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: |
+              export LDFLAGS="-L/usr/aarch64-linux-gnu/lib" &&
+              export CFLAGS="-B/usr/aarch64-linux-gnu/lib/gcc/aarch64-linux-gnu/$(gcc-aarch64-linux-gnu -dumpversion) --sysroot=/usr/aarch64-linux-gnu" &&
+              export CXXFLAGS="-B/usr/aarch64-linux-gnu/lib/gcc/aarch64-linux-gnu/$(gcc-aarch64-linux-gnu -dumpversion) --sysroot=/usr/aarch64-linux-gnu" &&
+              pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             setup: |  
