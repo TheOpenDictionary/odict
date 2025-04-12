@@ -30,15 +30,17 @@ macro_rules! lookup {
             fn find_entry<'a, 'b>(
                 &'a self,
                 follow: &bool,
+                insensitive: &bool,
                 query: &'b str,
                 directed_from: Option<&'a $ret>,
             ) -> $opt<LookupResult<&'a $ret>> {
+                // Try exact match first
                 if let Some(entry) = self.entries.get(query) {
                     // Follow an alias if it exists
                     if *follow {
                         if let $opt::Some(also) = &entry.see_also {
                             if (also.len() > 0) {
-                                return self.find_entry(follow, also, Some(entry));
+                                return self.find_entry(follow, insensitive, also, Some(entry));
                             }
                         }
                     }
@@ -47,6 +49,21 @@ macro_rules! lookup {
                         entry,
                         directed_from,
                     });
+                }
+
+                // If insensitive flag is true and exact match failed, try with lowercase
+                if *insensitive {
+                    let query_lower = query.to_lowercase();
+
+                    // Only try lowercase if it's different from the original query
+                    if query_lower != query {
+                        // Try direct lookup with lowercase (reuse all the same logic)
+                        if let $opt::Some(result) =
+                            self.find_entry(&false, &false, &query_lower, directed_from)
+                        {
+                            return $opt::Some(result);
+                        }
+                    }
                 }
 
                 $opt::None
@@ -60,9 +77,13 @@ macro_rules! lookup {
             where
                 Options: AsRef<LookupOptions> + Send + Sync,
             {
-                let LookupOptions { follow, strategy } = options.as_ref();
+                let LookupOptions {
+                    follow,
+                    strategy,
+                    insensitive,
+                } = options.as_ref();
 
-                if let $opt::Some(result) = self.find_entry(follow, query, None) {
+                if let $opt::Some(result) = self.find_entry(follow, insensitive, query, None) {
                     return Ok(vec![result]);
                 }
 
@@ -75,7 +96,8 @@ macro_rules! lookup {
 
                     while start < end {
                         let substr: String = chars[start..end].iter().collect();
-                        let maybe_entry = self.find_entry(follow, substr.as_str(), None);
+                        let maybe_entry =
+                            self.find_entry(follow, insensitive, substr.as_str(), None);
 
                         if maybe_entry.is_some() || substr.len() <= *min_length {
                             start = end;

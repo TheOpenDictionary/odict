@@ -6,6 +6,7 @@ use odict::lookup::Language;
 pub struct TokenizeOptions {
   pub follow: Option<bool>,
   pub allow_list: Option<Vec<String>>,
+  pub insensitive: Option<bool>,
 }
 
 impl Default for TokenizeOptions {
@@ -13,6 +14,7 @@ impl Default for TokenizeOptions {
     TokenizeOptions {
       follow: Some(true),
       allow_list: None,
+      insensitive: None,
     }
   }
 }
@@ -34,6 +36,10 @@ impl From<TokenizeOptions> for odict::lookup::TokenizeOptions {
       if !langs.is_empty() {
         opts = opts.allow_list(langs);
       }
+    }
+
+    if let Some(insensitive) = options.insensitive {
+      opts = opts.insensitive(insensitive);
     }
 
     opts

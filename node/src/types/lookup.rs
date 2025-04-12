@@ -7,6 +7,7 @@ use super::Entry;
 pub struct LookupOptions {
   pub split: Option<u32>,
   pub follow: Option<bool>,
+  pub insensitive: Option<bool>,
 }
 
 impl Default for LookupOptions {
@@ -14,6 +15,7 @@ impl Default for LookupOptions {
     LookupOptions {
       split: None,
       follow: None,
+      insensitive: None,
     }
   }
 }
@@ -30,6 +32,10 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 
     if let Some(follow) = opts.follow {
       s = s.follow(follow);
+    }
+
+    if let Some(insensitive) = opts.insensitive {
+      s = s.insensitive(insensitive);
     }
 
     s
