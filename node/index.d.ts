@@ -65,6 +65,7 @@ export interface IndexOptions {
 export interface LookupOptions {
   split?: number;
   follow?: boolean;
+  insensitive?: boolean;
 }
 
 export interface LookupResult {
@@ -107,4 +108,5 @@ export interface Token {
 export interface TokenizeOptions {
   follow?: boolean;
   allowList?: Array<string>;
+  insensitive?: boolean;
 }

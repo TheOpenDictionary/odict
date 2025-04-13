@@ -1,7 +1,7 @@
-use clap::{Args, arg, command};
+use clap::{arg, command, Args};
 use odict::lookup::TokenizeOptions;
 
-use crate::{CLIContext, enums::PrintFormat, get_lookup_entries, print_entries};
+use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -29,6 +29,14 @@ pub struct TokenizeArgs {
         help = "Follows all \"see also\" attributes (\"see\") until it finds a root term."
     )]
     follow: bool,
+
+    #[arg(
+        short = 'i',
+        long,
+        default_value_t = false,
+        help = "Perform case-insensitive lookups when matching tokens"
+    )]
+    insensitive: bool,
 }
 
 pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()> {
@@ -37,13 +45,17 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
         text,
         format,
         follow,
+        insensitive,
     } = args;
 
     let file = ctx
         .reader
         .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
 
-    let opts = TokenizeOptions::default().follow(*follow);
+    let opts = TokenizeOptions::default()
+        .follow(*follow)
+        .insensitive(*insensitive);
+
     let archive = file.to_archive()?;
 
     let result = archive.tokenize(text, opts);

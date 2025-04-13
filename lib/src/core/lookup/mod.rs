@@ -59,7 +59,7 @@ macro_rules! lookup {
                     if query_lower != query {
                         // Try direct lookup with lowercase (reuse all the same logic)
                         if let $opt::Some(result) =
-                            self.find_entry(&false, &false, &query_lower, directed_from)
+                            self.find_entry(follow, &false, &query_lower, directed_from)
                         {
                             return $opt::Some(result);
                         }

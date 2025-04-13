@@ -38,6 +38,14 @@ pub struct LookupArgs {
         help = "If a definition cannot be found, attempt to split the query into words of at least length S and look up each word separately. Can be relatively slow."
     )]
     split: usize,
+
+    #[arg(
+        short = 'i',
+        long,
+        default_value_t = false,
+        help = "Perform case-insensitive lookups"
+    )]
+    insensitive: bool,
 }
 
 pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
@@ -47,13 +55,16 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
         format,
         follow,
         split,
+        insensitive,
     } = args;
 
     let file = ctx
         .reader
         .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
 
-    let mut opts: LookupOptions = LookupOptions::default().follow(*follow);
+    let mut opts: LookupOptions = LookupOptions::default()
+        .follow(*follow)
+        .insensitive(*insensitive);
 
     if *split > 0 {
         opts = opts.strategy(LookupStrategy::Split(*split));
