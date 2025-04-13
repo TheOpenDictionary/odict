@@ -93,8 +93,35 @@ def test_write_raw_xml():
         # Clean up the temporary file
         os.unlink(temp_path)
 
+
 def test_index_and_search(dict1, snapshot):
     # Test indexing and searching
     dict1.index()
     results = dict1.search("run")
     assert results == snapshot  # Use snapshot testing
+
+
+def test_lookup_case_sensitive(dict1):
+    # By default lookups should be case-sensitive
+    result = dict1.lookup("CAT")
+    assert len(result) == 0  # Shouldn't find "CAT" (only "cat" exists)
+
+
+def test_lookup_case_insensitive(dict1):
+    # Test case-insensitive lookup
+    result = dict1.lookup("CAT", insensitive=True)
+    assert len(result) == 1
+    assert result[0].entry.term == "cat"
+
+    # Test with mixed case
+    result = dict1.lookup("DoG", insensitive=True)
+    assert len(result) == 1
+    assert result[0].entry.term == "dog"
+
+
+def test_lookup_case_insensitive_with_follow(dict1):
+    # Test case-insensitive lookup combined with follow option
+    result = dict1.lookup("RaN", follow=True, insensitive=True)
+    assert len(result) == 1
+    assert result[0].entry.term == "run"
+    assert result[0].directed_from.term == "ran"

@@ -57,6 +57,30 @@ describe("Dictionary", () => {
       const result = dict1.lookup("catdog", { split: 3 });
       expect(result).toMatchSnapshot();
     });
+
+    it("is case-sensitive by default", async () => {
+      const result = dict1.lookup("CAT");
+      expect(result.length).toBe(0);
+    });
+
+    it("can perform case-insensitive lookup", async () => {
+      const result = dict1.lookup("CAT", { insensitive: true });
+      expect(result.length).toBe(1);
+      expect(result[0].entry.term).toBe("cat");
+    });
+
+    it("works with mixed case", async () => {
+      const result = dict1.lookup(["DoG", "cAT"], { insensitive: true });
+      expect(result.length).toBe(2);
+      expect(result[0].entry.term).toBe("dog");
+      expect(result[1].entry.term).toBe("cat");
+    });
+
+    it("combines case-insensitivity with follow option", async () => {
+      const result = dict1.lookup("RaN", { follow: true, insensitive: true });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
   });
 
   it("can return the lexicon", async () => {
@@ -72,6 +96,27 @@ describe("Dictionary", () => {
     expect(tokens[0].lemma).toBe("你好");
     expect(tokens[0].entries[0].entry.term).toBe("你");
     expect(tokens[0].entries[1].entry.term).toBe("好");
+  });
+
+  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text case-sensitively by default", () => {
+    const tokens = dict1.tokenize("DOG cat");
+    
+    expect(tokens.length).toBe(2);
+    expect(tokens[0].lemma).toBe("DOG");
+    expect(tokens[0].entries.length).toBe(0); // "DOG" shouldn't match "dog"
+    expect(tokens[1].lemma).toBe("cat");
+    expect(tokens[1].entries[0].entry.term).toBe("cat");
+  });
+
+  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text case-insensitively when specified", () => {
+    const tokens = dict1.tokenize("DOG cat", { insensitive: true });
+    
+    expect(tokens.length).toBe(2);
+    expect(tokens[0].lemma).toBe("DOG");
+    expect(tokens[0].entries.length).toBe(1); // "DOG" should match "dog" with insensitivity
+    expect(tokens[0].entries[0].entry.term).toBe("dog");
+    expect(tokens[1].lemma).toBe("cat");
+    expect(tokens[1].entries[0].entry.term).toBe("cat");
   });
 
   it.skipIf(process.env.NAPI_RS_FORCE_WASI)(

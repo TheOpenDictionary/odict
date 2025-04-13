@@ -31,6 +31,7 @@ pub struct TokenizeOptions {
     pub follow: bool,
     // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
     pub allow_list: Option<Vec<Language>>,
+    pub insensitive: bool,
 }
 
 impl AsRef<TokenizeOptions> for TokenizeOptions {
@@ -43,7 +44,8 @@ impl TokenizeOptions {
     pub fn default() -> Self {
         Self {
             allow_list: None,
-            follow: true,
+            follow: false,
+            insensitive: false,
         }
     }
 
@@ -54,6 +56,11 @@ impl TokenizeOptions {
 
     pub fn allow_list(mut self, allow_list: Vec<Language>) -> Self {
         self.allow_list = Some(allow_list);
+        self
+    }
+
+    pub fn insensitive(mut self, insensitive: bool) -> Self {
+        self.insensitive = insensitive;
         self
     }
 }
@@ -110,7 +117,8 @@ macro_rules! tokenize {
                             &query,
                             LookupOptions::default()
                                 .strategy(lookup_method)
-                                .follow(opts.follow),
+                                .follow(opts.follow)
+                                .insensitive(opts.insensitive),
                         )?;
 
                         Ok(Token {

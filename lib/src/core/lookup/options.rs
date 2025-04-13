@@ -8,6 +8,7 @@ pub enum LookupStrategy {
 pub struct LookupOptions {
     pub follow: bool,
     pub strategy: LookupStrategy,
+    pub insensitive: bool,
 }
 
 impl AsRef<LookupOptions> for LookupOptions {
@@ -21,6 +22,7 @@ impl LookupOptions {
         Self {
             follow: false,
             strategy: LookupStrategy::Exact,
+            insensitive: false,
         }
     }
 
@@ -31,6 +33,11 @@ impl LookupOptions {
 
     pub fn strategy(mut self, strategy: LookupStrategy) -> Self {
         self.strategy = strategy;
+        self
+    }
+
+    pub fn insensitive(mut self, insensitive: bool) -> Self {
+        self.insensitive = insensitive;
         self
     }
 }

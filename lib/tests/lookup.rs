@@ -79,4 +79,78 @@ mod lookup_tests {
         assert_eq!(fallback.len(), 1);
         assert_eq!(fallback[0].entry.term, "runner");
     }
+
+    #[test]
+    fn test_lookup_case_sensitive() {
+        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+
+        // Should find "dog" but not "DOG" with case sensitivity (default)
+        let result = dict
+            .lookup(&vec!["dog"], LookupOptions::default().insensitive(false))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "dog");
+
+        let result = dict
+            .lookup(&vec!["DOG"], LookupOptions::default().insensitive(false))
+            .unwrap();
+
+        assert_eq!(result.len(), 0);
+    }
+
+    #[test]
+    fn test_lookup_case_insensitive() {
+        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+
+        // Should find entries regardless of case when insensitive is true
+        let result = dict
+            .lookup(&vec!["DOG"], LookupOptions::default().insensitive(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "dog");
+
+        let result = dict
+            .lookup(&vec!["Cat"], LookupOptions::default().insensitive(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "cat");
+    }
+
+    #[test]
+    fn test_lookup_case_insensitive_mixed() {
+        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+
+        // Test mixed-case queries
+        let result = dict
+            .lookup(
+                &vec!["DoG", "cAt"],
+                LookupOptions::default().insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 2);
+        assert_eq!(result[0].entry.term, "dog");
+        assert_eq!(result[1].entry.term, "cat");
+    }
+
+    #[test]
+    fn test_lookup_case_insensitive_with_follow() {
+        let dict = EXAMPLE_DICT_2.to_archive().unwrap();
+
+        // Test case insensitive lookup combined with follow option
+        let result = dict
+            .lookup(
+                &vec!["RuNnErS"],
+                LookupOptions::default().follow(true).insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "runners");
+        assert_eq!(result[0].entry.term, "runner");
+    }
 }

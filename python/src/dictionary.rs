@@ -17,6 +17,7 @@ fn lookup(
     queries: &Vec<String>,
     split: Option<usize>,
     follow: Option<bool>,
+    insensitive: Option<bool>,
 ) -> PyResult<Vec<crate::types::LookupResult>> {
     let dict = file.to_archive().map_err(cast_error)?;
 
@@ -28,6 +29,10 @@ fn lookup(
 
     if let Some(follow) = follow {
         opts.follow = follow;
+    }
+
+    if let Some(insensitive) = insensitive {
+        opts.insensitive = insensitive;
     }
 
     let results = dict
@@ -118,12 +123,13 @@ impl Dictionary {
         Ok(path)
     }
 
-    #[pyo3(signature = (query, split=None, follow=None))]
+    #[pyo3(signature = (query, split=None, follow=None, insensitive=None))]
     pub fn lookup(
         &self,
         query: Either<String, Vec<String>>,
         split: Option<usize>,
         follow: Option<bool>,
+        insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
 
@@ -132,7 +138,7 @@ impl Dictionary {
             Either::Right(mut c) => queries.append(&mut c),
         }
 
-        lookup(&(self.file), &queries, split, follow)
+        lookup(&(self.file), &queries, split, follow, insensitive)
     }
 
     pub fn lexicon(&self) -> PyResult<Vec<&str>> {
@@ -209,11 +215,12 @@ impl Dictionary {
         Ok(entries)
     }
 
-    #[pyo3(signature = (text, follow=None))]
+    #[pyo3(signature = (text, follow=None, insensitive=None))]
     pub fn tokenize(
         &self,
         text: String,
         follow: Option<bool>,
+        insensitive: Option<bool>,
     ) -> PyResult<Vec<crate::types::Token>> {
         let dict = self.file.to_archive().map_err(cast_error)?;
 
@@ -221,6 +228,10 @@ impl Dictionary {
 
         if let Some(follow) = follow {
             opts = opts.follow(follow);
+        }
+
+        if let Some(insensitive) = insensitive {
+            opts = opts.insensitive(insensitive);
         }
 
         let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
