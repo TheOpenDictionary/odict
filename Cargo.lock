@@ -1661,9 +1661,9 @@ dependencies = [
 
 [[package]]
 name = "jiff"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f33145a5cbea837164362c7bd596106eb7c5198f97d1ba6f6ebb3223952e488"
+checksum = "18ac8a13ed52bd2a3004d6495147917068b1eb90e4e8b43eff0906fd7d9882a2"
 dependencies = [
  "jiff-static",
  "log",
@@ -1674,9 +1674,9 @@ dependencies = [
 
 [[package]]
 name = "jiff-static"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43ce13c40ec6956157a3635d97a1ee2df323b263f09ea14165131289cb0f5c19"
+checksum = "f078382f7a4e3fd1526c40d1fb2b3cea0e5552592fd394a002c52b4bf283bc45"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2168,9 +2168,9 @@ dependencies = [
 
 [[package]]
 name = "lru"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "227748d55f2f0ab4735d87fd623798cb6b664512fe979705f829c9f81c934465"
+checksum = "9f8cc7106155f10bdf99a6f379688f543ad6596a415375b36a59a054ceda1198"
 dependencies = [
  "hashbrown 0.15.2",
 ]
@@ -2459,7 +2459,7 @@ dependencies = [
  "humansize",
  "humantime",
  "indicatif",
- "lru 0.13.0",
+ "lru 0.14.0",
  "num-format",
  "odict",
  "pulldown-cmark",
