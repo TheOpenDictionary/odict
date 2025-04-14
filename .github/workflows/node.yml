@@ -24,7 +24,7 @@ permissions:
       - "tasks.toml"
       - "examples/**"
     tags:
-      - "node-*"
+      - "node*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -555,10 +555,10 @@ jobs:
       - name: List packages
         run: ls -R ./node/npm
         shell: bash
-      - uses: olegtarasov/get-tag@v2.1.3
+      - uses: olegtarasov/get-tag@v2.1.4
         id: tagName
         with:
-          tagRegex: "node\/(.*)"
+          tagRegex: "node/(.*)"
       - name: Print tag name
         run: echo $GIT_TAG_NAME
       - name: Publish
