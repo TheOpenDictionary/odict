@@ -2422,7 +2422,7 @@ dependencies = [
 
 [[package]]
 name = "odict"
-version = "2.3.0"
+version = "2.4.0"
 dependencies = [
  "brotli",
  "byteorder",
@@ -2448,7 +2448,7 @@ dependencies = [
 
 [[package]]
 name = "odict-cli"
-version = "2.3.0"
+version = "2.4.0"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -2468,7 +2468,7 @@ dependencies = [
 
 [[package]]
 name = "odict_node"
-version = "1.1.1"
+version = "1.1.2"
 dependencies = [
  "merge",
  "napi",
@@ -2479,7 +2479,7 @@ dependencies = [
 
 [[package]]
 name = "odict_python"
-version = "1.2.0"
+version = "1.3.0"
 dependencies = [
  "either",
  "odict",
