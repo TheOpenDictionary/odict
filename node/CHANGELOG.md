@@ -4,6 +4,15 @@
 
 
 
+## [1.1.2](https://github.com/TheOpenDictionary/odict/compare/node/v1.3.0...node/v1.1.2) (2025-04-13)
+
+## [1.4.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.3.0...node/v1.4.0) (2025-04-13)
+
+
+### Features
+
+* Add flag to support case insensitivity for lookups and tokenization ([#1179](https://github.com/TheOpenDictionary/odict/issues/1179)) ([a7e7baa](https://github.com/TheOpenDictionary/odict/commit/a7e7baac0f8d02e565a2d01acdc59c9bd1bc3242))
+
 ## [1.3.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.2.0...node/v1.3.0) (2025-04-04)
 
 
