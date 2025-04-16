@@ -29,7 +29,8 @@ impl From<Definition> for DefinitionJSON {
 
         Self {
             id,
-            value,
+            // Convert RichText to String for JSON serialization
+            value: value.to_plain_string(),
             examples: examples.into_iter().map(|e| e.value).collect(),
             notes: notes.into_iter().map(|n| NoteJSON::from(n)).collect(),
         }

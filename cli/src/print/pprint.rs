@@ -5,7 +5,7 @@ use odict::{Definition, DefinitionType, Entry, Error, Etymology, Example, Group,
 
 use crate::CLIContext;
 
-use super::md::print_md;
+use super::md::{print_md, print_rich_text_md};
 
 const STYLE_POS: LazyLock<Style> = LazyLock::new(|| Style::new().italic());
 const STYLE_TITLE: LazyLock<Style> = LazyLock::new(|| Style::new().bold().underlined());
@@ -111,7 +111,7 @@ fn print_definition(
         true => index_to_alpha(index).to_string(),
     };
 
-    let text = &format!("{}. {}", numbering, print_md(&definition.value));
+    let text = &format!("{}. {}", numbering, print_rich_text_md(&definition.value));
 
     out.write_line(&indent(text, indent_width))?;
 

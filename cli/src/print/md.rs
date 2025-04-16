@@ -1,4 +1,5 @@
 use console::Style;
+use odict::RichText;
 use pulldown_cmark::{Event, Parser, Tag};
 
 pub fn print_md(md: &String) -> String {
@@ -38,4 +39,9 @@ pub fn print_md(md: &String) -> String {
     }
 
     buffer.trim().to_string()
+}
+
+// Add an overload that accepts RichText
+pub fn print_rich_text_md(rich_text: &RichText) -> String {
+    print_md(&rich_text.to_plain_string())
 }
