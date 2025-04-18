@@ -1,8 +1,6 @@
 use crate::EntryRef;
 use serde::{Deserialize, Serialize};
 
-/// JSON representation of an EntryRef
-/// Since EntryRef is just a string in JSON, we can simply use a wrapper around String
 #[derive(Serialize, Deserialize)]
 pub struct EntryRefJSON(pub String);
 
