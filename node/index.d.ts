@@ -36,7 +36,9 @@ export interface DictionaryOptions {
 export interface Entry {
   term: string;
   seeAlso?: string;
+  lemma?: string;
   etymologies: Array<Etymology>;
+  forms: Array<Form>;
 }
 
 export interface Etymology {
@@ -48,6 +50,21 @@ export interface Etymology {
 
 export interface Example {
   value: string;
+}
+
+export interface Form {
+  term: string;
+  kind?: FormKind;
+}
+
+export declare const enum FormKind {
+  Conjugation = 0,
+  Inflection = 1,
+  Plural = 2,
+  Singular = 3,
+  Comparative = 4,
+  Superlative = 5,
+  Other = 6,
 }
 
 export interface Group {

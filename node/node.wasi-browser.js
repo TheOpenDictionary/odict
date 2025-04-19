@@ -58,3 +58,4 @@ const {
 });
 export const Dictionary = __napiModule.exports.Dictionary;
 export const compile = __napiModule.exports.compile;
+export const FormKind = __napiModule.exports.FormKind;

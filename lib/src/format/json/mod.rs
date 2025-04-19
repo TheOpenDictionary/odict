@@ -1,7 +1,9 @@
 mod definition;
 mod dictionary;
 mod entry;
+mod entry_ref;
 mod etymology;
+mod form;
 mod group;
 mod json;
 mod note;
@@ -12,7 +14,9 @@ mod utils;
 
 pub(super) use definition::*;
 pub(super) use entry::*;
+pub(super) use entry_ref::*;
 pub(super) use etymology::*;
+pub(super) use form::*;
 pub(super) use group::*;
 pub(super) use note::*;
 pub(super) use sense::*;

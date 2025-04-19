@@ -1,6 +1,9 @@
 use rkyv::{deserialize, to_bytes};
 
+use crate::models::form::{unwrap_forms, Form};
 use crate::{error::Error, serializable, Etymology};
+
+use super::EntryRef;
 
 serializable! {
   pub struct Entry {
@@ -9,10 +12,19 @@ serializable! {
 
     #[serde(rename = "@see")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub see_also: Option<String>,
+    pub see_also: Option<EntryRef>,
+
+    #[serde(rename = "@lemma")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lemma: Option<EntryRef>,
 
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
+
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(deserialize_with = "unwrap_forms")]
+    pub forms: Vec<Form>,
   }
 }
 
