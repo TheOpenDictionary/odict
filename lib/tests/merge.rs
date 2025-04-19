@@ -13,6 +13,7 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
+                lemma: None,
                 forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
@@ -48,6 +49,7 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
+                  lemma: None,
                   see_also: None,
                   forms: vec![],
                   term: "cat".to_string(),
@@ -81,6 +83,7 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               "dog".to_string() => Entry {
+                  lemma: None,
                   see_also: None,
                   forms: vec![],
                   term: "dog".to_string(),
@@ -107,6 +110,7 @@ mod merge_tests {
                   }],
               },
               "cat".to_string() => Entry {
+                  lemma: None,
                   see_also: None,
                   term: "cat".to_string(),
                   forms: vec![],

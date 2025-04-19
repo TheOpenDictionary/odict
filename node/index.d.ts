@@ -36,6 +36,7 @@ export interface DictionaryOptions {
 export interface Entry {
   term: string;
   seeAlso?: string;
+  lemma?: string;
   etymologies: Array<Etymology>;
   forms: Array<Form>;
 }

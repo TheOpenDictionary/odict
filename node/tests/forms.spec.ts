@@ -25,34 +25,91 @@ describe("Form support", () => {
         </entry>
       </dictionary>
     `;
-    
+
     // Create a temporary file
     const tempFile = join(tmpdir(), `${randomUUID()}.xml`);
     await writeFile(tempFile, xmlContent, "utf-8");
-    
+
     // Compile and load the dictionary
     const compiled = compile(xmlContent);
     const dict = new Dictionary(compiled);
-    
+
     // Look up the entry
     const results = dict.lookup("run");
-    
+
     // Check that we have one result
     expect(results.length).toBe(1);
-    
+
     const entry = results[0].entry;
-    
+
     // Check the forms
     expect(entry.forms.length).toBe(3);
-    
+
     // Forms are stored properly with terms and kinds
     expect(entry.forms[0].term).toBe("ran");
     expect(entry.forms[0].kind).toBe(FormKind.Inflection);
-    
+
     expect(entry.forms[1].term).toBe("running");
     expect(entry.forms[1].kind).toBe(FormKind.Superlative);
-    
+
     expect(entry.forms[2].term).toBe("runs");
     expect(entry.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified
+  });
+});
+
+describe("Lemma support", () => {
+  it("should handle entries with lemma references", async () => {
+    const xmlContent = `
+      <dictionary>
+        <entry term="running" lemma="run">
+          <ety>
+            <sense>
+              <definition value="To move quickly on foot." />
+            </sense>
+          </ety>
+        </entry>
+        <entry term="ran" lemma="run">
+          <ety>
+            <sense>
+              <definition value="Past tense of run." />
+            </sense>
+          </ety>
+        </entry>
+        <entry term="run">
+          <forms>
+            <form kind="past-tense">ran</form>
+            <form kind="present-participle">running</form>
+          </forms>
+          <ety>
+            <sense>
+              <definition value="To move quickly on foot." />
+            </sense>
+          </ety>
+        </entry>
+      </dictionary>
+    `;
+
+    // Create a temporary file
+    const tempFile = join(tmpdir(), `${randomUUID()}.xml`);
+    await writeFile(tempFile, xmlContent, "utf-8");
+
+    // Compile and load the dictionary
+    const compiled = compile(xmlContent);
+    const dict = new Dictionary(compiled);
+
+    // Look up the entries
+    const runningResults = dict.lookup("running");
+    const ranResults = dict.lookup("ran");
+
+    // Check that we have one result for each
+    expect(runningResults.length).toBe(1);
+    expect(ranResults.length).toBe(1);
+
+    // Verify lemma references
+    expect(runningResults[0].entry.lemma).not.toBeNull();
+    expect(runningResults[0].entry.lemma).toBe("run");
+
+    expect(ranResults[0].entry.lemma).not.toBeNull();
+    expect(ranResults[0].entry.lemma).toBe("run");
   });
 });

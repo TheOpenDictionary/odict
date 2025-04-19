@@ -13,6 +13,8 @@ pub struct Entry {
     #[pyo3(get)]
     pub see_also: Option<String>,
     #[pyo3(get)]
+    pub lemma: Option<String>,
+    #[pyo3(get)]
     pub etymologies: Vec<Etymology>,
     #[pyo3(get)]
     pub forms: Vec<Form>,
@@ -40,6 +42,7 @@ impl From<odict::Entry> for Entry {
         let odict::Entry {
             term,
             see_also,
+            lemma,
             etymologies,
             forms,
         } = entry;
@@ -47,6 +50,7 @@ impl From<odict::Entry> for Entry {
         Self {
             term,
             see_also: see_also.map(|s| s.0),
+            lemma: lemma.map(|l| l.0),
             etymologies: etymologies
                 .into_iter()
                 .map(|e| Etymology::from(e))

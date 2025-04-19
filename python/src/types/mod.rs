@@ -12,7 +12,6 @@ mod token;
 
 pub use entry::*;
 pub use example::*;
-pub use form::*;
 pub use form_kind::*;
 pub use lookup::*;
 pub use token::*;
