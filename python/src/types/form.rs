@@ -1,27 +1,28 @@
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct Form {
     #[pyo3(get)]
-    pub form_type: Option<String>,
+    pub term: String,
+
     #[pyo3(get)]
-    pub text: String,
+    pub kind: Option<String>,
+}
+
+#[pymethods]
+impl Form {
+    #[new]
+    pub fn new(term: String, kind: Option<String>) -> Self {
+        Self { term, kind }
+    }
 }
 
 impl From<odict::Form> for Form {
     fn from(form: odict::Form) -> Self {
-        let odict::Form { form_type, text } = form;
-
-        let form_type = form_type.map(|t| match t {
-            odict::FormType::Conjugation => "conjugation".to_string(),
-            odict::FormType::Inflection => "inflection".to_string(),
-            odict::FormType::Plural => "plural".to_string(),
-            odict::FormType::Irregular => "irregular".to_string(),
-            odict::FormType::Variant => "variant".to_string(),
-            odict::FormType::Other => "other".to_string(),
-        });
-
-        Self { form_type, text }
+        Self {
+            term: form.term.0,
+            kind: form.kind.map(|t| t.to_string()),
+        }
     }
 }

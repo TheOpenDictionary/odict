@@ -37,6 +37,7 @@ export interface Entry {
   term: string;
   seeAlso?: string;
   etymologies: Array<Etymology>;
+  forms: Array<Form>;
 }
 
 export interface Etymology {
@@ -48,6 +49,11 @@ export interface Etymology {
 
 export interface Example {
   value: string;
+}
+
+export interface Form {
+  term: string;
+  kind?: string;
 }
 
 export interface Group {

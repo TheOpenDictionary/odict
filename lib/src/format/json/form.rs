@@ -1,19 +1,21 @@
-use crate::Form;
+use crate::{Form, FormKind};
 use serde::Serialize;
+
+use super::EntryRefJSON;
 
 #[derive(Serialize)]
 pub struct FormJSON {
-    pub value: String,
+    pub term: EntryRefJSON,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub kind: Option<FormKind>,
 }
 
 impl From<Form> for FormJSON {
     fn from(form: Form) -> Self {
         Self {
-            value: form.value.0,
-            type_: form.type_.map(|ft| ft.to_string()),
+            term: EntryRefJSON(form.term.0),
+            kind: form.kind,
         }
     }
 }
@@ -21,8 +23,8 @@ impl From<Form> for FormJSON {
 impl From<&Form> for FormJSON {
     fn from(form: &Form) -> Self {
         Self {
-            value: form.value.0.clone(),
-            type_: form.type_.as_ref().map(|ft| ft.to_string()),
+            term: EntryRefJSON(form.term.0.clone()),
+            kind: form.kind.clone(),
         }
     }
 }
