@@ -1,6 +1,6 @@
 use dictionary::Dictionary;
 use pyo3::prelude::*;
-use types::Form;
+use types::FormKind;
 
 mod dictionary;
 mod types;
@@ -9,6 +9,6 @@ mod utils;
 #[pymodule]
 fn theopendictionary(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<Dictionary>()?;
-    m.add_class::<Form>()?;
+    m.add_class::<FormKind>()?;
     Ok(())
 }

@@ -53,7 +53,17 @@ export interface Example {
 
 export interface Form {
   term: string;
-  kind?: string;
+  kind?: FormKind;
+}
+
+export declare const enum FormKind {
+  Conjugation = 0,
+  Inflection = 1,
+  Plural = 2,
+  Singular = 3,
+  Comparative = 4,
+  Superlative = 5,
+  Other = 6,
 }
 
 export interface Group {

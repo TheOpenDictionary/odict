@@ -3,7 +3,7 @@ import unittest
 import os
 import uuid
 
-from theopendictionary import Dictionary
+from theopendictionary import Dictionary, FormKind
 
 
 class TestForms(unittest.TestCase):
@@ -49,10 +49,10 @@ class TestForms(unittest.TestCase):
 
             # Forms are stored properly with terms and kinds
             self.assertEqual(entry.forms[0].term, "ran")
-            self.assertEqual(entry.forms[0].kind, "superlative")
+            self.assertEqual(entry.forms[0].kind, FormKind.Superlative)
 
             self.assertEqual(entry.forms[1].term, "running")
-            self.assertEqual(entry.forms[1].kind, "inflection")
+            self.assertEqual(entry.forms[1].kind, FormKind.Inflection)
 
             self.assertEqual(entry.forms[2].term, "runs")
             self.assertIsNone(entry.forms[2].kind)

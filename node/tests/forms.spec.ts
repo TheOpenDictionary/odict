@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
-import { compile, Dictionary } from "../index.js";
+import { compile, Dictionary, FormKind } from "../index.js";
 
 describe("Form support", () => {
   it("should handle entries with forms", async () => {
@@ -47,10 +47,10 @@ describe("Form support", () => {
     
     // Forms are stored properly with terms and kinds
     expect(entry.forms[0].term).toBe("ran");
-    expect(entry.forms[0].kind).toBe("inflection");
+    expect(entry.forms[0].kind).toBe(FormKind.Inflection);
     
     expect(entry.forms[1].term).toBe("running");
-    expect(entry.forms[1].kind).toBe("superlative");
+    expect(entry.forms[1].kind).toBe(FormKind.Superlative);
     
     expect(entry.forms[2].term).toBe("runs");
     expect(entry.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified

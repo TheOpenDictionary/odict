@@ -372,3 +372,4 @@ if (!nativeBinding) {
 
 module.exports.Dictionary = nativeBinding.Dictionary;
 module.exports.compile = nativeBinding.compile;
+module.exports.FormKind = nativeBinding.FormKind;
