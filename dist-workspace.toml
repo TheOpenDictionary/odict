@@ -4,7 +4,7 @@ members = ["cargo:cli"]
 # Config for 'dist'
 [dist]
 # The preferred dist version to use in CI (Cargo.toml SemVer syntax)
-cargo-dist-version = "0.25.1"
+cargo-dist-version = "0.28.4"
 # CI backends to support
 ci = "github"
 # The installers to generate for each app
@@ -14,13 +14,7 @@ tap = "TheOpenDictionary/homebrew-odict"
 # Customize the Homebrew formula name
 formula = "odict"
 # Target platforms to build apps for (Rust target-triple syntax)
-targets = [
-  "aarch64-apple-darwin",
-  "x86_64-apple-darwin",
-  "x86_64-unknown-linux-gnu",
-  "x86_64-unknown-linux-musl",
-  "x86_64-pc-windows-msvc",
-]
+targets = ["aarch64-apple-darwin", "x86_64-apple-darwin", "x86_64-unknown-linux-gnu", "x86_64-unknown-linux-musl", "x86_64-pc-windows-msvc"]
 # Path that installers should place binaries in
 install-path = "CARGO_HOME"
 # Publish jobs to run in CI
@@ -31,4 +25,5 @@ install-updater = false
 tag-namespace = "cli"
 # Whether dist should create a Github Release or use an existing draft
 create-release = false
+# Build only the required packages, and individually
 precise-builds = true
