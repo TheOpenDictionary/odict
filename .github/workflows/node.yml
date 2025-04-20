@@ -17,12 +17,6 @@ permissions:
   push:
     branches:
       - main
-    paths:
-      - "node/**"
-      - "lib/**"
-      - "**/tasks.toml"
-      - "tasks.toml"
-      - "examples/**"
     tags:
       - "node*"
 concurrency:
