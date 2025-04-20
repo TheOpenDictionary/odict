@@ -1,9 +1,9 @@
 [tools]
+"cargo:cargo-nextest" = "0.9.92"
 node = "22.14.0"
+"cargo:https://github.com/astral-sh/cargo-dist" = { version = "tag:v0.28.4", crate = "cargo-dist" }
 python = "3.13.2"
 "cargo:cargo-insta" = "1.42.2"
-"cargo:cargo-dist" = "0.28.0"
-"cargo:cargo-nextest" = "0.9.92"
 "cargo:wasm-pack" = "latest"
 
 [settings]
@@ -14,9 +14,9 @@ _.python.venv = { path = ".venv", create = true }
 
 [task_config]
 includes = [
-    "tasks.toml",
-    "lib/tasks.toml",
-    "cli/tasks.toml",
-    "node/tasks.toml",
-    "python/tasks.toml",
+  "tasks.toml",
+  "lib/tasks.toml",
+  "cli/tasks.toml",
+  "node/tasks.toml",
+  "python/tasks.toml",
 ]
