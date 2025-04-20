@@ -1,7 +1,7 @@
 [tools]
 "cargo:cargo-nextest" = "0.9.92"
 node = "22.14.0"
-"cargo:https://github.com/astral-sh/cargo-dist" = { version = "tag:v0.28.4", crate = "cargo-dist" }
+"cargo:cargo-dist" = "0.28.0"
 python = "3.13.2"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:wasm-pack" = "latest"
