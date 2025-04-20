@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.4.0...lib/v2.5.0) (2025-04-20)
+
+
+### Features
+
+* Add support for word forms and lemmas ([#1186](https://github.com/TheOpenDictionary/odict/issues/1186)) ([9e37a28](https://github.com/TheOpenDictionary/odict/commit/9e37a2834fda82bfaf558aeab9cc74fbced5a1d4))
+
 ## [2.4.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.3.0...lib/v2.4.0) (2025-04-13)
 
 
