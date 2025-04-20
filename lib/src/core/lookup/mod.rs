@@ -39,7 +39,8 @@ macro_rules! lookup {
                     // Follow an alias if it exists
                     if *follow {
                         if let $opt::Some(also) = &entry.see_also {
-                            if (also.len() > 0) {
+                            if also.len() > 0 {
+                                // Convert EntryRef to &str using as_str() method
                                 return self.find_entry(follow, insensitive, also, Some(entry));
                             }
                         }
