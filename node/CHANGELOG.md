@@ -4,6 +4,13 @@
 
 
 
+## [1.5.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.4.0...node/v1.5.0) (2025-04-20)
+
+
+### Features
+
+* Add support for word forms and lemmas ([#1186](https://github.com/TheOpenDictionary/odict/issues/1186)) ([9e37a28](https://github.com/TheOpenDictionary/odict/commit/9e37a2834fda82bfaf558aeab9cc74fbced5a1d4))
+
 ## [1.1.2](https://github.com/TheOpenDictionary/odict/compare/node/v1.1.2...node/v1.1.2) (2025-04-20)
 
 ## [1.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.1.2...node/v1.2.0) (2025-04-20)
