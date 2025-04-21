@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::{DefinitionType, PartOfSpeech, Sense};
 
-use super::{DefinitionJSON, GroupJSON};
+use super::{DefinitionJSON, EntryRefJSON, GroupJSON};
 
 #[derive(Serialize)]
 #[serde(tag = "type")]
@@ -29,20 +29,33 @@ impl From<DefinitionType> for DefinitionTypeJSON {
 pub struct SenseJSON {
     pub pos: PartOfSpeech,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lemma: Option<EntryRefJSON>,
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub definitions: Vec<DefinitionTypeJSON>,
+    
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
 }
 
 impl From<Sense> for SenseJSON {
     fn from(sense: Sense) -> Self {
-        let Sense { pos, definitions } = sense;
+        let Sense {
+            pos,
+            lemma,
+            definitions,
+            tags,
+        } = sense;
 
         Self {
             pos,
+            lemma: lemma.map(EntryRefJSON::from),
             definitions: definitions
                 .into_iter()
                 .map(|d| DefinitionTypeJSON::from(d))
                 .collect(),
+            tags,
         }
     }
 }

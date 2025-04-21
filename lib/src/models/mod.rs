@@ -11,6 +11,7 @@ mod note;
 #[allow(non_camel_case_types)]
 mod pos;
 mod sense;
+mod tags;
 
 #[macro_use]
 mod serializable;
@@ -27,3 +28,4 @@ pub use self::id::*;
 pub use self::note::*;
 pub use self::pos::*;
 pub use self::sense::*;
+pub use self::tags::*;

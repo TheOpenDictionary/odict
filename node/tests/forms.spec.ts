@@ -1,7 +1,6 @@
-import { beforeAll, describe, expect, it } from "vitest";
-import { readFile, writeFile } from "node:fs/promises";
+import { describe, expect, it } from "vitest";
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
@@ -13,9 +12,9 @@ describe("Form support", () => {
       <dictionary>
         <entry term="run">
           <forms>
-            <form kind="inflection">ran</form>
-            <form kind="superlative">running</form>
-            <form>runs</form>
+            <form kind="inflection" term="ran" />
+            <form kind="superlative" term="running" />
+            <form term="runs" />
           </forms>
           <ety>
             <sense>
@@ -61,24 +60,24 @@ describe("Lemma support", () => {
   it("should handle entries with lemma references", async () => {
     const xmlContent = `
       <dictionary>
-        <entry term="running" lemma="run">
+        <entry term="running">
           <ety>
-            <sense>
+            <sense lemma="run">
               <definition value="To move quickly on foot." />
             </sense>
           </ety>
         </entry>
-        <entry term="ran" lemma="run">
+        <entry term="ran">
           <ety>
-            <sense>
+            <sense lemma="run">
               <definition value="Past tense of run." />
             </sense>
           </ety>
         </entry>
         <entry term="run">
           <forms>
-            <form kind="past-tense">ran</form>
-            <form kind="present-participle">running</form>
+            <form kind="past-tense" term="ran" />
+            <form kind="present-participle" term="running" />
           </forms>
           <ety>
             <sense>
@@ -105,11 +104,24 @@ describe("Lemma support", () => {
     expect(runningResults.length).toBe(1);
     expect(ranResults.length).toBe(1);
 
-    // Verify lemma references
-    expect(runningResults[0].entry.lemma).not.toBeNull();
-    expect(runningResults[0].entry.lemma).toBe("run");
+    // Get the entries
+    const runningEntry = runningResults[0].entry;
+    const ranEntry = ranResults[0].entry;
 
-    expect(ranResults[0].entry.lemma).not.toBeNull();
-    expect(ranResults[0].entry.lemma).toBe("run");
+    // Extract the first etymology
+    const runningEtymology = runningEntry.etymologies[0];
+    const ranEtymology = ranEntry.etymologies[0];
+
+    // Get the senses (they're in an object keyed by part of speech)
+    // The default part of speech is 'n' (noun) from the XML
+    const runningSense = Object.values(runningEtymology.senses)[0];
+    const ranSense = Object.values(ranEtymology.senses)[0];
+    
+    // Verify lemma references are on the sense objects
+    expect(runningSense.lemma).toBeDefined();
+    expect(runningSense.lemma).toBe("run");
+
+    expect(ranSense.lemma).toBeDefined(); 
+    expect(ranSense.lemma).toBe("run");
   });
 });

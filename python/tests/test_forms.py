@@ -12,9 +12,9 @@ class TestForms(unittest.TestCase):
         <dictionary>
           <entry term="run">
             <forms>
-              <form kind="superlative">ran</form>
-              <form kind="inflection">running</form>
-              <form>runs</form>
+              <form kind="superlative" term="ran" />
+              <form kind="inflection" term="running" />
+              <form term="runs" />
             </forms>
             <ety>
               <sense>

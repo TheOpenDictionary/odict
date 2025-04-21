@@ -7,6 +7,7 @@ use super::form_kind::FormKind;
 pub struct Form {
   pub term: String,
   pub kind: Option<FormKind>,
+  pub tags: Vec<String>,
 }
 
 impl From<odict::Form> for Form {
@@ -14,6 +15,7 @@ impl From<odict::Form> for Form {
     Self {
       term: form.term.0,
       kind: form.kind.map(FormKind::from),
+      tags: form.tags,
     }
   }
 }

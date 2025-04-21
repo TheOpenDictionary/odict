@@ -9,7 +9,6 @@ use super::form::Form;
 pub struct Entry {
   pub term: String,
   pub see_also: Option<String>,
-  pub lemma: Option<String>,
   pub etymologies: Vec<Etymology>,
   pub forms: Vec<Form>,
 }
@@ -19,7 +18,6 @@ impl Entry {
     let odict::Entry {
       term,
       see_also,
-      lemma,
       etymologies,
       forms,
     } = entry;
@@ -27,7 +25,6 @@ impl Entry {
     Ok(Self {
       term,
       see_also: see_also.map(|s| s.0),
-      lemma: lemma.map(|s| s.0),
       etymologies: etymologies
         .into_iter()
         .map(|e| Etymology::from(e))

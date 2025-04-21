@@ -10,13 +10,20 @@ pub struct Form {
 
     #[pyo3(get, set)]
     pub kind: Option<FormKind>,
+
+    #[pyo3(get)]
+    pub tags: Vec<String>,
 }
 
 #[pymethods]
 impl Form {
     #[new]
-    pub fn new(term: String, kind: Option<FormKind>) -> Self {
-        Self { term, kind }
+    pub fn new(term: String, kind: Option<FormKind>, tags: Option<Vec<String>>) -> Self {
+        Self {
+            term,
+            kind,
+            tags: tags.unwrap_or_default(),
+        }
     }
 
     fn __str__(&self) -> String {
@@ -37,6 +44,7 @@ impl From<odict::Form> for Form {
         Self {
             term: form.term.0,
             kind: form.kind.map(FormKind::from),
+            tags: form.tags,
         }
     }
 }
