@@ -34,6 +34,9 @@ pub struct SenseJSON {
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub definitions: Vec<DefinitionTypeJSON>,
+    
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
 }
 
 impl From<Sense> for SenseJSON {
@@ -42,6 +45,7 @@ impl From<Sense> for SenseJSON {
             pos,
             lemma,
             definitions,
+            tags,
         } = sense;
 
         Self {
@@ -51,6 +55,7 @@ impl From<Sense> for SenseJSON {
                 .into_iter()
                 .map(|d| DefinitionTypeJSON::from(d))
                 .collect(),
+            tags,
         }
     }
 }

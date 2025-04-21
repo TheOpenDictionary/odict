@@ -1,6 +1,6 @@
 use crate::serializable;
 
-use super::{pos::PartOfSpeech, Definition, Group, EntryRef};
+use super::{pos::PartOfSpeech, tags::unwrap_tags, Definition, EntryRef, Group};
 
 serializable! {
   pub enum DefinitionType {
@@ -23,5 +23,10 @@ serializable! {
 
     #[serde(default, rename = "$value")]
     pub definitions: Vec<DefinitionType>,
+
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(deserialize_with = "unwrap_tags")]
+    pub tags: Vec<String>,
   }
 }

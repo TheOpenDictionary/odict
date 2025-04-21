@@ -7,6 +7,7 @@ pub struct Sense {
   pub pos: String,
   pub lemma: Option<String>,
   pub definitions: Vec<Either<Definition, Group>>,
+  pub tags: Vec<String>,
 }
 
 impl Sense {
@@ -15,6 +16,7 @@ impl Sense {
       pos,
       lemma,
       definitions,
+      tags,
     } = sense;
 
     Ok(Self {
@@ -29,6 +31,7 @@ impl Sense {
           }
         })
         .collect::<Result<Vec<Either<Definition, Group>>, _>>()?,
+      tags,
     })
   }
 }

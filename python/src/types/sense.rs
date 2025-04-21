@@ -12,6 +12,8 @@ pub struct Sense {
     pub lemma: Option<String>,
     #[pyo3(get)]
     pub definitions: Vec<Either<Definition, Group>>,
+    #[pyo3(get)]
+    pub tags: Vec<String>,
 }
 
 impl From<odict::Sense> for Sense {
@@ -20,6 +22,7 @@ impl From<odict::Sense> for Sense {
             pos,
             lemma,
             definitions,
+            tags,
         } = sense;
 
         Self {
@@ -32,6 +35,7 @@ impl From<odict::Sense> for Sense {
                     odict::DefinitionType::Group(g) => Either::Right(Group::from(g)),
                 })
                 .collect(),
+            tags,
         }
     }
 }

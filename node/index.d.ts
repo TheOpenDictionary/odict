@@ -54,6 +54,7 @@ export interface Example {
 export interface Form {
   term: string;
   kind?: FormKind;
+  tags: Array<string>;
 }
 
 export declare const enum FormKind {
@@ -106,6 +107,7 @@ export interface Sense {
   pos: string;
   lemma?: string;
   definitions: Array<Definition | Group>;
+  tags: Array<string>;
 }
 
 export interface SplitOptions {

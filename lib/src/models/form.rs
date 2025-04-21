@@ -3,7 +3,7 @@ use std::fmt;
 
 use crate::serializable;
 
-use super::EntryRef;
+use super::{tags::unwrap_tags, EntryRef};
 
 serializable! {
   #[serde(rename_all = "lowercase")]
@@ -41,6 +41,11 @@ serializable! {
 
     #[serde(rename = "$text")]
     pub term: EntryRef,
+
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[serde(deserialize_with = "unwrap_tags")]
+    pub tags: Vec<String>,
   }
 }
 
