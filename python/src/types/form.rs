@@ -10,7 +10,7 @@ pub struct Form {
 
     #[pyo3(get, set)]
     pub kind: Option<FormKind>,
-    
+
     #[pyo3(get)]
     pub tags: Vec<String>,
 }
@@ -19,7 +19,11 @@ pub struct Form {
 impl Form {
     #[new]
     pub fn new(term: String, kind: Option<FormKind>, tags: Option<Vec<String>>) -> Self {
-        Self { term, kind, tags: tags.unwrap_or_default() }
+        Self {
+            term,
+            kind,
+            tags: tags.unwrap_or_default(),
+        }
     }
 
     fn __str__(&self) -> String {

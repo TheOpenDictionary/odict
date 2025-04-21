@@ -26,8 +26,8 @@ class TestLemma(unittest.TestCase):
           </entry>
           <entry term="run">
             <forms>
-              <form kind="past-tense">ran</form>
-              <form kind="present-participle">running</form>
+              <form kind="past-tense" term="ran" />
+              <form kind="present-participle" term="running" />
             </forms>
             <ety>
               <sense>
