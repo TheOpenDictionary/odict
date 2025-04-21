@@ -1,6 +1,6 @@
 use crate::serializable;
 
-use super::{pos::PartOfSpeech, Definition, Group};
+use super::{pos::PartOfSpeech, Definition, Group, EntryRef};
 
 serializable! {
   pub enum DefinitionType {
@@ -16,6 +16,10 @@ serializable! {
   pub struct Sense {
     #[serde(rename = "@pos", default)]
     pub pos: PartOfSpeech,
+
+    #[serde(rename = "@lemma")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lemma: Option<EntryRef>,
 
     #[serde(default, rename = "$value")]
     pub definitions: Vec<DefinitionType>,

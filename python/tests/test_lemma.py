@@ -10,16 +10,16 @@ class TestLemma(unittest.TestCase):
     def test_lemma(self):
         xml_content = """
         <dictionary>
-          <entry term="running" lemma="run">
+          <entry term="running">
             <ety>
-              <sense>
+              <sense lemma="run">
                 <definition value="To move quickly on foot." />
               </sense>
             </ety>
           </entry>
-          <entry term="ran" lemma="run">
+          <entry term="ran">
             <ety>
-              <sense>
+              <sense lemma="run">
                 <definition value="Past tense of run." />
               </sense>
             </ety>
@@ -57,12 +57,24 @@ class TestLemma(unittest.TestCase):
             self.assertEqual(len(running_results), 1)
             self.assertEqual(len(ran_results), 1)
 
-            # Verify lemma references
-            self.assertIsNotNone(running_results[0].entry.lemma)
-            self.assertEqual(running_results[0].entry.lemma, "run")
+            # Get the entries
+            running_entry = running_results[0].entry
+            ran_entry = ran_results[0].entry
 
-            self.assertIsNotNone(ran_results[0].entry.lemma)
-            self.assertEqual(ran_results[0].entry.lemma, "run")
+            # Extract the first etymology
+            running_etymology = running_entry.etymologies[0]
+            ran_etymology = ran_entry.etymologies[0]
+
+            # Get the first sense from each etymology (in Python it's an ordered list of key-value pairs)
+            running_sense = list(running_etymology.senses.values())[0]
+            ran_sense = list(ran_etymology.senses.values())[0]
+
+            # Verify lemma references are on the sense objects
+            self.assertIsNotNone(running_sense.lemma)
+            self.assertEqual(running_sense.lemma, "run")
+
+            self.assertIsNotNone(ran_sense.lemma)
+            self.assertEqual(ran_sense.lemma, "run")
 
         finally:
             # Clean up

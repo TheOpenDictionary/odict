@@ -14,10 +14,6 @@ serializable! {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<EntryRef>,
 
-    #[serde(rename = "@lemma")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub lemma: Option<EntryRef>,
-
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
 

@@ -13,7 +13,6 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
-                lemma: None,
                 forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
@@ -25,6 +24,7 @@ mod merge_tests {
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         pos: PartOfSpeech::n,
+                        lemma: None,
                         definitions: vec![
                         DefinitionType::Definition(
                             Definition {
@@ -49,7 +49,6 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
-                  lemma: None,
                   see_also: None,
                   forms: vec![],
                   term: "cat".to_string(),
@@ -61,6 +60,7 @@ mod merge_tests {
                           PartOfSpeech::n=>
                           Sense {
                               pos: PartOfSpeech::n,
+                              lemma: None,
                               definitions: vec![
                                 DefinitionType::Definition(
                                   Definition {
@@ -83,7 +83,6 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               "dog".to_string() => Entry {
-                  lemma: None,
                   see_also: None,
                   forms: vec![],
                   term: "dog".to_string(),
@@ -95,6 +94,7 @@ mod merge_tests {
                         PartOfSpeech::n=>
                         Sense {
                             pos: PartOfSpeech::n,
+                            lemma: None,
                             definitions: vec![
                               DefinitionType::Definition(
                                 Definition {
@@ -110,7 +110,6 @@ mod merge_tests {
                   }],
               },
               "cat".to_string() => Entry {
-                  lemma: None,
                   see_also: None,
                   term: "cat".to_string(),
                   forms: vec![],
@@ -122,6 +121,7 @@ mod merge_tests {
                           PartOfSpeech::n=>
                           Sense {
                               pos: PartOfSpeech::n,
+                              lemma: None,
                               definitions: vec![DefinitionType::Definition(
                                 Definition{
                                   id: None,

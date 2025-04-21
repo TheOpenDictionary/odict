@@ -36,7 +36,6 @@ export interface DictionaryOptions {
 export interface Entry {
   term: string;
   seeAlso?: string;
-  lemma?: string;
   etymologies: Array<Etymology>;
   forms: Array<Form>;
 }
@@ -105,6 +104,7 @@ export interface SearchOptions {
 
 export interface Sense {
   pos: string;
+  lemma?: string;
   definitions: Array<Definition | Group>;
 }
 
