@@ -11,11 +11,9 @@ class TestForms(unittest.TestCase):
         xml_content = """
         <dictionary>
           <entry term="run">
-            <forms>
-              <form kind="superlative" term="ran" />
-              <form kind="inflection" term="running" />
-              <form term="runs" />
-            </forms>
+            <form kind="superlative" term="ran" />
+            <form kind="inflection" term="running" />
+            <form term="runs" />
             <ety>
               <sense>
                 <definition value="To move quickly on foot." />

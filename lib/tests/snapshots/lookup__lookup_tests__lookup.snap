@@ -36,14 +36,16 @@ expression: result.to_json(true).unwrap()
                 "type": "definition",
                 "value": "a cat",
                 "examples": [
-                  "There goes a cat!"
+                  {
+                    "value": "There goes a cat!"
+                  }
                 ],
                 "notes": [
                   {
                     "value": "Some definition note",
                     "examples": [
                       {
-                        "$text": "Some example"
+                        "value": "Some example"
                       }
                     ]
                   }

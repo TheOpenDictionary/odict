@@ -2,7 +2,7 @@ use serde::Serialize;
 
 use crate::Definition;
 
-use super::NoteJSON;
+use super::{ExampleJSON, NoteJSON};
 
 #[derive(Serialize)]
 pub struct DefinitionJSON {
@@ -12,7 +12,7 @@ pub struct DefinitionJSON {
     pub value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub examples: Vec<String>,
+    pub examples: Vec<ExampleJSON>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<NoteJSON>,
@@ -30,7 +30,7 @@ impl From<Definition> for DefinitionJSON {
         Self {
             id,
             value,
-            examples: examples.into_iter().map(|e| e.value).collect(),
+            examples: examples.into_iter().map(|e| ExampleJSON::from(e)).collect(),
             notes: notes.into_iter().map(|n| NoteJSON::from(n)).collect(),
         }
     }

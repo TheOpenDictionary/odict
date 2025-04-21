@@ -25,10 +25,8 @@ class TestLemma(unittest.TestCase):
             </ety>
           </entry>
           <entry term="run">
-            <forms>
-              <form kind="past-tense" term="ran" />
-              <form kind="present-participle" term="running" />
-            </forms>
+            <form kind="past-tense" term="ran" />
+            <form kind="present-participle" term="running" />
             <ety>
               <sense>
                 <definition value="To move quickly on foot." />

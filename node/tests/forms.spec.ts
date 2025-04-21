@@ -11,11 +11,9 @@ describe("Form support", () => {
     const xmlContent = `
       <dictionary>
         <entry term="run">
-          <forms>
-            <form kind="inflection" term="ran" />
-            <form kind="superlative" term="running" />
-            <form term="runs" />
-          </forms>
+          <form kind="inflection" term="ran" />
+          <form kind="superlative" term="running" />
+          <form term="runs" />
           <ety>
             <sense>
               <definition value="To move quickly on foot." />
@@ -75,10 +73,8 @@ describe("Lemma support", () => {
           </ety>
         </entry>
         <entry term="run">
-          <forms>
-            <form kind="past-tense" term="ran" />
-            <form kind="present-participle" term="running" />
-          </forms>
+          <form kind="past-tense" term="ran" />
+          <form kind="present-participle" term="running" />
           <ety>
             <sense>
               <definition value="To move quickly on foot." />

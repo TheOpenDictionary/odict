@@ -12,10 +12,8 @@ fn test_form_tags_serialization() {
     let xml = quick_xml::se::to_string(&form).unwrap();
 
     // Check that the XML has the expected tags element structure
-    assert!(xml.contains("<tags>"));
     assert!(xml.contains("<tag>possessive</tag>"));
     assert!(xml.contains("<tag>archaic</tag>"));
-    assert!(xml.contains("</tags>"));
 
     // Deserialize from XML
     let deserialized: Form = quick_xml::de::from_str(&xml).unwrap();
@@ -39,10 +37,8 @@ fn test_sense_tags_serialization() {
     let xml = quick_xml::se::to_string(&sense).unwrap();
 
     // Check that the XML has the expected tags element structure
-    assert!(xml.contains("<tags>"));
     assert!(xml.contains("<tag>informal</tag>"));
     assert!(xml.contains("<tag>slang</tag>"));
-    assert!(xml.contains("</tags>"));
 
     // Deserialize from XML
     let deserialized: Sense = quick_xml::de::from_str(&xml).unwrap();
@@ -64,7 +60,7 @@ fn test_empty_tags() {
     let xml = quick_xml::se::to_string(&form).unwrap();
 
     // Empty tags should be skipped in serialization
-    assert!(!xml.contains("<tags>"));
+    assert!(!xml.contains("<tag"));
 
     // Deserializing XML without tags should result in an empty vector
     let deserialized: Form = quick_xml::de::from_str(&xml).unwrap();
@@ -93,11 +89,11 @@ fn test_form_with_tags() {
 
     // Check for form tags
     assert!(xml.contains("<form"));
-    assert!(xml.contains("<tags><tag>plural</tag></tags>"));
-    println!("{}", xml);
+    assert!(xml.contains("<tag>plural</tag>"));
+
     // Deserialize from XML
     let deserialized: Entry = quick_xml::de::from_str(&xml).unwrap();
-    println!("{:?}", deserialized);
+
     // Check that form tags were correctly deserialized
     assert_eq!(deserialized.forms[0].tags.len(), 1);
     assert_eq!(deserialized.forms[0].tags[0], "plural");
