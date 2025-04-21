@@ -8,6 +8,7 @@ mod utils;
 
 #[pymodule]
 fn theopendictionary(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add("POS_TAGS", odict::POS_TAGS)?;
     m.add_class::<Dictionary>()?;
     m.add_class::<FormKind>()?;
     Ok(())
