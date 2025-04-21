@@ -23,6 +23,7 @@ mod merge_tests {
                     pronunciation:None,
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
+                        tags: vec![],
                         pos: PartOfSpeech::n,
                         lemma: None,
                         definitions: vec![
@@ -59,6 +60,7 @@ mod merge_tests {
                       senses:hash_map! {
                           PartOfSpeech::n=>
                           Sense {
+                              tags: vec![],
                               pos: PartOfSpeech::n,
                               lemma: None,
                               definitions: vec![
@@ -93,6 +95,7 @@ mod merge_tests {
                       senses:hash_map! {
                         PartOfSpeech::n=>
                         Sense {
+                            tags: vec![],
                             pos: PartOfSpeech::n,
                             lemma: None,
                             definitions: vec![
@@ -120,6 +123,7 @@ mod merge_tests {
                       senses:hash_map! {
                           PartOfSpeech::n=>
                           Sense {
+                              tags: vec![],
                               pos: PartOfSpeech::n,
                               lemma: None,
                               definitions: vec![DefinitionType::Definition(

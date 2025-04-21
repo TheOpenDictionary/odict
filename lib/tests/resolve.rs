@@ -37,6 +37,7 @@ mod resolve_tests {
                             }
                           )
                         ],
+                        tags: vec![],
                       }
                     }
                   }

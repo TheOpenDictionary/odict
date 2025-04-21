@@ -12,9 +12,9 @@ describe("Form support", () => {
       <dictionary>
         <entry term="run">
           <forms>
-            <form kind="inflection">ran</form>
-            <form kind="superlative">running</form>
-            <form>runs</form>
+            <form kind="inflection" term="ran" />
+            <form kind="superlative" term="running" />
+            <form term="runs" />
           </forms>
           <ety>
             <sense>
@@ -76,8 +76,8 @@ describe("Lemma support", () => {
         </entry>
         <entry term="run">
           <forms>
-            <form kind="past-tense">ran</form>
-            <form kind="present-participle">running</form>
+            <form kind="past-tense" term="ran" />
+            <form kind="present-participle" term="running" />
           </forms>
           <ety>
             <sense>
