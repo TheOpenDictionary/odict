@@ -1,7 +1,6 @@
 use serde::Serialize;
 
-use super::example::ExampleJSON;
-use crate::Note;
+use crate::{Example, Note};
 
 #[derive(Serialize)]
 pub struct NoteJSON {
@@ -11,7 +10,7 @@ pub struct NoteJSON {
     value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<ExampleJSON>,
+    examples: Vec<Example>,
 }
 
 impl From<Note> for NoteJSON {
@@ -25,7 +24,7 @@ impl From<Note> for NoteJSON {
         Self {
             id,
             value,
-            examples: examples.into_iter().map(ExampleJSON::from).collect(),
+            examples,
         }
     }
 }

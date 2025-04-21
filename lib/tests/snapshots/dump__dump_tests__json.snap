@@ -1,6 +1,7 @@
 ---
 source: lib/tests/dump.rs
 expression: dumped
+snapshot_kind: text
 ---
 {
   "id": "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f",
@@ -26,7 +27,7 @@ expression: dumped
                       "value": "Some definition note",
                       "examples": [
                         {
-                          "value": "Some example"
+                          "$text": "Some example"
                         }
                       ]
                     }

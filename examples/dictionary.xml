@@ -3,21 +3,15 @@
     <ety>
       <sense pos="n">
         <definition value="A book or electronic resource that lists the words of a language and gives their meaning or translation">
-          <examples>
-            <example yo="poop">I'll look up “love” in the dictionary</example>
-            <example>The website gives access to an online dictionary</example>
-            <example>The dictionary definition of “smile”</example>
-          </examples>
+          <example yo="poop">I'll look up “love” in the dictionary</example>
+          <example>The website gives access to an online dictionary</example>
+          <example>The dictionary definition of “smile”</example>
         </definition>
         <definition value="A reference work on a particular subject, the items of which are typically arranged in alphabetical order">
-          <examples>
-            <example>A dictionary of quotations</example>
-          </examples>
+          <example>A dictionary of quotations</example>
         </definition>
         <definition value="(Computing) a set of words or other text strings made for use in applications such as spelling checkers">
-          <examples>
-            <example>The worm attempts to crack account passwords using a built-in dictionary</example>
-          </examples>
+          <example>The worm attempts to crack account passwords using a built-in dictionary</example>
         </definition>
       </sense>
     </ety>

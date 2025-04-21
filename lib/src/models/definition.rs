@@ -1,9 +1,6 @@
 use crate::serializable;
 
-use super::{
-    example::{unwrap_examples, wrap_examples, Example},
-    note::{unwrap_notes, wrap_notes, Note},
-};
+use super::{example::Example, note::Note};
 
 serializable! {
   pub struct Definition {
@@ -14,16 +11,10 @@ serializable! {
     #[serde(rename = "@value")]
     pub value: String,
 
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "unwrap_examples")]
-    #[serde(serialize_with = "wrap_examples")]
+    #[serde(default, rename="example")]
     pub examples: Vec<Example>,
 
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    #[serde(deserialize_with = "unwrap_notes")]
-    #[serde(serialize_with = "wrap_notes")]
+    #[serde(default, rename="note")]
     pub notes: Vec<Note>,
   }
 }

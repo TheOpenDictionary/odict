@@ -6,10 +6,8 @@
       <sense pos="v">
         <group description="A number of verb senses">
           <definition value="(vertebrates) To move swiftly (figuratively)">
-            <examples>
-              <example>The dog runs after the cat.</example>
-              <example>The horse ran away.</example>
-            </examples>
+            <example>The dog runs after the cat.</example>
+            <example>The horse ran away.</example>
           </definition>
           <definition value="(fluids) To flow." />
           <definition value="(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled." />
@@ -20,10 +18,8 @@
       </sense>
       <sense pos="n">
         <definition value="(vertebrates) To move swiftly">
-          <examples>
-            <example>The dog runs after the cat.</example>
-            <example>The horse ran away.</example>
-          </examples>
+          <example>The dog runs after the cat.</example>
+          <example>The horse ran away.</example>
         </definition>
         <definition value="Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip." />
         <definition value="A pleasure trip." />
@@ -54,16 +50,10 @@
     <ety description="Latin root">
       <sense pos="n">
         <definition value="a cat">
-          <examples>
-            <example>There goes a cat!</example>
-          </examples>
-          <notes>
-            <note value="Some definition note">
-              <examples>
-                <example>Some example</example>
-              </examples>
-            </note>
-          </notes>
+          <example>There goes a cat!</example>
+          <note value="Some definition note">
+            <example>Some example</example>
+          </note>
         </definition>
       </sense>
     </ety>
