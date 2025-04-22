@@ -2428,6 +2428,7 @@ dependencies = [
  "byteorder",
  "charabia",
  "criterion",
+ "derive_more",
  "dirs",
  "insta",
  "map-macro",
@@ -2444,7 +2445,6 @@ dependencies = [
  "thiserror 2.0.12",
  "url",
  "uuid",
- "validation",
 ]
 
 [[package]]
@@ -3876,12 +3876,6 @@ dependencies = [
  "quote",
  "syn 2.0.100",
 ]
-
-[[package]]
-name = "validation"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fb8044f0b8a3e94bc8cd089c6a2e42e435553093800b76762418d4bbc3289cc"
 
 [[package]]
 name = "version_check"
