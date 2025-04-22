@@ -8,7 +8,6 @@ use crate::Example;
 #[convert(from(Example))]
 pub struct ExampleJSON {
     pub value: String,
-
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub translations: Vec<TranslationJSON>,
 }
