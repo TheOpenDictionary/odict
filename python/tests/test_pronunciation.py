@@ -1,11 +1,18 @@
 import os
 import sys
-import pytest
 import tempfile
+import uuid
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Add parent directory to path for imports
+sys.path.insert(
+     0,
+     os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
 
-from theopendictionary import Dictionary, PronunciationKind, MediaURL, Pronunciation
+from theopendictionary import (  # noqa: E402
+    Dictionary,
+    PronunciationKind,
+)
 
 
 def test_entry_with_pronunciation():
@@ -21,11 +28,16 @@ def test_entry_with_pronunciation():
     </dictionary>
     """
 
-    with tempfile.NamedTemporaryFile(suffix=".xml", mode="w+") as xml_file:
-        xml_file.write(xml.encode("utf-8"))
-        xml_file.flush()
+    # Create a temporary file
+    temp_dir = tempfile.gettempdir()
+    temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
 
-        dictionary = Dictionary.compile(xml_file.name)
+    try:
+        # Write XML content to an ODICT file
+        Dictionary.write(xml, temp_file)
+
+        # Create dictionary from the temporary ODICT file
+        dictionary = Dictionary(temp_file)
         results = dictionary.lookup("你好")
 
         assert len(results) == 1
@@ -38,7 +50,15 @@ def test_entry_with_pronunciation():
         )
         assert str(entry.etymologies[0].pronunciations[0].kind) == "pinyin"
         assert len(entry.etymologies[0].pronunciations[0].urls) == 1
-        assert entry.etymologies[0].pronunciations[0].urls[0].src == "./audio.mp3"
+        assert (
+            entry.etymologies[0].pronunciations[0].urls[0].src
+            == "./audio.mp3"
+        )
+
+    finally:
+        # Clean up
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
 
 
 def test_example_with_pronunciation():
@@ -60,18 +80,25 @@ def test_example_with_pronunciation():
     </dictionary>
     """
 
-    with tempfile.NamedTemporaryFile(suffix=".xml", mode="w+") as xml_file:
-        xml_file.write(xml)
-        xml_file.flush()
+    # Create a temporary file
+    temp_dir = tempfile.gettempdir()
+    temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
 
-        dictionary = Dictionary.compile(xml_file.name)
+    try:
+        # Write XML content to an ODICT file
+        Dictionary.write(xml, temp_file)
+
+        # Create dictionary from the temporary ODICT file
+        dictionary = Dictionary(temp_file)
         results = dictionary.lookup("example")
 
         assert len(results) == 1
         entry = results[0].entry
 
         # Access the example through the definition
-        definition = next(iter(entry.etymologies[0].senses.values())).definitions[0]
+        definition = next(
+            iter(entry.etymologies[0].senses.values())
+        ).definitions[0]
         example = definition.examples[0]
 
         assert len(example.pronunciations) == 1
@@ -80,6 +107,11 @@ def test_example_with_pronunciation():
         assert len(example.pronunciations[0].urls) == 1
         assert example.pronunciations[0].urls[0].src == "./example.mp3"
         assert example.pronunciations[0].urls[0].mime_type == "audio/mpeg"
+
+    finally:
+        # Clean up
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
 
 
 def test_multiple_pronunciations():
@@ -101,11 +133,16 @@ def test_multiple_pronunciations():
     </dictionary>
     """
 
-    with tempfile.NamedTemporaryFile(suffix=".xml", mode="w+") as xml_file:
-        xml_file.write(xml)
-        xml_file.flush()
+    # Create a temporary file
+    temp_dir = tempfile.gettempdir()
+    temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
 
-        dictionary = Dictionary.compile(xml_file.name)
+    try:
+        # Write XML content to an ODICT file
+        Dictionary.write(xml, temp_file)
+
+        # Create dictionary from the temporary ODICT file
+        dictionary = Dictionary(temp_file)
         results = dictionary.lookup("hello")
 
         assert len(results) == 1
@@ -114,3 +151,8 @@ def test_multiple_pronunciations():
         assert len(entry.etymologies[0].pronunciations) == 2
         assert entry.etymologies[0].pronunciations[0].value == "həˈləʊ"
         assert entry.etymologies[0].pronunciations[1].value == "hɛˈloʊ"
+
+    finally:
+        # Clean up
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
