@@ -141,8 +141,8 @@ impl Dictionary {
 
       let entries = results
         .iter()
-        .map(|e| Entry::from_entry(e.clone()))
-        .collect::<Result<Vec<Entry>, _>>()?;
+        .map(|e| e.clone().into())
+        .collect::<Vec<Entry>>()?;
 
       return Ok(entries);
     }
@@ -169,35 +169,8 @@ impl Dictionary {
 
       let mapped = tokens
         .iter()
-        .map(|token| {
-          let entries = token
-            .entries
-            .iter()
-            .map(|result| {
-              let entry = Entry::from_archive(result.entry)?;
-              let directed_from = match &result.directed_from {
-                Some(from) => Some(Entry::from_archive(from)?),
-                None => None,
-              };
-
-              Ok(types::LookupResult {
-                entry,
-                directed_from,
-              })
-            })
-            .collect::<Result<Vec<types::LookupResult>, _>>()?;
-
-          Ok(types::Token {
-            lemma: token.lemma.clone(),
-            language: token.language.map(|s| s.code().to_string()).clone(),
-            script: token.script.name().to_string(),
-            kind: format!("{:?}", token.kind),
-            start: token.start as u16,
-            end: token.end as u16,
-            entries,
-          })
-        })
-        .collect::<Result<Vec<types::Token>, _>>()?;
+        .map(|token| token.into())
+        .collect::<Vec<types::Token>>();
 
       return Ok(mapped);
     }

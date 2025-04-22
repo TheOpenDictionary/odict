@@ -12,7 +12,6 @@ mod core;
 mod error;
 mod ext;
 mod models;
-mod utils;
 
 pub mod format;
 pub mod fs;

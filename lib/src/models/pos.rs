@@ -19,6 +19,12 @@ macro_rules! create_pos {
   }
 }
 
+impl From<PartOfSpeech> for String {
+    fn from(pos: PartOfSpeech) -> Self {
+        return pos.description().to_string();
+    }
+}
+
 impl fmt::Display for PartOfSpeech {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)

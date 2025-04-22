@@ -1,11 +1,12 @@
-use derive_more::From;
 use serde::Serialize;
+use structural_convert::StructuralConvert;
 
 use crate::Definition;
 
 use super::{ExampleJSON, NoteJSON};
 
-#[derive(Serialize, From)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(Definition))]
 pub struct DefinitionJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,

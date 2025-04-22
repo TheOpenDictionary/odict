@@ -19,22 +19,12 @@ impl Default for IndexOptions {
 }
 
 #[cfg(feature = "search")]
-impl From<IndexOptions> for odict::search::IndexOptions {
-  fn from(opts: IndexOptions) -> Self {
-    let mut s = odict::search::IndexOptions::default();
-
-    if let Some(memory) = opts.memory {
-      s = s.memory(memory.try_into().unwrap());
+impl From<odict::search::IndexOptions> for IndexOptions {
+  fn from(opts: odict::search::IndexOptions) -> Self {
+    IndexOptions {
+      directory: Some(opts.dir.to_string_lossy().to_string()),
+      memory: Some(opts.memory.try_into().unwrap()),
+      overwrite: Some(opts.overwrite),
     }
-
-    if let Some(directory) = opts.directory {
-      s = s.dir(&directory);
-    }
-
-    if let Some(overwrite) = opts.overwrite {
-      s = s.overwrite(overwrite);
-    }
-
-    s
   }
 }

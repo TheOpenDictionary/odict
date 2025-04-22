@@ -67,8 +67,8 @@ impl ToJSON for Vec<LookupResult<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| EntryJSON::from(v.entry))
-            .collect::<Vec<EntryJSON>>();
+            .map(|v| EntryJSON::try_from(v.entry))
+            .collect::<crate::Result<Vec<EntryJSON>>>()?;
         stringify(&json, pretty)
     }
 }
@@ -77,8 +77,8 @@ impl ToJSON for Vec<&ArchivedEntry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| EntryJSON::from(v))
-            .collect::<Vec<EntryJSON>>();
+            .map(|v| EntryJSON::try_from(v))
+            .collect::<crate::Result<Vec<EntryJSON>>>()?;
 
         stringify(&json, pretty)
     }
@@ -87,7 +87,7 @@ impl ToJSON for Vec<&ArchivedEntry> {
 #[cfg(feature = "tokenize-latin")]
 impl<'a> ToJSON for Token<&ArchivedEntry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
-        let json = TokenJSON::from(self);
+        let json = TokenJSON::try_from(self)?;
         stringify(&json, pretty)
     }
 }
@@ -97,8 +97,8 @@ impl<'a> ToJSON for Vec<Token<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| TokenJSON::from(v))
-            .collect::<Vec<TokenJSON>>();
+            .map(|v| TokenJSON::try_from(v))
+            .collect::<crate::Result<Vec<TokenJSON>>>()?;
 
         stringify(&json, pretty)
     }
