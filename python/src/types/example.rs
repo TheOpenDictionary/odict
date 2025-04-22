@@ -1,4 +1,5 @@
 use crate::types::{Pronunciation, Translation};
+
 use pyo3::prelude::*;
 
 #[pyclass]

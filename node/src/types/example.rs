@@ -1,4 +1,5 @@
 use crate::types::{Pronunciation, Translation};
+use crate::types::Translation;
 use napi::bindgen_prelude::*;
 
 #[napi(object)]
