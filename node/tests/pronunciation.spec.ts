@@ -6,9 +6,11 @@ describe("Pronunciation support", () => {
     const xml = `
       <dictionary>
         <entry term="你好">
-          <pronunciation kind="pinyin" value="ni hao">
-            <url src="./audio.mp3" />
-          </pronunciation>
+          <ety>
+            <pronunciation kind="pinyin" value="ni hao">
+              <url src="./audio.mp3" />
+            </pronunciation>
+          </ety>
         </entry>
       </dictionary>
     `;
@@ -20,12 +22,13 @@ describe("Pronunciation support", () => {
     expect(results.length).toBe(1);
     
     const entry = results[0].entry;
-    expect(entry.pronunciations).toBeDefined();
-    expect(entry.pronunciations.length).toBe(1);
-    expect(entry.pronunciations[0].kind).toBe(PronunciationKind.Pinyin);
-    expect(entry.pronunciations[0].value).toBe("ni hao");
-    expect(entry.pronunciations[0].urls.length).toBe(1);
-    expect(entry.pronunciations[0].urls[0].src).toBe("./audio.mp3");
+    expect(entry.etymologies.length).toBe(1);
+    expect(entry.etymologies[0].pronunciations).toBeDefined();
+    expect(entry.etymologies[0].pronunciations.length).toBe(1);
+    expect(entry.etymologies[0].pronunciations[0].kind).toBe(PronunciationKind.Pinyin);
+    expect(entry.etymologies[0].pronunciations[0].value).toBe("ni hao");
+    expect(entry.etymologies[0].pronunciations[0].urls.length).toBe(1);
+    expect(entry.etymologies[0].pronunciations[0].urls[0].src).toBe("./audio.mp3");
   });
 
   it("should parse examples with pronunciations", async () => {
@@ -69,13 +72,13 @@ describe("Pronunciation support", () => {
     const xml = `
       <dictionary>
         <entry term="hello">
-          <pronunciation kind="ipa" value="həˈləʊ">
-            <url src="./hello-british.mp3" />
-          </pronunciation>
-          <pronunciation kind="ipa" value="hɛˈloʊ">
-            <url src="./hello-american.mp3" />
-          </pronunciation>
           <ety>
+            <pronunciation kind="ipa" value="həˈləʊ">
+              <url src="./hello-british.mp3" />
+            </pronunciation>
+            <pronunciation kind="ipa" value="hɛˈloʊ">
+              <url src="./hello-american.mp3" />
+            </pronunciation>
             <sense pos="adj">
               <definition value="A greeting" />
             </sense>
@@ -91,8 +94,9 @@ describe("Pronunciation support", () => {
     expect(results.length).toBe(1);
     
     const entry = results[0].entry;
-    expect(entry.pronunciations.length).toBe(2);
-    expect(entry.pronunciations[0].value).toBe("həˈləʊ");
-    expect(entry.pronunciations[1].value).toBe("hɛˈloʊ");
+    expect(entry.etymologies.length).toBe(1);
+    expect(entry.etymologies[0].pronunciations.length).toBe(2);
+    expect(entry.etymologies[0].pronunciations[0].value).toBe("həˈləʊ");
+    expect(entry.etymologies[0].pronunciations[1].value).toBe("hɛˈloʊ");
   });
 });

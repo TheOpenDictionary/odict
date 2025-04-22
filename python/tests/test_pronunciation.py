@@ -12,9 +12,11 @@ def test_entry_with_pronunciation():
     xml = """
     <dictionary>
       <entry term="你好">
-        <pronunciation kind="pinyin" value="ni hao">
-          <url src="./audio.mp3" />
-        </pronunciation>
+        <ety>
+          <pronunciation kind="pinyin" value="ni hao">
+            <url src="./audio.mp3" />
+          </pronunciation>
+        </ety>
       </entry>
     </dictionary>
     """
@@ -28,12 +30,15 @@ def test_entry_with_pronunciation():
 
         assert len(results) == 1
         entry = results[0].entry
-        assert len(entry.pronunciations) == 1
-        assert entry.pronunciations[0].value == "ni hao"
-        assert isinstance(entry.pronunciations[0].kind, PronunciationKind)
-        assert str(entry.pronunciations[0].kind) == "pinyin"
-        assert len(entry.pronunciations[0].urls) == 1
-        assert entry.pronunciations[0].urls[0].src == "./audio.mp3"
+        assert len(entry.etymologies) == 1
+        assert len(entry.etymologies[0].pronunciations) == 1
+        assert entry.etymologies[0].pronunciations[0].value == "ni hao"
+        assert isinstance(
+            entry.etymologies[0].pronunciations[0].kind, PronunciationKind
+        )
+        assert str(entry.etymologies[0].pronunciations[0].kind) == "pinyin"
+        assert len(entry.etymologies[0].pronunciations[0].urls) == 1
+        assert entry.etymologies[0].pronunciations[0].urls[0].src == "./audio.mp3"
 
 
 def test_example_with_pronunciation():
@@ -81,13 +86,13 @@ def test_multiple_pronunciations():
     xml = """
     <dictionary>
       <entry term="hello">
-        <pronunciation kind="ipa" value="həˈləʊ">
-          <url src="./hello-british.mp3" />
-        </pronunciation>
-        <pronunciation kind="ipa" value="hɛˈloʊ">
-          <url src="./hello-american.mp3" />
-        </pronunciation>
         <ety>
+          <pronunciation kind="ipa" value="həˈləʊ">
+            <url src="./hello-british.mp3" />
+          </pronunciation>
+          <pronunciation kind="ipa" value="hɛˈloʊ">
+            <url src="./hello-american.mp3" />
+          </pronunciation>
           <sense pos="adj">
             <definition value="A greeting" />
           </sense>
@@ -105,6 +110,7 @@ def test_multiple_pronunciations():
 
         assert len(results) == 1
         entry = results[0].entry
-        assert len(entry.pronunciations) == 2
-        assert entry.pronunciations[0].value == "həˈləʊ"
-        assert entry.pronunciations[1].value == "hɛˈloʊ"
+        assert len(entry.etymologies) == 1
+        assert len(entry.etymologies[0].pronunciations) == 2
+        assert entry.etymologies[0].pronunciations[0].value == "həˈləʊ"
+        assert entry.etymologies[0].pronunciations[1].value == "hɛˈloʊ"

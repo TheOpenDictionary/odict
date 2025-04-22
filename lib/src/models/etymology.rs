@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use crate::models::pronunciation::Pronunciation;
 use crate::serializable;
 
 use super::{pos::PartOfSpeech, sense::Sense};
@@ -10,15 +11,15 @@ serializable! {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
-    #[serde(rename = "@pronunciation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pronunciation: Option<String>,
+    #[serde(default, rename = "pronunciation")]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub pronunciations: Vec<Pronunciation>,
 
     #[serde(rename = "@description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
-    #[serde(rename = "sense", with = "senses")]
+    #[serde(rename = "sense", default, with = "senses")]
     pub senses: HashMap<PartOfSpeech, Sense>,
   }
 }

@@ -14,7 +14,6 @@ mod merge_tests {
             entries: hash_map! {
               String::from("dog") => Entry {
                 forms: vec![],
-                pronunciations: vec![],
                 term: "dog".to_string(),
                 see_also: None,
                 translations: vec![],
@@ -22,7 +21,7 @@ mod merge_tests {
                   Etymology {
                     id:None,
                     description:None,
-                    pronunciation:None,
+                    pronunciations: vec![],
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         tags: vec![],
@@ -52,14 +51,13 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
-                  pronunciations: vec![],
                   see_also: None,
                   forms: vec![],
                   term: "cat".to_string(),
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                           PartOfSpeech::n=>
@@ -90,13 +88,12 @@ mod merge_tests {
             entries: hash_map! {
               "dog".to_string() => Entry {
                   see_also: None,
-                  pronunciations: vec![],
                   forms: vec![],
                   term: "dog".to_string(),
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                         PartOfSpeech::n=>
@@ -120,13 +117,12 @@ mod merge_tests {
               },
               "cat".to_string() => Entry {
                   see_also: None,
-                  pronunciations: vec![],
                   term: "cat".to_string(),
                   forms: vec![],
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                           PartOfSpeech::n=>

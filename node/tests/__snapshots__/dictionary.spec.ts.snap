@@ -6,6 +6,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
     "etymologies": [
       {
         "description": "Latin root",
+        "pronunciations": [],
         "senses": {
           "n": {
             "definitions": [
@@ -40,7 +41,6 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
       },
     ],
     "forms": [],
-    "pronunciations": [],
     "term": "run",
     "translations": [],
   },
@@ -54,6 +54,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciations": [],
           "senses": {
             "n": {
               "definitions": [
@@ -66,7 +67,6 @@ exports[`Dictionary > lookup > can split terms 1`] = `
         },
       ],
       "forms": [],
-      "pronunciations": [],
       "term": "cat",
       "translations": [],
     },
@@ -76,7 +76,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
-          "pronunciation": "dooooog",
+          "pronunciations": [],
           "senses": {
             "un": {
               "definitions": [
@@ -89,7 +89,6 @@ exports[`Dictionary > lookup > can split terms 1`] = `
         },
       ],
       "forms": [],
-      "pronunciations": [],
       "term": "dog",
       "translations": [],
     },
@@ -104,6 +103,7 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciations": [],
           "senses": {
             "n": {
               "definitions": [
@@ -116,7 +116,6 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
         },
       ],
       "forms": [],
-      "pronunciations": [],
       "term": "cat",
       "translations": [],
     },
@@ -134,6 +133,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
@@ -146,7 +146,6 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
             },
           ],
           "forms": [],
-          "pronunciations": [],
           "term": "你",
           "translations": [],
         },
@@ -156,6 +155,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
@@ -168,7 +168,6 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
             },
           ],
           "forms": [],
-          "pronunciations": [],
           "term": "好",
           "translations": [],
         },
@@ -196,6 +195,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
@@ -208,7 +208,6 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
             },
           ],
           "forms": [],
-          "pronunciations": [],
           "term": "你",
           "translations": [],
         },

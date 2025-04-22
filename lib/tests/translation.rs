@@ -35,7 +35,6 @@ fn test_translation_in_entry() {
     // Create an entry with translations
     let entry = Entry {
         term: "hello".to_string(),
-        pronunciations: vec![],
         see_also: None,
         etymologies: vec![],
         forms: vec![],

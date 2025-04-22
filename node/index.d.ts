@@ -39,12 +39,11 @@ export interface Entry {
   etymologies: Array<Etymology>;
   forms: Array<Form>;
   translations: Array<Translation>;
-  pronunciations: Array<Pronunciation>;
 }
 
 export interface Etymology {
   id?: string;
-  pronunciation?: string;
+  pronunciations: Pronunciation[];
   description?: string;
   senses: Record<string, Sense>;
 }

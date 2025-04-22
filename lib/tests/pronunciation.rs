@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod pronunciation_tests {
-    use odict::{MediaURL, PronunciationKind};
+    use odict::{Etymology, MediaURL, PronunciationKind};
     use quick_xml::de::from_str;
 
     #[test]
@@ -41,16 +41,20 @@ mod pronunciation_tests {
     fn test_parse_entry_with_pronunciation() {
         let xml = r#"
         <entry term="你好">
-          <pronunciation kind="pinyin" value="ni hao">
-            <url src="./audio.mp3" type="audio/mpeg" />
-          </pronunciation>
+          <ety>
+            <pronunciation kind="pinyin" value="ni hao">
+              <url src="./audio.mp3" type="audio/mpeg" />
+            </pronunciation>
+          </ety>
         </entry>
         "#;
 
         let entry: odict::Entry = from_str(xml).unwrap();
         assert_eq!(entry.term, "你好");
-        assert_eq!(entry.pronunciations.len(), 1);
-        let pronunciation = &entry.pronunciations[0];
+        assert_eq!(entry.etymologies.len(), 1);
+        assert_eq!(entry.etymologies[0].pronunciations.len(), 1);
+
+        let pronunciation = &entry.etymologies[0].pronunciations[0];
         assert!(matches!(pronunciation.kind, PronunciationKind::Pinyin));
         assert_eq!(pronunciation.value, "ni hao");
         assert_eq!(pronunciation.urls.len(), 1);
@@ -85,23 +89,26 @@ mod pronunciation_tests {
     fn test_entry_with_multiple_pronunciations() {
         let xml = r#"
         <entry term="你好">
-          <pronunciation kind="pinyin" value="ni hao">
-            <url src="./audio1.mp3" />
-          </pronunciation>
-          <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥">
-            <url src="./audio2.mp3" />
-          </pronunciation>
+          <ety>
+            <pronunciation kind="pinyin" value="ni hao">
+              <url src="./audio1.mp3" />
+            </pronunciation>
+            <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥">
+              <url src="./audio2.mp3" />
+            </pronunciation>
+          </ety>
         </entry>
         "#;
 
         let entry: odict::Entry = from_str(xml).unwrap();
-        assert_eq!(entry.pronunciations.len(), 2);
+        assert_eq!(entry.etymologies.len(), 1);
+        assert_eq!(entry.etymologies[0].pronunciations.len(), 2);
 
-        let pinyin = &entry.pronunciations[0];
+        let pinyin = &entry.etymologies[0].pronunciations[0];
         assert!(matches!(pinyin.kind, PronunciationKind::Pinyin));
         assert_eq!(pinyin.value, "ni hao");
 
-        let ipa = &entry.pronunciations[1];
+        let ipa = &entry.etymologies[0].pronunciations[1];
         assert!(matches!(ipa.kind, PronunciationKind::IPA));
         assert_eq!(ipa.value, "ni˨˩ xɑʊ̯˧˥");
     }

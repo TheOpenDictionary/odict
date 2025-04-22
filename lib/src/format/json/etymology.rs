@@ -4,15 +4,15 @@ use serde::Serialize;
 
 use crate::{Etymology, PartOfSpeech};
 
-use super::{ordered_map, SenseJSON};
+use super::{ordered_map, PronunciationJSON, SenseJSON};
 
 #[derive(Serialize)]
 pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pronunciation: Option<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub pronunciations: Vec<PronunciationJSON>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -25,17 +25,20 @@ pub struct EtymologyJSON {
 }
 
 impl From<Etymology> for EtymologyJSON {
-    fn from(entry: Etymology) -> Self {
+    fn from(etymology: Etymology) -> Self {
         let Etymology {
             id,
-            pronunciation,
+            pronunciations,
             description,
             senses,
-        } = entry;
+        } = etymology;
 
         Self {
             id,
-            pronunciation,
+            pronunciations: pronunciations
+                .into_iter()
+                .map(PronunciationJSON::from)
+                .collect(),
             description,
             senses: senses
                 .into_iter()

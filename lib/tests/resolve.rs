@@ -16,7 +16,6 @@ mod resolve_tests {
             entries: hash_map! {
               String::from("dog") => Entry {
                 forms: vec![],
-                pronunciations: vec![],
                 term: "dog".to_string(),
                 see_also: None,
                 translations: vec![],
@@ -24,7 +23,7 @@ mod resolve_tests {
                   Etymology {
                     id: None,
                     description: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         pos: PartOfSpeech::n,

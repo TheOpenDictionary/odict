@@ -4,7 +4,6 @@ use crate::utils::cast_error;
 
 use super::etymology::Etymology;
 use super::form::Form;
-use super::pronunciation::Pronunciation;
 use super::translation::Translation;
 
 #[pyclass]
@@ -20,8 +19,6 @@ pub struct Entry {
     pub forms: Vec<Form>,
     #[pyo3(get)]
     pub translations: Vec<Translation>,
-    #[pyo3(get)]
-    pub pronunciations: Vec<Pronunciation>,
 }
 
 #[pymethods]
@@ -49,7 +46,6 @@ impl From<odict::Entry> for Entry {
             etymologies,
             forms,
             translations,
-            pronunciations,
         } = entry;
 
         Self {
@@ -63,10 +59,6 @@ impl From<odict::Entry> for Entry {
             translations: translations
                 .into_iter()
                 .map(|t| Translation::from(t).unwrap())
-                .collect(),
-            pronunciations: pronunciations
-                .into_iter()
-                .map(Pronunciation::from)
                 .collect(),
         }
     }
