@@ -38,6 +38,7 @@ export interface Entry {
   seeAlso?: string;
   etymologies: Array<Etymology>;
   forms: Array<Form>;
+  translations: Array<Translation>;
 }
 
 export interface Etymology {
@@ -49,6 +50,7 @@ export interface Etymology {
 
 export interface Example {
   value: string;
+  translations: Translation[];
 }
 
 export interface Form {
@@ -128,4 +130,9 @@ export interface TokenizeOptions {
   follow?: boolean;
   allowList?: Array<string>;
   insensitive?: boolean;
+}
+
+export interface Translation {
+  lang: string;
+  value: string;
 }

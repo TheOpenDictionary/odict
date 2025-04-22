@@ -41,6 +41,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
     ],
     "forms": [],
     "term": "run",
+    "translations": [],
   },
 ]
 `;
@@ -65,6 +66,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       ],
       "forms": [],
       "term": "cat",
+      "translations": [],
     },
   },
   {
@@ -86,6 +88,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       ],
       "forms": [],
       "term": "dog",
+      "translations": [],
     },
   },
 ]
@@ -111,6 +114,7 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
       ],
       "forms": [],
       "term": "cat",
+      "translations": [],
     },
   },
 ]
@@ -139,6 +143,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           ],
           "forms": [],
           "term": "你",
+          "translations": [],
         },
       },
       {
@@ -159,6 +164,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           ],
           "forms": [],
           "term": "好",
+          "translations": [],
         },
       },
     ],
@@ -197,6 +203,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           ],
           "forms": [],
           "term": "你",
+          "translations": [],
         },
       },
     ],

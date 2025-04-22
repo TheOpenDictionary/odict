@@ -16,6 +16,7 @@ mod merge_tests {
                 forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
+                translations: vec![],
                 etymologies: vec![
                   Etymology {
                     id:None,
@@ -53,6 +54,7 @@ mod merge_tests {
                   see_also: None,
                   forms: vec![],
                   term: "cat".to_string(),
+                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciation: None,
@@ -88,6 +90,7 @@ mod merge_tests {
                   see_also: None,
                   forms: vec![],
                   term: "dog".to_string(),
+                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciation: None,
@@ -116,6 +119,7 @@ mod merge_tests {
                   see_also: None,
                   term: "cat".to_string(),
                   forms: vec![],
+                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciation: None,

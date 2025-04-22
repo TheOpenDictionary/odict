@@ -4,6 +4,7 @@ use crate::utils::cast_error;
 
 use super::etymology::Etymology;
 use super::form::Form;
+use super::translation::Translation;
 
 #[napi(object)]
 pub struct Entry {
@@ -11,6 +12,7 @@ pub struct Entry {
   pub see_also: Option<String>,
   pub etymologies: Vec<Etymology>,
   pub forms: Vec<Form>,
+  pub translations: Vec<Translation>,
 }
 
 impl Entry {
@@ -20,6 +22,7 @@ impl Entry {
       see_also,
       etymologies,
       forms,
+      translations,
     } = entry;
 
     Ok(Self {
@@ -30,6 +33,10 @@ impl Entry {
         .map(|e| Etymology::from(e))
         .collect::<Result<Vec<Etymology>, _>>()?,
       forms: forms.into_iter().map(Form::from).collect(),
+      translations: translations
+        .into_iter()
+        .map(Translation::from)
+        .collect::<Result<Vec<Translation>, _>>()?,
     })
   }
 

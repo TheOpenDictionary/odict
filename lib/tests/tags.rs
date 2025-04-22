@@ -82,6 +82,7 @@ fn test_form_with_tags() {
         see_also: None,
         etymologies: vec![],
         forms: vec![form],
+        translations: vec![],
     };
 
     // Serialize to XML
