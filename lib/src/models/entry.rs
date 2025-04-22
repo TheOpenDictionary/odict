@@ -1,7 +1,7 @@
 use rkyv::{deserialize, to_bytes};
 
 use crate::models::form::Form;
-use crate::{error::Error, serializable, Etymology, Translation};
+use crate::{error::Error, serializable, Etymology, Pronunciation, Translation};
 
 use super::EntryRef;
 
@@ -25,6 +25,10 @@ serializable! {
     #[serde(default, rename = "translation")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub translations: Vec<Translation>,
+
+    #[serde(default, rename = "pronunciation")]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub pronunciations: Vec<Pronunciation>,
   }
 }
 

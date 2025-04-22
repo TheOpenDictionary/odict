@@ -39,6 +39,7 @@ export interface Entry {
   etymologies: Array<Etymology>;
   forms: Array<Form>;
   translations: Array<Translation>;
+  pronunciations: Array<Pronunciation>;
 }
 
 export interface Etymology {
@@ -51,6 +52,7 @@ export interface Etymology {
 export interface Example {
   value: string;
   translations: Translation[];
+  pronunciations: Pronunciation[];
 }
 
 export interface Form {
@@ -92,10 +94,35 @@ export interface LookupResult {
   directedFrom?: Entry;
 }
 
+export interface MediaUrl {
+  src: string;
+  mimeType?: string;
+  description?: string;
+}
+
 export interface Note {
   id?: string;
   value: string;
   examples: Array<Example>;
+}
+
+export interface Pronunciation {
+  kind: PronunciationKind;
+  value: string;
+  urls: Array<MediaUrl>;
+}
+
+export declare const enum PronunciationKind {
+  IPA = 0,
+  Pinyin = 1,
+  Hiragana = 2,
+  Romaji = 3,
+  Katakana = 4,
+  Yale = 5,
+  Jyutping = 6,
+  Bopomofo = 7,
+  Hepburn = 8,
+  Other = 9,
 }
 
 export interface SearchOptions {

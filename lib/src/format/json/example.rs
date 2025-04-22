@@ -1,12 +1,12 @@
 use serde::Serialize;
 
-use crate::Example;
 use super::TranslationJSON;
+use crate::Example;
 
 #[derive(Serialize, Clone)]
 pub struct ExampleJSON {
     pub value: String,
-    
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub translations: Vec<TranslationJSON>,
 }
@@ -16,8 +16,9 @@ impl From<Example> for ExampleJSON {
         let Example {
             value,
             translations,
+            ..
         } = example;
-        
+
         Self {
             value,
             translations: translations

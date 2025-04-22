@@ -14,6 +14,7 @@ mod merge_tests {
             entries: hash_map! {
               String::from("dog") => Entry {
                 forms: vec![],
+                pronunciations: vec![],
                 term: "dog".to_string(),
                 see_also: None,
                 translations: vec![],
@@ -51,6 +52,7 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
+                  pronunciations: vec![],
                   see_also: None,
                   forms: vec![],
                   term: "cat".to_string(),
@@ -88,6 +90,7 @@ mod merge_tests {
             entries: hash_map! {
               "dog".to_string() => Entry {
                   see_also: None,
+                  pronunciations: vec![],
                   forms: vec![],
                   term: "dog".to_string(),
                   translations: vec![],
@@ -117,6 +120,7 @@ mod merge_tests {
               },
               "cat".to_string() => Entry {
                   see_also: None,
+                  pronunciations: vec![],
                   term: "cat".to_string(),
                   forms: vec![],
                   translations: vec![],

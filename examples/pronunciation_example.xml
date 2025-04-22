@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary name="Pronunciation Example Dictionary"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
+
+  <!-- Example of an entry with multiple pronunciations -->
+  <entry term="hello">
+    <!-- Entry-level pronunciation (British English) -->
+    <pronunciation kind="ipa" value="həˈləʊ">
+      <url src="./audio/hello_uk.mp3" type="audio/mpeg" description="British pronunciation" />
+    </pronunciation>
+
+    <!-- Entry-level pronunciation (American English) -->
+    <pronunciation kind="ipa" value="hɛˈloʊ">
+      <url src="./audio/hello_us.mp3" type="audio/mpeg" description="American pronunciation" />
+    </pronunciation>
+
+    <ety description="From Middle English hello, hallo, from Old High German hallo, holla, holā, emphatic imperative of hol, hal, emhl, over, to, at.">
+      <sense pos="int">
+        <definition value="A greeting used to initiate a conversation or gain attention.">
+          <example value="Hello, John! How are you today?">
+            <!-- Example-level pronunciation -->
+            <pronunciation kind="ipa" value="həˈləʊ, dʒɒn! haʊ ɑː juː təˈdeɪ?">
+              <url src="./audio/hello_john.mp3" type="audio/mpeg" />
+            </pronunciation>
+          </example>
+        </definition>
+      </sense>
+    </ety>
+  </entry>
+
+  <!-- Example of a Chinese entry with Pinyin pronunciation -->
+  <entry term="你好">
+    <pronunciation kind="pinyin" value="nǐ hǎo">
+      <url src="./audio/nihao.mp3" type="audio/mpeg" description="Standard Mandarin pronunciation" />
+    </pronunciation>
+
+    <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥">
+      <url src="./audio/nihao_ipa.mp3" type="audio/mpeg" />
+    </pronunciation>
+
+    <ety>
+      <sense pos="phr">
+        <definition value="Hello; greeting used when meeting someone">
+          <example value="你好，认识你很高兴。">
+            <pronunciation kind="pinyin" value="Nǐ hǎo, rènshi nǐ hěn gāoxìng." />
+          </example>
+        </definition>
+      </sense>
+    </ety>
+  </entry>
+
+  <!-- Example of a Japanese entry with multiple pronunciation systems -->
+  <entry term="こんにちは">
+    <pronunciation kind="romaji" value="Kon'nichiwa">
+      <url src="./audio/konnichiwa.mp3" type="audio/mpeg" />
+    </pronunciation>
+
+    <pronunciation kind="ipa" value="koɴ̩ɲit͡ɕiwa" />
+
+    <ety>
+      <sense pos="int">
+        <definition value="Hello; good afternoon; greeting used during the day">
+          <example value="こんにちは、お元気ですか？">
+            <pronunciation kind="romaji" value="Kon'nichiwa, o-genki desu ka?" />
+            <pronunciation kind="hiragana" value="こんにちは、おげんきですか？" />
+          </example>
+        </definition>
+      </sense>
+    </ety>
+  </entry>
+
+  <!-- Example of using a custom pronunciation system -->
+  <entry term="北京">
+    <pronunciation kind="pinyin" value="Běijīng">
+      <url src="./audio/beijing_pinyin.mp3" type="audio/mpeg" />
+    </pronunciation>
+
+    <pronunciation kind="wadegiles" value="Pei-ching">
+      <url src="./audio/beijing_wadegiles.mp3" type="audio/mpeg" description="Wade-Giles romanization" />
+    </pronunciation>
+
+    <ety>
+      <sense pos="propn">
+        <definition value="Beijing; the capital city of China">
+          <example value="我住在北京。">
+            <pronunciation kind="pinyin" value="Wǒ zhù zài Běijīng." />
+          </example>
+        </definition>
+      </sense>
+    </ety>
+  </entry>
+</dictionary>

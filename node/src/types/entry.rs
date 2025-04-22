@@ -4,6 +4,7 @@ use crate::utils::cast_error;
 
 use super::etymology::Etymology;
 use super::form::Form;
+use super::pronunciation::Pronunciation;
 use super::translation::Translation;
 
 #[napi(object)]
@@ -13,6 +14,7 @@ pub struct Entry {
   pub etymologies: Vec<Etymology>,
   pub forms: Vec<Form>,
   pub translations: Vec<Translation>,
+  pub pronunciations: Vec<Pronunciation>,
 }
 
 impl Entry {
@@ -23,6 +25,7 @@ impl Entry {
       etymologies,
       forms,
       translations,
+      pronunciations,
     } = entry;
 
     Ok(Self {
@@ -37,6 +40,10 @@ impl Entry {
         .into_iter()
         .map(Translation::from)
         .collect::<Result<Vec<Translation>, _>>()?,
+      pronunciations: pronunciations
+        .into_iter()
+        .map(|p| Pronunciation::from(p))
+        .collect::<Result<Vec<Pronunciation>, _>>()?,
     })
   }
 

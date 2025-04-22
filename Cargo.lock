@@ -2442,6 +2442,7 @@ dependencies = [
  "tantivy",
  "tempfile",
  "thiserror 2.0.12",
+ "url",
  "uuid",
  "validation",
 ]

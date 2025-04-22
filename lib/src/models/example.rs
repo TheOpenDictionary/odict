@@ -1,5 +1,5 @@
 use crate::serializable;
-use crate::Translation;
+use crate::{Pronunciation, Translation};
 
 serializable! {
 pub struct Example {
@@ -9,5 +9,9 @@ pub struct Example {
     #[serde(default, rename = "translation")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub translations: Vec<Translation>,
+
+    #[serde(default, rename = "pronunciation")]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub pronunciations: Vec<Pronunciation>,
   }
 }

@@ -78,6 +78,7 @@ fn test_form_with_tags() {
 
     // Create an entry with the form
     let entry = Entry {
+        pronunciations: vec![],
         term: "word".to_string(),
         see_also: None,
         etymologies: vec![],

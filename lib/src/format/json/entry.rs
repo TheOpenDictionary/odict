@@ -2,7 +2,7 @@ use crate::{ArchivedEntry, Entry};
 
 use serde::Serialize;
 
-use super::{EntryRefJSON, EtymologyJSON, FormJSON, TranslationJSON};
+use super::{EntryRefJSON, EtymologyJSON, FormJSON, PronunciationJSON, TranslationJSON};
 
 #[derive(Serialize)]
 pub struct EntryJSON {
@@ -19,6 +19,9 @@ pub struct EntryJSON {
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub translations: Vec<TranslationJSON>,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub pronunciations: Vec<PronunciationJSON>,
 }
 
 impl From<Entry> for EntryJSON {
@@ -29,6 +32,7 @@ impl From<Entry> for EntryJSON {
             etymologies,
             forms,
             translations,
+            pronunciations,
         } = entry;
 
         Self {
@@ -43,6 +47,10 @@ impl From<Entry> for EntryJSON {
                 .map(|e| EtymologyJSON::from(e))
                 .collect(),
             forms: forms.into_iter().map(|f| FormJSON::from(f)).collect(),
+            pronunciations: pronunciations
+                .into_iter()
+                .map(|p| PronunciationJSON::from(p))
+                .collect(),
         }
     }
 }

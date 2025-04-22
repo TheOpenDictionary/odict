@@ -5,6 +5,7 @@ mod example;
 mod group;
 mod md;
 mod note;
+mod pronunciation;
 mod sense;
 mod utils;
 
