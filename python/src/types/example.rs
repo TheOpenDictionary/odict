@@ -1,3 +1,4 @@
+use crate::types::Translation;
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -5,14 +6,37 @@ use pyo3::prelude::*;
 pub struct Example {
     #[pyo3(get)]
     pub value: String,
+
+    #[pyo3(get)]
+    pub translations: Vec<Translation>,
 }
 
 impl From<odict::Example> for Example {
     fn from(example: odict::Example) -> Self {
-        let odict::Example { value } = example;
+        let odict::Example {
+            value,
+            translations,
+        } = example;
+
+        let mapped_translations = translations
+            .into_iter()
+            .map(|t| Translation::from(t).unwrap())
+            .collect();
 
         Self {
             value: String::from(value),
+            translations: mapped_translations,
+        }
+    }
+}
+
+#[pymethods]
+impl Example {
+    #[new]
+    pub fn new(value: String) -> Self {
+        Self {
+            value,
+            translations: Vec::new(),
         }
     }
 }

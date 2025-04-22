@@ -81,6 +81,7 @@ mod test {
 
         let example = Example {
             value: String::from("test"),
+            translations: vec![],
         };
 
         let result = insert_example(builder, None, None, 0, &example);

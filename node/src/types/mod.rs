@@ -12,6 +12,7 @@ mod sense;
 mod split;
 mod token;
 mod tokenize;
+mod translation;
 
 pub use dictionary::*;
 pub use entry::*;
@@ -22,6 +23,7 @@ pub use lookup::*;
 pub use split::*;
 pub use token::*;
 pub use tokenize::*;
+pub use translation::*;
 
 mod index;
 mod search;

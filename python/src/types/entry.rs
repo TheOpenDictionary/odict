@@ -4,6 +4,7 @@ use crate::utils::cast_error;
 
 use super::etymology::Etymology;
 use super::form::Form;
+use super::translation::Translation;
 
 #[pyclass]
 #[derive(Debug, Clone)]
@@ -16,6 +17,8 @@ pub struct Entry {
     pub etymologies: Vec<Etymology>,
     #[pyo3(get)]
     pub forms: Vec<Form>,
+    #[pyo3(get)]
+    pub translations: Vec<Translation>,
 }
 
 #[pymethods]
@@ -42,6 +45,7 @@ impl From<odict::Entry> for Entry {
             see_also,
             etymologies,
             forms,
+            translations,
         } = entry;
 
         Self {
@@ -52,6 +56,10 @@ impl From<odict::Entry> for Entry {
                 .map(|e| Etymology::from(e))
                 .collect(),
             forms: forms.into_iter().map(Form::from).collect(),
+            translations: translations
+                .into_iter()
+                .map(|t| Translation::from(t).unwrap())
+                .collect(),
         }
     }
 }

@@ -18,6 +18,7 @@ mod resolve_tests {
                 forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
+                translations: vec![],
                 etymologies: vec![
                   Etymology {
                     id: None,
