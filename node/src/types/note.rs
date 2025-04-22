@@ -1,5 +1,3 @@
-use napi::bindgen_prelude::*;
-
 use structural_convert::StructuralConvert;
 
 use super::Example;

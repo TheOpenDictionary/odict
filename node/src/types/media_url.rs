@@ -1,5 +1,3 @@
-use napi::bindgen_prelude::*;
-use napi_derive::napi;
 use structural_convert::StructuralConvert;
 
 #[napi(object)]

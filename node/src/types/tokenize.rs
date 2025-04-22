@@ -19,14 +19,28 @@ impl Default for TokenizeOptions {
   }
 }
 
-impl From<odict::lookup::TokenizeOptions> for TokenizeOptions {
-  fn from(options: odict::lookup::TokenizeOptions) -> Self {
-    TokenizeOptions {
-      follow: Some(options.follow),
-      allow_list: options
-        .allow_list
-        .map(|list| list.iter().map(|s| s.to_string()).collect()),
-      insensitive: Some(options.insensitive),
+impl From<TokenizeOptions> for odict::lookup::TokenizeOptions {
+  fn from(opts: TokenizeOptions) -> Self {
+    let mut options = odict::lookup::TokenizeOptions::default();
+
+    if let Some(follow) = opts.follow {
+      options = options.follow(follow);
     }
+
+    if let Some(insensitive) = opts.insensitive {
+      options = options.insensitive(insensitive);
+    }
+
+    if let Some(allow_list) = opts.allow_list {
+      options = options.allow_list(
+        allow_list
+          .into_iter()
+          .map(|s| Language::from_code(s))
+          .filter_map(|l| l)
+          .collect::<Vec<Language>>(),
+      );
+    }
+
+    options
   }
 }

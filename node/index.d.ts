@@ -43,15 +43,15 @@ export interface Entry {
 
 export interface Etymology {
   id?: string;
-  pronunciations: Pronunciation[];
+  pronunciations: Array<Pronunciation>;
   description?: string;
   senses: Record<string, Sense>;
 }
 
 export interface Example {
   value: string;
-  translations: Translation[];
-  pronunciations: Pronunciation[];
+  translations: Array<Translation>;
+  pronunciations: Array<Pronunciation>;
 }
 
 export interface Form {

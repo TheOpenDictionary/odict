@@ -1,5 +1,3 @@
-use odict::ArchivedEntry;
-
 use super::LookupResult;
 
 #[napi(object)]
@@ -13,16 +11,5 @@ pub struct Token {
   pub end: u16,
 }
 
-impl From<odict::lookup::Token> for Token {
-  fn from(token: odict::lookup::Token) -> Self {
-    Token {
-      lemma: token.lemma.clone(),
-      language: token.language.map(|s| s.code().to_string()).clone(),
-      script: token.script.name().to_string(),
-      kind: format!("{:?}", token.kind),
-      start: token.start as u16,
-      end: token.end as u16,
-      entries: token.entries.iter().map(|result| result.into()).collect(),
-    }
-  }
-}
+// We handle token conversion manually in dictionary.rs now
+// This implementation was causing generic parameter errors
