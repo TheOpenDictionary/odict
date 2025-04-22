@@ -3,6 +3,7 @@ use pyo3::prelude::*;
 use super::Entry;
 
 #[pyclass]
+#[derive(Debug, Clone)]
 pub struct LookupResult {
     #[pyo3(get)]
     pub entry: Entry,
@@ -34,6 +35,18 @@ impl From<odict::lookup::LookupResult<&odict::ArchivedEntry>> for LookupResult {
         let directed_from = result
             .directed_from
             .map(|s| Entry::from(s.to_entry().unwrap()));
+
+        Self {
+            entry,
+            directed_from,
+        }
+    }
+}
+
+impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+        let entry = Entry::from(result.entry);
+        let directed_from = result.directed_from.map(|s| Entry::from(s));
 
         Self {
             entry,

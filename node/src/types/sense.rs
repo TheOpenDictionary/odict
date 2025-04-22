@@ -12,7 +12,6 @@ pub struct Sense {
   pub tags: Vec<String>,
 }
 
-// Custom conversion implementation for Sense
 impl From<odict::Sense> for Sense {
   fn from(sense: odict::Sense) -> Self {
     Sense {

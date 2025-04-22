@@ -1,12 +1,11 @@
 use either::Either;
+use odict::DefinitionType;
 use pyo3::prelude::*;
-use structural_convert::StructuralConvert;
 
 use super::{definition::Definition, group::Group};
 
 #[pyclass]
-#[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Sense))]
+#[derive(Debug, Clone)]
 pub struct Sense {
     #[pyo3(get)]
     pub pos: String,
@@ -16,4 +15,22 @@ pub struct Sense {
     pub definitions: Vec<Either<Definition, Group>>,
     #[pyo3(get)]
     pub tags: Vec<String>,
+}
+
+impl From<odict::Sense> for Sense {
+    fn from(sense: odict::Sense) -> Self {
+        Sense {
+            pos: sense.pos.to_string(),
+            lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),
+            definitions: sense
+                .definitions
+                .into_iter()
+                .map(|def_type| match def_type {
+                    DefinitionType::Definition(def) => Either::Left(def.into()),
+                    DefinitionType::Group(group) => Either::Right(group.into()),
+                })
+                .collect(),
+            tags: sense.tags,
+        }
+    }
 }

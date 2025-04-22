@@ -49,6 +49,18 @@ pub struct LookupResult {
   pub directed_from: Option<Entry>,
 }
 
+impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
+  fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+    let entry = Entry::from(result.entry);
+    let directed_from = result.directed_from.map(|s| Entry::from(s));
+
+    Self {
+      entry,
+      directed_from,
+    }
+  }
+}
+
 impl TryFrom<&odict::lookup::LookupResult<&ArchivedEntry>> for LookupResult {
   type Error = napi::Error;
 
