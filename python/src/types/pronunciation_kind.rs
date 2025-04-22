@@ -4,52 +4,96 @@ use pyo3::prelude::*;
 use pyo3::pyclass::CompareOp;
 
 #[pyclass]
-#[derive(Clone, Debug)]
-pub enum FormKind {
-    Conjugation,
-    Inflection,
-    Plural,
-    Singular,
-    Comparative,
-    Superlative,
-    PastTense,
-    PresentParticiple,
+#[derive(Clone, Debug, PartialEq)]
+pub enum PronunciationKind {
+    IPA,
+    Pinyin,
+    Hiragana,
+    Romaji,
+    Katakana,
+    Yale,
+    Jyutping,
+    Bopomofo,
+    Hepburn,
     Other,
 }
 
 #[pymethods]
-impl FormKind {
-    fn __eq__(&self, other: &Self) -> bool {
-        std::mem::discriminant(self) == std::mem::discriminant(other)
+impl PronunciationKind {
+    #[new]
+    pub fn new(kind: &str) -> Self {
+        match kind.to_lowercase().as_str() {
+            "ipa" => Self::IPA,
+            "pinyin" => Self::Pinyin,
+            "hiragana" => Self::Hiragana,
+            "romaji" => Self::Romaji,
+            "katakana" => Self::Katakana,
+            "yale" => Self::Yale,
+            "jyutping" => Self::Jyutping,
+            "bopomofo" => Self::Bopomofo,
+            "hepburn" => Self::Hepburn,
+            _ => Self::Other,
+        }
     }
-}
 
-impl From<odict::FormKind> for FormKind {
-    fn from(kind: odict::FormKind) -> Self {
-        match kind {
-            odict::FormKind::Conjugation => FormKind::Conjugation,
-            odict::FormKind::Inflection => FormKind::Inflection,
-            odict::FormKind::Plural => FormKind::Plural,
-            odict::FormKind::Singular => FormKind::Singular,
-            odict::FormKind::Comparative => FormKind::Comparative,
-            odict::FormKind::Superlative => FormKind::Superlative,
-            odict::FormKind::Other => FormKind::Other,
+    fn __richcmp__(&self, other: &Self, op: CompareOp, py: Python<'_>) -> PyObject {
+        match op {
+            CompareOp::Eq => (self == other).into_py(py),
+            CompareOp::Ne => (self != other).into_py(py),
+            _ => py.NotImplemented(),
+        }
+    }
+
+    fn __str__(&self) -> String {
+        self.to_string()
+    }
+
+    fn __repr__(&self) -> String {
+        match self {
+            Self::IPA => "PronunciationKind.IPA".to_string(),
+            Self::Pinyin => "PronunciationKind.Pinyin".to_string(),
+            Self::Hiragana => "PronunciationKind.Hiragana".to_string(),
+            Self::Romaji => "PronunciationKind.Romaji".to_string(),
+            Self::Katakana => "PronunciationKind.Katakana".to_string(),
+            Self::Yale => "PronunciationKind.Yale".to_string(),
+            Self::Jyutping => "PronunciationKind.Jyutping".to_string(),
+            Self::Bopomofo => "PronunciationKind.Bopomofo".to_string(),
+            Self::Hepburn => "PronunciationKind.Hepburn".to_string(),
+            Self::Other => "PronunciationKind.Other".to_string(),
         }
     }
 }
 
-impl ToString for FormKind {
-    fn to_string(&self) -> String {
+impl fmt::Display for PronunciationKind {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            FormKind::Conjugation => "conjugation".to_string(),
-            FormKind::Inflection => "inflection".to_string(),
-            FormKind::Plural => "plural".to_string(),
-            FormKind::Singular => "singular".to_string(),
-            FormKind::Comparative => "comparative".to_string(),
-            FormKind::Superlative => "superlative".to_string(),
-            FormKind::PastTense => "past-tense".to_string(),
-            FormKind::PresentParticiple => "present-participle".to_string(),
-            FormKind::Other => "other".to_string(),
+            Self::IPA => write!(f, "ipa"),
+            Self::Pinyin => write!(f, "pinyin"),
+            Self::Hiragana => write!(f, "hiragana"),
+            Self::Romaji => write!(f, "romaji"),
+            Self::Katakana => write!(f, "katakana"),
+            Self::Yale => write!(f, "yale"),
+            Self::Jyutping => write!(f, "jyutping"),
+            Self::Bopomofo => write!(f, "bopomofo"),
+            Self::Hepburn => write!(f, "hepburn"),
+            Self::Other => write!(f, "other"),
+        }
+    }
+}
+
+impl From<odict::PronunciationKind> for PronunciationKind {
+    fn from(kind: odict::PronunciationKind) -> Self {
+        match kind {
+            odict::PronunciationKind::IPA => Self::IPA,
+            odict::PronunciationKind::Pinyin => Self::Pinyin,
+            odict::PronunciationKind::Hiragana => Self::Hiragana,
+            odict::PronunciationKind::Romaji => Self::Romaji,
+            odict::PronunciationKind::Katakana => Self::Katakana,
+            odict::PronunciationKind::Yale => Self::Yale,
+            odict::PronunciationKind::Jyutping => Self::Jyutping,
+            odict::PronunciationKind::Bopomofo => Self::Bopomofo,
+            odict::PronunciationKind::Hepburn => Self::Hepburn,
+            odict::PronunciationKind::Other => Self::Other,
         }
     }
 }

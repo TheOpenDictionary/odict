@@ -35,7 +35,7 @@ impl Pronunciation {
     fn __repr__(&self) -> String {
         format!(
             "Pronunciation(kind='{}', value='{}', urls={})",
-            self.raw_kind,
+            self.kind,
             self.value,
             if self.urls.is_empty() {
                 "[]".to_string()
@@ -53,7 +53,7 @@ impl Pronunciation {
     }
 
     fn __str__(&self) -> String {
-        format!("{} ({})", self.value, self.raw_kind)
+        format!("{} ({})", self.value, self.kind)
     }
 }
 
