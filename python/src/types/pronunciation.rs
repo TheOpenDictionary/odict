@@ -1,11 +1,13 @@
 use pyo3::prelude::*;
 use std::fmt;
+use structural_convert::StructuralConvert;
 
 use super::media_url::MediaURL;
 use super::pronunciation_kind::PronunciationKind;
 
 #[pyclass]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, StructuralConvert)]
+#[convert(from(odict::Pronunciation))]
 pub struct Pronunciation {
     #[pyo3(get)]
     pub kind: PronunciationKind,
@@ -54,17 +56,5 @@ impl Pronunciation {
 
     fn __str__(&self) -> String {
         format!("{} ({})", self.value, self.kind)
-    }
-}
-
-impl From<odict::Pronunciation> for Pronunciation {
-    fn from(pronunciation: odict::Pronunciation) -> Self {
-        let odict::Pronunciation { kind, value, urls } = pronunciation;
-
-        Self {
-            kind: PronunciationKind::from(kind),
-            value,
-            urls: urls.into_iter().map(MediaURL::from).collect(),
-        }
     }
 }

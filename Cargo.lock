@@ -2521,6 +2521,7 @@ dependencies = [
  "either",
  "odict",
  "pyo3",
+ "structural-convert",
 ]
 
 [[package]]
