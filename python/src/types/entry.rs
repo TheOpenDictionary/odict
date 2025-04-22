@@ -58,8 +58,8 @@ impl From<odict::Entry> for Entry {
             forms: forms.into_iter().map(Form::from).collect(),
             translations: translations
                 .into_iter()
-                .map(|t| Translation::from(t))
-                .collect::<Result<Vec<_>, _>>()?,
-        })
+                .map(|t| Translation::from(t).unwrap())
+                .collect(),
+        }
     }
 }
