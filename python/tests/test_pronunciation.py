@@ -22,7 +22,7 @@ def test_entry_with_pronunciation():
     """
 
     with tempfile.NamedTemporaryFile(suffix=".xml", mode="w+") as xml_file:
-        xml_file.write(xml)
+        xml_file.write(xml.encode("utf-8"))
         xml_file.flush()
 
         dictionary = Dictionary.compile(xml_file.name)
