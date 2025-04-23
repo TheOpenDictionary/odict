@@ -16,3 +16,6 @@ insta.opt-level = 3
 [profile.dist]
 inherits = "release"
 lto = "thin"
+
+[workspace.dependencies]
+structural-convert = "0.13.0"

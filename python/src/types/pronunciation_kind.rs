@@ -1,7 +1,6 @@
 use std::fmt;
 
 use pyo3::prelude::*;
-use pyo3::pyclass::CompareOp;
 use structural_convert::StructuralConvert;
 
 #[pyclass]
