@@ -61,6 +61,9 @@ pub enum Error {
     #[error("Failed to parse ID: {0}")]
     InvalidID(String),
 
+    #[error("Invalid URL: {0}")]
+    InvalidURL(String),
+
     #[error("An unexpected error occurred: {0}")]
     Other(String),
 }

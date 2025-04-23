@@ -23,7 +23,7 @@ mod resolve_tests {
                   Etymology {
                     id: None,
                     description: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         pos: PartOfSpeech::n,

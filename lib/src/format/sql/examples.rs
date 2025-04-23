@@ -80,6 +80,7 @@ mod test {
         let builder = &mut SQLBuilder::new(crate::format::sql::SQLDialect::Postgres);
 
         let example = Example {
+            pronunciations: vec![],
             value: String::from("test"),
             translations: vec![],
         };

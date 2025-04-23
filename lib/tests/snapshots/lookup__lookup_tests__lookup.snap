@@ -7,7 +7,6 @@ expression: result.to_json(true).unwrap()
     "term": "dog",
     "etymologies": [
       {
-        "pronunciation": "dooooog",
         "description": "Latin root",
         "senses": {
           "un": {

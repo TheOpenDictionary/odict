@@ -21,7 +21,7 @@ mod merge_tests {
                   Etymology {
                     id:None,
                     description:None,
-                    pronunciation:None,
+                    pronunciations: vec![],
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         tags: vec![],
@@ -57,7 +57,7 @@ mod merge_tests {
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                           PartOfSpeech::n=>
@@ -93,7 +93,7 @@ mod merge_tests {
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                         PartOfSpeech::n=>
@@ -122,7 +122,7 @@ mod merge_tests {
                   translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
                           PartOfSpeech::n=>

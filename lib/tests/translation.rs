@@ -5,6 +5,7 @@ use odict::{DefinitionType, Entry, Example, ToDictionary, Translation};
 fn test_translation_in_example() {
     // Create an example with translations
     let example = Example {
+        pronunciations: vec![],
         value: "This is an example sentence.".to_string(),
         translations: vec![
             Translation {

@@ -2,7 +2,9 @@ use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
 use crate::{Etymology, Sense, ID};
 
-use super::{entries::Entries, senses::insert_sense, utils::SQLBuilder};
+use super::{
+    entries::Entries, pronunciations::insert_pronunciation, senses::insert_sense, utils::SQLBuilder,
+};
 
 #[derive(Iden)]
 pub enum Etymologies {
@@ -60,6 +62,11 @@ pub fn insert_etymology(
                 entry_id.into(),
             ])?,
     );
+
+    // Insert pronunciations
+    for pronunciation in &etymology.pronunciations {
+        insert_pronunciation(builder, id.as_str(), pronunciation)?;
+    }
 
     let mut senses = etymology.senses.values().collect::<Vec<&Sense>>();
 

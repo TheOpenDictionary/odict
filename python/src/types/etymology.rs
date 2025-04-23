@@ -2,6 +2,7 @@ use std::{collections::HashMap, fmt};
 
 use pyo3::prelude::*;
 
+use super::pronunciation::Pronunciation;
 use super::sense::Sense;
 
 #[pyclass]
@@ -10,7 +11,7 @@ pub struct Etymology {
     #[pyo3(get)]
     pub id: Option<String>,
     #[pyo3(get)]
-    pub pronunciation: Option<String>,
+    pub pronunciations: Vec<Pronunciation>,
     #[pyo3(get)]
     pub description: Option<String>,
     #[pyo3(get)]
@@ -26,7 +27,7 @@ impl fmt::Debug for Etymology {
 
         f.debug_struct("Etymology")
             .field("id", &self.id)
-            .field("pronunciation", &self.pronunciation)
+            .field("pronunciations", &self.pronunciations)
             .field("description", &self.description)
             .field("senses", &senses)
             .finish()
@@ -37,14 +38,17 @@ impl From<odict::Etymology> for Etymology {
     fn from(etymology: odict::Etymology) -> Self {
         let odict::Etymology {
             id,
-            pronunciation,
+            pronunciations,
             description,
             senses,
         } = etymology;
 
         Self {
             id,
-            pronunciation,
+            pronunciations: pronunciations
+                .into_iter()
+                .map(Pronunciation::from)
+                .collect(),
             description: description.map(|d| String::from(d)),
             senses: senses
                 .into_iter()
