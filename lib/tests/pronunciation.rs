@@ -57,10 +57,10 @@ mod pronunciation_tests {
         let pronunciation = &entry.etymologies[0].pronunciations[0];
         assert!(matches!(pronunciation.kind, PronunciationKind::Pinyin));
         assert_eq!(pronunciation.value, "ni hao");
-        assert_eq!(pronunciation.urls.len(), 1);
-        assert_eq!(pronunciation.urls[0].src, "./audio.mp3");
+        assert_eq!(pronunciation.media.len(), 1);
+        assert_eq!(pronunciation.media[0].src, "./audio.mp3");
         assert_eq!(
-            pronunciation.urls[0].mime_type,
+            pronunciation.media[0].mime_type,
             Some("audio/mpeg".to_string())
         );
     }
@@ -81,8 +81,8 @@ mod pronunciation_tests {
         let pronunciation = &example.pronunciations[0];
         assert!(matches!(pronunciation.kind, PronunciationKind::IPA));
         assert_eq!(pronunciation.value, "həˈləʊ wɜːld");
-        assert_eq!(pronunciation.urls.len(), 1);
-        assert_eq!(pronunciation.urls[0].src, "./hello.mp3");
+        assert_eq!(pronunciation.media.len(), 1);
+        assert_eq!(pronunciation.media[0].src, "./hello.mp3");
     }
 
     #[test]
