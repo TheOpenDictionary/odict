@@ -2,7 +2,7 @@ use either::Either;
 use odict::DefinitionType;
 use pyo3::prelude::*;
 
-use super::{definition::Definition, group::Group};
+use super::{definition::Definition, form::Form, group::Group, translation::Translation};
 
 #[pyclass]
 #[derive(Debug, Clone)]
@@ -15,6 +15,10 @@ pub struct Sense {
     pub definitions: Vec<Either<Definition, Group>>,
     #[pyo3(get)]
     pub tags: Vec<String>,
+    #[pyo3(get)]
+    pub translations: Vec<Translation>,
+    #[pyo3(get)]
+    pub forms: Vec<Form>,
 }
 
 impl From<odict::Sense> for Sense {
@@ -31,6 +35,8 @@ impl From<odict::Sense> for Sense {
                 })
                 .collect(),
             tags: sense.tags,
+            translations: sense.translations.into_iter().map(|t| t.into()).collect(),
+            forms: sense.forms.into_iter().map(|f| f.into()).collect(),
         }
     }
 }

@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 use crate::{DefinitionType, PartOfSpeech, Sense};
 
-use super::{DefinitionJSON, EntryRefJSON, GroupJSON};
+use super::{DefinitionJSON, EntryRefJSON, FormJSON, GroupJSON, TranslationJSON};
 
 #[derive(Serialize, StructuralConvert)]
 #[convert(from(DefinitionType))]
@@ -29,4 +29,10 @@ pub struct SenseJSON {
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub tags: Vec<String>,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub translations: Vec<TranslationJSON>,
+
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub forms: Vec<FormJSON>,
 }

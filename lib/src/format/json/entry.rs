@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
-use super::{EntryRefJSON, EtymologyJSON, FormJSON, TranslationJSON};
+use super::{EntryRefJSON, EtymologyJSON};
 
 #[derive(Serialize, StructuralConvert)]
 #[convert(from(Entry))]
@@ -15,12 +15,6 @@ pub struct EntryJSON {
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub etymologies: Vec<EtymologyJSON>,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub forms: Vec<FormJSON>,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub translations: Vec<TranslationJSON>,
 }
 
 impl TryFrom<&ArchivedEntry> for EntryJSON {

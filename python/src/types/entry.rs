@@ -4,8 +4,6 @@ use structural_convert::StructuralConvert;
 use crate::utils::cast_error;
 
 use super::etymology::Etymology;
-use super::form::Form;
-use super::translation::Translation;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
@@ -17,10 +15,6 @@ pub struct Entry {
     pub see_also: Option<String>,
     #[pyo3(get)]
     pub etymologies: Vec<Etymology>,
-    #[pyo3(get)]
-    pub forms: Vec<Form>,
-    #[pyo3(get)]
-    pub translations: Vec<Translation>,
 }
 
 #[pymethods]
