@@ -4,8 +4,6 @@ use structural_convert::StructuralConvert;
 use crate::utils::cast_error;
 
 use super::etymology::Etymology;
-use super::form::Form;
-use super::translation::Translation;
 
 #[napi(object)]
 #[derive(StructuralConvert)]
@@ -14,8 +12,6 @@ pub struct Entry {
   pub term: String,
   pub see_also: Option<String>,
   pub etymologies: Vec<Etymology>,
-  pub forms: Vec<Form>,
-  pub translations: Vec<Translation>,
 }
 
 pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Entry> {

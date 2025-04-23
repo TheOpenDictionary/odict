@@ -18,4 +18,4 @@ odict = { path = "../lib", features = [
   "json",
 ] }
 either = { version = "*" }
-structural-convert = "0.13.0"
+structural-convert = { workspace = true }

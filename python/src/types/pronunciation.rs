@@ -1,5 +1,4 @@
 use pyo3::prelude::*;
-use std::fmt;
 use structural_convert::StructuralConvert;
 
 use super::media_url::MediaURL;

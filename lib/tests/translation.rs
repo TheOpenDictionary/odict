@@ -32,39 +32,70 @@ fn test_translation_in_example() {
 
 #[test]
 fn test_translation_in_entry() {
-    // Create an entry with translations
+    // Create translations
+    let translations = vec![
+        Translation {
+            lang: "es".to_string(),
+            value: "hola".to_string(),
+        },
+        Translation {
+            lang: "fr".to_string(),
+            value: "bonjour".to_string(),
+        },
+    ];
+
+    // Create a sense with translations
+    let sense = odict::Sense {
+        pos: odict::PartOfSpeech::n,
+        lemma: None,
+        definitions: vec![],
+        tags: vec![],
+        translations: translations.clone(),
+        forms: vec![],
+    };
+
+    // Create an etymology with the sense
+    let mut senses = std::collections::HashMap::new();
+    senses.insert(odict::PartOfSpeech::n, sense);
+
+    let etymology = odict::Etymology {
+        id: None,
+        pronunciations: vec![],
+        description: None,
+        senses,
+    };
+
+    // Create an entry with the etymology
     let entry = Entry {
         term: "hello".to_string(),
         see_also: None,
-        etymologies: vec![],
-        forms: vec![],
-        translations: vec![
-            Translation {
-                lang: "es".to_string(),
-                value: "hola".to_string(),
-            },
-            Translation {
-                lang: "fr".to_string(),
-                value: "bonjour".to_string(),
-            },
-        ],
+        etymologies: vec![etymology],
     };
 
     // Test that translations are correctly stored
-    assert_eq!(entry.translations.len(), 2);
-    assert_eq!(entry.translations[0].lang, "es");
-    assert_eq!(entry.translations[0].value, "hola");
-    assert_eq!(entry.translations[1].lang, "fr");
-    assert_eq!(entry.translations[1].value, "bonjour");
+    let stored_translations = &entry.etymologies[0]
+        .senses
+        .get(&odict::PartOfSpeech::n)
+        .unwrap()
+        .translations;
+    assert_eq!(stored_translations.len(), 2);
+    assert_eq!(stored_translations[0].lang, "es");
+    assert_eq!(stored_translations[0].value, "hola");
+    assert_eq!(stored_translations[1].lang, "fr");
+    assert_eq!(stored_translations[1].value, "bonjour");
 }
 
 #[test]
 fn test_xml_serialization() {
-    // Define a simple XML with translations
+    // Define a simple XML with translations - now translations should be inside a sense
     let xml = r#"<dictionary>
         <entry term="hello">
-            <translation lang="es" value="hola" />
-            <translation lang="fr" value="bonjour" />
+            <ety>
+                <sense pos="n">
+                    <translation lang="es" value="hola" />
+                    <translation lang="fr" value="bonjour" />
+                </sense>
+            </ety>
         </entry>
     </dictionary>"#;
 
@@ -74,12 +105,20 @@ fn test_xml_serialization() {
     // Get the entry by key from the HashMap
     let entry = dictionary.entries.get("hello").unwrap();
 
+    // Get the translations from the first etymology's first sense
+    let translations = &entry.etymologies[0]
+        .senses
+        .values()
+        .next()
+        .unwrap()
+        .translations;
+
     // Test that translations are parsed correctly
-    assert_eq!(entry.translations.len(), 2);
-    assert_eq!(entry.translations[0].lang, "es");
-    assert_eq!(entry.translations[0].value, "hola");
-    assert_eq!(entry.translations[1].lang, "fr");
-    assert_eq!(entry.translations[1].value, "bonjour");
+    assert_eq!(translations.len(), 2);
+    assert_eq!(translations[0].lang, "es");
+    assert_eq!(translations[0].value, "hola");
+    assert_eq!(translations[1].lang, "fr");
+    assert_eq!(translations[1].value, "bonjour");
 }
 
 #[test]
@@ -135,11 +174,15 @@ fn test_example_with_translation() {
 
 #[test]
 fn test_json_format() {
-    // Define a simple XML with translations
+    // Define a simple XML with translations now in the sense structure
     let xml = r#"<dictionary>
         <entry term="hello">
-            <translation lang="es" value="hola" />
-            <translation lang="fr" value="bonjour" />
+            <ety>
+                <sense pos="n">
+                    <translation lang="es" value="hola" />
+                    <translation lang="fr" value="bonjour" />
+                </sense>
+            </ety>
         </entry>
     </dictionary>"#;
 
@@ -153,16 +196,22 @@ fn test_json_format() {
     // Access entry translations through the entries array
     if let Some(entries) = json_value["entries"].as_object() {
         let entry = entries.get("hello").unwrap();
-        let translations = &entry["translations"];
 
-        // Validate entry translations
-        assert_eq!(translations.as_array().unwrap().len(), 2);
-        assert_eq!(translations[0]["lang"], "es");
-        assert_eq!(translations[0]["value"], "hola");
-        assert_eq!(translations[1]["lang"], "fr");
-        assert_eq!(translations[1]["value"], "bonjour");
+        // Validate translations in the sense structure
+        if let Some(etymologies) = entry["etymologies"].as_array() {
+            if let Some(senses) = etymologies[0]["senses"].as_array() {
+                let translations = &senses[0]["translations"];
 
-        // Validate example translations
+                // Validate entry translations
+                assert_eq!(translations.as_array().unwrap().len(), 2);
+                assert_eq!(translations[0]["lang"], "es");
+                assert_eq!(translations[0]["value"], "hola");
+                assert_eq!(translations[1]["lang"], "fr");
+                assert_eq!(translations[1]["value"], "bonjour");
+            }
+        }
+
+        // The rest of the test for example translations remains the same
         if let Some(etymologies) = entry["etymologies"].as_array() {
             if let Some(senses) = etymologies[0]["senses"].as_array() {
                 if let Some(definitions) = senses[0]["definitions"].as_array() {

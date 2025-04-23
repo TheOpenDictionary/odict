@@ -11,12 +11,12 @@ describe("Form support", () => {
     const xmlContent = `
       <dictionary>
         <entry term="run">
-          <form kind="inflection" term="ran" />
-          <form kind="superlative" term="running" />
-          <form term="runs" />
           <ety>
             <sense>
               <definition value="To move quickly on foot." />
+              <form kind="inflection" term="ran" />
+              <form kind="superlative" term="running" />
+              <form term="runs" />
             </sense>
           </ety>
         </entry>
@@ -38,19 +38,23 @@ describe("Form support", () => {
     expect(results.length).toBe(1);
 
     const entry = results[0].entry;
+    
+    // Get the etymology and sense
+    const etymology = entry.etymologies[0];
+    const sense = Object.values(etymology.senses)[0];
 
-    // Check the forms
-    expect(entry.forms.length).toBe(3);
+    // Check the forms in the sense
+    expect(sense.forms.length).toBe(3);
 
     // Forms are stored properly with terms and kinds
-    expect(entry.forms[0].term).toBe("ran");
-    expect(entry.forms[0].kind).toBe(FormKind.Inflection);
+    expect(sense.forms[0].term).toBe("ran");
+    expect(sense.forms[0].kind).toBe(FormKind.Inflection);
 
-    expect(entry.forms[1].term).toBe("running");
-    expect(entry.forms[1].kind).toBe(FormKind.Superlative);
+    expect(sense.forms[1].term).toBe("running");
+    expect(sense.forms[1].kind).toBe(FormKind.Superlative);
 
-    expect(entry.forms[2].term).toBe("runs");
-    expect(entry.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified
+    expect(sense.forms[2].term).toBe("runs");
+    expect(sense.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified
   });
 });
 
