@@ -1,10 +1,12 @@
 use crate::{ArchivedEntry, Entry};
+use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
 use super::{EntryRefJSON, EtymologyJSON, FormJSON, TranslationJSON};
 
-#[derive(Serialize)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(Entry))]
 pub struct EntryJSON {
     pub term: String,
 
@@ -21,34 +23,9 @@ pub struct EntryJSON {
     pub translations: Vec<TranslationJSON>,
 }
 
-impl From<Entry> for EntryJSON {
-    fn from(entry: Entry) -> Self {
-        let Entry {
-            term,
-            see_also,
-            etymologies,
-            forms,
-            translations,
-        } = entry;
-
-        Self {
-            term,
-            see_also: see_also.map(EntryRefJSON::from),
-            translations: translations
-                .into_iter()
-                .map(|t| TranslationJSON::from(t))
-                .collect(),
-            etymologies: etymologies
-                .into_iter()
-                .map(|e| EtymologyJSON::from(e))
-                .collect(),
-            forms: forms.into_iter().map(|f| FormJSON::from(f)).collect(),
-        }
+impl TryFrom<&ArchivedEntry> for EntryJSON {
+    fn try_from(entry: &ArchivedEntry) -> crate::Result<Self> {
+        Ok(entry.to_entry()?.into())
     }
-}
-
-impl From<&ArchivedEntry> for EntryJSON {
-    fn from(entry: &ArchivedEntry) -> Self {
-        EntryJSON::from(entry.to_entry().unwrap())
-    }
+    type Error = crate::Error;
 }

@@ -28,10 +28,13 @@ impl LookupResult {
     }
 }
 
-impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
-    fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
-        let entry = Entry::from(result.entry);
-        let directed_from = result.directed_from.map(Entry::from);
+impl From<odict::lookup::LookupResult<&odict::ArchivedEntry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<&odict::ArchivedEntry>) -> Self {
+        let entry = Entry::from(result.entry.to_entry().unwrap());
+
+        let directed_from = result
+            .directed_from
+            .map(|s| Entry::from(s.to_entry().unwrap()));
 
         Self {
             entry,
@@ -40,13 +43,10 @@ impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
     }
 }
 
-impl From<odict::lookup::LookupResult<&odict::ArchivedEntry>> for LookupResult {
-    fn from(result: odict::lookup::LookupResult<&odict::ArchivedEntry>) -> Self {
-        let entry = Entry::from(result.entry.to_entry().unwrap());
-
-        let directed_from = result
-            .directed_from
-            .map(|s| Entry::from(s.to_entry().unwrap()));
+impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+        let entry = Entry::from(result.entry);
+        let directed_from = result.directed_from.map(|s| Entry::from(s));
 
         Self {
             entry,

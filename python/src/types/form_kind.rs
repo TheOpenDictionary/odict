@@ -1,7 +1,9 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 #[pyclass]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, StructuralConvert)]
+#[convert(from(odict::FormKind))]
 pub enum FormKind {
     Conjugation,
     Inflection,
@@ -9,8 +11,6 @@ pub enum FormKind {
     Singular,
     Comparative,
     Superlative,
-    PastTense,
-    PresentParticiple,
     Other,
 }
 
@@ -18,20 +18,6 @@ pub enum FormKind {
 impl FormKind {
     fn __eq__(&self, other: &Self) -> bool {
         std::mem::discriminant(self) == std::mem::discriminant(other)
-    }
-}
-
-impl From<odict::FormKind> for FormKind {
-    fn from(kind: odict::FormKind) -> Self {
-        match kind {
-            odict::FormKind::Conjugation => FormKind::Conjugation,
-            odict::FormKind::Inflection => FormKind::Inflection,
-            odict::FormKind::Plural => FormKind::Plural,
-            odict::FormKind::Singular => FormKind::Singular,
-            odict::FormKind::Comparative => FormKind::Comparative,
-            odict::FormKind::Superlative => FormKind::Superlative,
-            odict::FormKind::Other => FormKind::Other,
-        }
     }
 }
 
@@ -44,8 +30,6 @@ impl ToString for FormKind {
             FormKind::Singular => "singular".to_string(),
             FormKind::Comparative => "comparative".to_string(),
             FormKind::Superlative => "superlative".to_string(),
-            FormKind::PastTense => "past-tense".to_string(),
-            FormKind::PresentParticiple => "present-participle".to_string(),
             FormKind::Other => "other".to_string(),
         }
     }

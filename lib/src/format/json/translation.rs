@@ -1,17 +1,11 @@
 use crate::Translation;
+use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, StructuralConvert)]
+#[convert(from(Translation))]
 pub struct TranslationJSON {
     pub lang: String,
     pub value: String,
-}
-
-impl From<Translation> for TranslationJSON {
-    fn from(translation: Translation) -> Self {
-        let Translation { lang, value } = translation;
-
-        Self { lang, value }
-    }
 }

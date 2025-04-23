@@ -1,4 +1,5 @@
 use either::Either;
+use odict::DefinitionType;
 use pyo3::prelude::*;
 
 use super::{definition::Definition, group::Group};
@@ -18,24 +19,18 @@ pub struct Sense {
 
 impl From<odict::Sense> for Sense {
     fn from(sense: odict::Sense) -> Self {
-        let odict::Sense {
-            pos,
-            lemma,
-            definitions,
-            tags,
-        } = sense;
-
-        Self {
-            pos: pos.to_string(),
-            lemma: lemma.map(|l| l.0),
-            definitions: definitions
+        Sense {
+            pos: sense.pos.to_string(),
+            lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),
+            definitions: sense
+                .definitions
                 .into_iter()
-                .map(|d| match d {
-                    odict::DefinitionType::Definition(d) => Either::Left(Definition::from(d)),
-                    odict::DefinitionType::Group(g) => Either::Right(Group::from(g)),
+                .map(|def_type| match def_type {
+                    DefinitionType::Definition(def) => Either::Left(def.into()),
+                    DefinitionType::Group(group) => Either::Right(group.into()),
                 })
                 .collect(),
-            tags,
+            tags: sense.tags,
         }
     }
 }

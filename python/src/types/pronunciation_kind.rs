@@ -2,9 +2,11 @@ use std::fmt;
 
 use pyo3::prelude::*;
 use pyo3::pyclass::CompareOp;
+use structural_convert::StructuralConvert;
 
 #[pyclass]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, StructuralConvert)]
+#[convert(from(odict::PronunciationKind))]
 pub enum PronunciationKind {
     IPA,
     Pinyin,
@@ -77,23 +79,6 @@ impl fmt::Display for PronunciationKind {
             Self::Bopomofo => write!(f, "bopomofo"),
             Self::Hepburn => write!(f, "hepburn"),
             Self::Other => write!(f, "other"),
-        }
-    }
-}
-
-impl From<odict::PronunciationKind> for PronunciationKind {
-    fn from(kind: odict::PronunciationKind) -> Self {
-        match kind {
-            odict::PronunciationKind::IPA => Self::IPA,
-            odict::PronunciationKind::Pinyin => Self::Pinyin,
-            odict::PronunciationKind::Hiragana => Self::Hiragana,
-            odict::PronunciationKind::Romaji => Self::Romaji,
-            odict::PronunciationKind::Katakana => Self::Katakana,
-            odict::PronunciationKind::Yale => Self::Yale,
-            odict::PronunciationKind::Jyutping => Self::Jyutping,
-            odict::PronunciationKind::Bopomofo => Self::Bopomofo,
-            odict::PronunciationKind::Hepburn => Self::Hepburn,
-            odict::PronunciationKind::Other => Self::Other,
         }
     }
 }

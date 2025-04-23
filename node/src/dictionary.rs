@@ -6,7 +6,7 @@ use merge::Merge;
 use odict::ToDictionary;
 
 use crate::{
-  types::{self, DictionaryOptions, Entry, IndexOptions, LookupOptions, SearchOptions},
+  types::{self, DictionaryOptions, Entry},
   utils::{cast_error, resolve_options},
 };
 
@@ -47,11 +47,11 @@ impl Dictionary {
   pub fn _lookup(
     &self,
     queries: &Vec<String>,
-    options: Option<LookupOptions>,
+    options: Option<types::LookupOptions>,
   ) -> Result<Vec<types::LookupResult>> {
     let dict = self.file.to_archive().map_err(cast_error)?;
 
-    let mut opts: LookupOptions = options.unwrap_or(LookupOptions::default());
+    let mut opts: types::LookupOptions = options.unwrap_or(types::LookupOptions::default());
 
     if let Some(split) = opts
       .split
@@ -60,25 +60,17 @@ impl Dictionary {
       opts.split = Some(split);
     }
 
+    // Fix: Convert to odict::lookup::LookupOptions explicitly to help type inference
+    let odict_options: odict::lookup::LookupOptions = opts.into();
     let results = dict
-      .lookup(queries, &odict::lookup::LookupOptions::from(opts))
+      .lookup(queries, odict_options)
       .map_err(|e| cast_error(e))?;
 
+    // Convert results properly
     let mapped = results
       .iter()
-      .map(|result| {
-        let entry = Entry::from_archive(result.entry)?;
-        let directed_from = match &result.directed_from {
-          Some(from) => Some(Entry::from_archive(from)?),
-          None => None,
-        };
-
-        Ok(types::LookupResult {
-          entry,
-          directed_from,
-        })
-      })
-      .collect::<Result<Vec<types::LookupResult>, _>>()?;
+      .map(|result| result.try_into())
+      .collect::<Result<Vec<types::LookupResult>>>()?;
 
     Ok(mapped)
   }
@@ -87,7 +79,7 @@ impl Dictionary {
   pub fn lookup(
     &self,
     query: Either<String, Vec<String>>,
-    options: Option<LookupOptions>,
+    options: Option<types::LookupOptions>,
   ) -> Result<Vec<types::LookupResult>> {
     let mut queries: Vec<String> = vec![];
 
@@ -108,45 +100,53 @@ impl Dictionary {
   }
 
   #[napi]
-  pub fn index(&self, options: Option<IndexOptions>) -> Result<()> {
+  pub fn index(&self, options: Option<types::IndexOptions>) -> Result<()> {
     #[cfg(feature = "search")]
     {
       let dict = self.file.to_archive().map_err(cast_error)?;
-      let mut opts = options;
+      let mut opts = options.unwrap_or(types::IndexOptions::default());
 
-      opts.merge(self.options().index);
+      if let Some(default_opts) = self.options().index {
+        opts.merge(default_opts);
+      }
 
       dict
-        .index::<&odict::search::IndexOptions>(&opts.unwrap().into())
+        .index(odict::search::IndexOptions::from(opts))
         .map_err(cast_error)?;
 
       return Ok(());
     }
 
+    #[cfg(not(feature = "search"))]
     unimplemented!("index() is not available in browser environments. Maybe try IndexedDB?");
   }
 
   #[napi]
-  pub fn search(&self, query: String, options: Option<SearchOptions>) -> Result<Vec<Entry>> {
+  pub fn search(&self, query: String, options: Option<types::SearchOptions>) -> Result<Vec<Entry>> {
     #[cfg(feature = "search")]
     {
       let dict = self.file.to_archive().map_err(cast_error)?;
-      let mut opts = options;
+      let mut opts = options.unwrap_or_default();
 
-      opts.merge(self.options().search);
+      if let Some(default_opts) = self.options().search {
+        opts.merge(default_opts);
+      }
 
+      // Use our helper function to avoid orphan rule issues
       let results = dict
-        .search::<&odict::search::SearchOptions>(query.as_str(), &opts.unwrap().into())
+        .search(query.as_str(), odict::search::SearchOptions::from(opts))
         .map_err(cast_error)?;
 
+      // Use the new from_entry function for Entry types
       let entries = results
         .iter()
-        .map(|e| Entry::from_entry(e.clone()))
-        .collect::<Result<Vec<Entry>, _>>()?;
+        .map(|e| types::entry::from_entry(e))
+        .collect::<Result<Vec<Entry>>>()?;
 
       return Ok(entries);
     }
 
+    #[cfg(not(feature = "search"))]
     unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
 
@@ -167,44 +167,42 @@ impl Dictionary {
 
       let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
 
-      let mapped = tokens
-        .iter()
-        .map(|token| {
-          let entries = token
-            .entries
-            .iter()
-            .map(|result| {
-              let entry = Entry::from_archive(result.entry)?;
-              let directed_from = match &result.directed_from {
-                Some(from) => Some(Entry::from_archive(from)?),
-                None => None,
-              };
+      // Convert tokens manually
+      let mut mapped_tokens = Vec::new();
 
-              Ok(types::LookupResult {
-                entry,
-                directed_from,
-              })
-            })
-            .collect::<Result<Vec<types::LookupResult>, _>>()?;
+      for token in tokens {
+        let mut entries = Vec::new();
 
-          Ok(types::Token {
-            lemma: token.lemma.clone(),
-            language: token.language.map(|s| s.code().to_string()).clone(),
-            script: token.script.name().to_string(),
-            kind: format!("{:?}", token.kind),
-            start: token.start as u16,
-            end: token.end as u16,
-            entries,
-          })
-        })
-        .collect::<Result<Vec<types::Token>, _>>()?;
+        for result in &token.entries {
+          let entry = types::entry::from_archive(result.entry)?;
 
-      return Ok(mapped);
+          let directed_from = match result.directed_from {
+            Some(entry) => Some(types::entry::from_archive(entry)?),
+            None => None,
+          };
+
+          entries.push(types::LookupResult {
+            entry,
+            directed_from,
+          });
+        }
+
+        mapped_tokens.push(types::Token {
+          lemma: token.lemma.clone(),
+          language: token.language.map(|s| s.code().to_string()),
+          script: token.script.name().to_string(),
+          kind: format!("{:?}", token.kind),
+          start: token.start as u16,
+          end: token.end as u16,
+          entries,
+        });
+      }
+
+      return Ok(mapped_tokens);
     }
 
+    #[cfg(not(feature = "tokenize"))]
     unimplemented!("tokenize() is not available in this environment.");
-
-    Ok(vec![])
   }
 }
 

@@ -42,8 +42,10 @@ impl From<Token<Entry>> for TokenJSON {
     }
 }
 
-impl From<Token<&ArchivedEntry>> for TokenJSON {
-    fn from(token: Token<&ArchivedEntry>) -> Self {
+impl TryFrom<Token<&ArchivedEntry>> for TokenJSON {
+    type Error = crate::Error;
+
+    fn try_from(token: Token<&ArchivedEntry>) -> crate::Result<Self> {
         let Token {
             lemma,
             language,
@@ -54,7 +56,7 @@ impl From<Token<&ArchivedEntry>> for TokenJSON {
             end,
         } = token;
 
-        Self {
+        Ok(Self {
             lemma,
             language: language.map(|lang| lang.code().to_string()),
             script: script.name().to_string(),
@@ -63,8 +65,8 @@ impl From<Token<&ArchivedEntry>> for TokenJSON {
             end,
             entries: entries
                 .into_iter()
-                .map(|result| EntryJSON::from(result.entry))
-                .collect(),
-        }
+                .map(|result| EntryJSON::try_from(result.entry))
+                .collect::<crate::Result<Vec<EntryJSON>>>()?,
+        })
     }
 }
