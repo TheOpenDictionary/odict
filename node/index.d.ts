@@ -37,8 +37,6 @@ export interface Entry {
   term: string;
   seeAlso?: string;
   etymologies: Array<Etymology>;
-  forms: Array<Form>;
-  translations: Array<Translation>;
 }
 
 export interface Etymology {
@@ -136,6 +134,8 @@ export interface Sense {
   lemma?: string;
   definitions: Array<Definition | Group>;
   tags: Array<string>;
+  translations: Array<Translation>;
+  forms: Array<Form>;
 }
 
 export interface SplitOptions {

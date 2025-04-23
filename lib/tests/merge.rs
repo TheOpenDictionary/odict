@@ -13,10 +13,8 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
-                forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
-                translations: vec![],
                 etymologies: vec![
                   Etymology {
                     id:None,
@@ -25,6 +23,8 @@ mod merge_tests {
                     senses: hash_map! {
                       PartOfSpeech::n => Sense {
                         tags: vec![],
+                        translations: vec![],
+                        forms: vec![],
                         pos: PartOfSpeech::n,
                         lemma: None,
                         definitions: vec![
@@ -52,9 +52,7 @@ mod merge_tests {
               "cat".to_string()=>
               Entry {
                   see_also: None,
-                  forms: vec![],
                   term: "cat".to_string(),
-                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciations: vec![],
@@ -64,6 +62,8 @@ mod merge_tests {
                           Sense {
                               tags: vec![],
                               pos: PartOfSpeech::n,
+                              forms: vec![],
+                              translations: vec![],
                               lemma: None,
                               definitions: vec![
                                 DefinitionType::Definition(
@@ -88,9 +88,7 @@ mod merge_tests {
             entries: hash_map! {
               "dog".to_string() => Entry {
                   see_also: None,
-                  forms: vec![],
                   term: "dog".to_string(),
-                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciations: vec![],
@@ -100,6 +98,8 @@ mod merge_tests {
                         Sense {
                             tags: vec![],
                             pos: PartOfSpeech::n,
+                            forms: vec![],
+                            translations: vec![],
                             lemma: None,
                             definitions: vec![
                               DefinitionType::Definition(
@@ -118,8 +118,6 @@ mod merge_tests {
               "cat".to_string() => Entry {
                   see_also: None,
                   term: "cat".to_string(),
-                  forms: vec![],
-                  translations: vec![],
                   etymologies: vec![Etymology {
                     id: None,
                     pronunciations: vec![],
@@ -129,6 +127,8 @@ mod merge_tests {
                           Sense {
                               tags: vec![],
                               pos: PartOfSpeech::n,
+                              forms: vec![],
+                              translations: vec![],
                               lemma: None,
                               definitions: vec![DefinitionType::Definition(
                                 Definition{

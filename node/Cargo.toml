@@ -11,12 +11,12 @@ crate-type = ["cdylib"]
 default = ["search", "json", "sql", "tokenize"]
 json = ["odict/json"]
 tokenize = [
-    "odict/tokenize-latin",
-    "odict/tokenize-chinese",
-    "odict/tokenize-thai",
-    "odict/tokenize-khmer",
-    "odict/tokenize-swedish",
-    "odict/tokenize-german",
+  "odict/tokenize-latin",
+  "odict/tokenize-chinese",
+  "odict/tokenize-thai",
+  "odict/tokenize-khmer",
+  "odict/tokenize-swedish",
+  "odict/tokenize-german",
 ]
 sql = ["odict/sql"]
 config = ["odict/config"]
@@ -28,7 +28,7 @@ merge = "0.1.0"
 napi = { version = "2", default-features = false, features = ["napi4"] }
 napi-derive = "2"
 odict = { path = "../lib" }
-structural-convert = "0.13.0"
+structural-convert = { workspace = true }
 
 [build-dependencies]
 napi-build = "2.0.1"

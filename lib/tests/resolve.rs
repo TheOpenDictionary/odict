@@ -15,10 +15,8 @@ mod resolve_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
-                forms: vec![],
                 term: "dog".to_string(),
                 see_also: None,
-                translations: vec![],
                 etymologies: vec![
                   Etymology {
                     id: None,
@@ -28,6 +26,8 @@ mod resolve_tests {
                       PartOfSpeech::n => Sense {
                         pos: PartOfSpeech::n,
                         lemma: None,
+                        forms: vec![],
+                        translations: vec![],
                         definitions: vec![
                         DefinitionType::Definition(
                             Definition {

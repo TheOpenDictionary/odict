@@ -31,6 +31,8 @@ fn test_sense_tags_serialization() {
         lemma: None,
         definitions: vec![],
         tags: vec!["informal".to_string(), "slang".to_string()],
+        translations: vec![],
+        forms: vec![],
     };
 
     // Serialize to XML
@@ -76,13 +78,32 @@ fn test_form_with_tags() {
         tags: vec!["plural".to_string()],
     };
 
-    // Create an entry with the form
+    // Create a sense with the form
+    let sense = Sense {
+        pos: PartOfSpeech::n,
+        lemma: None,
+        definitions: vec![],
+        tags: vec![],
+        translations: vec![],
+        forms: vec![form],
+    };
+
+    // Create an etymology with the sense
+    let mut senses = std::collections::HashMap::new();
+    senses.insert(PartOfSpeech::n, sense);
+
+    let etymology = odict::Etymology {
+        id: None,
+        pronunciations: vec![],
+        description: None,
+        senses,
+    };
+
+    // Create an entry with the etymology
     let entry = Entry {
         term: "word".to_string(),
         see_also: None,
-        etymologies: vec![],
-        forms: vec![form],
-        translations: vec![],
+        etymologies: vec![etymology],
     };
 
     // Serialize to XML
@@ -96,6 +117,67 @@ fn test_form_with_tags() {
     let deserialized: Entry = quick_xml::de::from_str(&xml).unwrap();
 
     // Check that form tags were correctly deserialized
+    assert_eq!(
+        deserialized.etymologies[0]
+            .senses
+            .get(&PartOfSpeech::n)
+            .unwrap()
+            .forms[0]
+            .tags
+            .len(),
+        1
+    );
+    assert_eq!(
+        deserialized.etymologies[0]
+            .senses
+            .get(&PartOfSpeech::n)
+            .unwrap()
+            .forms[0]
+            .tags[0],
+        "plural"
+    );
+}
+
+#[test]
+fn test_forms_in_sense() {
+    // Create forms with tags
+    let form1 = Form {
+        term: EntryRef("words".to_string()),
+        kind: Some(FormKind::Plural),
+        tags: vec!["plural".to_string()],
+    };
+
+    let form2 = Form {
+        term: EntryRef("worded".to_string()),
+        kind: Some(FormKind::Comparative),
+        tags: vec!["past".to_string()],
+    };
+
+    // Create a sense with forms
+    let sense = Sense {
+        pos: PartOfSpeech::n,
+        lemma: None,
+        definitions: vec![],
+        tags: vec![],
+        translations: vec![],
+        forms: vec![form1, form2],
+    };
+
+    // Serialize to XML
+    let xml = quick_xml::se::to_string(&sense).unwrap();
+
+    // Check for form tags
+    assert!(xml.contains("<form"));
+    assert!(xml.contains("<tag>plural</tag>"));
+    assert!(xml.contains("<tag>past</tag>"));
+
+    // Deserialize from XML
+    let deserialized: Sense = quick_xml::de::from_str(&xml).unwrap();
+
+    // Check that forms were correctly deserialized
+    assert_eq!(deserialized.forms.len(), 2);
     assert_eq!(deserialized.forms[0].tags.len(), 1);
     assert_eq!(deserialized.forms[0].tags[0], "plural");
+    assert_eq!(deserialized.forms[1].tags.len(), 1);
+    assert_eq!(deserialized.forms[1].tags[0], "past");
 }

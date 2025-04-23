@@ -2,7 +2,7 @@ use napi::bindgen_prelude::*;
 
 use odict::DefinitionType;
 
-use super::{definition::Definition, group::Group};
+use super::{definition::Definition, form::Form, group::Group, translation::Translation};
 
 #[napi(object)]
 pub struct Sense {
@@ -10,6 +10,8 @@ pub struct Sense {
   pub lemma: Option<String>,
   pub definitions: Vec<Either<Definition, Group>>,
   pub tags: Vec<String>,
+  pub translations: Vec<Translation>,
+  pub forms: Vec<Form>,
 }
 
 impl From<odict::Sense> for Sense {
@@ -26,6 +28,8 @@ impl From<odict::Sense> for Sense {
         })
         .collect(),
       tags: sense.tags,
+      translations: sense.translations.into_iter().map(|t| t.into()).collect(),
+      forms: sense.forms.into_iter().map(|f| f.into()).collect(),
     }
   }
 }

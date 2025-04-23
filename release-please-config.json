@@ -4,7 +4,13 @@
     {
       "type": "sentence-case"
     },
-    "cargo-workspace"
+    {
+      "type": "linked-versions",
+      "groupName": "odict",
+      "components": [
+        "lib", "cli"
+      ]
+    }
   ],
   "include-component-in-tag": true,
   "tag-separator": "/",

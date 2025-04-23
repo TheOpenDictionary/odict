@@ -11,12 +11,12 @@ class TestForms(unittest.TestCase):
         xml_content = """
         <dictionary>
           <entry term="run">
-            <form kind="superlative" term="ran" />
-            <form kind="inflection" term="running" />
-            <form term="runs" />
             <ety>
               <sense>
                 <definition value="To move quickly on foot." />
+                <form kind="superlative" term="ran" />
+                <form kind="inflection" term="running" />
+                <form term="runs" />
               </sense>
             </ety>
           </entry>
@@ -41,19 +41,25 @@ class TestForms(unittest.TestCase):
             self.assertEqual(len(results), 1)
 
             entry = results[0].entry
+            
+            # Access the first etymology
+            etymology = entry.etymologies[0]
+            
+            # Get the first sense (they're stored in a dict by part of speech)
+            sense = list(etymology.senses.values())[0]
 
-            # Check the forms
-            self.assertEqual(len(entry.forms), 3)
+            # Forms are now at the Sense level
+            self.assertEqual(len(sense.forms), 3)
 
             # Forms are stored properly with terms and kinds
-            self.assertEqual(entry.forms[0].term, "ran")
-            self.assertEqual(entry.forms[0].kind, FormKind.Superlative)
+            self.assertEqual(sense.forms[0].term, "ran")
+            self.assertEqual(sense.forms[0].kind, FormKind.Superlative)
 
-            self.assertEqual(entry.forms[1].term, "running")
-            self.assertEqual(entry.forms[1].kind, FormKind.Inflection)
+            self.assertEqual(sense.forms[1].term, "running")
+            self.assertEqual(sense.forms[1].kind, FormKind.Inflection)
 
-            self.assertEqual(entry.forms[2].term, "runs")
-            self.assertIsNone(entry.forms[2].kind)
+            self.assertEqual(sense.forms[2].term, "runs")
+            self.assertIsNone(sense.forms[2].kind)
         finally:
             # Clean up
             if os.path.exists(temp_file):

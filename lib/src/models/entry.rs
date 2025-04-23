@@ -1,7 +1,6 @@
 use rkyv::{deserialize, to_bytes};
 
-use crate::models::form::Form;
-use crate::{error::Error, serializable, Etymology, Translation};
+use crate::{error::Error, serializable, Etymology};
 
 use super::EntryRef;
 
@@ -17,14 +16,6 @@ serializable! {
 
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
-
-    #[serde(default, rename = "form")]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub forms: Vec<Form>,
-
-    #[serde(default, rename = "translation")]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub translations: Vec<Translation>,
   }
 }
 
