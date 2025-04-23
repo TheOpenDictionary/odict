@@ -37,6 +37,7 @@ export interface Entry {
   term: string;
   seeAlso?: string;
   etymologies: Array<Etymology>;
+  media: Array<MediaURL>;
 }
 
 export interface Etymology {

@@ -4,6 +4,7 @@ use structural_convert::StructuralConvert;
 use crate::utils::cast_error;
 
 use super::etymology::Etymology;
+use super::media_url::MediaURL;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
@@ -15,6 +16,8 @@ pub struct Entry {
     pub see_also: Option<String>,
     #[pyo3(get)]
     pub etymologies: Vec<Etymology>,
+    #[pyo3(get)]
+    pub media: Vec<MediaURL>,
 }
 
 #[pymethods]

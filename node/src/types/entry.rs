@@ -4,6 +4,7 @@ use structural_convert::StructuralConvert;
 use crate::utils::cast_error;
 
 use super::etymology::Etymology;
+use super::media_url::MediaURL;
 
 #[napi(object)]
 #[derive(StructuralConvert)]
@@ -12,6 +13,7 @@ pub struct Entry {
   pub term: String,
   pub see_also: Option<String>,
   pub etymologies: Vec<Etymology>,
+  pub media: Vec<MediaURL>,
 }
 
 pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Entry> {
