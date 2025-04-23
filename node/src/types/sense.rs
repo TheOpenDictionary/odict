@@ -1,5 +1,7 @@
 use napi::bindgen_prelude::*;
 
+use odict::DefinitionType;
+
 use super::{definition::Definition, group::Group};
 
 #[napi(object)]
@@ -10,28 +12,20 @@ pub struct Sense {
   pub tags: Vec<String>,
 }
 
-impl Sense {
-  pub fn from(sense: odict::Sense) -> Result<Self> {
-    let odict::Sense {
-      pos,
-      lemma,
-      definitions,
-      tags,
-    } = sense;
-
-    Ok(Self {
-      pos: pos.to_string(),
-      lemma: lemma.map(|l| l.0),
-      definitions: definitions
+impl From<odict::Sense> for Sense {
+  fn from(sense: odict::Sense) -> Self {
+    Sense {
+      pos: sense.pos.to_string(),
+      lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),
+      definitions: sense
+        .definitions
         .into_iter()
-        .map(|d| -> Result<Either<Definition, Group>> {
-          match d {
-            odict::DefinitionType::Definition(d) => Ok(Either::A(Definition::from(d)?)),
-            odict::DefinitionType::Group(g) => Ok(Either::B(Group::from(g)?)),
-          }
+        .map(|def_type| match def_type {
+          DefinitionType::Definition(def) => Either::A(def.into()),
+          DefinitionType::Group(group) => Either::B(group.into()),
         })
-        .collect::<Result<Vec<Either<Definition, Group>>, _>>()?,
-      tags,
-    })
+        .collect(),
+      tags: sense.tags,
+    }
   }
 }

@@ -1,20 +1,15 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructuralConvert)]
+#[convert(from(odict::Translation))]
 pub struct Translation {
     #[pyo3(get)]
     pub lang: String,
 
     #[pyo3(get)]
     pub value: String,
-}
-
-impl Translation {
-    pub fn from(translation: odict::Translation) -> PyResult<Self> {
-        let odict::Translation { lang, value } = translation;
-        Ok(Self { lang, value })
-    }
 }
 
 #[pymethods]

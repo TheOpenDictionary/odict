@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod pronunciation_tests {
-    use odict::{Etymology, MediaURL, PronunciationKind};
+    use odict::{MediaURL, PronunciationKind};
     use quick_xml::de::from_str;
 
     #[test]

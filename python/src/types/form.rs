@@ -1,9 +1,11 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 use super::form_kind::FormKind;
 
 #[pyclass]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, StructuralConvert)]
+#[convert(from(odict::Form))]
 pub struct Form {
     #[pyo3(get)]
     pub term: String,
@@ -36,15 +38,5 @@ impl Form {
 
     fn __repr__(&self) -> String {
         self.__str__()
-    }
-}
-
-impl From<odict::Form> for Form {
-    fn from(form: odict::Form) -> Self {
-        Self {
-            term: form.term.0,
-            kind: form.kind.map(FormKind::from),
-            tags: form.tags,
-        }
     }
 }

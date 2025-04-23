@@ -1,9 +1,11 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 use super::Example;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructuralConvert)]
+#[convert(from(odict::Note))]
 pub struct Note {
     #[pyo3(get)]
     pub id: Option<String>,
@@ -11,20 +13,4 @@ pub struct Note {
     pub value: String,
     #[pyo3(get)]
     pub examples: Vec<Example>,
-}
-
-impl From<odict::Note> for Note {
-    fn from(note: odict::Note) -> Self {
-        let odict::Note {
-            id,
-            value,
-            examples,
-        } = note;
-
-        Self {
-            id,
-            value: String::from(value),
-            examples: examples.into_iter().map(|e| Example::from(e)).collect(),
-        }
-    }
 }

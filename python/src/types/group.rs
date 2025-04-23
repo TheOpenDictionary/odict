@@ -1,9 +1,11 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 use super::definition::Definition;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructuralConvert)]
+#[convert(from(odict::Group))]
 pub struct Group {
     #[pyo3(get)]
     pub id: Option<String>,
@@ -11,23 +13,4 @@ pub struct Group {
     pub description: String,
     #[pyo3(get)]
     pub definitions: Vec<Definition>,
-}
-
-impl From<odict::Group> for Group {
-    fn from(group: odict::Group) -> Self {
-        let odict::Group {
-            id,
-            description,
-            definitions,
-        } = group;
-
-        Self {
-            id,
-            description: String::from(description),
-            definitions: definitions
-                .into_iter()
-                .map(|d| Definition::from(d))
-                .collect(),
-        }
-    }
 }

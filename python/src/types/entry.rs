@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 use crate::utils::cast_error;
 
@@ -7,7 +8,8 @@ use super::form::Form;
 use super::translation::Translation;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructuralConvert)]
+#[convert(from(odict::Entry))]
 pub struct Entry {
     #[pyo3(get)]
     pub term: String,
@@ -35,31 +37,5 @@ impl Entry {
 impl Entry {
     pub fn from_archive(entry: &odict::ArchivedEntry) -> PyResult<Self> {
         Ok(Self::from(entry.to_entry().map_err(cast_error)?))
-    }
-}
-
-impl From<odict::Entry> for Entry {
-    fn from(entry: odict::Entry) -> Self {
-        let odict::Entry {
-            term,
-            see_also,
-            etymologies,
-            forms,
-            translations,
-        } = entry;
-
-        Self {
-            term,
-            see_also: see_also.map(|s| s.0),
-            etymologies: etymologies
-                .into_iter()
-                .map(|e| Etymology::from(e))
-                .collect(),
-            forms: forms.into_iter().map(Form::from).collect(),
-            translations: translations
-                .into_iter()
-                .map(|t| Translation::from(t).unwrap())
-                .collect(),
-        }
     }
 }

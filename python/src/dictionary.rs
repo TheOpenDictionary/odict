@@ -107,10 +107,6 @@ impl Dictionary {
         Ok(dict)
     }
 
-    // pub fn options(&self) -> DictionaryOptions {
-    //     resolve_options(&self.options)
-    // }
-
     #[getter]
     pub fn path(&self) -> PyResult<String> {
         let path = self

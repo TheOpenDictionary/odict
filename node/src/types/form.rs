@@ -1,21 +1,12 @@
-use napi::bindgen_prelude::*;
+use structural_convert::StructuralConvert;
 
 use super::form_kind::FormKind;
 
 #[napi(object)]
-#[derive(Clone)]
+#[derive(Clone, StructuralConvert)]
+#[convert(from(odict::Form))]
 pub struct Form {
   pub term: String,
   pub kind: Option<FormKind>,
   pub tags: Vec<String>,
-}
-
-impl From<odict::Form> for Form {
-  fn from(form: odict::Form) -> Self {
-    Self {
-      term: form.term.0,
-      kind: form.kind.map(FormKind::from),
-      tags: form.tags,
-    }
-  }
 }

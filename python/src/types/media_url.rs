@@ -1,8 +1,10 @@
 use pyo3::prelude::*;
 use std::fmt;
+use structural_convert::StructuralConvert;
 
 #[pyclass]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, StructuralConvert)]
+#[convert(from(odict::MediaURL))]
 pub struct MediaURL {
     #[pyo3(get)]
     pub src: String,
@@ -40,21 +42,5 @@ impl MediaURL {
 impl fmt::Display for MediaURL {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.src)
-    }
-}
-
-impl From<odict::MediaURL> for MediaURL {
-    fn from(media_url: odict::MediaURL) -> Self {
-        let odict::MediaURL {
-            src,
-            mime_type,
-            description,
-        } = media_url;
-
-        Self {
-            src,
-            mime_type,
-            description,
-        }
     }
 }

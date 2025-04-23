@@ -23,24 +23,24 @@ impl Default for SearchOptions {
 #[cfg(feature = "search")]
 impl From<SearchOptions> for odict::search::SearchOptions {
   fn from(opts: SearchOptions) -> Self {
-    let mut s = odict::search::SearchOptions::default();
+    let mut options = odict::search::SearchOptions::default();
+
+    if let Some(dir) = opts.directory {
+      options = options.dir(dir.as_str());
+    }
 
     if let Some(threshold) = opts.threshold {
-      s = s.threshold(threshold);
-    }
-
-    if let Some(directory) = opts.directory {
-      s = s.dir(&directory);
-    }
-
-    if let Some(limit) = opts.limit {
-      s = s.limit(limit.try_into().unwrap());
+      options = options.threshold(threshold);
     }
 
     if let Some(autoindex) = opts.autoindex {
-      s = s.autoindex(autoindex);
+      options = options.autoindex(autoindex);
     }
 
-    s
+    if let Some(limit) = opts.limit {
+      options = options.limit(limit as usize);
+    }
+
+    options
   }
 }

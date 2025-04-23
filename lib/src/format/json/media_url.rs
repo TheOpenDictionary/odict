@@ -1,7 +1,9 @@
 use crate::MediaURL;
 use serde::Serialize;
+use structural_convert::StructuralConvert;
 
-#[derive(Serialize)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(MediaURL))]
 pub struct MediaURLJSON {
     pub src: String,
 
@@ -10,19 +12,4 @@ pub struct MediaURLJSON {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
-
-impl From<MediaURL> for MediaURLJSON {
-    fn from(url: MediaURL) -> Self {
-        let MediaURL {
-            src,
-            mime_type,
-            description,
-        } = url;
-        Self {
-            src,
-            mime_type,
-            description,
-        }
-    }
 }

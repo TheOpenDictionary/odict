@@ -32,6 +32,12 @@ impl From<String> for EntryRef {
     }
 }
 
+impl From<EntryRef> for String {
+    fn from(entry_ref: EntryRef) -> Self {
+        entry_ref.0
+    }
+}
+
 impl From<&str> for EntryRef {
     fn from(s: &str) -> Self {
         EntryRef(s.to_string())
