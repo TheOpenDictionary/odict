@@ -19,9 +19,9 @@ pub fn write_pronunciation(
     lines.push(pron_text);
 
     // Add URLs as markdown links if they exist
-    if !pronunciation.urls.is_empty() {
+    if !pronunciation.media.is_empty() {
         let url_lines: Vec<String> = pronunciation
-            .urls
+            .media
             .iter()
             .map(|url| {
                 let desc = url.description.as_deref().unwrap_or("Audio");

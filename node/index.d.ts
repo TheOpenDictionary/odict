@@ -106,7 +106,7 @@ export interface Note {
 export interface Pronunciation {
   kind: PronunciationKind;
   value: string;
-  urls: Array<MediaUrl>;
+  media: Array<MediaUrl>;
 }
 
 export declare const enum PronunciationKind {
