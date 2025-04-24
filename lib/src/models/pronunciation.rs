@@ -11,6 +11,6 @@ serializable! {
 
     #[serde(default, rename = "url")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub urls: Vec<MediaURL>,
+    pub media: Vec<MediaURL>,
   }
 }

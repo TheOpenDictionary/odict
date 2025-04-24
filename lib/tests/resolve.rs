@@ -15,6 +15,7 @@ mod resolve_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
+                media: vec![],
                 term: "dog".to_string(),
                 see_also: None,
                 etymologies: vec![

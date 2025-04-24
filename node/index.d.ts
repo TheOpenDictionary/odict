@@ -37,6 +37,7 @@ export interface Entry {
   term: string;
   seeAlso?: string;
   etymologies: Array<Etymology>;
+  media: Array<MediaURL>;
 }
 
 export interface Etymology {
@@ -106,7 +107,7 @@ export interface Note {
 export interface Pronunciation {
   kind: PronunciationKind;
   value: string;
-  urls: Array<MediaUrl>;
+  media: Array<MediaUrl>;
 }
 
 export declare const enum PronunciationKind {

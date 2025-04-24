@@ -67,6 +67,7 @@ fn test_translation_in_entry() {
 
     // Create an entry with the etymology
     let entry = Entry {
+        media: vec![],
         term: "hello".to_string(),
         see_also: None,
         etymologies: vec![etymology],

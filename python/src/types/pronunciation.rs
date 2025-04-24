@@ -15,7 +15,7 @@ pub struct Pronunciation {
     pub value: String,
 
     #[pyo3(get)]
-    pub urls: Vec<MediaURL>,
+    pub media: Vec<MediaURL>,
 }
 
 #[pymethods]
@@ -25,12 +25,12 @@ impl Pronunciation {
         Self {
             kind: PronunciationKind::new(kind),
             value,
-            urls: Vec::new(),
+            media: Vec::new(),
         }
     }
 
-    pub fn add_url(&mut self, url: MediaURL) {
-        self.urls.push(url);
+    pub fn add_media(&mut self, url: MediaURL) {
+        self.media.push(url);
     }
 
     fn __repr__(&self) -> String {
@@ -38,12 +38,12 @@ impl Pronunciation {
             "Pronunciation(kind='{}', value='{}', urls={})",
             self.kind,
             self.value,
-            if self.urls.is_empty() {
+            if self.media.is_empty() {
                 "[]".to_string()
             } else {
                 format!(
                     "[{}]",
-                    self.urls
+                    self.media
                         .iter()
                         .map(|url| url.to_string())
                         .collect::<Vec<_>>()

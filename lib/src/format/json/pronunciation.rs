@@ -12,5 +12,5 @@ pub struct PronunciationJSON {
     pub value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub urls: Vec<MediaURLJSON>,
+    pub media: Vec<MediaURLJSON>,
 }
