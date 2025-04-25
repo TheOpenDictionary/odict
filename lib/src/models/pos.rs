@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::serializable;
+use crate::{case::SnakeCase, serializable};
 
 serializable! {
     #[derive(Hash, Ord, PartialOrd)]
@@ -138,31 +138,11 @@ serializable! {
     }
 }
 
-pub const POS_TAGS: &[&str] = &[
-    /* -------------------------------------------------------------------------- */
-    /*                            Japanese-specific POS                           */
-    /* -------------------------------------------------------------------------- */
-    "AdjPn", "AdjKari", "Art", "AdjKu", "AdjNari", "AdjNa", "AdjShiku", "AdjT", "AdjIx", "NAdv",
-    "AdvTo", "AdjNo", "NPref", "NSuf", "NT", "AdjF", "V5b", "V5g", "V5k", "V5m", "V5n", "V5r",
-    "V5rI", "V5aru", "V5kS", "V5s", "V5t", "V5u", "V5uru", "V5uS", "V1", "V1S", "Vz", "Vk", "V2bS",
-    "V2bK", "V2dS", "V2dK", "V2gS", "V2gK", "V2hS", "V2hK", "V2kS", "V2kK", "V2mS", "V2mK", "V2nS",
-    "V2rS", "V2rK", "V2sS", "V2tS", "V2tK", "V2aS", "V2wS", "V2yS", "V2yK", "V2zS", "Vn", "Vr",
-    "VsC", "Vs", "VsI", "VsS", "VUnspec", "V4b", "V4g", "V4h", "V4k", "V4m", "V4n", "V4r", "V4s",
-    "V4t",
-    /* -------------------------------------------------------------------------- */
-    /*                                Universal POS                               */
-    /* -------------------------------------------------------------------------- */
-    "Abv", "Adf", "Adj", "PhrAdj", "Adv", "PhrAdv", "Aff", "Aux", "AuxAdj", "AuxV", "Chr", "Cf",
-    "Cls", "Contr", "Conj", "ConjC", "Cop", "Ctr", "Det", "Expr", "Inf", "Intf", "Intj", "Vi",
-    "Name", "N", "Num", "Part", "Phr", "Postp", "Pref", "Prep", "PhrPrep", "Pron", "Propn", "Prov",
-    "Punc", "ConjS", "Suff", "Sym", "Vt", "Un", "V",
-];
-
 impl From<PartOfSpeech> for String {
     fn from(pos: PartOfSpeech) -> Self {
         match pos {
             PartOfSpeech::Other(s) => s,
-            _ => format!("{:?}", pos),
+            _ => format!("{:?}", pos).snake_case(),
         }
     }
 }
@@ -171,7 +151,7 @@ impl fmt::Display for PartOfSpeech {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             PartOfSpeech::Other(s) => write!(f, "{}", s),
-            _ => write!(f, "{:?}", self),
+            _ => write!(f, "{}", format!("{:?}", self).snake_case()),
         }
     }
 }
