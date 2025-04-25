@@ -6,6 +6,7 @@ serializable! {
     #[derive(Hash, Ord, PartialOrd)]
     #[rkyv(derive(PartialEq, Eq, Hash))]
     #[repr(u8)]
+    #[serde(rename_all = "snake_case")]
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
@@ -309,7 +310,7 @@ impl PartOfSpeech {
             PartOfSpeech::Vt => "transitive verb",
             PartOfSpeech::Un => "unknown",
             PartOfSpeech::V => "verb",
-            PartOfSpeech::Other(ref s) => "custom part of speech",
+            PartOfSpeech::Other(ref s) => s,
         }
     }
 }

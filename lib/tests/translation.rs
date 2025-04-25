@@ -46,7 +46,7 @@ fn test_translation_in_entry() {
 
     // Create a sense with translations
     let sense = odict::Sense {
-        pos: odict::PartOfSpeech::n,
+        pos: odict::PartOfSpeech::N,
         lemma: None,
         definitions: vec![],
         tags: vec![],
@@ -56,7 +56,7 @@ fn test_translation_in_entry() {
 
     // Create an etymology with the sense
     let mut senses = std::collections::HashMap::new();
-    senses.insert(odict::PartOfSpeech::n, sense);
+    senses.insert(odict::PartOfSpeech::N, sense);
 
     let etymology = odict::Etymology {
         id: None,
@@ -75,7 +75,7 @@ fn test_translation_in_entry() {
     // Test that translations are correctly stored
     let stored_translations = &entry.etymologies[0]
         .senses
-        .get(&odict::PartOfSpeech::n)
+        .get(&odict::PartOfSpeech::N)
         .unwrap()
         .translations;
     assert_eq!(stored_translations.len(), 2);

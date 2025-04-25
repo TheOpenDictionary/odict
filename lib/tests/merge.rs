@@ -21,11 +21,11 @@ mod merge_tests {
                     description:None,
                     pronunciations: vec![],
                     senses: hash_map! {
-                      PartOfSpeech::n => Sense {
+                      PartOfSpeech::N => Sense {
                         tags: vec![],
                         translations: vec![],
                         forms: vec![],
-                        pos: PartOfSpeech::n,
+                        pos: PartOfSpeech::N,
                         lemma: None,
                         definitions: vec![
                         DefinitionType::Definition(
@@ -58,10 +58,10 @@ mod merge_tests {
                     pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                          PartOfSpeech::n=>
+                          PartOfSpeech::N=>
                           Sense {
                               tags: vec![],
-                              pos: PartOfSpeech::n,
+                              pos: PartOfSpeech::N,
                               forms: vec![],
                               translations: vec![],
                               lemma: None,
@@ -94,10 +94,10 @@ mod merge_tests {
                     pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                        PartOfSpeech::n=>
+                        PartOfSpeech::N=>
                         Sense {
                             tags: vec![],
-                            pos: PartOfSpeech::n,
+                            pos: PartOfSpeech::N,
                             forms: vec![],
                             translations: vec![],
                             lemma: None,
@@ -123,10 +123,10 @@ mod merge_tests {
                     pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                          PartOfSpeech::n=>
+                          PartOfSpeech::N=>
                           Sense {
                               tags: vec![],
-                              pos: PartOfSpeech::n,
+                              pos: PartOfSpeech::N,
                               forms: vec![],
                               translations: vec![],
                               lemma: None,
