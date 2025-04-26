@@ -5,6 +5,7 @@ use crate::{error::Error, serializable, Etymology};
 use super::EntryRef;
 
 serializable! {
+  #[derive(Default)]
   #[serde(rename = "entry")]
   pub struct Entry {
     #[serde(rename = "@term")]

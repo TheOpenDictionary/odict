@@ -139,7 +139,7 @@ mod tokenize_tests {
         </dictionary>
         "#;
 
-        let dict = odict::Dictionary::from(xml).unwrap();
+        let dict = odict::Dictionary::try_from(xml).unwrap();
 
         // Test case insensitivity combined with follow option
         let result = dict.tokenize(

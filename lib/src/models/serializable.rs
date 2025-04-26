@@ -45,3 +45,27 @@ macro_rules! serializable_custom {
         $i
     };
 }
+
+#[macro_export]
+macro_rules! serializable_enum {
+    ($i:item) => {
+        #[derive(
+            Hash,
+            Ord,
+            PartialOrd,
+            PartialEq,
+            Eq,
+            Debug,
+            Clone,
+            strum::EnumString,
+            strum::Display,
+            rkyv::Archive,
+            rkyv::Serialize,
+            rkyv::Deserialize,
+        )]
+        #[rkyv(derive(Debug, PartialEq, Eq, Hash))]
+        #[repr(u8)]
+        #[strum(ascii_case_insensitive, serialize_all = "snake_case")]
+        $i
+    };
+}

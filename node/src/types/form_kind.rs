@@ -10,5 +10,5 @@ pub enum FormKind {
   Singular,
   Comparative,
   Superlative,
-  Other,
+  Other(String),
 }

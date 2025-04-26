@@ -1,12 +1,9 @@
-use std::fmt;
+use std::str::FromStr;
 
-use crate::{case::SnakeCase, serializable};
+use crate::serializable_enum;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-serializable! {
-    #[derive(Hash, Ord, PartialOrd)]
-    #[rkyv(derive(PartialEq, Eq, Hash))]
-    #[repr(u8)]
-    #[serde(rename_all = "snake_case")]
+serializable_enum! {
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
@@ -135,24 +132,6 @@ serializable! {
         /*                                Custom POS                                  */
         /* -------------------------------------------------------------------------- */
         Other(String),
-    }
-}
-
-impl From<PartOfSpeech> for String {
-    fn from(pos: PartOfSpeech) -> Self {
-        match pos {
-            PartOfSpeech::Other(s) => s,
-            _ => format!("{:?}", pos).snake_case(),
-        }
-    }
-}
-
-impl fmt::Display for PartOfSpeech {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            PartOfSpeech::Other(s) => write!(f, "{}", s),
-            _ => write!(f, "{}", format!("{:?}", self).snake_case()),
-        }
     }
 }
 
@@ -292,5 +271,29 @@ impl PartOfSpeech {
             PartOfSpeech::V => "verb",
             PartOfSpeech::Other(ref s) => s,
         }
+    }
+}
+
+impl Serialize for PartOfSpeech {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let s = match self {
+            PartOfSpeech::Other(ref st) => st.to_owned(),
+            _ => self.to_string(),
+        };
+
+        serializer.serialize_str(&s)
+    }
+}
+
+impl<'de> Deserialize<'de> for PartOfSpeech {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        Ok(PartOfSpeech::from_str(s.as_str()).unwrap_or(PartOfSpeech::Other(s.to_string())))
     }
 }

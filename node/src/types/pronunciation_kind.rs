@@ -14,5 +14,5 @@ pub enum PronunciationKind {
   Jyutping,
   Bopomofo,
   Hepburn,
-  Other,
+  Other(String),
 }

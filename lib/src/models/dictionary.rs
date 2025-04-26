@@ -7,6 +7,7 @@ use crate::{error::Error, serializable};
 use super::{entry::Entry, id::ID};
 
 serializable! {
+  #[derive(Default)]
   #[serde(rename = "dictionary")]
   pub struct Dictionary {
       #[serde(default, rename = "@id")]
@@ -59,17 +60,14 @@ impl Dictionary {
 
         Ok(bytes.to_vec())
     }
-
-    pub fn from(xml: &str) -> crate::Result<Self> {
-        let dict = from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))?;
-        Ok(dict)
-    }
 }
 
-impl From<&str> for Dictionary {
-    fn from(xml: &str) -> Self {
-        from_str(xml).unwrap()
+impl TryFrom<&str> for Dictionary {
+    fn try_from(xml: &str) -> crate::Result<Self> {
+        from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))
     }
+
+    type Error = crate::Error;
 }
 
 impl ArchivedDictionary {

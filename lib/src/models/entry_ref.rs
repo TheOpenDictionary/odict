@@ -3,6 +3,7 @@ use std::ops::Deref;
 use crate::serializable;
 
 serializable! {
+  #[derive(Default)]
   pub struct EntryRef(pub String);
 }
 

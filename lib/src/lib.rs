@@ -7,7 +7,6 @@ pub mod search;
 #[cfg(feature = "markdown")]
 mod md;
 
-mod case;
 mod compress;
 mod core;
 mod error;

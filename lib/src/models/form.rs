@@ -1,11 +1,11 @@
-use std::fmt;
+use std::str::FromStr;
 
-use crate::serializable;
+use crate::{serializable, serializable_enum};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use super::EntryRef;
 
-serializable! {
-  #[serde(rename_all = "lowercase")]
+serializable_enum! {
   pub enum FormKind {
       Conjugation,
       Inflection,
@@ -13,22 +13,31 @@ serializable! {
       Singular,
       Comparative,
       Superlative,
-      #[serde(other)]
-      Other,
+      Other(String),
   }
 }
 
-impl fmt::Display for FormKind {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            FormKind::Conjugation => write!(f, "conjugation"),
-            FormKind::Inflection => write!(f, "inflection"),
-            FormKind::Plural => write!(f, "plural"),
-            FormKind::Singular => write!(f, "singular"),
-            FormKind::Comparative => write!(f, "comparative"),
-            FormKind::Superlative => write!(f, "superlative"),
-            FormKind::Other => write!(f, "other"),
-        }
+impl Serialize for FormKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let s = match self {
+            FormKind::Other(ref st) => st.to_owned(),
+            _ => self.to_string(),
+        };
+
+        serializer.serialize_str(&s)
+    }
+}
+
+impl<'de> Deserialize<'de> for FormKind {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        Ok(FormKind::from_str(s.as_str()).unwrap_or(FormKind::Other(s.to_string())))
     }
 }
 

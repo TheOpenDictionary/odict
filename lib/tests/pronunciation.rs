@@ -11,11 +11,14 @@ mod pronunciation_tests {
 
         // Test deserialization including case-insensitivity
         let deserialized: PronunciationKind = serde_json::from_str("\"IPA\"").unwrap();
+
         assert!(matches!(deserialized, PronunciationKind::IPA));
+
+        let expected = PronunciationKind::Other("wagegiles".into());
 
         // Test Other variant
         let deserialized: PronunciationKind = serde_json::from_str("\"wadegiles\"").unwrap();
-        assert!(matches!(deserialized, PronunciationKind::Other));
+        assert!(matches!(deserialized, expected));
     }
 
     #[test]
@@ -55,7 +58,10 @@ mod pronunciation_tests {
         assert_eq!(entry.etymologies[0].pronunciations.len(), 1);
 
         let pronunciation = &entry.etymologies[0].pronunciations[0];
-        assert!(matches!(pronunciation.kind, PronunciationKind::Pinyin));
+        assert!(matches!(
+            pronunciation.kind,
+            Some(PronunciationKind::Pinyin)
+        ));
         assert_eq!(pronunciation.value, "ni hao");
         assert_eq!(pronunciation.urls.len(), 1);
         assert_eq!(pronunciation.urls[0].src, "./audio.mp3");
@@ -79,7 +85,7 @@ mod pronunciation_tests {
         assert_eq!(example.value, "Hello, world!");
         assert_eq!(example.pronunciations.len(), 1);
         let pronunciation = &example.pronunciations[0];
-        assert!(matches!(pronunciation.kind, PronunciationKind::IPA));
+        assert!(matches!(pronunciation.kind, Some(PronunciationKind::IPA)));
         assert_eq!(pronunciation.value, "həˈləʊ wɜːld");
         assert_eq!(pronunciation.urls.len(), 1);
         assert_eq!(pronunciation.urls[0].src, "./hello.mp3");
@@ -105,11 +111,11 @@ mod pronunciation_tests {
         assert_eq!(entry.etymologies[0].pronunciations.len(), 2);
 
         let pinyin = &entry.etymologies[0].pronunciations[0];
-        assert!(matches!(pinyin.kind, PronunciationKind::Pinyin));
+        assert!(matches!(pinyin.kind, Some(PronunciationKind::Pinyin)));
         assert_eq!(pinyin.value, "ni hao");
 
         let ipa = &entry.etymologies[0].pronunciations[1];
-        assert!(matches!(ipa.kind, PronunciationKind::IPA));
+        assert!(matches!(ipa.kind, Some(PronunciationKind::IPA)));
         assert_eq!(ipa.value, "ni˨˩ xɑʊ̯˧˥");
     }
 }

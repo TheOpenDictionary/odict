@@ -87,8 +87,10 @@ mod test {
 
         let result = insert_example(builder, None, None, 0, &example);
 
-        println!("{}", builder.build().unwrap());
         assert!(result.is_ok());
-        assert!(builder.build().unwrap().ends_with("'test', 0, NULL, NULL)"));
+
+        let built = builder.build().unwrap();
+
+        assert!(built.ends_with("'test', 0, NULL, NULL)"));
     }
 }
