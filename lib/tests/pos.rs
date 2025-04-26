@@ -6,7 +6,7 @@ mod pos_tests {
     use odict::{format::xml::ToXML, Dictionary, Entry, Etymology, PartOfSpeech, Sense};
 
     #[test]
-    fn test_custom_variant_se() {
+    fn test_se_custom() {
         let mut dict = Dictionary::default();
 
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
@@ -38,13 +38,13 @@ mod pos_tests {
     }
 
     #[test]
-    fn test_custom_variant_de() {
+    fn test_de_custom() {
         let xml = "
           <dictionary>
             <entry term=\"dog\">
               <ety>
                 <sense pos=\"custom\" />
-              </ety> 
+              </ety>
             </entry>
           </dictionary>
         ";
@@ -59,5 +59,59 @@ mod pos_tests {
 
         assert!(sense.is_some());
         assert_eq!(sense.unwrap().pos, expected);
+    }
+
+    #[test]
+    fn test_se() {
+        let mut dict = Dictionary::default();
+
+        dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
+
+        dict.entries.insert(
+            "dog".into(),
+            Entry {
+                term: "dog".into(),
+                see_also: None,
+                etymologies: vec![Etymology {
+                    id: None,
+                    pronunciations: vec![],
+                    description: None,
+                    senses: hash_map! {
+                      PartOfSpeech::AdjKari => Sense {
+                        lemma: None,
+                        definitions: vec![],
+                        tags: vec![],
+                        translations: vec![],
+                        forms: vec![],
+                        pos: PartOfSpeech::AdjKari
+                      }
+                    },
+                }],
+            },
+        );
+
+        assert_snapshot!(dict.to_xml(true).unwrap());
+    }
+
+    #[test]
+    fn test_de() {
+        let xml = "
+          <dictionary>
+            <entry term=\"dog\">
+              <ety>
+                <sense pos=\"ADJ_KARI\" />
+              </ety>
+            </entry>
+          </dictionary>
+        ";
+
+        let dict = Dictionary::try_from(xml).unwrap();
+
+        let sense = dict.entries.get("dog").unwrap().etymologies[0]
+            .senses
+            .get(&PartOfSpeech::AdjKari);
+
+        assert!(sense.is_some());
+        assert_eq!(sense.unwrap().pos, PartOfSpeech::AdjKari);
     }
 }
