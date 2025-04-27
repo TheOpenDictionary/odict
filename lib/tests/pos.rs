@@ -6,6 +6,14 @@ mod pos_tests {
     use odict::{format::xml::ToXML, Dictionary, Entry, Etymology, PartOfSpeech, Sense};
 
     #[test]
+    fn test_description() {
+        assert_eq!(
+            PartOfSpeech::AdjKari.description(),
+            "'kari' adjective (archaic)"
+        );
+        assert_eq!(PartOfSpeech::Other("custom".into()).description(), "custom");
+    }
+    #[test]
     fn test_se_custom() {
         let mut dict = Dictionary::default();
 

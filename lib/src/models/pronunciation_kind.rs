@@ -18,6 +18,15 @@ serializable_enum! {
   }
 }
 
+impl From<PronunciationKind> for String {
+    fn from(pos: PronunciationKind) -> Self {
+        match pos {
+            PronunciationKind::Other(ref s) => s.to_owned(),
+            _ => pos.to_string(),
+        }
+    }
+}
+
 impl Serialize for PronunciationKind {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where

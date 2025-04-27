@@ -25,7 +25,7 @@ describe("Pronunciation support", () => {
     expect(entry.etymologies.length).toBe(1);
     expect(entry.etymologies[0].pronunciations).toBeDefined();
     expect(entry.etymologies[0].pronunciations.length).toBe(1);
-    expect(entry.etymologies[0].pronunciations[0].kind).toBe(PronunciationKind.Pinyin);
+    expect(entry.etymologies[0].pronunciations[0].kind).toBe("pinyin");
     expect(entry.etymologies[0].pronunciations[0].value).toBe("ni hao");
     expect(entry.etymologies[0].pronunciations[0].urls.length).toBe(1);
     expect(entry.etymologies[0].pronunciations[0].urls[0].src).toBe("./audio.mp3");
@@ -61,7 +61,7 @@ describe("Pronunciation support", () => {
     
     expect(example.pronunciations).toBeDefined();
     expect(example.pronunciations.length).toBe(1);
-    expect(example.pronunciations[0].kind).toBe(PronunciationKind.IPA);
+    expect(example.pronunciations[0].kind).toBe("ipa");
     expect(example.pronunciations[0].value).toBe("ɪɡˈzæmpl ˈsɛntəns");
     expect(example.pronunciations[0].urls.length).toBe(1);
     expect(example.pronunciations[0].urls[0].src).toBe("./example.mp3");

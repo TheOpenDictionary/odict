@@ -17,6 +17,15 @@ serializable_enum! {
   }
 }
 
+impl From<FormKind> for String {
+    fn from(pos: FormKind) -> Self {
+        match pos {
+            FormKind::Other(ref s) => s.to_owned(),
+            _ => pos.to_string(),
+        }
+    }
+}
+
 impl Serialize for FormKind {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where

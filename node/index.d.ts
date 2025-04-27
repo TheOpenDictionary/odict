@@ -54,18 +54,8 @@ export interface Example {
 
 export interface Form {
   term: string;
-  kind?: FormKind;
+  kind?: string;
   tags: Array<string>;
-}
-
-export declare const enum FormKind {
-  Conjugation = 0,
-  Inflection = 1,
-  Plural = 2,
-  Singular = 3,
-  Comparative = 4,
-  Superlative = 5,
-  Other = 6,
 }
 
 export interface Group {
@@ -104,22 +94,9 @@ export interface Note {
 }
 
 export interface Pronunciation {
-  kind: PronunciationKind;
+  kind?: string;
   value: string;
   urls: Array<MediaUrl>;
-}
-
-export declare const enum PronunciationKind {
-  IPA = 0,
-  Pinyin = 1,
-  Hiragana = 2,
-  Romaji = 3,
-  Katakana = 4,
-  Yale = 5,
-  Jyutping = 6,
-  Bopomofo = 7,
-  Hepburn = 8,
-  Other = 9,
 }
 
 export interface SearchOptions {

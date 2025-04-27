@@ -2,131 +2,249 @@ use std::str::FromStr;
 
 use crate::serializable_enum;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use strum::EnumProperty;
 
 serializable_enum! {
+    #[derive(strum::EnumProperty)]
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
         /* -------------------------------------------------------------------------- */
+        #[strum(props(description = "pre-noun adjectival (rentaishi)"))]
         AdjPn,
+        #[strum(props(description = "'kari' adjective (archaic)"))]
         AdjKari,
+        #[strum(props(description = "article"))]
         Art,
+        #[strum(props(description = "'ku' adjective (archaic)"))]
         AdjKu,
+        #[strum(props(description = "archaic/formal form of na-adjective"))]
         AdjNari,
+        #[strum(props(description = "adjectival nouns or quasi-adjectives (keiyodoshi)"))]
         AdjNa,
+        #[strum(props(description = "'shiku' adjective (archaic)"))]
         AdjShiku,
+        #[strum(props(description = "'taru' adjective"))]
         AdjT,
+        #[strum(props(description = "adjective (keiyoushi) - yoi/ii class"))]
         AdjIx,
+        #[strum(props(description = "adverbial noun (fukushitekimeishi)"))]
         NAdv,
+        #[strum(props(description = "adverb taking the 'to' particle"))]
         AdvTo,
+        #[strum(props(description = "nouns which may take the genitive case particle 'no'"))]
         AdjNo,
+        #[strum(props(description = "noun, used as a prefix"))]
         NPref,
+        #[strum(props(description = "noun, used as a suffix"))]
         NSuf,
+        #[strum(props(description = "noun (temporal) (jisoumeishi)"))]
         NT,
+        #[strum(props(description = "noun or verb acting prenominally"))]
         AdjF,
+        #[strum(props(description = "Godan verb with 'bu' ending"))]
         V5b,
+        #[strum(props(description = "Godan verb with 'gu' ending"))]
         V5g,
+        #[strum(props(description = "Godan verb with 'ku' ending"))]
         V5k,
+        #[strum(props(description = "Godan verb with 'mu' ending"))]
         V5m,
+        #[strum(props(description = "Godan verb with 'nu' ending"))]
         V5n,
+        #[strum(props(description = "Godan verb with 'ru' ending"))]
         V5r,
+        #[strum(props(description = "Godan verb with 'ru' ending (irregular verb)"))]
         V5rI,
+        #[strum(props(description = "Godan verb - -aru special class"))]
         V5aru,
+        #[strum(props(description = "Godan verb - Iku/Yuku special class"))]
         V5kS,
+        #[strum(props(description = "Godan verb with 'su' ending"))]
         V5s,
+        #[strum(props(description = "Godan verb with 'tsu' ending"))]
         V5t,
+        #[strum(props(description = "Godan verb with 'u' ending"))]
         V5u,
+        #[strum(props(description = "Godan verb - Uru old class verb (old form of Eru)"))]
         V5uru,
+        #[strum(props(description = "Godan verb with 'u' ending (special class)"))]
         V5uS,
+        #[strum(props(description = "Ichidan verb"))]
         V1,
+        #[strum(props(description = "Ichidan verb - kureru special class"))]
         V1S,
+        #[strum(props(description = "Ichidan verb - zuru verb (alternative form of -jiru verbs)"))]
         Vz,
+        #[strum(props(description = "Kuru verb - special class"))]
         Vk,
+        #[strum(props(description = "Nidan verb (lower class) with 'bu' ending (archaic)"))]
         V2bS,
+        #[strum(props(description = "Nidan verb (upper class) with 'bu' ending (archaic)"))]
         V2bK,
+        #[strum(props(description = "Nidan verb (lower class) with 'dzu' ending (archaic)"))]
         V2dS,
+        #[strum(props(description = "Nidan verb (upper class) with 'dzu' ending (archaic)"))]
         V2dK,
+        #[strum(props(description = "Nidan verb (lower class) with 'gu' ending (archaic)"))]
         V2gS,
+        #[strum(props(description = "Nidan verb (upper class) with 'gu' ending (archaic)"))]
         V2gK,
+        #[strum(props(description = "Nidan verb (lower class) with 'hu/fu' ending (archaic)"))]
         V2hS,
+        #[strum(props(description = "Nidan verb (upper class) with 'hu/fu' ending (archaic)"))]
         V2hK,
+        #[strum(props(description = "Nidan verb (lower class) with 'ku' ending (archaic)"))]
         V2kS,
+        #[strum(props(description = "Nidan verb (upper class) with 'ku' ending (archaic)"))]
         V2kK,
+        #[strum(props(description = "Nidan verb (lower class) with 'mu' ending (archaic)"))]
         V2mS,
+        #[strum(props(description = "Nidan verb (upper class) with 'mu' ending (archaic)"))]
         V2mK,
+        #[strum(props(description = "Nidan verb (lower class) with 'nu' ending (archaic)"))]
         V2nS,
+        #[strum(props(description = "Nidan verb (lower class) with 'ru' ending (archaic)"))]
         V2rS,
+        #[strum(props(description = "Nidan verb (upper class) with 'ru' ending (archaic)"))]
         V2rK,
+        #[strum(props(description = "Nidan verb (lower class) with 'su' ending (archaic)"))]
         V2sS,
+        #[strum(props(description = "Nidan verb (lower class) with 'tsu' ending (archaic)"))]
         V2tS,
+        #[strum(props(description = "Nidan verb (upper class) with 'tsu' ending (archaic)"))]
         V2tK,
+        #[strum(props(description = "Nidan verb with 'u' ending (archaic)"))]
         V2aS,
+        #[strum(props(description = "Nidan verb (lower class) with 'u' ending and 'we' conjugation (archaic)"))]
         V2wS,
+        #[strum(props(description = "Nidan verb (lower class) with 'yu' ending (archaic)"))]
         V2yS,
+        #[strum(props(description = "Nidan verb (upper class) with 'yu' ending (archaic)"))]
         V2yK,
+        #[strum(props(description = "Nidan verb (lower class) with 'zu' ending (archaic)"))]
         V2zS,
+        #[strum(props(description = "irregular nu verb"))]
         Vn,
+        #[strum(props(description = "irregular ru verb, plain form ends with -ri"))]
         Vr,
+        #[strum(props(description = "su verb - precursor to the modern suru"))]
         VsC,
+        #[strum(props(description = "noun or participle which takes the aux. verb suru"))]
         Vs,
+        #[strum(props(description = "suru verb - included"))]
         VsI,
+        #[strum(props(description = "suru verb - special class"))]
         VsS,
+        #[strum(props(description = "verb unspecified"))]
         VUnspec,
+        #[strum(props(description = "Yodan verb with 'bu' ending (archaic)"))]
         V4b,
+        #[strum(props(description = "Yodan verb with 'gu' ending (archaic)"))]
         V4g,
+        #[strum(props(description = "Yodan verb with 'hu/fu' ending (archaic)"))]
         V4h,
+        #[strum(props(description = "Yodan verb with 'ku' ending (archaic)"))]
         V4k,
+        #[strum(props(description = "Yodan verb with 'mu' ending (archaic)"))]
         V4m,
+        #[strum(props(description = "Yodan verb with 'nu' ending (archaic)"))]
         V4n,
+        #[strum(props(description = "Yodan verb with 'ru' ending (archaic)"))]
         V4r,
+        #[strum(props(description = "Yodan verb with 'su' ending (archaic)"))]
         V4s,
+        #[strum(props(description = "Yodan verb with 'tsu' ending (archaic)"))]
         V4t,
 
         /* -------------------------------------------------------------------------- */
         /*                                Universal POS                               */
         /* -------------------------------------------------------------------------- */
+        #[strum(props(description = "abbreviation"))]
         Abv,
+        #[strum(props(description = "adfix"))]
         Adf,
+        #[strum(props(description = "adjective"))]
         Adj,
+        #[strum(props(description = "adjective phrase"))]
         PhrAdj,
+        #[strum(props(description = "adverb"))]
         Adv,
+        #[strum(props(description = "adverbial phrase"))]
         PhrAdv,
+        #[strum(props(description = "affix"))]
         Aff,
+        #[strum(props(description = "auxiliary"))]
         Aux,
+        #[strum(props(description = "auxiliary adjective"))]
         AuxAdj,
+        #[strum(props(description = "auxiliary verb"))]
         AuxV,
+        #[strum(props(description = "character"))]
         Chr,
+        #[strum(props(description = "circumfix"))]
         Cf,
+        #[strum(props(description = "classifier"))]
         Cls,
-        Contr,
+        #[strum(props(description = "conjunction"))]
         Conj,
+        #[strum(props(description = "coordinating conjunction"))]
         ConjC,
+        #[strum(props(description = "contraction"))]
+        Contr,
+        #[strum(props(description = "copula"))]
         Cop,
+        #[strum(props(description = "counter"))]
         Ctr,
+        #[strum(props(description = "determiner"))]
         Det,
+        #[strum(props(description = "expression"))]
         Expr,
+        #[strum(props(description = "infix"))]
         Inf,
+        #[strum(props(description = "interfix"))]
         Intf,
+        #[strum(props(description = "interjection"))]
         Intj,
+        #[strum(props(description = "intransitive verb"))]
         Vi,
+        #[strum(props(description = "name"))]
         Name,
+        #[strum(props(description = "noun"))]
         N,
+        #[strum(props(description = "numeric"))]
         Num,
+        #[strum(props(description = "particle"))]
         Part,
+        #[strum(props(description = "phrase"))]
         Phr,
+        #[strum(props(description = "postposition"))]
         Postp,
+        #[strum(props(description = "prefix"))]
         Pref,
+        #[strum(props(description = "preposition"))]
         Prep,
+        #[strum(props(description = "prepositional phrase"))]
         PhrPrep,
+        #[strum(props(description = "pronoun"))]
         Pron,
+        #[strum(props(description = "proper noun"))]
         Propn,
+        #[strum(props(description = "proverb"))]
         Prov,
+        #[strum(props(description = "punctuation"))]
         Punc,
+        #[strum(props(description = "subordinating conjunction"))]
         ConjS,
+        #[strum(props(description = "suffix"))]
         Suff,
+        #[strum(props(description = "symbol"))]
         Sym,
+        #[strum(props(description = "transitive verb"))]
         Vt,
+        #[strum(props(description = "unknown"))]
         Un,
+        #[strum(props(description = "verb"))]
         V,
         /* -------------------------------------------------------------------------- */
         /*                                Custom POS                                  */
@@ -141,135 +259,20 @@ impl Default for PartOfSpeech {
     }
 }
 
+impl From<PartOfSpeech> for String {
+    fn from(pos: PartOfSpeech) -> Self {
+        match pos {
+            PartOfSpeech::Other(ref s) => s.to_owned(),
+            _ => pos.to_string(),
+        }
+    }
+}
+
 impl PartOfSpeech {
     pub fn description(&self) -> &str {
-        match *self {
-            /* -------------------------------------------------------------------------- */
-            /*                            Japanese-specific POS                           */
-            /* -------------------------------------------------------------------------- */
-            PartOfSpeech::AdjPn => "pre-noun adjectival (rentaishi)",
-            PartOfSpeech::AdjKari => "'kari' adjective (archaic)",
-            PartOfSpeech::Art => "article",
-            PartOfSpeech::AdjKu => "'ku' adjective (archaic)",
-            PartOfSpeech::AdjNari => "archaic/formal form of na-adjective",
-            PartOfSpeech::AdjNa => "adjectival nouns or quasi-adjectives (keiyodoshi)",
-            PartOfSpeech::AdjShiku => "'shiku' adjective (archaic)",
-            PartOfSpeech::AdjT => "'taru' adjective",
-            PartOfSpeech::AdjIx => "adjective (keiyoushi) - yoi/ii class",
-            PartOfSpeech::NAdv => "adverbial noun (fukushitekimeishi)",
-            PartOfSpeech::AdvTo => "adverb taking the 'to' particle",
-            PartOfSpeech::AdjNo => "nouns which may take the genitive case particle 'no'",
-            PartOfSpeech::NPref => "noun, used as a prefix",
-            PartOfSpeech::NSuf => "noun, used as a suffix",
-            PartOfSpeech::NT => "noun (temporal) (jisoumeishi)",
-            PartOfSpeech::AdjF => "noun or verb acting prenominally",
-            PartOfSpeech::V5b => "Godan verb with 'bu' ending",
-            PartOfSpeech::V5g => "Godan verb with 'gu' ending",
-            PartOfSpeech::V5k => "Godan verb with 'ku' ending",
-            PartOfSpeech::V5m => "Godan verb with 'mu' ending",
-            PartOfSpeech::V5n => "Godan verb with 'nu' ending",
-            PartOfSpeech::V5r => "Godan verb with 'ru' ending",
-            PartOfSpeech::V5rI => "Godan verb with 'ru' ending (irregular verb)",
-            PartOfSpeech::V5aru => "Godan verb - -aru special class",
-            PartOfSpeech::V5kS => "Godan verb - Iku/Yuku special class",
-            PartOfSpeech::V5s => "Godan verb with 'su' ending",
-            PartOfSpeech::V5t => "Godan verb with 'tsu' ending",
-            PartOfSpeech::V5u => "Godan verb with 'u' ending",
-            PartOfSpeech::V5uru => "Godan verb - Uru old class verb (old form of Eru)",
-            PartOfSpeech::V5uS => "Godan verb with 'u' ending (special class)",
-            PartOfSpeech::V1 => "Ichidan verb",
-            PartOfSpeech::V1S => "Ichidan verb - kureru special class",
-            PartOfSpeech::Vz => "Ichidan verb - zuru verb (alternative form of -jiru verbs)",
-            PartOfSpeech::Vk => "Kuru verb - special class",
-            PartOfSpeech::V2bS => "Nidan verb (lower class) with 'bu' ending (archaic)",
-            PartOfSpeech::V2bK => "Nidan verb (upper class) with 'bu' ending (archaic)",
-            PartOfSpeech::V2dS => "Nidan verb (lower class) with 'dzu' ending (archaic)",
-            PartOfSpeech::V2dK => "Nidan verb (upper class) with 'dzu' ending (archaic)",
-            PartOfSpeech::V2gS => "Nidan verb (lower class) with 'gu' ending (archaic)",
-            PartOfSpeech::V2gK => "Nidan verb (upper class) with 'gu' ending (archaic)",
-            PartOfSpeech::V2hS => "Nidan verb (lower class) with 'hu/fu' ending (archaic)",
-            PartOfSpeech::V2hK => "Nidan verb (upper class) with 'hu/fu' ending (archaic)",
-            PartOfSpeech::V2kS => "Nidan verb (lower class) with 'ku' ending (archaic)",
-            PartOfSpeech::V2kK => "Nidan verb (upper class) with 'ku' ending (archaic)",
-            PartOfSpeech::V2mS => "Nidan verb (lower class) with 'mu' ending (archaic)",
-            PartOfSpeech::V2mK => "Nidan verb (upper class) with 'mu' ending (archaic)",
-            PartOfSpeech::V2nS => "Nidan verb (lower class) with 'nu' ending (archaic)",
-            PartOfSpeech::V2rS => "Nidan verb (lower class) with 'ru' ending (archaic)",
-            PartOfSpeech::V2rK => "Nidan verb (upper class) with 'ru' ending (archaic)",
-            PartOfSpeech::V2sS => "Nidan verb (lower class) with 'su' ending (archaic)",
-            PartOfSpeech::V2tS => "Nidan verb (lower class) with 'tsu' ending (archaic)",
-            PartOfSpeech::V2tK => "Nidan verb (upper class) with 'tsu' ending (archaic)",
-            PartOfSpeech::V2aS => "Nidan verb with 'u' ending (archaic)",
-            PartOfSpeech::V2wS => {
-                "Nidan verb (lower class) with 'u' ending and 'we' conjugation (archaic)"
-            }
-            PartOfSpeech::V2yS => "Nidan verb (lower class) with 'yu' ending (archaic)",
-            PartOfSpeech::V2yK => "Nidan verb (upper class) with 'yu' ending (archaic)",
-            PartOfSpeech::V2zS => "Nidan verb (lower class) with 'zu' ending (archaic)",
-            PartOfSpeech::Vn => "irregular nu verb",
-            PartOfSpeech::Vr => "irregular ru verb, plain form ends with -ri",
-            PartOfSpeech::VsC => "su verb - precursor to the modern suru",
-            PartOfSpeech::Vs => "noun or participle which takes the aux. verb suru",
-            PartOfSpeech::VsI => "suru verb - included",
-            PartOfSpeech::VsS => "suru verb - special class",
-            PartOfSpeech::VUnspec => "verb unspecified",
-            PartOfSpeech::V4b => "Yodan verb with 'bu' ending (archaic)",
-            PartOfSpeech::V4g => "Yodan verb with 'gu' ending (archaic)",
-            PartOfSpeech::V4h => "Yodan verb with 'hu/fu' ending (archaic)",
-            PartOfSpeech::V4k => "Yodan verb with 'ku' ending (archaic)",
-            PartOfSpeech::V4m => "Yodan verb with 'mu' ending (archaic)",
-            PartOfSpeech::V4n => "Yodan verb with 'nu' ending (archaic)",
-            PartOfSpeech::V4r => "Yodan verb with 'ru' ending (archaic)",
-            PartOfSpeech::V4s => "Yodan verb with 'su' ending (archaic)",
-            PartOfSpeech::V4t => "Yodan verb with 'tsu' ending (archaic)",
-
-            /* -------------------------------------------------------------------------- */
-            /*                                Universal POS                               */
-            /* -------------------------------------------------------------------------- */
-            PartOfSpeech::Abv => "abbreviation",
-            PartOfSpeech::Adf => "adfix",
-            PartOfSpeech::Adj => "adjective",
-            PartOfSpeech::PhrAdj => "adjective phrase",
-            PartOfSpeech::Adv => "adverb",
-            PartOfSpeech::PhrAdv => "adverbial phrase",
-            PartOfSpeech::Aff => "affix",
-            PartOfSpeech::Aux => "auxiliary",
-            PartOfSpeech::AuxAdj => "auxiliary adjective",
-            PartOfSpeech::AuxV => "auxiliary verb",
-            PartOfSpeech::Chr => "character",
-            PartOfSpeech::Cf => "circumfix",
-            PartOfSpeech::Cls => "classifier",
-            PartOfSpeech::Conj => "conjunction",
-            PartOfSpeech::ConjC => "coordinating conjunction",
-            PartOfSpeech::Contr => "contraction",
-            PartOfSpeech::Cop => "copula",
-            PartOfSpeech::Ctr => "counter",
-            PartOfSpeech::Det => "determiner",
-            PartOfSpeech::Expr => "expression",
-            PartOfSpeech::Inf => "infix",
-            PartOfSpeech::Intf => "interfix",
-            PartOfSpeech::Intj => "interjection",
-            PartOfSpeech::Vi => "intransitive verb",
-            PartOfSpeech::Name => "name",
-            PartOfSpeech::N => "noun",
-            PartOfSpeech::Num => "numeric",
-            PartOfSpeech::Part => "particle",
-            PartOfSpeech::Phr => "phrase",
-            PartOfSpeech::Postp => "postposition",
-            PartOfSpeech::Pref => "prefix",
-            PartOfSpeech::Prep => "preposition",
-            PartOfSpeech::PhrPrep => "prepositional phrase",
-            PartOfSpeech::Pron => "pronoun",
-            PartOfSpeech::Propn => "proper noun",
-            PartOfSpeech::Prov => "proverb",
-            PartOfSpeech::Punc => "punctuation",
-            PartOfSpeech::ConjS => "subordinating conjunction",
-            PartOfSpeech::Suff => "suffix",
-            PartOfSpeech::Sym => "symbol",
-            PartOfSpeech::Vt => "transitive verb",
-            PartOfSpeech::Un => "unknown",
-            PartOfSpeech::V => "verb",
+        match self {
             PartOfSpeech::Other(ref s) => s,
+            _ => self.get_str("description").unwrap_or(""),
         }
     }
 }
@@ -279,12 +282,7 @@ impl Serialize for PartOfSpeech {
     where
         S: Serializer,
     {
-        let s = match self {
-            PartOfSpeech::Other(ref st) => st.to_owned(),
-            _ => self.to_string(),
-        };
-
-        serializer.serialize_str(&s)
+        serializer.serialize_str(String::from(self.clone()).as_str())
     }
 }
 
