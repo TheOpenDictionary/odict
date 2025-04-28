@@ -1,10 +1,12 @@
-use std::str::FromStr;
+use std::{mem, str::FromStr};
 
 use crate::serializable_enum;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use strum::EnumProperty;
 
 serializable_enum! {
+    #[derive(Serialize, Deserialize)]
+    #[serde(rename_all = "snake_case")]
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
@@ -248,7 +250,8 @@ serializable_enum! {
         /* -------------------------------------------------------------------------- */
         /*                                Custom POS                                  */
         /* -------------------------------------------------------------------------- */
-        #[strum(message = "{0}")]
+        #[strum(to_string = "{0}")]
+        #[serde(untagged)]
         Other(String),
     }
 }
@@ -268,27 +271,27 @@ impl From<PartOfSpeech> for String {
     }
 }
 
-impl Serialize for PartOfSpeech {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let s = match self {
-            PartOfSpeech::Other(ref st) => st.to_owned(),
-            _ => {
-                let variants = PartOfSpeech::VARIANTS;
-            }
-        };
-        serializer.serialize_str(&s)
-    }
-}
+// impl Serialize for PartOfSpeech {
+//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+//     where
+//         S: Serializer,
+//     {
+//         let s = match self {
+//             PartOfSpeech::Other(ref st) => st.to_owned(),
+//             _ => {
+//                 let variants = PartOfSpeech::VARIANTS[*self as usize];
+//             }
+//         };
+//         serializer.serialize_str(&s)
+//     }
+// }
 
-impl<'de> Deserialize<'de> for PartOfSpeech {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        Ok(PartOfSpeech::from_str(s.as_str()).unwrap_or(PartOfSpeech::Other(s.to_string())))
-    }
-}
+// impl<'de> Deserialize<'de> for PartOfSpeech {
+//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//     where
+//         D: Deserializer<'de>,
+//     {
+//         let s = String::deserialize(deserializer)?;
+//         Ok(PartOfSpeech::from_str(s.as_str()).unwrap_or(PartOfSpeech::Other(s.to_string())))
+//     }
+// }

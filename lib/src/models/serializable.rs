@@ -1,5 +1,3 @@
-use strum_macros::{EnumDiscriminants, EnumMessage, EnumString};
-
 #[macro_export]
 macro_rules! serializable {
     ($i:item) => {
@@ -51,7 +49,6 @@ macro_rules! serializable_custom {
 #[macro_export]
 macro_rules! serializable_enum {
     ($i:item) => {
-        #[strum_discriminants(derive(EnumString, EnumMessage))],
         #[derive(
             Hash,
             Ord,
@@ -60,6 +57,9 @@ macro_rules! serializable_enum {
             Eq,
             Debug,
             Clone,
+            strum::VariantNames,
+            strum::EnumString,
+            strum::Display,
             rkyv::Archive,
             rkyv::Serialize,
             rkyv::Deserialize,

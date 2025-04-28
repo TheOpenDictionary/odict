@@ -8,10 +8,10 @@ mod pos_tests {
     #[test]
     fn test_description() {
         assert_eq!(
-            PartOfSpeech::AdjKari.description(),
+            PartOfSpeech::AdjKari.to_string(),
             "'kari' adjective (archaic)"
         );
-        assert_eq!(PartOfSpeech::Other("custom".into()).description(), "custom");
+        assert_eq!(PartOfSpeech::Other("custom".into()).to_string(), "custom");
     }
     #[test]
     fn test_se_custom() {
@@ -107,7 +107,7 @@ mod pos_tests {
           <dictionary>
             <entry term=\"dog\">
               <ety>
-                <sense pos=\"ADJ_KARI\" />
+                <sense pos=\"adj_kari\" />
               </ety>
             </entry>
           </dictionary>
