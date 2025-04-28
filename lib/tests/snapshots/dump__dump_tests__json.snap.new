@@ -1,0 +1,176 @@
+---
+source: lib/tests/dump.rs
+assertion_line: 36
+expression: dumped
+---
+{
+  "id": "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f",
+  "name": "Example Dictionary 1",
+  "entries": {
+    "cat": {
+      "term": "cat",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "pos": "n",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "a cat",
+                  "examples": [
+                    {
+                      "value": "There goes a cat!"
+                    }
+                  ],
+                  "notes": [
+                    {
+                      "value": "Some definition note",
+                      "examples": [
+                        {
+                          "value": "Some example"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "dog": {
+      "term": "dog",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "unknown": {
+              "pos": "unknown",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "a dog"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "poo": {
+      "term": "poo",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "unknown": {
+              "pos": "unknown",
+              "definitions": [
+                {
+                  "type": "group",
+                  "description": "A number of verb senses",
+                  "definitions": [
+                    {
+                      "value": "crap, shit"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "ran": {
+      "term": "ran",
+      "see_also": "run"
+    },
+    "run": {
+      "term": "run",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": {
+            "n": {
+              "pos": "n",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "(vertebrates) To move swiftly",
+                  "examples": [
+                    {
+                      "value": "The dog runs after the cat."
+                    },
+                    {
+                      "value": "The horse ran away."
+                    }
+                  ]
+                },
+                {
+                  "type": "definition",
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "A pleasure trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "Flight, instance or period of fleeing."
+                },
+                {
+                  "type": "definition",
+                  "value": "Migration (of fish)."
+                },
+                {
+                  "type": "definition",
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
+                }
+              ]
+            },
+            "v": {
+              "pos": "v",
+              "definitions": [
+                {
+                  "type": "group",
+                  "description": "A number of verb senses",
+                  "definitions": [
+                    {
+                      "value": "(vertebrates) To move swiftly (figuratively)",
+                      "examples": [
+                        {
+                          "value": "The dog runs after the cat."
+                        },
+                        {
+                          "value": "The horse ran away."
+                        }
+                      ]
+                    },
+                    {
+                      "value": "(fluids) To flow."
+                    },
+                    {
+                      "value": "(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled."
+                    },
+                    {
+                      "value": "(social) To carry out an activity."
+                    },
+                    {
+                      "value": "To extend or persist, statically or dynamically, through space or time."
+                    },
+                    {
+                      "value": "(transitive) To execute or carry out a plan, procedure or program."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
