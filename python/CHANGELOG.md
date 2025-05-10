@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.5.0...python/v1.6.0) (2025-05-10)
+
+
+### Features
+
+* Add `rank` attribute to Entry for storing word frequencies ([#1210](https://github.com/TheOpenDictionary/odict/issues/1210)) ([2b2439a](https://github.com/TheOpenDictionary/odict/commit/2b2439a4dcb82d2b2c247174eb22d4a90d2037d5))
+
 ## [1.5.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.4.0...python/v1.5.0) (2025-04-24)
 
 
