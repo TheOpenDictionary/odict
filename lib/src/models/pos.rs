@@ -250,6 +250,12 @@ serializable_enum! {
     }
 }
 
+impl From<PartOfSpeech> for String {
+    fn from(pos: PartOfSpeech) -> Self {
+        pos.to_string()
+    }
+}
+
 impl Default for PartOfSpeech {
     fn default() -> Self {
         PartOfSpeech::Un

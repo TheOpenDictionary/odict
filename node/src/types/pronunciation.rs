@@ -1,14 +1,26 @@
+use internal::ToEnumWrapper;
 use napi_derive::napi;
-use structural_convert::StructuralConvert;
 
+use super::enums::EnumWrapper;
 use super::media_url::MediaURL;
-use super::pronunciation_kind::PronunciationKind;
 
 #[napi(object)]
-#[derive(StructuralConvert)]
-#[convert(from(odict::Pronunciation))]
 pub struct Pronunciation {
-  pub kind: Option<PronunciationKind>,
+  pub kind: Option<EnumWrapper>,
   pub value: String,
   pub media: Vec<MediaURL>,
+}
+
+impl From<odict::Pronunciation> for Pronunciation {
+  fn from(pronunciation: odict::Pronunciation) -> Self {
+    Self {
+      kind: pronunciation.kind.map(|k| k.to_enum_wrapper().into()),
+      value: pronunciation.value,
+      media: pronunciation
+        .media
+        .into_iter()
+        .map(MediaURL::from)
+        .collect(),
+    }
+  }
 }

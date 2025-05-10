@@ -40,6 +40,11 @@ export interface Entry {
   media: Array<MediaURL>;
 }
 
+export interface EnumWrapper {
+  variant: string;
+  value: string;
+}
+
 export interface Etymology {
   id?: string;
   pronunciations: Array<Pronunciation>;
@@ -55,7 +60,7 @@ export interface Example {
 
 export interface Form {
   term: string;
-  kind?: string;
+  kind?: EnumWrapper;
   tags: Array<string>;
 }
 
@@ -95,7 +100,7 @@ export interface Note {
 }
 
 export interface Pronunciation {
-  kind?: string;
+  kind?: EnumWrapper;
   value: string;
   media: Array<MediaUrl>;
 }
@@ -108,7 +113,7 @@ export interface SearchOptions {
 }
 
 export interface Sense {
-  pos: string;
+  pos: EnumWrapper;
   lemma?: string;
   definitions: Array<Definition | Group>;
   tags: Array<string>;

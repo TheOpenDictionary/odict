@@ -1638,6 +1638,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "internal"
+version = "0.1.0"
+dependencies = [
+ "odict",
+ "strum 0.27.1",
+]
+
+[[package]]
 name = "irg-kvariants"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2520,6 +2528,7 @@ dependencies = [
 name = "odict_node"
 version = "1.1.1"
 dependencies = [
+ "internal",
  "merge",
  "napi",
  "napi-build",
@@ -2712,15 +2721,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy 0.8.24",
-]
-
-[[package]]
-name = "private"
-version = "0.1.0"
-dependencies = [
- "odict",
- "serde",
- "serde_json",
 ]
 
 [[package]]

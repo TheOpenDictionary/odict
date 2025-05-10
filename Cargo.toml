@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["cli", "lib", "python", "node", "private"]
+members = ["cli", "lib", "python", "node", "internal"]
 
 [profile.release]
 codegen-units = 1
