@@ -1,12 +1,6 @@
-use std::{mem, str::FromStr};
-
 use crate::serializable_enum;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use strum::EnumProperty;
 
 serializable_enum! {
-    #[derive(Serialize, Deserialize)]
-    #[serde(rename_all = "snake_case")]
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
@@ -261,37 +255,3 @@ impl Default for PartOfSpeech {
         PartOfSpeech::Un
     }
 }
-
-impl From<PartOfSpeech> for String {
-    fn from(pos: PartOfSpeech) -> Self {
-        match pos {
-            PartOfSpeech::Other(ref s) => s.to_owned(),
-            _ => pos.to_string(),
-        }
-    }
-}
-
-// impl Serialize for PartOfSpeech {
-//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-//     where
-//         S: Serializer,
-//     {
-//         let s = match self {
-//             PartOfSpeech::Other(ref st) => st.to_owned(),
-//             _ => {
-//                 let variants = PartOfSpeech::VARIANTS[*self as usize];
-//             }
-//         };
-//         serializer.serialize_str(&s)
-//     }
-// }
-
-// impl<'de> Deserialize<'de> for PartOfSpeech {
-//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-//     where
-//         D: Deserializer<'de>,
-//     {
-//         let s = String::deserialize(deserializer)?;
-//         Ok(PartOfSpeech::from_str(s.as_str()).unwrap_or(PartOfSpeech::Other(s.to_string())))
-//     }
-// }

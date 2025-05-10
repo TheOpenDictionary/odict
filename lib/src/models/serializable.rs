@@ -58,15 +58,17 @@ macro_rules! serializable_enum {
             Debug,
             Clone,
             strum::VariantNames,
-            strum::EnumString,
             strum::Display,
             rkyv::Archive,
             rkyv::Serialize,
             rkyv::Deserialize,
+            serde::Serialize,
+            serde::Deserialize,
         )]
         #[rkyv(derive(Debug, PartialEq, Eq, Hash))]
         #[repr(u8)]
         #[strum(ascii_case_insensitive, serialize_all = "snake_case")]
+        #[serde(rename_all = "snake_case")]
         $i
     };
 }

@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::Dictionary;
 
 pub trait ToDictionary {
@@ -6,12 +8,12 @@ pub trait ToDictionary {
 
 impl ToDictionary for String {
     fn to_dictionary(&self) -> crate::Result<Dictionary> {
-        Dictionary::try_from(self.as_str())
+        Dictionary::from_str(self.as_str())
     }
 }
 
 impl ToDictionary for str {
     fn to_dictionary(&self) -> crate::Result<Dictionary> {
-        Dictionary::try_from(self)
+        Dictionary::from_str(self)
     }
 }

@@ -1,6 +1,5 @@
-use quick_xml::de::from_str;
 use rkyv::{deserialize, to_bytes};
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
 use crate::{error::Error, serializable};
 
@@ -62,12 +61,12 @@ impl Dictionary {
     }
 }
 
-impl TryFrom<&str> for Dictionary {
-    fn try_from(xml: &str) -> crate::Result<Self> {
-        from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))
+impl FromStr for Dictionary {
+    fn from_str(xml: &str) -> Result<Self, Self::Err> {
+        quick_xml::de::from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))
     }
 
-    type Error = crate::Error;
+    type Err = crate::Error;
 }
 
 impl ArchivedDictionary {

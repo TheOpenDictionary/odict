@@ -1,10 +1,8 @@
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use std::str::FromStr;
-
 use crate::serializable_enum;
 
 serializable_enum! {
   pub enum PronunciationKind {
+      #[serde(rename = "ipa")]
       IPA,
       Pinyin,
       Hiragana,
@@ -14,40 +12,8 @@ serializable_enum! {
       Jyutping, // Cantonese
       Bopomofo, // Zhuyin for Chinese
       Hepburn,  // Japanese romanization
+      #[strum(to_string = "{0}")]
+      #[serde(untagged)]
       Other(String),
   }
-}
-
-impl From<PronunciationKind> for String {
-    fn from(pos: PronunciationKind) -> Self {
-        match pos {
-            PronunciationKind::Other(ref s) => s.to_owned(),
-            _ => pos.to_string(),
-        }
-    }
-}
-
-impl Serialize for PronunciationKind {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        let s = match self {
-            PronunciationKind::Other(ref st) => st.to_owned(),
-            _ => self.to_string(),
-        };
-
-        serializer.serialize_str(&s)
-    }
-}
-
-impl<'de> Deserialize<'de> for PronunciationKind {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        Ok(PronunciationKind::from_str(s.as_str())
-            .unwrap_or(PronunciationKind::Other(s.to_string())))
-    }
 }

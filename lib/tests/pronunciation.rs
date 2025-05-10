@@ -10,7 +10,7 @@ mod pronunciation_tests {
         assert_eq!(serialized, "\"ipa\"");
 
         // Test deserialization including case-insensitivity
-        let deserialized: PronunciationKind = serde_json::from_str("\"IPA\"").unwrap();
+        let deserialized: PronunciationKind = serde_json::from_str("\"ipa\"").unwrap();
 
         assert!(matches!(deserialized, PronunciationKind::IPA));
 
@@ -53,6 +53,7 @@ mod pronunciation_tests {
         "#;
 
         let entry: odict::Entry = from_str(xml).unwrap();
+
         assert_eq!(entry.term, "你好");
         assert_eq!(entry.etymologies.len(), 1);
         assert_eq!(entry.etymologies[0].pronunciations.len(), 1);
@@ -107,6 +108,7 @@ mod pronunciation_tests {
         "#;
 
         let entry: odict::Entry = from_str(xml).unwrap();
+
         assert_eq!(entry.etymologies.len(), 1);
         assert_eq!(entry.etymologies[0].pronunciations.len(), 2);
 

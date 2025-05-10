@@ -1,0 +1,14 @@
+[package]
+name = "private"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+odict = { path = "../lib", features = [] }
+serde_json = "1.0.116"
+serde = { version = "1.0.200", features = ["serde_derive"] }
+
+[lib]
+name = "private"
+crate-type = ["cdylib", "staticlib", "lib"]
