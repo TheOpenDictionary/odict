@@ -7,7 +7,7 @@ use crate::{Pronunciation, PronunciationKind};
 #[derive(Serialize, StructuralConvert)]
 #[convert(from(Pronunciation))]
 pub struct PronunciationJSON {
-    pub kind: PronunciationKind,
+    pub kind: Option<PronunciationKind>,
 
     pub value: String,
 

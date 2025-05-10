@@ -1,12 +1,15 @@
+use internal::ToEnumWrapper;
 use napi::bindgen_prelude::*;
 
 use odict::DefinitionType;
 
-use super::{definition::Definition, form::Form, group::Group, translation::Translation};
+use super::{
+  definition::Definition, enums::EnumWrapper, form::Form, group::Group, translation::Translation,
+};
 
 #[napi(object)]
 pub struct Sense {
-  pub pos: String,
+  pub pos: EnumWrapper,
   pub lemma: Option<String>,
   pub definitions: Vec<Either<Definition, Group>>,
   pub tags: Vec<String>,
@@ -17,7 +20,7 @@ pub struct Sense {
 impl From<odict::Sense> for Sense {
   fn from(sense: odict::Sense) -> Self {
     Sense {
-      pos: sense.pos.to_string(),
+      pos: sense.pos.to_enum_wrapper().into(),
       lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),
       definitions: sense
         .definitions

@@ -17,7 +17,7 @@ mod dump_tests {
 
         let dumped = dict.clone().to_xml(true).unwrap();
 
-        let mut dictionary2 = Dictionary::from(dumped.as_str()).unwrap();
+        let mut dictionary2 = Dictionary::try_from(dumped.as_str()).unwrap();
 
         dictionary2.id = dict.id.clone();
 

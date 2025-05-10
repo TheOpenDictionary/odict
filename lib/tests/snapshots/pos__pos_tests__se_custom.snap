@@ -1,0 +1,11 @@
+---
+source: lib/tests/pos.rs
+expression: dict.to_xml(true).unwrap()
+---
+<dictionary id="2ee2a1ae-f7ff-4590-ba2d-de857ba7857f">
+  <entry term="dog">
+    <ety>
+      <sense pos="cusTom"/>
+    </ety>
+  </entry>
+</dictionary>

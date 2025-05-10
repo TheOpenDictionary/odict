@@ -48,10 +48,10 @@ describe("Form support", () => {
 
     // Forms are stored properly with terms and kinds
     expect(sense.forms[0].term).toBe("ran");
-    expect(sense.forms[0].kind).toBe(FormKind.Inflection);
+    expect(sense.forms[0].kind).toBe("inflection");
 
     expect(sense.forms[1].term).toBe("running");
-    expect(sense.forms[1].kind).toBe(FormKind.Superlative);
+    expect(sense.forms[1].kind).toBe("superlative");
 
     expect(sense.forms[2].term).toBe("runs");
     expect(sense.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified

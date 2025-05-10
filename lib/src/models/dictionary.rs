@@ -1,12 +1,12 @@
-use quick_xml::de::from_str;
 use rkyv::{deserialize, to_bytes};
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
 use crate::{error::Error, serializable};
 
 use super::{entry::Entry, id::ID};
 
 serializable! {
+  #[derive(Default)]
   #[serde(rename = "dictionary")]
   pub struct Dictionary {
       #[serde(default, rename = "@id")]
@@ -59,17 +59,14 @@ impl Dictionary {
 
         Ok(bytes.to_vec())
     }
-
-    pub fn from(xml: &str) -> crate::Result<Self> {
-        let dict = from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))?;
-        Ok(dict)
-    }
 }
 
-impl From<&str> for Dictionary {
-    fn from(xml: &str) -> Self {
-        from_str(xml).unwrap()
+impl FromStr for Dictionary {
+    fn from_str(xml: &str) -> Result<Self, Self::Err> {
+        quick_xml::de::from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))
     }
+
+    type Err = crate::Error;
 }
 
 impl ArchivedDictionary {

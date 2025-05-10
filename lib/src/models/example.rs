@@ -2,7 +2,9 @@ use crate::serializable;
 use crate::{Pronunciation, Translation};
 
 serializable! {
-pub struct Example {
+  #[derive(Default)]
+  #[serde(rename = "example")]
+  pub struct Example {
     #[serde(rename = "@value")]
     pub value: String,
 
