@@ -108,7 +108,7 @@ pub fn insert_pronunciation(
     );
 
     // Insert any URLs
-    for url in &pronunciation.urls {
+    for url in &pronunciation.media {
         let url_id = ID::default();
 
         builder.add_insert(

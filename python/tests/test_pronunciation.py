@@ -4,10 +4,7 @@ import tempfile
 import uuid
 
 # Add parent directory to path for imports
-sys.path.insert(
-     0,
-     os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from theopendictionary import (  # noqa: E402
     Dictionary,
@@ -49,11 +46,8 @@ def test_entry_with_pronunciation():
             entry.etymologies[0].pronunciations[0].kind, PronunciationKind
         )
         assert str(entry.etymologies[0].pronunciations[0].kind) == "pinyin"
-        assert len(entry.etymologies[0].pronunciations[0].urls) == 1
-        assert (
-            entry.etymologies[0].pronunciations[0].urls[0].src
-            == "./audio.mp3"
-        )
+        assert len(entry.etymologies[0].pronunciations[0].media) == 1
+        assert entry.etymologies[0].pronunciations[0].media[0].src == "./audio.mp3"
 
     finally:
         # Clean up
@@ -96,17 +90,15 @@ def test_example_with_pronunciation():
         entry = results[0].entry
 
         # Access the example through the definition
-        definition = next(
-            iter(entry.etymologies[0].senses.values())
-        ).definitions[0]
+        definition = next(iter(entry.etymologies[0].senses.values())).definitions[0]
         example = definition.examples[0]
 
         assert len(example.pronunciations) == 1
         assert example.pronunciations[0].value == "ɪɡˈzæmpl ˈsɛntəns"
         assert str(example.pronunciations[0].kind) == "ipa"
-        assert len(example.pronunciations[0].urls) == 1
-        assert example.pronunciations[0].urls[0].src == "./example.mp3"
-        assert example.pronunciations[0].urls[0].mime_type == "audio/mpeg"
+        assert len(example.pronunciations[0].media) == 1
+        assert example.pronunciations[0].media[0].src == "./example.mp3"
+        assert example.pronunciations[0].media[0].mime_type == "audio/mpeg"
 
     finally:
         # Clean up

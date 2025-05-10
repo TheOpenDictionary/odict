@@ -2,7 +2,7 @@ use rkyv::{deserialize, to_bytes};
 
 use crate::{error::Error, serializable, Etymology};
 
-use super::EntryRef;
+use super::{EntryRef, MediaURL};
 
 serializable! {
   #[derive(Default)]
@@ -17,6 +17,9 @@ serializable! {
 
     #[serde(default, rename = "ety")]
     pub etymologies: Vec<Etymology>,
+
+    #[serde(default, rename = "media")]
+    pub media: Vec<MediaURL>,
   }
 }
 

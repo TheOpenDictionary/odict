@@ -10,5 +10,5 @@ use super::pronunciation_kind::PronunciationKind;
 pub struct Pronunciation {
   pub kind: Option<PronunciationKind>,
   pub value: String,
-  pub urls: Vec<MediaURL>,
+  pub media: Vec<MediaURL>,
 }

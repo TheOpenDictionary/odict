@@ -27,8 +27,8 @@ describe("Pronunciation support", () => {
     expect(entry.etymologies[0].pronunciations.length).toBe(1);
     expect(entry.etymologies[0].pronunciations[0].kind).toBe("pinyin");
     expect(entry.etymologies[0].pronunciations[0].value).toBe("ni hao");
-    expect(entry.etymologies[0].pronunciations[0].urls.length).toBe(1);
-    expect(entry.etymologies[0].pronunciations[0].urls[0].src).toBe("./audio.mp3");
+    expect(entry.etymologies[0].pronunciations[0].media.length).toBe(1);
+    expect(entry.etymologies[0].pronunciations[0].media[0].src).toBe("./audio.mp3");
   });
 
   it("should parse examples with pronunciations", async () => {
@@ -63,9 +63,9 @@ describe("Pronunciation support", () => {
     expect(example.pronunciations.length).toBe(1);
     expect(example.pronunciations[0].kind).toBe("ipa");
     expect(example.pronunciations[0].value).toBe("ɪɡˈzæmpl ˈsɛntəns");
-    expect(example.pronunciations[0].urls.length).toBe(1);
-    expect(example.pronunciations[0].urls[0].src).toBe("./example.mp3");
-    expect(example.pronunciations[0].urls[0].mimeType).toBe("audio/mpeg");
+    expect(example.pronunciations[0].media.length).toBe(1);
+    expect(example.pronunciations[0].media[0].src).toBe("./example.mp3");
+    expect(example.pronunciations[0].media[0].mimeType).toBe("audio/mpeg");
   });
 
   it("should handle multiple pronunciations for an entry", async () => {
