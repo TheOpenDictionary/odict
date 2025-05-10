@@ -102,6 +102,7 @@ fn test_form_with_tags() {
     // Create an entry with the etymology
     let entry = Entry {
         media: vec![],
+        rank: None,
         term: "word".to_string(),
         see_also: None,
         etymologies: vec![etymology],

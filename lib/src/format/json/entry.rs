@@ -11,6 +11,9 @@ pub struct EntryJSON {
     pub term: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<EntryRefJSON>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]

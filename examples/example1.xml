@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary name="Example Dictionary 1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
-  <entry term="run">
+  <entry rank="100" term="run">
     <ety description="Latin root">
       <sense pos="v">
         <group description="A number of verb senses">
