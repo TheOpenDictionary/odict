@@ -45,6 +45,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
       },
     ],
     "media": [],
+    "rank": 100,
     "term": "run",
   },
 ]

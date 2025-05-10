@@ -89,6 +89,7 @@ expression: dumped
     },
     "run": {
       "term": "run",
+      "rank": 100,
       "etymologies": [
         {
           "description": "Latin root",
