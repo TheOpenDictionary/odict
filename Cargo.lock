@@ -1115,7 +1115,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "976dd42dc7e85965fe702eb8164f21f450704bdde31faefd6471dba214cb594e"
 dependencies = [
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -1323,9 +1323,9 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
-version = "0.15.2"
+version = "0.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
+checksum = "84b26c544d002229e640969970a2e74021aadf6e2f96372b9c58eff97de08eb3"
 dependencies = [
  "allocator-api2",
  "equivalent",
@@ -1581,7 +1581,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cea70ddb795996207ad57735b50c5982d8844f38ba9ee5f1aedcfb708a2aa11e"
 dependencies = [
  "equivalent",
- "hashbrown 0.15.2",
+ "hashbrown 0.15.3",
 ]
 
 [[package]]
@@ -1656,7 +1656,7 @@ checksum = "e04d7f318608d35d4b61ddd75cbdaee86b023ebe2bd5a66ee0915f0bf93095a9"
 dependencies = [
  "hermit-abi 0.5.0",
  "libc",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -2211,7 +2211,7 @@ version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "234cf4f4a04dc1f57e24b96cc0cd600cf2af460d4161ac5ecdd0af8e1f3b2a38"
 dependencies = [
- "hashbrown 0.15.2",
+ "hashbrown 0.15.3",
 ]
 
 [[package]]
@@ -2220,7 +2220,7 @@ version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f8cc7106155f10bdf99a6f379688f543ad6596a415375b36a59a054ceda1198"
 dependencies = [
- "hashbrown 0.15.2",
+ "hashbrown 0.15.3",
 ]
 
 [[package]]
@@ -2470,13 +2470,14 @@ dependencies = [
 
 [[package]]
 name = "odict"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "brotli 8.0.1",
  "byteorder",
  "charabia",
  "criterion",
  "dirs",
+ "hashbrown 0.15.3",
  "insta",
  "map-macro",
  "pulldown-cmark",
@@ -2497,7 +2498,7 @@ dependencies = [
 
 [[package]]
 name = "odict-cli"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -2529,7 +2530,7 @@ dependencies = [
 
 [[package]]
 name = "odict_python"
-version = "1.5.0"
+version = "1.6.0"
 dependencies = [
  "either",
  "odict",
@@ -3058,7 +3059,7 @@ checksum = "1e147371c75553e1e2fcdb483944a8540b8438c31426279553b9a8182a9b7b65"
 dependencies = [
  "bytecheck",
  "bytes",
- "hashbrown 0.15.2",
+ "hashbrown 0.15.3",
  "indexmap",
  "munge",
  "ptr_meta",
@@ -3118,7 +3119,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.4.15",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3131,7 +3132,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.9.4",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -3619,7 +3620,7 @@ dependencies = [
  "getrandom 0.3.2",
  "once_cell",
  "rustix 1.0.5",
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4084,7 +4085,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.52.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

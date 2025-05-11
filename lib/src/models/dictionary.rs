@@ -1,6 +1,6 @@
+use hashbrown::HashSet;
 use quick_xml::de::from_str;
 use rkyv::{deserialize, to_bytes};
-use std::collections::HashMap;
 
 use crate::{error::Error, serializable};
 
@@ -17,13 +17,12 @@ serializable! {
       pub name: Option<String>,
 
       #[serde(default, rename = "entry", with = "entries")]
-      pub entries: HashMap<String, Entry>,
+      pub entries: HashSet<Entry>,
   }
 }
 
 mod entries {
-
-    use std::collections::HashMap;
+    use hashbrown::HashSet;
 
     use serde::de::Deserializer;
     use serde::ser::Serializer;
@@ -31,24 +30,24 @@ mod entries {
 
     use crate::models::Entry;
 
-    pub fn serialize<S>(map: &HashMap<String, Entry>, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(set: &HashSet<Entry>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        serializer.collect_seq(map.values())
+        serializer.collect_seq(set.iter())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashMap<String, Entry>, D::Error>
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashSet<Entry>, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let mut map = HashMap::new();
+        let mut set = HashSet::new();
 
         for item in Vec::<Entry>::deserialize(deserializer)? {
-            map.insert(item.term.to_owned(), item);
+            set.insert(item);
         }
 
-        Ok(map)
+        Ok(set)
     }
 }
 

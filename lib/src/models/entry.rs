@@ -1,4 +1,5 @@
 use rkyv::{deserialize, to_bytes};
+use std::hash::{Hash, Hasher};
 
 use crate::{error::Error, serializable, Etymology};
 
@@ -26,9 +27,33 @@ serializable! {
   }
 }
 
+impl Hash for Entry {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.term.hash(state);
+    }
+}
+
 impl AsRef<Entry> for Entry {
     fn as_ref(&self) -> &Entry {
         self
+    }
+}
+
+impl Borrow<str> for Entry {
+    fn borrow(&self) -> &str {
+        self.term.as_str()
+    }
+}
+
+impl Hash for ArchivedEntry {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.term.hash(state);
+    }
+}
+
+impl Borrow<str> for ArchivedEntry {
+    fn borrow(&self) -> &str {
+        self.term.as_str()
     }
 }
 

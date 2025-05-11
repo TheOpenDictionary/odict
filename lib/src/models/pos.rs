@@ -6,8 +6,6 @@ macro_rules! create_pos {
   ( { $( $variant:ident, )* }) => {
       serializable! {
         #[derive(Hash, Ord, PartialOrd)]
-        #[rkyv(derive(PartialEq, Eq, Hash))]
-        #[repr(u8)]
         pub enum PartOfSpeech {
             $( $variant, )*
         }
