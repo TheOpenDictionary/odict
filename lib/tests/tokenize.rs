@@ -3,6 +3,8 @@ mod helpers;
 #[cfg(test)]
 mod tokenize_tests {
 
+    use std::str::FromStr;
+
     use odict::lookup::{Language, TokenizeOptions};
 
     use crate::helpers::EXAMPLE_DICT_1;
@@ -139,7 +141,7 @@ mod tokenize_tests {
         </dictionary>
         "#;
 
-        let dict = odict::Dictionary::try_from(xml).unwrap();
+        let dict = odict::Dictionary::from_str(xml).unwrap();
 
         // Test case insensitivity combined with follow option
         let result = dict.tokenize(

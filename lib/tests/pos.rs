@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod pos_tests {
 
+    use std::str::FromStr;
+
     use insta::assert_snapshot;
     use map_macro::hash_map;
     use odict::{format::xml::ToXML, Dictionary, Entry, Etymology, PartOfSpeech, Sense};
@@ -23,6 +25,7 @@ mod pos_tests {
         dict.entries.insert(
             "dog".into(),
             Entry {
+                media: vec![],
                 term: "dog".into(),
                 see_also: None,
                 etymologies: vec![Etymology {
@@ -58,7 +61,7 @@ mod pos_tests {
           </dictionary>
         ";
 
-        let dict = Dictionary::try_from(xml).unwrap();
+        let dict = Dictionary::from_str(xml).unwrap();
 
         let expected = PartOfSpeech::Other("custom".into());
 
@@ -81,6 +84,7 @@ mod pos_tests {
             Entry {
                 term: "dog".into(),
                 see_also: None,
+                media: vec![],
                 etymologies: vec![Etymology {
                     id: None,
                     pronunciations: vec![],
@@ -114,7 +118,7 @@ mod pos_tests {
           </dictionary>
         ";
 
-        let dict = Dictionary::try_from(xml).unwrap();
+        let dict = Dictionary::from_str(xml).unwrap();
 
         let sense = dict.entries.get("dog").unwrap().etymologies[0]
             .senses
