@@ -66,7 +66,6 @@ macro_rules! serializable_enum {
             serde::Deserialize,
         )]
         #[rkyv(derive(Debug, PartialEq, Eq, Hash))]
-        #[repr(u8)]
         #[strum(ascii_case_insensitive, serialize_all = "snake_case")]
         #[serde(rename_all = "snake_case")]
         $i

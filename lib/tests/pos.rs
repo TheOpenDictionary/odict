@@ -5,12 +5,20 @@ mod pos_tests {
 
     use insta::assert_snapshot;
     use map_macro::hash_map;
-    use odict::{format::xml::ToXML, Dictionary, Entry, Etymology, PartOfSpeech, Sense};
+    use odict::{
+        format::xml::ToXML, Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense,
+    };
+
+    #[test]
+    fn test_id() {
+        assert_eq!(PartOfSpeech::AdjKari.id(), "adj_kari");
+        assert_eq!(PartOfSpeech::Other("custom".into()).to_string(), "custom");
+    }
 
     #[test]
     fn test_display() {
         assert_eq!(
-            PartOfSpeech::AdjKari.to_string(),
+            format!("{}", PartOfSpeech::AdjKari),
             "'kari' adjective (archaic)"
         );
         assert_eq!(PartOfSpeech::Other("custom".into()).to_string(), "custom");

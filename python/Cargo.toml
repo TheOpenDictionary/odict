@@ -10,12 +10,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.24.0", features = ["either"] }
-odict = { path = "../lib", features = [
-  "config",
-  "sql",
-  "tokenize",
-  "search",
-  "json",
-] }
+odict = { path = "../lib", features = ["config", "sql", "tokenize", "search"] }
 either = { version = "*" }
 structural-convert = { workspace = true }

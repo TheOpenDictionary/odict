@@ -8,8 +8,7 @@ publish = false
 crate-type = ["cdylib"]
 
 [features]
-default = ["search", "json", "sql", "tokenize"]
-json = ["odict/json"]
+default = ["search", "sql", "tokenize"]
 tokenize = [
   "odict/tokenize-latin",
   "odict/tokenize-chinese",
