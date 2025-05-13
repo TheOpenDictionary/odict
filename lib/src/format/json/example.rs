@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 use super::TranslationJSON;
 use crate::Example;
 
-#[derive(Serialize, Clone, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Example))]
 pub struct ExampleJSON {
     pub value: String,

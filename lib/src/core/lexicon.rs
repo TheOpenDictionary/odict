@@ -7,7 +7,7 @@ macro_rules! lexicon {
                 let mut vec: Vec<&str> = self
                     .entries
                     .iter()
-                    .map(|(_, entry)| entry.term.as_str())
+                    .map(|entry| entry.term.as_str())
                     .collect();
                 vec.sort();
                 vec

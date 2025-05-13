@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 use super::media_url::MediaURLJSON;
 use crate::{Pronunciation, PronunciationKind};
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Pronunciation))]
 pub struct PronunciationJSON {
     pub kind: Option<PronunciationKind>,

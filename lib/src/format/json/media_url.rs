@@ -2,7 +2,7 @@ use crate::MediaURL;
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(MediaURL))]
 pub struct MediaURLJSON {
     pub src: String,

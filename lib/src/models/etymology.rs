@@ -1,9 +1,9 @@
-use std::collections::HashMap;
+use std::collections::HashSet;
 
 use crate::models::pronunciation::Pronunciation;
 use crate::serializable;
 
-use super::{pos::PartOfSpeech, sense::Sense};
+use super::sense::Sense;
 
 serializable! {
   #[derive(Default)]
@@ -22,40 +22,31 @@ serializable! {
     pub description: Option<String>,
 
     #[serde(rename = "sense", default, with = "senses")]
-    pub senses: HashMap<PartOfSpeech, Sense>,
+    pub senses: HashSet<Sense>,
   }
 }
 
 mod senses {
-
-    use std::collections::HashMap;
+    use std::collections::HashSet;
 
     use serde::de::Deserializer;
     use serde::ser::Serializer;
     use serde::Deserialize;
 
-    use crate::models::{PartOfSpeech, Sense};
+    use crate::models::Sense;
 
-    pub fn serialize<S>(
-        map: &HashMap<PartOfSpeech, Sense>,
-        serializer: S,
-    ) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(set: &HashSet<Sense>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
-        serializer.collect_seq(map.values())
+        serializer.collect_seq(set.iter())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashMap<PartOfSpeech, Sense>, D::Error>
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashSet<Sense>, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let mut map = HashMap::new();
-
-        for item in Vec::<Sense>::deserialize(deserializer)? {
-            map.insert(item.pos.clone(), item);
-        }
-
-        Ok(map)
+        let senses = Vec::<Sense>::deserialize(deserializer)?;
+        Ok(senses.into_iter().collect())
     }
 }

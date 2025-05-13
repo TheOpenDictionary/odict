@@ -1,5 +1,6 @@
 use rkyv::{deserialize, to_bytes};
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashSet;
+use std::str::FromStr;
 
 use crate::{error::Error, serializable};
 
@@ -22,7 +23,7 @@ serializable! {
 }
 
 mod entries {
-    use hashbrown::HashSet;
+    use std::collections::HashSet;
 
     use serde::de::Deserializer;
     use serde::ser::Serializer;

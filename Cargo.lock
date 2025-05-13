@@ -2485,7 +2485,6 @@ dependencies = [
  "charabia",
  "criterion",
  "dirs",
- "hashbrown 0.15.3",
  "insta",
  "map-macro",
  "pulldown-cmark",

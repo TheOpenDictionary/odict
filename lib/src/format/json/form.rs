@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 
 use super::EntryRefJSON;
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Form))]
 pub struct FormJSON {
     pub term: EntryRefJSON,

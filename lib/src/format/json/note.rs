@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 use super::example::ExampleJSON;
 use crate::Note;
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Note))]
 pub struct NoteJSON {
     #[serde(skip_serializing_if = "Option::is_none")]

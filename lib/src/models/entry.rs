@@ -1,5 +1,8 @@
 use rkyv::{deserialize, to_bytes};
-use std::hash::{Hash, Hasher};
+use std::{
+    borrow::Borrow,
+    hash::{Hash, Hasher},
+};
 
 use crate::{error::Error, serializable, Etymology};
 

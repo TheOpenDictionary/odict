@@ -5,7 +5,7 @@ use super::DefinitionJSON;
 
 use crate::Group;
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Group))]
 pub struct GroupJSON {
     #[serde(skip_serializing_if = "Option::is_none")]

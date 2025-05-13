@@ -4,7 +4,7 @@ mod pos_tests {
     use std::str::FromStr;
 
     use insta::assert_snapshot;
-    use map_macro::hash_map;
+    use map_macro::hash_set;
     use odict::{
         format::xml::ToXML, Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense,
     };
@@ -30,29 +30,25 @@ mod pos_tests {
 
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
 
-        dict.entries.insert(
-            "dog".into(),
-            Entry {
-                media: vec![],
-                term: "dog".into(),
-                see_also: None,
-                etymologies: vec![Etymology {
-                    id: None,
-                    pronunciations: vec![],
-                    description: None,
-                    senses: hash_map! {
-                      PartOfSpeech::Other("cusTom".into()) => Sense {
-                        lemma: None,
-                        definitions: vec![],
-                        tags: vec![],
-                        translations: vec![],
-                        forms: vec![],
-                        pos: PartOfSpeech::Other("cusTom".into())
-                      }
-                    },
+        dict.entries.insert(Entry {
+            media: vec![],
+            rank: None,
+            term: "dog".into(),
+            see_also: None,
+            etymologies: vec![Etymology {
+                id: None,
+                pronunciations: vec![],
+                description: None,
+                senses: hash_set![Sense {
+                    lemma: None,
+                    definitions: vec![],
+                    tags: vec![],
+                    translations: vec![],
+                    forms: vec![],
+                    pos: PartOfSpeech::Other("cusTom".into())
                 }],
-            },
-        );
+            }],
+        });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
     }
@@ -87,29 +83,25 @@ mod pos_tests {
 
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
 
-        dict.entries.insert(
-            "dog".into(),
-            Entry {
-                term: "dog".into(),
-                see_also: None,
-                media: vec![],
-                etymologies: vec![Etymology {
-                    id: None,
-                    pronunciations: vec![],
-                    description: None,
-                    senses: hash_map! {
-                      PartOfSpeech::AdjKari => Sense {
-                        lemma: None,
-                        definitions: vec![],
-                        tags: vec![],
-                        translations: vec![],
-                        forms: vec![],
-                        pos: PartOfSpeech::AdjKari
-                      }
-                    },
+        dict.entries.insert(Entry {
+            term: "dog".into(),
+            rank: None,
+            see_also: None,
+            media: vec![],
+            etymologies: vec![Etymology {
+                id: None,
+                pronunciations: vec![],
+                description: None,
+                senses: hash_set![Sense {
+                    lemma: None,
+                    definitions: vec![],
+                    tags: vec![],
+                    translations: vec![],
+                    forms: vec![],
+                    pos: PartOfSpeech::AdjKari
                 }],
-            },
-        );
+            }],
+        });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
     }

@@ -1,3 +1,4 @@
+use map_macro::hash_set;
 use odict::{Entry, EntryRef, Form, FormKind, PartOfSpeech, Sense};
 
 #[test]
@@ -89,8 +90,8 @@ fn test_form_with_tags() {
     };
 
     // Create an etymology with the sense
-    let mut senses = std::collections::HashMap::new();
-    senses.insert(PartOfSpeech::N, sense);
+    let mut senses = hash_set! {};
+    senses.insert(sense);
 
     let etymology = odict::Etymology {
         id: None,
