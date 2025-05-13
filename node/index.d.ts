@@ -41,6 +41,7 @@ export interface Entry {
 }
 
 export interface EnumWrapper {
+  name: string;
   variant: string;
   value: string;
 }

@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from theopendictionary import (  # noqa: E402
     Dictionary,
-    PronunciationKind,
+    EnumWrapper,
 )
 
 
@@ -42,10 +42,9 @@ def test_entry_with_pronunciation():
         assert len(entry.etymologies) == 1
         assert len(entry.etymologies[0].pronunciations) == 1
         assert entry.etymologies[0].pronunciations[0].value == "ni hao"
-        assert isinstance(
-            entry.etymologies[0].pronunciations[0].kind, PronunciationKind
-        )
-        assert str(entry.etymologies[0].pronunciations[0].kind) == "pinyin"
+        assert isinstance(entry.etymologies[0].pronunciations[0].kind, EnumWrapper)
+        assert entry.etymologies[0].pronunciations[0].kind.variant == "pinyin"
+        assert entry.etymologies[0].pronunciations[0].kind.value == "pinyin"
         assert len(entry.etymologies[0].pronunciations[0].media) == 1
         assert entry.etymologies[0].pronunciations[0].media[0].src == "./audio.mp3"
 
@@ -95,7 +94,8 @@ def test_example_with_pronunciation():
 
         assert len(example.pronunciations) == 1
         assert example.pronunciations[0].value == "ɪɡˈzæmpl ˈsɛntəns"
-        assert str(example.pronunciations[0].kind) == "ipa"
+        assert example.pronunciations[0].kind.variant == "ipa"
+        assert example.pronunciations[0].kind.value == "ipa"
         assert len(example.pronunciations[0].media) == 1
         assert example.pronunciations[0].media[0].src == "./example.mp3"
         assert example.pronunciations[0].media[0].mime_type == "audio/mpeg"

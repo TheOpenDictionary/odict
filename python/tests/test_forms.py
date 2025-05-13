@@ -3,7 +3,7 @@ import unittest
 import os
 import uuid
 
-from theopendictionary import Dictionary, FormKind
+from theopendictionary import Dictionary, EnumWrapper
 
 
 class TestForms(unittest.TestCase):
@@ -41,10 +41,10 @@ class TestForms(unittest.TestCase):
             self.assertEqual(len(results), 1)
 
             entry = results[0].entry
-            
+
             # Access the first etymology
             etymology = entry.etymologies[0]
-            
+
             # Get the first sense (they're stored in a dict by part of speech)
             sense = list(etymology.senses.values())[0]
 
@@ -53,10 +53,14 @@ class TestForms(unittest.TestCase):
 
             # Forms are stored properly with terms and kinds
             self.assertEqual(sense.forms[0].term, "ran")
-            self.assertEqual(sense.forms[0].kind, FormKind.Superlative)
+            self.assertIsNotNone(sense.forms[0].kind)
+            self.assertEqual(sense.forms[0].kind.variant, "superlative")
+            self.assertEqual(sense.forms[0].kind.value, "superlative")
 
             self.assertEqual(sense.forms[1].term, "running")
-            self.assertEqual(sense.forms[1].kind, FormKind.Inflection)
+            self.assertIsNotNone(sense.forms[1].kind)
+            self.assertEqual(sense.forms[1].kind.variant, "inflection")
+            self.assertEqual(sense.forms[1].kind.value, "inflection")
 
             self.assertEqual(sense.forms[2].term, "runs")
             self.assertIsNone(sense.forms[2].kind)

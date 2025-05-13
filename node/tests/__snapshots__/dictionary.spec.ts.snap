@@ -19,6 +19,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
             ],
             "forms": [],
             "pos": {
+              "name": "PartOfSpeech",
               "value": "noun",
               "variant": "n",
             },
@@ -41,6 +42,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
             ],
             "forms": [],
             "pos": {
+              "name": "PartOfSpeech",
               "value": "verb",
               "variant": "v",
             },
@@ -71,6 +73,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
               ],
               "forms": [],
               "pos": {
+                "name": "PartOfSpeech",
                 "value": "noun",
                 "variant": "n",
               },
@@ -97,6 +100,7 @@ exports[`Dictionary > lookup > can split terms 1`] = `
               ],
               "forms": [],
               "pos": {
+                "name": "PartOfSpeech",
                 "value": "unknown",
                 "variant": "un",
               },
@@ -128,6 +132,7 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
               ],
               "forms": [],
               "pos": {
+                "name": "PartOfSpeech",
                 "value": "noun",
                 "variant": "n",
               },
@@ -162,6 +167,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
                   ],
                   "forms": [],
                   "pos": {
+                    "name": "PartOfSpeech",
                     "value": "verb",
                     "variant": "v",
                   },
@@ -188,6 +194,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
                   ],
                   "forms": [],
                   "pos": {
+                    "name": "PartOfSpeech",
                     "value": "verb",
                     "variant": "v",
                   },
@@ -232,6 +239,7 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
                   ],
                   "forms": [],
                   "pos": {
+                    "name": "PartOfSpeech",
                     "value": "verb",
                     "variant": "v",
                   },

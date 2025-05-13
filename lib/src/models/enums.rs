@@ -1,19 +1,33 @@
 use std::fmt::{Debug, Display};
 
+use super::{FormKind, PartOfSpeech, PronunciationKind};
+
 pub trait EnumIdentifier {
     fn id(&self) -> String;
 }
 
-impl<T> EnumIdentifier for T
-where
-    T: strum::VariantNames + serde::Serialize + Debug + Display,
-{
-    fn id(&self) -> String {
-        serde_json::to_value(self)
-            .map(|v| match v {
-                serde_json::Value::String(s) => s,
-                _ => format!("{}", self),
-            })
-            .unwrap_or_else(|_| format!("Error serializing enum: {:?}", self))
-    }
+fn get_tag_name<T: serde::Serialize + Display + Debug>(value: &T) -> String {
+    serde_json::to_value(value)
+        .map(|v| match v {
+            serde_json::Value::String(s) => s,
+            _ => format!("{}", value),
+        })
+        .unwrap_or_else(|_| format!("Error serializing enum: {:?}", value))
 }
+
+macro_rules! impl_enum_identifier {
+    ($enum_type:ident) => {
+        impl EnumIdentifier for $enum_type {
+            fn id(&self) -> String {
+                match self {
+                    $enum_type::Other(_) => "other".to_string(),
+                    _ => get_tag_name(self),
+                }
+            }
+        }
+    };
+}
+
+impl_enum_identifier!(PartOfSpeech);
+impl_enum_identifier!(FormKind);
+impl_enum_identifier!(PronunciationKind);

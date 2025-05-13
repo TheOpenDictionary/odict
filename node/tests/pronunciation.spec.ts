@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compile, Dictionary } from "../index";
+import { compile, Dictionary, type Definition } from "../index";
 
 describe("Pronunciation support", () => {
   it("should parse entries with pronunciations", async () => {
@@ -26,6 +26,7 @@ describe("Pronunciation support", () => {
     expect(entry.etymologies[0].pronunciations).toBeDefined();
     expect(entry.etymologies[0].pronunciations.length).toBe(1);
     expect(entry.etymologies[0].pronunciations[0].kind).toStrictEqual({
+      name: "PronunciationKind",
       value: "pinyin",
       variant: "pinyin",
     });
@@ -62,11 +63,14 @@ describe("Pronunciation support", () => {
     expect(results.length).toBe(1);
 
     const entry = results[0].entry;
-    const example = entry.etymologies[0].senses["n"].definitions[0].examples[0];
+    const example = (
+      entry.etymologies[0].senses["n"].definitions[0] as Definition
+    ).examples[0];
 
     expect(example.pronunciations).toBeDefined();
     expect(example.pronunciations.length).toBe(1);
     expect(example.pronunciations[0].kind).toStrictEqual({
+      name: "PronunciationKind",
       value: "ipa",
       variant: "ipa",
     });

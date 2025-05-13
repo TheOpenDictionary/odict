@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
-import { compile, Dictionary, FormKind } from "../index.js";
+import { compile, Dictionary } from "../index.js";
 
 describe("Form support", () => {
   it("should handle entries with forms", async () => {
@@ -49,12 +49,14 @@ describe("Form support", () => {
     // Forms are stored properly with terms and kinds
     expect(sense.forms[0].term).toBe("ran");
     expect(sense.forms[0].kind).toStrictEqual({
+      name: "FormKind",
       value: "inflection",
       variant: "inflection",
     });
 
     expect(sense.forms[1].term).toBe("running");
     expect(sense.forms[1].kind).toStrictEqual({
+      name: "FormKind",
       value: "superlative",
       variant: "superlative",
     });
