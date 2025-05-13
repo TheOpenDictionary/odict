@@ -1,5 +1,7 @@
 use std::collections::HashSet;
 
+use rkyv::with::{AsBox, MapNiche};
+
 use crate::models::pronunciation::Pronunciation;
 use crate::serializable;
 
@@ -11,6 +13,7 @@ serializable! {
   pub struct Etymology {
     #[serde(rename = "@id")]
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[rkyv(with = MapNiche<AsBox>)]
     pub id: Option<String>,
 
     #[serde(default, rename = "pronunciation")]
@@ -18,6 +21,7 @@ serializable! {
     pub pronunciations: Vec<Pronunciation>,
 
     #[serde(rename = "@description")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 

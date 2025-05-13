@@ -1,4 +1,7 @@
-use rkyv::{deserialize, to_bytes};
+use rkyv::{
+    deserialize, to_bytes,
+    with::{AsBox, MapNiche},
+};
 use std::collections::HashSet;
 use std::str::FromStr;
 
@@ -14,6 +17,7 @@ serializable! {
       pub id: ID,
 
       #[serde(rename = "@name")]
+      #[rkyv(with = MapNiche<AsBox>)]
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 

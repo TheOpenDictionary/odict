@@ -1,3 +1,5 @@
+use rkyv::with::{AsBox, MapNiche};
+
 use crate::serializable;
 
 use super::example::Example;
@@ -7,6 +9,7 @@ serializable! {
   #[serde(rename = "note")]
   pub struct Note {
     #[serde(rename = "@id")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
