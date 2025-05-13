@@ -35,6 +35,7 @@ export interface DictionaryOptions {
 
 export interface Entry {
   term: string;
+  rank?: number;
   seeAlso?: string;
   etymologies: Array<Etymology>;
   media: Array<MediaURL>;

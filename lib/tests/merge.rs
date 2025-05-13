@@ -13,6 +13,7 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
+                rank: None,
                 media: vec![],
                 term: "dog".to_string(),
                 see_also: None,
@@ -52,6 +53,7 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
+                  rank: None,
                   media: vec![],
                   see_also: None,
                   term: "cat".to_string(),
@@ -89,6 +91,7 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               "dog".to_string() => Entry {
+                  rank: None,
                   see_also: None,
                   media: vec![],
                   term: "dog".to_string(),
@@ -120,6 +123,7 @@ mod merge_tests {
               },
               "cat".to_string() => Entry {
                   see_also: None,
+                  rank: None,
                   media: vec![],
                   term: "cat".to_string(),
                   etymologies: vec![Etymology {

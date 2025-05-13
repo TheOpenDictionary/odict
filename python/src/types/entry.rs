@@ -13,6 +13,8 @@ pub struct Entry {
     #[pyo3(get)]
     pub term: String,
     #[pyo3(get)]
+    pub rank: Option<u32>,
+    #[pyo3(get)]
     pub see_also: Option<String>,
     #[pyo3(get)]
     pub etymologies: Vec<Etymology>,

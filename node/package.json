@@ -1,6 +1,6 @@
 {
   "name": "@odict/node",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",

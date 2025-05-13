@@ -11,6 +11,10 @@ serializable! {
     #[serde(rename = "@term")]
     pub term: String,
 
+    #[serde(rename = "@rank")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<u32>,
+
     #[serde(rename = "@see")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<EntryRef>,

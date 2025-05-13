@@ -11,6 +11,7 @@ use super::media_url::MediaURL;
 #[convert(from(odict::Entry))]
 pub struct Entry {
   pub term: String,
+  pub rank: Option<u32>,
   pub see_also: Option<String>,
   pub etymologies: Vec<Etymology>,
   pub media: Vec<MediaURL>,
