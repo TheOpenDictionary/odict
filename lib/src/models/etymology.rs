@@ -6,6 +6,8 @@ use crate::serializable;
 use super::{pos::PartOfSpeech, sense::Sense};
 
 serializable! {
+  #[derive(Default)]
+  #[serde(rename = "ety")]
   pub struct Etymology {
     #[serde(rename = "@id")]
     #[serde(skip_serializing_if = "Option::is_none")]

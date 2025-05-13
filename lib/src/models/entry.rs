@@ -6,6 +6,7 @@ use crate::{error::Error, serializable, Etymology};
 use super::{EntryRef, MediaURL};
 
 serializable! {
+  #[derive(Default)]
   #[serde(rename = "entry")]
   pub struct Entry {
     #[serde(rename = "@term")]

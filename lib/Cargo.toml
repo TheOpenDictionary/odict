@@ -9,14 +9,13 @@ license = "MIT"
 exclude = ["benches/*", "tests/*"]
 
 [features]
-json = ["dep:serde_json"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
-default = ["json", "sql", "config"]
+default = ["sql", "config"]
 
 # Language-specific support
 charabia = ["dep:charabia"]
@@ -52,14 +51,13 @@ rkyv = { version = "0.8.8", features = ["hashbrown-0_15"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 url = "2.5.0"
+serde_json = "1.0.116"
 thiserror = "2.0.7"
 brotli = "8.0.0"
 structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
-# feature=json
-serde_json = { version = "1.0.116", optional = true }
 # feature=search
 tantivy = { version = "0.22.0", optional = true }
 # feature=config
@@ -67,6 +65,7 @@ dirs = { version = "6.0.0", optional = true }
 # feature=sql
 sea-query = { version = "0.32.0", optional = true }
 hashbrown = "0.15.3"
+strum = { version = "0.27.1", features = ["derive"] }
 
 [dev-dependencies]
 insta = "1.38.0"

@@ -1,17 +1,16 @@
 mod definition;
 pub mod dictionary;
 pub mod entry;
+mod enums;
 mod etymology;
 mod example;
 mod form;
-mod form_kind;
 mod group;
 pub mod index;
 pub mod lookup;
 mod media_url;
 mod note;
 mod pronunciation;
-mod pronunciation_kind;
 pub mod search;
 mod sense;
 mod split;

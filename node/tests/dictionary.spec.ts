@@ -22,7 +22,7 @@ async function getDictionary(name: string) {
 
 describe("Dictionary", () => {
   expect.addSnapshotSerializer({
-    test: (t) => typeof t.value === "string",
+    test: (t) => typeof t.value === "string" && !("variant" in t),
     serialize: (t) => `"${t.value}"`,
   });
 
@@ -88,36 +88,45 @@ describe("Dictionary", () => {
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
   });
 
-  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text and find entries", () => {
-    const tokens = dict3.tokenize("你好！你是谁？");
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should tokenize text and find entries",
+    () => {
+      const tokens = dict3.tokenize("你好！你是谁？");
 
-    expect(tokens).toMatchSnapshot();
-    expect(tokens.length).toBeGreaterThan(0);
-    expect(tokens[0].lemma).toBe("你好");
-    expect(tokens[0].entries[0].entry.term).toBe("你");
-    expect(tokens[0].entries[1].entry.term).toBe("好");
-  });
+      expect(tokens).toMatchSnapshot();
+      expect(tokens.length).toBeGreaterThan(0);
+      expect(tokens[0].lemma).toBe("你好");
+      expect(tokens[0].entries[0].entry.term).toBe("你");
+      expect(tokens[0].entries[1].entry.term).toBe("好");
+    },
+  );
 
-  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text case-sensitively by default", () => {
-    const tokens = dict1.tokenize("DOG cat");
-    
-    expect(tokens.length).toBe(2);
-    expect(tokens[0].lemma).toBe("DOG");
-    expect(tokens[0].entries.length).toBe(0); // "DOG" shouldn't match "dog"
-    expect(tokens[1].lemma).toBe("cat");
-    expect(tokens[1].entries[0].entry.term).toBe("cat");
-  });
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should tokenize text case-sensitively by default",
+    () => {
+      const tokens = dict1.tokenize("DOG cat");
 
-  it.skipIf(process.env.NO_TOKENIZE)("should tokenize text case-insensitively when specified", () => {
-    const tokens = dict1.tokenize("DOG cat", { insensitive: true });
-    
-    expect(tokens.length).toBe(2);
-    expect(tokens[0].lemma).toBe("DOG");
-    expect(tokens[0].entries.length).toBe(1); // "DOG" should match "dog" with insensitivity
-    expect(tokens[0].entries[0].entry.term).toBe("dog");
-    expect(tokens[1].lemma).toBe("cat");
-    expect(tokens[1].entries[0].entry.term).toBe("cat");
-  });
+      expect(tokens.length).toBe(2);
+      expect(tokens[0].lemma).toBe("DOG");
+      expect(tokens[0].entries.length).toBe(0); // "DOG" shouldn't match "dog"
+      expect(tokens[1].lemma).toBe("cat");
+      expect(tokens[1].entries[0].entry.term).toBe("cat");
+    },
+  );
+
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should tokenize text case-insensitively when specified",
+    () => {
+      const tokens = dict1.tokenize("DOG cat", { insensitive: true });
+
+      expect(tokens.length).toBe(2);
+      expect(tokens[0].lemma).toBe("DOG");
+      expect(tokens[0].entries.length).toBe(1); // "DOG" should match "dog" with insensitivity
+      expect(tokens[0].entries[0].entry.term).toBe("dog");
+      expect(tokens[1].lemma).toBe("cat");
+      expect(tokens[1].entries[0].entry.term).toBe("cat");
+    },
+  );
 
   it.skipIf(process.env.NAPI_RS_FORCE_WASI)(
     "can index and search a dictionary",

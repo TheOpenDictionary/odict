@@ -21,11 +21,11 @@ run = "pnpm --filter=\"@odict/node\" npm publish"
 
 ["test:node"]
 depends = ["setup:node", "build:node"]
-run = "pnpm --filter=\"@odict/node\" test -- "
+run = "pnpm --filter=\"@odict/node\" test"
 
 ["snapshot:node"]
 depends = ["setup:node", "build:node"]
-run = "pnpm --filter=\"@odict/node\" test -- -u "
+run = "pnpm --filter=\"@odict/node\" test -u"
 
 ["ci:node"]
 depends = ["setup:node"]

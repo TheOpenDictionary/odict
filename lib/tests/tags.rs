@@ -27,7 +27,7 @@ fn test_form_tags_serialization() {
 #[test]
 fn test_sense_tags_serialization() {
     let sense = Sense {
-        pos: PartOfSpeech::n,
+        pos: PartOfSpeech::N,
         lemma: None,
         definitions: vec![],
         tags: vec!["informal".to_string(), "slang".to_string()],
@@ -80,7 +80,7 @@ fn test_form_with_tags() {
 
     // Create a sense with the form
     let sense = Sense {
-        pos: PartOfSpeech::n,
+        pos: PartOfSpeech::N,
         lemma: None,
         definitions: vec![],
         tags: vec![],
@@ -90,7 +90,7 @@ fn test_form_with_tags() {
 
     // Create an etymology with the sense
     let mut senses = std::collections::HashMap::new();
-    senses.insert(PartOfSpeech::n, sense);
+    senses.insert(PartOfSpeech::N, sense);
 
     let etymology = odict::Etymology {
         id: None,
@@ -122,7 +122,7 @@ fn test_form_with_tags() {
     assert_eq!(
         deserialized.etymologies[0]
             .senses
-            .get(&PartOfSpeech::n)
+            .get(&PartOfSpeech::N)
             .unwrap()
             .forms[0]
             .tags
@@ -132,7 +132,7 @@ fn test_form_with_tags() {
     assert_eq!(
         deserialized.etymologies[0]
             .senses
-            .get(&PartOfSpeech::n)
+            .get(&PartOfSpeech::N)
             .unwrap()
             .forms[0]
             .tags[0],
@@ -157,7 +157,7 @@ fn test_forms_in_sense() {
 
     // Create a sense with forms
     let sense = Sense {
-        pos: PartOfSpeech::n,
+        pos: PartOfSpeech::N,
         lemma: None,
         definitions: vec![],
         tags: vec![],

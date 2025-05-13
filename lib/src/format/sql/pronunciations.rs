@@ -34,7 +34,7 @@ pub fn create_pronunciations(builder: &mut SQLBuilder) {
                     .not_null()
                     .primary_key(),
             )
-            .col(ColumnDef::new(Pronunciations::Kind).string().not_null())
+            .col(ColumnDef::new(Pronunciations::Kind).string())
             .col(ColumnDef::new(Pronunciations::Value).string().not_null())
             .col(
                 ColumnDef::new(Pronunciations::EtymologyID)
@@ -101,7 +101,7 @@ pub fn insert_pronunciation(
             ])
             .values([
                 id.as_str().into(),
-                pronunciation.kind.to_string().into(),
+                pronunciation.kind.clone().map(|k| k.to_string()).into(),
                 pronunciation.value.clone().into(),
                 etymology_id.into(),
             ])?,

@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
-import { compile, Dictionary, FormKind } from "../index.js";
+import { compile, Dictionary } from "../index.js";
 
 describe("Form support", () => {
   it("should handle entries with forms", async () => {
@@ -38,7 +38,7 @@ describe("Form support", () => {
     expect(results.length).toBe(1);
 
     const entry = results[0].entry;
-    
+
     // Get the etymology and sense
     const etymology = entry.etymologies[0];
     const sense = Object.values(etymology.senses)[0];
@@ -48,10 +48,18 @@ describe("Form support", () => {
 
     // Forms are stored properly with terms and kinds
     expect(sense.forms[0].term).toBe("ran");
-    expect(sense.forms[0].kind).toBe(FormKind.Inflection);
+    expect(sense.forms[0].kind).toStrictEqual({
+      name: "FormKind",
+      value: "inflection",
+      variant: "inflection",
+    });
 
     expect(sense.forms[1].term).toBe("running");
-    expect(sense.forms[1].kind).toBe(FormKind.Superlative);
+    expect(sense.forms[1].kind).toStrictEqual({
+      name: "FormKind",
+      value: "superlative",
+      variant: "superlative",
+    });
 
     expect(sense.forms[2].term).toBe("runs");
     expect(sense.forms[2].kind).toBeUndefined(); // Optional kind is null when not specified
@@ -116,12 +124,12 @@ describe("Lemma support", () => {
     // The default part of speech is 'n' (noun) from the XML
     const runningSense = Object.values(runningEtymology.senses)[0];
     const ranSense = Object.values(ranEtymology.senses)[0];
-    
+
     // Verify lemma references are on the sense objects
     expect(runningSense.lemma).toBeDefined();
     expect(runningSense.lemma).toBe("run");
 
-    expect(ranSense.lemma).toBeDefined(); 
+    expect(ranSense.lemma).toBeDefined();
     expect(ranSense.lemma).toBe("run");
   });
 });
