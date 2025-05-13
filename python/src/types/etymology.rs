@@ -44,7 +44,7 @@ impl From<odict::Etymology> for Etymology {
             senses: ety
                 .senses
                 .into_iter()
-                .map(|(k, v)| (k.id(), v.into()))
+                .map(|v| (v.pos.id(), v.into()))
                 .collect(),
         }
     }
