@@ -33,24 +33,17 @@ mod pos_tests {
         dict.entries.insert(
             "dog".into(),
             Entry {
-                media: vec![],
                 term: "dog".into(),
-                see_also: None,
                 etymologies: vec![Etymology {
-                    id: None,
-                    pronunciations: vec![],
-                    description: None,
                     senses: hash_map! {
                       PartOfSpeech::Other("cusTom".into()) => Sense {
-                        lemma: None,
-                        definitions: vec![],
-                        tags: vec![],
-                        translations: vec![],
-                        forms: vec![],
-                        pos: PartOfSpeech::Other("cusTom".into())
+                        pos: PartOfSpeech::Other("cusTom".into()),
+                        ..Sense::default()
                       }
                     },
+                    ..Etymology::default()
                 }],
+                ..Entry::default()
             },
         );
 
@@ -91,23 +84,16 @@ mod pos_tests {
             "dog".into(),
             Entry {
                 term: "dog".into(),
-                see_also: None,
-                media: vec![],
                 etymologies: vec![Etymology {
-                    id: None,
-                    pronunciations: vec![],
-                    description: None,
                     senses: hash_map! {
                       PartOfSpeech::AdjKari => Sense {
-                        lemma: None,
-                        definitions: vec![],
-                        tags: vec![],
-                        translations: vec![],
-                        forms: vec![],
-                        pos: PartOfSpeech::AdjKari
+                        pos: PartOfSpeech::AdjKari,
+                        ..Sense::default()
                       }
                     },
+                    ..Etymology::default()
                 }],
+                ..Entry::default()
             },
         );
 
