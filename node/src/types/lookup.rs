@@ -1,4 +1,7 @@
 use merge::Merge;
+use odict::ArchivedEntry;
+
+use crate::utils::cast_error;
 
 use super::Entry;
 
@@ -22,23 +25,21 @@ impl Default for LookupOptions {
 
 impl From<LookupOptions> for odict::lookup::LookupOptions {
   fn from(opts: LookupOptions) -> Self {
-    let mut s = odict::lookup::LookupOptions::default();
+    let mut options = odict::lookup::LookupOptions::default();
 
     if let Some(split) = opts.split {
-      s = s.strategy(odict::lookup::LookupStrategy::Split(
-        split.try_into().unwrap(),
-      ));
+      options = options.strategy(odict::lookup::LookupStrategy::Split(split as usize));
     }
 
     if let Some(follow) = opts.follow {
-      s = s.follow(follow);
+      options = options.follow(follow);
     }
 
     if let Some(insensitive) = opts.insensitive {
-      s = s.insensitive(insensitive);
+      options = options.insensitive(insensitive);
     }
 
-    s
+    options
   }
 }
 
@@ -46,4 +47,34 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 pub struct LookupResult {
   pub entry: Entry,
   pub directed_from: Option<Entry>,
+}
+
+impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
+  fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+    let entry = Entry::from(result.entry);
+    let directed_from = result.directed_from.map(|s| Entry::from(s));
+
+    Self {
+      entry,
+      directed_from,
+    }
+  }
+}
+
+impl TryFrom<&odict::lookup::LookupResult<&ArchivedEntry>> for LookupResult {
+  type Error = napi::Error;
+
+  fn try_from(result: &odict::lookup::LookupResult<&ArchivedEntry>) -> napi::Result<Self> {
+    let entry = Entry::from(result.entry.to_entry().map_err(cast_error)?);
+
+    let directed_from = match result.directed_from {
+      Some(e) => Some(Entry::from(e.to_entry().map_err(cast_error)?)),
+      None => None,
+    };
+
+    Ok(LookupResult {
+      entry,
+      directed_from,
+    })
+  }
 }

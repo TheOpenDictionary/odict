@@ -1,18 +1,30 @@
+use crate::types::{Pronunciation, Translation};
+
 use pyo3::prelude::*;
+use structural_convert::StructuralConvert;
 
 #[pyclass]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, StructuralConvert)]
+#[convert(from(odict::Example))]
 pub struct Example {
     #[pyo3(get)]
     pub value: String,
+
+    #[pyo3(get)]
+    pub translations: Vec<Translation>,
+
+    #[pyo3(get)]
+    pub pronunciations: Vec<Pronunciation>,
 }
 
-impl From<odict::Example> for Example {
-    fn from(example: odict::Example) -> Self {
-        let odict::Example { value } = example;
-
+#[pymethods]
+impl Example {
+    #[new]
+    pub fn new(value: String) -> Self {
         Self {
-            value: String::from(value),
+            value,
+            translations: Vec::new(),
+            pronunciations: Vec::new(),
         }
     }
 }

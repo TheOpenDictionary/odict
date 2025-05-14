@@ -20,28 +20,27 @@ impl Default for TokenizeOptions {
 }
 
 impl From<TokenizeOptions> for odict::lookup::TokenizeOptions {
-  fn from(options: TokenizeOptions) -> Self {
-    let mut opts = Self::default();
+  fn from(opts: TokenizeOptions) -> Self {
+    let mut options = odict::lookup::TokenizeOptions::default();
 
-    if let Some(follow) = options.follow {
-      opts = opts.follow(follow);
+    if let Some(follow) = opts.follow {
+      options = options.follow(follow);
     }
 
-    if let Some(languages) = options.allow_list {
-      let langs: Vec<Language> = languages
-        .iter()
-        .filter_map(|code| Language::from_code(code))
-        .collect();
-
-      if !langs.is_empty() {
-        opts = opts.allow_list(langs);
-      }
+    if let Some(insensitive) = opts.insensitive {
+      options = options.insensitive(insensitive);
     }
 
-    if let Some(insensitive) = options.insensitive {
-      opts = opts.insensitive(insensitive);
+    if let Some(allow_list) = opts.allow_list {
+      options = options.allow_list(
+        allow_list
+          .into_iter()
+          .map(|s| Language::from_code(s))
+          .filter_map(|l| l)
+          .collect::<Vec<Language>>(),
+      );
     }
 
-    opts
+    options
   }
 }

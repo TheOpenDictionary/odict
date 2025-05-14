@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
@@ -6,7 +7,8 @@ use crate::{Dictionary, ID};
 
 use super::{ordered_map, EntryJSON};
 
-#[derive(Serialize)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(Dictionary))]
 pub struct DictionaryJSON {
     pub id: ID,
 
@@ -18,19 +20,4 @@ pub struct DictionaryJSON {
         skip_serializing_if = "HashMap::is_empty"
     )]
     pub entries: HashMap<String, EntryJSON>,
-}
-
-impl From<Dictionary> for DictionaryJSON {
-    fn from(dictionary: Dictionary) -> Self {
-        let Dictionary { id, name, entries } = dictionary;
-
-        Self {
-            id,
-            name,
-            entries: entries
-                .into_iter()
-                .map(|(k, v)| (k, EntryJSON::from(v)))
-                .collect(),
-        }
-    }
 }

@@ -1,7 +1,9 @@
 use std::{collections::HashMap, fmt};
 
+use odict::EnumIdentifier;
 use pyo3::prelude::*;
 
+use super::pronunciation::Pronunciation;
 use super::sense::Sense;
 
 #[pyclass]
@@ -10,7 +12,7 @@ pub struct Etymology {
     #[pyo3(get)]
     pub id: Option<String>,
     #[pyo3(get)]
-    pub pronunciation: Option<String>,
+    pub pronunciations: Vec<Pronunciation>,
     #[pyo3(get)]
     pub description: Option<String>,
     #[pyo3(get)]
@@ -26,7 +28,7 @@ impl fmt::Debug for Etymology {
 
         f.debug_struct("Etymology")
             .field("id", &self.id)
-            .field("pronunciation", &self.pronunciation)
+            .field("pronunciations", &self.pronunciations)
             .field("description", &self.description)
             .field("senses", &senses)
             .finish()
@@ -34,21 +36,15 @@ impl fmt::Debug for Etymology {
 }
 
 impl From<odict::Etymology> for Etymology {
-    fn from(etymology: odict::Etymology) -> Self {
-        let odict::Etymology {
-            id,
-            pronunciation,
-            description,
-            senses,
-        } = etymology;
-
+    fn from(ety: odict::Etymology) -> Self {
         Self {
-            id,
-            pronunciation,
-            description: description.map(|d| String::from(d)),
-            senses: senses
+            id: ety.id,
+            pronunciations: ety.pronunciations.into_iter().map(Into::into).collect(),
+            description: ety.description,
+            senses: ety
+                .senses
                 .into_iter()
-                .map(|(k, v)| (k.to_string(), Sense::from(v)))
+                .map(|(k, v)| (k.id(), v.into()))
                 .collect(),
         }
     }

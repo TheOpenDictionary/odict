@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, str::FromStr};
 
 use either::Either;
 use odict::{
@@ -69,7 +69,7 @@ impl Dictionary {
 
     #[staticmethod]
     pub fn write(xml_str: String, out_path: String) -> PyResult<Self> {
-        let dict = odict::Dictionary::from(&xml_str).map_err(cast_error)?;
+        let dict = odict::Dictionary::from_str(&xml_str).map_err(cast_error)?;
         let reader = odict::DictionaryReader::default();
         let writer = odict::DictionaryWriter::default();
 
@@ -106,10 +106,6 @@ impl Dictionary {
 
         Ok(dict)
     }
-
-    // pub fn options(&self) -> DictionaryOptions {
-    //     resolve_options(&self.options)
-    // }
 
     #[getter]
     pub fn path(&self) -> PyResult<String> {

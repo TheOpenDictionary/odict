@@ -8,6 +8,7 @@ use super::{
     examples::create_examples,
     groups::create_groups,
     notes::create_notes,
+    pronunciations::create_pronunciations,
     senses::create_senses,
     utils::SQLBuilder,
 };
@@ -25,6 +26,7 @@ fn add_schema(builder: &mut SQLBuilder) {
     create_definitions(builder);
     create_notes(builder);
     create_examples(builder);
+    create_pronunciations(builder);
 }
 
 impl ToSQL for Dictionary {

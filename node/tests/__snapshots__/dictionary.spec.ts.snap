@@ -6,6 +6,7 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
     "etymologies": [
       {
         "description": "Latin root",
+        "pronunciations": [],
         "senses": {
           "n": {
             "definitions": [
@@ -16,7 +17,14 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
               "Migration (of fish).",
               "A group of fish that migrate, or ascend a river for the purpose of spawning.",
             ],
-            "pos": "n",
+            "forms": [],
+            "pos": {
+              "name": "PartOfSpeech",
+              "value": "noun",
+              "variant": "n",
+            },
+            "tags": [],
+            "translations": [],
           },
           "v": {
             "definitions": [
@@ -32,12 +40,20 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
                 "description": "A number of verb senses",
               },
             ],
-            "pos": "v",
+            "forms": [],
+            "pos": {
+              "name": "PartOfSpeech",
+              "value": "verb",
+              "variant": "v",
+            },
+            "tags": [],
+            "translations": [],
           },
         },
       },
     ],
-    "forms": [],
+    "media": [],
+    "rank": 100,
     "term": "run",
   },
 ]
@@ -50,17 +66,25 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciations": [],
           "senses": {
             "n": {
               "definitions": [
                 "a cat",
               ],
-              "pos": "n",
+              "forms": [],
+              "pos": {
+                "name": "PartOfSpeech",
+                "value": "noun",
+                "variant": "n",
+              },
+              "tags": [],
+              "translations": [],
             },
           },
         },
       ],
-      "forms": [],
+      "media": [],
       "term": "cat",
     },
   },
@@ -69,18 +93,25 @@ exports[`Dictionary > lookup > can split terms 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
-          "pronunciation": "dooooog",
+          "pronunciations": [],
           "senses": {
             "un": {
               "definitions": [
                 "a dog",
               ],
-              "pos": "un",
+              "forms": [],
+              "pos": {
+                "name": "PartOfSpeech",
+                "value": "unknown",
+                "variant": "un",
+              },
+              "tags": [],
+              "translations": [],
             },
           },
         },
       ],
-      "forms": [],
+      "media": [],
       "term": "dog",
     },
   },
@@ -94,17 +125,25 @@ exports[`Dictionary > lookup > looks up terms properly 1`] = `
       "etymologies": [
         {
           "description": "Latin root",
+          "pronunciations": [],
           "senses": {
             "n": {
               "definitions": [
                 "a cat",
               ],
-              "pos": "n",
+              "forms": [],
+              "pos": {
+                "name": "PartOfSpeech",
+                "value": "noun",
+                "variant": "n",
+              },
+              "tags": [],
+              "translations": [],
             },
           },
         },
       ],
-      "forms": [],
+      "media": [],
       "term": "cat",
     },
   },
@@ -121,17 +160,25 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
                     "Lorem ipsum",
                   ],
-                  "pos": "v",
+                  "forms": [],
+                  "pos": {
+                    "name": "PartOfSpeech",
+                    "value": "verb",
+                    "variant": "v",
+                  },
+                  "tags": [],
+                  "translations": [],
                 },
               },
             },
           ],
-          "forms": [],
+          "media": [],
           "term": "你",
         },
       },
@@ -140,17 +187,25 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
                     "Lorem ipsum",
                   ],
-                  "pos": "v",
+                  "forms": [],
+                  "pos": {
+                    "name": "PartOfSpeech",
+                    "value": "verb",
+                    "variant": "v",
+                  },
+                  "tags": [],
+                  "translations": [],
                 },
               },
             },
           ],
-          "forms": [],
+          "media": [],
           "term": "好",
         },
       },
@@ -177,17 +232,25 @@ exports[`Dictionary > should tokenize text and find entries 1`] = `
           "etymologies": [
             {
               "description": "Latin root",
+              "pronunciations": [],
               "senses": {
                 "v": {
                   "definitions": [
                     "Lorem ipsum",
                   ],
-                  "pos": "v",
+                  "forms": [],
+                  "pos": {
+                    "name": "PartOfSpeech",
+                    "value": "verb",
+                    "variant": "v",
+                  },
+                  "tags": [],
+                  "translations": [],
                 },
               },
             },
           ],
-          "forms": [],
+          "media": [],
           "term": "你",
         },
       },

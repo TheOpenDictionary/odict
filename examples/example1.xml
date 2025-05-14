@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary name="Example Dictionary 1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../odict.xsd">
-  <entry term="run">
+  <entry rank="100" term="run">
     <ety description="Latin root">
       <sense pos="v">
         <group description="A number of verb senses">
           <definition value="(vertebrates) To move swiftly (figuratively)">
-            <example>The dog runs after the cat.</example>
-            <example>The horse ran away.</example>
+            <example value="The dog runs after the cat." />
+            <example value="The horse ran away." />
           </definition>
           <definition value="(fluids) To flow." />
           <definition value="(nautical, of a vessel) To sail before the wind, in distinction from reaching or sailing close-hauled." />
@@ -18,8 +18,8 @@
       </sense>
       <sense pos="n">
         <definition value="(vertebrates) To move swiftly">
-          <example>The dog runs after the cat.</example>
-          <example>The horse ran away.</example>
+          <example value="The dog runs after the cat." />
+          <example value="The horse ran away." />
         </definition>
         <definition value="Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip." />
         <definition value="A pleasure trip." />
@@ -50,9 +50,9 @@
     <ety description="Latin root">
       <sense pos="n">
         <definition value="a cat">
-          <example>There goes a cat!</example>
+          <example value="There goes a cat!" />
           <note value="Some definition note">
-            <example>Some example</example>
+            <example value="Some example" />
           </note>
         </definition>
       </sense>

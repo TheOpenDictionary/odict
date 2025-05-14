@@ -80,13 +80,17 @@ mod test {
         let builder = &mut SQLBuilder::new(crate::format::sql::SQLDialect::Postgres);
 
         let example = Example {
+            pronunciations: vec![],
             value: String::from("test"),
+            translations: vec![],
         };
 
         let result = insert_example(builder, None, None, 0, &example);
 
-        println!("{}", builder.build().unwrap());
         assert!(result.is_ok());
-        assert!(builder.build().unwrap().ends_with("'test', 0, NULL, NULL)"));
+
+        let built = builder.build().unwrap();
+
+        assert!(built.ends_with("'test', 0, NULL, NULL)"));
     }
 }

@@ -5,6 +5,7 @@ mod etymologies;
 mod examples;
 mod groups;
 mod notes;
+mod pronunciations;
 mod senses;
 mod sql;
 mod utils;

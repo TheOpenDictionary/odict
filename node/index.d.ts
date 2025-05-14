@@ -35,36 +35,35 @@ export interface DictionaryOptions {
 
 export interface Entry {
   term: string;
+  rank?: number;
   seeAlso?: string;
-  lemma?: string;
   etymologies: Array<Etymology>;
-  forms: Array<Form>;
+  media: Array<MediaURL>;
+}
+
+export interface EnumWrapper {
+  name: string;
+  variant: string;
+  value: string;
 }
 
 export interface Etymology {
   id?: string;
-  pronunciation?: string;
+  pronunciations: Array<Pronunciation>;
   description?: string;
   senses: Record<string, Sense>;
 }
 
 export interface Example {
   value: string;
+  translations: Array<Translation>;
+  pronunciations: Array<Pronunciation>;
 }
 
 export interface Form {
   term: string;
-  kind?: FormKind;
-}
-
-export declare const enum FormKind {
-  Conjugation = 0,
-  Inflection = 1,
-  Plural = 2,
-  Singular = 3,
-  Comparative = 4,
-  Superlative = 5,
-  Other = 6,
+  kind?: EnumWrapper;
+  tags: Array<string>;
 }
 
 export interface Group {
@@ -90,10 +89,22 @@ export interface LookupResult {
   directedFrom?: Entry;
 }
 
+export interface MediaUrl {
+  src: string;
+  mimeType?: string;
+  description?: string;
+}
+
 export interface Note {
   id?: string;
   value: string;
   examples: Array<Example>;
+}
+
+export interface Pronunciation {
+  kind?: EnumWrapper;
+  value: string;
+  media: Array<MediaUrl>;
 }
 
 export interface SearchOptions {
@@ -104,8 +115,12 @@ export interface SearchOptions {
 }
 
 export interface Sense {
-  pos: string;
+  pos: EnumWrapper;
+  lemma?: string;
   definitions: Array<Definition | Group>;
+  tags: Array<string>;
+  translations: Array<Translation>;
+  forms: Array<Form>;
 }
 
 export interface SplitOptions {
@@ -126,4 +141,9 @@ export interface TokenizeOptions {
   follow?: boolean;
   allowList?: Array<string>;
   insensitive?: boolean;
+}
+
+export interface Translation {
+  lang: string;
+  value: string;
 }

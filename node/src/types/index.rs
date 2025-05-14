@@ -1,7 +1,7 @@
 use merge::Merge;
 
 #[napi(object)]
-#[derive(PartialEq, Merge, Clone, Eq)]
+#[derive(PartialEq, Debug, Merge, Clone, Eq)]
 pub struct IndexOptions {
   pub directory: Option<String>,
   pub memory: Option<u32>,
@@ -21,20 +21,20 @@ impl Default for IndexOptions {
 #[cfg(feature = "search")]
 impl From<IndexOptions> for odict::search::IndexOptions {
   fn from(opts: IndexOptions) -> Self {
-    let mut s = odict::search::IndexOptions::default();
+    let mut options = odict::search::IndexOptions::default();
 
-    if let Some(memory) = opts.memory {
-      s = s.memory(memory.try_into().unwrap());
+    if let Some(dir) = opts.directory {
+      options = options.dir(dir.as_str());
     }
 
-    if let Some(directory) = opts.directory {
-      s = s.dir(&directory);
+    if let Some(memory) = opts.memory {
+      options = options.memory(memory as usize);
     }
 
     if let Some(overwrite) = opts.overwrite {
-      s = s.overwrite(overwrite);
+      options = options.overwrite(overwrite);
     }
 
-    s
+    options
   }
 }

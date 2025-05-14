@@ -1,42 +1,35 @@
 use napi::bindgen_prelude::*;
+use structural_convert::StructuralConvert;
 
 use crate::utils::cast_error;
 
 use super::etymology::Etymology;
-use super::form::Form;
+use super::media_url::MediaURL;
 
 #[napi(object)]
+#[derive(StructuralConvert)]
+#[convert(from(odict::Entry))]
 pub struct Entry {
   pub term: String,
+  pub rank: Option<u32>,
   pub see_also: Option<String>,
-  pub lemma: Option<String>,
   pub etymologies: Vec<Etymology>,
-  pub forms: Vec<Form>,
+  pub media: Vec<MediaURL>,
 }
 
-impl Entry {
-  pub fn from_entry(entry: odict::Entry) -> Result<Self> {
-    let odict::Entry {
-      term,
-      see_also,
-      lemma,
-      etymologies,
-      forms,
-    } = entry;
+pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Entry> {
+  entry.to_entry().map_err(cast_error).map(|e| e.into())
+}
 
-    Ok(Self {
-      term,
-      see_also: see_also.map(|s| s.0),
-      lemma: lemma.map(|s| s.0),
-      etymologies: etymologies
-        .into_iter()
-        .map(|e| Etymology::from(e))
-        .collect::<Result<Vec<Etymology>, _>>()?,
-      forms: forms.into_iter().map(Form::from).collect(),
-    })
-  }
+impl TryFrom<&odict::Entry> for Entry {
+  type Error = napi::Error;
 
-  pub fn from_archive(entry: &odict::ArchivedEntry) -> Result<Self> {
-    Entry::from_entry(entry.to_entry().map_err(cast_error)?)
+  fn try_from(entry: &odict::Entry) -> Result<Self> {
+    Ok(entry.clone().into())
   }
+}
+
+// Add this helper function to handle both Entry and ArchivedEntry types
+pub fn from_entry(entry: &odict::Entry) -> Result<Entry> {
+  Ok(entry.clone().into())
 }

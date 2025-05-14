@@ -1,8 +1,11 @@
 use serde::Serialize;
+use structural_convert::StructuralConvert;
 
-use crate::{Example, Note};
+use super::example::ExampleJSON;
+use crate::Note;
 
-#[derive(Serialize)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(Note))]
 pub struct NoteJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     id: Option<String>,
@@ -10,21 +13,5 @@ pub struct NoteJSON {
     value: String,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    examples: Vec<Example>,
-}
-
-impl From<Note> for NoteJSON {
-    fn from(note: Note) -> Self {
-        let Note {
-            id,
-            value,
-            examples,
-        } = note;
-
-        Self {
-            id,
-            value,
-            examples,
-        }
-    }
+    examples: Vec<ExampleJSON>,
 }

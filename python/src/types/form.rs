@@ -1,6 +1,7 @@
+use internal::ToEnumWrapper;
 use pyo3::prelude::*;
 
-use super::form_kind::FormKind;
+use super::enums::EnumWrapper;
 
 #[pyclass]
 #[derive(Clone, Debug)]
@@ -9,34 +10,18 @@ pub struct Form {
     pub term: String,
 
     #[pyo3(get, set)]
-    pub kind: Option<FormKind>,
-}
+    pub kind: Option<EnumWrapper>,
 
-#[pymethods]
-impl Form {
-    #[new]
-    pub fn new(term: String, kind: Option<FormKind>) -> Self {
-        Self { term, kind }
-    }
-
-    fn __str__(&self) -> String {
-        if let Some(k) = &self.kind {
-            format!("Form({}, kind={})", self.term, k.to_string())
-        } else {
-            format!("Form({})", self.term)
-        }
-    }
-
-    fn __repr__(&self) -> String {
-        self.__str__()
-    }
+    #[pyo3(get)]
+    pub tags: Vec<String>,
 }
 
 impl From<odict::Form> for Form {
     fn from(form: odict::Form) -> Self {
         Self {
-            term: form.term.0,
-            kind: form.kind.map(FormKind::from),
+            term: form.term.to_string(),
+            kind: form.kind.map(|k| k.to_enum_wrapper().into()),
+            tags: form.tags,
         }
     }
 }

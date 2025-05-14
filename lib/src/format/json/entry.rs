@@ -1,51 +1,28 @@
 use crate::{ArchivedEntry, Entry};
+use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
-use super::{EntryRefJSON, EtymologyJSON, FormJSON};
+use super::{EntryRefJSON, EtymologyJSON};
 
-#[derive(Serialize)]
+#[derive(Serialize, StructuralConvert)]
+#[convert(from(Entry))]
 pub struct EntryJSON {
     pub term: String,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub see_also: Option<EntryRefJSON>,
+    pub rank: Option<u32>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub lemma: Option<EntryRefJSON>,
+    pub see_also: Option<EntryRefJSON>,
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub etymologies: Vec<EtymologyJSON>,
-
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub forms: Vec<FormJSON>,
 }
 
-impl From<Entry> for EntryJSON {
-    fn from(entry: Entry) -> Self {
-        let Entry {
-            term,
-            see_also,
-            lemma,
-            etymologies,
-            forms,
-        } = entry;
-
-        Self {
-            term,
-            see_also: see_also.map(EntryRefJSON::from),
-            lemma: lemma.map(EntryRefJSON::from),
-            etymologies: etymologies
-                .into_iter()
-                .map(|e| EtymologyJSON::from(e))
-                .collect(),
-            forms: forms.into_iter().map(|f| FormJSON::from(f)).collect(),
-        }
+impl TryFrom<&ArchivedEntry> for EntryJSON {
+    fn try_from(entry: &ArchivedEntry) -> crate::Result<Self> {
+        Ok(entry.to_entry()?.into())
     }
-}
-
-impl From<&ArchivedEntry> for EntryJSON {
-    fn from(entry: &ArchivedEntry) -> Self {
-        EntryJSON::from(entry.to_entry().unwrap())
-    }
+    type Error = crate::Error;
 }

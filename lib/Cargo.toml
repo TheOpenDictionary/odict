@@ -3,20 +3,19 @@ name = "odict"
 description = "A blazingly-fast dictionary file format for human languages"
 homepage = "https://odict.org"
 repository = "https://github.com/TheOpenDictionary/odict"
-version = "2.4.0"
+version = "2.7.0"
 edition = "2021"
 license = "MIT"
 exclude = ["benches/*", "tests/*"]
 
 [features]
-json = ["dep:serde_json"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
-default = ["json", "sql", "config"]
+default = ["sql", "config"]
 
 # Language-specific support
 charabia = ["dep:charabia"]
@@ -47,32 +46,32 @@ harness = false
 byteorder = "1.5.0"
 quick-xml = { version = "0.37.0", features = ["serialize"] }
 rayon = "1.10.0"
-regex = "1.10.4"
 charabia = { version = "0.9.3", optional = true, default-features = false }
 rkyv = { version = "0.8.8", features = ["alloc"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-validation = "0.0.1"
+url = "2.5.0"
+serde_json = "1.0.116"
 thiserror = "2.0.7"
-brotli = "7.0.0"
+brotli = "8.0.0"
+structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
-# feature=json
-serde_json = { version = "1.0.116", optional = true }
 # feature=search
 tantivy = { version = "0.24.1", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
 sea-query = { version = "0.32.0", optional = true }
-
+strum = { version = "0.27.1", features = ["derive"] }
 
 [dev-dependencies]
 insta = "1.38.0"
 map-macro = "0.3.0"
 criterion = { version = "0.5.1", features = ["html_reports"] }
 tempfile = "3.14.0"
+regex = "1.10.4"
 
 [lib]
 name = "odict"

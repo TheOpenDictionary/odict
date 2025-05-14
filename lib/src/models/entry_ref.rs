@@ -3,6 +3,7 @@ use std::ops::Deref;
 use crate::serializable;
 
 serializable! {
+  #[derive(Default)]
   pub struct EntryRef(pub String);
 }
 
@@ -29,6 +30,12 @@ impl Deref for ArchivedEntryRef {
 impl From<String> for EntryRef {
     fn from(s: String) -> Self {
         EntryRef(s)
+    }
+}
+
+impl From<EntryRef> for String {
+    fn from(entry_ref: EntryRef) -> Self {
+        entry_ref.0
     }
 }
 

@@ -99,4 +99,3 @@ const {
 
 module.exports.Dictionary = __napiModule.exports.Dictionary;
 module.exports.compile = __napiModule.exports.compile;
-module.exports.FormKind = __napiModule.exports.FormKind;

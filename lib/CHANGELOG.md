@@ -1,5 +1,38 @@
 # Changelog
 
+## [2.7.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.6.0...lib/v2.7.0) (2025-05-10)
+
+
+### Features
+
+* Add `rank` attribute to Entry for storing word frequencies ([#1210](https://github.com/TheOpenDictionary/odict/issues/1210)) ([2b2439a](https://github.com/TheOpenDictionary/odict/commit/2b2439a4dcb82d2b2c247174eb22d4a90d2037d5))
+
+## [2.6.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.5.0...lib/v2.6.0) (2025-04-24)
+
+
+### Features
+
+* Add &lt;pronunciation&gt; tag ([#1197](https://github.com/TheOpenDictionary/odict/issues/1197)) ([026e2f2](https://github.com/TheOpenDictionary/odict/commit/026e2f292bf02c182684f8656b9eaa13533f1a72))
+* Add `tags` fields to `sense` and `form`, as well as move `lemma` to `<sense>` ([#1192](https://github.com/TheOpenDictionary/odict/issues/1192)) ([f03d8c1](https://github.com/TheOpenDictionary/odict/commit/f03d8c122f96ec20f85ccff639962c9ffa44aee5))
+* Add media URLs to `<entry>` nodes ([#1202](https://github.com/TheOpenDictionary/odict/issues/1202)) ([04c2307](https://github.com/TheOpenDictionary/odict/commit/04c2307b005ff57bbe460f7b1034f97c811b580f))
+* Add translation node ([#1196](https://github.com/TheOpenDictionary/odict/issues/1196)) ([ef15aba](https://github.com/TheOpenDictionary/odict/commit/ef15abaf0749cf014315fb57ec63c50d2ae59e98))
+* Add wrapper nodes to `example` and `note` types ([#1194](https://github.com/TheOpenDictionary/odict/issues/1194)) ([bde127c](https://github.com/TheOpenDictionary/odict/commit/bde127cab6a9d805de23c0ff695c504c510cc89a))
+* Move `translations` and `forms` to `sense` ([#1200](https://github.com/TheOpenDictionary/odict/issues/1200)) ([5c0e746](https://github.com/TheOpenDictionary/odict/commit/5c0e7466df84f5435cc53eba7fcc72813c11d28c))
+* Remove wrapper components ([0908f01](https://github.com/TheOpenDictionary/odict/commit/0908f0128c1dd1b0749b756d757d8f3aa50e6c1c))
+* Use `structural_convert` macro instead of custom From implementations ([#1199](https://github.com/TheOpenDictionary/odict/issues/1199)) ([392d624](https://github.com/TheOpenDictionary/odict/commit/392d624a4b956f0bc22d0529b4ccb0307807cdfd))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate brotli to v8 ([#1189](https://github.com/TheOpenDictionary/odict/issues/1189)) ([a8d61e6](https://github.com/TheOpenDictionary/odict/commit/a8d61e697ad17fc7a69796a7ee0c27f5ee285944))
+
+## [2.5.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.4.0...lib/v2.5.0) (2025-04-20)
+
+
+### Features
+
+* Add support for word forms and lemmas ([#1186](https://github.com/TheOpenDictionary/odict/issues/1186)) ([9e37a28](https://github.com/TheOpenDictionary/odict/commit/9e37a2834fda82bfaf558aeab9cc74fbced5a1d4))
+
 ## [2.4.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.3.0...lib/v2.4.0) (2025-04-13)
 
 

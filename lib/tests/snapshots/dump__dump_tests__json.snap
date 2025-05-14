@@ -1,7 +1,6 @@
 ---
 source: lib/tests/dump.rs
 expression: dumped
-snapshot_kind: text
 ---
 {
   "id": "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f",
@@ -20,14 +19,16 @@ snapshot_kind: text
                   "type": "definition",
                   "value": "a cat",
                   "examples": [
-                    "There goes a cat!"
+                    {
+                      "value": "There goes a cat!"
+                    }
                   ],
                   "notes": [
                     {
                       "value": "Some definition note",
                       "examples": [
                         {
-                          "$text": "Some example"
+                          "value": "Some example"
                         }
                       ]
                     }
@@ -43,7 +44,6 @@ snapshot_kind: text
       "term": "dog",
       "etymologies": [
         {
-          "pronunciation": "dooooog",
           "description": "Latin root",
           "senses": {
             "un": {
@@ -89,6 +89,7 @@ snapshot_kind: text
     },
     "run": {
       "term": "run",
+      "rank": 100,
       "etymologies": [
         {
           "description": "Latin root",
@@ -100,8 +101,12 @@ snapshot_kind: text
                   "type": "definition",
                   "value": "(vertebrates) To move swiftly",
                   "examples": [
-                    "The dog runs after the cat.",
-                    "The horse ran away."
+                    {
+                      "value": "The dog runs after the cat."
+                    },
+                    {
+                      "value": "The horse ran away."
+                    }
                   ]
                 },
                 {
@@ -136,8 +141,12 @@ snapshot_kind: text
                     {
                       "value": "(vertebrates) To move swiftly (figuratively)",
                       "examples": [
-                        "The dog runs after the cat.",
-                        "The horse ran away."
+                        {
+                          "value": "The dog runs after the cat."
+                        },
+                        {
+                          "value": "The horse ran away."
+                        }
                       ]
                     },
                     {

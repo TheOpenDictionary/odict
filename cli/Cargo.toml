@@ -1,6 +1,6 @@
 [package]
 name = "odict-cli"
-version = "2.4.0"
+version = "2.7.0"
 edition = "2021"
 description = "Lightning-fast dictionary file format and toolchain"
 homepage = "https://odict.org"
@@ -16,7 +16,6 @@ odict = { path = "../lib", features = [
   "sql",
   "search",
   "html",
-  "json",
   "tokenize",
 ] }
 clap = { version = "4.5.4", features = ["derive", "cargo"] }

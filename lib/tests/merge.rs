@@ -13,18 +13,22 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               String::from("dog") => Entry {
-                lemma: None,
-                forms: vec![],
+                rank: None,
+                media: vec![],
                 term: "dog".to_string(),
                 see_also: None,
                 etymologies: vec![
                   Etymology {
                     id:None,
                     description:None,
-                    pronunciation:None,
+                    pronunciations: vec![],
                     senses: hash_map! {
-                      PartOfSpeech::n => Sense {
-                        pos: PartOfSpeech::n,
+                      PartOfSpeech::N => Sense {
+                        tags: vec![],
+                        translations: vec![],
+                        forms: vec![],
+                        pos: PartOfSpeech::N,
+                        lemma: None,
                         definitions: vec![
                         DefinitionType::Definition(
                             Definition {
@@ -49,18 +53,22 @@ mod merge_tests {
             entries: hash_map! {
               "cat".to_string()=>
               Entry {
-                  lemma: None,
+                  rank: None,
+                  media: vec![],
                   see_also: None,
-                  forms: vec![],
                   term: "cat".to_string(),
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                          PartOfSpeech::n=>
+                          PartOfSpeech::N=>
                           Sense {
-                              pos: PartOfSpeech::n,
+                              tags: vec![],
+                              pos: PartOfSpeech::N,
+                              forms: vec![],
+                              translations: vec![],
+                              lemma: None,
                               definitions: vec![
                                 DefinitionType::Definition(
                                   Definition {
@@ -83,18 +91,22 @@ mod merge_tests {
             name: None,
             entries: hash_map! {
               "dog".to_string() => Entry {
-                  lemma: None,
+                  rank: None,
                   see_also: None,
-                  forms: vec![],
+                  media: vec![],
                   term: "dog".to_string(),
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                        PartOfSpeech::n=>
+                        PartOfSpeech::N=>
                         Sense {
-                            pos: PartOfSpeech::n,
+                            tags: vec![],
+                            pos: PartOfSpeech::N,
+                            forms: vec![],
+                            translations: vec![],
+                            lemma: None,
                             definitions: vec![
                               DefinitionType::Definition(
                                 Definition {
@@ -110,18 +122,22 @@ mod merge_tests {
                   }],
               },
               "cat".to_string() => Entry {
-                  lemma: None,
                   see_also: None,
+                  rank: None,
+                  media: vec![],
                   term: "cat".to_string(),
-                  forms: vec![],
                   etymologies: vec![Etymology {
                     id: None,
-                    pronunciation: None,
+                    pronunciations: vec![],
                     description: None,
                       senses:hash_map! {
-                          PartOfSpeech::n=>
+                          PartOfSpeech::N=>
                           Sense {
-                              pos: PartOfSpeech::n,
+                              tags: vec![],
+                              pos: PartOfSpeech::N,
+                              forms: vec![],
+                              translations: vec![],
+                              lemma: None,
                               definitions: vec![DefinitionType::Definition(
                                 Definition{
                                   id: None,
