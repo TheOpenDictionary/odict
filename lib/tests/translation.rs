@@ -56,7 +56,8 @@ fn test_translation_in_entry() {
     };
 
     // Create an etymology with the sense
-    let mut senses = hash_set! {};
+    let mut senses = hash_set![];
+
     senses.insert(sense);
 
     let etymology = odict::Etymology {

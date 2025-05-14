@@ -79,52 +79,38 @@ mod merge_tests {
             name: None,
             entries: hash_set![
                 Entry {
-                    rank: None,
-                    see_also: None,
-                    media: vec![],
                     term: "dog".to_string(),
                     etymologies: vec![Etymology {
-                        id: None,
-                        pronunciations: vec![],
-                        description: None,
                         senses: hash_set![Sense {
-                            tags: vec![],
                             pos: PartOfSpeech::N,
-                            forms: vec![],
-                            translations: vec![],
-                            lemma: None,
                             definitions: vec![DefinitionType::Definition(Definition {
                                 id: None,
                                 value: "some definition".into(),
                                 examples: vec![],
                                 notes: vec![],
                             })],
-                        }]
+                            ..Sense::default()
+                        }],
+                        ..Etymology::default()
                     }],
+                    ..Entry::default()
                 },
                 Entry {
-                    see_also: None,
-                    rank: None,
-                    media: vec![],
                     term: "cat".to_string(),
                     etymologies: vec![Etymology {
-                        id: None,
-                        pronunciations: vec![],
-                        description: None,
                         senses: hash_set![Sense {
-                            tags: vec![],
                             pos: PartOfSpeech::N,
-                            forms: vec![],
-                            translations: vec![],
-                            lemma: None,
                             definitions: vec![DefinitionType::Definition(Definition {
                                 id: None,
                                 value: "some other definition".into(),
                                 examples: vec![],
                                 notes: vec![],
                             })],
-                        },]
+                            ..Sense::default()
+                        }],
+                        ..Etymology::default()
                     }],
+                    ..Entry::default()
                 },
             ],
         };
