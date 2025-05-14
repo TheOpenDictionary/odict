@@ -90,7 +90,8 @@ fn test_form_with_tags() {
     };
 
     // Create an etymology with the sense
-    let mut senses = hash_set! {};
+    let mut senses = hash_set![];
+
     senses.insert(sense);
 
     let etymology = odict::Etymology {
