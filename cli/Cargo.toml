@@ -1,6 +1,6 @@
 [package]
 name = "odict-cli"
-version = "2.7.0"
+version = "2.8.0"
 edition = "2021"
 description = "Lightning-fast dictionary file format and toolchain"
 homepage = "https://odict.org"
