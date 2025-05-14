@@ -22,6 +22,7 @@ napi-derive = "2"
 odict = { path = "../lib" }
 structural-convert = { workspace = true }
 internal = { path = "../internal" }
+openssl = { version = "0.10.72", features = ["vendored"] }
 
 [build-dependencies]
 napi-build = "2.0.1"
