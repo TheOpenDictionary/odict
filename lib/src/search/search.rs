@@ -1,3 +1,5 @@
+use rkyv::util::AlignedVec;
+
 use std::{ffi::OsStr, path::PathBuf};
 
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
@@ -117,8 +119,12 @@ macro_rules! search {
                             .as_bytes()
                             .unwrap();
 
+                        let mut aligned_vec = AlignedVec::<4096>::new();
+
+                        aligned_vec.extend_from_slice(bytes);
+
                         let archive =
-                            unsafe { access_unchecked::<crate::ArchivedEntry>(&bytes[..]) };
+                            unsafe { access_unchecked::<crate::ArchivedEntry>(&aligned_vec) };
 
                         archive.to_entry().unwrap()
                     })
