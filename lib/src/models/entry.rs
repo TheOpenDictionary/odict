@@ -1,4 +1,7 @@
-use rkyv::{deserialize, to_bytes};
+use rkyv::{
+    deserialize, to_bytes,
+    with::{AsBox, MapNiche},
+};
 use std::{
     borrow::Borrow,
     hash::{Hash, Hasher},
@@ -16,10 +19,12 @@ serializable! {
     pub term: String,
 
     #[serde(rename = "@rank")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rank: Option<u32>,
 
     #[serde(rename = "@see")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub see_also: Option<EntryRef>,
 

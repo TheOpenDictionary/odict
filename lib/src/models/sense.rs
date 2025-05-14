@@ -1,6 +1,8 @@
 use std::borrow::Borrow;
 use std::hash::Hash;
 
+use rkyv::with::{AsBox, MapNiche};
+
 use crate::models::form::Form;
 use crate::{serializable, Translation};
 
@@ -25,6 +27,7 @@ serializable! {
     pub pos: PartOfSpeech,
 
     #[serde(rename = "@lemma")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lemma: Option<EntryRef>,
 

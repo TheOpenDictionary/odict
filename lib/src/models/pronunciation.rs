@@ -1,9 +1,12 @@
+use rkyv::with::{AsBox, MapNiche};
+
 use super::{MediaURL, PronunciationKind};
 use crate::serializable;
 
 serializable! {
   pub struct Pronunciation {
     #[serde(rename = "@kind")]
+    #[rkyv(with = MapNiche<AsBox>)]
     pub kind: Option<PronunciationKind>,
 
     #[serde(rename = "@value")]

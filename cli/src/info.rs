@@ -3,7 +3,6 @@ use clap::{arg, command, Args};
 use console::Style;
 use humansize::{format_size, DECIMAL};
 use num_format::{Locale, ToFormattedString};
-use odict::ArchivedOption;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -25,7 +24,7 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
     let bold = Style::new().bold();
     let dict = file.to_archive()?;
 
-    if let ArchivedOption::Some(name) = &dict.name {
+    if let Option::Some(name) = &dict.name.as_ref() {
         ctx.println(format!(
             "\n{}\n{}\n",
             bold.apply_to(name),

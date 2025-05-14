@@ -1,3 +1,5 @@
+use rkyv::with::{AsBox, MapNiche};
+
 use crate::serializable;
 
 use super::EntryRef;
@@ -7,6 +9,7 @@ serializable! {
   #[serde(rename = "form")]
   pub struct Form {
     #[serde(rename = "@kind")]
+    #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<FormKind>,
 
