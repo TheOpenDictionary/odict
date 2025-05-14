@@ -21,10 +21,20 @@ impl ID {
     }
 }
 
-impl Into<String> for ID {
-    fn into(self) -> String {
-        self.0
+impl TryFrom<String> for ID {
+    fn try_from(s: String) -> crate::Result<ID> {
+        ID::parse(s.as_str())
     }
+
+    type Error = crate::Error;
+}
+
+impl TryFrom<&str> for ID {
+    fn try_from(s: &str) -> crate::Result<ID> {
+        ID::parse(s)
+    }
+
+    type Error = crate::Error;
 }
 
 impl Default for ID {

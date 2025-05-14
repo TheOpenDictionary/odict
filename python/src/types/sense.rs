@@ -1,14 +1,17 @@
 use either::Either;
+use internal::ToEnumWrapper;
 use odict::DefinitionType;
 use pyo3::prelude::*;
 
-use super::{definition::Definition, form::Form, group::Group, translation::Translation};
+use super::{
+    definition::Definition, enums::EnumWrapper, form::Form, group::Group, translation::Translation,
+};
 
 #[pyclass]
 #[derive(Debug, Clone)]
 pub struct Sense {
     #[pyo3(get)]
-    pub pos: String,
+    pub pos: EnumWrapper,
     #[pyo3(get)]
     pub lemma: Option<String>,
     #[pyo3(get)]
@@ -24,7 +27,7 @@ pub struct Sense {
 impl From<odict::Sense> for Sense {
     fn from(sense: odict::Sense) -> Self {
         Sense {
-            pos: sense.pos.to_string(),
+            pos: sense.pos.to_enum_wrapper().into(),
             lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),
             definitions: sense
                 .definitions

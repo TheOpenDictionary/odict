@@ -46,7 +46,7 @@ pub fn insert_sense(
             .columns([Senses::ID, Senses::POS, Senses::EtymologyID])
             .values([
                 id.as_str().into(),
-                sense.pos.description().into(),
+                sense.pos.to_string().into(),
                 etymology_id.into(),
             ])?,
     );

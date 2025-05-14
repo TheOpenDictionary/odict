@@ -4,7 +4,7 @@ use crate::serializable;
 serializable! {
   pub struct Pronunciation {
     #[serde(rename = "@kind")]
-    pub kind: PronunciationKind,
+    pub kind: Option<PronunciationKind>,
 
     #[serde(rename = "@value")]
     pub value: String,

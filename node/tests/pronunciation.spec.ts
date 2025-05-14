@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compile, Dictionary, PronunciationKind } from "../index";
+import { compile, Dictionary, type Definition } from "../index";
 
 describe("Pronunciation support", () => {
   it("should parse entries with pronunciations", async () => {
@@ -14,21 +14,27 @@ describe("Pronunciation support", () => {
         </entry>
       </dictionary>
     `;
-    
+
     const compiled = compile(xml);
     const dict = new Dictionary(compiled);
-    
+
     const results = dict.lookup("你好");
     expect(results.length).toBe(1);
-    
+
     const entry = results[0].entry;
     expect(entry.etymologies.length).toBe(1);
     expect(entry.etymologies[0].pronunciations).toBeDefined();
     expect(entry.etymologies[0].pronunciations.length).toBe(1);
-    expect(entry.etymologies[0].pronunciations[0].kind).toBe(PronunciationKind.Pinyin);
+    expect(entry.etymologies[0].pronunciations[0].kind).toStrictEqual({
+      name: "PronunciationKind",
+      value: "pinyin",
+      variant: "pinyin",
+    });
     expect(entry.etymologies[0].pronunciations[0].value).toBe("ni hao");
     expect(entry.etymologies[0].pronunciations[0].media.length).toBe(1);
-    expect(entry.etymologies[0].pronunciations[0].media[0].src).toBe("./audio.mp3");
+    expect(entry.etymologies[0].pronunciations[0].media[0].src).toBe(
+      "./audio.mp3",
+    );
   });
 
   it("should parse examples with pronunciations", async () => {
@@ -49,19 +55,25 @@ describe("Pronunciation support", () => {
         </entry>
       </dictionary>
     `;
-    
+
     const compiled = compile(xml);
     const dict = new Dictionary(compiled);
-    
+
     const results = dict.lookup("example");
     expect(results.length).toBe(1);
-    
+
     const entry = results[0].entry;
-    const example = entry.etymologies[0].senses["n"].definitions[0].examples[0];
-    
+    const example = (
+      entry.etymologies[0].senses["n"].definitions[0] as Definition
+    ).examples[0];
+
     expect(example.pronunciations).toBeDefined();
     expect(example.pronunciations.length).toBe(1);
-    expect(example.pronunciations[0].kind).toBe(PronunciationKind.IPA);
+    expect(example.pronunciations[0].kind).toStrictEqual({
+      name: "PronunciationKind",
+      value: "ipa",
+      variant: "ipa",
+    });
     expect(example.pronunciations[0].value).toBe("ɪɡˈzæmpl ˈsɛntəns");
     expect(example.pronunciations[0].media.length).toBe(1);
     expect(example.pronunciations[0].media[0].src).toBe("./example.mp3");
@@ -86,13 +98,13 @@ describe("Pronunciation support", () => {
         </entry>
       </dictionary>
     `;
-    
+
     const compiled = compile(xml);
     const dict = new Dictionary(compiled);
-    
+
     const results = dict.lookup("hello");
     expect(results.length).toBe(1);
-    
+
     const entry = results[0].entry;
     expect(entry.etymologies.length).toBe(1);
     expect(entry.etymologies[0].pronunciations.length).toBe(2);

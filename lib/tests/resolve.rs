@@ -25,8 +25,8 @@ mod resolve_tests {
                     description: None,
                     pronunciations: vec![],
                     senses: hash_map! {
-                      PartOfSpeech::n => Sense {
-                        pos: PartOfSpeech::n,
+                      PartOfSpeech::N => Sense {
+                        pos: PartOfSpeech::N,
                         lemma: None,
                         forms: vec![],
                         translations: vec![],
