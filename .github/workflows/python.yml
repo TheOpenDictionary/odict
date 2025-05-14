@@ -56,7 +56,7 @@ jobs:
             if command -v apt-get &> /dev/null; then
                 apt-get update && apt-get install pkg-config libssl-dev libatomic-ops-dev -y
             elif command -v yum &> /dev/null; then
-                yum install pkg-config openssl-devel devtoolset-10-libatomic-devel perl-IPC-Cmd -y
+                yum install pkgconfig openssl-devel devtoolset-10-libatomic-devel perl-IPC-Cmd -y
             else
                 echo "Neither apt-get nor yum is installed. Please install a package manager."
                 exit 1
@@ -119,6 +119,15 @@ jobs:
           args: --release --out dist --find-interpreter --manifest-path python/Cargo.toml
           sccache: 'true'
           manylinux: musllinux_1_2
+          before-script-linux: |
+            if command -v apt-get &> /dev/null; then
+                apt-get update && apt-get install pkg-config libssl-dev libatomic-ops-dev -y
+            elif command -v yum &> /dev/null; then
+                yum install pkgconfig openssl-devel devtoolset-10-libatomic-devel perl-IPC-Cmd -y
+            else
+                echo "Neither apt-get nor yum is installed. Please install a package manager."
+                exit 1
+            fi
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
