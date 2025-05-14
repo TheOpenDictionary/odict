@@ -53,9 +53,14 @@ jobs:
           args: --release --out dist --find-interpreter --manifest-path python/Cargo.toml
           sccache: 'true'
           before-script-linux: |
-            set -e
-            apt-get update
-            apt-get install -y --no-install-recommends pkg-config libssl-dev
+            if command -v apt-get &> /dev/null; then
+                apt-get update && apt-get install libssl-dev libatomic-ops-dev -y
+            elif command -v yum &> /dev/null; then
+                yum install openssl-devel devtoolset-10-libatomic-devel perl-IPC-Cmd -y
+            else
+                echo "Neither apt-get nor yum is installed. Please install a package manager."
+                exit 1
+            fi
           manylinux: auto
       - name: Upload wheels
         uses: actions/upload-artifact@v4
