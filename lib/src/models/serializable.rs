@@ -12,7 +12,7 @@ macro_rules! serializable {
             rkyv::Serialize,
             rkyv::Deserialize,
         )]
-        #[rkyv(derive(Debug))]
+        #[rkyv(derive(Debug, PartialEq, Eq))]
         $i
     };
 }

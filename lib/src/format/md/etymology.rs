@@ -21,7 +21,7 @@ pub fn write_ety(
         }
     }
 
-    for sense in etymology.senses.values() {
+    for sense in etymology.senses.iter() {
         write_sense(lines, sense, entry)?;
     }
 

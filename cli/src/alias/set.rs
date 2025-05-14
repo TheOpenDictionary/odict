@@ -1,4 +1,3 @@
-
 use clap::{arg, Args};
 
 use crate::CLIContext;

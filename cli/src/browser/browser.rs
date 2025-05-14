@@ -1,9 +1,9 @@
 use std::time::Duration;
 
-use odict::{find::FindOptions, format::md::ToMarkdown, DictionaryFile};
+use odict::{DictionaryFile, find::FindOptions, format::md::ToMarkdown};
 use ratatui::{
-    crossterm::event::{self, Event, KeyCode},
     Frame,
+    crossterm::event::{self, Event, KeyCode},
 };
 use tui_input::backend::crossterm::EventHandler;
 

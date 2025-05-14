@@ -14,7 +14,6 @@ mod sense;
 #[cfg(feature = "tokenize-latin")]
 mod token;
 mod translation;
-mod utils;
 
 pub(super) use definition::*;
 pub(super) use entry::*;
@@ -27,6 +26,5 @@ pub(super) use note::*;
 pub(super) use pronunciation::*;
 pub(super) use sense::*;
 pub(super) use translation::*;
-pub(super) use utils::*;
 
 pub use json::*;

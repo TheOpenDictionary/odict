@@ -4,7 +4,7 @@ mod pos_tests {
     use std::str::FromStr;
 
     use insta::assert_snapshot;
-    use map_macro::hash_map;
+    use map_macro::hash_set;
     use odict::{
         format::xml::ToXML, Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense,
     };
@@ -30,22 +30,18 @@ mod pos_tests {
 
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
 
-        dict.entries.insert(
-            "dog".into(),
-            Entry {
-                term: "dog".into(),
-                etymologies: vec![Etymology {
-                    senses: hash_map! {
-                      PartOfSpeech::Other("cusTom".into()) => Sense {
-                        pos: PartOfSpeech::Other("cusTom".into()),
-                        ..Sense::default()
-                      }
-                    },
-                    ..Etymology::default()
+        dict.entries.insert(Entry {
+            term: "dog".into(),
+            etymologies: vec![Etymology {
+                description: None,
+                senses: hash_set![Sense {
+                    pos: PartOfSpeech::Other("cusTom".into()),
+                    ..Sense::default()
                 }],
-                ..Entry::default()
-            },
-        );
+                ..Etymology::default()
+            }],
+            ..Entry::default()
+        });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
     }
@@ -80,22 +76,17 @@ mod pos_tests {
 
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
 
-        dict.entries.insert(
-            "dog".into(),
-            Entry {
-                term: "dog".into(),
-                etymologies: vec![Etymology {
-                    senses: hash_map! {
-                      PartOfSpeech::AdjKari => Sense {
-                        pos: PartOfSpeech::AdjKari,
-                        ..Sense::default()
-                      }
-                    },
-                    ..Etymology::default()
+        dict.entries.insert(Entry {
+            term: "dog".into(),
+            etymologies: vec![Etymology {
+                senses: hash_set![Sense {
+                    pos: PartOfSpeech::AdjKari,
+                    ..Sense::default()
                 }],
-                ..Entry::default()
-            },
-        );
+                ..Etymology::default()
+            }],
+            ..Entry::default()
+        });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
     }

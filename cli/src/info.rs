@@ -1,4 +1,3 @@
-
 use crate::context::CLIContext;
 use clap::{arg, command, Args};
 use console::Style;

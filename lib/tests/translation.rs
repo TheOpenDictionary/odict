@@ -1,3 +1,4 @@
+use map_macro::hash_set;
 use odict::format::json::ToJSON;
 use odict::{DefinitionType, Entry, Example, ToDictionary, Translation};
 
@@ -55,8 +56,9 @@ fn test_translation_in_entry() {
     };
 
     // Create an etymology with the sense
-    let mut senses = std::collections::HashMap::new();
-    senses.insert(odict::PartOfSpeech::N, sense);
+    let mut senses = hash_set![];
+
+    senses.insert(sense);
 
     let etymology = odict::Etymology {
         id: None,
@@ -110,7 +112,7 @@ fn test_xml_serialization() {
     // Get the translations from the first etymology's first sense
     let translations = &entry.etymologies[0]
         .senses
-        .values()
+        .iter()
         .next()
         .unwrap()
         .translations;
@@ -150,7 +152,7 @@ fn test_example_with_translation() {
     // Get examples using the definition's examples() method
     if let Some(definition) = entry.etymologies[0]
         .senses
-        .values()
+        .iter()
         .next()
         .and_then(|sense| sense.definitions.get(0))
         .and_then(|def_type| match def_type {

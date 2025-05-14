@@ -35,7 +35,7 @@ macro_rules! preview {
                     .iter()
                     .flat_map(|e| -> Vec<String> {
                         e.senses
-                            .values()
+                            .iter()
                             .flat_map(|s| -> Vec<String> {
                                 s.definitions
                                     .iter()

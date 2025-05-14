@@ -172,7 +172,7 @@ fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(
         out.write_line(&format!("\n{}", &desc))?;
     }
 
-    for sense in etymology.senses.values() {
+    for sense in etymology.senses.iter() {
         print_sense(ctx, sense, entry)?;
     }
 

@@ -18,7 +18,7 @@ impl EntryPopup {
         let md = format!("{}\n", termimad::term_text(content.as_str()));
 
         EntryPopup {
-            content:md,
+            content: md,
             content_length: lines,
             ..Default::default()
         }

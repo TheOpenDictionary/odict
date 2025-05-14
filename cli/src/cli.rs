@@ -66,7 +66,7 @@ pub enum Commands {
     /// Start a local web server to serve one or several dictionaries
     #[command(arg_required_else_help = true)]
     Serve(ServeArgs),
-    
+
     /// Tokenize text and find dictionary entries for each token
     #[command(arg_required_else_help = true)]
     Tokenize(TokenizeArgs),

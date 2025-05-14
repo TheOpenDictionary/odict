@@ -8,9 +8,9 @@ impl Dictionary {
     }
 
     pub fn merge(&mut self, dictionary: &Dictionary) {
-        for (term, entry) in dictionary.entries.iter() {
-            if !self.entries.contains_key(term.as_str()) {
-                self.entries.insert(term.clone(), entry.clone());
+        for entry in dictionary.entries.iter() {
+            if !self.entries.contains(entry) {
+                self.entries.insert(entry.clone());
             }
         }
     }
