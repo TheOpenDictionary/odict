@@ -31,23 +31,16 @@ mod pos_tests {
         dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
 
         dict.entries.insert(Entry {
-            media: vec![],
-            rank: None,
             term: "dog".into(),
-            see_also: None,
             etymologies: vec![Etymology {
-                id: None,
-                pronunciations: vec![],
                 description: None,
                 senses: hash_set![Sense {
-                    lemma: None,
-                    definitions: vec![],
-                    tags: vec![],
-                    translations: vec![],
-                    forms: vec![],
-                    pos: PartOfSpeech::Other("cusTom".into())
+                    pos: PartOfSpeech::Other("cusTom".into()),
+                    ..Sense::default()
                 }],
+                ..Etymology::default()
             }],
+            ..Entry::default()
         });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
@@ -85,22 +78,14 @@ mod pos_tests {
 
         dict.entries.insert(Entry {
             term: "dog".into(),
-            rank: None,
-            see_also: None,
-            media: vec![],
             etymologies: vec![Etymology {
-                id: None,
-                pronunciations: vec![],
-                description: None,
                 senses: hash_set![Sense {
-                    lemma: None,
-                    definitions: vec![],
-                    tags: vec![],
-                    translations: vec![],
-                    forms: vec![],
-                    pos: PartOfSpeech::AdjKari
+                    pos: PartOfSpeech::AdjKari,
+                    ..Sense::default()
                 }],
+                ..Etymology::default()
             }],
+            ..Entry::default()
         });
 
         assert_snapshot!(dict.to_xml(true).unwrap());
