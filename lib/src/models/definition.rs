@@ -3,6 +3,7 @@ use crate::serializable;
 use super::{example::Example, note::Note};
 
 serializable! {
+  #[derive(Default)]
   pub struct Definition {
     #[serde(rename = "@id")]
     #[serde(skip_serializing_if = "Option::is_none")]

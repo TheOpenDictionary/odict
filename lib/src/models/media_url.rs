@@ -2,6 +2,8 @@ use crate::{serializable, Error};
 use url::Url;
 
 serializable! {
+  #[derive(Default)]
+  #[serde(rename = "url")]
   pub struct MediaURL {
     #[serde(rename = "@src")]
     pub src: String,

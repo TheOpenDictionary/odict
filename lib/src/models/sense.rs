@@ -14,6 +14,7 @@ serializable! {
 }
 
 serializable! {
+  #[derive(Default)]
   #[serde(rename = "sense")]
   pub struct Sense {
     #[serde(rename = "@pos", default)]

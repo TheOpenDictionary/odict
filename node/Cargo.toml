@@ -8,8 +8,7 @@ publish = false
 crate-type = ["cdylib"]
 
 [features]
-default = ["search", "json", "sql", "tokenize"]
-json = ["odict/json"]
+default = ["search", "sql", "tokenize"]
 tokenize = ["odict/tokenize"]
 sql = ["odict/sql"]
 config = ["odict/config"]
@@ -22,6 +21,7 @@ napi = { version = "2", default-features = false, features = ["napi4"] }
 napi-derive = "2"
 odict = { path = "../lib" }
 structural-convert = { workspace = true }
+internal = { path = "../internal" }
 
 [build-dependencies]
 napi-build = "2.0.1"
