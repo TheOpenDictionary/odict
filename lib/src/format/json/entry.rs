@@ -1,3 +1,5 @@
+use std::hash::{Hash, Hasher};
+
 use crate::{ArchivedEntry, Entry};
 use structural_convert::StructuralConvert;
 
@@ -5,7 +7,7 @@ use serde::Serialize;
 
 use super::{EntryRefJSON, EtymologyJSON};
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, Eq, PartialEq, StructuralConvert)]
 #[convert(from(Entry))]
 pub struct EntryJSON {
     pub term: String,
@@ -25,4 +27,10 @@ impl TryFrom<&ArchivedEntry> for EntryJSON {
         Ok(entry.to_entry()?.into())
     }
     type Error = crate::Error;
+}
+
+impl Hash for EntryJSON {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.term.hash(state);
+    }
 }

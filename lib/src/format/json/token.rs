@@ -4,7 +4,7 @@ use crate::{lookup::Token, ArchivedEntry, Entry};
 
 use super::EntryJSON;
 
-#[derive(Serialize)]
+#[derive(Serialize, PartialEq, Eq)]
 pub struct TokenJSON {
     pub lemma: String,
     pub language: Option<String>,

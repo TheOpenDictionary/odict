@@ -2,7 +2,7 @@ mod helpers;
 
 #[cfg(test)]
 mod resolve_tests {
-    use map_macro::hash_map;
+    use map_macro::hash_set;
 
     use odict::{
         Definition, DefinitionType, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID,
@@ -13,8 +13,8 @@ mod resolve_tests {
         let dict = Dictionary {
             id: ID::new(),
             name: None,
-            entries: hash_map! {
-              String::from("dog") => Entry {
+            entries: hash_set! {
+              Entry {
                 rank: None,
                 media: vec![],
                 term: "dog".to_string(),
@@ -24,8 +24,7 @@ mod resolve_tests {
                     id: None,
                     description: None,
                     pronunciations: vec![],
-                    senses: hash_map! {
-                      PartOfSpeech::N => Sense {
+                    senses: hash_set![ Sense {
                         pos: PartOfSpeech::N,
                         lemma: None,
                         forms: vec![],
@@ -41,8 +40,7 @@ mod resolve_tests {
                           )
                         ],
                         tags: vec![],
-                      }
-                    }
+                      }]
                   }
                 ]
               }

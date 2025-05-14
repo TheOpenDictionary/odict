@@ -1,6 +1,6 @@
 use std::{borrow::Cow, sync::LazyLock};
 
-use console::{style, Style};
+use console::{Style, style};
 use odict::{
     Definition, DefinitionType, Entry, Error, Etymology, Example, Group, MarkdownStrategy, Note,
     Sense,

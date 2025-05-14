@@ -5,7 +5,7 @@ use crate::Definition;
 
 use super::{ExampleJSON, NoteJSON};
 
-#[derive(Serialize, StructuralConvert)]
+#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Definition))]
 pub struct DefinitionJSON {
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -37,7 +37,7 @@ pub fn insert_dictionary(builder: &mut SQLBuilder, dictionary: &Dictionary) -> c
             ])?,
     );
 
-    let mut entries = dictionary.entries.values().collect::<Vec<&Entry>>();
+    let mut entries = dictionary.entries.iter().collect::<Vec<&Entry>>();
 
     entries.sort_by(|a, b| a.term.cmp(&b.term));
 

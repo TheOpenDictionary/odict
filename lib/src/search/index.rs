@@ -95,7 +95,7 @@ macro_rules! index {
 
             let mut index_writer = index.writer(opts.memory)?;
 
-            self.entries.values().enumerate().for_each(|(i, entry)| {
+            self.entries.iter().enumerate().for_each(|(i, entry)| {
                 let document = doc!(
                   *FIELD_TERM => entry.term.as_str(),
                   *FIELD_DEFINITIONS => entry.preview(PreviewOptions::default()),
