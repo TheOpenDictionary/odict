@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.6.0...python/v1.7.0) (2025-05-14)
+
+
+### Features
+
+* Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
+* Replace HashMap with HashSet ([#1217](https://github.com/TheOpenDictionary/odict/issues/1217)) ([fdb5e11](https://github.com/TheOpenDictionary/odict/commit/fdb5e111ea84b179156486eacf4b78d843c12efb))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate pyo3 to 0.25.0 ([#1221](https://github.com/TheOpenDictionary/odict/issues/1221)) ([8105fde](https://github.com/TheOpenDictionary/odict/commit/8105fde943c4c4d0fad74c9e00c8cc01d70f199a))
+
 ## [1.6.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.5.0...python/v1.6.0) (2025-05-10)
 
 

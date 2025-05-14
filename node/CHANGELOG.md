@@ -4,6 +4,14 @@
 
 
 
+## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.7.0...node/v1.8.0) (2025-05-14)
+
+
+### Features
+
+* Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
+* Replace HashMap with HashSet ([#1217](https://github.com/TheOpenDictionary/odict/issues/1217)) ([fdb5e11](https://github.com/TheOpenDictionary/odict/commit/fdb5e111ea84b179156486eacf4b78d843c12efb))
+
 ## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.6.0...node/v1.7.0) (2025-05-10)
 
 

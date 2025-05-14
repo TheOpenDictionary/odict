@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.7.0...lib/v2.8.0) (2025-05-14)
+
+
+### Features
+
+* Add Niching policies to reduce disk space ([#1218](https://github.com/TheOpenDictionary/odict/issues/1218)) ([c33ac83](https://github.com/TheOpenDictionary/odict/commit/c33ac83972158813f76b5039e2aab55251dd83b8))
+* Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
+* Replace HashMap with HashSet ([#1217](https://github.com/TheOpenDictionary/odict/issues/1217)) ([fdb5e11](https://github.com/TheOpenDictionary/odict/commit/fdb5e111ea84b179156486eacf4b78d843c12efb))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate tantivy to 0.24.0 ([#1176](https://github.com/TheOpenDictionary/odict/issues/1176)) ([111887f](https://github.com/TheOpenDictionary/odict/commit/111887f085d00a988f6227a6fd810a583500726b))
+
 ## [2.7.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.6.0...lib/v2.7.0) (2025-05-10)
 
 
