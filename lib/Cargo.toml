@@ -47,7 +47,7 @@ harness = false
 byteorder = "1.5.0"
 quick-xml = { version = "0.37.0", features = ["serialize"] }
 rayon = "1.10.0"
-charabia = { version = "0.9.3", optional = true, default-features = false }
+charabia = { version = "0.9.4", optional = true, default-features = false }
 rkyv = { version = "0.8.8", features = ["alloc"] }
 serde = { version = "1.0.200", features = ["serde_derive"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
