@@ -1,4 +1,7 @@
-use std::fmt::{Display, Formatter};
+use std::{
+    cmp::Ordering,
+    fmt::{Display, Formatter},
+};
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct SemanticVersion {
@@ -68,5 +71,44 @@ impl From<Vec<u8>> for SemanticVersion {
     fn from(version: Vec<u8>) -> Self {
         let version = std::str::from_utf8(&version).unwrap();
         Self::from(version)
+    }
+}
+
+impl PartialOrd for SemanticVersion {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        let result =
+            (self.major, self.minor, self.patch).cmp(&(other.major, other.minor, other.patch));
+        if result != Ordering::Equal {
+            return Some(result);
+        }
+
+        // prerelease is considered less than the normal release
+        if self.prerelease.is_some() && other.prerelease.is_none() {
+            return Some(Ordering::Less);
+        } else if self.prerelease.is_none() && other.prerelease.is_some() {
+            return Some(Ordering::Greater);
+        }
+
+        // cannot determine order if both are prerelease
+        None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_compare() {
+        let v1: SemanticVersion = "0.9.0".into();
+        let v2: SemanticVersion = "0.11.0".into();
+        assert!(v1 < v2);
+    }
+
+    #[test]
+    fn test_compare_prerelease() {
+        let v1: SemanticVersion = "2.7.0-alpha".into();
+        let v2: SemanticVersion = "2.7.0".into();
+        assert!(v1 < v2);
     }
 }
