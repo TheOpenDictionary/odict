@@ -5,8 +5,7 @@ pub mod lookup;
 pub mod merge;
 pub mod preview;
 pub mod resolve;
-
-pub(crate) mod semver;
+pub mod semver;
 
 pub use io::DictionaryWriter;
 pub use io::{DictionaryFile, DictionaryReader};
