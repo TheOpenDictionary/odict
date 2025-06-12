@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.8.0...cli/v2.9.0) (2025-06-12)
+
+
+### Miscellaneous Chores
+
+* **cli:** Synchronize odict versions
+
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.7.0...cli/v2.8.0) (2025-05-14)
 
 

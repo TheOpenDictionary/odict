@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.8.0...lib/v2.9.0) (2025-06-12)
+
+
+### Features
+
+* Make mod semver public & implement partial order for SemanticVersion ([#1225](https://github.com/TheOpenDictionary/odict/issues/1225)) ([15b860a](https://github.com/TheOpenDictionary/odict/commit/15b860a06cfd638fb7e4e896cdc9760506322de6))
+
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.7.0...lib/v2.8.0) (2025-05-14)
 
 
