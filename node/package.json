@@ -42,7 +42,7 @@
     "@types/node": "^22",
     "buffer": "^6.0.3",
     "prettier": "^3.6.2",
-    "vite": "^6",
+    "vite": "^7.0.0",
     "vite-plugin-node-polyfills": "0.23.0",
     "vitest": "^3.2.4"
   },
