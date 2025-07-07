@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary name="Mixed Ranking Test">
+  <entry term="high">
+    <ety>
+      <pos>noun</pos>
+      <def>High ranking entry</def>
+    </ety>
+  </entry>
+  <entry term="medium" rank="50">
+    <ety>
+      <pos>noun</pos>
+      <def>Medium ranking entry</def>
+    </ety>
+  </entry>
+  <entry term="low" rank="10">
+    <ety>
+      <pos>noun</pos>
+      <def>Low ranking entry</def>
+    </ety>
+  </entry>
+  <entry term="highest" rank="100">
+    <ety>
+      <pos>noun</pos>
+      <def>Highest ranking entry</def>
+    </ety>
+  </entry>
+  <entry term="mid-high" rank="75">
+    <ety>
+      <pos>noun</pos>
+      <def>Mid-high ranking entry</def>
+    </ety>
+  </entry>
+</dictionary>

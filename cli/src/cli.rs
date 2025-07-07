@@ -3,7 +3,7 @@ use clap::{command, crate_version, Parser, Subcommand};
 use crate::alias::AliasCommands;
 use crate::{
     CompileArgs, DumpArgs, IndexArgs, InfoArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs,
-    SearchArgs, ServeArgs, TokenizeArgs,
+    RankingArgs, SearchArgs, ServeArgs, TokenizeArgs,
 };
 
 #[derive(Debug, Parser)]
@@ -58,6 +58,10 @@ pub enum Commands {
     /// Scaffolds a new ODict XML dictionary
     #[command(arg_required_else_help = true)]
     New(NewArgs),
+
+    /// Print ranking information (min/max ranks) for a compiled dictionary
+    #[command(arg_required_else_help = true)]
+    Ranking(RankingArgs),
 
     /// Run a full-text query on a compiled dictionary
     #[command(arg_required_else_help = true)]
