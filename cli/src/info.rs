@@ -55,8 +55,16 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
 
     match (min_rank, max_rank) {
         (Some(min), Some(max)) => {
-            ctx.println(format!("{} {}", bold.apply_to("Minimum Word Rank:"), min));
-            ctx.println(format!("{} {}", bold.apply_to("Maximum Word Rank:"), max));
+            ctx.println(format!(
+                "{} {}",
+                bold.apply_to("Min Word Rank:"),
+                min.to_formatted_string(&Locale::en)
+            ));
+            ctx.println(format!(
+                "{} {}",
+                bold.apply_to("Max Word Rank:"),
+                max.to_formatted_string(&Locale::en)
+            ));
         }
         _ => {}
     }
