@@ -54,7 +54,7 @@ pub fn ranking(ctx: &mut CLIContext, args: &RankingArgs) -> anyhow::Result<()> {
                 ));
             } else {
                 ctx.println(format!(
-                    "{}",
+                    "\n{}",
                     muted.apply_to(format!("Rank range spans {} values.", max - min + 1))
                 ));
             }
