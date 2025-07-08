@@ -2,6 +2,8 @@
 /* eslint-disable */
 export declare class Dictionary {
   constructor(data: Buffer, options?: DictionaryOptions | undefined | null);
+  get minRank(): number | null;
+  get maxRank(): number | null;
   lookup(
     query: string | Array<string>,
     options?: LookupOptions | undefined | null,

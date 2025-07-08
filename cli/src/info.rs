@@ -24,6 +24,9 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
     let bold = Style::new().bold();
     let dict = file.to_archive()?;
 
+    let min_rank = dict.min_rank();
+    let max_rank = dict.max_rank();
+
     if let Option::Some(name) = &dict.name.as_ref() {
         ctx.println(format!(
             "\n{}\n{}\n",
@@ -49,6 +52,22 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
         bold.apply_to("Entries:"),
         dict.entries.len().to_formatted_string(&Locale::en)
     ));
+
+    match (min_rank, max_rank) {
+        (Some(min), Some(max)) => {
+            ctx.println(format!(
+                "{} {}",
+                bold.apply_to("Min Word Rank:"),
+                min.to_formatted_string(&Locale::en)
+            ));
+            ctx.println(format!(
+                "{} {}",
+                bold.apply_to("Max Word Rank:"),
+                max.to_formatted_string(&Locale::en)
+            ));
+        }
+        _ => {}
+    }
 
     ctx.println("");
 

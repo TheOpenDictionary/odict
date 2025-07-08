@@ -75,6 +75,28 @@ impl Dictionary {
     Ok(mapped)
   }
 
+  #[napi(getter)]
+  pub fn min_rank(&self) -> Result<Option<u32>> {
+    Ok(
+      self
+        .file
+        .to_archive()
+        .map_err(|e| cast_error(e))?
+        .min_rank(),
+    )
+  }
+
+  #[napi(getter)]
+  pub fn max_rank(&self) -> Result<Option<u32>> {
+    Ok(
+      self
+        .file
+        .to_archive()
+        .map_err(|e| cast_error(e))?
+        .max_rank(),
+    )
+  }
+
   #[napi]
   pub fn lookup(
     &self,

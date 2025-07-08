@@ -119,6 +119,16 @@ impl Dictionary {
         Ok(path)
     }
 
+    #[getter]
+    pub fn min_rank(&self) -> PyResult<Option<u32>> {
+        Ok(self.file.to_archive().map_err(cast_error)?.min_rank())
+    }
+
+    #[getter]
+    pub fn max_rank(&self) -> PyResult<Option<u32>> {
+        Ok(self.file.to_archive().map_err(cast_error)?.max_rank())
+    }
+
     #[pyo3(signature = (query, split=None, follow=None, insensitive=None))]
     pub fn lookup(
         &self,

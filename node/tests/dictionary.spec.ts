@@ -88,6 +88,63 @@ describe("Dictionary", () => {
     expect(result).toStrictEqual(["cat", "dog", "poo", "ran", "run"]);
   });
 
+  describe("rank", () => {
+    it("returns correct min_rank for dictionary with ranks", () => {
+      // example1 has one entry with rank=100 (the "run" entry)
+      expect(dict1.minRank).toBe(100);
+    });
+
+    it("returns correct max_rank for dictionary with ranks", () => {
+      // example1 has one entry with rank=100 (the "run" entry)
+      expect(dict1.maxRank).toBe(100);
+    });
+
+    it("returns null min_rank for dictionary without ranks", () => {
+      // example2 has no rank attributes
+      expect(dict2.minRank).toBe(null);
+    });
+
+    it("returns null max_rank for dictionary without ranks", () => {
+      // example2 has no rank attributes
+      expect(dict2.maxRank).toBe(null);
+    });
+
+    it("handles mixed entries with and without ranks", async () => {
+      // Create a test dictionary with mixed rank entries
+      const mixedXml = `<?xml version="1.0" encoding="UTF-8"?>
+<dictionary>
+  <entry term="high">
+    <ety>
+      <pos>noun</pos>
+      <def>High ranking</def>
+    </ety>
+  </entry>
+  <entry term="medium" rank="50">
+    <ety>
+      <pos>noun</pos>
+      <def>Medium ranking</def>
+    </ety>
+  </entry>
+  <entry term="low" rank="10">
+    <ety>
+      <pos>noun</pos>
+      <def>Low ranking</def>
+    </ety>
+  </entry>
+  <entry term="highest" rank="100">
+    <ety>
+      <pos>noun</pos>
+      <def>Highest ranking</def>
+    </ety>
+  </entry>
+</dictionary>`;
+
+      const mixedDict = new Dictionary(compile(mixedXml));
+      expect(mixedDict.minRank).toBe(10);
+      expect(mixedDict.maxRank).toBe(100);
+    });
+  });
+
   it.skipIf(process.env.NO_TOKENIZE)(
     "should tokenize text and find entries",
     () => {

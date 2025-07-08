@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod form_tests {
-    use odict::{FormKind, MediaURL};
+    use odict::FormKind;
     use quick_xml::de::from_str;
 
     #[test]

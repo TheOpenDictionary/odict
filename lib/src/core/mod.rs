@@ -4,6 +4,7 @@ pub mod lexicon;
 pub mod lookup;
 pub mod merge;
 pub mod preview;
+pub mod rank;
 pub mod resolve;
 pub mod semver;
 
