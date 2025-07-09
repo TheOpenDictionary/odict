@@ -1,4 +1,5 @@
 use merge::Merge;
+use napi::bindgen_prelude::*;
 use odict::ArchivedEntry;
 
 use crate::utils::cast_error;
@@ -6,12 +7,13 @@ use crate::utils::cast_error;
 use super::Entry;
 
 #[napi(object)]
-#[derive(Merge)]
+#[derive(Merge, Clone)]
 pub struct LookupOptions {
   pub split: Option<u32>,
   /// Maximum number of redirects to follow via see_also links.
-  /// Use a high number like 999999 to achieve infinite following (old behavior).
-  pub follow: Option<u32>,
+  /// Pass true for infinite following, false for no following, or a number for specific limit.
+  #[napi(ts_type = "boolean | number")]
+  pub follow: Option<Either<bool, u32>>,
   pub insensitive: Option<bool>,
 }
 
@@ -34,7 +36,11 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
     }
 
     if let Some(follow) = opts.follow {
-      options = options.follow(follow);
+      options = options.follow(match follow {
+        Either::A(true) => u32::MAX,
+        Either::A(false) => 0,
+        Either::B(num) => num,
+      });
     }
 
     if let Some(insensitive) = opts.insensitive {

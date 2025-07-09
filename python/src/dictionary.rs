@@ -16,7 +16,7 @@ fn lookup(
     file: &odict::DictionaryFile,
     queries: &Vec<String>,
     split: Option<usize>,
-    follow: Option<u32>,
+    follow: Option<Either<bool, u32>>,
     insensitive: Option<bool>,
 ) -> PyResult<Vec<crate::types::LookupResult>> {
     let dict = file.to_archive().map_err(cast_error)?;
@@ -28,7 +28,12 @@ fn lookup(
     }
 
     if let Some(follow) = follow {
-        opts.follow = Some(follow);
+        let follow_value = match follow {
+            Either::Left(true) => u32::MAX,
+            Either::Left(false) => return Ok(vec![]), // Don't set follow, equivalent to None
+            Either::Right(num) => num,
+        };
+        opts.follow = Some(follow_value);
     }
 
     if let Some(insensitive) = insensitive {
@@ -134,7 +139,7 @@ impl Dictionary {
         &self,
         query: Either<String, Vec<String>>,
         split: Option<usize>,
-        follow: Option<u32>,
+        follow: Option<Either<bool, u32>>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
@@ -225,7 +230,7 @@ impl Dictionary {
     pub fn tokenize(
         &self,
         text: String,
-        follow: Option<u32>,
+        follow: Option<Either<bool, u32>>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<crate::types::Token>> {
         let dict = self.file.to_archive().map_err(cast_error)?;
@@ -233,7 +238,17 @@ impl Dictionary {
         let mut opts = odict::lookup::TokenizeOptions::default();
 
         if let Some(follow) = follow {
-            opts = opts.follow(follow);
+            match follow {
+                Either::Left(true) => {
+                    opts = opts.follow(u32::MAX);
+                }
+                Either::Left(false) => {
+                    // Don't set follow, use default behavior
+                }
+                Either::Right(num) => {
+                    opts = opts.follow(num);
+                }
+            };
         }
 
         if let Some(insensitive) = insensitive {

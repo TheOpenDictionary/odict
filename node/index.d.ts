@@ -84,9 +84,9 @@ export interface LookupOptions {
   split?: number;
   /**
    * Maximum number of redirects to follow via see_also links.
-   * Use a high number like 999999 to achieve infinite following (old behavior).
+   * Pass true for infinite following, false for no following, or a number for specific limit.
    */
-  follow?: number;
+  follow?: boolean | number;
   insensitive?: boolean;
 }
 
@@ -144,11 +144,7 @@ export interface Token {
 }
 
 export interface TokenizeOptions {
-  /**
-   * Maximum number of redirects to follow via see_also links.
-   * Use a high number like 999999 to achieve infinite following (old behavior).
-   */
-  follow?: number;
+  follow?: boolean | number;
   allowList?: Array<string>;
   insensitive?: boolean;
 }
