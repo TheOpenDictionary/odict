@@ -16,7 +16,7 @@ use crate::get_lookup_entries;
 #[derive(Debug, Deserialize)]
 pub struct LookupRequest {
     queries: String,
-    follow: Option<bool>,
+    follow: Option<u32>,
     split: Option<usize>,
 }
 
@@ -86,7 +86,7 @@ async fn handle_lookup(
             name: dictionary_name.to_string(),
         })?;
 
-    let mut opts = LookupOptions::default().follow(follow.unwrap_or(false));
+    let mut opts = LookupOptions::default().follow(follow.unwrap_or(0));
 
     if split.is_some() {
         opts = opts.strategy(LookupStrategy::Split(split.unwrap()));

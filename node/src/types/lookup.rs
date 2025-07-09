@@ -9,7 +9,9 @@ use super::Entry;
 #[derive(Merge)]
 pub struct LookupOptions {
   pub split: Option<u32>,
-  pub follow: Option<bool>,
+  /// Maximum number of redirects to follow via see_also links.
+  /// Use a high number like 999999 to achieve infinite following (old behavior).
+  pub follow: Option<u32>,
   pub insensitive: Option<bool>,
 }
 

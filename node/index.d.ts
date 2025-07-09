@@ -82,7 +82,11 @@ export interface IndexOptions {
 
 export interface LookupOptions {
   split?: number;
-  follow?: boolean;
+  /**
+   * Maximum number of redirects to follow via see_also links.
+   * Use a high number like 999999 to achieve infinite following (old behavior).
+   */
+  follow?: number;
   insensitive?: boolean;
 }
 
@@ -140,7 +144,11 @@ export interface Token {
 }
 
 export interface TokenizeOptions {
-  follow?: boolean;
+  /**
+   * Maximum number of redirects to follow via see_also links.
+   * Use a high number like 999999 to achieve infinite following (old behavior).
+   */
+  follow?: number;
   allowList?: Array<string>;
   insensitive?: boolean;
 }

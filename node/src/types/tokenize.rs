@@ -4,7 +4,9 @@ use odict::lookup::Language;
 #[napi(object)]
 #[derive(PartialEq, Merge, Clone, Eq)]
 pub struct TokenizeOptions {
-  pub follow: Option<bool>,
+  /// Maximum number of redirects to follow via see_also links.
+  /// Use a high number like 999999 to achieve infinite following (old behavior).
+  pub follow: Option<u32>,
   pub allow_list: Option<Vec<String>>,
   pub insensitive: Option<bool>,
 }
@@ -12,7 +14,7 @@ pub struct TokenizeOptions {
 impl Default for TokenizeOptions {
   fn default() -> Self {
     TokenizeOptions {
-      follow: Some(true),
+      follow: Some(u32::MAX), // Default to infinite following
       allow_list: None,
       insensitive: None,
     }

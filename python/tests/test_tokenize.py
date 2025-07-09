@@ -108,7 +108,8 @@ def test_tokenize_case_insensitive_with_follow():
         dict_instance = Dictionary(temp_path)
 
         # Test case insensitivity with follow option
-        tokens = dict_instance.tokenize("RUNS", follow=True, insensitive=True)
+        # (using high number for infinite following)
+        tokens = dict_instance.tokenize("RUNS", follow=999999, insensitive=True)
 
         assert len(tokens) == 1
         assert tokens[0].lemma == "RUNS"

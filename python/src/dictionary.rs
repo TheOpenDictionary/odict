@@ -16,7 +16,7 @@ fn lookup(
     file: &odict::DictionaryFile,
     queries: &Vec<String>,
     split: Option<usize>,
-    follow: Option<bool>,
+    follow: Option<u32>,
     insensitive: Option<bool>,
 ) -> PyResult<Vec<crate::types::LookupResult>> {
     let dict = file.to_archive().map_err(cast_error)?;
@@ -28,7 +28,7 @@ fn lookup(
     }
 
     if let Some(follow) = follow {
-        opts.follow = follow;
+        opts.follow = Some(follow);
     }
 
     if let Some(insensitive) = insensitive {
@@ -134,7 +134,7 @@ impl Dictionary {
         &self,
         query: Either<String, Vec<String>>,
         split: Option<usize>,
-        follow: Option<bool>,
+        follow: Option<u32>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
@@ -225,7 +225,7 @@ impl Dictionary {
     pub fn tokenize(
         &self,
         text: String,
-        follow: Option<bool>,
+        follow: Option<u32>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<crate::types::Token>> {
         let dict = self.file.to_archive().map_err(cast_error)?;

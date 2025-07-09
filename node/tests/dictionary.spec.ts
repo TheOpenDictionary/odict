@@ -48,7 +48,7 @@ describe("Dictionary", () => {
     });
 
     it("follows terms properly", async () => {
-      const result = dict1.lookup("ran", { follow: true });
+      const result = dict1.lookup("ran", { follow: 1 });
       expect(result[0].entry.term).toBe("run");
       expect(result[0].directedFrom?.term).toBe("ran");
     });
@@ -77,7 +77,7 @@ describe("Dictionary", () => {
     });
 
     it("combines case-insensitivity with follow option", async () => {
-      const result = dict1.lookup("RaN", { follow: true, insensitive: true });
+      const result = dict1.lookup("RaN", { follow: 1, insensitive: true });
       expect(result[0].entry.term).toBe("run");
       expect(result[0].directedFrom?.term).toBe("ran");
     });

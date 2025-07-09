@@ -29,19 +29,31 @@ macro_rules! lookup {
         impl $tys {
             fn find_entry<'a, 'b>(
                 &'a self,
-                follow: &bool,
+                follow: &Option<u32>,
                 insensitive: &bool,
                 query: &'b str,
                 directed_from: Option<&'a $ret>,
             ) -> $opt<LookupResult<&'a $ret>> {
                 // Try exact match first
                 if let Some(entry) = self.entries.get(query) {
-                    // Follow an alias if it exists
-                    if *follow {
-                        if let Option::Some(also) = &entry.see_also.as_ref() {
-                            if also.len() > 0 {
-                                // Convert EntryRef to &str using as_str() method
-                                return self.find_entry(follow, insensitive, also, Some(entry));
+                    // Follow an alias if it exists and we have redirects remaining
+                    if let Some(max_redirects) = follow {
+                        if *max_redirects > 0 {
+                            if let Option::Some(also) = &entry.see_also.as_ref() {
+                                if also.len() > 0 {
+                                    // Decrement redirect count for recursive call
+                                    let remaining_redirects = if *max_redirects == u32::MAX {
+                                        Some(u32::MAX) // Keep infinite
+                                    } else {
+                                        Some(max_redirects - 1)
+                                    };
+                                    return self.find_entry(
+                                        &remaining_redirects,
+                                        insensitive,
+                                        also,
+                                        directed_from.or(Some(entry)),
+                                    );
+                                }
                             }
                         }
                     }
