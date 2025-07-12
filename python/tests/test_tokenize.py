@@ -108,7 +108,8 @@ def test_tokenize_case_insensitive_with_follow():
         dict_instance = Dictionary(temp_path)
 
         # Test case insensitivity with follow option
-        tokens = dict_instance.tokenize("RUNS", follow=True, insensitive=True)
+        # (using high number for infinite following)
+        tokens = dict_instance.tokenize("RUNS", follow=999999, insensitive=True)
 
         assert len(tokens) == 1
         assert tokens[0].lemma == "RUNS"
@@ -118,4 +119,113 @@ def test_tokenize_case_insensitive_with_follow():
 
     finally:
         # Clean up the temporary file
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_boolean_true():
+    # Test follow=True (should be equivalent to u32::MAX)
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    Dictionary.write(xml_content, temp_path)
+
+    try:
+        dict_instance = Dictionary(temp_path)
+        tokens = dict_instance.tokenize("runs", follow=True)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert len(tokens[0].entries) == 1
+        assert tokens[0].entries[0].entry.term == "run"
+        assert tokens[0].entries[0].directed_from.term == "runs"
+
+    finally:
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_boolean_false():
+    # Test follow=False (should disable following)
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    Dictionary.write(xml_content, temp_path)
+
+    try:
+        dict_instance = Dictionary(temp_path)
+        tokens = dict_instance.tokenize("runs", follow=False)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert tokens[0].entries[0].entry.term == "runs"
+
+    finally:
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_number():
+    # Test follow with specific number
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    Dictionary.write(xml_content, temp_path)
+
+    try:
+        dict_instance = Dictionary(temp_path)
+        tokens = dict_instance.tokenize("runs", follow=5)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert len(tokens[0].entries) == 1
+        assert tokens[0].entries[0].entry.term == "run"
+        assert tokens[0].entries[0].directed_from.term == "runs"
+
+    finally:
         os.unlink(temp_path)

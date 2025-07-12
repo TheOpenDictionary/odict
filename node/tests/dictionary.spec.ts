@@ -48,7 +48,7 @@ describe("Dictionary", () => {
     });
 
     it("follows terms properly", async () => {
-      const result = dict1.lookup("ran", { follow: true });
+      const result = dict1.lookup("ran", { follow: 1 });
       expect(result[0].entry.term).toBe("run");
       expect(result[0].directedFrom?.term).toBe("ran");
     });
@@ -77,7 +77,24 @@ describe("Dictionary", () => {
     });
 
     it("combines case-insensitivity with follow option", async () => {
-      const result = dict1.lookup("RaN", { follow: true, insensitive: true });
+      const result = dict1.lookup("RaN", { follow: 1, insensitive: true });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
+
+    it("supports follow=true for infinite following", async () => {
+      const result = dict1.lookup("ran", { follow: true });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
+
+    it("supports follow=false to disable following", async () => {
+      const result = dict1.lookup("ran", { follow: false });
+      expect(result[0].entry.term).toBe("ran"); 
+    });
+
+    it("supports follow with specific number", async () => {
+      const result = dict1.lookup("ran", { follow: 5 });
       expect(result[0].entry.term).toBe("run");
       expect(result[0].directedFrom?.term).toBe("ran");
     });
@@ -182,6 +199,43 @@ describe("Dictionary", () => {
       expect(tokens[0].entries[0].entry.term).toBe("dog");
       expect(tokens[1].lemma).toBe("cat");
       expect(tokens[1].entries[0].entry.term).toBe("cat");
+    },
+  );
+
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should support follow=true for infinite following in tokenize",
+    () => {
+      const tokens = dict1.tokenize("ran", { follow: true });
+
+      expect(tokens.length).toBe(1);
+      expect(tokens[0].lemma).toBe("ran");
+      expect(tokens[0].entries.length).toBe(1);
+      expect(tokens[0].entries[0].entry.term).toBe("run");
+      expect(tokens[0].entries[0].directedFrom?.term).toBe("ran");
+    },
+  );
+
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should support follow=false to disable following in tokenize",
+    () => {
+      const tokens = dict1.tokenize("ran", { follow: false });
+
+      expect(tokens.length).toBe(1);
+      expect(tokens[0].lemma).toBe("ran");
+      expect(tokens[0].entries[0].entry.term).toBe("ran"); 
+    },
+  );
+
+  it.skipIf(process.env.NO_TOKENIZE)(
+    "should support follow with specific number in tokenize",
+    () => {
+      const tokens = dict1.tokenize("ran", { follow: 5 });
+
+      expect(tokens.length).toBe(1);
+      expect(tokens[0].lemma).toBe("ran");
+      expect(tokens[0].entries.length).toBe(1);
+      expect(tokens[0].entries[0].entry.term).toBe("run");
+      expect(tokens[0].entries[0].directedFrom?.term).toBe("ran");
     },
   );
 

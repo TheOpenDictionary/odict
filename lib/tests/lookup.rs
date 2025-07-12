@@ -8,6 +8,7 @@ mod lookup_tests {
         format::json::ToJSON,
         lookup::{LookupOptions, LookupStrategy},
     };
+    use std::{str::FromStr, u32};
 
     use crate::helpers::{EXAMPLE_DICT_1, EXAMPLE_DICT_2};
 
@@ -44,9 +45,7 @@ mod lookup_tests {
         let control = dict
             .lookup(
                 &vec!["runners"],
-                LookupOptions::default()
-                    .strategy(LookupStrategy::Split(2))
-                    .follow(false),
+                LookupOptions::default().strategy(LookupStrategy::Split(2)),
             )
             .unwrap();
 
@@ -58,7 +57,7 @@ mod lookup_tests {
                 &vec!["runners"],
                 LookupOptions::default()
                     .strategy(LookupStrategy::Split(2))
-                    .follow(true),
+                    .follow(u32::MAX),
             )
             .unwrap();
 
@@ -72,12 +71,67 @@ mod lookup_tests {
                 &vec!["unfindable (runners)"],
                 LookupOptions::default()
                     .strategy(LookupStrategy::Split(2))
-                    .follow(true),
+                    .follow(u32::MAX),
             )
             .unwrap();
 
         assert_eq!(fallback.len(), 1);
         assert_eq!(fallback[0].entry.term, "runner");
+    }
+
+    #[test]
+    fn test_lookup_follow_limit() {
+        // Create a dictionary with a chain of redirects: alias1 -> alias2 -> target
+        let xml = r#"
+        <dictionary>
+            <entry term="target">
+                <ety>
+                    <sense pos="n">
+                        <definition value="The final destination" />
+                    </sense>
+                </ety>
+            </entry>
+            <entry term="alias2" see="target" />
+            <entry term="alias1" see="alias2" />
+        </dictionary>
+        "#;
+
+        let dict = odict::Dictionary::from_str(xml).unwrap();
+
+        // Test with follow limit of 0 (no following)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(0))
+            .unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "alias1");
+        assert_eq!(result[0].directed_from.is_none(), true);
+
+        // Test with follow limit of 1 (follows one level)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(1))
+            .unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "alias2");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias1");
+
+        // Test with follow limit of 2 (follows to the end)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(2))
+            .unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias1");
+
+        // Test with infinite follow (should reach the end)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(u32::MAX))
+            .unwrap();
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias1");
     }
 
     #[test]
@@ -144,7 +198,7 @@ mod lookup_tests {
         let result = dict
             .lookup(
                 &vec!["RuNnErS"],
-                LookupOptions::default().follow(true).insensitive(true),
+                LookupOptions::default().follow(u32::MAX).insensitive(true),
             )
             .unwrap();
 

@@ -146,7 +146,9 @@ mod tokenize_tests {
         // Test case insensitivity combined with follow option
         let result = dict.tokenize(
             "RUNS",
-            &TokenizeOptions::default().follow(true).insensitive(true),
+            &TokenizeOptions::default()
+                .follow(u32::MAX)
+                .insensitive(true),
         );
         let res = result.as_ref().unwrap();
 

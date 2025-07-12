@@ -1,10 +1,12 @@
 use merge::Merge;
+use napi::bindgen_prelude::*;
 use odict::lookup::Language;
 
 #[napi(object)]
-#[derive(PartialEq, Merge, Clone, Eq)]
+#[derive(Merge, Clone)]
 pub struct TokenizeOptions {
-  pub follow: Option<bool>,
+  #[napi(ts_type = "boolean | number")]
+  pub follow: Option<Either<bool, u32>>,
   pub allow_list: Option<Vec<String>>,
   pub insensitive: Option<bool>,
 }
@@ -12,7 +14,7 @@ pub struct TokenizeOptions {
 impl Default for TokenizeOptions {
   fn default() -> Self {
     TokenizeOptions {
-      follow: Some(true),
+      follow: None,
       allow_list: None,
       insensitive: None,
     }
@@ -24,7 +26,11 @@ impl From<TokenizeOptions> for odict::lookup::TokenizeOptions {
     let mut options = odict::lookup::TokenizeOptions::default();
 
     if let Some(follow) = opts.follow {
-      options = options.follow(follow);
+      options = options.follow(match follow {
+        Either::A(true) => u32::MAX,
+        Either::A(false) => 0,
+        Either::B(num) => num,
+      });
     }
 
     if let Some(insensitive) = opts.insensitive {

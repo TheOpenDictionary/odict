@@ -28,7 +28,9 @@ pub struct Token<T> {
 }
 
 pub struct TokenizeOptions {
-    pub follow: bool,
+    /// Maximum number of redirects to follow via see_also links.
+    /// 0 means no following, u32::MAX provides infinite following (old behavior).
+    pub follow: u32,
     // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
     pub allow_list: Option<Vec<Language>>,
     pub insensitive: bool,
@@ -44,12 +46,12 @@ impl TokenizeOptions {
     pub fn default() -> Self {
         Self {
             allow_list: None,
-            follow: false,
+            follow: 0,
             insensitive: false,
         }
     }
 
-    pub fn follow(mut self, follow: bool) -> Self {
+    pub fn follow(mut self, follow: u32) -> Self {
         self.follow = follow;
         self
     }

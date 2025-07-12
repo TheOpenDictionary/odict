@@ -82,7 +82,11 @@ export interface IndexOptions {
 
 export interface LookupOptions {
   split?: number;
-  follow?: boolean;
+  /**
+   * Maximum number of redirects to follow via see_also links.
+   * Pass true for infinite following, false for no following, or a number for specific limit.
+   */
+  follow?: boolean | number;
   insensitive?: boolean;
 }
 
@@ -140,7 +144,7 @@ export interface Token {
 }
 
 export interface TokenizeOptions {
-  follow?: boolean;
+  follow?: boolean | number;
   allowList?: Array<string>;
   insensitive?: boolean;
 }
