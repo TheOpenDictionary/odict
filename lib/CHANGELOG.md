@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.8.0...lib/v2.9.0) (2025-07-12)
+
+
+### Features
+
+* Add `min_rank` and `max_rank` methods for retrieving ranking bounds ([#1245](https://github.com/TheOpenDictionary/odict/issues/1245)) ([3cff5ee](https://github.com/TheOpenDictionary/odict/commit/3cff5ee302b5a2281c3ee8fdb75b1ee553760b94))
+* Allow custom `follow` limit by changing from boolean to number ([#1246](https://github.com/TheOpenDictionary/odict/issues/1246)) ([d96187a](https://github.com/TheOpenDictionary/odict/commit/d96187a541220f2e934462a31af363f64786d623))
+* Make mod semver public & implement partial order for SemanticVersion ([#1225](https://github.com/TheOpenDictionary/odict/issues/1225)) ([15b860a](https://github.com/TheOpenDictionary/odict/commit/15b860a06cfd638fb7e4e896cdc9760506322de6))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate quick-xml to 0.38.0 ([#1242](https://github.com/TheOpenDictionary/odict/issues/1242)) ([b55a728](https://github.com/TheOpenDictionary/odict/commit/b55a72826b94357a6d4781aae1cd75d97a28f7ee))
+
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.7.0...lib/v2.8.0) (2025-05-14)
 
 
