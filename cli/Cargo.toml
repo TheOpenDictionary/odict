@@ -20,7 +20,7 @@ odict = { path = "../lib", features = [
 ] }
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
 console = "0.15.8"
-indicatif = "0.17.8"
+indicatif = "0.18.0"
 pulldown-cmark = "0.13.0"
 actix-web = "4.5.1"
 serde = { version = "1.0.200", features = ["derive"] }
