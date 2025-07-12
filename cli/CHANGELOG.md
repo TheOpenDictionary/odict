@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.8.0...cli/v2.9.0) (2025-07-12)
+
+
+### Features
+
+* Add `min_rank` and `max_rank` methods for retrieving ranking bounds ([#1245](https://github.com/TheOpenDictionary/odict/issues/1245)) ([3cff5ee](https://github.com/TheOpenDictionary/odict/commit/3cff5ee302b5a2281c3ee8fdb75b1ee553760b94))
+* Allow custom `follow` limit by changing from boolean to number ([#1246](https://github.com/TheOpenDictionary/odict/issues/1246)) ([d96187a](https://github.com/TheOpenDictionary/odict/commit/d96187a541220f2e934462a31af363f64786d623))
+
+
+### Bug Fixes
+
+* **deps:** Update rust crate lru to 0.16.0 ([#1241](https://github.com/TheOpenDictionary/odict/issues/1241)) ([ba9d9a9](https://github.com/TheOpenDictionary/odict/commit/ba9d9a97cef809a3445e4ba89b90024e4520bd44))
+
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.7.0...cli/v2.8.0) (2025-05-14)
 
 
