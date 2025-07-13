@@ -3,8 +3,11 @@ use merge::Merge;
 #[napi(object)]
 #[derive(PartialEq, Debug, Merge, Clone, Eq)]
 pub struct IndexOptions {
+  #[merge(strategy = merge::option::overwrite_none)]
   pub directory: Option<String>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub memory: Option<u32>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub overwrite: Option<bool>,
 }
 

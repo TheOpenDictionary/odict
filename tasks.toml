@@ -20,6 +20,9 @@ description = "Runs nextest on all Cargo packages"
 depends = ["test", "test:*"]
 description = "Recursively tests all packages in the project"
 
+["upgrade:cargo"]
+run = "cargo +nightly update --breaking -Z unstable-options"
+
 [setup]
 run = ["mise install", "corepack enable", "pnpm install"]
 depends_post = ["setup:*"]

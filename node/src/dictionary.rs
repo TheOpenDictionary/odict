@@ -234,7 +234,7 @@ mod test {
 
   #[test]
   fn test_options_merging() {
-    let opts1 = crate::types::DictionaryOptions {
+    let mut opts1 = crate::types::DictionaryOptions {
       search: None,
       index: Some(crate::types::IndexOptions {
         directory: Some("test".to_string()),
@@ -248,21 +248,33 @@ mod test {
       },
     };
 
-    let mut opts2: Option<crate::types::IndexOptions> = None;
+    let opts2 = crate::types::DictionaryOptions {
+      search: Some(crate::types::SearchOptions {
+        directory: Some("search_dir".to_string()),
+        threshold: Some(10),
+        autoindex: Some(true),
+        limit: Some(100),
+      }),
+      index: None,
+      split: None,
+    };
 
-    let mut opts3: Option<crate::types::SplitOptions> = Some(crate::types::SplitOptions {
-      min_length: Some(10),
-    });
+    opts1.merge(opts2);
 
-    opts2.merge(opts1.index);
-    opts3.merge(opts1.split);
+    assert_eq!(
+      opts1.search.as_ref().unwrap().directory,
+      Some("search_dir".to_string())
+    );
 
-    let result1 = opts2.unwrap();
-    let result2 = opts3.unwrap();
-
-    assert_eq!(result1.directory.unwrap(), "test".to_string());
-    assert_eq!(result1.memory.unwrap(), 1234);
-    assert_eq!(result1.overwrite.unwrap(), false);
-    assert_eq!(result2.min_length.unwrap(), 10);
+    assert_eq!(
+      opts1.index.as_ref().unwrap().directory,
+      Some("test".to_string())
+    );
+    assert_eq!(opts1.split.as_ref().unwrap().min_length, Some(5));
+    assert_eq!(opts1.index.as_ref().unwrap().memory, Some(1234));
+    assert_eq!(opts1.index.as_ref().unwrap().overwrite, Some(false));
+    assert_eq!(opts1.search.as_ref().unwrap().threshold, Some(10));
+    assert_eq!(opts1.search.as_ref().unwrap().autoindex, Some(true));
+    assert_eq!(opts1.search.as_ref().unwrap().limit, Some(100));
   }
 }

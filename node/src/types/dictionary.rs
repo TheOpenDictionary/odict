@@ -7,8 +7,11 @@ use super::{IndexOptions, SearchOptions};
 #[napi(object)]
 #[derive(PartialEq, Merge, Clone, Eq)]
 pub struct DictionaryOptions {
+  #[merge(strategy = merge::option::recurse)]
   pub split: Option<SplitOptions>,
+  #[merge(strategy = merge::option::recurse)]
   pub index: Option<IndexOptions>,
+  #[merge(strategy = merge::option::recurse)]
   pub search: Option<SearchOptions>,
 }
 

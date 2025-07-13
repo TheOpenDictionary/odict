@@ -9,11 +9,14 @@ use super::Entry;
 #[napi(object)]
 #[derive(Merge, Clone)]
 pub struct LookupOptions {
+  #[merge(strategy = merge::option::overwrite_none)]
   pub split: Option<u32>,
   /// Maximum number of redirects to follow via see_also links.
   /// Pass true for infinite following, false for no following, or a number for specific limit.
   #[napi(ts_type = "boolean | number")]
+  #[merge(strategy = merge::option::overwrite_none)]
   pub follow: Option<Either<bool, u32>>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub insensitive: Option<bool>,
 }
 

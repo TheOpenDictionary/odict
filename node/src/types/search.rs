@@ -3,9 +3,13 @@ use merge::Merge;
 #[napi(object)]
 #[derive(PartialEq, Merge, Clone, Eq)]
 pub struct SearchOptions {
+  #[merge(strategy = merge::option::overwrite_none)]
   pub directory: Option<String>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub threshold: Option<u32>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub autoindex: Option<bool>,
+  #[merge(strategy = merge::option::overwrite_none)]
   pub limit: Option<u32>,
 }
 
