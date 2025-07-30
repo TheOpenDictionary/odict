@@ -1,16 +1,15 @@
 import {
-  instantiateNapiModuleSync as __emnapiInstantiateNapiModuleSync,
-  getDefaultContext as __emnapiGetDefaultContext,
-  WASI as __WASI,
   createOnMessage as __wasmCreateOnMessageForFsProxy,
+  getDefaultContext as __emnapiGetDefaultContext,
+  instantiateNapiModuleSync as __emnapiInstantiateNapiModuleSync,
+  WASI as __WASI,
 } from "@napi-rs/wasm-runtime";
-
-import __wasmUrl from "./node.wasm32-wasi.wasm?url";
 
 const __wasi = new __WASI({
   version: "preview1",
 });
 
+const __wasmUrl = new URL("./node.wasm32-wasi.wasm", import.meta.url).href;
 const __emnapiContext = __emnapiGetDefaultContext();
 
 const __sharedMemory = new WebAssembly.Memory({
@@ -56,5 +55,6 @@ const {
     }
   },
 });
+export default __napiModule.exports;
 export const Dictionary = __napiModule.exports.Dictionary;
 export const compile = __napiModule.exports.compile;

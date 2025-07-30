@@ -35,10 +35,11 @@ const isMuslFromFilesystem = () => {
 };
 
 const isMuslFromReport = () => {
-  const report =
-    typeof process.report.getReport === "function"
-      ? process.report.getReport()
-      : null;
+  let report = null;
+  if (typeof process.report?.getReport === "function") {
+    process.report.excludeNetwork = true;
+    report = process.report.getReport();
+  }
   if (!report) {
     return null;
   }
@@ -149,7 +150,6 @@ function requireNative() {
     } catch (e) {
       loadErrors.push(e);
     }
-
     if (process.arch === "x64") {
       try {
         return require("./node.darwin-x64.node");
@@ -329,6 +329,45 @@ function requireNative() {
         new Error(`Unsupported architecture on Linux: ${process.arch}`),
       );
     }
+  } else if (process.platform === "openharmony") {
+    if (process.arch === "arm64") {
+      try {
+        return require("./node.linux-arm64-ohos.node");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+      try {
+        return require("@odict/node-linux-arm64-ohos");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+    } else if (process.arch === "x64") {
+      try {
+        return require("./node.linux-x64-ohos.node");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+      try {
+        return require("@odict/node-linux-x64-ohos");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+    } else if (process.arch === "arm") {
+      try {
+        return require("./node.linux-arm-ohos.node");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+      try {
+        return require("@odict/node-linux-arm-ohos");
+      } catch (e) {
+        loadErrors.push(e);
+      }
+    } else {
+      loadErrors.push(
+        new Error(`Unsupported architecture on OpenHarmony: ${process.arch}`),
+      );
+    }
   } else {
     loadErrors.push(
       new Error(
@@ -361,14 +400,16 @@ if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
 
 if (!nativeBinding) {
   if (loadErrors.length > 0) {
-    // TODO Link to documentation with potential fixes
-    //  - The package owner could build/publish bindings for this arch
-    //  - The user may need to bundle the correct files
-    //  - The user may need to re-install node_modules to get new packages
-    throw new Error("Failed to load native binding", { cause: loadErrors });
+    throw new Error(
+      `Cannot find native binding. ` +
+        `npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). ` +
+        "Please try `npm i` again after removing both package-lock.json and node_modules directory.",
+      { cause: loadErrors },
+    );
   }
   throw new Error(`Failed to load native binding`);
 }
 
+module.exports = nativeBinding;
 module.exports.Dictionary = nativeBinding.Dictionary;
 module.exports.compile = nativeBinding.compile;

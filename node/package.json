@@ -37,8 +37,8 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
-    "@napi-rs/cli": "3.0.0-alpha.76",
-    "@napi-rs/wasm-runtime": "^0.2.11",
+    "@napi-rs/cli": "3.0.4",
+    "@napi-rs/wasm-runtime": "^1.0.1",
     "@types/node": "^24.0.10",
     "buffer": "^6.0.3",
     "prettier": "^3.6.2",
