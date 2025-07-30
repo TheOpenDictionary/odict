@@ -78,19 +78,20 @@ impl PartialOrd for SemanticVersion {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         let result =
             (self.major, self.minor, self.patch).cmp(&(other.major, other.minor, other.patch));
-        if result != Ordering::Equal {
+
+        if result != Ordering::Equal || self.prerelease == other.prerelease {
             return Some(result);
         }
 
         // prerelease is considered less than the normal release
         if self.prerelease.is_some() && other.prerelease.is_none() {
-            return Some(Ordering::Less);
+            Some(Ordering::Less)
         } else if self.prerelease.is_none() && other.prerelease.is_some() {
-            return Some(Ordering::Greater);
+            Some(Ordering::Greater)
+        } else {
+            // cannot determine order if both are prerelease but different
+            None
         }
-
-        // cannot determine order if both are prerelease
-        None
     }
 }
 
@@ -102,7 +103,9 @@ mod tests {
     fn test_compare() {
         let v1: SemanticVersion = "0.9.0".into();
         let v2: SemanticVersion = "0.11.0".into();
+        assert!(v1 == v1);
         assert!(v1 < v2);
+        assert!(v2 <= v2);
     }
 
     #[test]
