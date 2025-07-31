@@ -24,11 +24,11 @@ search = ["odict/search", "config"]
 [dependencies]
 merge = "0.2.0"
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
-napi = { version = "2", default-features = false, features = ["napi4"] }
-napi-derive = "2"
+napi = { version = "3", default-features = false, features = ["napi4"] }
+napi-derive = "3"
 odict = { path = "../lib" }
 structural-convert = { workspace = true }
 internal = { path = "../internal" }
 
 [build-dependencies]
-napi-build = "2.0.1"
+napi-build = "2"
