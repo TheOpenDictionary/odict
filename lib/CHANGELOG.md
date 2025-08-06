@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/lib/v2.9.0...lib/v2.9.1) (2025-08-06)
+
+
+### Bug Fixes
+
+* Correct semver partial order implementation ([#1255](https://github.com/TheOpenDictionary/odict/issues/1255)) ([627e3ad](https://github.com/TheOpenDictionary/odict/commit/627e3ad45cf57e5e5e048bd1d727cef81c3e023a))
+
 ## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.8.0...lib/v2.9.0) (2025-07-12)
 
 
