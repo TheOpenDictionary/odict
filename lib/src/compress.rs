@@ -27,7 +27,7 @@ impl CompressOptions {
 impl Default for CompressOptions {
     fn default() -> Self {
         Self {
-            quality: 11,
+            quality: 8,
             window_size: 22,
         }
     }
