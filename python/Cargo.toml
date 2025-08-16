@@ -9,7 +9,7 @@ name = "theopendictionary"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.25.0", features = ["either"] }
+pyo3 = { version = "0.25.1", features = ["either"] }
 odict = { path = "../lib", features = ["config", "sql", "tokenize", "search"] }
 internal = { path = "../internal" }
 either = { version = "*" }

@@ -44,34 +44,34 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.38.0", features = ["serialize"] }
-rayon = "1.10.0"
-charabia = { version = "0.9.3", optional = true, default-features = false }
-rkyv = { version = "0.8.8" }
-serde = { version = "1.0.200", features = ["serde_derive"] }
-uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-url = "2.5.0"
-serde_json = "1.0.116"
-thiserror = "2.0.7"
-brotli = "8.0.0"
+quick-xml = { version = "0.38.1", features = ["serialize"] }
+rayon = "1.11.0"
+charabia = { version = "0.9.6", optional = true, default-features = false }
+rkyv = { version = "0.8.11" }
+serde = { version = "1.0.219", features = ["serde_derive"] }
+uuid = { version = "1.18.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+url = "2.5.4"
+serde_json = "1.0.142"
+thiserror = "2.0.14"
+brotli = "8.0.1"
 structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=search
-tantivy = { version = "0.24.1", optional = true }
+tantivy = { version = "0.24.2", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
-sea-query = { version = "0.32.0", optional = true }
-strum = { version = "0.27.1", features = ["derive"] }
+sea-query = { version = "0.32.7", optional = true }
+strum = { version = "0.27.2", features = ["derive"] }
 
 [dev-dependencies]
-insta = "1.38.0"
+insta = "1.43.1"
 map-macro = { version = "0.3.0" }
 criterion = { version = "0.7.0", features = ["html_reports"] }
-tempfile = "3.14.0"
-regex = "1.10.4"
+tempfile = "3.20.0"
+regex = "1.11.1"
 
 [lib]
 name = "odict"

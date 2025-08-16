@@ -80,7 +80,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-android-arm64");
+        const binding = require("@odict/node-android-arm64");
+        const bindingPackageVersion =
+          require("@odict/node-android-arm64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -91,7 +103,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-android-arm-eabi");
+        const binding = require("@odict/node-android-arm-eabi");
+        const bindingPackageVersion =
+          require("@odict/node-android-arm-eabi/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -108,7 +132,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-win32-x64-msvc");
+        const binding = require("@odict/node-win32-x64-msvc");
+        const bindingPackageVersion =
+          require("@odict/node-win32-x64-msvc/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -119,7 +155,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-win32-ia32-msvc");
+        const binding = require("@odict/node-win32-ia32-msvc");
+        const bindingPackageVersion =
+          require("@odict/node-win32-ia32-msvc/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -130,7 +178,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-win32-arm64-msvc");
+        const binding = require("@odict/node-win32-arm64-msvc");
+        const bindingPackageVersion =
+          require("@odict/node-win32-arm64-msvc/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -146,7 +206,19 @@ function requireNative() {
       loadErrors.push(e);
     }
     try {
-      return require("@odict/node-darwin-universal");
+      const binding = require("@odict/node-darwin-universal");
+      const bindingPackageVersion =
+        require("@odict/node-darwin-universal/package.json").version;
+      if (
+        bindingPackageVersion !== "1.9.0" &&
+        process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+        process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+      ) {
+        throw new Error(
+          `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+        );
+      }
+      return binding;
     } catch (e) {
       loadErrors.push(e);
     }
@@ -157,7 +229,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-darwin-x64");
+        const binding = require("@odict/node-darwin-x64");
+        const bindingPackageVersion =
+          require("@odict/node-darwin-x64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -168,7 +252,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-darwin-arm64");
+        const binding = require("@odict/node-darwin-arm64");
+        const bindingPackageVersion =
+          require("@odict/node-darwin-arm64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -185,7 +281,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-freebsd-x64");
+        const binding = require("@odict/node-freebsd-x64");
+        const bindingPackageVersion =
+          require("@odict/node-freebsd-x64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -196,7 +304,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-freebsd-arm64");
+        const binding = require("@odict/node-freebsd-arm64");
+        const bindingPackageVersion =
+          require("@odict/node-freebsd-arm64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -214,7 +334,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-x64-musl");
+          const binding = require("@odict/node-linux-x64-musl");
+          const bindingPackageVersion =
+            require("@odict/node-linux-x64-musl/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -225,7 +357,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-x64-gnu");
+          const binding = require("@odict/node-linux-x64-gnu");
+          const bindingPackageVersion =
+            require("@odict/node-linux-x64-gnu/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -238,7 +382,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-arm64-musl");
+          const binding = require("@odict/node-linux-arm64-musl");
+          const bindingPackageVersion =
+            require("@odict/node-linux-arm64-musl/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -249,7 +405,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-arm64-gnu");
+          const binding = require("@odict/node-linux-arm64-gnu");
+          const bindingPackageVersion =
+            require("@odict/node-linux-arm64-gnu/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -262,7 +430,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-arm-musleabihf");
+          const binding = require("@odict/node-linux-arm-musleabihf");
+          const bindingPackageVersion =
+            require("@odict/node-linux-arm-musleabihf/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -273,7 +453,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-arm-gnueabihf");
+          const binding = require("@odict/node-linux-arm-gnueabihf");
+          const bindingPackageVersion =
+            require("@odict/node-linux-arm-gnueabihf/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -286,7 +478,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-riscv64-musl");
+          const binding = require("@odict/node-linux-riscv64-musl");
+          const bindingPackageVersion =
+            require("@odict/node-linux-riscv64-musl/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -297,7 +501,19 @@ function requireNative() {
           loadErrors.push(e);
         }
         try {
-          return require("@odict/node-linux-riscv64-gnu");
+          const binding = require("@odict/node-linux-riscv64-gnu");
+          const bindingPackageVersion =
+            require("@odict/node-linux-riscv64-gnu/package.json").version;
+          if (
+            bindingPackageVersion !== "1.9.0" &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            );
+          }
+          return binding;
         } catch (e) {
           loadErrors.push(e);
         }
@@ -309,7 +525,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-linux-ppc64-gnu");
+        const binding = require("@odict/node-linux-ppc64-gnu");
+        const bindingPackageVersion =
+          require("@odict/node-linux-ppc64-gnu/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -320,7 +548,19 @@ function requireNative() {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-linux-s390x-gnu");
+        const binding = require("@odict/node-linux-s390x-gnu");
+        const bindingPackageVersion =
+          require("@odict/node-linux-s390x-gnu/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
@@ -332,34 +572,70 @@ function requireNative() {
   } else if (process.platform === "openharmony") {
     if (process.arch === "arm64") {
       try {
-        return require("./node.linux-arm64-ohos.node");
+        return require("./node.openharmony-arm64.node");
       } catch (e) {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-linux-arm64-ohos");
+        const binding = require("@odict/node-openharmony-arm64");
+        const bindingPackageVersion =
+          require("@odict/node-openharmony-arm64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
     } else if (process.arch === "x64") {
       try {
-        return require("./node.linux-x64-ohos.node");
+        return require("./node.openharmony-x64.node");
       } catch (e) {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-linux-x64-ohos");
+        const binding = require("@odict/node-openharmony-x64");
+        const bindingPackageVersion =
+          require("@odict/node-openharmony-x64/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }
     } else if (process.arch === "arm") {
       try {
-        return require("./node.linux-arm-ohos.node");
+        return require("./node.openharmony-arm.node");
       } catch (e) {
         loadErrors.push(e);
       }
       try {
-        return require("@odict/node-linux-arm-ohos");
+        const binding = require("@odict/node-openharmony-arm");
+        const bindingPackageVersion =
+          require("@odict/node-openharmony-arm/package.json").version;
+        if (
+          bindingPackageVersion !== "1.9.0" &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== "0"
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.0 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          );
+        }
+        return binding;
       } catch (e) {
         loadErrors.push(e);
       }

@@ -37,12 +37,12 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
-    "@napi-rs/cli": "3.0.4",
-    "@napi-rs/wasm-runtime": "^1.0.1",
-    "@types/node": "^24.0.10",
+    "@napi-rs/cli": "3.1.4",
+    "@napi-rs/wasm-runtime": "^1.0.3",
+    "@types/node": "^24.3.0",
     "buffer": "^6.0.3",
     "prettier": "^3.6.2",
-    "vite": "^7.0.2",
+    "vite": "^7.1.2",
     "vite-plugin-node-polyfills": "0.24.0",
     "vitest": "^3.2.4"
   },
