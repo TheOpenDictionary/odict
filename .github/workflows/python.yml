@@ -10,7 +10,7 @@ on:
     branches:
       - main
     tags:
-      - 'python*'
+      - 'python**'
   pull_request:
     paths:
       - 'python/**'
