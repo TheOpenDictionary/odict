@@ -4,6 +4,13 @@
 
 
 
+## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.0...node/v1.9.1) (2025-08-16)
+
+
+### Bug Fixes
+
+* Update Node requirement ([b9a0a35](https://github.com/TheOpenDictionary/odict/commit/b9a0a3590ca621976a5025c274453a619c84e299))
+
 ## [1.9.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.8.0...node/v1.9.0) (2025-07-12)
 
 

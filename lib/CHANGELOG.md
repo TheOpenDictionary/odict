@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/lib/v2.9.0...lib/v2.9.1) (2025-08-16)
+
+
+### Bug Fixes
+
+* Correct semver partial order implementation ([#1255](https://github.com/TheOpenDictionary/odict/issues/1255)) ([627e3ad](https://github.com/TheOpenDictionary/odict/commit/627e3ad45cf57e5e5e048bd1d727cef81c3e023a))
+
+
+### Performance Improvements
+
+* Decrease compress quality to 8 ([#1269](https://github.com/TheOpenDictionary/odict/issues/1269)) ([ccc5040](https://github.com/TheOpenDictionary/odict/commit/ccc504063b0289edb2410939141aa992c3adadd4)), closes [#1249](https://github.com/TheOpenDictionary/odict/issues/1249)
+
 ## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.8.0...lib/v2.9.0) (2025-07-12)
 
 
