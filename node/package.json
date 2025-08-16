@@ -39,7 +39,7 @@
   "devDependencies": {
     "@napi-rs/cli": "3.1.4",
     "@napi-rs/wasm-runtime": "^1.0.3",
-    "@types/node": "^24.3.0",
+    "@types/node": "^22.9.0",
     "buffer": "^6.0.3",
     "prettier": "^3.6.2",
     "vite": "^7.1.2",
