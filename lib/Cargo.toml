@@ -12,6 +12,7 @@ exclude = ["benches/*", "tests/*"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
+download = ["dep:reqwest"]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
@@ -49,15 +50,21 @@ rayon = "1.11.0"
 charabia = { version = "0.9.6", optional = true, default-features = false }
 rkyv = { version = "0.8.11" }
 serde = { version = "1.0.219", features = ["serde_derive"] }
-uuid = { version = "1.18.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+uuid = { version = "1.18.0", features = [
+  "v4",
+  "fast-rng",
+  "macro-diagnostics",
+] }
 url = "2.5.4"
-serde_json = "1.0.142"
-thiserror = "2.0.14"
-brotli = "8.0.1"
+serde_json = "1.0.143"
+thiserror = "2.0.15"
+brotli = "8.0.2"
 structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
+# feature = download
+reqwest = { version = "0.12.23", optional = true }
 # feature=search
 tantivy = { version = "0.24.2", optional = true }
 # feature=config
@@ -72,6 +79,7 @@ map-macro = { version = "0.3.0" }
 criterion = { version = "0.7.0", features = ["html_reports"] }
 tempfile = "3.20.0"
 regex = "1.11.1"
+tokio = { version = "1.47.1", features = ["rt", "macros"] }
 
 [lib]
 name = "odict"

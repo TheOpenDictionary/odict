@@ -15,6 +15,7 @@ odict = { path = "../lib", features = [
   "config",
   "sql",
   "search",
+  "download",
   "html",
   "tokenize",
 ] }

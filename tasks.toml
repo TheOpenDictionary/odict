@@ -20,8 +20,10 @@ description = "Runs nextest on all Cargo packages"
 depends = ["test", "test:*"]
 description = "Recursively tests all packages in the project"
 
-["upgrade:cargo"]
-run = "cargo +nightly update --breaking -Z unstable-options"
+["upgrade"]
+depends = ["upgrade:*"]
+run = "cargo upgrade"
+description = "Updates all dependencies to their latest versions"
 
 [setup]
 run = ["mise install", "corepack enable", "pnpm install"]
@@ -33,6 +35,7 @@ depends = ["build:*"]
 description = "Recursively builds all packages in the project"
 
 ["format"]
+depends = ["format:*"]
 run = "cargo fmt --all -- **/*.rs"
 description = "Format all Rust files"
 

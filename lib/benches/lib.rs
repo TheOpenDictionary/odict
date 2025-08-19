@@ -1,6 +1,7 @@
-use std::fs::read_to_string;
+use std::hint::black_box;
+use std::{fs::read_to_string, str::FromStr};
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
 use odict::{lookup::LookupOptions, Dictionary, DictionaryWriter};
 
 mod helpers;
@@ -23,7 +24,7 @@ fn bench_compile(c: &mut Criterion) {
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);
     let xml = read_to_string(input).unwrap();
-    let dict = Dictionary::from(black_box(&xml)).unwrap();
+    let dict = Dictionary::from_str(black_box(&xml)).unwrap();
 
     c.bench_function("compile", |b| {
         b.iter(|| {
@@ -39,7 +40,7 @@ fn bench_parse(c: &mut Criterion) {
 
     c.bench_function("parse", |b| {
         b.iter(|| {
-            Dictionary::from(black_box(&xml)).unwrap();
+            Dictionary::from_str(black_box(&xml)).unwrap();
         });
     });
 }

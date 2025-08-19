@@ -1,6 +1,9 @@
 #[cfg(feature = "config")]
 pub mod config;
 
+#[cfg(feature = "download")]
+pub mod download;
+
 #[cfg(feature = "search")]
 pub mod search;
 
