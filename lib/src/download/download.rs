@@ -46,11 +46,12 @@ impl AsRef<DownloadOptions> for DownloadOptions {
     }
 }
 
-pub struct Downloader {
+#[derive(Clone, Debug)]
+pub struct DictionaryDownloader {
     base_url: String,
 }
 
-impl Default for Downloader {
+impl Default for DictionaryDownloader {
     fn default() -> Self {
         Self {
             base_url: "https://pub-520e4751d2374bc5bc14265c6e02e06e.r2.dev".to_string(),
@@ -58,7 +59,7 @@ impl Default for Downloader {
     }
 }
 
-impl Downloader {
+impl DictionaryDownloader {
     pub fn new(base_url: String) -> Self {
         Self { base_url }
     }
@@ -168,8 +169,8 @@ mod tests {
     use wiremock::matchers::{header, method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
-    fn create_test_downloader(base_url: String) -> Downloader {
-        Downloader::new(base_url)
+    fn create_test_downloader(base_url: String) -> DictionaryDownloader {
+        DictionaryDownloader::new(base_url)
     }
 
     #[tokio::test]
@@ -322,7 +323,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_download_invalid_dictionary_name() {
-        let downloader = Downloader::default();
+        let downloader = DictionaryDownloader::default();
         let temp_dir = TempDir::new().unwrap();
 
         let result = downloader
@@ -363,7 +364,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_downloader_default() {
-        let downloader = Downloader::default();
+        let downloader = DictionaryDownloader::default();
         assert_eq!(
             downloader.base_url,
             "https://pub-520e4751d2374bc5bc14265c6e02e06e.r2.dev"
@@ -373,7 +374,7 @@ mod tests {
     #[tokio::test]
     async fn test_downloader_new() {
         let custom_url = "https://custom.example.com";
-        let downloader = Downloader::new(custom_url.to_string());
+        let downloader = DictionaryDownloader::new(custom_url.to_string());
         assert_eq!(downloader.base_url, custom_url);
     }
 
@@ -399,7 +400,7 @@ mod tests {
             .await;
 
         let url = format!("{}/fetch-test.odict", mock_server.uri());
-        let result = Downloader::fetch_with_etag(&url, None).await;
+        let result = DictionaryDownloader::fetch_with_etag(&url, None).await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -419,7 +420,7 @@ mod tests {
             .await;
 
         let url = format!("{}/not-modified.odict", mock_server.uri());
-        let result = Downloader::fetch_with_etag(&url, Some("\"existing-etag\"")).await;
+        let result = DictionaryDownloader::fetch_with_etag(&url, Some("\"existing-etag\"")).await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -438,7 +439,7 @@ mod tests {
             .await;
 
         let url = format!("{}/error.odict", mock_server.uri());
-        let result = Downloader::fetch_with_etag(&url, None).await;
+        let result = DictionaryDownloader::fetch_with_etag(&url, None).await;
 
         assert!(result.is_err());
         match result.unwrap_err() {
