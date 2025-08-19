@@ -172,11 +172,11 @@ impl ArchivedDictionary {
     }
 }
 
-impl &ArchivedDictionary {
-    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
-        let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
-            .map_err(|e| Error::Deserialize(e.to_string()))?;
+// impl &ArchivedDictionary {
+//     pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
+//         let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
+//             .map_err(|e| Error::Deserialize(e.to_string()))?;
 
-        Ok(dict)
-    }
-}
+//         Ok(dict)
+//     }
+// }

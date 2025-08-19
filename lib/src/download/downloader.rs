@@ -1,6 +1,10 @@
-use std::{path::Path, time::SystemTime};
+use std::{
+    path::{Path, PathBuf},
+    time::SystemTime,
+};
 
 use crate::{
+    config::get_config_dir,
     download::{
         client::get_client,
         metadata::{get_metadata, set_metadata, DictionaryMetadata},
@@ -11,11 +15,33 @@ use crate::{
 
 pub struct DownloadOptions {
     caching: bool,
+    out_dir: Option<PathBuf>,
 }
 
 impl Default for DownloadOptions {
     fn default() -> Self {
-        Self { caching: true }
+        Self {
+            caching: true,
+            out_dir: None,
+        }
+    }
+}
+
+impl DownloadOptions {
+    pub fn caching(&mut self, value: bool) -> &Self {
+        self.caching = value;
+        self
+    }
+
+    pub fn out_dir<P: AsRef<Path>>(&mut self, path: P) -> &Self {
+        self.out_dir = Some(path.as_ref().to_path_buf());
+        self
+    }
+}
+
+impl AsRef<DownloadOptions> for DownloadOptions {
+    fn as_ref(&self) -> &DownloadOptions {
+        self
     }
 }
 
@@ -36,32 +62,33 @@ impl Downloader {
         Self { base_url }
     }
 
-    pub async fn download<P: AsRef<Path>>(
-        &self,
-        dictionary_name: &str,
-        out_dir: P,
-    ) -> crate::Result<Vec<u8>> {
-        self.download_with_options(dictionary_name, out_dir, &DownloadOptions::default())
+    pub async fn download(&self, dictionary_name: &str) -> crate::Result<Vec<u8>> {
+        self.download_with_options(dictionary_name, &DownloadOptions::default())
             .await
     }
 
-    pub async fn download_with_options<P: AsRef<Path>>(
+    pub async fn download_with_options<Options: AsRef<DownloadOptions>>(
         &self,
         dictionary_name: &str,
-        out_dir: P,
-        options: &DownloadOptions,
+        options: Options,
     ) -> crate::Result<Vec<u8>> {
         let (dictionary, language) = parse_dictionary_name(dictionary_name)?;
 
-        let out_path = out_dir.as_ref().join(format!("{}.odict", language));
+        let opts = options.as_ref();
 
-        if !out_path.exists() {
-            std::fs::create_dir_all(&out_path).map_err(crate::error::Error::Io)?;
+        let out_dir = match opts.out_dir {
+            Some(ref dir) => dir.clone(),
+            None => get_config_dir()?.join("dictionaries").join(&dictionary),
+        };
+
+        if !out_dir.exists() {
+            std::fs::create_dir_all(&out_dir).map_err(crate::error::Error::Io)?;
         }
 
-        let url = format!("{}/{}.odict", self.base_url, dictionary);
+        let url = format!("{}/{}/{}.odict", self.base_url, dictionary, language);
+        let out_path = out_dir.join(format!("{}.odict", language));
 
-        let etag = if options.caching {
+        let etag = if opts.caching {
             get_metadata(&out_path)?.map(|meta| meta.etag)
         } else {
             None
@@ -70,7 +97,7 @@ impl Downloader {
         let (bytes, new_etag) = Self::fetch_with_etag(&url, etag.as_deref()).await?;
 
         if let Some(etag) = new_etag {
-            if options.caching {
+            if opts.caching {
                 set_metadata(
                     &out_path,
                     DictionaryMetadata {
@@ -150,7 +177,7 @@ mod tests {
         let test_data = b"test dictionary data";
 
         Mock::given(method("GET"))
-            .and(path("/test-dict.odict"))
+            .and(path("/wiktionary/eng.odict"))
             .respond_with(ResponseTemplate::new(200).set_body_bytes(test_data))
             .mount(&mock_server)
             .await;
@@ -158,12 +185,17 @@ mod tests {
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
 
-        let result = downloader.download("test-dict_en", temp_dir.path()).await;
+        let result = downloader
+            .download_with_options(
+                "wiktionary/eng",
+                DownloadOptions::default().out_dir(temp_dir.path()),
+            )
+            .await;
 
         assert!(result.is_ok());
         assert_eq!(result.unwrap(), test_data);
 
-        let output_file = temp_dir.path().join("en.odict");
+        let output_file = temp_dir.path().join("eng.odict");
         assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
@@ -174,7 +206,7 @@ mod tests {
         let test_data = b"cached dictionary data";
 
         Mock::given(method("GET"))
-            .and(path("/cached-dict.odict"))
+            .and(path("/wiktionary/eng.odict"))
             .respond_with(
                 ResponseTemplate::new(200)
                     .set_body_bytes(test_data)
@@ -185,10 +217,13 @@ mod tests {
 
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
-        let options = DownloadOptions { caching: true };
+        let options = DownloadOptions {
+            caching: true,
+            out_dir: Some(temp_dir.path().to_path_buf()),
+        };
 
         let result = downloader
-            .download_with_options("cached-dict_fr", temp_dir.path(), &options)
+            .download_with_options("wiktionary/eng", &options)
             .await;
 
         assert!(result.is_ok());
@@ -201,17 +236,20 @@ mod tests {
         let test_data = b"non-cached dictionary data";
 
         Mock::given(method("GET"))
-            .and(path("/no-cache-dict.odict"))
+            .and(path("/wiktionary/de.odict"))
             .respond_with(ResponseTemplate::new(200).set_body_bytes(test_data))
             .mount(&mock_server)
             .await;
 
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
-        let options = DownloadOptions { caching: false };
+        let options = DownloadOptions { 
+            caching: false,
+            out_dir: Some(temp_dir.path().to_path_buf()),
+        };
 
         let result = downloader
-            .download_with_options("no-cache-dict_de", temp_dir.path(), &options)
+            .download_with_options("wiktionary/de", &options)
             .await;
 
         assert!(result.is_ok());
@@ -241,17 +279,20 @@ mod tests {
         .unwrap();
 
         Mock::given(method("GET"))
-            .and(path("/etag-dict.odict"))
+            .and(path("/wiktionary/es.odict"))
             .and(header("If-None-Match", "\"existing-etag\""))
             .respond_with(ResponseTemplate::new(304))
             .mount(&mock_server)
             .await;
 
         let downloader = create_test_downloader(mock_server.uri());
-        let options = DownloadOptions { caching: true };
+        let options = DownloadOptions { 
+            caching: true,
+            out_dir: Some(temp_dir.path().to_path_buf()),
+        };
 
         let result = downloader
-            .download_with_options("etag-dict_es", temp_dir.path(), &options)
+            .download_with_options("wiktionary/es", &options)
             .await;
 
         assert!(result.is_ok());
@@ -263,15 +304,13 @@ mod tests {
         let mock_server = MockServer::start().await;
 
         Mock::given(method("GET"))
-            .and(path("/error-dict.odict"))
+            .and(path("/wiktionary/err.odict"))
             .respond_with(ResponseTemplate::new(500))
             .mount(&mock_server)
             .await;
 
         let downloader = create_test_downloader(mock_server.uri());
-        let temp_dir = TempDir::new().unwrap();
-
-        let result = downloader.download("error-dict_it", temp_dir.path()).await;
+        let result = downloader.download("wiktionary/err").await;
 
         assert!(result.is_err());
         match result.unwrap_err() {
@@ -285,7 +324,12 @@ mod tests {
         let downloader = Downloader::default();
         let temp_dir = TempDir::new().unwrap();
 
-        let result = downloader.download("invalid-name", temp_dir.path()).await;
+        let result = downloader
+            .download_with_options(
+                "invalid-name",
+                DownloadOptions::default().out_dir(temp_dir.path()),
+            )
+            .await;
 
         assert!(result.is_err());
     }
@@ -296,7 +340,8 @@ mod tests {
         let test_data = b"test data for new directory";
 
         Mock::given(method("GET"))
-            .and(path("/new-dict.odict"))
+        Mock::given(method("GET"))
+            .and(path("/wiktionary/ger.odict"))
             .respond_with(ResponseTemplate::new(200).set_body_bytes(test_data))
             .mount(&mock_server)
             .await;
@@ -305,11 +350,15 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let nested_dir = temp_dir.path().join("nested").join("path");
 
-        let result = downloader.download("new-dict_pt", &nested_dir).await;
+        let result = downloader
+            .download_with_options(
+                "wiktionary/ger",
+                DownloadOptions::default().out_dir(&nested_dir),
+            )
+            .await;
 
         assert!(result.is_ok());
-        assert!(nested_dir.join("pt.odict").exists());
-    }
+        assert!(nested_dir.join("ger.odict").exists());
 
     #[tokio::test]
     async fn test_downloader_default() {
@@ -354,7 +403,7 @@ mod tests {
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
         assert_eq!(bytes, test_data);
-        assert_eq!(etag, Some("\"fetch-etag\"".to_string()));
+        assert_eq!(etag, Some("fetch-etag".to_string()));
     }
 
     #[tokio::test]
