@@ -123,6 +123,8 @@ impl Dictionary {
         options: &crate::download::DownloadOptions,
     ) -> crate::Result<Dictionary> {
         // Get config directory and create dictionaries subdirectory
+
+        use crate::{download::Downloader, DictionaryReader};
         let config_dir = crate::config::get_config_dir()?;
         let dictionaries_dir = config_dir.join("dictionaries");
 
@@ -142,15 +144,14 @@ impl Dictionary {
         let dict_dir = dictionaries_dir.join(dictionary);
 
         // Download the dictionary file with the specified options
-        let downloaded_path =
-            crate::download::download_with_options(dict_lang, Some(&dict_dir), options).await?;
-
-        // Read the downloaded file
-        let content = std::fs::read_to_string(&downloaded_path)
-            .map_err(|e| Error::Other(format!("Failed to read downloaded file: {}", e)))?;
+        let content = Downloader::default()
+            .download_with_options(dict_lang, &dict_dir, options)
+            .await?;
 
         // Parse and return the dictionary
-        Dictionary::from_str(&content)
+        DictionaryReader::default()
+            .read_from_bytes(&content)?
+            .to_dictionary()
     }
 }
 
@@ -163,6 +164,15 @@ impl FromStr for Dictionary {
 }
 
 impl ArchivedDictionary {
+    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
+        let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
+            .map_err(|e| Error::Deserialize(e.to_string()))?;
+
+        Ok(dict)
+    }
+}
+
+impl &ArchivedDictionary {
     pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
         let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
             .map_err(|e| Error::Deserialize(e.to_string()))?;

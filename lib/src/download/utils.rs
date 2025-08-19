@@ -1,5 +1,3 @@
-use std::{fs::File, io::Read, path::Path};
-
 pub fn parse_dictionary_name(name: &str) -> super::Result<(String, String)> {
     let parts: Vec<&str> = name.split('/').collect();
 

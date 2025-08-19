@@ -80,6 +80,7 @@ criterion = { version = "0.7.0", features = ["html_reports"] }
 tempfile = "3.20.0"
 regex = "1.11.1"
 tokio = { version = "1.47.1", features = ["rt", "macros"] }
+wiremock = "0.6.4"
 
 [lib]
 name = "odict"
