@@ -13,6 +13,7 @@ use crate::{
     Error,
 };
 
+#[derive(Clone)]
 pub struct DownloadOptions {
     caching: bool,
     out_dir: Option<PathBuf>,
@@ -243,7 +244,7 @@ mod tests {
 
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
-        let options = DownloadOptions { 
+        let options = DownloadOptions {
             caching: false,
             out_dir: Some(temp_dir.path().to_path_buf()),
         };
@@ -286,7 +287,7 @@ mod tests {
             .await;
 
         let downloader = create_test_downloader(mock_server.uri());
-        let options = DownloadOptions { 
+        let options = DownloadOptions {
             caching: true,
             out_dir: Some(temp_dir.path().to_path_buf()),
         };
@@ -340,7 +341,6 @@ mod tests {
         let test_data = b"test data for new directory";
 
         Mock::given(method("GET"))
-        Mock::given(method("GET"))
             .and(path("/wiktionary/ger.odict"))
             .respond_with(ResponseTemplate::new(200).set_body_bytes(test_data))
             .mount(&mock_server)
@@ -359,6 +359,7 @@ mod tests {
 
         assert!(result.is_ok());
         assert!(nested_dir.join("ger.odict").exists());
+    }
 
     #[tokio::test]
     async fn test_downloader_default() {

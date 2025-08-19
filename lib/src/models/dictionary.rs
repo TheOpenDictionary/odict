@@ -144,8 +144,11 @@ impl Dictionary {
         let dict_dir = dictionaries_dir.join(dictionary);
 
         // Download the dictionary file with the specified options
+        let mut download_options = options.clone();
+        download_options.out_dir(&dict_dir);
+
         let content = Downloader::default()
-            .download_with_options(dict_lang, &dict_dir, options)
+            .download_with_options(dict_lang, &download_options)
             .await?;
 
         // Parse and return the dictionary
