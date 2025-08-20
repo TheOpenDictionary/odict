@@ -15,8 +15,6 @@ use crate::{
 
 use futures_util::StreamExt;
 
-/// Progress callback function type
-/// Parameters: downloaded_bytes, total_bytes (if known), progress (0.0 to 1.0)
 pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync>;
 
 pub struct DownloadOptions {

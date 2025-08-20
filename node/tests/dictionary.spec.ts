@@ -1,8 +1,7 @@
-import { beforeAll, describe, expect, it } from "vitest";
-
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import { compile, Dictionary } from "../index.js";
 
@@ -90,7 +89,7 @@ describe("Dictionary", () => {
 
     it("supports follow=false to disable following", async () => {
       const result = dict1.lookup("ran", { follow: false });
-      expect(result[0].entry.term).toBe("ran"); 
+      expect(result[0].entry.term).toBe("ran");
     });
 
     it("supports follow with specific number", async () => {
@@ -222,7 +221,7 @@ describe("Dictionary", () => {
 
       expect(tokens.length).toBe(1);
       expect(tokens[0].lemma).toBe("ran");
-      expect(tokens[0].entries[0].entry.term).toBe("ran"); 
+      expect(tokens[0].entries[0].entry.term).toBe("ran");
     },
   );
 
@@ -260,5 +259,164 @@ describe("Dictionary", () => {
         "Failed to create reference from Buffer",
       );
     }
+  });
+
+  describe.skipIf(typeof Dictionary.load !== "function")("load", () => {
+    it("loads dictionary from local .odict file path", async () => {
+      const dictPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.odict",
+      );
+
+      const loadedDict = await Dictionary.load(dictPath);
+
+      expect(loadedDict).toBeDefined();
+      expect(loadedDict.lexicon()).toStrictEqual([
+        "cat",
+        "dog",
+        "poo",
+        "ran",
+        "run",
+      ]);
+
+      // Verify it works the same as loading from compiled data
+      const result = loadedDict.lookup("cat");
+      expect(result).toMatchSnapshot();
+    });
+
+    it("loads dictionary without options", async () => {
+      const dictPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example2.odict",
+      );
+
+      const loadedDict = await Dictionary.load(dictPath);
+
+      expect(loadedDict).toBeDefined();
+      expect(loadedDict.lexicon().length).toBeGreaterThan(0);
+    });
+
+    it("throws error for non-existent file", async () => {
+      const nonExistentPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/does-not-exist.odict",
+      );
+
+      await expect(Dictionary.load(nonExistentPath)).rejects.toThrow();
+    });
+
+    it("throws error for invalid file format", async () => {
+      const invalidPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.xml", // XML instead of .odict
+      );
+
+      await expect(Dictionary.load(invalidPath)).rejects.toThrow();
+    });
+
+    it("throws error for invalid dictionary name format", async () => {
+      // Test invalid formats that would trigger download attempt
+      const invalidFormats = [
+        "invalid",
+        "INVALID/EN", // uppercase
+        "invalid/", // missing language
+        "/english", // missing dictionary
+        "invalid/en/extra", // too many parts
+        "invalid@en", // wrong separator
+        "123invalid/en", // numbers not allowed
+      ];
+
+      for (const format of invalidFormats) {
+        await expect(Dictionary.load(format)).rejects.toThrow();
+      }
+    });
+
+    it("handles download failure", async () => {
+      const validFormat = "wiktionary/eng";
+      await expect(Dictionary.load(validFormat)).rejects.toThrow(
+        /An unexpected error occurred/,
+      );
+    });
+
+    it("handles download success", async () => {
+      const validFormat = "wiktionary/cmn-eng";
+      expect(await Dictionary.load(validFormat)).toBeDefined();
+    });
+
+    it("loads empty dictionary file", async () => {
+      const emptyPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/empty.odict",
+      );
+
+      const loadedDict = await Dictionary.load(emptyPath);
+
+      expect(loadedDict).toBeDefined();
+      expect(loadedDict.lexicon()).toStrictEqual([]);
+
+      const result = loadedDict.lookup("anything");
+      expect(result).toStrictEqual([]);
+    });
+
+    it("preserves dictionary functionality after loading", async () => {
+      const dictPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.odict",
+      );
+
+      const loadedDict = await Dictionary.load(dictPath);
+
+      // Test all major functionality works
+      expect(loadedDict.lexicon()).toBeDefined();
+      expect(loadedDict.lookup("cat")).toBeDefined();
+      expect(loadedDict.minRank).toBe(100);
+      expect(loadedDict.maxRank).toBe(100);
+
+      // Test lookup with options
+      const result = loadedDict.lookup("ran", { follow: 1 });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
+
+    it("loads different dictionary files correctly", async () => {
+      const dict1Path = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.odict",
+      );
+      const dict2Path = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example2.odict",
+      );
+
+      const [loadedDict1, loadedDict2] = await Promise.all([
+        Dictionary.load(dict1Path),
+        Dictionary.load(dict2Path),
+      ]);
+
+      // Verify they loaded different dictionaries
+      const lexicon1 = loadedDict1.lexicon();
+      const lexicon2 = loadedDict2.lexicon();
+
+      expect(lexicon1).not.toStrictEqual(lexicon2);
+      expect(loadedDict1.minRank).not.toBe(loadedDict2.minRank);
+    });
+
+    it("throws descriptive error for malformed .odict file", async () => {
+      // Create a temporary file with invalid content
+      const { writeFile, unlink } = await import("node:fs/promises");
+      const { tmpdir } = await import("node:os");
+      const tempPath = join(tmpdir(), "malformed.odict");
+
+      try {
+        await writeFile(tempPath, "invalid odict content");
+        await expect(Dictionary.load(tempPath)).rejects.toThrow(
+          "The input does not have a valid ODict file signature",
+        );
+      } finally {
+        try {
+          await unlink(tempPath);
+        } catch {}
+      }
+    });
   });
 });

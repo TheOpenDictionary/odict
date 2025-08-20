@@ -1,7 +1,7 @@
 use crate::context::CLIContext;
 use clap::{arg, command, Args};
 use console::Style;
-use humansize::{format_size, DECIMAL};
+use indicatif::DecimalBytes;
 use num_format::{Locale, ToFormattedString};
 
 #[derive(Debug, Args)]
@@ -46,7 +46,7 @@ pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Resu
     ctx.println(format!(
         "{} {}",
         bold.apply_to("File Size:"),
-        format_size(file.total_size, DECIMAL)
+        DecimalBytes(file.total_size)
     ));
 
     ctx.println(format!(

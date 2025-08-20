@@ -2,8 +2,7 @@ use std::{path::PathBuf, time::Duration};
 
 use anyhow::Context;
 use clap::{arg, command, Args};
-use humantime::format_duration;
-use indicatif::ProgressBar;
+use indicatif::{HumanDuration, ProgressBar};
 use odict::{fs::infer_path, io::DictionaryWriterOptions, CompressOptions};
 
 use crate::{t, CLIContext};
@@ -59,7 +58,7 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
             .with_context(|| "An error occurred compiling your XML")
     })?;
 
-    spinner.finish_with_message(format!("Compiled in {}!", format_duration(duration)));
+    spinner.finish_with_message(format!("Compiled in {}!", HumanDuration(duration)));
 
     Ok(())
 }

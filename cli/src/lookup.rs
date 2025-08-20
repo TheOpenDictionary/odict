@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::enums::PrintFormat;
 use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
@@ -58,6 +60,10 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
         insensitive,
     } = args;
 
+    let spinner = indicatif::ProgressBar::new_spinner();
+
+    spinner.enable_steady_tick(Duration::from_millis(100));
+
     let file = ctx
         .loader
         .load(&path)
@@ -73,6 +79,8 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
     }
 
     let result = file.to_archive()?.lookup(queries, opts);
+
+    spinner.finish_and_clear();
 
     match result {
         Ok(entries) => {
