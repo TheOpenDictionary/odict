@@ -29,10 +29,21 @@ pub fn compile(xml: String) -> Result<Buffer> {
 
 #[napi]
 impl Dictionary {
+  #[cfg(feature = "load")]
+  #[napi(factory)]
+  pub async fn load(dictionary: String, options: Option<DictionaryOptions>) -> Result<Self> {
+    let loader = odict::DictionaryLoader::default();
+    let file = loader.load(&dictionary).await.map_err(cast_error)?;
+    let dict = Dictionary { options, file };
+
+    Ok(dict)
+  }
+
   #[napi(constructor)]
   pub fn new(data: Buffer, options: Option<DictionaryOptions>) -> Result<Self> {
-    let reader = odict::DictionaryReader::default();
-    let file = reader
+    let mut loader = odict::DictionaryLoader::default();
+    let file = loader
+      .reader()
       .read_from_bytes::<Vec<u8>>(data.into())
       .map_err(cast_error)?;
     let dict = Dictionary { options, file };
