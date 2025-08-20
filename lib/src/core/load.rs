@@ -60,6 +60,20 @@ impl DictionaryLoader {
     }
 
     #[cfg(feature = "alias")]
+    pub fn alias_manager(&mut self) -> &mut AliasManager {
+        &mut self.alias_manager
+    }
+
+    pub fn reader(&mut self) -> &mut DictionaryReader {
+        &mut self.reader
+    }
+
+    #[cfg(feature = "download")]
+    pub fn downloader(&mut self) -> &mut DictionaryDownloader {
+        &mut self.downloader
+    }
+
+    #[cfg(feature = "alias")]
     /// Sets the alias manager for this loader (chainable).
     pub fn with_alias_manager(mut self, alias_manager: AliasManager) -> Self {
         self.alias_manager = alias_manager;
@@ -81,10 +95,6 @@ impl DictionaryLoader {
             if let Some(path) = self.alias_manager.get(input) {
                 return Some(self.reader.read_from_path(path));
             }
-        }
-        #[cfg(not(feature = "alias"))]
-        {
-            let _ = input; // Suppress unused variable warning
         }
         None
     }

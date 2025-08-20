@@ -11,5 +11,5 @@ pub struct DeleteArgs {
 }
 
 pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> anyhow::Result<()> {
-    anyhow::Ok(ctx.alias_manager.delete(args.name.as_str())?)
+    anyhow::Ok(ctx.loader.alias_manager().delete(args.name.as_str())?)
 }

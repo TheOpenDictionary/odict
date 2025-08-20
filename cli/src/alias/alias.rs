@@ -22,10 +22,10 @@ pub enum AliasCommands {
     Delete(DeleteArgs),
 }
 
-pub fn alias(ctx: &mut CLIContext, command: &AliasCommands) -> anyhow::Result<()> {
+pub async fn alias<'a>(ctx: &mut CLIContext<'a>, command: &AliasCommands) -> anyhow::Result<()> {
     match command {
-        AliasCommands::Add(args) => set(ctx, args, false),
-        AliasCommands::Set(args) => set(ctx, args, true),
+        AliasCommands::Add(args) => set(ctx, args, false).await,
+        AliasCommands::Set(args) => set(ctx, args, true).await,
         AliasCommands::Delete(args) => delete(ctx, args),
     }
 }

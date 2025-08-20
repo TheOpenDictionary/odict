@@ -6,26 +6,25 @@ use odict_cli::{
     CLIContext, Commands, CLI,
 };
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let cli = CLI::parse();
     let mut ctx = CLIContext::default(&cli);
 
-    let cmd = |c| match cli.command {
-        Commands::Alias(ref args) => alias(c, args),
-        Commands::Compile(ref args) => compile(c, args),
-        Commands::Dump(ref args) => dump(c, args),
-        Commands::Index(ref args) => index(c, args),
-        Commands::Lexicon(ref args) => lexicon(c, args),
-        Commands::Lookup(ref args) => lookup(c, args),
-        Commands::Merge(ref args) => merge(c, args),
-        Commands::New(ref args) => new(c, args),
-        Commands::Search(ref args) => search(c, args),
-        Commands::Serve(ref args) => serve(c, args),
-        Commands::Info(ref args) => info(c, args),
-        Commands::Tokenize(ref args) => tokenize(c, args),
+    let result = match cli.command {
+        Commands::Alias(ref args) => alias(&mut ctx, args).await,
+        Commands::Compile(ref args) => compile(&ctx, args),
+        Commands::Dump(ref args) => dump(&mut ctx, args).await,
+        Commands::Index(ref args) => index(&mut ctx, args).await,
+        Commands::Lexicon(ref args) => lexicon(&mut ctx, args).await,
+        Commands::Lookup(ref args) => lookup(&mut ctx, args).await,
+        Commands::Merge(ref args) => merge(&ctx, args).await,
+        Commands::New(ref args) => new(&mut ctx, args),
+        Commands::Search(ref args) => search(&mut ctx, args).await,
+        Commands::Serve(ref args) => serve(&mut ctx, args).await,
+        Commands::Info(ref args) => info(&mut ctx, args).await,
+        Commands::Tokenize(ref args) => tokenize(&mut ctx, args).await,
     };
-
-    let result = cmd(&mut ctx);
 
     if let Err(e) = result {
         ctx.stderr

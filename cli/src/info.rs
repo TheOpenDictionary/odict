@@ -12,14 +12,16 @@ pub struct InfoArgs {
     dictionary_path: String,
 }
 
-pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
+pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Result<()> {
     let InfoArgs {
         dictionary_path: path,
     } = args;
 
     let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+        .loader
+        .load(&path)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     let bold = Style::new().bold();
     let dict = file.to_archive()?;

@@ -39,7 +39,7 @@ pub struct TokenizeArgs {
     insensitive: bool,
 }
 
-pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()> {
+pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyhow::Result<()> {
     let TokenizeArgs {
         dictionary_path: path,
         text,
@@ -49,8 +49,10 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
     } = args;
 
     let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+        .loader
+        .load(&path)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     let opts = TokenizeOptions::default()
         .follow(*follow)

@@ -58,7 +58,8 @@ async fn handle_search(
 
     let file = dictionary_cache
         .get(&dictionary_name)
-        .map_err(|_e| SearchError::DictionaryNotFound {
+        .await
+        .map_err(|_e| SearchError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?
         .ok_or(SearchError::DictionaryNotFound {

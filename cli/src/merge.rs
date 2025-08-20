@@ -19,16 +19,20 @@ pub struct MergeArgs {
     output: Option<String>,
 }
 
-pub fn merge(ctx: &CLIContext, args: &MergeArgs) -> anyhow::Result<()> {
+pub async fn merge<'a>(ctx: &CLIContext<'a>, args: &MergeArgs) -> anyhow::Result<()> {
     let mut dict = ctx
-        .reader
-        .read_from_path(&args.destination)?
+        .loader
+        .load(&args.destination)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
         .to_dictionary()?;
 
     for source in &args.sources {
         let source_dict = ctx
-            .reader
-            .read_from_path_or_alias_with_manager(source, &ctx.alias_manager)?
+            .loader
+            .load(source)
+            .await
+            .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
             .to_dictionary()?;
 
         dict.merge(&source_dict);

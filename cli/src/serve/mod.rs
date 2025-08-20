@@ -12,7 +12,7 @@ use clap::{command, Args, ValueEnum};
 use console::style;
 use env_logger::Env;
 use lru::LruCache;
-use odict::{config::AliasManager, DictionaryFile, DictionaryReader};
+use odict::{DictionaryFile, DictionaryLoader};
 
 use crate::CLIContext;
 
@@ -94,26 +94,23 @@ pub(self) fn get_dictionary_map(
 struct DictionaryCache {
     cache: RwLock<LruCache<String, Arc<DictionaryFile>>>,
     dictionaries: HashMap<String, PathBuf>,
-    reader: DictionaryReader,
-    alias_manager: AliasManager,
+    loader: DictionaryLoader,
 }
 
 impl DictionaryCache {
     fn new(
         size: NonZero<usize>,
         dictionaries: HashMap<String, PathBuf>,
-        reader: DictionaryReader,
-        alias_manager: AliasManager,
+        loader: DictionaryLoader,
     ) -> Self {
         DictionaryCache {
             cache: RwLock::new(LruCache::new(size)),
             dictionaries,
-            reader,
-            alias_manager,
+            loader,
         }
     }
 
-    pub fn get(&self, key: &str) -> anyhow::Result<Option<Arc<DictionaryFile>>> {
+    pub async fn get(&self, key: &str) -> anyhow::Result<Option<Arc<DictionaryFile>>> {
         {
             let cache = self.cache.read().unwrap();
             if let Some(file) = cache.peek(key) {
@@ -124,10 +121,11 @@ impl DictionaryCache {
 
         // Not in cache, need to load it
         if let Some(path) = self.dictionaries.get(key) {
-            let dict = self.reader.read_from_path_or_alias_with_manager(
-                path.to_string_lossy().as_ref(),
-                &self.alias_manager,
-            )?;
+            let dict = self
+                .loader
+                .load(path.to_string_lossy().as_ref())
+                .await
+                .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
             // Now get a write lock to update the cache
             let mut cache = self.cache.write().unwrap();
@@ -143,8 +141,7 @@ impl DictionaryCache {
     }
 }
 
-#[actix_web::main]
-pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()> {
+pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Result<()> {
     let ServeArgs {
         port,
         dictionaries,
@@ -152,11 +149,7 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
         capacity,
     } = args;
 
-    let CLIContext {
-        alias_manager,
-        reader,
-        ..
-    } = ctx;
+    let CLIContext { loader, .. } = ctx;
 
     let dictionary_map = get_dictionary_map(&dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
@@ -164,8 +157,7 @@ pub async fn serve(ctx: &mut CLIContext, args: &ServeArgs) -> anyhow::Result<()>
     let dictionary_cache = DictionaryCache::new(
         NonZero::new(*capacity).unwrap(),
         dictionary_map.to_owned(),
-        reader.to_owned(),
-        alias_manager.to_owned(),
+        loader.to_owned(),
     );
 
     if dictionary_map.is_empty() {

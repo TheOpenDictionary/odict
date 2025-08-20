@@ -10,10 +10,12 @@ pub struct LexiconArgs {
     dictionary: String,
 }
 
-pub fn lexicon(ctx: &mut CLIContext, args: &LexiconArgs) -> anyhow::Result<()> {
+pub async fn lexicon<'a>(ctx: &mut CLIContext<'a>, args: &LexiconArgs) -> anyhow::Result<()> {
     let dict = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?
+        .loader
+        .load(&args.dictionary)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
         .to_dictionary()?;
 
     let lexicon = dict.lexicon();

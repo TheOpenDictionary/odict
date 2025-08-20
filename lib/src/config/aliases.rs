@@ -11,6 +11,12 @@ pub struct AliasManager {
     aliases: HashMap<String, String>,
 }
 
+impl AsRef<AliasManager> for AliasManager {
+    fn as_ref(&self) -> &AliasManager {
+        self
+    }
+}
+
 impl AliasManager {
     pub fn new<S: AsRef<OsStr> + ?Sized>(
         config_path: &S, // May be used in the future?

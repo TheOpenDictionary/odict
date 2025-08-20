@@ -1,17 +1,19 @@
 use std::sync::LazyLock;
 
-use odict::{DictionaryFile, DictionaryReader, DictionaryWriter, Result};
+use odict::{DictionaryFile, DictionaryLoader, DictionaryWriter, Result};
 use tempfile::NamedTempFile;
 
 pub fn get_example_dict(name: &str) -> Result<DictionaryFile> {
-    let reader = DictionaryReader::default();
+    let loader = DictionaryLoader::default();
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);
     let output = NamedTempFile::new()?.path().to_str().unwrap().to_string();
 
     writer.compile_xml(&input, &output)?;
 
-    reader.read_from_path(&output)
+    tokio::runtime::Runtime::new()
+        .expect("Failed to create Tokio runtime")
+        .block_on(async { loader.load(&output).await })
 }
 
 pub static EXAMPLE_DICT_1: LazyLock<DictionaryFile> =

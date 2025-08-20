@@ -13,10 +13,26 @@ use crate::{
     Error,
 };
 
-#[derive(Clone)]
+use futures_util::StreamExt;
+
+/// Progress callback function type
+/// Parameters: downloaded_bytes, total_bytes (if known), progress (0.0 to 1.0)
+pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync>;
+
 pub struct DownloadOptions {
     caching: bool,
     out_dir: Option<PathBuf>,
+    on_progress: Option<ProgressCallback>,
+}
+
+impl Clone for DownloadOptions {
+    fn clone(&self) -> Self {
+        Self {
+            caching: self.caching,
+            out_dir: self.out_dir.clone(),
+            on_progress: None, // Function pointers can't be cloned, so we set to None
+        }
+    }
 }
 
 impl Default for DownloadOptions {
@@ -24,6 +40,7 @@ impl Default for DownloadOptions {
         Self {
             caching: true,
             out_dir: None,
+            on_progress: None,
         }
     }
 }
@@ -38,6 +55,14 @@ impl DownloadOptions {
         self.out_dir = Some(path.as_ref().to_path_buf());
         self
     }
+
+    pub fn on_progress<F>(&mut self, callback: F) -> &Self
+    where
+        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'static,
+    {
+        self.on_progress = Some(Box::new(callback));
+        self
+    }
 }
 
 impl AsRef<DownloadOptions> for DownloadOptions {
@@ -49,6 +74,12 @@ impl AsRef<DownloadOptions> for DownloadOptions {
 #[derive(Clone, Debug)]
 pub struct DictionaryDownloader {
     base_url: String,
+}
+
+impl AsRef<DictionaryDownloader> for DictionaryDownloader {
+    fn as_ref(&self) -> &DictionaryDownloader {
+        self
+    }
 }
 
 impl Default for DictionaryDownloader {
@@ -96,7 +127,8 @@ impl DictionaryDownloader {
             None
         };
 
-        let (bytes, new_etag) = Self::fetch_with_etag(&url, etag.as_deref()).await?;
+        let (bytes, new_etag) =
+            Self::fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref()).await?;
 
         if let Some(etag) = new_etag {
             if opts.caching {
@@ -122,6 +154,7 @@ impl DictionaryDownloader {
     async fn fetch_with_etag(
         url: &str,
         etag: Option<&str>,
+        on_progress: Option<&ProgressCallback>,
     ) -> crate::Result<(Vec<u8>, Option<String>)> {
         let client = get_client();
         let mut request = client.get(url);
@@ -143,12 +176,30 @@ impl DictionaryDownloader {
             200 => {
                 // Success - extract etag and bytes
                 let etag = super::extract_etag(&response);
+                let content_length = response.content_length();
 
-                let bytes = response
-                    .bytes()
-                    .await
-                    .map_err(|e| Error::Other(format!("Failed to read response body: {}", e)))?
-                    .to_vec();
+                let mut bytes = Vec::new();
+                let mut downloaded = 0u64;
+                let mut stream = response.bytes_stream();
+
+                while let Some(chunk) = stream.next().await {
+                    let chunk = chunk.map_err(|e| {
+                        Error::Other(format!("Failed to read response chunk: {}", e))
+                    })?;
+
+                    bytes.extend_from_slice(&chunk);
+                    downloaded += chunk.len() as u64;
+
+                    // Call progress callback if provided
+                    if let Some(callback) = on_progress {
+                        let progress = if let Some(total) = content_length {
+                            downloaded as f64 / total as f64
+                        } else {
+                            0.0 // Unknown total size
+                        };
+                        callback(downloaded, content_length, progress);
+                    }
+                }
 
                 Ok((bytes, etag))
             }
@@ -222,6 +273,7 @@ mod tests {
         let options = DownloadOptions {
             caching: true,
             out_dir: Some(temp_dir.path().to_path_buf()),
+            on_progress: None,
         };
 
         let result = downloader
@@ -248,6 +300,7 @@ mod tests {
         let options = DownloadOptions {
             caching: false,
             out_dir: Some(temp_dir.path().to_path_buf()),
+            on_progress: None,
         };
 
         let result = downloader
@@ -291,6 +344,7 @@ mod tests {
         let options = DownloadOptions {
             caching: true,
             out_dir: Some(temp_dir.path().to_path_buf()),
+            on_progress: None,
         };
 
         let result = downloader
@@ -378,6 +432,57 @@ mod tests {
         assert_eq!(downloader.base_url, custom_url);
     }
 
+    #[tokio::test]
+    async fn test_download_with_progress_callback() {
+        let mock_server = MockServer::start().await;
+        let test_data = b"test data with progress tracking";
+
+        Mock::given(method("GET"))
+            .and(path("/wiktionary/progress.odict"))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_bytes(test_data)
+                    .insert_header("content-length", test_data.len().to_string()),
+            )
+            .mount(&mock_server)
+            .await;
+
+        let downloader = create_test_downloader(mock_server.uri());
+        let temp_dir = TempDir::new().unwrap();
+
+        // Track progress calls
+        use std::sync::{Arc, Mutex};
+        let progress_calls = Arc::new(Mutex::new(Vec::new()));
+        let progress_calls_clone = progress_calls.clone();
+
+        let mut options = DownloadOptions::default();
+        options.out_dir(temp_dir.path());
+        options.on_progress(move |downloaded, total, progress| {
+            let mut calls = progress_calls_clone.lock().unwrap();
+            calls.push((downloaded, total, progress));
+        });
+
+        let result = downloader
+            .download_with_options("wiktionary/progress", &options)
+            .await;
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), test_data);
+
+        // Verify progress was tracked
+        let calls = progress_calls.lock().unwrap();
+        assert!(
+            !calls.is_empty(),
+            "Progress callback should have been called"
+        );
+
+        // Check the final call
+        let final_call = calls.last().unwrap();
+        assert_eq!(final_call.0, test_data.len() as u64); // downloaded bytes
+        assert_eq!(final_call.1, Some(test_data.len() as u64)); // total bytes
+        assert_eq!(final_call.2, 1.0); // progress should be 100%
+    }
+
     #[test]
     fn test_download_options_default() {
         let options = DownloadOptions::default();
@@ -400,7 +505,7 @@ mod tests {
             .await;
 
         let url = format!("{}/fetch-test.odict", mock_server.uri());
-        let result = DictionaryDownloader::fetch_with_etag(&url, None).await;
+        let result = DictionaryDownloader::fetch_with_etag(&url, None, None).await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -420,7 +525,8 @@ mod tests {
             .await;
 
         let url = format!("{}/not-modified.odict", mock_server.uri());
-        let result = DictionaryDownloader::fetch_with_etag(&url, Some("\"existing-etag\"")).await;
+        let result =
+            DictionaryDownloader::fetch_with_etag(&url, Some("\"existing-etag\""), None).await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -439,7 +545,7 @@ mod tests {
             .await;
 
         let url = format!("{}/error.odict", mock_server.uri());
-        let result = DictionaryDownloader::fetch_with_etag(&url, None).await;
+        let result = DictionaryDownloader::fetch_with_etag(&url, None, None).await;
 
         assert!(result.is_err());
         match result.unwrap_err() {

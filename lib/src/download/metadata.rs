@@ -16,8 +16,10 @@ pub struct DictionaryMetadata {
     pub url: String,
 }
 
+const METADATA_EXTENSION: &str = ".meta.json";
+
 pub fn get_metadata<P: AsRef<Path>>(local_path: P) -> Result<Option<DictionaryMetadata>> {
-    let metadata = local_path.as_ref().with_extension(".metadata.json");
+    let metadata = local_path.as_ref().with_extension(METADATA_EXTENSION);
 
     if !metadata.exists() {
         return Ok(None);
@@ -32,7 +34,7 @@ pub fn get_metadata<P: AsRef<Path>>(local_path: P) -> Result<Option<DictionaryMe
 
 /// Save etag cache to disk
 pub fn set_metadata<P: AsRef<Path>>(local_path: P, metadata: DictionaryMetadata) -> Result<()> {
-    let metadata_path = local_path.as_ref().with_extension(".metadata.json");
+    let metadata_path = local_path.as_ref().with_extension(METADATA_EXTENSION);
 
     let content = serde_json::to_string_pretty(&metadata)
         .map_err(|e| Error::Other(format!("Failed to serialize metadata json: {}", e)))?;
@@ -70,7 +72,7 @@ mod tests {
         set_metadata(&file_path, metadata.clone()).unwrap();
 
         // Verify metadata file was created
-        let metadata_path = file_path.with_extension(".metadata.json");
+        let metadata_path = file_path.with_extension(METADATA_EXTENSION);
         assert!(metadata_path.exists());
 
         // Verify we can read back the metadata
@@ -84,7 +86,7 @@ mod tests {
     fn test_get_metadata_existing() {
         let temp_dir = TempDir::new().unwrap();
         let file_path = temp_dir.path().join("test.odict");
-        let metadata_path = file_path.with_extension(".metadata.json");
+        let metadata_path = file_path.with_extension(METADATA_EXTENSION);
 
         let metadata = DictionaryMetadata {
             etag: "existing-etag".to_string(),
@@ -104,7 +106,7 @@ mod tests {
     fn test_get_metadata_invalid_json() {
         let temp_dir = TempDir::new().unwrap();
         let file_path = temp_dir.path().join("test.odict");
-        let metadata_path = file_path.with_extension(".metadata.json");
+        let metadata_path = file_path.with_extension(METADATA_EXTENSION);
 
         fs::write(&metadata_path, "invalid json").unwrap();
 

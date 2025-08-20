@@ -58,6 +58,7 @@ async fn handle_tokenize(
 
     let file = dictionary_cache
         .get(&dictionary_name)
+        .await
         .map_err(|_e| TokenizeError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?

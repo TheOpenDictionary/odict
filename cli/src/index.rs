@@ -29,10 +29,12 @@ pub struct IndexArgs {
     pub(super) memory: usize,
 }
 
-pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> anyhow::Result<()> {
+pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
     let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;
+        .loader
+        .load(&args.dictionary)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     ctx.println("".to_string());
 

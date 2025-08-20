@@ -13,12 +13,20 @@ pub struct SetArgs {
     path: String,
 }
 
-pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
-    let dict = ctx.reader.read_from_path(args.path.as_str())?;
+pub async fn set<'a>(
+    ctx: &mut CLIContext<'a>,
+    args: &SetArgs,
+    overwrite: bool,
+) -> anyhow::Result<()> {
+    let dict = ctx
+        .loader
+        .load(args.path.as_str())
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     if overwrite {
-        anyhow::Ok(ctx.alias_manager.set(args.name.as_str(), &dict)?)
+        anyhow::Ok(ctx.loader.alias_manager().set(args.name.as_str(), &dict)?)
     } else {
-        anyhow::Ok(ctx.alias_manager.add(args.name.as_str(), &dict)?)
+        anyhow::Ok(ctx.loader.alias_manager().add(args.name.as_str(), &dict)?)
     }
 }

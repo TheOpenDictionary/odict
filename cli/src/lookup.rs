@@ -48,7 +48,7 @@ pub struct LookupArgs {
     insensitive: bool,
 }
 
-pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
+pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::Result<()> {
     let LookupArgs {
         dictionary_path: path,
         queries,
@@ -59,8 +59,10 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
     } = args;
 
     let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+        .loader
+        .load(&path)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     let mut opts: LookupOptions = LookupOptions::default()
         .follow(*follow)

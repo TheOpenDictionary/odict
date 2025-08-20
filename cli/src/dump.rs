@@ -22,7 +22,7 @@ pub struct DumpArgs {
     output: Option<String>,
 }
 
-pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
+pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Result<()> {
     let DumpArgs {
         input,
         format,
@@ -30,8 +30,10 @@ pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
     } = args;
 
     let dict = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(input, &ctx.alias_manager)?
+        .loader
+        .load(input)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
         .to_dictionary()?;
 
     let contents = match format {

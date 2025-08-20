@@ -24,10 +24,12 @@ pub struct SearchArgs {
     query: String,
 }
 
-pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> anyhow::Result<()> {
+pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
     let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;
+        .loader
+        .load(&args.dictionary)
+        .await
+        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
     let dict = file.to_dictionary()?;
 
@@ -35,15 +37,13 @@ pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> anyhow::Result<()> {
         let index_path = get_default_index_dir().join(dict.id.as_str());
 
         if !index_path.exists() {
-            crate::index(
-                ctx,
-                &IndexArgs {
-                    dictionary: args.dictionary.clone(),
-                    directory: None,
-                    overwrite: false,
-                    memory: DEFAULT_INDEX_MEMORY,
-                },
-            )?;
+            let index_args = IndexArgs {
+                dictionary: args.dictionary.clone(),
+                directory: None,
+                overwrite: false,
+                memory: DEFAULT_INDEX_MEMORY,
+            };
+            crate::index(ctx, &index_args).await?;
         }
     }
 
