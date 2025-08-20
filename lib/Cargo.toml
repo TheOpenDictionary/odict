@@ -59,7 +59,7 @@ structural-convert = { workspace = true }
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=search
-tantivy = { version = "0.24.2", optional = true }
+tantivy = { version = "0.25.0", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
