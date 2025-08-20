@@ -1,15 +1,19 @@
+use regex::Regex;
+use std::sync::LazyLock;
+
+static DICTIONARY_NAME_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^([a-z]+)/([a-z-]+)$").unwrap());
+
 pub fn parse_dictionary_name(name: &str) -> super::Result<(String, String)> {
-    let parts: Vec<&str> = name.split('/').collect();
+    let captures = DICTIONARY_NAME_REGEX.captures(name).ok_or_else(|| {
+    crate::error::Error::Other(format!(
+      "Invalid dictionary/language format '{}'. Expected format: 'dictionary/language' (lowercase letters, dash allowed in language)",
+      name
+    ))
+  })?;
 
-    if parts.len() != 2 {
-        return Err(crate::error::Error::Other(format!(
-            "Invalid dictionary/language format '{}'. Expected format: 'dictionary/language'",
-            name
-        )));
-    }
-
-    let dictionary = parts[0];
-    let language = parts[1];
+    let dictionary = captures.get(1).unwrap().as_str();
+    let language = captures.get(2).unwrap().as_str();
 
     Ok((dictionary.to_string(), language.to_string()))
 }
