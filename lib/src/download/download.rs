@@ -1,5 +1,6 @@
 use std::{
     path::{Path, PathBuf},
+    sync::LazyLock,
     time::SystemTime,
 };
 
@@ -16,6 +17,9 @@ use crate::{
 use futures_util::StreamExt;
 
 pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync>;
+
+pub const DEFAULT_DOWNLOADER: LazyLock<DictionaryDownloader> =
+    LazyLock::new(|| DictionaryDownloader::default());
 
 pub struct DownloadOptions {
     caching: bool,

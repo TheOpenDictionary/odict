@@ -6,7 +6,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_with_ranks() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.access().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, Some(100));
@@ -14,7 +14,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_with_ranks() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.access().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, Some(100));
@@ -22,7 +22,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_no_ranks() {
-        let dict = EXAMPLE_DICT_2.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_2.access().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, None);
@@ -30,7 +30,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_no_ranks() {
-        let dict = EXAMPLE_DICT_2.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_2.access().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, None);
@@ -38,7 +38,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_dictionary_type() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.deserialize().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, Some(100));
@@ -46,7 +46,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_dictionary_type() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.deserialize().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, Some(100));
@@ -54,7 +54,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_dictionary_type_no_ranks() {
-        let dict = EXAMPLE_DICT_2.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_2.deserialize().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, None);
@@ -62,7 +62,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_dictionary_type_no_ranks() {
-        let dict = EXAMPLE_DICT_2.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_2.deserialize().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, None);

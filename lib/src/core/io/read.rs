@@ -5,36 +5,9 @@ use std::{
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
-use rkyv::access_unchecked;
 
 use super::consts::{SIGNATURE, VERSION};
-use crate::semver::SemanticVersion;
-use crate::{compress::decompress, error::Error, ArchivedDictionary, Dictionary};
-
-/* -------------------------------------------------------------------------- */
-/*                               DictionaryFile                               */
-/* -------------------------------------------------------------------------- */
-
-#[derive(Clone)]
-pub struct DictionaryFile {
-    pub signature: String,
-    pub version: SemanticVersion,
-    pub path: Option<PathBuf>,
-    pub total_size: u64,
-    content: Vec<u8>,
-}
-
-impl DictionaryFile {
-    pub fn to_archive(&self) -> crate::Result<&ArchivedDictionary> {
-        let archived = unsafe { access_unchecked::<crate::ArchivedDictionary>(&self.content[..]) };
-        Ok(archived)
-    }
-
-    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
-        let dict: Dictionary = self.to_archive()?.to_dictionary()?;
-        Ok(dict)
-    }
-}
+use crate::{compress::decompress, error::Error, semver::SemanticVersion, OpenDictionary};
 
 /* -------------------------------------------------------------------------- */
 /*                               Helper Methods                               */
@@ -98,17 +71,12 @@ pub struct DictionaryReader {}
 
 impl Default for DictionaryReader {
     fn default() -> Self {
-        Self::new()
+        Self {}
     }
 }
 
-impl DictionaryReader {
-    pub fn new() -> Self {
-        // TODO: maybe add a config?
-        Self {}
-    }
-
-    pub fn read_from_bytes<T>(&self, data: T) -> crate::Result<DictionaryFile>
+impl OpenDictionary {
+    pub fn from_bytes<T>(data: T) -> crate::Result<OpenDictionary>
     where
         T: AsRef<[u8]>,
     {
@@ -118,7 +86,7 @@ impl DictionaryReader {
         let version = read_version(&mut reader)?;
         let content = read_content(&mut reader)?;
 
-        Ok(DictionaryFile {
+        Ok(Self {
             signature,
             version,
             content,
@@ -127,7 +95,7 @@ impl DictionaryReader {
         })
     }
 
-    pub fn read_from_path(&self, path: &str) -> crate::Result<DictionaryFile> {
+    pub fn from_path(path: &str) -> crate::Result<OpenDictionary> {
         let pb = canonicalize(PathBuf::from(path))?;
 
         let mut file = File::open(&pb)?;
@@ -136,7 +104,7 @@ impl DictionaryReader {
 
         file.read_to_end(&mut buffer)?;
 
-        let mut result = self.read_from_bytes(&buffer)?;
+        let mut result = Self::from_bytes(&buffer)?;
 
         result.path = Some(pb);
 

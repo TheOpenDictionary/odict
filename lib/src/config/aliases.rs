@@ -1,9 +1,18 @@
 use serde_json::to_vec;
-use std::{collections::HashMap, ffi::OsStr, fs, fs::read_to_string, path::PathBuf};
+use std::{
+    collections::HashMap,
+    ffi::OsStr,
+    fs::{self, read_to_string},
+    path::PathBuf,
+    sync::{LazyLock, Mutex},
+};
 
-use crate::DictionaryFile;
+use crate::OpenDictionary;
 
 use super::config::get_config_dir;
+
+pub const DEFAULT_ALIAS_MANAGER: LazyLock<Mutex<AliasManager>> =
+    LazyLock::new(|| Mutex::new(AliasManager::default()));
 
 #[derive(Debug, Clone)]
 pub struct AliasManager {
@@ -48,7 +57,7 @@ impl AliasManager {
         Ok(())
     }
 
-    pub fn add(&mut self, alias: &str, file: &DictionaryFile) -> crate::Result<()> {
+    pub fn add(&mut self, alias: &str, file: &OpenDictionary) -> crate::Result<()> {
         if self.get(alias).is_none() {
             self.set(alias, file)
         } else {
@@ -56,7 +65,7 @@ impl AliasManager {
         }
     }
 
-    pub fn set(&mut self, alias: &str, file: &DictionaryFile) -> crate::Result<()> {
+    pub fn set(&mut self, alias: &str, file: &OpenDictionary) -> crate::Result<()> {
         match &file.path {
             Some(path) => {
                 self.aliases
@@ -78,9 +87,19 @@ impl AliasManager {
     }
 }
 
-impl DictionaryFile {
+impl OpenDictionary {
+    pub fn from_alias(alias: &str) -> crate::Result<OpenDictionary> {
+        DEFAULT_ALIAS_MANAGER
+            .lock()
+            .unwrap()
+            .get(alias)
+            .map_or_else(
+                || Err(crate::Error::AliasNotFound(alias.to_string())),
+                |path| OpenDictionary::from_path(path),
+            )
+    }
+
     pub fn alias_to(&self, name: &str) -> crate::Result<()> {
-        let mut manager = AliasManager::default();
-        manager.add(name, self)
+        DEFAULT_ALIAS_MANAGER.lock().unwrap().add(name, self)
     }
 }

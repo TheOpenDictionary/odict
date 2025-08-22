@@ -60,12 +60,10 @@ pub struct Dictionary {
 #[pymethods]
 impl Dictionary {
     #[new]
-    pub fn new(path_or_alias: String) -> PyResult<Self> {
-        let reader = odict::DictionaryReader::default();
+    pub fn new(dictionary: String) -> PyResult<Self> {
+        let loader = odict::DictionaryLoader::default();
 
-        let file = reader
-            .read_from_path_or_alias(&path_or_alias)
-            .map_err(cast_error)?;
+        let file = loader.load(&dictionary).map_err(cast_error)?;
 
         let dict = Dictionary { file };
 
@@ -75,12 +73,12 @@ impl Dictionary {
     #[staticmethod]
     pub fn write(xml_str: String, out_path: String) -> PyResult<Self> {
         let dict = odict::Dictionary::from_str(&xml_str).map_err(cast_error)?;
-        let reader = odict::DictionaryReader::default();
+        let loader = odict::DictionaryLoader::default();
         let writer = odict::DictionaryWriter::default();
 
         writer.write_to_path(&dict, &out_path).map_err(cast_error)?;
 
-        let file = reader.read_from_path(&out_path).map_err(cast_error)?;
+        let file = loader.load(&out_path).map_err(cast_error)?;
 
         let dict = Dictionary { file };
 

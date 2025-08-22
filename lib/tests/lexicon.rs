@@ -7,7 +7,7 @@ mod lexicon_tests {
     #[test]
     fn test_lexicon() {
         let binding = get_example_dict("example1").expect("Failed to get example dictionary");
-        let dict = binding.to_archive().unwrap();
+        let dict = binding.access().unwrap();
         let result = dict.lexicon();
         assert_eq!(result, vec!["cat", "dog", "poo", "ran", "run"]);
     }

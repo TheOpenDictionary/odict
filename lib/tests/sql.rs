@@ -12,7 +12,7 @@ mod index_tests {
     #[test]
     fn test_sql() {
         let result = EXAMPLE_DICT_1
-            .to_dictionary()
+            .deserialize()
             .unwrap()
             .clone()
             .to_sql(SQLDialect::Postgres);

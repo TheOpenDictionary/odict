@@ -1,16 +1,15 @@
 use std::sync::LazyLock;
 
-use odict::{DictionaryFile, DictionaryLoader, DictionaryWriter, Result};
+use odict::{DictionaryWriter, OpenDictionary, Result};
 
-pub async fn create_archive_dict(name: &str) -> Result<DictionaryFile> {
-    let loader = DictionaryLoader::default();
+pub async fn create_archive_dict(name: &str) -> Result<OpenDictionary> {
     let writer = DictionaryWriter::default();
     let input = format!("../examples/{}.xml", name);
     let output = format!("../examples/{}.odict", name);
 
     writer.compile_xml(&input, &output)?;
-    loader.load(&output).await.map_err(cast_error)
+    OpenDictionary::from_path(&output).await.map_err(cast_error)
 }
 
-pub static EXAMPLE_DICTIONARY_1: LazyLock<DictionaryFile> =
+pub static EXAMPLE_DICTIONARY_1: LazyLock<OpenDictionary> =
     LazyLock::new(|| create_archive_dict("wiktionary").unwrap());

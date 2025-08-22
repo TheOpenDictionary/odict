@@ -74,10 +74,9 @@ impl FromStr for Dictionary {
 }
 
 impl ArchivedDictionary {
-    pub fn to_dictionary(&self) -> crate::Result<Dictionary> {
+    pub fn deserialize(&self) -> crate::Result<Dictionary> {
         let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
             .map_err(|e| Error::Deserialize(e.to_string()))?;
-
         Ok(dict)
     }
 }

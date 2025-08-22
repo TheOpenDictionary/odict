@@ -27,8 +27,21 @@ pub enum Error {
     #[error("This dictionary has no path!")]
     DictionaryMissingPath,
 
+    #[cfg(feature = "alias")]
     #[error("An alias with this name already exists!")]
     AliasExists,
+
+    #[cfg(feature = "alias")]
+    #[error("Alias not found: {0}")]
+    AliasNotFound(String),
+
+    #[cfg(feature = "download")]
+    #[error("Failed to download dictionary: {0} {1}")]
+    DownloadFailed(String, String),
+
+    #[cfg(feature = "download")]
+    #[error("Invalid remote dictionary name: {0}")]
+    InvalidDictionaryName(String),
 
     #[error("This file is not compatible with the current version of ODict")]
     Incompatible,

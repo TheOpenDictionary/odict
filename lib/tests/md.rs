@@ -10,7 +10,7 @@ mod markdown_tests {
 
     #[test]
     fn test_markdown() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.deserialize().unwrap();
 
         let run = dict.lookup(&vec!["dog"], LookupOptions::default()).unwrap();
 

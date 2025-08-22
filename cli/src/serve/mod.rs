@@ -12,7 +12,7 @@ use clap::{command, Args, ValueEnum};
 use console::style;
 use env_logger::Env;
 use lru::LruCache;
-use odict::{DictionaryFile, DictionaryLoader};
+use odict::OpenDictionary;
 
 use crate::CLIContext;
 
@@ -92,25 +92,19 @@ pub(self) fn get_dictionary_map(
 }
 
 struct DictionaryCache {
-    cache: RwLock<LruCache<String, Arc<DictionaryFile>>>,
+    cache: RwLock<LruCache<String, Arc<OpenDictionary>>>,
     dictionaries: HashMap<String, PathBuf>,
-    loader: DictionaryLoader,
 }
 
 impl DictionaryCache {
-    fn new(
-        size: NonZero<usize>,
-        dictionaries: HashMap<String, PathBuf>,
-        loader: DictionaryLoader,
-    ) -> Self {
+    fn new(size: NonZero<usize>, dictionaries: HashMap<String, PathBuf>) -> Self {
         DictionaryCache {
             cache: RwLock::new(LruCache::new(size)),
             dictionaries,
-            loader,
         }
     }
 
-    pub async fn get(&self, key: &str) -> anyhow::Result<Option<Arc<DictionaryFile>>> {
+    pub async fn get(&self, key: &str) -> anyhow::Result<Option<Arc<OpenDictionary>>> {
         {
             let cache = self.cache.read().unwrap();
             if let Some(file) = cache.peek(key) {
@@ -121,10 +115,7 @@ impl DictionaryCache {
 
         // Not in cache, need to load it
         if let Some(path) = self.dictionaries.get(key) {
-            let dict = self
-                .loader
-                .load(path.to_string_lossy().as_ref())
-                .await
+            let dict = OpenDictionary::from_path(path.to_string_lossy().as_ref())
                 .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
 
             // Now get a write lock to update the cache
@@ -149,16 +140,11 @@ pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Re
         capacity,
     } = args;
 
-    let CLIContext { loader, .. } = ctx;
-
     let dictionary_map = get_dictionary_map(&dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
 
-    let dictionary_cache = DictionaryCache::new(
-        NonZero::new(*capacity).unwrap(),
-        dictionary_map.to_owned(),
-        loader.to_owned(),
-    );
+    let dictionary_cache =
+        DictionaryCache::new(NonZero::new(*capacity).unwrap(), dictionary_map.to_owned());
 
     if dictionary_map.is_empty() {
         ctx.println(format!(

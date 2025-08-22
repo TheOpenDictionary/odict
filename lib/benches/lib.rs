@@ -9,7 +9,7 @@ mod helpers;
 use helpers::EXAMPLE_DICTIONARY_1;
 
 fn bench_lookup(c: &mut Criterion) {
-    let dict = EXAMPLE_DICTIONARY_1.to_archive().unwrap();
+    let dict = EXAMPLE_DICTIONARY_1.access().unwrap();
 
     c.bench_function("lookup", |b| {
         b.iter(|| {
