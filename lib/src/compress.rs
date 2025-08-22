@@ -33,7 +33,7 @@ impl Default for CompressOptions {
     }
 }
 
-pub fn compress<Options: AsRef<CompressOptions>>(
+pub(crate) fn compress<Options: AsRef<CompressOptions>>(
     bytes: &[u8],
     options: Options,
 ) -> crate::Result<Vec<u8>> {
@@ -50,7 +50,7 @@ pub fn compress<Options: AsRef<CompressOptions>>(
     Ok(buf)
 }
 
-pub fn decompress(bytes: &[u8]) -> crate::Result<Vec<u8>> {
+pub(crate) fn decompress(bytes: &[u8]) -> crate::Result<Vec<u8>> {
     let mut buf = Vec::new();
     let mut reader = brotli::Decompressor::new(bytes, 4096);
 

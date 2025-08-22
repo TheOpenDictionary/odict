@@ -56,21 +56,20 @@ mod entries {
     }
 }
 
-impl Dictionary {
-    pub fn serialize(&self) -> crate::Result<Vec<u8>> {
-        let bytes =
-            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
-
-        Ok(bytes.to_vec())
-    }
-}
-
 impl FromStr for Dictionary {
     fn from_str(xml: &str) -> Result<Self, Self::Err> {
         quick_xml::de::from_str(xml).map_err(|e| crate::Error::Deserialize(e.to_string()))
     }
 
     type Err = crate::Error;
+}
+
+impl Dictionary {
+    pub fn serialize(&self) -> crate::Result<Vec<u8>> {
+        let bytes =
+            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
+        Ok(bytes.to_vec())
+    }
 }
 
 impl ArchivedDictionary {

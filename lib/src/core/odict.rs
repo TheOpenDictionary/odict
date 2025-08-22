@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 use rkyv::access_unchecked;
 
-use crate::{semver::SemanticVersion, ArchivedDictionary, Dictionary};
+use crate::{ArchivedDictionary, Dictionary, SemanticVersion};
 
 #[derive(Clone)]
 pub struct OpenDictionary {

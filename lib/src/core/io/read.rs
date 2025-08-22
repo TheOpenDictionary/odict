@@ -7,7 +7,7 @@ use std::{
 use byteorder::{LittleEndian, ReadBytesExt};
 
 use super::consts::{SIGNATURE, VERSION};
-use crate::{compress::decompress, error::Error, semver::SemanticVersion, OpenDictionary};
+use crate::{compress::decompress, error::Error, OpenDictionary, SemanticVersion};
 
 /* -------------------------------------------------------------------------- */
 /*                               Helper Methods                               */

@@ -1,6 +1,6 @@
 use std::sync::LazyLock;
 
-use crate::semver::SemanticVersion;
+use crate::SemanticVersion;
 
 pub const SIGNATURE: &[u8] = b"ODICT";
 
