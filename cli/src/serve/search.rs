@@ -67,7 +67,7 @@ async fn handle_search(
         })?;
 
     let dictionary = file
-        .to_archive()
+        .content()
         .map_err(|_e| SearchError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?;

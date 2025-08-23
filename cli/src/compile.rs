@@ -3,7 +3,7 @@ use std::{path::PathBuf, time::Duration};
 use anyhow::Context;
 use clap::{arg, command, Args};
 use indicatif::{HumanDuration, ProgressBar};
-use odict::{fs::infer_path, io::DictionaryWriterOptions, CompressOptions};
+use odict::{fs::infer_path, CompressOptions};
 
 use crate::{t, CLIContext};
 

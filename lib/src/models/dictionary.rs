@@ -65,7 +65,7 @@ impl FromStr for Dictionary {
 }
 
 impl Dictionary {
-    pub fn serialize(&self) -> crate::Result<Vec<u8>> {
+    pub fn to_bytes(&self) -> crate::Result<Vec<u8>> {
         let bytes =
             to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
         Ok(bytes.to_vec())
@@ -73,7 +73,7 @@ impl Dictionary {
 }
 
 impl ArchivedDictionary {
-    pub fn deserialize(&self) -> crate::Result<Dictionary> {
+    pub fn to_struct(&self) -> crate::Result<Dictionary> {
         let dict: Dictionary = deserialize::<Dictionary, rkyv::rancor::Error>(self)
             .map_err(|e| Error::Deserialize(e.to_string()))?;
         Ok(dict)

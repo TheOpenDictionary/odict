@@ -67,7 +67,7 @@ async fn handle_tokenize(
         })?;
 
     let dictionary = file
-        .to_archive()
+        .content()
         .map_err(|_e| TokenizeError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?;
