@@ -10,7 +10,7 @@ use tantivy::{
     collector::TopDocs, query::QueryParser, tokenizer::TextAnalyzer, Index, ReloadPolicy,
 };
 
-use crate::{ArchivedDictionary, Dictionary, Entry};
+use crate::schema::{ArchivedDictionary, Dictionary, Entry};
 
 use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 use super::index::IndexOptions;
@@ -123,8 +123,9 @@ macro_rules! search {
 
                         aligned_vec.extend_from_slice(bytes);
 
-                        let archive =
-                            unsafe { access_unchecked::<crate::ArchivedEntry>(&aligned_vec) };
+                        let archive = unsafe {
+                            access_unchecked::<crate::schema::ArchivedEntry>(&aligned_vec)
+                        };
 
                         archive.to_entry().unwrap()
                     })

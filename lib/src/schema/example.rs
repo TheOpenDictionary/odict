@@ -1,5 +1,5 @@
+use crate::schema::{Pronunciation, Translation};
 use crate::serializable;
-use crate::{Pronunciation, Translation};
 
 serializable! {
   #[derive(Default)]

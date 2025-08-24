@@ -11,7 +11,7 @@ mod index_tests {
 
     #[test]
     fn test_search() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap().deserialize().unwrap();
         let dir = ".odict/.idx";
 
         dict.index(IndexOptions::default().dir(dir)).unwrap();

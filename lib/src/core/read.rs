@@ -7,7 +7,7 @@ use std::{
 use byteorder::{LittleEndian, ReadBytesExt};
 
 use super::consts::{SIGNATURE, VERSION};
-use crate::{compress::decompress, error::Error, OpenDictionary, SemanticVersion};
+use crate::{compress::decompress, error::Error, version::SemanticVersion, OpenDictionary};
 
 /* -------------------------------------------------------------------------- */
 /*                               Helper Methods                               */
@@ -81,17 +81,16 @@ impl OpenDictionary {
         T: AsRef<[u8]>,
     {
         let mut reader = Cursor::new(data);
-
         let signature = read_signature(&mut reader)?;
         let version = read_version(&mut reader)?;
         let content = read_content(&mut reader)?;
 
         Ok(Self {
-            signature,
-            version,
-            content,
-            total_size: reader.position(),
+            signature: signature.clone(),
+            version: version.clone(),
             path: None,
+            total_size: reader.position(),
+            bytes: content,
         })
     }
 

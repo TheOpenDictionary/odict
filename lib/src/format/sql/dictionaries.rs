@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, Iden, Query, Table};
 
-use crate::{Dictionary, Entry};
+use crate::schema::{Dictionary, Entry};
 
 use super::{entries::insert_entry, utils::SQLBuilder};
 

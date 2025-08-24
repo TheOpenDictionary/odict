@@ -1,4 +1,4 @@
-use crate::{DefinitionType, Entry, Sense};
+use crate::schema::{DefinitionType, Entry, Sense};
 
 use super::{definition::write_definition, group::write_group};
 

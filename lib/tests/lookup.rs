@@ -14,7 +14,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         let result = dict
             .lookup(&vec!["dog", "cat"], LookupOptions::default())
@@ -25,7 +25,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_splitting() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         let result = dict
             .lookup(
@@ -40,7 +40,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_follow() {
-        let dict = EXAMPLE_DICT_2.access().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap();
 
         let control = dict
             .lookup(
@@ -96,7 +96,7 @@ mod lookup_tests {
         </dictionary>
         "#;
 
-        let dict = odict::Dictionary::from_str(xml).unwrap();
+        let dict = odict::schema::Dictionary::from_str(xml).unwrap();
 
         // Test with follow limit of 0 (no following)
         let result = dict
@@ -136,7 +136,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_case_sensitive() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Should find "dog" but not "DOG" with case sensitivity (default)
         let result = dict
@@ -155,7 +155,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_case_insensitive() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Should find entries regardless of case when insensitive is true
         let result = dict
@@ -175,7 +175,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_case_insensitive_mixed() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Test mixed-case queries
         let result = dict
@@ -192,7 +192,7 @@ mod lookup_tests {
 
     #[test]
     fn test_lookup_case_insensitive_with_follow() {
-        let dict = EXAMPLE_DICT_2.access().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap();
 
         // Test case insensitive lookup combined with follow option
         let result = dict

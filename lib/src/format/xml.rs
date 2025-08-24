@@ -1,7 +1,7 @@
 use quick_xml::se::{to_string, Serializer};
 use serde::Serialize;
 
-use crate::{Dictionary, Entry};
+use crate::schema::{Dictionary, Entry};
 
 pub trait ToXML {
     fn to_xml(self, pretty: bool) -> crate::Result<String>

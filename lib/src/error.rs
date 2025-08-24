@@ -35,11 +35,11 @@ pub enum Error {
     #[error("Alias not found: {0}")]
     AliasNotFound(String),
 
-    #[cfg(feature = "download")]
+    #[cfg(feature = "http")]
     #[error("Failed to download dictionary: {0} {1}")]
     DownloadFailed(String, String),
 
-    #[cfg(feature = "download")]
+    #[cfg(feature = "http")]
     #[error("Invalid remote dictionary name: {0}")]
     InvalidDictionaryName(String),
 

@@ -5,16 +5,16 @@ pub mod download;
 pub mod metadata;
 pub mod utils;
 
-#[cfg(feature = "download")]
+#[cfg(feature = "http")]
 use crate::download::download::DEFAULT_DOWNLOADER;
 use crate::OpenDictionary;
 
-#[cfg(feature = "download")]
+#[cfg(feature = "http")]
 pub use download::{DictionaryDownloader, DownloadOptions};
 
 pub use utils::*;
 
-#[cfg(feature = "download")]
+#[cfg(feature = "http")]
 impl OpenDictionary {
     /// Attempts to download and load a dictionary if the input looks like a dictionary name.
     ///

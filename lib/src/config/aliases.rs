@@ -66,7 +66,7 @@ impl AliasManager {
     }
 
     pub fn set(&mut self, alias: &str, file: &OpenDictionary) -> crate::Result<()> {
-        match &file.path {
+        match &file.path() {
             Some(path) => {
                 self.aliases
                     .insert(alias.to_string(), path.to_string_lossy().to_string());

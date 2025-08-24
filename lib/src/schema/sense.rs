@@ -3,8 +3,8 @@ use std::hash::Hash;
 
 use rkyv::with::{AsBox, MapNiche};
 
-use crate::models::form::Form;
-use crate::{serializable, Translation};
+use crate::schema::{Form, Translation};
+use crate::serializable;
 
 use super::ArchivedPartOfSpeech;
 use super::{pos::PartOfSpeech, Definition, EntryRef, Group};

@@ -6,7 +6,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_with_ranks() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, Some(100));
@@ -14,7 +14,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_with_ranks() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, Some(100));
@@ -22,7 +22,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_no_ranks() {
-        let dict = EXAMPLE_DICT_2.access().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, None);
@@ -30,7 +30,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_no_ranks() {
-        let dict = EXAMPLE_DICT_2.access().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, None);
@@ -38,7 +38,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_dictionary_type() {
-        let dict = EXAMPLE_DICT_1.deserialize().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap().deserialize().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, Some(100));
@@ -46,7 +46,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_dictionary_type() {
-        let dict = EXAMPLE_DICT_1.deserialize().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap().deserialize().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, Some(100));
@@ -54,7 +54,7 @@ mod rank_tests {
 
     #[test]
     fn test_min_rank_dictionary_type_no_ranks() {
-        let dict = EXAMPLE_DICT_2.deserialize().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap().deserialize().unwrap();
         let result = dict.min_rank();
 
         assert_eq!(result, None);
@@ -62,7 +62,7 @@ mod rank_tests {
 
     #[test]
     fn test_max_rank_dictionary_type_no_ranks() {
-        let dict = EXAMPLE_DICT_2.deserialize().unwrap();
+        let dict = EXAMPLE_DICT_2.contents().unwrap().deserialize().unwrap();
         let result = dict.max_rank();
 
         assert_eq!(result, None);
@@ -70,7 +70,7 @@ mod rank_tests {
 
     #[test]
     fn test_rank_with_multiple_values() {
-        use odict::{Dictionary, Entry, Etymology};
+        use odict::schema::{Dictionary, Entry, Etymology};
         use std::collections::HashSet;
 
         let mut dict = Dictionary::default();
@@ -110,7 +110,7 @@ mod rank_tests {
 
     #[test]
     fn test_rank_single_value() {
-        use odict::{Dictionary, Entry, Etymology};
+        use odict::schema::{Dictionary, Entry, Etymology};
         use std::collections::HashSet;
 
         let mut dict = Dictionary::default();
@@ -138,7 +138,7 @@ mod rank_tests {
 
     #[test]
     fn test_rank_empty_dictionary() {
-        use odict::Dictionary;
+        use odict::schema::Dictionary;
 
         let dict = Dictionary::default();
 
@@ -148,7 +148,7 @@ mod rank_tests {
 
     #[test]
     fn test_rank_extreme_values() {
-        use odict::{Dictionary, Entry, Etymology};
+        use odict::schema::{Dictionary, Entry, Etymology};
         use std::collections::HashSet;
 
         let mut dict = Dictionary::default();

@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 use rkyv::with::{AsBox, MapNiche};
 
-use crate::models::pronunciation::Pronunciation;
+use crate::schema::pronunciation::Pronunciation;
 use crate::serializable;
 
 use super::sense::Sense;
@@ -37,7 +37,7 @@ mod senses {
     use serde::ser::Serializer;
     use serde::Deserialize;
 
-    use crate::models::Sense;
+    use crate::schema::Sense;
 
     pub fn serialize<S>(set: &HashSet<Sense>, serializer: S) -> Result<S::Ok, S::Error>
     where

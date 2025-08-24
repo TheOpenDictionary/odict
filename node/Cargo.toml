@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 
 [features]
 default = ["search", "sql", "tokenize", "load"]
-load = ["odict/download", "odict/alias"]
+load = ["odict/http", "odict/alias"]
 tokenize = [
   "odict/tokenize-latin",
   "odict/tokenize-chinese",

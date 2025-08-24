@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Entry, ID};
+use crate::schema::{Entry, ID};
 
 use super::{dictionaries::Dictionaries, etymologies::insert_etymology, utils::SQLBuilder};
 

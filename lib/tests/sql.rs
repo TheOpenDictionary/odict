@@ -12,6 +12,8 @@ mod index_tests {
     #[test]
     fn test_sql() {
         let result = EXAMPLE_DICT_1
+            .contents()
+            .unwrap()
             .deserialize()
             .unwrap()
             .clone()

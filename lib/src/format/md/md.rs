@@ -1,4 +1,4 @@
-use crate::{ArchivedEntry, Entry};
+use crate::schema::{ArchivedEntry, Entry};
 
 use super::{entry::write_entry, utils::divider};
 

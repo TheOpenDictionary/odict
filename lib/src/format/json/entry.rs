@@ -1,6 +1,6 @@
 use std::hash::{Hash, Hasher};
 
-use crate::{ArchivedEntry, Entry};
+use crate::schema::{ArchivedEntry, Entry};
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;

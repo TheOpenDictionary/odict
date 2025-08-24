@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod io_tests {
 
-    use odict::{DictionaryLoader, DictionaryWriter, ID};
+    use odict::schema::ID;
     use regex::Regex;
     use rkyv::deserialize;
 
@@ -18,7 +18,7 @@ mod io_tests {
 
         assert_eq!(read.is_err(), false);
 
-        let archive = read.as_ref().unwrap().access().unwrap();
+        let archive = read.as_ref().unwrap().contents().unwrap();
 
         let id: ID = deserialize::<ID, rkyv::rancor::Error>(&archive.id).unwrap();
 

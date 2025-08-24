@@ -1,4 +1,4 @@
-use crate::{Entry, Pronunciation};
+use crate::schema::{Entry, Pronunciation};
 
 pub fn write_pronunciation(
     lines: &mut Vec<String>,

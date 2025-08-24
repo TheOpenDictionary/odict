@@ -1,4 +1,4 @@
-use crate::Translation;
+use crate::schema::Translation;
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;

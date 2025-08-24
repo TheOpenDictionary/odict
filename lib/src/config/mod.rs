@@ -1,7 +1,7 @@
+#[cfg(feature = "alias")]
 mod aliases;
-mod config;
-
-pub use config::*;
-
 #[cfg(feature = "alias")]
 pub use aliases::*;
+
+mod config;
+pub use config::*;

@@ -1,12 +1,8 @@
 use charabia::Segment;
 use rayon::prelude::*;
 
-use super::{
-    options::{LookupOptions, LookupStrategy},
-    LookupResult,
-};
-
-use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use crate::lookup::{LookupOptions, LookupResult, LookupStrategy};
+use crate::schema::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 pub type Language = charabia::Language;
 pub type TokenKind = charabia::TokenKind;

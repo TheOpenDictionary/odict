@@ -2,7 +2,7 @@ use serde::Serialize;
 use structural_convert::StructuralConvert;
 
 use super::media_url::MediaURLJSON;
-use crate::{Pronunciation, PronunciationKind};
+use crate::schema::{Pronunciation, PronunciationKind};
 
 #[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Pronunciation))]

@@ -14,7 +14,7 @@ path = "src/main.rs"
 odict = { path = "../lib", features = [
   "sql",
   "search",
-  "download",
+  "http",
   "alias",
   "html",
   "tokenize",

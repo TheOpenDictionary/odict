@@ -1,4 +1,4 @@
-use crate::{Entry, Example};
+use crate::schema::{Entry, Example};
 
 use super::pronunciation::write_pronunciation;
 use super::utils::{indent, underline_target};

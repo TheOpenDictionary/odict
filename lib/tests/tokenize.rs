@@ -5,13 +5,13 @@ mod tokenize_tests {
 
     use std::str::FromStr;
 
-    use odict::lookup::{Language, TokenizeOptions};
+    use odict::tokenize::{Language, TokenizeOptions};
 
     use crate::helpers::EXAMPLE_DICT_1;
 
     #[test]
     fn test_tokenize() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.tokenize("poo run", &TokenizeOptions::default());
         let res = result.as_ref().unwrap();
 
@@ -29,7 +29,7 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_chinese() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.tokenize("你不知道的事", &TokenizeOptions::default());
         let res = result.as_ref().unwrap();
         let expected_lemmas = ["你", "不", "知道", "的", "事"];
@@ -45,7 +45,7 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_accents() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.tokenize(
             "Chào bạn, hôm nay trời đẹp quá!",
             &TokenizeOptions::default().allow_list(vec![
@@ -69,7 +69,7 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_case_sensitive() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Default behavior (case-sensitive)
         let result = dict.tokenize("DOG run", &TokenizeOptions::default().insensitive(false));
@@ -89,7 +89,7 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_case_insensitive() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // With case insensitivity enabled
         let result = dict.tokenize("DOG RUN", &TokenizeOptions::default().insensitive(true));
@@ -111,7 +111,7 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_mixed_case() {
-        let dict = EXAMPLE_DICT_1.access().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Test with mixed case text
         let result = dict.tokenize("DoG CaT", &TokenizeOptions::default().insensitive(true));
@@ -141,7 +141,7 @@ mod tokenize_tests {
         </dictionary>
         "#;
 
-        let dict = odict::Dictionary::from_str(xml).unwrap();
+        let dict = odict::schema::Dictionary::from_str(xml).unwrap();
 
         // Test case insensitivity combined with follow option
         let result = dict.tokenize(

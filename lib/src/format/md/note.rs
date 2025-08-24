@@ -1,4 +1,7 @@
-use crate::{error::Result, Entry, Note};
+use crate::{
+    error::Result,
+    schema::{Entry, Note},
+};
 
 use super::{example::write_example, utils::indent};
 

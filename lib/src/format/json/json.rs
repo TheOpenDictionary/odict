@@ -7,10 +7,13 @@ use super::entry::EntryJSON;
 #[cfg(feature = "tokenize-latin")]
 use super::token::TokenJSON;
 
-use crate::{lookup::LookupResult, ArchivedEntry, Dictionary, Entry};
+use crate::{
+    lookup::LookupResult,
+    schema::{ArchivedEntry, Dictionary, Entry},
+};
 
 #[cfg(feature = "tokenize-latin")]
-use crate::Token;
+use crate::tokenize::Token;
 
 pub struct JSONSerializer {}
 

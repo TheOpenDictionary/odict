@@ -1,4 +1,7 @@
-use crate::{Definition, Entry, Error};
+use crate::{
+    schema::{Definition, Entry},
+    Error,
+};
 
 use super::{example::write_example, note::write_note, utils::indent};
 

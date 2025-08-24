@@ -1,18 +1,54 @@
-use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use crate::schema::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 use rayon::prelude::*;
 use rkyv::option::ArchivedOption;
 use std::marker::{Send, Sync};
 
-mod options;
+#[derive(Debug, PartialEq, Clone)]
+pub enum LookupStrategy {
+    Exact,
+    Split(usize),
+}
 
-#[cfg(feature = "tokenize-latin")]
-mod tokenize;
+#[derive(Debug, Clone)]
+pub struct LookupOptions {
+    /// Maximum number of redirects to follow via see_also links.
+    /// None means no following, Some(u32::MAX) provides infinite following (old behavior).
+    pub follow: Option<u32>,
+    pub strategy: LookupStrategy,
+    pub insensitive: bool,
+}
 
-pub use options::*;
+impl AsRef<LookupOptions> for LookupOptions {
+    fn as_ref(&self) -> &Self {
+        self
+    }
+}
 
-#[cfg(feature = "tokenize-latin")]
-pub use tokenize::*;
+impl LookupOptions {
+    pub fn default() -> Self {
+        Self {
+            follow: None,
+            strategy: LookupStrategy::Exact,
+            insensitive: false,
+        }
+    }
+
+    pub fn follow(mut self, follow: u32) -> Self {
+        self.follow = Some(follow);
+        self
+    }
+
+    pub fn strategy(mut self, strategy: LookupStrategy) -> Self {
+        self.strategy = strategy;
+        self
+    }
+
+    pub fn insensitive(mut self, insensitive: bool) -> Self {
+        self.insensitive = insensitive;
+        self
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct LookupResult<E> {

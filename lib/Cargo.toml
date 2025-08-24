@@ -13,7 +13,7 @@ sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
 alias = ["config"]
-download = ["dep:reqwest", "dep:regex", "dep:futures-util", "config"]
+http = ["dep:reqwest", "dep:regex", "dep:futures-util", "config"]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
@@ -64,7 +64,7 @@ structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
-# feature = download
+# feature=http
 reqwest = { version = "0.12.23", optional = true, features = ["stream"] }
 futures-util = { version = "0.3", optional = true }
 regex = { version = "1.11.1", optional = true }

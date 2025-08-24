@@ -1,4 +1,4 @@
-use crate::Dictionary;
+use crate::schema::Dictionary;
 
 impl Dictionary {
     pub fn merge_multi(&mut self, dictionaries: Vec<&Dictionary>) {

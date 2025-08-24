@@ -1,6 +1,9 @@
 use serde::Serialize;
 
-use crate::{lookup::Token, ArchivedEntry, Entry};
+use crate::{
+    schema::{ArchivedEntry, Entry},
+    tokenize::Token,
+};
 
 use super::EntryJSON;
 

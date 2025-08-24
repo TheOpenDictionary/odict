@@ -5,14 +5,16 @@ mod index_tests {
 
     use std::sync::LazyLock;
 
-    use odict::{search::IndexOptions, Dictionary};
+    use odict::{schema::Dictionary, search::IndexOptions};
 
     use crate::helpers::get_example_dict;
 
     static EXAMPLE_DICT: LazyLock<Dictionary> = LazyLock::new(|| {
         get_example_dict("example1")
             .expect("Failed to get example dictionary")
-            .to_dictionary()
+            .contents()
+            .unwrap()
+            .deserialize()
             .unwrap()
     });
 

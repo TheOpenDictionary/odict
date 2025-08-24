@@ -1,27 +1,27 @@
 use crate::compress::{compress, CompressOptions};
 use crate::error::Error;
-use crate::Dictionary;
+use crate::schema::Dictionary;
 
 use super::consts::{SIGNATURE, VERSION};
 
-pub struct CompileOptions {
+pub struct CompilerOptions {
     pub compress_options: CompressOptions,
 }
 
-impl AsRef<CompileOptions> for CompileOptions {
-    fn as_ref(&self) -> &CompileOptions {
+impl AsRef<CompilerOptions> for CompilerOptions {
+    fn as_ref(&self) -> &CompilerOptions {
         self
     }
 }
 
-impl CompileOptions {
+impl CompilerOptions {
     pub fn compression(mut self, compress_options: CompressOptions) -> Self {
         self.compress_options = compress_options;
         self
     }
 }
 
-impl Default for CompileOptions {
+impl Default for CompilerOptions {
     fn default() -> Self {
         Self {
             compress_options: CompressOptions::default(),
@@ -30,11 +30,11 @@ impl Default for CompileOptions {
 }
 
 impl Dictionary {
-    pub fn compile(&self) -> crate::Result<Vec<u8>> {
-        self.compile_with_opts(CompileOptions::default())
+    pub fn to_bytes(&self) -> crate::Result<Vec<u8>> {
+        self.to_bytes_with_options(CompilerOptions::default())
     }
 
-    pub fn compile_with_opts<Options: AsRef<CompileOptions>>(
+    pub fn to_bytes_with_options<Options: AsRef<CompilerOptions>>(
         &self,
         options: Options,
     ) -> crate::Result<Vec<u8>> {
