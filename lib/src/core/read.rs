@@ -1,13 +1,20 @@
 use std::{
-    fs::{canonicalize, File},
     io::{Cursor, Read},
-    path::PathBuf,
+    path::Path,
 };
 
 use byteorder::{LittleEndian, ReadBytesExt};
 
 use super::consts::{SIGNATURE, VERSION};
-use crate::{compress::decompress, error::Error, version::SemanticVersion, OpenDictionary};
+use crate::{
+    compress::decompress,
+    error::Error,
+    fs::{self},
+    schema::Dictionary,
+    version::SemanticVersion,
+    OpenDictionary,
+};
+use std::str::FromStr;
 
 /* -------------------------------------------------------------------------- */
 /*                               Helper Methods                               */
@@ -75,6 +82,13 @@ impl Default for DictionaryReader {
     }
 }
 
+impl Dictionary {
+    pub fn from_path<P: AsRef<Path>>(path: P) -> crate::Result<Self> {
+        let buffer = crate::fs::read_to_string(path)?;
+        Self::from_str(&buffer)
+    }
+}
+
 impl OpenDictionary {
     pub fn from_bytes<T>(data: T) -> crate::Result<OpenDictionary>
     where
@@ -89,24 +103,14 @@ impl OpenDictionary {
             signature: signature.clone(),
             version: version.clone(),
             path: None,
-            total_size: reader.position(),
             bytes: content,
         })
     }
 
-    pub fn from_path(path: &str) -> crate::Result<OpenDictionary> {
-        let pb = canonicalize(PathBuf::from(path))?;
-
-        let mut file = File::open(&pb)?;
-
-        let mut buffer = Vec::new();
-
-        file.read_to_end(&mut buffer)?;
-
+    pub fn from_path<P: AsRef<Path>>(path: P) -> crate::Result<OpenDictionary> {
+        let buffer = fs::read_to_bytes(&path)?;
         let mut result = Self::from_bytes(&buffer)?;
-
-        result.path = Some(pb);
-
+        result.path = Some(path.as_ref().to_path_buf());
         Ok(result)
     }
 }

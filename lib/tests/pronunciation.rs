@@ -14,11 +14,11 @@ mod pronunciation_tests {
 
         assert!(matches!(deserialized, PronunciationKind::IPA));
 
-        let expected = PronunciationKind::Other("wagegiles".into());
+        let _expected = PronunciationKind::Other("wagegiles".into());
 
         // Test Other variant
         let deserialized: PronunciationKind = serde_json::from_str("\"wadegiles\"").unwrap();
-        assert!(matches!(deserialized, expected));
+        assert!(matches!(deserialized, _expected));
     }
 
     #[test]

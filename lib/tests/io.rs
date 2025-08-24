@@ -1,20 +1,24 @@
 #[cfg(test)]
 mod io_tests {
 
-    use odict::schema::ID;
+    use odict::{
+        schema::{Dictionary, ID},
+        OpenDictionary,
+    };
     use regex::Regex;
     use rkyv::deserialize;
 
-    #[tokio::test]
-    async fn test_empty() {
-        let loader = DictionaryLoader::default();
-        let writer = DictionaryWriter::default();
-
-        let write = writer.compile_xml("../examples/empty.xml", "../examples/empty.odict");
+    #[test]
+    fn test_empty() {
+        let write = Dictionary::from_path("../examples/empty.xml")
+            .unwrap()
+            .build()
+            .unwrap()
+            .to_disk("../examples/empty.odict");
 
         assert_eq!(write.is_ok(), true);
 
-        let read = loader.load("../examples/empty.odict").await;
+        let read = OpenDictionary::from_path("../examples/empty.odict");
 
         assert_eq!(read.is_err(), false);
 

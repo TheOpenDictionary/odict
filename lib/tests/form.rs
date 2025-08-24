@@ -14,11 +14,11 @@ mod form_tests {
 
         assert!(matches!(deserialized, FormKind::Comparative));
 
-        let expected = FormKind::Other("third-person".into());
+        let _expected = FormKind::Other("third-person".into());
 
         let deserialized: FormKind = serde_json::from_str("\"third-person\"").unwrap();
 
-        assert!(matches!(deserialized, expected));
+        assert!(matches!(deserialized, _expected));
     }
 
     #[test]

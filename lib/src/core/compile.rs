@@ -1,6 +1,7 @@
 use crate::compress::{compress, CompressOptions};
 use crate::error::Error;
 use crate::schema::Dictionary;
+use crate::OpenDictionary;
 
 use super::consts::{SIGNATURE, VERSION};
 
@@ -29,7 +30,7 @@ impl Default for CompilerOptions {
     }
 }
 
-impl Dictionary {
+impl OpenDictionary {
     pub fn to_bytes(&self) -> crate::Result<Vec<u8>> {
         self.to_bytes_with_options(CompilerOptions::default())
     }
@@ -38,9 +39,7 @@ impl Dictionary {
         &self,
         options: Options,
     ) -> crate::Result<Vec<u8>> {
-        let buf = &self.serialize()?;
-
-        let compressed = compress(buf, &options.as_ref().compress_options)
+        let compressed = compress(&self.bytes, &options.as_ref().compress_options)
             .map_err(|e| Error::Write(e.to_string()))?;
 
         let version_bytes = VERSION.as_bytes();
@@ -90,5 +89,17 @@ impl Dictionary {
         output.extend_from_slice(&compressed);
 
         return Ok(output);
+    }
+}
+
+impl Dictionary {
+    pub fn build(&self) -> crate::Result<OpenDictionary> {
+        let dict = OpenDictionary {
+            signature: String::from_utf8_lossy(SIGNATURE).to_string(),
+            version: VERSION.clone(),
+            path: None,
+            bytes: self.serialize()?,
+        };
+        Ok(dict)
     }
 }
