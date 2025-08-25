@@ -2,7 +2,7 @@ use console::Style;
 use pulldown_cmark::{Event, Parser, Tag};
 
 pub fn print_md(md: &String) -> String {
-    let parser = Parser::new(&md);
+    let parser = Parser::new(md);
     let mut tags_stack = Vec::new();
     let mut buffer = String::new();
 

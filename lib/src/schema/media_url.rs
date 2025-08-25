@@ -44,7 +44,7 @@ impl MediaURL {
         // Allow relative paths and absolute URLs
         if self.src.starts_with("http://") || self.src.starts_with("https://") {
             // Validate as absolute URL
-            Url::parse(&self.src).map_err(|e| Error::InvalidURL(format!("Invalid URL: {}", e)))?;
+            Url::parse(&self.src).map_err(|e| Error::InvalidURL(format!("Invalid URL: {e}")))?;
         } else if !self.src.starts_with("./") && !self.src.starts_with("/") {
             // If not a relative path with ./ or / prefix, and not an absolute URL
             // then it's invalid

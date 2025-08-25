@@ -157,7 +157,7 @@ fn test_example_with_translation() {
         .senses
         .iter()
         .next()
-        .and_then(|sense| sense.definitions.get(0))
+        .and_then(|sense| sense.definitions.first())
         .and_then(|def_type| match def_type {
             DefinitionType::Definition(def) => Some(def),
             _ => None,

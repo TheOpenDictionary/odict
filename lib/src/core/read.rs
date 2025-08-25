@@ -73,14 +73,8 @@ where
 /*                              DictionaryReader                              */
 /* -------------------------------------------------------------------------- */
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct DictionaryReader {}
-
-impl Default for DictionaryReader {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl Dictionary {
     pub fn from_path<P: AsRef<Path>>(path: P) -> crate::Result<Self> {

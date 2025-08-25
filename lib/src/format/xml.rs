@@ -19,7 +19,7 @@ pub trait ToXML {
                 self.serialize(ser)
                     .map_err(|e| crate::Error::Serialize(e.to_string()))?;
 
-                Ok(format!("{}", buffer))
+                Ok(buffer.to_string())
             }
             false => Ok(to_string(&self).map_err(|e| crate::Error::Serialize(e.to_string()))?),
         }

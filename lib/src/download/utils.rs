@@ -4,11 +4,10 @@ use std::sync::LazyLock;
 static DICTIONARY_NAME_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^([a-z]+)/([a-z-]+)$").unwrap());
 
-pub fn parse_dictionary_name(name: &str) -> super::Result<(String, String)> {
+pub fn parse_remote_dictionary_name(name: &str) -> super::Result<(String, String)> {
     let captures = DICTIONARY_NAME_REGEX.captures(name).ok_or_else(|| {
     crate::error::Error::Other(format!(
-      "Invalid dictionary/language format '{}'. Expected format: 'dictionary/language' (lowercase letters, dash allowed in language)",
-      name
+      "Invalid dictionary/language format '{name}'. Expected format: 'dictionary/language' (lowercase letters, dash allowed in language)"
     ))
   })?;
 
@@ -18,7 +17,7 @@ pub fn parse_dictionary_name(name: &str) -> super::Result<(String, String)> {
     Ok((dictionary.to_string(), language.to_string()))
 }
 
-pub fn extract_etag(response: &reqwest::Response) -> Option<String> {
+pub(super) fn extract_etag(response: &reqwest::Response) -> Option<String> {
     response
         .headers()
         .get("etag")

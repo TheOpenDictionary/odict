@@ -65,9 +65,7 @@ pub struct ServeArgs {
     dictionaries: Vec<String>,
 }
 
-pub(self) fn get_dictionary_map(
-    dictionaries: &Vec<String>,
-) -> anyhow::Result<HashMap<String, PathBuf>> {
+fn get_dictionary_map(dictionaries: &Vec<String>) -> anyhow::Result<HashMap<String, PathBuf>> {
     let mut dictionary_map = HashMap::<String, PathBuf>::new();
 
     for path in dictionaries {
@@ -78,7 +76,7 @@ pub(self) fn get_dictionary_map(
                 let p = entry?.path();
                 let name = p.file_stem().unwrap().to_string_lossy().to_string();
 
-                if p.is_file() && p.extension().map_or(false, |ext| ext == "odict") {
+                if p.is_file() && p.extension().is_some_and(|ext| ext == "odict") {
                     dictionary_map.insert(name.clone(), p.clone());
                 }
             }
@@ -115,8 +113,7 @@ impl DictionaryCache {
 
         // Not in cache, need to load it
         if let Some(path) = self.dictionaries.get(key) {
-            let dict = OpenDictionary::from_path(path.to_string_lossy().as_ref())
-                .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+            let dict = OpenDictionary::from_path(path.to_string_lossy().as_ref())?;
 
             // Now get a write lock to update the cache
             let mut cache = self.cache.write().unwrap();
@@ -140,22 +137,19 @@ pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Re
         capacity,
     } = args;
 
-    let dictionary_map = get_dictionary_map(&dictionaries)?;
+    let dictionary_map = get_dictionary_map(dictionaries)?;
     let log_level = format!("{}", level.as_ref().unwrap_or(&LogLevel::Info));
 
     let dictionary_cache =
         DictionaryCache::new(NonZero::new(*capacity).unwrap(), dictionary_map.to_owned());
 
     if dictionary_map.is_empty() {
-        ctx.println(format!(
-            "\n⚠️  No dictionaries found to serve. Please provide valid dictionary files or directories containing .odict files."
-        ));
+        ctx.println("\n⚠️  No dictionaries found to serve. Please provide valid dictionary files or directories containing .odict files.".to_string());
         return Ok(());
     }
 
     ctx.println(format!(
-        "\n🟢  Serving the following dictionaries on port {} with log level \"{}\":\n",
-        port, log_level
+        "\n🟢  Serving the following dictionaries on port {port} with log level \"{log_level}\":\n"
     ));
 
     for (name, dict) in &dictionary_map {

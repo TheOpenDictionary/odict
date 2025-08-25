@@ -1,6 +1,6 @@
 use clap::{arg, command, Args};
 
-use crate::CLIContext;
+use crate::load_dictionary;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -19,30 +19,20 @@ pub struct MergeArgs {
     output: Option<String>,
 }
 
-pub async fn merge<'a>(ctx: &CLIContext<'a>, args: &MergeArgs) -> anyhow::Result<()> {
-    let mut dict = ctx
-        .loader
-        .load(&args.destination)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
-        .to_dictionary()?;
+pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
+    let mut dict = load_dictionary(&args.destination)
+        .await?
+        .contents()?
+        .deserialize()?;
 
     for source in &args.sources {
-        let source_dict = ctx
-            .loader
-            .load(source)
-            .await
-            .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
-            .to_dictionary()?;
+        let source_dict = load_dictionary(source).await?.contents()?.deserialize()?;
 
         dict.merge(&source_dict);
     }
 
-    if let Some(output) = &args.output {
-        ctx.writer.write_to_path(&dict, &output)?;
-    } else {
-        ctx.writer.write_to_path(&dict, &args.destination)?;
-    }
+    dict.build()?
+        .to_disk(args.output.as_ref().unwrap_or(&args.destination))?;
 
     Ok(())
 }

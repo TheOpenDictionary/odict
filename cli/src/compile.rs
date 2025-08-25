@@ -3,9 +3,9 @@ use std::{path::PathBuf, time::Duration};
 use anyhow::Context;
 use clap::{arg, command, Args};
 use indicatif::{HumanDuration, ProgressBar};
-use odict::{fs::infer_path, CompressOptions};
+use odict::{compile::CompilerOptions, fs::infer_path, schema::Dictionary, CompressOptions};
 
-use crate::{t, CLIContext};
+use crate::t;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -24,7 +24,7 @@ pub struct CompileArgs {
     window_size: u32,
 }
 
-pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
+pub fn compile(args: &CompileArgs) -> anyhow::Result<()> {
     let CompileArgs {
         input,
         output,
@@ -32,7 +32,7 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
         window_size,
     } = args;
 
-    let out = output.to_owned().unwrap_or_else(|| infer_path(&input));
+    let out = output.to_owned().unwrap_or_else(|| infer_path(input));
 
     let compress_opts = CompressOptions::default()
         .quality(*quality)
@@ -48,13 +48,12 @@ pub fn compile(ctx: &CLIContext, args: &CompileArgs) -> anyhow::Result<()> {
     spinner.enable_steady_tick(Duration::from_millis(100));
 
     let duration = t(|| {
-        ctx.writer
-            .compile_xml_with_opts(
-                &input,
+        Dictionary::from_path(input)?
+            .build()?
+            .to_disk_with_options(
                 &out,
-                DictionaryWriterOptions::default().compression(compress_opts),
+                CompilerOptions::default().with_compression(compress_opts),
             )
-            .map(|_| ())
             .with_context(|| "An error occurred compiling your XML")
     })?;
 

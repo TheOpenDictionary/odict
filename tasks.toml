@@ -13,7 +13,7 @@ run = "cargo insta accept"
 description = "Updates all Insta snapshot tests"
 
 [test]
-run = "cargo nextest run -p odict -p internal --all-features --verbose"
+run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
 
 ["test-all"]

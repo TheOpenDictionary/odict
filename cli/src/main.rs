@@ -1,6 +1,5 @@
-use std::io::Write;
-
 use clap::Parser;
+use console::style;
 use odict_cli::{
     alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, tokenize,
     CLIContext, Commands, CLI,
@@ -12,13 +11,13 @@ async fn main() {
     let mut ctx = CLIContext::default(&cli);
 
     let result = match cli.command {
-        Commands::Alias(ref args) => alias(&mut ctx, args).await,
-        Commands::Compile(ref args) => compile(&ctx, args),
+        Commands::Alias(ref args) => alias(args).await,
+        Commands::Compile(ref args) => compile(args),
         Commands::Dump(ref args) => dump(&mut ctx, args).await,
         Commands::Index(ref args) => index(&mut ctx, args).await,
         Commands::Lexicon(ref args) => lexicon(&mut ctx, args).await,
         Commands::Lookup(ref args) => lookup(&mut ctx, args).await,
-        Commands::Merge(ref args) => merge(&ctx, args).await,
+        Commands::Merge(ref args) => merge(args).await,
         Commands::New(ref args) => new(&mut ctx, args),
         Commands::Search(ref args) => search(&mut ctx, args).await,
         Commands::Serve(ref args) => serve(&mut ctx, args).await,
@@ -28,7 +27,7 @@ async fn main() {
 
     if let Err(e) = result {
         ctx.stderr
-            .write_all(format!("Error: {}", e).as_bytes())
+            .write_line(format!("{}", style(format!("Error: {e}")).red()).as_str())
             .unwrap();
     }
 }

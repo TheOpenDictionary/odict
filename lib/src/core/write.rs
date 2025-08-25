@@ -23,7 +23,7 @@ impl OpenDictionary {
 
         self.path = canonicalize(path)?
             .to_str()
-            .map(|s| std::path::PathBuf::from(s));
+            .map(std::path::PathBuf::from);
 
         Ok(())
     }

@@ -9,6 +9,9 @@ pub enum Error {
     #[error(transparent)]
     FromUtf8(#[from] std::string::FromUtf8Error),
 
+    #[error(transparent)]
+    ConversionError(#[from] std::num::TryFromIntError),
+
     #[error("Failed to compress: {0}")]
     Compression(String),
 

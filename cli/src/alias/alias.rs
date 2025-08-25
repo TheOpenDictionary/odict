@@ -1,5 +1,3 @@
-use crate::CLIContext;
-
 use super::{
     delete::{delete, DeleteArgs},
     set::{set, SetArgs},
@@ -22,10 +20,10 @@ pub enum AliasCommands {
     Delete(DeleteArgs),
 }
 
-pub async fn alias<'a>(ctx: &mut CLIContext<'a>, command: &AliasCommands) -> anyhow::Result<()> {
+pub async fn alias<'a>(command: &AliasCommands) -> anyhow::Result<()> {
     match command {
-        AliasCommands::Add(args) => set(ctx, args, false).await,
-        AliasCommands::Set(args) => set(ctx, args, true).await,
-        AliasCommands::Delete(args) => delete(ctx, args),
+        AliasCommands::Add(args) => set(args, false).await,
+        AliasCommands::Set(args) => set(args, true).await,
+        AliasCommands::Delete(args) => delete(args),
     }
 }

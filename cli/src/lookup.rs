@@ -1,8 +1,8 @@
 use std::time::Duration;
 
 use crate::enums::PrintFormat;
-use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
+use crate::{get_lookup_entries, load_dictionary};
 use clap::{arg, command, Args};
 use odict::lookup::{LookupOptions, LookupStrategy};
 
@@ -64,11 +64,7 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
 
     spinner.enable_steady_tick(Duration::from_millis(100));
 
-    let file = ctx
-        .loader
-        .load(&path)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+    let file = load_dictionary(path).await?;
 
     let mut opts: LookupOptions = LookupOptions::default()
         .follow(*follow)
@@ -78,7 +74,7 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
         opts = opts.strategy(LookupStrategy::Split(*split));
     }
 
-    let result = file.to_archive()?.lookup(queries, opts);
+    let result = file.contents()?.lookup(queries, opts);
 
     spinner.finish_and_clear();
 
@@ -87,8 +83,6 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
             print_entries(ctx, get_lookup_entries(entries), format)?;
             Ok(())
         }
-        Err(err) => {
-            return Err(anyhow::Error::from(err));
-        }
+        Err(err) => Err(anyhow::Error::from(err)),
     }
 }

@@ -1,7 +1,9 @@
 use clap::{arg, command, Args};
 use odict::search::{get_default_index_dir, SearchOptions};
 
-use crate::{enums::PrintFormat, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY};
+use crate::{
+    enums::PrintFormat, load_dictionary, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY,
+};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -25,13 +27,9 @@ pub struct SearchArgs {
 }
 
 pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
-    let file = ctx
-        .loader
-        .load(&args.dictionary)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+    let file = load_dictionary(&args.dictionary).await?;
 
-    let dict = file.to_dictionary()?;
+    let dict = file.contents()?;
 
     if args.index {
         let index_path = get_default_index_dir().join(dict.id.as_str());

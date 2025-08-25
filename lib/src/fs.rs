@@ -12,7 +12,7 @@ pub fn infer_path<P: Into<PathBuf> + AsRef<OsStr>>(path: P) -> PathBuf {
 
     PathBuf::new()
         .join(directory)
-        .join(format!("{}.odict", name))
+        .join(format!("{name}.odict"))
 }
 
 fn open_file<P: AsRef<Path>>(path: P) -> crate::Result<File> {

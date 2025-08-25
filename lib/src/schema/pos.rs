@@ -1,6 +1,7 @@
 use crate::serializable_enum;
 
 serializable_enum! {
+    #[derive(Default)]
     pub enum PartOfSpeech {
         /* -------------------------------------------------------------------------- */
         /*                            Japanese-specific POS                           */
@@ -238,6 +239,7 @@ serializable_enum! {
         #[strum(to_string = "transitive verb")]
         Vt,
         #[strum(to_string = "unknown")]
+        #[default]
         Un,
         #[strum(to_string = "verb")]
         V,
@@ -253,11 +255,5 @@ serializable_enum! {
 impl From<PartOfSpeech> for String {
     fn from(pos: PartOfSpeech) -> Self {
         pos.to_string()
-    }
-}
-
-impl Default for PartOfSpeech {
-    fn default() -> Self {
-        PartOfSpeech::Un
     }
 }

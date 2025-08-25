@@ -10,9 +10,9 @@ fn get_tag_name<T: serde::Serialize + Display + Debug>(value: &T) -> String {
     serde_json::to_value(value)
         .map(|v| match v {
             serde_json::Value::String(s) => s,
-            _ => format!("{}", value),
+            _ => format!("{value}"),
         })
-        .unwrap_or_else(|_| format!("Error serializing enum: {:?}", value))
+        .unwrap_or_else(|_| format!("Error serializing enum: {value:?}"))
 }
 
 macro_rules! impl_enum_identifier {

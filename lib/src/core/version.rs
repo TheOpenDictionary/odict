@@ -21,17 +21,6 @@ impl SemanticVersion {
         }
     }
 
-    pub fn to_string(&self) -> String {
-        let mut version = format!("{}.{}.{}", self.major, self.minor, self.patch);
-
-        if let Some(prerelease) = &self.prerelease {
-            version.push('-');
-            version.push_str(prerelease);
-        }
-
-        version
-    }
-
     pub fn is_compatible(&self, other: &Self) -> bool {
         self.major == other.major && self.prerelease.as_deref() == other.prerelease.as_deref()
     }
@@ -43,7 +32,14 @@ impl SemanticVersion {
 
 impl Display for SemanticVersion {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_string())
+        let mut version = format!("{}.{}.{}", self.major, self.minor, self.patch);
+
+        if let Some(prerelease) = &self.prerelease {
+            version.push('-');
+            version.push_str(prerelease);
+        }
+
+        write!(f, "{version}")
     }
 }
 

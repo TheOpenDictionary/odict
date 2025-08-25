@@ -20,7 +20,7 @@ pub fn write_pronunciation(
 
         lines.push(pron_text);
     } else {
-        lines.push(format!("{}", pronunciation.value));
+        lines.push(pronunciation.value.to_string());
     }
 
     // Add URLs as markdown links if they exist

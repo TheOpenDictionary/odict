@@ -1,81 +1,21 @@
-use std::{
-    path::{Path, PathBuf},
-    sync::LazyLock,
-    time::SystemTime,
-};
+use std::time::SystemTime;
 
 use crate::{
     config::get_config_dir,
     download::{
-        client::get_client,
         metadata::{get_metadata, set_metadata, DictionaryMetadata},
-        parse_dictionary_name,
+        options::{DownloadOptions, ProgressCallback},
+        utils::parse_remote_dictionary_name,
     },
     Error,
 };
 
 use futures_util::StreamExt;
-
-pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync>;
-
-pub const DEFAULT_DOWNLOADER: LazyLock<DictionaryDownloader> =
-    LazyLock::new(|| DictionaryDownloader::default());
-
-pub struct DownloadOptions {
-    caching: bool,
-    out_dir: Option<PathBuf>,
-    on_progress: Option<ProgressCallback>,
-}
-
-impl Clone for DownloadOptions {
-    fn clone(&self) -> Self {
-        Self {
-            caching: self.caching,
-            out_dir: self.out_dir.clone(),
-            on_progress: None, // Function pointers can't be cloned, so we set to None
-        }
-    }
-}
-
-impl Default for DownloadOptions {
-    fn default() -> Self {
-        Self {
-            caching: true,
-            out_dir: None,
-            on_progress: None,
-        }
-    }
-}
-
-impl DownloadOptions {
-    pub fn caching(&mut self, value: bool) -> &Self {
-        self.caching = value;
-        self
-    }
-
-    pub fn out_dir<P: AsRef<Path>>(&mut self, path: P) -> &Self {
-        self.out_dir = Some(path.as_ref().to_path_buf());
-        self
-    }
-
-    pub fn on_progress<F>(&mut self, callback: F) -> &Self
-    where
-        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'static,
-    {
-        self.on_progress = Some(Box::new(callback));
-        self
-    }
-}
-
-impl AsRef<DownloadOptions> for DownloadOptions {
-    fn as_ref(&self) -> &DownloadOptions {
-        self
-    }
-}
-
+use reqwest::Client;
 #[derive(Clone, Debug)]
 pub struct DictionaryDownloader {
     base_url: String,
+    client: Client,
 }
 
 impl AsRef<DictionaryDownloader> for DictionaryDownloader {
@@ -88,13 +28,22 @@ impl Default for DictionaryDownloader {
     fn default() -> Self {
         Self {
             base_url: "https://pub-520e4751d2374bc5bc14265c6e02e06e.r2.dev".to_string(),
+            client: Client::builder()
+                .user_agent("odict/2.9.1")
+                .build()
+                .expect("Failed to create HTTP client"),
         }
     }
 }
 
 impl DictionaryDownloader {
-    pub fn new(base_url: String) -> Self {
-        Self { base_url }
+    pub fn new(client: Client, base_url: String) -> Self {
+        Self { client, base_url }
+    }
+
+    pub fn with_client<F>(mut self, client: Client) -> Self {
+        self.client = client;
+        self
     }
 
     pub async fn download(&self, dictionary_name: &str) -> crate::Result<Vec<u8>> {
@@ -107,7 +56,7 @@ impl DictionaryDownloader {
         dictionary_name: &str,
         options: Options,
     ) -> crate::Result<Vec<u8>> {
-        let (dictionary, language) = parse_dictionary_name(dictionary_name)?;
+        let (dictionary, language) = parse_remote_dictionary_name(dictionary_name)?;
 
         let opts = options.as_ref();
 
@@ -121,7 +70,7 @@ impl DictionaryDownloader {
         }
 
         let url = format!("{}/{}/{}.odict", self.base_url, dictionary, language);
-        let out_path = out_dir.join(format!("{}.odict", language));
+        let out_path = out_dir.join(format!("{language}.odict"));
 
         let etag = if opts.caching {
             get_metadata(&out_path)?.map(|meta| meta.etag)
@@ -129,8 +78,9 @@ impl DictionaryDownloader {
             None
         };
 
-        let (bytes, new_etag) =
-            Self::fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref()).await?;
+        let (bytes, new_etag) = self
+            .fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref())
+            .await?;
 
         if let Some(etag) = new_etag {
             if opts.caching {
@@ -147,18 +97,19 @@ impl DictionaryDownloader {
 
         if !bytes.is_empty() {
             std::fs::write(&out_path, &bytes)?;
-            return Ok(bytes.clone());
+            Ok(bytes.clone())
         } else {
-            return Ok(std::fs::read(&out_path)?);
+            Ok(std::fs::read(&out_path)?)
         }
     }
 
     async fn fetch_with_etag(
+        &self,
         url: &str,
         etag: Option<&str>,
         on_progress: Option<&ProgressCallback>,
     ) -> crate::Result<(Vec<u8>, Option<String>)> {
-        let client = get_client();
+        let client = &self.client;
         let mut request = client.get(url);
 
         if let Some(tag) = etag {
@@ -168,7 +119,7 @@ impl DictionaryDownloader {
         let response = request
             .send()
             .await
-            .map_err(|e| Error::Other(format!("Failed to fetch from {}: {}", url, e)))?;
+            .map_err(|e| Error::Other(format!("Failed to fetch from {url}: {e}")))?;
 
         match response.status().as_u16() {
             304 => {
@@ -177,7 +128,7 @@ impl DictionaryDownloader {
             }
             200 => {
                 // Success - extract etag and bytes
-                let etag = super::extract_etag(&response);
+                let etag = super::utils::extract_etag(&response);
                 let content_length = response.content_length();
 
                 let mut bytes = Vec::new();
@@ -185,9 +136,8 @@ impl DictionaryDownloader {
                 let mut stream = response.bytes_stream();
 
                 while let Some(chunk) = stream.next().await {
-                    let chunk = chunk.map_err(|e| {
-                        Error::Other(format!("Failed to read response chunk: {}", e))
-                    })?;
+                    let chunk = chunk
+                        .map_err(|e| Error::Other(format!("Failed to read response chunk: {e}")))?;
 
                     bytes.extend_from_slice(&chunk);
                     downloaded += chunk.len() as u64;
@@ -206,8 +156,7 @@ impl DictionaryDownloader {
                 Ok((bytes, etag))
             }
             status => Err(Error::Other(format!(
-                "Unexpected response status from {}: {}",
-                url, status
+                "Unexpected response status from {url}: {status}"
             ))),
         }
     }
@@ -216,6 +165,8 @@ impl DictionaryDownloader {
 mod tests {
     use std::fs;
 
+    use crate::download::options::DownloadOptions;
+
     use super::*;
 
     use tempfile::TempDir;
@@ -223,7 +174,7 @@ mod tests {
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     fn create_test_downloader(base_url: String) -> DictionaryDownloader {
-        DictionaryDownloader::new(base_url)
+        DictionaryDownloader::new(reqwest::Client::new(), base_url)
     }
 
     #[tokio::test]
@@ -272,11 +223,9 @@ mod tests {
 
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
-        let options = DownloadOptions {
-            caching: true,
-            out_dir: Some(temp_dir.path().to_path_buf()),
-            on_progress: None,
-        };
+        let options = DownloadOptions::default()
+            .caching(true)
+            .out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/eng", &options)
@@ -299,11 +248,9 @@ mod tests {
 
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
-        let options = DownloadOptions {
-            caching: false,
-            out_dir: Some(temp_dir.path().to_path_buf()),
-            on_progress: None,
-        };
+        let options = DownloadOptions::default()
+            .caching(true)
+            .out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/de", &options)
@@ -343,11 +290,9 @@ mod tests {
             .await;
 
         let downloader = create_test_downloader(mock_server.uri());
-        let options = DownloadOptions {
-            caching: true,
-            out_dir: Some(temp_dir.path().to_path_buf()),
-            on_progress: None,
-        };
+        let options = DownloadOptions::default()
+            .caching(true)
+            .out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/es", &options)
@@ -430,7 +375,8 @@ mod tests {
     #[tokio::test]
     async fn test_downloader_new() {
         let custom_url = "https://custom.example.com";
-        let downloader = DictionaryDownloader::new(custom_url.to_string());
+        let client = reqwest::Client::new();
+        let downloader = DictionaryDownloader::new(client, custom_url.to_string());
         assert_eq!(downloader.base_url, custom_url);
     }
 
@@ -457,12 +403,12 @@ mod tests {
         let progress_calls = Arc::new(Mutex::new(Vec::new()));
         let progress_calls_clone = progress_calls.clone();
 
-        let mut options = DownloadOptions::default();
-        options.out_dir(temp_dir.path());
-        options.on_progress(move |downloaded, total, progress| {
-            let mut calls = progress_calls_clone.lock().unwrap();
-            calls.push((downloaded, total, progress));
-        });
+        let options = DownloadOptions::default()
+            .out_dir(temp_dir.path())
+            .on_progress(move |downloaded, total, progress| {
+                let mut calls = progress_calls_clone.lock().unwrap();
+                calls.push((downloaded, total, progress));
+            });
 
         let result = downloader
             .download_with_options("wiktionary/progress", &options)
@@ -507,7 +453,9 @@ mod tests {
             .await;
 
         let url = format!("{}/fetch-test.odict", mock_server.uri());
-        let result = DictionaryDownloader::fetch_with_etag(&url, None, None).await;
+        let result = DictionaryDownloader::default()
+            .fetch_with_etag(&url, None, None)
+            .await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -527,8 +475,9 @@ mod tests {
             .await;
 
         let url = format!("{}/not-modified.odict", mock_server.uri());
-        let result =
-            DictionaryDownloader::fetch_with_etag(&url, Some("\"existing-etag\""), None).await;
+        let result = DictionaryDownloader::default()
+            .fetch_with_etag(&url, Some("\"existing-etag\""), None)
+            .await;
 
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
@@ -547,7 +496,9 @@ mod tests {
             .await;
 
         let url = format!("{}/error.odict", mock_server.uri());
-        let result = DictionaryDownloader::fetch_with_etag(&url, None, None).await;
+        let result = DictionaryDownloader::default()
+            .fetch_with_etag(&url, None, None)
+            .await;
 
         assert!(result.is_err());
         match result.unwrap_err() {

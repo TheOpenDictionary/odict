@@ -82,7 +82,7 @@ async fn handle_lookup(
         })?;
 
     let dictionary = file
-        .content()
+        .contents()
         .map_err(|_e| LookupError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?;

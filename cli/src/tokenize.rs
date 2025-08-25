@@ -1,7 +1,7 @@
 use clap::{arg, command, Args};
-use odict::lookup::TokenizeOptions;
+use odict::tokenize::TokenizeOptions;
 
-use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
+use crate::{enums::PrintFormat, get_lookup_entries, load_dictionary, print_entries, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -48,19 +48,14 @@ pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyh
         insensitive,
     } = args;
 
-    let file = ctx
-        .loader
-        .load(&path)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+    let file = load_dictionary(path).await?;
 
     let opts = TokenizeOptions::default()
         .follow(*follow)
         .insensitive(*insensitive);
 
-    let archive = file.to_archive()?;
-
-    let result = archive.tokenize(text, opts);
+    let dict = file.contents()?;
+    let result = dict.tokenize(text, opts);
 
     match result {
         Ok(tokens) => {
@@ -71,7 +66,7 @@ pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyh
                 .collect::<Vec<_>>();
 
             if all_entries.is_empty() {
-                ctx.println(format!("No entries found for the text: \"{}\"", text));
+                ctx.println(format!("No entries found for the text: \"{text}\""));
             } else {
                 print_entries(ctx, get_lookup_entries(all_entries), format)?;
             }

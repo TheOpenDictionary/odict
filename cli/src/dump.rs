@@ -6,7 +6,7 @@ use odict::format::{
     xml::ToXML,
 };
 
-use crate::{enums::DumpFormat, CLIContext};
+use crate::{enums::DumpFormat, load_dictionary, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -29,12 +29,7 @@ pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Resu
         output,
     } = args;
 
-    let dict = ctx
-        .loader
-        .load(input)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?
-        .to_dictionary()?;
+    let dict = load_dictionary(input).await?.contents()?.deserialize()?;
 
     let contents = match format {
         DumpFormat::XML => dict.to_xml(true)?,
@@ -44,7 +39,7 @@ pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Resu
     };
 
     match output {
-        Some(out) => fs::write(&out, &contents)?,
+        Some(out) => fs::write(out, &contents)?,
         None => ctx.println(contents),
     };
 

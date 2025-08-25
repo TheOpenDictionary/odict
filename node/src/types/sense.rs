@@ -1,7 +1,7 @@
 use internal::ToEnumWrapper;
 use napi::bindgen_prelude::*;
 
-use odict::DefinitionType;
+use odict::schema::DefinitionType;
 
 use super::{
   definition::Definition, enums::EnumWrapper, form::Form, group::Group, translation::Translation,

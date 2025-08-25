@@ -1,6 +1,5 @@
 use clap::{arg, Args};
-
-use crate::CLIContext;
+use odict::config::AliasManager;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -10,6 +9,6 @@ pub struct DeleteArgs {
     name: String,
 }
 
-pub fn delete(ctx: &mut CLIContext, args: &DeleteArgs) -> anyhow::Result<()> {
-    anyhow::Ok(ctx.loader.alias_manager().delete(args.name.as_str())?)
+pub fn delete(args: &DeleteArgs) -> anyhow::Result<()> {
+    anyhow::Ok(AliasManager::default().delete(args.name.as_str())?)
 }

@@ -23,11 +23,11 @@ mod index_tests {
         let opts = IndexOptions::default().dir(".odict/.idx");
         let result1 = EXAMPLE_DICT.index(&opts);
 
-        assert_eq!(result1.is_err(), false);
+        assert!(result1.is_ok());
 
         let result2 = EXAMPLE_DICT.index(&opts);
 
-        assert_eq!(result2.is_err(), true);
+        assert!(result2.is_err());
         assert_eq!(result2.unwrap_err().to_string(), "Index already exists");
     }
 }

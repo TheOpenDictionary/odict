@@ -1,6 +1,7 @@
 use clap::{arg, Args};
+use odict::config::AliasManager;
 
-use crate::CLIContext;
+use crate::load_dictionary;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -13,20 +14,12 @@ pub struct SetArgs {
     path: String,
 }
 
-pub async fn set<'a>(
-    ctx: &mut CLIContext<'a>,
-    args: &SetArgs,
-    overwrite: bool,
-) -> anyhow::Result<()> {
-    let dict = ctx
-        .loader
-        .load(args.path.as_str())
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
+    let dict = load_dictionary(args.path.as_str()).await?;
 
     if overwrite {
-        anyhow::Ok(ctx.loader.alias_manager().set(args.name.as_str(), &dict)?)
+        anyhow::Ok(AliasManager::default().set(args.name.as_str(), &dict)?)
     } else {
-        anyhow::Ok(ctx.loader.alias_manager().add(args.name.as_str(), &dict)?)
+        anyhow::Ok(AliasManager::default().add(args.name.as_str(), &dict)?)
     }
 }

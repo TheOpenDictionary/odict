@@ -4,7 +4,7 @@ use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
 use odict::search::{get_default_index_dir, IndexOptions};
 
-use crate::CLIContext;
+use crate::{load_dictionary, CLIContext};
 
 pub(super) static DEFAULT_INDEX_MEMORY: usize = 15000000;
 
@@ -30,15 +30,11 @@ pub struct IndexArgs {
 }
 
 pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
-    let file = ctx
-        .loader
-        .load(&args.dictionary)
-        .await
-        .map_err(|e| anyhow::anyhow!("Failed to load dictionary: {}", e))?;
+    let file = load_dictionary(&args.dictionary).await?;
 
-    ctx.println("".to_string());
+    ctx.println("");
 
-    let dict = file.to_dictionary()?;
+    let dict = file.contents()?;
 
     let progress1 = ProgressBar::new(dict.entries.len() as u64).with_style(
         ProgressStyle::with_template("[{eta_precise}] {bar} {pos}/{len} entries indexed").unwrap(),

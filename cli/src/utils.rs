@@ -1,6 +1,9 @@
 use std::time::Duration;
 
-use odict::{lookup::LookupResult, ArchivedEntry, Entry};
+use odict::{
+    lookup::LookupResult,
+    schema::{ArchivedEntry, Entry},
+};
 
 pub fn t<F>(cb: F) -> anyhow::Result<Duration>
 where

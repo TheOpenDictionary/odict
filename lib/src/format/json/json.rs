@@ -49,7 +49,7 @@ impl ToJSON for Vec<Entry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| EntryJSON::from(v))
+            .map(EntryJSON::from)
             .collect::<Vec<EntryJSON>>();
 
         stringify(&json, pretty)
@@ -80,7 +80,7 @@ impl ToJSON for Vec<&ArchivedEntry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| EntryJSON::try_from(v))
+            .map(EntryJSON::try_from)
             .collect::<crate::Result<Vec<EntryJSON>>>()?;
 
         stringify(&json, pretty)
@@ -88,7 +88,7 @@ impl ToJSON for Vec<&ArchivedEntry> {
 }
 
 #[cfg(feature = "tokenize-latin")]
-impl<'a> ToJSON for Token<&ArchivedEntry> {
+impl ToJSON for Token<&ArchivedEntry> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = TokenJSON::try_from(self)?;
         stringify(&json, pretty)
@@ -96,11 +96,11 @@ impl<'a> ToJSON for Token<&ArchivedEntry> {
 }
 
 #[cfg(feature = "tokenize-latin")]
-impl<'a> ToJSON for Vec<Token<&ArchivedEntry>> {
+impl ToJSON for Vec<Token<&ArchivedEntry>> {
     fn to_json(self, pretty: bool) -> crate::Result<String> {
         let json = self
             .into_iter()
-            .map(|v| TokenJSON::try_from(v))
+            .map(TokenJSON::try_from)
             .collect::<crate::Result<Vec<TokenJSON>>>()?;
 
         stringify(&json, pretty)

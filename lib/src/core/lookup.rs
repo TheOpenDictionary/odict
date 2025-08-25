@@ -63,11 +63,11 @@ pub struct LookupResult<E> {
 macro_rules! lookup {
     ($tys:ident, $ret:ident, $opt:ident) => {
         impl $tys {
-            fn find_entry<'a, 'b>(
+            fn find_entry<'a>(
                 &'a self,
                 follow: &Option<u32>,
                 insensitive: &bool,
-                query: &'b str,
+                query: &str,
                 directed_from: Option<&'a $ret>,
             ) -> $opt<LookupResult<&'a $ret>> {
                 // Try exact match first
@@ -118,9 +118,9 @@ macro_rules! lookup {
                 $opt::None
             }
 
-            fn perform_lookup<'a, 'b, Options>(
+            fn perform_lookup<'a, Options>(
                 &'a self,
-                query: &'b str,
+                query: &str,
                 options: Options,
             ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
             where

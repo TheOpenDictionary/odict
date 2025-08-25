@@ -29,6 +29,18 @@ impl OpenDictionary {
         &self.version
     }
 
+    pub fn size(&self) -> crate::Result<u64> {
+        if let Some(path) = &self.path {
+            if let Ok(metadata) = std::fs::metadata(path) {
+                return Ok(metadata.len());
+            }
+        }
+
+        let bytes = self.to_bytes()?;
+
+        Ok(bytes.len().try_into()?)
+    }
+
     pub fn contents(&self) -> crate::Result<&crate::schema::ArchivedDictionary> {
         Ok(unsafe { access_unchecked::<crate::schema::ArchivedDictionary>(&self.bytes[..]) })
     }

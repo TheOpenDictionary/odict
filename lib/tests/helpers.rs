@@ -4,7 +4,7 @@ use odict::{schema::Dictionary, OpenDictionary, Result};
 use tempfile::NamedTempFile;
 
 pub fn get_example_dict(name: &str) -> Result<OpenDictionary> {
-    let input = format!("../examples/{}.xml", name);
+    let input = format!("../examples/{name}.xml");
     let output = NamedTempFile::new()?.path().to_str().unwrap().to_string();
     let mut dict = Dictionary::from_path(&input).unwrap().build().unwrap();
 

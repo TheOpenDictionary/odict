@@ -5,6 +5,7 @@ use crate::OpenDictionary;
 
 use super::consts::{SIGNATURE, VERSION};
 
+#[derive(Default)]
 pub struct CompilerOptions {
     pub compress_options: CompressOptions,
 }
@@ -16,17 +17,9 @@ impl AsRef<CompilerOptions> for CompilerOptions {
 }
 
 impl CompilerOptions {
-    pub fn compression(mut self, compress_options: CompressOptions) -> Self {
+    pub fn with_compression(mut self, compress_options: CompressOptions) -> Self {
         self.compress_options = compress_options;
         self
-    }
-}
-
-impl Default for CompilerOptions {
-    fn default() -> Self {
-        Self {
-            compress_options: CompressOptions::default(),
-        }
     }
 }
 
@@ -88,7 +81,7 @@ impl OpenDictionary {
         output.extend_from_slice(&compressed_size_bytes);
         output.extend_from_slice(&compressed);
 
-        return Ok(output);
+        Ok(output)
     }
 }
 

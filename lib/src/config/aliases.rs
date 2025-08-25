@@ -4,15 +4,11 @@ use std::{
     ffi::OsStr,
     fs::{self, read_to_string},
     path::PathBuf,
-    sync::{LazyLock, Mutex},
 };
 
 use crate::OpenDictionary;
 
 use super::config::get_config_dir;
-
-pub const DEFAULT_ALIAS_MANAGER: LazyLock<Mutex<AliasManager>> =
-    LazyLock::new(|| Mutex::new(AliasManager::default()));
 
 #[derive(Debug, Clone)]
 pub struct AliasManager {
@@ -87,19 +83,47 @@ impl AliasManager {
     }
 }
 
+#[derive(Debug, Default, Clone)]
+pub struct AliasOptions {
+    manager: AliasManager,
+}
+
+impl AsRef<AliasOptions> for AliasOptions {
+    fn as_ref(&self) -> &AliasOptions {
+        self
+    }
+}
+
+impl AsMut<AliasOptions> for AliasOptions {
+    fn as_mut(&mut self) -> &mut AliasOptions {
+        self
+    }
+}
+
 impl OpenDictionary {
-    pub fn from_alias(alias: &str) -> crate::Result<OpenDictionary> {
-        DEFAULT_ALIAS_MANAGER
-            .lock()
-            .unwrap()
-            .get(alias)
-            .map_or_else(
-                || Err(crate::Error::AliasNotFound(alias.to_string())),
-                |path| OpenDictionary::from_path(path),
-            )
+    pub fn from_alias_with_options<Options: AsRef<AliasOptions>>(
+        alias: &str,
+        options: Options,
+    ) -> crate::Result<OpenDictionary> {
+        options.as_ref().manager.get(alias).map_or_else(
+            || Err(crate::Error::AliasNotFound(alias.to_string())),
+            OpenDictionary::from_path,
+        )
+    }
+
+    pub fn alias_to_with_options<Options: AsMut<AliasOptions>>(
+        &self,
+        name: &str,
+        mut options: Options,
+    ) -> crate::Result<()> {
+        options.as_mut().manager.add(name, self)
     }
 
     pub fn alias_to(&self, name: &str) -> crate::Result<()> {
-        DEFAULT_ALIAS_MANAGER.lock().unwrap().add(name, self)
+        self.alias_to_with_options(name, AliasOptions::default())
+    }
+
+    pub fn from_alias(alias: &str) -> crate::Result<OpenDictionary> {
+        Self::from_alias_with_options(alias, AliasOptions::default())
     }
 }

@@ -26,10 +26,10 @@ pub fn get_metadata<P: AsRef<Path>>(local_path: P) -> Result<Option<DictionaryMe
     }
 
     let content = std::fs::read_to_string(&metadata)
-        .map_err(|e| Error::Other(format!("Failed to read metadata json: {}", e)))?;
+        .map_err(|e| Error::Other(format!("Failed to read metadata json: {e}")))?;
 
     serde_json::from_str(&content)
-        .map_err(|e| Error::Other(format!("Failed to parse metadata json: {}", e)))
+        .map_err(|e| Error::Other(format!("Failed to parse metadata json: {e}")))
 }
 
 /// Save etag cache to disk
@@ -37,10 +37,10 @@ pub fn set_metadata<P: AsRef<Path>>(local_path: P, metadata: DictionaryMetadata)
     let metadata_path = local_path.as_ref().with_extension(METADATA_EXTENSION);
 
     let content = serde_json::to_string_pretty(&metadata)
-        .map_err(|e| Error::Other(format!("Failed to serialize metadata json: {}", e)))?;
+        .map_err(|e| Error::Other(format!("Failed to serialize metadata json: {e}")))?;
 
     std::fs::write(&metadata_path, content)
-        .map_err(|e| Error::Other(format!("Failed to write metadata json: {}", e)))
+        .map_err(|e| Error::Other(format!("Failed to write metadata json: {e}")))
 }
 
 #[cfg(test)]

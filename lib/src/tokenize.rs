@@ -23,6 +23,7 @@ pub struct Token<T> {
     pub entries: Vec<LookupResult<T>>,
 }
 
+#[derive(Default)]
 pub struct TokenizeOptions {
     /// Maximum number of redirects to follow via see_also links.
     /// 0 means no following, u32::MAX provides infinite following (old behavior).
@@ -38,15 +39,8 @@ impl AsRef<TokenizeOptions> for TokenizeOptions {
     }
 }
 
-impl TokenizeOptions {
-    pub fn default() -> Self {
-        Self {
-            allow_list: None,
-            follow: 0,
-            insensitive: false,
-        }
-    }
 
+impl TokenizeOptions {
     pub fn follow(mut self, follow: u32) -> Self {
         self.follow = follow;
         self
@@ -80,9 +74,9 @@ fn is_valid_token(input: &str) -> bool {
 macro_rules! tokenize {
     ($t:ident, $r:ident) => {
         impl $t {
-            pub fn tokenize<'a, 'b, Options>(
+            pub fn tokenize<'a, Options>(
                 &'a self,
-                text: &'b str,
+                text: &str,
                 options: Options,
             ) -> crate::Result<Vec<Token<&'a $r>>>
             where

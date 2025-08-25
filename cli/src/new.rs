@@ -27,7 +27,7 @@ pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
     );
 
     if let Some(name) = &args.name {
-        template.push_str(&format!(" name=\"{}\"", name));
+        template.push_str(&format!(" name=\"{name}\""));
     }
 
     template.push_str(
