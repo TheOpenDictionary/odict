@@ -1,4 +1,4 @@
-use crate::{context::CLIContext, load_dictionary};
+use crate::{context::CLIContext, internal::load_dictionary};
 use clap::{arg, command, Args};
 use console::Style;
 use indicatif::DecimalBytes;
@@ -17,7 +17,7 @@ pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Resu
         dictionary_path: path,
     } = args;
 
-    let file = load_dictionary(path).await?;
+    let file = internal::load_dictionary(path).await?;
 
     let bold = Style::new().bold();
     let dict = file.contents()?;

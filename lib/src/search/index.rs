@@ -119,15 +119,13 @@ macro_rules! index {
     };
 }
 
-// Workaround
-
 trait SerializeEntry {
     fn serialize(&self) -> crate::Result<Vec<u8>>;
 }
 
 impl SerializeEntry for &ArchivedEntry {
     fn serialize(&self) -> crate::Result<Vec<u8>> {
-        self.to_entry().unwrap().serialize()
+        self.deserialize().unwrap().serialize()
     }
 }
 

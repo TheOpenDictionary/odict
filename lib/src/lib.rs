@@ -1,6 +1,9 @@
 #[cfg(feature = "config")]
 pub mod config;
 
+#[cfg(feature = "alias")]
+pub mod alias;
+
 #[cfg(feature = "http")]
 pub mod download;
 
@@ -28,3 +31,6 @@ pub use self::core::*;
 pub use self::error::*;
 pub use self::ext::*;
 pub use self::odict::*;
+
+#[cfg(feature = "search")]
+pub use self::search::*;

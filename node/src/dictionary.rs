@@ -2,57 +2,60 @@ use std::vec;
 
 use napi::bindgen_prelude::*;
 
-use merge::Merge;
 use odict::ToDictionary;
 
+#[cfg(feature = "node")]
+use crate::types::LoadOptions;
 use crate::{
-  types::{self, DictionaryOptions, Entry},
-  utils::{cast_error, resolve_options},
+  types::{self, Entry},
+  utils::cast_error,
 };
 
 #[napi]
-pub struct Dictionary {
-  options: Option<DictionaryOptions>,
-  file: odict::DictionaryFile,
+pub struct OpenDictionary {
+  dict: odict::OpenDictionary,
 }
 
 #[napi]
 pub fn compile(xml: String) -> Result<Buffer> {
-  let dictionary = xml.to_dictionary().map_err(cast_error)?;
-
-  let bytes = odict::DictionaryWriter::default()
-    .write_to_bytes(&dictionary)
+  let bytes = xml
+    .to_dictionary()
+    .and_then(|d| d.build())
+    .and_then(|d| d.to_bytes())
     .map_err(cast_error)?;
-
   Ok(bytes.into())
 }
 
 #[napi]
-impl Dictionary {
-  #[cfg(feature = "load")]
+impl OpenDictionary {
+  #[cfg(feature = "node")]
   #[napi(factory)]
-  pub async fn load(dictionary: String, options: Option<DictionaryOptions>) -> Result<Self> {
-    let loader = odict::DictionaryLoader::default();
-    let file = loader.load(&dictionary).await.map_err(cast_error)?;
-    let dict = Dictionary { options, file };
+  pub async fn load(dictionary: String, options: Option<LoadOptions>) -> Result<Self> {
+    use internal::LoadDictionaryOptions;
 
-    Ok(dict)
+    let opts = options
+      .map(|o| LoadDictionaryOptions::try_from(o))
+      .transpose()
+      .map_err(cast_error)?
+      .unwrap_or_default();
+
+    let dict = internal::load_dictionary_with_options(&dictionary, opts)
+      .await
+      .map_err(cast_error)?;
+
+    Ok(Self { dict })
   }
 
   #[napi(constructor)]
-  pub fn new(data: Buffer, options: Option<DictionaryOptions>) -> Result<Self> {
-    let mut loader = odict::DictionaryLoader::default();
-    let file = loader
-      .reader()
-      .read_from_bytes::<Vec<u8>>(data.into())
-      .map_err(cast_error)?;
-    let dict = Dictionary { options, file };
-
-    Ok(dict)
+  pub fn new(data: Buffer) -> Result<Self> {
+    let dict = odict::OpenDictionary::from_bytes::<Vec<u8>>(data.into()).map_err(cast_error)?;
+    Ok(Self { dict })
   }
 
-  pub fn options(&self) -> DictionaryOptions {
-    resolve_options(&self.options)
+  #[cfg(feature = "node")]
+  #[napi]
+  pub fn save(&mut self, path: String) -> Result<()> {
+    self.dict.to_disk(&path).map_err(cast_error)
   }
 
   pub fn _lookup(
@@ -60,24 +63,18 @@ impl Dictionary {
     queries: &Vec<String>,
     options: Option<types::LookupOptions>,
   ) -> Result<Vec<types::LookupResult>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
+    let dict = self.dict.contents().map_err(cast_error)?;
 
     let mut opts: types::LookupOptions = options.unwrap_or(types::LookupOptions::default());
 
-    if let Some(split) = opts
-      .split
-      .or(self.options().split.map(|s| s.min_length).flatten())
-    {
+    if let Some(split) = opts.split {
       opts.split = Some(split);
     }
 
-    // Fix: Convert to odict::lookup::LookupOptions explicitly to help type inference
-    let odict_options: odict::lookup::LookupOptions = opts.into();
     let results = dict
-      .lookup(queries, odict_options)
+      .lookup(queries, &odict::lookup::LookupOptions::from(opts))
       .map_err(|e| cast_error(e))?;
 
-    // Convert results properly
     let mapped = results
       .iter()
       .map(|result| result.try_into())
@@ -88,24 +85,12 @@ impl Dictionary {
 
   #[napi(getter)]
   pub fn min_rank(&self) -> Result<Option<u32>> {
-    Ok(
-      self
-        .file
-        .to_archive()
-        .map_err(|e| cast_error(e))?
-        .min_rank(),
-    )
+    Ok(self.dict.contents().map_err(|e| cast_error(e))?.min_rank())
   }
 
   #[napi(getter)]
   pub fn max_rank(&self) -> Result<Option<u32>> {
-    Ok(
-      self
-        .file
-        .to_archive()
-        .map_err(|e| cast_error(e))?
-        .max_rank(),
-    )
+    Ok(self.dict.contents().map_err(|e| cast_error(e))?.max_rank())
   }
 
   #[napi]
@@ -126,7 +111,7 @@ impl Dictionary {
 
   #[napi]
   pub fn lexicon(&self) -> Result<Vec<&str>> {
-    let dict = self.file.to_archive().map_err(cast_error)?;
+    let dict = self.dict.contents().map_err(cast_error)?;
     let lexicon = dict.lexicon();
 
     Ok(lexicon)
@@ -134,36 +119,28 @@ impl Dictionary {
 
   #[napi]
   pub fn index(&self, options: Option<types::IndexOptions>) -> Result<()> {
-    #[cfg(feature = "search")]
+    #[cfg(feature = "node")]
     {
-      let dict = self.file.to_archive().map_err(cast_error)?;
-      let mut opts = options.unwrap_or(types::IndexOptions::default());
-
-      if let Some(default_opts) = self.options().index {
-        opts.merge(default_opts);
-      }
+      let dict = self.dict.contents().map_err(cast_error)?;
+      let opts = options.unwrap_or(types::IndexOptions::default());
 
       dict
-        .index(odict::search::IndexOptions::from(opts))
+        .index(odict::index::IndexOptions::from(opts))
         .map_err(cast_error)?;
 
       return Ok(());
     }
 
-    #[cfg(not(feature = "search"))]
+    #[cfg(not(feature = "node"))]
     unimplemented!("index() is not available in browser environments. Maybe try IndexedDB?");
   }
 
   #[napi]
   pub fn search(&self, query: String, options: Option<types::SearchOptions>) -> Result<Vec<Entry>> {
-    #[cfg(feature = "search")]
+    #[cfg(feature = "node")]
     {
-      let dict = self.file.to_archive().map_err(cast_error)?;
-      let mut opts = options.unwrap_or_default();
-
-      if let Some(default_opts) = self.options().search {
-        opts.merge(default_opts);
-      }
+      let dict = self.dict.contents().map_err(cast_error)?;
+      let opts = options.unwrap_or_default();
 
       // Use our helper function to avoid orphan rule issues
       let results = dict
@@ -173,13 +150,13 @@ impl Dictionary {
       // Use the new from_entry function for Entry types
       let entries = results
         .iter()
-        .map(|e| types::entry::from_entry(e))
-        .collect::<Result<Vec<Entry>>>()?;
+        .map(|e| e.clone().into())
+        .collect::<Vec<Entry>>();
 
       return Ok(entries);
     }
 
-    #[cfg(not(feature = "search"))]
+    #[cfg(not(feature = "node"))]
     unimplemented!("search() is not available in browser environments. Maybe try IndexedDB?");
   }
 
@@ -191,11 +168,11 @@ impl Dictionary {
   ) -> Result<Vec<types::Token>> {
     #[cfg(feature = "tokenize")]
     {
-      let dict = self.file.to_archive().map_err(cast_error)?;
+      let dict = self.dict.contents().map_err(cast_error)?;
 
       let opts = match options {
         Some(o) => o.into(),
-        None => odict::lookup::TokenizeOptions::default(),
+        None => odict::tokenize::TokenizeOptions::default(),
       };
 
       let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
@@ -207,10 +184,10 @@ impl Dictionary {
         let mut entries = Vec::new();
 
         for result in &token.entries {
-          let entry = types::entry::from_archive(result.entry)?;
+          let entry: types::Entry = result.entry.deserialize().map_err(cast_error)?.into();
 
           let directed_from = match result.directed_from {
-            Some(entry) => Some(types::entry::from_archive(entry)?),
+            Some(entry) => Some(entry.deserialize().map_err(cast_error)?.into()),
             None => None,
           };
 

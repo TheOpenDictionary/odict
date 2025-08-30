@@ -120,5 +120,5 @@ const {
   },
 });
 module.exports = __napiModule.exports;
-module.exports.Dictionary = __napiModule.exports.Dictionary;
+module.exports.OpenDictionary = __napiModule.exports.OpenDictionary;
 module.exports.compile = __napiModule.exports.compile;

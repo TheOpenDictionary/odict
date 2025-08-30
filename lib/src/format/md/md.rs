@@ -27,14 +27,14 @@ impl<T: AsRef<Entry>> ToMarkdown for Vec<T> {
 
 impl ToMarkdown for &ArchivedEntry {
     fn to_markdown(self) -> crate::Result<String> {
-        write_entry(&self.to_entry()?)
+        write_entry(&self.deserialize()?)
     }
 }
 
 impl ToMarkdown for Vec<&ArchivedEntry> {
     fn to_markdown(self) -> crate::Result<String> {
         self.iter()
-            .map(|entry| entry.to_entry().unwrap())
+            .map(|entry| entry.deserialize().unwrap())
             .collect::<Vec<Entry>>()
             .to_markdown()
     }

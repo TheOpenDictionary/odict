@@ -30,7 +30,7 @@ pub struct IndexArgs {
 }
 
 pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
-    let file = load_dictionary(&args.dictionary).await?;
+    let file = internal::load_dictionary(&args.dictionary).await?;
 
     ctx.println("");
 

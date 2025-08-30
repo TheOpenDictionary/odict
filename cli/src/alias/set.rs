@@ -1,5 +1,5 @@
 use clap::{arg, Args};
-use odict::config::AliasManager;
+use odict::alias::AliasManager;
 
 use crate::load_dictionary;
 
@@ -15,7 +15,7 @@ pub struct SetArgs {
 }
 
 pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
-    let dict = load_dictionary(args.path.as_str()).await?;
+    let dict = internal::load_dictionary(args.path.as_str()).await?;
 
     if overwrite {
         anyhow::Ok(AliasManager::default().set(args.name.as_str(), &dict)?)

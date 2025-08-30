@@ -1,7 +1,7 @@
 use clap::{arg, command, Args};
 use odict::tokenize::TokenizeOptions;
 
-use crate::{enums::PrintFormat, get_lookup_entries, load_dictionary, print_entries, CLIContext};
+use crate::{enums::PrintFormat, get_lookup_entries, internal::load_dictionary, print_entries, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -48,7 +48,7 @@ pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyh
         insensitive,
     } = args;
 
-    let file = load_dictionary(path).await?;
+    let file = internal::load_dictionary(path).await?;
 
     let opts = TokenizeOptions::default()
         .follow(*follow)

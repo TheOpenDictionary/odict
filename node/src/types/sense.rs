@@ -17,8 +17,8 @@ pub struct Sense {
   pub forms: Vec<Form>,
 }
 
-impl From<odict::Sense> for Sense {
-  fn from(sense: odict::Sense) -> Self {
+impl From<odict::schema::Sense> for Sense {
+  fn from(sense: odict::schema::Sense) -> Self {
     Sense {
       pos: sense.pos.to_enum_wrapper().into(),
       lemma: sense.lemma.map(|entry_ref| entry_ref.to_string()),

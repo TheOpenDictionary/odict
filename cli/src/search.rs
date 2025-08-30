@@ -2,7 +2,8 @@ use clap::{arg, command, Args};
 use odict::search::{get_default_index_dir, SearchOptions};
 
 use crate::{
-    enums::PrintFormat, load_dictionary, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY,
+    enums::PrintFormat, internal::load_dictionary, print_entries, CLIContext, IndexArgs,
+    DEFAULT_INDEX_MEMORY,
 };
 
 #[derive(Debug, Args)]
@@ -27,7 +28,7 @@ pub struct SearchArgs {
 }
 
 pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
-    let file = load_dictionary(&args.dictionary).await?;
+    let file = internal::load_dictionary(&args.dictionary).await?;
 
     let dict = file.contents()?;
 

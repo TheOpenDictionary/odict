@@ -8,8 +8,8 @@ publish = false
 crate-type = ["cdylib"]
 
 [features]
-default = ["search", "sql", "tokenize", "load"]
-load = ["odict/http", "odict/alias"]
+default = ["sql", "tokenize", "node"]
+node = ["odict/http", "internal/load", "odict/alias", "odict/search"]
 tokenize = [
   "odict/tokenize-latin",
   "odict/tokenize-chinese",
@@ -19,7 +19,6 @@ tokenize = [
   "odict/tokenize-german",
 ]
 sql = ["odict/sql"]
-search = ["odict/search"]
 
 [dependencies]
 merge = "0.2.0"

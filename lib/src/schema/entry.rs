@@ -76,7 +76,7 @@ impl Entry {
 }
 
 impl ArchivedEntry {
-    pub fn to_entry(&self) -> crate::Result<Entry> {
+    pub fn deserialize(&self) -> crate::Result<Entry> {
         let entry: Entry = deserialize::<Entry, rkyv::rancor::Error>(self)
             .map_err(|e| Error::Deserialize(e.to_string()))?;
 

@@ -100,6 +100,13 @@ impl AsMut<AliasOptions> for AliasOptions {
     }
 }
 
+impl AliasOptions {
+    pub fn with_manager(mut self, manager: AliasManager) -> Self {
+        self.manager = manager;
+        self
+    }
+}
+
 impl OpenDictionary {
     pub fn from_alias_with_options<Options: AsRef<AliasOptions>>(
         alias: &str,

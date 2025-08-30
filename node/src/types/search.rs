@@ -24,7 +24,7 @@ impl Default for SearchOptions {
   }
 }
 
-#[cfg(feature = "search")]
+#[cfg(feature = "node")]
 impl From<SearchOptions> for odict::search::SearchOptions {
   fn from(opts: SearchOptions) -> Self {
     let mut options = odict::search::SearchOptions::default();

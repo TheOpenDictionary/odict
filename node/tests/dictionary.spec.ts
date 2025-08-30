@@ -3,10 +3,10 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 
-import { compile, Dictionary } from "../index.js";
+import { compile, OpenDictionary } from "../index.js";
 
 async function getDictionary(name: string) {
-  return new Dictionary(
+  return new OpenDictionary(
     compile(
       await readFile(
         join(
@@ -25,9 +25,9 @@ describe("Dictionary", () => {
     serialize: (t) => `"${t.value}"`,
   });
 
-  let dict1: Dictionary;
-  let dict2: Dictionary;
-  let dict3: Dictionary;
+  let dict1: OpenDictionary;
+  let dict2: OpenDictionary;
+  let dict3: OpenDictionary;
 
   beforeAll(async () => {
     dict1 = await getDictionary("example1");
@@ -155,7 +155,7 @@ describe("Dictionary", () => {
   </entry>
 </dictionary>`;
 
-      const mixedDict = new Dictionary(compile(mixedXml));
+      const mixedDict = new OpenDictionary(compile(mixedXml));
       expect(mixedDict.minRank).toBe(10);
       expect(mixedDict.maxRank).toBe(100);
     });
@@ -252,7 +252,7 @@ describe("Dictionary", () => {
   it("throws errors inside JavaScript", async () => {
     try {
       // @ts-expect-error
-      const dict = new Dictionary("fake-alias");
+      const dict = new OpenDictionary("fake-alias");
       dict.lookup("dog");
     } catch (e) {
       expect((e as Error).message).toContain(
@@ -261,16 +261,42 @@ describe("Dictionary", () => {
     }
   });
 
-  describe.skipIf(typeof Dictionary.load !== "function")("load", () => {
+  describe.skipIf(typeof OpenDictionary.load !== "function")("load", () => {
+    const dict1Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example1.odict",
+    );
+
+    const dict2Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example2.odict",
+    );
+
+    const emptyPath = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/empty.odict",
+    );
+
+    beforeAll(async () => {
+      const dict1 = await getDictionary("example1");
+      const dict2 = await getDictionary("example2");
+      const empty = await getDictionary("empty");
+
+      dict1.save(dict1Path);
+      dict2.save(dict2Path);
+      empty.save(emptyPath);
+    });
+
     it("loads dictionary from local .odict file path", async () => {
       const dictPath = join(
         fileURLToPath(new URL(import.meta.url)),
         "../../../examples/example1.odict",
       );
 
-      const loadedDict = await Dictionary.load(dictPath);
+      const loadedDict = await OpenDictionary.load(dictPath);
 
       expect(loadedDict).toBeDefined();
+
       expect(loadedDict.lexicon()).toStrictEqual([
         "cat",
         "dog",
@@ -290,7 +316,7 @@ describe("Dictionary", () => {
         "../../../examples/example2.odict",
       );
 
-      const loadedDict = await Dictionary.load(dictPath);
+      const loadedDict = await OpenDictionary.load(dictPath);
 
       expect(loadedDict).toBeDefined();
       expect(loadedDict.lexicon().length).toBeGreaterThan(0);
@@ -302,7 +328,7 @@ describe("Dictionary", () => {
         "../../../examples/does-not-exist.odict",
       );
 
-      await expect(Dictionary.load(nonExistentPath)).rejects.toThrow();
+      await expect(OpenDictionary.load(nonExistentPath)).rejects.toThrow();
     });
 
     it("throws error for invalid file format", async () => {
@@ -311,7 +337,7 @@ describe("Dictionary", () => {
         "../../../examples/example1.xml", // XML instead of .odict
       );
 
-      await expect(Dictionary.load(invalidPath)).rejects.toThrow();
+      await expect(OpenDictionary.load(invalidPath)).rejects.toThrow();
     });
 
     it("throws error for invalid dictionary name format", async () => {
@@ -327,29 +353,24 @@ describe("Dictionary", () => {
       ];
 
       for (const format of invalidFormats) {
-        await expect(Dictionary.load(format)).rejects.toThrow();
+        await expect(OpenDictionary.load(format)).rejects.toThrow();
       }
     });
 
     it("handles download failure", async () => {
       const validFormat = "wiktionary/eng";
-      await expect(Dictionary.load(validFormat)).rejects.toThrow(
+      await expect(OpenDictionary.load(validFormat)).rejects.toThrow(
         /An unexpected error occurred/,
       );
     });
 
     it("handles download success", async () => {
       const validFormat = "wiktionary/cmn-eng";
-      expect(await Dictionary.load(validFormat)).toBeDefined();
+      expect(await OpenDictionary.load(validFormat)).toBeDefined();
     });
 
     it("loads empty dictionary file", async () => {
-      const emptyPath = join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/empty.odict",
-      );
-
-      const loadedDict = await Dictionary.load(emptyPath);
+      const loadedDict = await OpenDictionary.load(emptyPath);
 
       expect(loadedDict).toBeDefined();
       expect(loadedDict.lexicon()).toStrictEqual([]);
@@ -359,12 +380,7 @@ describe("Dictionary", () => {
     });
 
     it("preserves dictionary functionality after loading", async () => {
-      const dictPath = join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example1.odict",
-      );
-
-      const loadedDict = await Dictionary.load(dictPath);
+      const loadedDict = await OpenDictionary.load(dict1Path);
 
       // Test all major functionality works
       expect(loadedDict.lexicon()).toBeDefined();
@@ -379,18 +395,9 @@ describe("Dictionary", () => {
     });
 
     it("loads different dictionary files correctly", async () => {
-      const dict1Path = join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example1.odict",
-      );
-      const dict2Path = join(
-        fileURLToPath(new URL(import.meta.url)),
-        "../../../examples/example2.odict",
-      );
-
       const [loadedDict1, loadedDict2] = await Promise.all([
-        Dictionary.load(dict1Path),
-        Dictionary.load(dict2Path),
+        OpenDictionary.load(dict1Path),
+        OpenDictionary.load(dict2Path),
       ]);
 
       // Verify they loaded different dictionaries
@@ -409,7 +416,7 @@ describe("Dictionary", () => {
 
       try {
         await writeFile(tempPath, "invalid odict content");
-        await expect(Dictionary.load(tempPath)).rejects.toThrow(
+        await expect(OpenDictionary.load(tempPath)).rejects.toThrow(
           "The input does not have a valid ODict file signature",
         );
       } finally {

@@ -1,5 +1,5 @@
 use clap::{arg, Args};
-use odict::config::AliasManager;
+use odict::alias::AliasManager;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]

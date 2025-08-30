@@ -1,4 +1,4 @@
-use odict::EnumIdentifier;
+use odict::schema::EnumIdentifier;
 use std::collections::HashMap;
 
 use super::pronunciation::Pronunciation;
@@ -12,8 +12,8 @@ pub struct Etymology {
   pub senses: HashMap<String, Sense>,
 }
 
-impl From<odict::Etymology> for Etymology {
-  fn from(ety: odict::Etymology) -> Self {
+impl From<odict::schema::Etymology> for Etymology {
+  fn from(ety: odict::schema::Etymology) -> Self {
     Self {
       id: ety.id,
       pronunciations: ety.pronunciations.into_iter().map(Into::into).collect(),

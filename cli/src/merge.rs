@@ -20,13 +20,13 @@ pub struct MergeArgs {
 }
 
 pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
-    let mut dict = load_dictionary(&args.destination)
+    let mut dict = internal::load_dictionary(&args.destination)
         .await?
         .contents()?
         .deserialize()?;
 
     for source in &args.sources {
-        let source_dict = load_dictionary(source).await?.contents()?.deserialize()?;
+        let source_dict = internal::load_dictionary(source).await?.contents()?.deserialize()?;
 
         dict.merge(&source_dict);
     }

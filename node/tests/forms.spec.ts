@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
-import { compile, Dictionary } from "../index.js";
+import { compile, OpenDictionary } from "../index.js";
 
 describe("Form support", () => {
   it("should handle entries with forms", async () => {
@@ -29,7 +29,7 @@ describe("Form support", () => {
 
     // Compile and load the dictionary
     const compiled = compile(xmlContent);
-    const dict = new Dictionary(compiled);
+    const dict = new OpenDictionary(compiled);
 
     // Look up the entry
     const results = dict.lookup("run");
@@ -102,7 +102,7 @@ describe("Lemma support", () => {
 
     // Compile and load the dictionary
     const compiled = compile(xmlContent);
-    const dict = new Dictionary(compiled);
+    const dict = new OpenDictionary(compiled);
 
     // Look up the entries
     const runningResults = dict.lookup("running");

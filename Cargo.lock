@@ -2658,6 +2658,7 @@ dependencies = [
  "derive_more",
  "env_logger",
  "indicatif",
+ "internal",
  "lru 0.16.0",
  "num-format",
  "odict",

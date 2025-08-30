@@ -1,6 +1,6 @@
 use merge::Merge;
 use napi::bindgen_prelude::*;
-use odict::lookup::Language;
+use odict::tokenize::Language;
 
 #[napi(object)]
 #[derive(Merge, Clone)]
@@ -24,9 +24,9 @@ impl Default for TokenizeOptions {
   }
 }
 
-impl From<TokenizeOptions> for odict::lookup::TokenizeOptions {
+impl From<TokenizeOptions> for odict::tokenize::TokenizeOptions {
   fn from(opts: TokenizeOptions) -> Self {
-    let mut options = odict::lookup::TokenizeOptions::default();
+    let mut options = odict::tokenize::TokenizeOptions::default();
 
     if let Some(follow) = opts.follow {
       options = options.follow(match follow {
