@@ -65,8 +65,9 @@ structural-convert = { workspace = true }
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=http
-reqwest = { version = "0.12.23", optional = true, features = [
+reqwest = { version = "0.12.23", optional = true, default-features = false, features = [
   "rustls-tls",
+  "http2",
   "stream",
 ] }
 futures-util = { version = "0.3", optional = true }
