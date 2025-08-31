@@ -5,7 +5,7 @@ mod index_tests {
 
     use std::sync::LazyLock;
 
-    use odict::{schema::Dictionary, search::IndexOptions};
+    use odict::{index::IndexOptions, schema::Dictionary};
 
     use crate::helpers::get_example_dict;
 

@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from theopendictionary import Dictionary
+from theopendictionary import OpenDictionary, compile
 
 
 @pytest.fixture(scope="module")
@@ -11,7 +11,11 @@ def dict3_path():
 
 @pytest.fixture(scope="module")
 def dict3(dict3_path):
-    return Dictionary.compile(dict3_path)
+    # Read XML file and compile to bytes
+    with open(dict3_path, "r") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +26,11 @@ def dict1_path():
 
 @pytest.fixture(scope="module")
 def dict1(dict1_path):
-    return Dictionary.compile(dict1_path)
+    # Read XML file and compile to bytes
+    with open(dict1_path, "r") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
 
 
 def test_tokenize(dict3, snapshot):
@@ -102,11 +110,14 @@ def test_tokenize_case_insensitive_with_follow():
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
 
-    Dictionary.write(xml_content, temp_path)
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
 
     try:
-        dict_instance = Dictionary(temp_path)
-
         # Test case insensitivity with follow option
         # (using high number for infinite following)
         tokens = dict_instance.tokenize("RUNS", follow=999999, insensitive=True)
@@ -143,10 +154,14 @@ def test_tokenize_follow_boolean_true():
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
 
-    Dictionary.write(xml_content, temp_path)
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
 
     try:
-        dict_instance = Dictionary(temp_path)
         tokens = dict_instance.tokenize("runs", follow=True)
 
         assert len(tokens) == 1
@@ -180,10 +195,14 @@ def test_tokenize_follow_boolean_false():
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
 
-    Dictionary.write(xml_content, temp_path)
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
 
     try:
-        dict_instance = Dictionary(temp_path)
         tokens = dict_instance.tokenize("runs", follow=False)
 
         assert len(tokens) == 1
@@ -215,10 +234,14 @@ def test_tokenize_follow_number():
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
 
-    Dictionary.write(xml_content, temp_path)
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
 
     try:
-        dict_instance = Dictionary(temp_path)
         tokens = dict_instance.tokenize("runs", follow=5)
 
         assert len(tokens) == 1

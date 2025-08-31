@@ -10,7 +10,13 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.25.1", features = ["either"] }
+pyo3-async-runtimes = { version = "0.25.0", features = [
+  "tokio-runtime",
+  "attributes",
+] }
 odict = { path = "../lib", features = ["config", "sql", "tokenize", "search"] }
-internal = { path = "../internal" }
+internal = { path = "../internal", features = ["load"] }
 either = { version = "*" }
 structural-convert = { workspace = true }
+merge = { workspace = true }
+tokio = { version = "1.0", features = ["full"] }

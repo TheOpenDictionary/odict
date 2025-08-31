@@ -4,13 +4,21 @@ build-backend = "maturin"
 
 [project]
 name = "theopendictionary"
-requires-python = ">=3.8"
+requires-python = ">=3.8.1"
 classifiers = [
   "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dynamic = ["version"]
+dependencies = ["syrupy>=3.0.6"]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+
+[dependency-groups]
+dev = [
+    "flake8-bugbear>=24.12.12",
+    "pytest-asyncio>=0.24.0",
+    "syrupy>=3.0.6",
+]

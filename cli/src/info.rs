@@ -1,4 +1,4 @@
-use crate::{context::CLIContext, internal::load_dictionary};
+use crate::context::CLIContext;
 use clap::{arg, command, Args};
 use console::Style;
 use indicatif::DecimalBytes;

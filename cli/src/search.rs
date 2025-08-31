@@ -1,10 +1,8 @@
 use clap::{arg, command, Args};
-use odict::search::{get_default_index_dir, SearchOptions};
+use odict::index::get_default_index_dir;
+use odict::search::SearchOptions;
 
-use crate::{
-    enums::PrintFormat, internal::load_dictionary, print_entries, CLIContext, IndexArgs,
-    DEFAULT_INDEX_MEMORY,
-};
+use crate::{enums::PrintFormat, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]

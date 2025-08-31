@@ -1,7 +1,7 @@
 use clap::{arg, command, Args};
 use odict::tokenize::TokenizeOptions;
 
-use crate::{enums::PrintFormat, get_lookup_entries, internal::load_dictionary, print_entries, CLIContext};
+use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]

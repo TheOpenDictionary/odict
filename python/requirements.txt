@@ -1,5 +1,3 @@
 syrupy
-pytest
-maturin
-black
-flake8
+pytest-asyncio
+flake8-bugbear

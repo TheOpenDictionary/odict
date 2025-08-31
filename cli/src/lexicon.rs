@@ -1,6 +1,6 @@
 use clap::{arg, command, Args};
 
-use crate::{load_dictionary, CLIContext};
+use crate::CLIContext;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]

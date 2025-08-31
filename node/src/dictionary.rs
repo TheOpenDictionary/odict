@@ -6,6 +6,8 @@ use odict::ToDictionary;
 
 #[cfg(feature = "node")]
 use crate::types::LoadOptions;
+#[cfg(feature = "node")]
+use crate::types::SaveOptions;
 use crate::{
   types::{self, Entry},
   utils::cast_error,
@@ -54,8 +56,17 @@ impl OpenDictionary {
 
   #[cfg(feature = "node")]
   #[napi]
-  pub fn save(&mut self, path: String) -> Result<()> {
-    self.dict.to_disk(&path).map_err(cast_error)
+  pub fn save(&mut self, path: String, options: Option<SaveOptions>) -> Result<()> {
+    match options {
+      Some(opts) => {
+        let compiler_options = odict::compile::CompilerOptions::from(opts);
+        self
+          .dict
+          .to_disk_with_options(&path, compiler_options)
+          .map_err(cast_error)
+      }
+      None => self.dict.to_disk(&path).map_err(cast_error),
+    }
   }
 
   pub fn _lookup(

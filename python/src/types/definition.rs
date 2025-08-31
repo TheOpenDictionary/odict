@@ -5,7 +5,7 @@ use super::{note::Note, Example};
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Definition))]
+#[convert(from(odict::schema::Definition))]
 pub struct Definition {
     #[pyo3(get)]
     pub id: Option<String>,

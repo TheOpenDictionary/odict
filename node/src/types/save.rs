@@ -1,36 +1,34 @@
-// use odict::alias::AliasManager;
-// use structural_convert::StructuralConvert;
+#[napi(object)]
+#[derive(PartialEq, Default, Clone, Eq)]
+pub struct CompressOptions {
+  pub quality: Option<u32>,
+  pub window_size: Option<u32>,
+}
 
-// #[napi(object)]
-// #[derive(PartialEq, Default, Clone, Eq)]
-// pub struct AliasLoadOptions {
-//   pub path: Option<String>,
-// }
+#[napi(object)]
+#[derive(PartialEq, Default, Clone, Eq)]
+pub struct SaveOptions {
+  pub compress: Option<CompressOptions>,
+}
 
-// impl CompressOptions {
-//   pub fn with_path(mut self, path: String) -> Self {
-//     self.path = Some(path);
-//     self
-//   }
-// }
+impl From<SaveOptions> for odict::compile::CompilerOptions {
+  fn from(opts: SaveOptions) -> Self {
+    let mut compiler_options = odict::compile::CompilerOptions::default();
 
-// #[napi(object)]
-// #[derive(PartialEq, StructuralConvert, Default, Clone, Eq)]
-// #[convert(from(odict::write::CompressOptions))]
-// pub struct CompressOptions {
-//   pub alias: Option<AliasLoadOptions>,
-// }
+    if let Some(compress) = opts.compress {
+      let mut compress_options = odict::CompressOptions::default();
 
-// impl TryFrom<LoadOptions> for internal::LoadDictionaryOptions {
-//   type Error = odict::Error;
+      if let Some(quality) = compress.quality {
+        compress_options = compress_options.quality(quality);
+      }
 
-//   fn try_from(opts: LoadOptions) -> Result<Self, Self::Error> {
-//     let mut options = internal::LoadDictionaryOptions::default();
+      if let Some(window_size) = compress.window_size {
+        compress_options = compress_options.window_size(window_size);
+      }
 
-//     if let Some(path) = opts.alias.and_then(|a| a.path) {
-//       options = options.with_alias_manager(AliasManager::new(&path)?);
-//     }
+      compiler_options = compiler_options.with_compression(compress_options);
+    }
 
-//     Ok(options)
-//   }
-// }
+    compiler_options
+  }
+}

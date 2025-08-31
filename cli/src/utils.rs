@@ -21,6 +21,6 @@ where
 pub fn get_lookup_entries(results: Vec<LookupResult<&ArchivedEntry>>) -> Vec<Entry> {
     results
         .iter()
-        .map(|result| result.entry.to_entry().unwrap())
+        .map(|result| result.entry.deserialize().unwrap())
         .collect()
 }

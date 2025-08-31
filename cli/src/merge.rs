@@ -1,7 +1,5 @@
 use clap::{arg, command, Args};
 
-use crate::load_dictionary;
-
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
 #[command(flatten_help = true)]
@@ -26,7 +24,10 @@ pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
         .deserialize()?;
 
     for source in &args.sources {
-        let source_dict = internal::load_dictionary(source).await?.contents()?.deserialize()?;
+        let source_dict = internal::load_dictionary(source)
+            .await?
+            .contents()?
+            .deserialize()?;
 
         dict.merge(&source_dict);
     }

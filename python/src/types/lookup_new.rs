@@ -2,8 +2,6 @@ use either::Either;
 use merge::Merge;
 use pyo3::prelude::*;
 
-use super::Entry;
-
 #[pyclass]
 #[derive(Merge, Clone)]
 pub struct LookupOptions {
@@ -72,19 +70,30 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 }
 
 #[pyclass]
-#[derive(Debug, Clone)]
 pub struct LookupResult {
     #[pyo3(get)]
-    pub entry: Entry,
+    pub entry: crate::types::Entry,
     #[pyo3(get)]
-    pub directed_from: Option<Entry>,
+    pub directed_from: Option<crate::types::Entry>,
 }
 
 #[pymethods]
 impl LookupResult {
     #[new]
-    pub fn new(entry: Entry, directed_from: Option<Entry>) -> Self {
+    pub fn new(entry: crate::types::Entry, directed_from: Option<crate::types::Entry>) -> Self {
         LookupResult {
+            entry,
+            directed_from,
+        }
+    }
+}
+
+impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
+    fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
+        let entry = crate::types::Entry::from(result.entry);
+        let directed_from = result.directed_from.map(|s| crate::types::Entry::from(s));
+
+        Self {
             entry,
             directed_from,
         }
@@ -95,42 +104,20 @@ impl LookupResult {
     pub fn from_archive(
         result: &odict::lookup::LookupResult<&odict::schema::ArchivedEntry>,
     ) -> PyResult<Self> {
-        let entry = Entry::from_archive(result.entry)?;
-        let directed_from = match &result.directed_from {
-            Some(from) => Some(Entry::from_archive(from)?),
+        use crate::utils::cast_error;
+
+        let entry = crate::types::Entry::from(result.entry.deserialize().map_err(cast_error)?);
+
+        let directed_from = match result.directed_from {
+            Some(e) => Some(crate::types::Entry::from(
+                e.deserialize().map_err(cast_error)?,
+            )),
             None => None,
         };
 
-        Ok(Self {
+        Ok(LookupResult {
             entry,
             directed_from,
         })
-    }
-}
-
-impl From<odict::lookup::LookupResult<&odict::schema::ArchivedEntry>> for LookupResult {
-    fn from(result: odict::lookup::LookupResult<&odict::schema::ArchivedEntry>) -> Self {
-        let entry = Entry::from(result.entry.deserialize().unwrap());
-
-        let directed_from = result
-            .directed_from
-            .map(|s| Entry::from(s.deserialize().unwrap()));
-
-        Self {
-            entry,
-            directed_from,
-        }
-    }
-}
-
-impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
-    fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
-        let entry = Entry::from(result.entry);
-        let directed_from = result.directed_from.map(|s| Entry::from(s));
-
-        Self {
-            entry,
-            directed_from,
-        }
     }
 }

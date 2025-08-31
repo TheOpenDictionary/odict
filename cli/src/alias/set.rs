@@ -1,8 +1,6 @@
 use clap::{arg, Args};
 use odict::alias::AliasManager;
 
-use crate::load_dictionary;
-
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
 #[command(flatten_help = true)]

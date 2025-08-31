@@ -6,7 +6,7 @@ export declare class OpenDictionary {
     options?: LoadOptions | undefined | null,
   ): Promise<OpenDictionary>;
   constructor(data: Buffer);
-  save(path: string): void;
+  save(path: string, options?: SaveOptions | undefined | null): void;
   get minRank(): number | null;
   get maxRank(): number | null;
   lookup(
@@ -30,6 +30,11 @@ export interface AliasLoadOptions {
 }
 
 export declare function compile(xml: string): Buffer;
+
+export interface CompressOptions {
+  quality?: number;
+  windowSize?: number;
+}
 
 export interface Definition {
   id?: string;
@@ -118,6 +123,10 @@ export interface Pronunciation {
   kind?: EnumWrapper;
   value: string;
   media: Array<MediaUrl>;
+}
+
+export interface SaveOptions {
+  compress?: CompressOptions;
 }
 
 export interface SearchOptions {

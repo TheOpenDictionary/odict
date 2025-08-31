@@ -2,9 +2,9 @@ use std::path::PathBuf;
 
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
-use odict::search::{get_default_index_dir, IndexOptions};
+use odict::index::{get_default_index_dir, IndexOptions};
 
-use crate::{load_dictionary, CLIContext};
+use crate::CLIContext;
 
 pub(super) static DEFAULT_INDEX_MEMORY: usize = 15000000;
 

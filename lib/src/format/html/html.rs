@@ -36,7 +36,7 @@ impl ToHTML for &ArchivedEntry {
 impl ToHTML for Vec<&ArchivedEntry> {
     fn to_html(self) -> crate::Result<String> {
         self.iter()
-            .map(|entry| entry.to_entry().unwrap())
+            .map(|entry| entry.deserialize().unwrap())
             .collect::<Vec<Entry>>()
             .to_html()
     }

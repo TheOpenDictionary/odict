@@ -5,7 +5,8 @@ mod index_tests {
 
     use insta::assert_snapshot;
     use odict::format::json::ToJSON;
-    use odict::search::{IndexOptions, SearchOptions};
+    use odict::index::IndexOptions;
+    use odict::search::SearchOptions;
 
     use crate::helpers::EXAMPLE_DICT_1;
 

@@ -1,224 +1,166 @@
-use std::{path::PathBuf, str::FromStr};
-
 use either::Either;
-use odict::{
-    lookup::{LookupOptions, LookupStrategy},
-    search::{IndexOptions, SearchOptions},
-};
 use pyo3::prelude::*;
+use pyo3_async_runtimes::tokio::future_into_py;
+
+use odict::ToDictionary;
 
 use crate::{
-    types::{Entry, LookupResult, Token},
+    types::{Entry, IndexOptions, LookupOptions, LookupResult, SearchOptions, Token},
     utils::cast_error,
 };
 
-fn lookup(
-    file: &odict::DictionaryFile,
-    queries: &Vec<String>,
-    split: Option<usize>,
-    follow: Option<Either<bool, u32>>,
-    insensitive: Option<bool>,
-) -> PyResult<Vec<crate::types::LookupResult>> {
-    let dict = file.to_archive().map_err(cast_error)?;
-
-    let mut opts = LookupOptions::default();
-
-    if let Some(split) = split {
-        opts.strategy = LookupStrategy::Split(split);
-    }
-
-    if let Some(follow) = follow {
-        let follow_value = match follow {
-            Either::Left(true) => u32::MAX,
-            Either::Left(false) => return Ok(vec![]), // Don't set follow, equivalent to None
-            Either::Right(num) => num,
-        };
-        opts.follow = Some(follow_value);
-    }
-
-    if let Some(insensitive) = insensitive {
-        opts.insensitive = insensitive;
-    }
-
-    let results = dict
-        .lookup(queries, &odict::lookup::LookupOptions::from(opts.into()))
-        .map_err(|e| cast_error(e))?;
-
-    let mapped = results
-        .iter()
-        .map(|result| crate::types::LookupResult::from_archive(result))
-        .collect::<Result<Vec<crate::types::LookupResult>, _>>()?;
-
-    Ok(mapped)
+#[pyfunction]
+pub fn compile(xml: String) -> PyResult<Vec<u8>> {
+    let bytes = xml
+        .to_dictionary()
+        .and_then(|d| d.build())
+        .and_then(|d| d.to_bytes())
+        .map_err(cast_error)?;
+    Ok(bytes)
 }
 
 #[pyclass]
-pub struct Dictionary {
-    file: odict::DictionaryFile,
+pub struct OpenDictionary {
+    dict: odict::OpenDictionary,
 }
 
 #[pymethods]
-impl Dictionary {
+impl OpenDictionary {
+    #[staticmethod]
+    #[pyo3(signature = (dictionary, alias_path=None))]
+    pub fn load<'py>(
+        py: Python<'py>,
+        dictionary: String,
+        alias_path: Option<String>,
+    ) -> PyResult<Bound<'py, PyAny>> {
+        future_into_py(py, async move {
+            let mut opts = internal::LoadDictionaryOptions::default();
+
+            if let Some(path) = alias_path {
+                opts = opts.with_alias_manager(
+                    odict::alias::AliasManager::new(&path).map_err(cast_error)?,
+                );
+            }
+
+            let dict = internal::load_dictionary_with_options(&dictionary, opts)
+                .await
+                .map_err(cast_error)?;
+
+            Ok(OpenDictionary { dict })
+        })
+    }
+
     #[new]
-    pub fn new(dictionary: String) -> PyResult<Self> {
-        let loader = odict::DictionaryLoader::default();
-
-        let file = loader.load(&dictionary).map_err(cast_error)?;
-
-        let dict = Dictionary { file };
-
-        Ok(dict)
+    pub fn new(data: Vec<u8>) -> PyResult<Self> {
+        let dict = odict::OpenDictionary::from_bytes(data).map_err(cast_error)?;
+        Ok(Self { dict })
     }
 
-    #[staticmethod]
-    pub fn write(xml_str: String, out_path: String) -> PyResult<Self> {
-        let dict = odict::Dictionary::from_str(&xml_str).map_err(cast_error)?;
-        let loader = odict::DictionaryLoader::default();
-        let writer = odict::DictionaryWriter::default();
+    #[pyo3(signature = (path, quality=None, window_size=None))]
+    pub fn save(
+        &mut self,
+        path: String,
+        quality: Option<u32>,
+        window_size: Option<u32>,
+    ) -> PyResult<()> {
+        if quality.is_some() || window_size.is_some() {
+            let mut compress_options = odict::CompressOptions::default();
 
-        writer.write_to_path(&dict, &out_path).map_err(cast_error)?;
+            if let Some(q) = quality {
+                compress_options = compress_options.quality(q);
+            }
 
-        let file = loader.load(&out_path).map_err(cast_error)?;
+            if let Some(ws) = window_size {
+                compress_options = compress_options.window_size(ws);
+            }
 
-        let dict = Dictionary { file };
+            let compiler_options =
+                odict::compile::CompilerOptions::default().with_compression(compress_options);
 
-        Ok(dict)
-    }
-
-    #[staticmethod]
-    #[pyo3(signature = (xml_path, out_path=None))]
-    pub fn compile(xml_path: String, out_path: Option<String>) -> PyResult<Self> {
-        let in_file = PathBuf::from(xml_path.to_owned());
-
-        let out_file = out_path.unwrap_or_else(|| {
-            odict::fs::infer_path(&xml_path)
-                .to_string_lossy()
-                .to_string()
-        });
-
-        let reader = odict::DictionaryReader::default();
-        let writer = odict::DictionaryWriter::default();
-
-        writer
-            .compile_xml(&in_file, &out_file)
-            .map_err(cast_error)?;
-
-        let file = reader.read_from_path(&out_file).map_err(cast_error)?;
-
-        let dict = Dictionary { file };
-
-        Ok(dict)
-    }
-
-    #[getter]
-    pub fn path(&self) -> PyResult<String> {
-        let path = self
-            .file
-            .path
-            .as_ref()
-            .map(|p| p.to_string_lossy().to_string())
-            .unwrap();
-
-        Ok(path)
+            self.dict
+                .to_disk_with_options(&path, compiler_options)
+                .map_err(cast_error)
+        } else {
+            self.dict.to_disk(&path).map_err(cast_error)
+        }
     }
 
     #[getter]
     pub fn min_rank(&self) -> PyResult<Option<u32>> {
-        Ok(self.file.to_archive().map_err(cast_error)?.min_rank())
+        Ok(self.dict.contents().map_err(cast_error)?.min_rank())
     }
 
     #[getter]
     pub fn max_rank(&self) -> PyResult<Option<u32>> {
-        Ok(self.file.to_archive().map_err(cast_error)?.max_rank())
+        Ok(self.dict.contents().map_err(cast_error)?.max_rank())
     }
 
     #[pyo3(signature = (query, split=None, follow=None, insensitive=None))]
     pub fn lookup(
         &self,
         query: Either<String, Vec<String>>,
-        split: Option<usize>,
+        split: Option<u32>,
         follow: Option<Either<bool, u32>>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
 
         match query {
-            Either::Left(a) => queries.push(a.into()),
+            Either::Left(a) => queries.push(a),
             Either::Right(mut c) => queries.append(&mut c),
         }
 
-        lookup(&(self.file), &queries, split, follow, insensitive)
+        // Build LookupOptions from kwargs
+        let options = LookupOptions {
+            split,
+            follow,
+            insensitive,
+        };
+
+        let dict = self.dict.contents().map_err(cast_error)?;
+
+        let results = dict
+            .lookup(&queries, &odict::lookup::LookupOptions::from(options))
+            .map_err(cast_error)?;
+
+        let mapped = results
+            .iter()
+            .map(|result| LookupResult::from_archive(result))
+            .collect::<Result<Vec<LookupResult>, _>>()?;
+
+        Ok(mapped)
     }
 
     pub fn lexicon(&self) -> PyResult<Vec<&str>> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
+        let dict = self.dict.contents().map_err(cast_error)?;
         let lexicon = dict.lexicon();
 
         Ok(lexicon)
     }
 
-    #[pyo3(signature = (directory=None, memory=None, overwrite=None))]
-    pub fn index(
-        &self,
-        directory: Option<String>,
-        memory: Option<usize>,
-        overwrite: Option<bool>,
-    ) -> PyResult<()> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
-        let mut opts = IndexOptions::default();
+    #[pyo3(signature = (options=None))]
+    pub fn index(&self, options: Option<IndexOptions>) -> PyResult<()> {
+        let dict = self.dict.contents().map_err(cast_error)?;
+        let opts = options.unwrap_or_default();
 
-        if let Some(directory) = directory {
-            opts = opts.dir(&directory);
-        }
-
-        if let Some(memory) = memory {
-            opts = opts.memory(memory);
-        }
-
-        if let Some(overwrite) = overwrite {
-            opts = opts.overwrite(overwrite);
-        }
-
-        dict.index(&opts).map_err(cast_error)?;
+        dict.index(odict::index::IndexOptions::from(opts))
+            .map_err(cast_error)?;
 
         Ok(())
     }
 
-    #[pyo3(signature = (query, directory=None, threshold=None, autoindex=None, limit=None))]
-    pub fn search(
-        &self,
-        query: String,
-        directory: Option<String>,
-        threshold: Option<u32>,
-        autoindex: Option<bool>,
-        limit: Option<usize>,
-    ) -> PyResult<Vec<Entry>> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
-        let mut opts = SearchOptions::default();
-
-        if let Some(directory) = directory {
-            opts = opts.dir(&directory);
-        }
-
-        if let Some(threshold) = threshold {
-            opts = opts.threshold(threshold);
-        }
-
-        if let Some(autoindex) = autoindex {
-            opts = opts.autoindex(autoindex);
-        }
-
-        if let Some(limit) = limit {
-            opts = opts.limit(limit);
-        }
+    #[pyo3(signature = (query, options=None))]
+    pub fn search(&self, query: String, options: Option<SearchOptions>) -> PyResult<Vec<Entry>> {
+        let dict = self.dict.contents().map_err(cast_error)?;
+        let opts = options.unwrap_or_default();
 
         let results = dict
-            .search::<&odict::search::SearchOptions>(query.as_str(), &opts)
+            .search(query.as_str(), odict::search::SearchOptions::from(opts))
             .map_err(cast_error)?;
 
         let entries = results
             .iter()
-            .map(|e| Entry::from(e.clone()))
+            .map(|e| e.clone().into())
             .collect::<Vec<Entry>>();
 
         Ok(entries)
@@ -230,36 +172,56 @@ impl Dictionary {
         text: String,
         follow: Option<Either<bool, u32>>,
         insensitive: Option<bool>,
-    ) -> PyResult<Vec<crate::types::Token>> {
-        let dict = self.file.to_archive().map_err(cast_error)?;
+    ) -> PyResult<Vec<Token>> {
+        let dict = self.dict.contents().map_err(cast_error)?;
 
-        let mut opts = odict::lookup::TokenizeOptions::default();
+        // Build TokenizeOptions from kwargs
+        let mut opts = odict::tokenize::TokenizeOptions::default();
 
-        if let Some(follow) = follow {
-            match follow {
-                Either::Left(true) => {
-                    opts = opts.follow(u32::MAX);
-                }
-                Either::Left(false) => {
-                    // Don't set follow, use default behavior
-                }
-                Either::Right(num) => {
-                    opts = opts.follow(num);
-                }
-            };
+        if let Some(f) = follow {
+            opts = opts.follow(match f {
+                Either::Left(true) => u32::MAX,
+                Either::Left(false) => 0,
+                Either::Right(num) => num,
+            });
         }
 
-        if let Some(insensitive) = insensitive {
-            opts = opts.insensitive(insensitive);
+        if let Some(i) = insensitive {
+            opts = opts.insensitive(i);
         }
 
         let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
 
-        let mapped = tokens
-            .iter()
-            .map(|token| Ok(Token::from(token.clone())))
-            .collect::<Result<Vec<crate::types::Token>, PyErr>>()?;
+        let mut mapped_tokens = Vec::new();
 
-        Ok(mapped)
+        for token in tokens {
+            let mut entries = Vec::new();
+
+            for result in &token.entries {
+                let entry: Entry = result.entry.deserialize().map_err(cast_error)?.into();
+
+                let directed_from = match result.directed_from {
+                    Some(entry) => Some(entry.deserialize().map_err(cast_error)?.into()),
+                    None => None,
+                };
+
+                entries.push(LookupResult {
+                    entry,
+                    directed_from,
+                });
+            }
+
+            mapped_tokens.push(Token {
+                lemma: token.lemma.clone(),
+                language: token.language.map(|s| s.code().to_string()),
+                script: token.script.name().to_string(),
+                kind: format!("{:?}", token.kind),
+                start: token.start,
+                end: token.end,
+                entries,
+            });
+        }
+
+        Ok(mapped_tokens)
     }
 }

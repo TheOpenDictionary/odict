@@ -5,12 +5,10 @@ node = "22.18.0"
 python = "3.13.5"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
+uv = "latest"
 
 [settings]
-python.venv_stdlib = true
-
-[env]
-_.python.venv = { path = ".venv", create = true }
+python.uv_venv_auto = true
 
 [task_config]
 includes = [

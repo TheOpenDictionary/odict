@@ -1,8 +1,8 @@
 use std::time::Duration;
 
 use crate::enums::PrintFormat;
+use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
-use crate::{get_lookup_entries, internal::load_dictionary};
 use clap::{arg, command, Args};
 use odict::lookup::{LookupOptions, LookupStrategy};
 
