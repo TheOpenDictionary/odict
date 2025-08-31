@@ -48,6 +48,8 @@ jobs:
             build: pnpm --filter "@odict/node" build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
+            env:
+              CFLAGS_aarch64_unknown_linux_gnu: -D__ARM_ARCH=8  
             build: pnpm --filter "@odict/node" build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
@@ -202,7 +204,7 @@ jobs:
             env
             freebsd-version
             pnpm install
-            pnpm --filter "@odict/node" build
+            pnpm --filter "@odict/node" build:node
             strip -x node/*.node
             pnpm --filter "@odict/node" test
             rm -rf node_modules
