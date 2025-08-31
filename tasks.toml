@@ -12,6 +12,13 @@ description = "Recursively cleans all packages in the project"
 run = "cargo insta accept"
 description = "Updates all Insta snapshot tests"
 
+[bench]
+run = "cargo bench"
+description = "Runs benchmarks for all Cargo packages"
+
+[why]
+run = "cargo tree -i"
+
 [test]
 run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
 description = "Runs nextest on all Cargo packages"

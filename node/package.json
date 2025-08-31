@@ -51,8 +51,8 @@
   },
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
-    "build": "napi build --release --platform --strip --pipe \"prettier -w\"",
-    "build:wasm": "pnpm run build --target wasm32-wasip1-threads --no-default-features --features tokenize,sql",
+    "build:node": "napi build --release --platform --strip --features node --pipe \"prettier -w\"",
+    "build:wasm": "napi build --release --platform --strip --pipe \"prettier -w\" --target wasm32-wasip1-threads",
     "build:debug": "napi build --pipe \"prettier -w\"",
     "dev:wasm": "vite dev",
     "test": "vitest --reporter=verbose --no-watch",

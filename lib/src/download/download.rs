@@ -12,6 +12,7 @@ use crate::{
 
 use futures_util::StreamExt;
 use reqwest::Client;
+
 #[derive(Clone, Debug)]
 pub struct DictionaryDownloader {
     base_url: String,

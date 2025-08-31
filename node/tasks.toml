@@ -5,7 +5,7 @@ outputs = { auto = true }
 
 ["build:node"]
 depends = ["setup:node"]
-run = "pnpm --filter=\"@odict/node\" build"
+run = "pnpm --filter=\"@odict/node\" build:node"
 
 ["build:wasm"]
 depends = ["setup:node"]
