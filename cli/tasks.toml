@@ -9,3 +9,7 @@ outputs = { auto = true }
 ["run:cli"]
 run = "cargo run -p odict-cli"
 alias = "run"
+
+["preview:cli"]
+run = "cargo run --release -p odict-cli"
+alias = "preview"

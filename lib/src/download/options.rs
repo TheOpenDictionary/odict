@@ -3,15 +3,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
-pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync>;
+pub type ProgressCallback<'a> = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync + 'a>;
 
-pub struct DownloadOptions {
+pub struct DownloadOptions<'a> {
     pub caching: bool,
     pub out_dir: Option<PathBuf>,
-    pub on_progress: Option<ProgressCallback>,
+    pub on_progress: Option<ProgressCallback<'a>>,
 }
 
-impl fmt::Debug for DownloadOptions {
+impl fmt::Debug for DownloadOptions<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("DownloadOptions")
             .field("caching", &self.caching)
@@ -24,7 +24,7 @@ impl fmt::Debug for DownloadOptions {
     }
 }
 
-impl Clone for DownloadOptions {
+impl Clone for DownloadOptions<'_> {
     fn clone(&self) -> Self {
         Self {
             caching: self.caching,
@@ -34,7 +34,7 @@ impl Clone for DownloadOptions {
     }
 }
 
-impl Default for DownloadOptions {
+impl Default for DownloadOptions<'_> {
     fn default() -> Self {
         Self {
             caching: true,
@@ -44,7 +44,7 @@ impl Default for DownloadOptions {
     }
 }
 
-impl DownloadOptions {
+impl<'a> DownloadOptions<'a> {
     pub fn caching(mut self, value: bool) -> Self {
         self.caching = value;
         self
@@ -57,15 +57,15 @@ impl DownloadOptions {
 
     pub fn on_progress<F>(mut self, callback: F) -> Self
     where
-        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'static,
+        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'a,
     {
         self.on_progress = Some(Box::new(callback));
         self
     }
 }
 
-impl AsRef<DownloadOptions> for DownloadOptions {
-    fn as_ref(&self) -> &DownloadOptions {
+impl<'a> AsRef<DownloadOptions<'a>> for DownloadOptions<'a> {
+    fn as_ref(&self) -> &DownloadOptions<'a> {
         self
     }
 }

@@ -1,4 +1,4 @@
-use std::time::SystemTime;
+use std::{path::PathBuf, time::SystemTime};
 
 use crate::{
     config::get_config_dir,
@@ -47,16 +47,16 @@ impl DictionaryDownloader {
         self
     }
 
-    pub async fn download(&self, dictionary_name: &str) -> crate::Result<Vec<u8>> {
+    pub async fn download(&self, dictionary_name: &str) -> crate::Result<PathBuf> {
         self.download_with_options(dictionary_name, &DownloadOptions::default())
             .await
     }
 
-    pub async fn download_with_options<Options: AsRef<DownloadOptions>>(
+    pub async fn download_with_options<'a, Options: AsRef<DownloadOptions<'a>>>(
         &self,
         dictionary_name: &str,
         options: Options,
-    ) -> crate::Result<Vec<u8>> {
+    ) -> crate::Result<PathBuf> {
         let (dictionary, language) = parse_remote_dictionary_name(dictionary_name)?;
 
         let opts = options.as_ref();
@@ -96,19 +96,23 @@ impl DictionaryDownloader {
             }
         }
 
-        if !bytes.is_empty() {
-            std::fs::write(&out_path, &bytes)?;
-            Ok(bytes.clone())
-        } else {
-            Ok(std::fs::read(&out_path)?)
-        }
+        match bytes.is_empty() {
+            true => {
+                // File already exists from cache, no need to write
+            }
+            false => {
+                std::fs::write(&out_path, &bytes)?;
+            }
+        };
+
+        Ok(out_path)
     }
 
-    async fn fetch_with_etag(
+    async fn fetch_with_etag<'a>(
         &self,
         url: &str,
         etag: Option<&str>,
-        on_progress: Option<&ProgressCallback>,
+        on_progress: Option<&ProgressCallback<'a>>,
     ) -> crate::Result<(Vec<u8>, Option<String>)> {
         let client = &self.client;
         let mut request = client.get(url);
@@ -197,12 +201,12 @@ mod tests {
                 "wiktionary/eng",
                 DownloadOptions::default().out_dir(temp_dir.path()),
             )
-            .await;
-
-        assert!(result.is_ok());
-        assert_eq!(result.unwrap(), test_data);
+            .await
+            .unwrap();
 
         let output_file = temp_dir.path().join("eng.odict");
+
+        assert_eq!(result, output_file);
         assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
@@ -233,7 +237,10 @@ mod tests {
             .await;
 
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), test_data);
+        let result_path = result.unwrap();
+        let output_file = temp_dir.path().join("eng.odict");
+        assert_eq!(result_path, output_file);
+        assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
     #[tokio::test]
@@ -258,7 +265,10 @@ mod tests {
             .await;
 
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), test_data);
+        let result_path = result.unwrap();
+        let output_file = temp_dir.path().join("de.odict");
+        assert_eq!(result_path, output_file);
+        assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
     #[tokio::test]
@@ -300,7 +310,10 @@ mod tests {
             .await;
 
         assert!(result.is_ok());
-        assert_eq!(result.unwrap(), test_data);
+        let result_path = result.unwrap();
+        let output_file = temp_dir.path().join("es.odict");
+        assert_eq!(result_path, output_file);
+        assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
     #[tokio::test]
@@ -413,10 +426,13 @@ mod tests {
 
         let result = downloader
             .download_with_options("wiktionary/progress", &options)
-            .await;
+            .await
+            .unwrap();
 
-        assert!(result.is_ok());
-        assert_eq!(result.unwrap(), test_data);
+        let expected_path = temp_dir.path().join("progress.odict");
+        assert_eq!(result, expected_path);
+        assert!(expected_path.exists());
+        assert_eq!(fs::read(&expected_path).unwrap(), test_data);
 
         // Verify progress was tracked
         let calls = progress_calls.lock().unwrap();

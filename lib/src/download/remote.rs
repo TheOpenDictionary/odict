@@ -22,7 +22,7 @@ impl OpenDictionary {
         options: Options,
     ) -> crate::Result<OpenDictionary> {
         if parse_remote_dictionary_name(dictionary).is_ok() {
-            let bytes = options
+            let path = options
                 .as_ref()
                 .downloader
                 .download(dictionary)
@@ -30,7 +30,8 @@ impl OpenDictionary {
                 .map_err(|e| {
                     crate::Error::DownloadFailed(dictionary.to_string(), format!("{e}"))
                 })?;
-            return OpenDictionary::from_bytes(bytes);
+
+            return OpenDictionary::from_path(path);
         }
         Err(crate::Error::InvalidDictionaryName(dictionary.to_string()))
     }

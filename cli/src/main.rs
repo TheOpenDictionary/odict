@@ -1,8 +1,8 @@
 use clap::Parser;
 use console::style;
 use odict_cli::{
-    alias, compile, dump, index, info, lexicon, lookup, merge, new, search, serve, tokenize,
-    CLIContext, Commands, CLI,
+    alias, compile, download, dump, index, info, lexicon, lookup, merge, new, search, serve,
+    tokenize, CLIContext, Commands, CLI,
 };
 
 #[tokio::main]
@@ -13,6 +13,7 @@ async fn main() {
     let result = match cli.command {
         Commands::Alias(ref args) => alias(args).await,
         Commands::Compile(ref args) => compile(args),
+        Commands::Download(ref args) => download(&mut ctx, args).await,
         Commands::Dump(ref args) => dump(&mut ctx, args).await,
         Commands::Index(ref args) => index(&mut ctx, args).await,
         Commands::Lexicon(ref args) => lexicon(&mut ctx, args).await,
