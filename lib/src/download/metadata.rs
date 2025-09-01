@@ -16,7 +16,7 @@ pub struct DictionaryMetadata {
     pub url: String,
 }
 
-const METADATA_EXTENSION: &str = ".meta.json";
+const METADATA_EXTENSION: &str = "meta.json";
 
 pub fn get_metadata<P: AsRef<Path>>(local_path: P) -> Result<Option<DictionaryMetadata>> {
     let metadata = local_path.as_ref().with_extension(METADATA_EXTENSION);
