@@ -15,9 +15,7 @@ run = "uv tool run ruff check"
 run = "uv --preview-features format format"
 
 ["snapshot:python"]
-run = "uv tool run pytest --snapshot-update"
-depends = ["dev:python"]
+run = "mise run test:python --snapshot-update"
 
 ["test:python"]
-run = ".venv/bin/pytest -vv"
-depends = ["dev:python"]
+run = "uv tool run -w syrupy -w pytest-asyncio -w ./python pytest -vv"

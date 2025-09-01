@@ -46,9 +46,9 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.38.2", features = ["serialize"] }
+quick-xml = { version = "0.38.3", features = ["serialize"] }
 rayon = "1.11.0"
-charabia = { version = "0.9.6", optional = true, default-features = false }
+charabia = { version = "0.9.7", optional = true, default-features = false }
 rkyv = { version = "0.8.11" }
 serde = { version = "1.0.219", features = ["serde_derive"] }
 uuid = { version = "1.18.0", features = [
@@ -56,7 +56,7 @@ uuid = { version = "1.18.0", features = [
   "fast-rng",
   "macro-diagnostics",
 ] }
-url = "2.5.4"
+url = "2.5.7"
 serde_json = "1.0.143"
 thiserror = "2.0.16"
 brotli = "8.0.2"
@@ -81,13 +81,13 @@ sea-query = { version = "0.32.7", optional = true }
 strum = { version = "0.27.2", features = ["derive"] }
 
 [dev-dependencies]
+criterion = { version = "0.7.0", features = ["async_tokio", "html_reports"] }
 insta = "1.43.1"
 map-macro = { version = "0.3.0" }
-criterion = { version = "0.7.0", features = ["async_tokio", "html_reports"] }
-tempfile = "3.21.0"
-regex = "1.11.1"
 tokio = { version = "1.47.1", features = ["rt", "macros"] }
 wiremock = "0.6.4"
+tempfile = "3.21.0"
+regex = "1.11.2"
 
 [lib]
 name = "odict"

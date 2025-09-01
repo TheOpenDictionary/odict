@@ -9,6 +9,7 @@ members = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "attrs"
 version = "25.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -18,6 +19,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> main
 name = "colorama"
 version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
@@ -27,6 +30,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "flake8"
 version = "7.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -54,6 +58,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> main
 name = "iniconfig"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -63,6 +69,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "mccabe"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -72,6 +79,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> main
 name = "odict"
 version = "0.0.0"
 source = { virtual = "." }
@@ -95,6 +104,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "pycodestyle"
 version = "2.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -113,6 +123,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> main
 name = "pygments"
 version = "2.19.2"
 source = { registry = "https://pypi.org/simple" }
@@ -138,6 +150,7 @@ wheels = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "pytest-asyncio"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -150,6 +163,8 @@ wheels = [
 ]
 
 [[package]]
+=======
+>>>>>>> main
 name = "syrupy"
 version = "4.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -164,6 +179,7 @@ wheels = [
 [[package]]
 name = "theopendictionary"
 source = { editable = "python" }
+<<<<<<< HEAD
 dependencies = [
     { name = "syrupy" },
 ]
@@ -172,15 +188,28 @@ dependencies = [
 dev = [
     { name = "flake8-bugbear" },
     { name = "pytest-asyncio" },
+=======
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+>>>>>>> main
     { name = "syrupy" },
 ]
 
 [package.metadata]
+<<<<<<< HEAD
 requires-dist = [{ name = "syrupy", specifier = ">=3.0.6" }]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "flake8-bugbear", specifier = ">=24.12.12" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },
+=======
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.1" },
+>>>>>>> main
     { name = "syrupy", specifier = ">=3.0.6" },
 ]

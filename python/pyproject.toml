@@ -16,4 +16,4 @@ dynamic = ["version"]
 features = ["pyo3/extension-module"]
 
 [dependency-groups]
-dev = ["flake8-bugbear>=24.12.12", "pytest-asyncio>=0.24.0", "syrupy>=3.0.6"]
+dev = ["syrupy>=3.0.6", "pytest-asyncio>=0.24.0"]
