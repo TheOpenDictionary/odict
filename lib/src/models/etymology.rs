@@ -20,13 +20,13 @@ serializable! {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub pronunciations: Vec<Pronunciation>,
 
+    #[serde(rename = "sense", default, with = "senses")]
+    pub senses: HashSet<Sense>,
+
     #[serde(rename = "@description")]
     #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-
-    #[serde(rename = "sense", default, with = "senses")]
-    pub senses: HashSet<Sense>,
   }
 }
 

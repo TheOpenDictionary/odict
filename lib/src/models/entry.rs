@@ -18,11 +18,6 @@ serializable! {
     #[serde(rename = "@term")]
     pub term: String,
 
-    #[serde(rename = "@rank")]
-    #[rkyv(with = MapNiche<AsBox>)]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub rank: Option<u32>,
-
     #[serde(rename = "@see")]
     #[rkyv(with = MapNiche<AsBox>)]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -33,6 +28,11 @@ serializable! {
 
     #[serde(default, rename = "media")]
     pub media: Vec<MediaURL>,
+
+    #[serde(rename = "@rank")]
+    #[rkyv(with = MapNiche<AsBox>)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<u32>,
   }
 }
 
