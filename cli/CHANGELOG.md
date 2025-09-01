@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.1...cli/v2.10.0) (2025-09-01)
+
+
+### Features
+
+* Use u8 repr for enums ([b8bca1d](https://github.com/TheOpenDictionary/odict/commit/b8bca1d8bb94a6cfa552e30e91bd3d1a02ebd9e9))
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.0...cli/v2.9.1) (2025-08-16)
 
 

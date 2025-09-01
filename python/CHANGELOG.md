@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.8.0...python/v1.9.0) (2025-09-01)
+
+
+### Features
+
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.7.0...python/v1.8.0) (2025-07-12)
 
 

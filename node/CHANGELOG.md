@@ -4,6 +4,13 @@
 
 
 
+## [1.10.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.1...node/v1.10.0) (2025-09-01)
+
+
+### Features
+
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.0...node/v1.9.1) (2025-08-16)
 
 
