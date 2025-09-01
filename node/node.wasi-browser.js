@@ -58,3 +58,4 @@ const {
 export default __napiModule.exports;
 export const OpenDictionary = __napiModule.exports.OpenDictionary;
 export const compile = __napiModule.exports.compile;
+export const compile = __napiModule.exports.compile;

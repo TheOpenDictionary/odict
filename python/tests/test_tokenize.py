@@ -39,9 +39,10 @@ def test_tokenize(dict3, snapshot):
 
     # Verify we got some tokens
     assert len(tokens) > 0
-    print(tokens[0])
+
     # Check specific token values
     assert tokens[0].lemma == "你好"
+    assert len(tokens[0].entries) == 2
     assert tokens[0].entries[0].entry.term == "你"
     assert tokens[0].entries[1].entry.term == "好"
 

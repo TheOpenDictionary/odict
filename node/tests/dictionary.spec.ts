@@ -358,7 +358,7 @@ describe("Dictionary", () => {
     });
 
     it("handles download failure", async () => {
-      const validFormat = "wiktionary/eng";
+      const validFormat = "wiktionary/some-fake-dict";
       await expect(OpenDictionary.load(validFormat)).rejects.toThrow(
         /An unexpected error occurred/,
       );

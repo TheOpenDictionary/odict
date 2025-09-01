@@ -4,18 +4,39 @@ export declare class OpenDictionary {
   constructor(data: Buffer);
   get minRank(): number | null;
   get maxRank(): number | null;
+  static load(
+    dictionary: string,
+    options?: LoadOptions | undefined | null,
+  ): Promise<OpenDictionary>;
+  save(path: string, options?: SaveOptions | undefined | null): void;
   lookup(
     query: string | Array<string>,
     options?: LookupOptions | undefined | null,
   ): Array<LookupResult>;
   lexicon(): Array<string>;
+  index(options?: IndexOptions | undefined | null): void;
+  search(
+    query: string,
+    options?: SearchOptions | undefined | null,
+  ): Array<Entry>;
   tokenize(
     text: string,
     options?: TokenizeOptions | undefined | null,
   ): Array<Token>;
 }
 
+export interface AliasLoadOptions {
+  path?: string;
+}
+
 export declare function compile(xml: string): Buffer;
+
+export declare function compile(xml: string): Buffer;
+
+export interface CompressOptions {
+  quality?: number;
+  windowSize?: number;
+}
 
 export interface Definition {
   id?: string;
@@ -69,6 +90,10 @@ export interface IndexOptions {
   overwrite?: boolean;
 }
 
+export interface LoadOptions {
+  alias?: AliasLoadOptions;
+}
+
 export interface LookupOptions {
   split?: number;
   /**
@@ -100,6 +125,10 @@ export interface Pronunciation {
   kind?: EnumWrapper;
   value: string;
   media: Array<MediaUrl>;
+}
+
+export interface SaveOptions {
+  compress?: CompressOptions;
 }
 
 export interface SearchOptions {

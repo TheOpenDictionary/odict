@@ -689,3 +689,4 @@ if (!nativeBinding) {
 module.exports = nativeBinding;
 module.exports.OpenDictionary = nativeBinding.OpenDictionary;
 module.exports.compile = nativeBinding.compile;
+module.exports.compile = nativeBinding.compile;
