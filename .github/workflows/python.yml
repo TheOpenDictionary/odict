@@ -67,7 +67,7 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           pip install theopendictionary --find-links dist --force-reinstall
-          pip install pytest syrupy
+          pip install pytest syrupy pytest-asyncio
           cd python && pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') && matrix.platform.target != 'ppc64' }}
@@ -127,7 +127,7 @@ jobs:
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install theopendictionary --no-index --find-links dist --force-reinstall
-            pip install pytest syrupy
+            pip install pytest syrupy pytest-asyncio
             cd python && pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') }}
@@ -142,7 +142,7 @@ jobs:
             set -e
             python3 -m virtualenv .venv
             source .venv/bin/activate
-            pip install pytest syrupy
+            pip install pytest syrupy pytest-asyncio
             pip install theopendictionary --find-links dist --force-reinstall
             cd python && pytest
 
@@ -180,7 +180,7 @@ jobs:
           python3 -m venv .venv
           source .venv/Scripts/activate
           pip install theopendictionary --find-links dist --force-reinstall
-          pip install pytest syrupy
+          pip install pytest syrupy pytest-asyncio
           cd python && pytest
 
   macos:
@@ -214,7 +214,7 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           pip install theopendictionary --find-links dist --force-reinstall
-          pip install pytest syrupy
+          pip install pytest syrupy pytest-asyncio
           cd python && pytest
 
   sdist:
