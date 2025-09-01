@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "theopendictionary"
-requires-python = ">=3.8"
+requires-python = ">=3.8.1"
 classifiers = [
   "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
@@ -14,3 +14,6 @@ dynamic = ["version"]
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+
+[dependency-groups]
+dev = ["syrupy>=3.0.6"]

@@ -44,22 +44,22 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.38.1", features = ["serialize"] }
+quick-xml = { version = "0.38.3", features = ["serialize"] }
 rayon = "1.11.0"
-charabia = { version = "0.9.6", optional = true, default-features = false }
+charabia = { version = "0.9.7", optional = true, default-features = false }
 rkyv = { version = "0.8.11" }
 serde = { version = "1.0.219", features = ["serde_derive"] }
 uuid = { version = "1.18.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-url = "2.5.4"
-serde_json = "1.0.142"
-thiserror = "2.0.14"
-brotli = "8.0.1"
+url = "2.5.7"
+serde_json = "1.0.143"
+thiserror = "2.0.16"
+brotli = "8.0.2"
 structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=search
-tantivy = { version = "0.24.2", optional = true }
+tantivy = { version = "0.25.0", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
@@ -70,8 +70,8 @@ strum = { version = "0.27.2", features = ["derive"] }
 insta = "1.43.1"
 map-macro = { version = "0.3.0" }
 criterion = { version = "0.7.0", features = ["html_reports"] }
-tempfile = "3.20.0"
-regex = "1.11.1"
+tempfile = "3.21.0"
+regex = "1.11.2"
 
 [lib]
 name = "odict"
