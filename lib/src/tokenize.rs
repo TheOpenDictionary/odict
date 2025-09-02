@@ -39,7 +39,6 @@ impl AsRef<TokenizeOptions> for TokenizeOptions {
     }
 }
 
-
 impl TokenizeOptions {
     pub fn follow(mut self, follow: u32) -> Self {
         self.follow = follow;
@@ -70,8 +69,6 @@ fn is_valid_token(input: &str) -> bool {
 
     !c.trim().is_empty()
 }
-
-let n = Script::Cj;
 
 macro_rules! tokenize {
     ($t:ident, $r:ident) => {
