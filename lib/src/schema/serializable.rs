@@ -68,6 +68,7 @@ macro_rules! serializable_enum {
         #[rkyv(derive(Debug, PartialEq, Eq, Hash))]
         #[strum(ascii_case_insensitive, serialize_all = "snake_case")]
         #[serde(rename_all = "snake_case")]
+        #[repr(u8)]
         $i
     };
 }

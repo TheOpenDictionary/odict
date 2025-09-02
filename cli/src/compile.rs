@@ -17,7 +17,7 @@ pub struct CompileArgs {
     #[arg(short, help = "Output path of compiled dictionary")]
     output: Option<PathBuf>,
 
-    #[arg(short, value_parser = clap::value_parser!(u32).range(0..=11), help = "Brotli compression level (between 0 and 11)", default_value_t = 11)]
+    #[arg(short, value_parser = clap::value_parser!(u32).range(0..=11), help = "Brotli compression level (between 0 and 11)", default_value_t = 8)]
     quality: u32,
 
     #[arg(short, value_parser = clap::value_parser!(u32).range(0..=22), help = "Brotli large window size (between 0 and 22)", default_value_t = 22)]

@@ -10,6 +10,7 @@ use super::ArchivedPartOfSpeech;
 use super::{pos::PartOfSpeech, Definition, EntryRef, Group};
 
 serializable! {
+  #[repr(u8)]
   pub enum DefinitionType {
     #[serde(rename = "group")]
     Group(Group),
