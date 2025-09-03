@@ -19,3 +19,4 @@ lto = "thin"
 
 [workspace.dependencies]
 structural-convert = "0.13.0"
+merge = "0.2.0"

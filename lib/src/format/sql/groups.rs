@@ -1,6 +1,6 @@
 use sea_query::{ColumnDef, ForeignKey, ForeignKeyAction, Iden, Query, Table};
 
-use crate::{Group, ID};
+use crate::schema::{Group, ID};
 
 use super::{senses::Senses, utils::SQLBuilder};
 

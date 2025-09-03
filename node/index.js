@@ -687,5 +687,6 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding;
-module.exports.Dictionary = nativeBinding.Dictionary;
+module.exports.OpenDictionary = nativeBinding.OpenDictionary;
+module.exports.compile = nativeBinding.compile;
 module.exports.compile = nativeBinding.compile;

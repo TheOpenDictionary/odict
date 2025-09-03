@@ -6,7 +6,7 @@ mod lexicon_tests {
 
     #[test]
     fn test_lexicon() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.lexicon();
         assert_eq!(result, vec!["cat", "dog", "poo", "ran", "run"]);
     }

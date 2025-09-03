@@ -56,5 +56,6 @@ const {
   },
 });
 export default __napiModule.exports;
-export const Dictionary = __napiModule.exports.Dictionary;
+export const OpenDictionary = __napiModule.exports.OpenDictionary;
+export const compile = __napiModule.exports.compile;
 export const compile = __napiModule.exports.compile;

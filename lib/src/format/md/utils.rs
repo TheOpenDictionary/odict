@@ -8,7 +8,7 @@ pub fn underline_target(example: &str, target: &str) -> String {
 
     for (index, _) in example.match_indices(target) {
         parts.push(example[last_index..index].into());
-        parts.push(format!("*{}*", target));
+        parts.push(format!("*{target}*"));
 
         last_index = index + target.len();
     }
@@ -26,9 +26,7 @@ pub fn indent(s: &str, width: usize) -> String {
     let padding = " ".repeat(width);
 
     s.lines()
-        .into_iter()
-        .map(|l| format!("{}{}", padding, l))
+        .map(|l| format!("{padding}{l}"))
         .collect::<Vec<String>>()
         .join("\n")
-        .into()
 }

@@ -1,4 +1,4 @@
-use crate::Entry;
+use crate::schema::Entry;
 
 use super::etymology::write_ety;
 

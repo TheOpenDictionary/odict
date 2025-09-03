@@ -1,4 +1,4 @@
-use crate::{Entry, Example};
+use crate::schema::{Entry, Example};
 
 use super::pronunciation::write_pronunciation;
 use super::utils::{indent, underline_target};
@@ -15,7 +15,7 @@ pub fn write_example(
         &underline_target(&example.value, &entry.term)
     );
 
-    lines.push(indent(&text, indent_width).into());
+    lines.push(indent(&text, indent_width));
 
     // Add pronunciations if present
     if !example.pronunciations.is_empty() {
@@ -28,7 +28,7 @@ pub fn write_example(
             // Apply indentation to each generated pronunciation line
             for line in pronunciation_lines {
                 if !line.is_empty() {
-                    lines.push(indent(&line, pronunciation_indent).into());
+                    lines.push(indent(&line, pronunciation_indent));
                 } else {
                     lines.push(String::new());
                 }

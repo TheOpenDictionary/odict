@@ -21,10 +21,10 @@ impl Default for IndexOptions {
   }
 }
 
-#[cfg(feature = "search")]
-impl From<IndexOptions> for odict::search::IndexOptions {
+#[cfg(feature = "node")]
+impl From<IndexOptions> for odict::index::IndexOptions {
   fn from(opts: IndexOptions) -> Self {
-    let mut options = odict::search::IndexOptions::default();
+    let mut options = odict::index::IndexOptions::default();
 
     if let Some(dir) = opts.directory {
       options = options.dir(dir.as_str());

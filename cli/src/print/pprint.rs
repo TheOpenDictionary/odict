@@ -1,7 +1,10 @@
 use std::{borrow::Cow, sync::LazyLock};
 
 use console::{style, Style};
-use odict::{Definition, DefinitionType, Entry, Error, Etymology, Example, Group, Note, Sense};
+use odict::{
+    schema::{Definition, DefinitionType, Entry, Etymology, Example, Group, Note, Sense},
+    Error,
+};
 
 use crate::CLIContext;
 
@@ -42,17 +45,16 @@ fn underline_target(example: &str, target: &str) -> String {
         parts.push(STYLE_EXAMPLE.apply_to(&example[last_index..]).to_string());
     }
 
-    let modified_string = parts.concat();
+    
 
-    modified_string
+    parts.concat()
 }
 
 fn indent<'a>(s: &'a str, width: usize) -> Cow<'a, str> {
     let padding = " ".repeat(width);
 
     s.lines()
-        .into_iter()
-        .map(|l| format!("{}{}", padding, l))
+        .map(|l| format!("{padding}{l}"))
         .collect::<Vec<String>>()
         .join("\n")
         .into()
@@ -66,10 +68,10 @@ fn print_note(ctx: &CLIContext, index: usize, note: &Note, entry: &Entry) -> Res
         6,
     ))?;
 
-    if note.examples.len() > 0 {
+    if !note.examples.is_empty() {
         out.write_line("")?;
 
-        for example in (&note).examples.iter() {
+        for example in note.examples.iter() {
             print_example(ctx, 9, example, entry)?;
         }
     }
@@ -87,11 +89,11 @@ fn print_example(
 
     let text = &format!(
         "{} {}",
-        STYLE_EXAMPLE_BULLET.apply_to("▸").to_string(),
+        STYLE_EXAMPLE_BULLET.apply_to("▸"),
         &underline_target(&example.value, &entry.term)
     );
 
-    out.write_line(&indent(&text, indent_width))?;
+    out.write_line(&indent(text, indent_width))?;
 
     Ok(())
 }
@@ -115,16 +117,16 @@ fn print_definition(
 
     out.write_line(&indent(text, indent_width))?;
 
-    for example in (&definition).examples.iter() {
+    for example in definition.examples.iter() {
         print_example(ctx, indent_width + 3, example, entry)?;
     }
 
-    if definition.notes.len() > 0 {
+    if !definition.notes.is_empty() {
         let header = &format!("\n{}\n\n", STYLE_TITLE.apply_to("Notes"));
 
         out.write_line(&indent(header, indent_width + 3))?;
 
-        for (ndx, note) in (&definition).notes.iter().enumerate() {
+        for (ndx, note) in definition.notes.iter().enumerate() {
             print_note(ctx, ndx, note, entry)?;
         }
 
@@ -182,7 +184,7 @@ fn print_ety(ctx: &CLIContext, etymology: &Etymology, entry: &Entry) -> Result<(
 pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Entry>) -> Result<(), Error> {
     let out = &ctx.stdout;
 
-    for entry in entries.iter().map(|e| e) {
+    for entry in entries.iter() {
         out.write_line("")?;
         out.write_line(&divider())?;
         out.write_line(&format!("{}", style(&entry.term).bold()))?;
@@ -199,7 +201,7 @@ pub(super) fn pretty_print(ctx: &CLIContext, entries: Vec<Entry>) -> Result<(), 
                 )?;
             }
 
-            print_ety(ctx, etymology, &entry)?;
+            print_ety(ctx, etymology, entry)?;
         }
     }
 

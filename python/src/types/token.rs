@@ -1,4 +1,4 @@
-use odict::{ArchivedEntry, Entry};
+use odict::schema::{ArchivedEntry, Entry};
 use pyo3::prelude::*;
 
 use super::LookupResult;
@@ -33,9 +33,9 @@ impl Token {
     }
 }
 
-impl From<odict::Token<Entry>> for Token {
-    fn from(token: odict::Token<Entry>) -> Self {
-        let odict::Token {
+impl From<odict::tokenize::Token<Entry>> for Token {
+    fn from(token: odict::tokenize::Token<Entry>) -> Self {
+        let odict::tokenize::Token {
             lemma,
             language,
             entries,
@@ -57,9 +57,9 @@ impl From<odict::Token<Entry>> for Token {
     }
 }
 
-impl From<odict::Token<&ArchivedEntry>> for Token {
-    fn from(token: odict::Token<&ArchivedEntry>) -> Self {
-        let odict::Token {
+impl From<odict::tokenize::Token<&ArchivedEntry>> for Token {
+    fn from(token: odict::tokenize::Token<&ArchivedEntry>) -> Self {
+        let odict::tokenize::Token {
             lemma,
             language,
             entries,

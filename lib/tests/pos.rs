@@ -6,7 +6,8 @@ mod pos_tests {
     use insta::assert_snapshot;
     use map_macro::hash_set;
     use odict::{
-        format::xml::ToXML, Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense,
+        format::xml::ToXML,
+        schema::{Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense},
     };
 
     #[test]

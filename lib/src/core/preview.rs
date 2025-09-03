@@ -1,6 +1,6 @@
 #[cfg(feature = "markdown")]
 use crate::md::to_text;
-use crate::{ArchivedDefinitionType, ArchivedEntry, DefinitionType, Entry};
+use crate::schema::{ArchivedDefinitionType, ArchivedEntry, DefinitionType, Entry};
 
 pub struct PreviewOptions {
     delimiter: String,

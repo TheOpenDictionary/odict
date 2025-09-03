@@ -3,7 +3,7 @@ import unittest
 import os
 import uuid
 
-from theopendictionary import Dictionary, EnumWrapper
+from theopendictionary import OpenDictionary, compile
 
 
 class TestForms(unittest.TestCase):
@@ -27,12 +27,13 @@ class TestForms(unittest.TestCase):
         temp_dir = tempfile.gettempdir()
         temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
 
-        # Write XML content to an ODICT file
-        Dictionary.write(xml_content, temp_file)
-
         try:
-            # Create dictionary from the temporary ODICT file
-            dictionary = Dictionary(temp_file)
+            # Compile XML content to bytes and create dictionary
+            compiled_bytes = compile(xml_content)
+            dictionary = OpenDictionary(compiled_bytes)
+
+            # Save to file for testing
+            dictionary.save(temp_file)
 
             # Look up the entry
             results = dictionary.lookup("run")

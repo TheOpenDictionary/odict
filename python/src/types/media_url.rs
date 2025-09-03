@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 
 #[pyclass]
 #[derive(Clone, Debug, StructuralConvert)]
-#[convert(from(odict::MediaURL))]
+#[convert(from(odict::schema::MediaURL))]
 pub struct MediaURL {
     #[pyo3(get)]
     pub src: String,

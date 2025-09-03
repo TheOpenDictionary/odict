@@ -2,7 +2,7 @@
 mod merge_tests {
     use map_macro::hash_set;
 
-    use odict::{
+    use odict::schema::{
         Definition, DefinitionType, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID,
     };
 

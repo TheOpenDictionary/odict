@@ -5,7 +5,7 @@ use structural_convert::StructuralConvert;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Example))]
+#[convert(from(odict::schema::Example))]
 pub struct Example {
     #[pyo3(get)]
     pub value: String,

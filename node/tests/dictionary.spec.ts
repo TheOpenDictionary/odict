@@ -1,13 +1,12 @@
-import { beforeAll, describe, expect, it } from "vitest";
-
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { beforeAll, describe, expect, it } from "vitest";
 
-import { compile, Dictionary } from "../index.js";
+import { compile, OpenDictionary } from "../index.js";
 
 async function getDictionary(name: string) {
-  return new Dictionary(
+  return new OpenDictionary(
     compile(
       await readFile(
         join(
@@ -26,9 +25,9 @@ describe("Dictionary", () => {
     serialize: (t) => `"${t.value}"`,
   });
 
-  let dict1: Dictionary;
-  let dict2: Dictionary;
-  let dict3: Dictionary;
+  let dict1: OpenDictionary;
+  let dict2: OpenDictionary;
+  let dict3: OpenDictionary;
 
   beforeAll(async () => {
     dict1 = await getDictionary("example1");
@@ -90,7 +89,7 @@ describe("Dictionary", () => {
 
     it("supports follow=false to disable following", async () => {
       const result = dict1.lookup("ran", { follow: false });
-      expect(result[0].entry.term).toBe("ran"); 
+      expect(result[0].entry.term).toBe("ran");
     });
 
     it("supports follow with specific number", async () => {
@@ -156,7 +155,7 @@ describe("Dictionary", () => {
   </entry>
 </dictionary>`;
 
-      const mixedDict = new Dictionary(compile(mixedXml));
+      const mixedDict = new OpenDictionary(compile(mixedXml));
       expect(mixedDict.minRank).toBe(10);
       expect(mixedDict.maxRank).toBe(100);
     });
@@ -222,7 +221,7 @@ describe("Dictionary", () => {
 
       expect(tokens.length).toBe(1);
       expect(tokens[0].lemma).toBe("ran");
-      expect(tokens[0].entries[0].entry.term).toBe("ran"); 
+      expect(tokens[0].entries[0].entry.term).toBe("ran");
     },
   );
 
@@ -253,12 +252,178 @@ describe("Dictionary", () => {
   it("throws errors inside JavaScript", async () => {
     try {
       // @ts-expect-error
-      const dict = new Dictionary("fake-alias");
+      const dict = new OpenDictionary("fake-alias");
       dict.lookup("dog");
     } catch (e) {
       expect((e as Error).message).toContain(
         "Failed to create reference from Buffer",
       );
     }
+  });
+
+  describe.skipIf(typeof OpenDictionary.load !== "function")("load", () => {
+    const dict1Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example1.odict",
+    );
+
+    const dict2Path = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/example2.odict",
+    );
+
+    const emptyPath = join(
+      fileURLToPath(new URL(import.meta.url)),
+      "../../../examples/empty.odict",
+    );
+
+    beforeAll(async () => {
+      const dict1 = await getDictionary("example1");
+      const dict2 = await getDictionary("example2");
+      const empty = await getDictionary("empty");
+
+      dict1.save(dict1Path);
+      dict2.save(dict2Path);
+      empty.save(emptyPath);
+    });
+
+    it("loads dictionary from local .odict file path", async () => {
+      const dictPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.odict",
+      );
+
+      const loadedDict = await OpenDictionary.load(dictPath);
+
+      expect(loadedDict).toBeDefined();
+
+      expect(loadedDict.lexicon()).toStrictEqual([
+        "cat",
+        "dog",
+        "poo",
+        "ran",
+        "run",
+      ]);
+
+      // Verify it works the same as loading from compiled data
+      const result = loadedDict.lookup("cat");
+      expect(result).toMatchSnapshot();
+    });
+
+    it("loads dictionary without options", async () => {
+      const dictPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example2.odict",
+      );
+
+      const loadedDict = await OpenDictionary.load(dictPath);
+
+      expect(loadedDict).toBeDefined();
+      expect(loadedDict.lexicon().length).toBeGreaterThan(0);
+    });
+
+    it("throws error for non-existent file", async () => {
+      const nonExistentPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/does-not-exist.odict",
+      );
+
+      await expect(OpenDictionary.load(nonExistentPath)).rejects.toThrow();
+    });
+
+    it("throws error for invalid file format", async () => {
+      const invalidPath = join(
+        fileURLToPath(new URL(import.meta.url)),
+        "../../../examples/example1.xml", // XML instead of .odict
+      );
+
+      await expect(OpenDictionary.load(invalidPath)).rejects.toThrow();
+    });
+
+    it("throws error for invalid dictionary name format", async () => {
+      // Test invalid formats that would trigger download attempt
+      const invalidFormats = [
+        "invalid",
+        "INVALID/EN", // uppercase
+        "invalid/", // missing language
+        "/english", // missing dictionary
+        "invalid/en/extra", // too many parts
+        "invalid@en", // wrong separator
+        "123invalid/en", // numbers not allowed
+      ];
+
+      for (const format of invalidFormats) {
+        await expect(OpenDictionary.load(format)).rejects.toThrow();
+      }
+    });
+
+    it("handles download failure", async () => {
+      const validFormat = "wiktionary/some-fake-dict";
+      await expect(OpenDictionary.load(validFormat)).rejects.toThrow(
+        /An unexpected error occurred/,
+      );
+    });
+
+    it("handles download success", async () => {
+      const validFormat = "wiktionary/cmn-eng";
+      expect(await OpenDictionary.load(validFormat)).toBeDefined();
+    });
+
+    it("loads empty dictionary file", async () => {
+      const loadedDict = await OpenDictionary.load(emptyPath);
+
+      expect(loadedDict).toBeDefined();
+      expect(loadedDict.lexicon()).toStrictEqual([]);
+
+      const result = loadedDict.lookup("anything");
+      expect(result).toStrictEqual([]);
+    });
+
+    it("preserves dictionary functionality after loading", async () => {
+      const loadedDict = await OpenDictionary.load(dict1Path);
+
+      // Test all major functionality works
+      expect(loadedDict.lexicon()).toBeDefined();
+      expect(loadedDict.lookup("cat")).toBeDefined();
+      expect(loadedDict.minRank).toBe(100);
+      expect(loadedDict.maxRank).toBe(100);
+
+      // Test lookup with options
+      const result = loadedDict.lookup("ran", { follow: 1 });
+      expect(result[0].entry.term).toBe("run");
+      expect(result[0].directedFrom?.term).toBe("ran");
+    });
+
+    it("loads different dictionary files correctly", async () => {
+      const [loadedDict1, loadedDict2] = await Promise.all([
+        OpenDictionary.load(dict1Path),
+        OpenDictionary.load(dict2Path),
+      ]);
+
+      // Verify they loaded different dictionaries
+      const lexicon1 = loadedDict1.lexicon();
+      const lexicon2 = loadedDict2.lexicon();
+
+      expect(lexicon1).not.toStrictEqual(lexicon2);
+      expect(loadedDict1.minRank).not.toBe(loadedDict2.minRank);
+    });
+
+    it("throws descriptive error for malformed .odict file", async () => {
+      // Create a temporary file with invalid content
+      const { writeFile, unlink } = await import("node:fs/promises");
+      const { tmpdir } = await import("node:os");
+      const tempPath = join(tmpdir(), "malformed.odict");
+
+      try {
+        await writeFile(tempPath, "invalid odict content");
+        await expect(OpenDictionary.load(tempPath)).rejects.toThrow(
+          "The input does not have a valid ODict file signature",
+        );
+      } finally {
+        try {
+          await unlink(tempPath);
+        } catch {}
+      }
+    });
   });
 });

@@ -11,8 +11,8 @@ pub struct Pronunciation {
   pub media: Vec<MediaURL>,
 }
 
-impl From<odict::Pronunciation> for Pronunciation {
-  fn from(pronunciation: odict::Pronunciation) -> Self {
+impl From<odict::schema::Pronunciation> for Pronunciation {
+  fn from(pronunciation: odict::schema::Pronunciation) -> Self {
     Self {
       kind: pronunciation.kind.map(|k| k.to_enum_wrapper().into()),
       value: pronunciation.value,

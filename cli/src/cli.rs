@@ -2,8 +2,8 @@ use clap::{command, crate_version, Parser, Subcommand};
 
 use crate::alias::AliasCommands;
 use crate::{
-    CompileArgs, DumpArgs, IndexArgs, InfoArgs, LexiconArgs, LookupArgs, MergeArgs, NewArgs,
-    SearchArgs, ServeArgs, TokenizeArgs,
+    CompileArgs, DownloadArgs, DumpArgs, IndexArgs, InfoArgs, LexiconArgs, LookupArgs, MergeArgs,
+    NewArgs, SearchArgs, ServeArgs, TokenizeArgs,
 };
 
 #[derive(Debug, Parser)]
@@ -30,6 +30,10 @@ pub enum Commands {
     /// Compiles a dictionary from ODXML
     #[command(arg_required_else_help = true)]
     Compile(CompileArgs),
+
+    /// Downloads a dictionary from the remote registry
+    #[command(arg_required_else_help = true)]
+    Download(DownloadArgs),
 
     /// Outputs a dictionary in a human-readable format
     #[command(arg_required_else_help = true)]

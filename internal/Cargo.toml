@@ -4,8 +4,11 @@ version = "0.1.0"
 edition = "2024"
 publish = false
 
+[features]
+load = ["odict/http", "odict/alias"]
+
 [dependencies]
-odict = { path = "../lib", features = [] }
+odict = { path = "../lib", default-features = false }
 strum = { version = "0.27.2", features = ["derive"] }
 
 [lib]

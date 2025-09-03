@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use crate::Dictionary;
+use crate::schema::Dictionary;
 
 pub trait ToDictionary {
     fn to_dictionary(&self) -> crate::Result<Dictionary>;

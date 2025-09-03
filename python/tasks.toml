@@ -15,7 +15,7 @@ run = "uv tool run ruff check"
 run = "uv --preview-features format format"
 
 ["snapshot:python"]
-run = "uv tool run -w syrupy -w ./python pytest --snapshot-update"
+run = "mise run test:python --snapshot-update"
 
 ["test:python"]
-run = "uv tool run -w syrupy -w ./python pytest -vv"
+run = "uv tool run -w syrupy -w pytest-asyncio -w ./python pytest -vv"

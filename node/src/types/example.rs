@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 #[napi(object)]
 #[derive(StructuralConvert)]
-#[convert(from(odict::Example))]
+#[convert(from(odict::schema::Example))]
 pub struct Example {
   pub value: String,
   pub translations: Vec<Translation>,

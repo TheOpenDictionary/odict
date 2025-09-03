@@ -1,4 +1,4 @@
-use crate::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
+use crate::schema::{ArchivedDictionary, ArchivedEntry, Dictionary, Entry};
 
 macro_rules! resolve {
     ($t:ident, $ret:ident) => {

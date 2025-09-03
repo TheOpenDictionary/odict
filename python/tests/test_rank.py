@@ -3,7 +3,7 @@ import tempfile
 import os
 
 from pathlib import Path
-from theopendictionary import Dictionary
+from theopendictionary import OpenDictionary, compile
 
 
 @pytest.fixture(scope="module")
@@ -20,12 +20,20 @@ def dict2_path():
 
 @pytest.fixture(scope="module")
 def dict1(dict1_path):
-    return Dictionary.compile(dict1_path)
+    # Read XML file and compile to bytes
+    with open(dict1_path, "r") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
 
 
 @pytest.fixture(scope="module")
 def dict2(dict2_path):
-    return Dictionary.compile(dict2_path)
+    # Read XML file and compile to bytes
+    with open(dict2_path, "r") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
 
 
 @pytest.fixture(scope="module")
@@ -64,15 +72,16 @@ def mixed_rank_dict():
         temp_xml_path = f.name
 
     try:
-        dict_obj = Dictionary.compile(temp_xml_path)
+        # Read the XML content and compile it
+        with open(temp_xml_path, "r") as f:
+            xml_content = f.read()
+
+        compiled_bytes = compile(xml_content)
+        dict_obj = OpenDictionary(compiled_bytes)
         yield dict_obj
     finally:
         # Clean up temp files
         os.unlink(temp_xml_path)
-        # Also clean up the compiled dictionary file
-        compiled_path = temp_xml_path.replace(".xml", ".odict")
-        if os.path.exists(compiled_path):
-            os.unlink(compiled_path)
 
 
 def test_min_rank_with_ranks(dict1):

@@ -1,4 +1,4 @@
-use crate::{Form, FormKind};
+use crate::schema::{Form, FormKind};
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 
