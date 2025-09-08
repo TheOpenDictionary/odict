@@ -28,7 +28,7 @@ impl AsRef<DictionaryDownloader> for DictionaryDownloader {
 impl Default for DictionaryDownloader {
     fn default() -> Self {
         Self {
-            base_url: "https://pub-520e4751d2374bc5bc14265c6e02e06e.r2.dev".to_string(),
+            base_url: "https://dictionaries.odict.org".to_string(),
             client: Client::builder()
                 .user_agent("odict/2.9.1")
                 .build()
@@ -380,10 +380,7 @@ mod tests {
     #[tokio::test]
     async fn test_downloader_default() {
         let downloader = DictionaryDownloader::default();
-        assert_eq!(
-            downloader.base_url,
-            "https://pub-520e4751d2374bc5bc14265c6e02e06e.r2.dev"
-        );
+        assert_eq!(downloader.base_url, "https://dictionaries.odict.org");
     }
 
     #[tokio::test]
