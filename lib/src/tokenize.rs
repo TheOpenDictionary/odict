@@ -103,7 +103,7 @@ macro_rules! tokenize {
                         };
 
                         let query = vec![lemma];
-
+                        println!("Using strategy {:?} for token '{}'", lookup_method, lemma);
                         let entries = self.lookup(
                             &query,
                             LookupOptions::default()
@@ -111,6 +111,7 @@ macro_rules! tokenize {
                                 .follow(opts.follow)
                                 .insensitive(opts.insensitive),
                         )?;
+                        println!("Entries: {:#?}", entries);
 
                         Ok(Token {
                             lemma: lemma.to_string(),

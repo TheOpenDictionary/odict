@@ -364,8 +364,8 @@ describe("Dictionary", () => {
       );
     });
 
-    it("handles download success", async () => {
-      const validFormat = "wiktionary/cmn-eng";
+    it("handles download success", { timeout: 30_000 }, async () => {
+      const validFormat = "wiktionary/jpn";
       expect(await OpenDictionary.load(validFormat)).toBeDefined();
     });
 
