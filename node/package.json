@@ -37,23 +37,53 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
+    "@emnapi/core": "^1.5.0",
+    "@emnapi/runtime": "^1.5.0",
     "@napi-rs/cli": "3.1.5",
     "@napi-rs/wasm-runtime": "^1.0.3",
-    "@types/node": "^24.3.0",
+    "@oxc-node/core": "^0.0.32",
+    "@taplo/cli": "^0.7.0",
+    "@tybys/wasm-util": "^0.10.0",
+    "@types/node": "^24.3.1",
     "buffer": "^6.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "oxlint": "^1.14.0",
     "prettier": "^3.6.2",
-    "vite": "^7.1.3",
+    "tinybench": "^5.0.1",
+    "vite": "^7.1.5",
     "vite-plugin-node-polyfills": "0.24.0",
     "vitest": "^3.2.4"
   },
   "engines": {
-    "node": ">=20.0.0 <25.0.0"
+    "node": ">= 10.16.0 < 11 || >= 11.8.0 < 12 || >= 12.0.0"
+  },
+  "lint-staged": {
+    "*.@(js|ts|tsx)": [
+      "oxlint --fix"
+    ],
+    "*.@(js|ts|tsx|yml|yaml|md|json)": [
+      "prettier --write"
+    ],
+    "*.toml": [
+      "taplo format"
+    ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
+    "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build:node": "napi build --release --platform --strip --features node --pipe \"prettier -w\"",
     "build:wasm": "napi build --release --platform --strip --pipe \"prettier -w\" --target wasm32-wasip1-threads",
     "build:debug": "napi build --pipe \"prettier -w\"",
+    "format": "run-p format:prettier format:rs format:toml",
+    "format:prettier": "prettier . -w",
+    "format:toml": "taplo format",
+    "format:rs": "cargo fmt",
+    "lint": "oxlint .",
     "dev:wasm": "vite dev",
     "test": "vitest --reporter=verbose --no-watch",
     "universalize": "napi universalize",

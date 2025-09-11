@@ -18,4 +18,4 @@ run = "uv --preview-features format format"
 run = "mise run test:python --snapshot-update"
 
 ["test:python"]
-run = "uv tool run -w syrupy -w pytest-asyncio -w ./python pytest -vv"
+run = "uv tool run -w syrupy -w pytest-asyncio -w ./python {{arg(name='args',var=true)}} pytest -vv"

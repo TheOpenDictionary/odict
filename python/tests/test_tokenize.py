@@ -12,7 +12,7 @@ def dict3_path():
 @pytest.fixture(scope="module")
 def dict3(dict3_path):
     # Read XML file and compile to bytes
-    with open(dict3_path, "r") as f:
+    with open(dict3_path, "r", encoding="utf-8") as f:
         xml_content = f.read()
     compiled_bytes = compile(xml_content)
     return OpenDictionary(compiled_bytes)
@@ -27,7 +27,7 @@ def dict1_path():
 @pytest.fixture(scope="module")
 def dict1(dict1_path):
     # Read XML file and compile to bytes
-    with open(dict1_path, "r") as f:
+    with open(dict1_path, "r", encoding="utf-8") as f:
         xml_content = f.read()
     compiled_bytes = compile(xml_content)
     return OpenDictionary(compiled_bytes)
