@@ -27,8 +27,14 @@ impl OpenDictionary {
                 .downloader
                 .download(dictionary)
                 .await
-                .map_err(|e| {
-                    crate::Error::DownloadFailed(dictionary.to_string(), format!("{e}"))
+                .map_err(|e| match e {
+                    crate::Error::DownloadFailed(kind, msg) => {
+                        crate::Error::DownloadFailed(kind, msg)
+                    }
+                    _ => crate::Error::DownloadFailed(
+                        crate::download::NetworkError::Network,
+                        format!("Failed to download {dictionary}: {e}"),
+                    ),
                 })?;
 
             return OpenDictionary::from_path(path);

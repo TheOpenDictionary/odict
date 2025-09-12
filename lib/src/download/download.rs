@@ -12,11 +12,12 @@ use crate::{
 
 use futures_util::StreamExt;
 use reqwest::Client;
+use reqwest_middleware::ClientWithMiddleware;
 
 #[derive(Clone, Debug)]
 pub struct DictionaryDownloader {
     base_url: String,
-    client: Client,
+    client: ClientWithMiddleware,
 }
 
 impl AsRef<DictionaryDownloader> for DictionaryDownloader {
@@ -27,22 +28,38 @@ impl AsRef<DictionaryDownloader> for DictionaryDownloader {
 
 impl Default for DictionaryDownloader {
     fn default() -> Self {
+        let retry_policy =
+            reqwest_retry::policies::ExponentialBackoff::builder().build_with_max_retries(3);
+
+        let retry = reqwest_retry::RetryTransientMiddleware::new_with_policy(retry_policy);
+
+        let base_client = reqwest::Client::builder()
+            .user_agent("ODICT/3")
+            .build()
+            .expect("Failed to create HTTP client");
+
+        let client = reqwest_middleware::ClientBuilder::new(base_client)
+            .with(retry)
+            .build();
+
         Self {
             base_url: "https://dictionaries.odict.org".to_string(),
-            client: Client::builder()
-                .user_agent("odict/2.9.1")
-                .build()
-                .expect("Failed to create HTTP client"),
+            client,
         }
     }
 }
 
 impl DictionaryDownloader {
-    pub fn new(client: Client, base_url: String) -> Self {
+    pub fn new(client: ClientWithMiddleware, base_url: String) -> Self {
         Self { client, base_url }
     }
 
     pub fn with_client<F>(mut self, client: Client) -> Self {
+        self.client = client.into();
+        self
+    }
+
+    pub fn with_client_middleware<F>(mut self, client: ClientWithMiddleware) -> Self {
         self.client = client;
         self
     }
@@ -124,7 +141,7 @@ impl DictionaryDownloader {
         let response = request
             .send()
             .await
-            .map_err(|e| Error::Other(format!("Failed to fetch from {url}: {e}")))?;
+            .map_err(|e| super::utils::classify_reqwest_error(url, &e))?;
 
         match response.status().as_u16() {
             304 => {
@@ -141,8 +158,12 @@ impl DictionaryDownloader {
                 let mut stream = response.bytes_stream();
 
                 while let Some(chunk) = stream.next().await {
-                    let chunk = chunk
-                        .map_err(|e| Error::Other(format!("Failed to read response chunk: {e}")))?;
+                    let chunk = chunk.map_err(|e| {
+                        Error::DownloadFailed(
+                            super::utils::NetworkError::Body,
+                            format!("Failed to read response chunk: {e}"),
+                        )
+                    })?;
 
                     bytes.extend_from_slice(&chunk);
                     downloaded += chunk.len() as u64;
@@ -160,9 +181,10 @@ impl DictionaryDownloader {
 
                 Ok((bytes, etag))
             }
-            status => Err(Error::Other(format!(
-                "Unexpected response status from {url}: {status}"
-            ))),
+            status => Err(Error::DownloadFailed(
+                super::utils::NetworkError::Http(status),
+                format!("Unexpected response status from {url}: {status}"),
+            )),
         }
     }
 }
@@ -171,6 +193,7 @@ mod tests {
     use std::fs;
 
     use crate::download::options::DownloadOptions;
+    use crate::download::NetworkError;
 
     use super::*;
 
@@ -179,7 +202,7 @@ mod tests {
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
     fn create_test_downloader(base_url: String) -> DictionaryDownloader {
-        DictionaryDownloader::new(reqwest::Client::new(), base_url)
+        DictionaryDownloader::new(reqwest::Client::new().into(), base_url)
     }
 
     #[tokio::test]
@@ -331,8 +354,8 @@ mod tests {
 
         assert!(result.is_err());
         match result.unwrap_err() {
-            Error::Other(msg) => assert!(msg.contains("Unexpected response status")),
-            _ => panic!("Expected Error::Other"),
+            Error::DownloadFailed(NetworkError::Http(status), _) => assert_eq!(status, 500),
+            v => panic!("Expected NetworkError::Http, Received: {:?}", v),
         }
     }
 
@@ -387,7 +410,7 @@ mod tests {
     async fn test_downloader_new() {
         let custom_url = "https://custom.example.com";
         let client = reqwest::Client::new();
-        let downloader = DictionaryDownloader::new(client, custom_url.to_string());
+        let downloader = DictionaryDownloader::new(client.into(), custom_url.to_string());
         assert_eq!(downloader.base_url, custom_url);
     }
 
@@ -516,8 +539,8 @@ mod tests {
 
         assert!(result.is_err());
         match result.unwrap_err() {
-            Error::Other(msg) => assert!(msg.contains("Unexpected response status")),
-            _ => panic!("Expected Error::Other"),
+            Error::DownloadFailed(NetworkError::Http(status), _) => assert!(status == 404),
+            v => panic!("Expected Error::Http, Received: {:?}", v),
         }
     }
 }

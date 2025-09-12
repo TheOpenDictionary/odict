@@ -66,7 +66,7 @@ const isMuslFromChildProcess = () => {
 function requireNative() {
   if (process.env.NAPI_RS_NATIVE_LIBRARY_PATH) {
     try {
-      nativeBinding = require(process.env.NAPI_RS_NATIVE_LIBRARY_PATH);
+      nativeBinding = require(process.env.NAPI_RS_NATIVE_LIBRARY_PATH)
     } catch (err) {
       loadErrors.push(err)
     }
@@ -80,8 +80,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-android-arm64')
         const bindingPackageVersion = require('@odict/node-android-arm64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -96,8 +102,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-android-arm-eabi')
         const bindingPackageVersion = require('@odict/node-android-arm-eabi/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -116,8 +128,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-win32-x64-msvc')
         const bindingPackageVersion = require('@odict/node-win32-x64-msvc/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -132,8 +150,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-win32-ia32-msvc')
         const bindingPackageVersion = require('@odict/node-win32-ia32-msvc/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -148,8 +172,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-win32-arm64-msvc')
         const bindingPackageVersion = require('@odict/node-win32-arm64-msvc/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -167,8 +197,14 @@ function requireNative() {
     try {
       const binding = require('@odict/node-darwin-universal')
       const bindingPackageVersion = require('@odict/node-darwin-universal/package.json').version
-      if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-        throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+      if (
+        bindingPackageVersion !== '1.9.1' &&
+        process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+        process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+      ) {
+        throw new Error(
+          `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+        )
       }
       return binding
     } catch (e) {
@@ -183,8 +219,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-darwin-x64')
         const bindingPackageVersion = require('@odict/node-darwin-x64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -199,8 +241,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-darwin-arm64')
         const bindingPackageVersion = require('@odict/node-darwin-arm64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -219,8 +267,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-freebsd-x64')
         const bindingPackageVersion = require('@odict/node-freebsd-x64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -235,8 +289,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-freebsd-arm64')
         const bindingPackageVersion = require('@odict/node-freebsd-arm64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -256,8 +316,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-x64-musl')
           const bindingPackageVersion = require('@odict/node-linux-x64-musl/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -272,8 +338,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-x64-gnu')
           const bindingPackageVersion = require('@odict/node-linux-x64-gnu/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -290,8 +362,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-arm64-musl')
           const bindingPackageVersion = require('@odict/node-linux-arm64-musl/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -306,8 +384,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-arm64-gnu')
           const bindingPackageVersion = require('@odict/node-linux-arm64-gnu/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -324,8 +408,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-arm-musleabihf')
           const bindingPackageVersion = require('@odict/node-linux-arm-musleabihf/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -340,8 +430,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-arm-gnueabihf')
           const bindingPackageVersion = require('@odict/node-linux-arm-gnueabihf/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -358,8 +454,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-riscv64-musl')
           const bindingPackageVersion = require('@odict/node-linux-riscv64-musl/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -374,8 +476,14 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-riscv64-gnu')
           const bindingPackageVersion = require('@odict/node-linux-riscv64-gnu/package.json').version
-          if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (
+            bindingPackageVersion !== '1.9.1' &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+            process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+          ) {
+            throw new Error(
+              `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+            )
           }
           return binding
         } catch (e) {
@@ -391,8 +499,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-linux-ppc64-gnu')
         const bindingPackageVersion = require('@odict/node-linux-ppc64-gnu/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -407,8 +521,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-linux-s390x-gnu')
         const bindingPackageVersion = require('@odict/node-linux-s390x-gnu/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -427,8 +547,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-openharmony-arm64')
         const bindingPackageVersion = require('@odict/node-openharmony-arm64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -443,8 +569,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-openharmony-x64')
         const bindingPackageVersion = require('@odict/node-openharmony-x64/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -459,8 +591,14 @@ function requireNative() {
       try {
         const binding = require('@odict/node-openharmony-arm')
         const bindingPackageVersion = require('@odict/node-openharmony-arm/package.json').version
-        if (bindingPackageVersion !== '1.9.1' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (
+          bindingPackageVersion !== '1.9.1' &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK &&
+          process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0'
+        ) {
+          throw new Error(
+            `Native binding package version mismatch, expected 1.9.1 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`,
+          )
         }
         return binding
       } catch (e) {
@@ -501,7 +639,7 @@ if (!nativeBinding) {
       `Cannot find native binding. ` +
         `npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). ` +
         'Please try `npm i` again after removing both package-lock.json and node_modules directory.',
-      { cause: loadErrors }
+      { cause: loadErrors },
     )
   }
   throw new Error(`Failed to load native binding`)

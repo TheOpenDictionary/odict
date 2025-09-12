@@ -13,7 +13,14 @@ sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
 alias = ["config"]
-http = ["dep:reqwest", "dep:regex", "dep:futures-util", "config"]
+http = [
+  "dep:reqwest",
+  "dep:reqwest-middleware",
+  "dep:reqwest-retry",
+  "dep:regex",
+  "dep:futures-util",
+  "config",
+]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
@@ -70,6 +77,8 @@ reqwest = { version = "0.12.23", optional = true, default-features = false, feat
   "http2",
   "stream",
 ] }
+reqwest-middleware = { version = "0.4.2", optional = true }
+reqwest-retry = { version = "0.7.0", optional = true }
 futures-util = { version = "0.3", optional = true }
 regex = { version = "1.11.2", optional = true }
 # feature=search

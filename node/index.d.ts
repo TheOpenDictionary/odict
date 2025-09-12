@@ -135,10 +135,6 @@ export interface Sense {
   forms: Array<Form>
 }
 
-export interface SplitOptions {
-  minLength?: number
-}
-
 export interface Token {
   lemma: string
   language?: string

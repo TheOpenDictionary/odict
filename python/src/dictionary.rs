@@ -199,7 +199,7 @@ impl OpenDictionary {
 
             for result in &token.entries {
                 let entry: Entry = result.entry.deserialize().map_err(cast_error)?.into();
-                println!("Tokenizing entry: {:#?}", entry);
+
                 let directed_from = match result.directed_from {
                     Some(entry) => Some(entry.deserialize().map_err(cast_error)?.into()),
                     None => None,

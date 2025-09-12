@@ -19,7 +19,6 @@ mod note;
 mod pronunciation;
 mod search;
 mod sense;
-mod split;
 mod token;
 mod tokenize;
 mod translation;

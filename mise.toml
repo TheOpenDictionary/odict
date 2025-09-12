@@ -6,6 +6,7 @@ python = "3.13.5"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
 uv = "latest"
+rust = "latest"
 
 [settings]
 python.uv_venv_auto = true
