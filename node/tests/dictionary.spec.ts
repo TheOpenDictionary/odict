@@ -302,7 +302,7 @@ describe('Dictionary', () => {
       }
     })
 
-    it('handles download failure', async () => {
+    it('handles download failure', { timeout: 30_000 }, async () => {
       const validFormat = 'wiktionary/some-fake-dict'
       await expect(OpenDictionary.load(validFormat)).rejects.toThrow(/E_HTTP_404/)
     })
