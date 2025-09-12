@@ -302,12 +302,12 @@ describe('Dictionary', () => {
       }
     })
 
-    it('handles download failure', { timeout: 30_000 }, async () => {
+    it.skipIf(process.env.SKIP_NETWORK_TESTS)('handles download failure', { timeout: 30_000 }, async () => {
       const validFormat = 'wiktionary/some-fake-dict'
       await expect(OpenDictionary.load(validFormat)).rejects.toThrow(/E_HTTP_404/)
     })
 
-    it('handles download success', { timeout: 30_000 }, async () => {
+    it.skipIf(process.env.SKIP_NETWORK_TESTS)('handles download success', { timeout: 30_000 }, async () => {
       const validFormat = 'wiktionary/jpn'
       expect(await OpenDictionary.load(validFormat)).toBeDefined()
     })
