@@ -1,4 +1,4 @@
-use crate::MediaURL;
+use crate::schema::MediaURL;
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 

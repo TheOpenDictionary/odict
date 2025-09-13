@@ -5,13 +5,14 @@ mod index_tests {
 
     use insta::assert_snapshot;
     use odict::format::json::ToJSON;
-    use odict::search::{IndexOptions, SearchOptions};
+    use odict::index::IndexOptions;
+    use odict::search::SearchOptions;
 
     use crate::helpers::EXAMPLE_DICT_1;
 
     #[test]
     fn test_search() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap().deserialize().unwrap();
         let dir = ".odict/.idx";
 
         dict.index(IndexOptions::default().dir(dir)).unwrap();

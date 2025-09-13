@@ -31,9 +31,9 @@ impl SQLBuilder {
             .schema
             .iter()
             .map(|cmd| match self.dialect {
-                SQLDialect::Postgres => cmd.to_string(PostgresQueryBuilder::default()),
-                SQLDialect::MySQL => cmd.to_string(MysqlQueryBuilder::default()),
-                SQLDialect::SQLite => cmd.to_string(SqliteQueryBuilder::default()),
+                SQLDialect::Postgres => cmd.to_string(PostgresQueryBuilder),
+                SQLDialect::MySQL => cmd.to_string(MysqlQueryBuilder),
+                SQLDialect::SQLite => cmd.to_string(SqliteQueryBuilder),
             })
             .collect::<Vec<String>>();
 
@@ -41,9 +41,9 @@ impl SQLBuilder {
             .queries
             .iter()
             .map(|cmd| match self.dialect {
-                SQLDialect::Postgres => cmd.to_string(PostgresQueryBuilder::default()),
-                SQLDialect::MySQL => cmd.to_string(MysqlQueryBuilder::default()),
-                SQLDialect::SQLite => cmd.to_string(SqliteQueryBuilder::default()),
+                SQLDialect::Postgres => cmd.to_string(PostgresQueryBuilder),
+                SQLDialect::MySQL => cmd.to_string(MysqlQueryBuilder),
+                SQLDialect::SQLite => cmd.to_string(SqliteQueryBuilder),
             })
             .collect::<Vec<String>>();
 

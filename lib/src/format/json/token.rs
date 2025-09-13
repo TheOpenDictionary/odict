@@ -1,6 +1,9 @@
 use serde::Serialize;
 
-use crate::{lookup::Token, ArchivedEntry, Entry};
+use crate::{
+    schema::{ArchivedEntry, Entry},
+    tokenize::Token,
+};
 
 use super::EntryJSON;
 
@@ -31,7 +34,7 @@ impl From<Token<Entry>> for TokenJSON {
             lemma,
             language: language.map(|lang| lang.code().to_string()),
             script: script.name().to_string(),
-            kind: format!("{:?}", kind),
+            kind: format!("{kind:?}"),
             start,
             end,
             entries: entries
@@ -60,7 +63,7 @@ impl TryFrom<Token<&ArchivedEntry>> for TokenJSON {
             lemma,
             language: language.map(|lang| lang.code().to_string()),
             script: script.name().to_string(),
-            kind: format!("{:?}", kind),
+            kind: format!("{kind:?}"),
             start,
             end,
             entries: entries

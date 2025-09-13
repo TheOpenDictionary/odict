@@ -10,8 +10,8 @@ pub struct Form {
   pub tags: Vec<String>,
 }
 
-impl From<odict::Form> for Form {
-  fn from(form: odict::Form) -> Self {
+impl From<odict::schema::Form> for Form {
+  fn from(form: odict::schema::Form) -> Self {
     Self {
       term: form.term.to_string(),
       kind: form.kind.map(|k| k.to_enum_wrapper().into()),

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod pronunciation_tests {
-    use odict::{MediaURL, PronunciationKind};
+    use odict::schema::{MediaURL, PronunciationKind};
     use quick_xml::de::from_str;
 
     #[test]
@@ -14,11 +14,11 @@ mod pronunciation_tests {
 
         assert!(matches!(deserialized, PronunciationKind::IPA));
 
-        let expected = PronunciationKind::Other("wagegiles".into());
+        let _expected = PronunciationKind::Other("wagegiles".into());
 
         // Test Other variant
         let deserialized: PronunciationKind = serde_json::from_str("\"wadegiles\"").unwrap();
-        assert!(matches!(deserialized, expected));
+        assert!(matches!(deserialized, _expected));
     }
 
     #[test]
@@ -52,7 +52,7 @@ mod pronunciation_tests {
         </entry>
         "#;
 
-        let entry: odict::Entry = from_str(xml).unwrap();
+        let entry: odict::schema::Entry = from_str(xml).unwrap();
 
         assert_eq!(entry.term, "你好");
         assert_eq!(entry.etymologies.len(), 1);
@@ -82,7 +82,7 @@ mod pronunciation_tests {
         </example>
         "#;
 
-        let example: odict::Example = from_str(xml).unwrap();
+        let example: odict::schema::Example = from_str(xml).unwrap();
         assert_eq!(example.value, "Hello, world!");
         assert_eq!(example.pronunciations.len(), 1);
         let pronunciation = &example.pronunciations[0];
@@ -107,7 +107,7 @@ mod pronunciation_tests {
         </entry>
         "#;
 
-        let entry: odict::Entry = from_str(xml).unwrap();
+        let entry: odict::schema::Entry = from_str(xml).unwrap();
 
         assert_eq!(entry.etymologies.len(), 1);
         assert_eq!(entry.etymologies[0].pronunciations.len(), 2);

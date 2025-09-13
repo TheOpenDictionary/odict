@@ -2,7 +2,7 @@ use pulldown_cmark::{html, Event, Parser, Tag, TagEnd};
 
 fn pt_start_tag(tag: &Tag, buffer: &mut String, tags_stack: &mut Vec<Tag>) {
     match tag {
-        Tag::Link { title, .. } | Tag::Image { title, .. } => buffer.push_str(&title),
+        Tag::Link { title, .. } | Tag::Image { title, .. } => buffer.push_str(title),
         Tag::Item => {
             buffer.push('\n');
             let mut lists_stack = tags_stack
@@ -32,16 +32,13 @@ fn pt_start_tag(tag: &Tag, buffer: &mut String, tags_stack: &mut Vec<Tag>) {
 fn pt_end_tag(tag: &TagEnd, buffer: &mut String, tags_stack: &[Tag]) {
     match tag {
         TagEnd::Paragraph | TagEnd::Heading { .. } => buffer.push('\n'),
-        TagEnd::CodeBlock { .. } => {
-            if buffer.chars().last() != Some('\n') {
+        TagEnd::CodeBlock => {
+            if !buffer.ends_with('\n') {
                 buffer.push('\n');
             }
         }
         TagEnd::List(_) => {
-            let is_sublist = tags_stack.iter().any(|tag| match tag {
-                Tag::List(_) => true,
-                _ => false,
-            });
+            let is_sublist = tags_stack.iter().any(|tag| matches!(tag, Tag::List(_)));
             if !is_sublist {
                 buffer.push('\n')
             }
@@ -51,7 +48,7 @@ fn pt_end_tag(tag: &TagEnd, buffer: &mut String, tags_stack: &[Tag]) {
 }
 
 pub fn to_html(md: &str) -> String {
-    let parser = Parser::new(&md);
+    let parser = Parser::new(md);
 
     let mut html_output = String::new();
 
@@ -64,7 +61,7 @@ pub fn to_text(md: &str) -> String {
     // Implementation adapted from
     // https://github.com/fbecart/markdown_to_text/blob/master/src/lib.rs
 
-    let parser = Parser::new(&md);
+    let parser = Parser::new(md);
     let mut tags_stack = Vec::new();
     let mut buffer = String::new();
 

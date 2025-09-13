@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::enums::PrintFormat;
 use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
@@ -48,7 +50,7 @@ pub struct LookupArgs {
     insensitive: bool,
 }
 
-pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
+pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::Result<()> {
     let LookupArgs {
         dictionary_path: path,
         queries,
@@ -58,9 +60,11 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
         insensitive,
     } = args;
 
-    let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+    let spinner = indicatif::ProgressBar::new_spinner();
+
+    spinner.enable_steady_tick(Duration::from_millis(100));
+
+    let file = internal::load_dictionary(path).await?;
 
     let mut opts: LookupOptions = LookupOptions::default()
         .follow(*follow)
@@ -70,15 +74,15 @@ pub fn lookup(ctx: &mut CLIContext, args: &LookupArgs) -> anyhow::Result<()> {
         opts = opts.strategy(LookupStrategy::Split(*split));
     }
 
-    let result = file.to_archive()?.lookup(queries, opts);
+    let result = file.contents()?.lookup(queries, opts);
+
+    spinner.finish_and_clear();
 
     match result {
         Ok(entries) => {
             print_entries(ctx, get_lookup_entries(entries), format)?;
             Ok(())
         }
-        Err(err) => {
-            return Err(anyhow::Error::from(err));
-        }
+        Err(err) => Err(anyhow::Error::from(err)),
     }
 }

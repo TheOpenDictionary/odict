@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 use serde::{Serialize, Serializer};
 
-use crate::{EnumIdentifier, Etymology};
+use crate::schema::{EnumIdentifier, Etymology};
 
 use super::{PronunciationJSON, SenseJSON};
 

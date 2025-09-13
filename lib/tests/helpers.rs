@@ -1,21 +1,22 @@
 use std::sync::LazyLock;
 
-use odict::{DictionaryFile, DictionaryReader, DictionaryWriter, Result};
+use odict::{schema::Dictionary, OpenDictionary, Result};
 use tempfile::NamedTempFile;
 
-pub fn get_example_dict(name: &str) -> Result<DictionaryFile> {
-    let reader = DictionaryReader::default();
-    let writer = DictionaryWriter::default();
-    let input = format!("../examples/{}.xml", name);
+pub fn get_example_dict(name: &str) -> Result<OpenDictionary> {
+    let input = format!("../examples/{name}.xml");
     let output = NamedTempFile::new()?.path().to_str().unwrap().to_string();
+    let mut dict = Dictionary::from_path(&input).unwrap().build().unwrap();
 
-    writer.compile_xml(&input, &output)?;
+    dict.to_disk(&output).unwrap();
 
-    reader.read_from_path(&output)
+    Ok(dict)
 }
 
-pub static EXAMPLE_DICT_1: LazyLock<DictionaryFile> =
+#[allow(dead_code)]
+pub static EXAMPLE_DICT_1: LazyLock<OpenDictionary> =
     LazyLock::new(|| get_example_dict("example1").expect("Failed to get example dictionary 1"));
 
-pub static EXAMPLE_DICT_2: LazyLock<DictionaryFile> =
+#[allow(dead_code)]
+pub static EXAMPLE_DICT_2: LazyLock<OpenDictionary> =
     LazyLock::new(|| get_example_dict("example2").expect("Failed to get example dictionary 2"));

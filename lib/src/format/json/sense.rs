@@ -3,7 +3,7 @@ use std::hash::Hash;
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 
-use crate::{DefinitionType, PartOfSpeech, Sense};
+use crate::schema::{DefinitionType, PartOfSpeech, Sense};
 
 use super::{DefinitionJSON, EntryRefJSON, FormJSON, GroupJSON, TranslationJSON};
 

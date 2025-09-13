@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Translation))]
+#[convert(from(odict::schema::Translation))]
 pub struct Translation {
     #[pyo3(get)]
     pub lang: String,

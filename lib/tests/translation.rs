@@ -1,6 +1,9 @@
 use map_macro::hash_set;
 use odict::format::json::ToJSON;
-use odict::{DefinitionType, Entry, Example, ToDictionary, Translation};
+use odict::{
+    schema::{DefinitionType, Entry, Example, Translation},
+    ToDictionary,
+};
 
 #[test]
 fn test_translation_in_example() {
@@ -46,8 +49,8 @@ fn test_translation_in_entry() {
     ];
 
     // Create a sense with translations
-    let sense = odict::Sense {
-        pos: odict::PartOfSpeech::N,
+    let sense = odict::schema::Sense {
+        pos: odict::schema::PartOfSpeech::N,
         lemma: None,
         definitions: vec![],
         tags: vec![],
@@ -60,7 +63,7 @@ fn test_translation_in_entry() {
 
     senses.insert(sense);
 
-    let etymology = odict::Etymology {
+    let etymology = odict::schema::Etymology {
         id: None,
         pronunciations: vec![],
         description: None,
@@ -79,7 +82,7 @@ fn test_translation_in_entry() {
     // Test that translations are correctly stored
     let stored_translations = &entry.etymologies[0]
         .senses
-        .get(&odict::PartOfSpeech::N)
+        .get(&odict::schema::PartOfSpeech::N)
         .unwrap()
         .translations;
     assert_eq!(stored_translations.len(), 2);
@@ -154,7 +157,7 @@ fn test_example_with_translation() {
         .senses
         .iter()
         .next()
-        .and_then(|sense| sense.definitions.get(0))
+        .and_then(|sense| sense.definitions.first())
         .and_then(|def_type| match def_type {
             DefinitionType::Definition(def) => Some(def),
             _ => None,

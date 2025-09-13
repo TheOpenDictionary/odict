@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compile, Dictionary, type Definition } from "../index";
+import { compile, OpenDictionary, type Definition } from "../index";
 
 describe("Pronunciation support", () => {
   it("should parse entries with pronunciations", async () => {
@@ -16,7 +16,7 @@ describe("Pronunciation support", () => {
     `;
 
     const compiled = compile(xml);
-    const dict = new Dictionary(compiled);
+    const dict = new OpenDictionary(compiled);
 
     const results = dict.lookup("你好");
     expect(results.length).toBe(1);
@@ -57,7 +57,7 @@ describe("Pronunciation support", () => {
     `;
 
     const compiled = compile(xml);
-    const dict = new Dictionary(compiled);
+    const dict = new OpenDictionary(compiled);
 
     const results = dict.lookup("example");
     expect(results.length).toBe(1);
@@ -100,7 +100,7 @@ describe("Pronunciation support", () => {
     `;
 
     const compiled = compile(xml);
-    const dict = new Dictionary(compiled);
+    const dict = new OpenDictionary(compiled);
 
     const results = dict.lookup("hello");
     expect(results.length).toBe(1);

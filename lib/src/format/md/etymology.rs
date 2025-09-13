@@ -1,4 +1,4 @@
-use crate::{Entry, Etymology};
+use crate::schema::{Entry, Etymology};
 
 use super::pronunciation::write_pronunciation;
 use super::sense::write_sense;

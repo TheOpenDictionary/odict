@@ -8,7 +8,7 @@ use super::media_url::MediaURL;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Entry))]
+#[convert(from(odict::schema::Entry))]
 pub struct Entry {
     #[pyo3(get)]
     pub term: String,
@@ -34,7 +34,7 @@ impl Entry {
 }
 
 impl Entry {
-    pub fn from_archive(entry: &odict::ArchivedEntry) -> PyResult<Self> {
-        Ok(Self::from(entry.to_entry().map_err(cast_error)?))
+    pub fn from_archive(entry: &odict::schema::ArchivedEntry) -> PyResult<Self> {
+        Ok(Self::from(entry.deserialize().map_err(cast_error)?))
     }
 }

@@ -59,6 +59,38 @@ exports[`Dictionary > can index and search a dictionary 1`] = `
 ]
 `;
 
+exports[`Dictionary > load > loads dictionary from local .odict file path 1`] = `
+[
+  {
+    "entry": {
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "pronunciations": [],
+          "senses": {
+            "n": {
+              "definitions": [
+                "a cat",
+              ],
+              "forms": [],
+              "pos": {
+                "name": "PartOfSpeech",
+                "value": "noun",
+                "variant": "n",
+              },
+              "tags": [],
+              "translations": [],
+            },
+          },
+        },
+      ],
+      "media": [],
+      "term": "cat",
+    },
+  },
+]
+`;
+
 exports[`Dictionary > lookup > can split terms 1`] = `
 [
   {

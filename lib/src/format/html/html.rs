@@ -1,4 +1,8 @@
-use crate::{format::md::ToMarkdown, md::to_html, ArchivedEntry, Entry};
+use crate::{
+    format::md::ToMarkdown,
+    md::to_html,
+    schema::{ArchivedEntry, Entry},
+};
 
 pub trait ToHTML {
     fn to_html(self) -> crate::Result<String>;
@@ -32,7 +36,7 @@ impl ToHTML for &ArchivedEntry {
 impl ToHTML for Vec<&ArchivedEntry> {
     fn to_html(self) -> crate::Result<String> {
         self.iter()
-            .map(|entry| entry.to_entry().unwrap())
+            .map(|entry| entry.deserialize().unwrap())
             .collect::<Vec<Entry>>()
             .to_html()
     }

@@ -1,4 +1,4 @@
-use crate::{Entry, Group};
+use crate::schema::{Entry, Group};
 
 use super::{definition::write_definition, utils::indent};
 

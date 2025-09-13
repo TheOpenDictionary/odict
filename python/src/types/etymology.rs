@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt};
 
-use odict::EnumIdentifier;
+use odict::schema::EnumIdentifier;
 use pyo3::prelude::*;
 
 use super::pronunciation::Pronunciation;
@@ -35,8 +35,8 @@ impl fmt::Debug for Etymology {
     }
 }
 
-impl From<odict::Etymology> for Etymology {
-    fn from(ety: odict::Etymology) -> Self {
+impl From<odict::schema::Etymology> for Etymology {
+    fn from(ety: odict::schema::Etymology) -> Self {
         Self {
             id: ety.id,
             pronunciations: ety.pronunciations.into_iter().map(Into::into).collect(),
