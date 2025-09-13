@@ -6,24 +6,22 @@
   "types": "index.d.ts",
   "browser": "browser.js",
   "files": [
+    "index.d.ts",
     "index.js",
-    "index.d.ts"
+    "browser.js"
   ],
   "napi": {
     "binaryName": "node",
     "targets": [
-      "universal-apple-darwin",
-      "x86_64-unknown-linux-gnu",
       "x86_64-pc-windows-msvc",
+      "x86_64-apple-darwin",
+      "x86_64-unknown-linux-gnu",
       "x86_64-unknown-linux-musl",
       "aarch64-unknown-linux-gnu",
-      "riscv64gc-unknown-linux-gnu",
-      "s390x-unknown-linux-gnu",
-      "powerpc64le-unknown-linux-gnu",
       "i686-pc-windows-msvc",
       "armv7-unknown-linux-gnueabihf",
+      "aarch64-apple-darwin",
       "aarch64-linux-android",
-      "armv7-unknown-linux-musleabihf",
       "x86_64-unknown-freebsd",
       "aarch64-unknown-linux-musl",
       "aarch64-pc-windows-msvc",
@@ -76,9 +74,9 @@
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
-    "build:node": "napi build --release --platform --strip --features node --pipe \"prettier -w\"",
-    "build:wasm": "napi build --release --platform --strip --pipe \"prettier -w\" --target wasm32-wasip1-threads",
-    "build:debug": "napi build --pipe \"prettier -w\"",
+    "build:node": "napi build --release --platform --features node",
+    "build:wasm": "napi build --release --platform --target wasm32-wasip1-threads",
+    "build:debug": "napi build --platform --pipe \"prettier -w\"",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
     "format:toml": "taplo format",
@@ -88,6 +86,7 @@
     "test": "vitest --reporter=verbose --no-watch",
     "universalize": "napi universalize",
     "artifacts": "napi artifacts",
+    "preversion": "napi build --platform && git add .",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
   }
