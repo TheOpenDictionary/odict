@@ -7,6 +7,7 @@ python = "3.13.5"
 "cargo:cargo-edit" = "latest"
 uv = "latest"
 rust = "latest"
+yarn = "latest"
 
 [settings]
 python.uv_venv_auto = true
