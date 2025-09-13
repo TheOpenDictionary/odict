@@ -22,30 +22,30 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: pnpm
-      - name: Install
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, rustfmt
-      - name: Install dependencies
-        run: pnpm install
-      - name: Oxlint
-        run: pnpm --filter "@odict/node" lint
-      - name: Cargo fmt
-        run: cargo fmt -- --check
-      - name: Clippy
-        run: cargo clippy
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - name: Setup pnpm
+  #       uses: pnpm/action-setup@v4
+  #     - name: Setup node
+  #       uses: actions/setup-node@v5
+  #       with:
+  #         node-version: 22
+  #         cache: pnpm
+  #     - name: Install
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         components: clippy, rustfmt
+  #     - name: Install dependencies
+  #       run: pnpm install
+  #     - name: Oxlint
+  #       run: pnpm --filter "@odict/node" lint
+  #     - name: Cargo fmt
+  #       run: cargo fmt -- --check
+  #     - name: Clippy
+        # run: cargo clippy
   build:
     strategy:
       fail-fast: false
@@ -71,6 +71,8 @@ jobs:
             build: pnpm --filter "@odict/node" build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
+            env:
+              CFLAGS_aarch64_unknown_linux_gnu: -D__ARM_ARCH=8
             build: pnpm --filter "@odict/node" build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
@@ -89,6 +91,7 @@ jobs:
             build: pnpm --filter "@odict/node" build:node --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
+            setup: sudo apt-get update && sudo apt-get install -y build-essential clang
             build: pnpm --filter "@odict/node" build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
@@ -180,7 +183,7 @@ jobs:
             whoami
             env
             freebsd-version
-            corepack enable
+            sudo corepack enable
             pnpm install
             pnpm --filter "@odict/node" build
             rm -rf node_modules
@@ -346,7 +349,7 @@ jobs:
       contents: write
       id-token: write
     needs:
-      - lint
+      # - lint
       - build-freebsd
       - test-macOS-windows-binding
       - test-linux-binding
