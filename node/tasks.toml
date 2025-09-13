@@ -1,34 +1,37 @@
 ["setup:node"]
-run = "pnpm install"
+run = "yarn install"
 sources = ["${MISE_TASK_DIR}/package.json"]
 outputs = { auto = true }
 
 ["build:node"]
 depends = ["setup:node"]
-run = "pnpm --filter=\"@odict/node\" build:node"
+dir = "node"
+run = "yarn build:node"
 
 ["build:wasm"]
 depends = ["setup:node"]
-run = "pnpm --filter=\"@odict/node\" build:wasm"
+dir = "node"
+run = "yarn build:wasm"
 
 ["dev:wasm"]
 depends = ["build:wasm"]
-run = "pnpm --filter=\"@odict/node\" dev:wasm"
+dir = "node"
+run = "yarn dev:wasm"
 
 ["upgrade:node"]
-run = "pnpm up -L"
+run = "yarn up"
 
 ["publish:node"]
 depends = ["setup:node"]
-run = "pnpm --filter=\"@odict/node\" npm publish"
+run = "yarn --filter=\"@odict/node\" npm publish"
 
 ["test:node"]
 depends = ["setup:node", "build:node"]
-run = "pnpm --filter=\"@odict/node\" test"
+run = "yarn --filter=\"@odict/node\" test"
 
 ["snapshot:node"]
 depends = ["setup:node", "build:node"]
-run = "pnpm --filter=\"@odict/node\" test -u"
+run = "yarn --filter=\"@odict/node\" test -u"
 
 ["ci:node"]
 depends = ["setup:node"]

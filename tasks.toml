@@ -33,7 +33,7 @@ run = "cargo upgrade"
 description = "Updates all dependencies to their latest versions"
 
 [setup]
-run = ["mise install", "corepack enable", "pnpm install"]
+run = ["mise install", "corepack prepare", "corepack enable", "yarn install"]
 depends_post = ["setup:*"]
 description = "Installs all required dependencies"
 
