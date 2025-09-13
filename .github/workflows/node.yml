@@ -1,7 +1,7 @@
 name: CI
 env:
   DEBUG: napi:*
-  APP_NAME: test
+  APP_NAME: node
   MACOSX_DEPLOYMENT_TARGET: '10.13'
   CARGO_INCREMENTAL: '1'
 'on':
@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -39,7 +41,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Oxlint
-        run: pnpm lint
+        run: pnpm --filter "@odict/node" lint
       - name: Cargo fmt
         run: cargo fmt -- --check
       - name: Clippy
@@ -51,47 +53,49 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: pnpm build --target x86_64-apple-darwin
+            build: pnpm --filter "@odict/node" build --target x86_64-apple-darwin
           - host: windows-latest
-            build: pnpm build --target x86_64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: pnpm build --target i686-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: pnpm build --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: pnpm build --target x86_64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: pnpm build --target aarch64-apple-darwin
+            build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: pnpm build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: pnpm build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: pnpm build --target aarch64-linux-android
+            build: pnpm --filter "@odict/node" build --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: pnpm build --target armv7-linux-androideabi
+            build: pnpm --filter "@odict/node" build --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: pnpm build --target aarch64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: pnpm build --target aarch64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
-            build: pnpm build:wasm
+            build: pnpm --filter "@odict/node" build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -138,8 +142,8 @@ jobs:
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
-            ${{ env.APP_NAME }}.*.node
-            ${{ env.APP_NAME }}.*.wasm
+            ./node/${{ env.APP_NAME }}.*.node
+            ./node/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -176,8 +180,9 @@ jobs:
             whoami
             env
             freebsd-version
+            corepack enable
             pnpm install
-            pnpm build
+            pnpm --filter "@odict/node" build
             rm -rf node_modules
             rm -rf target
             rm -rf .pnpm/cache
@@ -185,7 +190,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_NAME }}.*.node
+          path: ./node/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -213,6 +218,8 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4      
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -225,12 +232,12 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: pnpm test
+        run: pnpm --filter "@odict/node" test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -250,6 +257,8 @@ jobs:
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4      
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -283,7 +292,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.target }}
-          path: .
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -299,7 +308,7 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          run: pnpm test
+          run: pnpm --filter "@odict/node" test
   test-wasi:
     name: Test WASI target
     needs:
@@ -307,6 +316,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4      
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -320,12 +331,12 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: bindings-wasm32-wasip1-threads
-          path: .
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: pnpm test
+        run: pnpm --filter "@odict/node" test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -342,6 +353,8 @@ jobs:
       - test-wasi
     steps:
       - uses: actions/checkout@v5
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4      
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -350,13 +363,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: create npm dirs
-        run: pnpm napi create-npm-dirs
+        run: pnpm --filter "@odict/node" napi create-npm-dirs
       - name: Download all artifacts
         uses: actions/download-artifact@v5
         with:
-          path: artifacts
+          path: ./node/artifacts
       - name: Move artifacts
-        run: pnpm artifacts
+        run: pnpm --filter "@odict/node" artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
