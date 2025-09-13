@@ -53,40 +53,40 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target x86_64-apple-darwin
+            build: pnpm --filter "@odict/node" build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build --target x86_64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build --target i686-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build:node --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
+            build: pnpm --filter "@odict/node" build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: pnpm --filter "@odict/node" build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: pnpm --filter "@odict/node" build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: pnpm --filter "@odict/node" build --target aarch64-linux-android
+            build: pnpm --filter "@odict/node" build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: pnpm --filter "@odict/node" build --target armv7-linux-androideabi
+            build: pnpm --filter "@odict/node" build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-musl -x
+            build: pnpm --filter "@odict/node" build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc
+            build: pnpm --filter "@odict/node" build:node --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             build: pnpm --filter "@odict/node" build:wasm
