@@ -80,7 +80,7 @@
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
     "dev:wasm": "vite dev",
-    "test": "ava",
+    "test": "ava --serial",
     "universalize": "napi universalize",
     "artifacts": "napi artifacts",
     "preversion": "napi build --platform && git add .",
@@ -100,8 +100,5 @@
       "--import",
       "@oxc-node/core/register"
     ]
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.50.1"
   }
 }

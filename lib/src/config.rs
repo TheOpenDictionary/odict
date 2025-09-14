@@ -1,5 +1,5 @@
 use dirs::home_dir;
-use std::{env::var, fs::create_dir, path::PathBuf};
+use std::{env::var, path::PathBuf};
 
 pub fn get_config_dir() -> crate::Result<PathBuf> {
     let dir_name = var("ODICT_CONFIG_DIR").ok().unwrap_or_else(|| {
