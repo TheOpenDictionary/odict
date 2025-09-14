@@ -2,7 +2,7 @@ use serde::Serialize;
 use structural_convert::StructuralConvert;
 
 use super::TranslationJSON;
-use crate::Example;
+use crate::schema::Example;
 
 #[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Example))]

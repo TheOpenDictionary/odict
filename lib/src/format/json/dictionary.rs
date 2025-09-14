@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 use serde::{Serialize, Serializer};
 
-use crate::{Dictionary, ID};
+use crate::schema::{Dictionary, ID};
 
 use super::EntryJSON;
 

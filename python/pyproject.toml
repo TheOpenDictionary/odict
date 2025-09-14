@@ -16,4 +16,4 @@ dynamic = ["version"]
 features = ["pyo3/extension-module"]
 
 [dependency-groups]
-dev = ["syrupy>=3.0.6"]
+dev = ["syrupy>=3.0.6", "pytest-asyncio>=0.24.0"]

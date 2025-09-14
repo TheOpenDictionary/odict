@@ -12,7 +12,9 @@ mod index_tests {
     #[test]
     fn test_sql() {
         let result = EXAMPLE_DICT_1
-            .to_dictionary()
+            .contents()
+            .unwrap()
+            .deserialize()
             .unwrap()
             .clone()
             .to_sql(SQLDialect::Postgres);
@@ -22,7 +24,7 @@ mod index_tests {
         )
         .unwrap();
 
-        assert_eq!(result.is_err(), false);
+        assert!(!result.is_err());
         assert_snapshot!(re.replace_all(result.unwrap().as_str(), ""));
     }
 }

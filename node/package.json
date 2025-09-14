@@ -1,29 +1,26 @@
 {
   "name": "@odict/node",
   "version": "1.9.1",
-  "type": "commonjs",
   "main": "index.js",
   "types": "index.d.ts",
   "browser": "browser.js",
   "files": [
+    "index.d.ts",
     "index.js",
-    "index.d.ts"
+    "browser.js"
   ],
   "napi": {
     "binaryName": "node",
     "targets": [
-      "universal-apple-darwin",
-      "x86_64-unknown-linux-gnu",
       "x86_64-pc-windows-msvc",
+      "x86_64-apple-darwin",
+      "x86_64-unknown-linux-gnu",
       "x86_64-unknown-linux-musl",
       "aarch64-unknown-linux-gnu",
-      "riscv64gc-unknown-linux-gnu",
-      "s390x-unknown-linux-gnu",
-      "powerpc64le-unknown-linux-gnu",
       "i686-pc-windows-msvc",
       "armv7-unknown-linux-gnueabihf",
+      "aarch64-apple-darwin",
       "aarch64-linux-android",
-      "armv7-unknown-linux-musleabihf",
       "x86_64-unknown-freebsd",
       "aarch64-unknown-linux-musl",
       "aarch64-pc-windows-msvc",
@@ -37,28 +34,71 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
+    "@emnapi/core": "^1.5.0",
+    "@emnapi/runtime": "^1.5.0",
     "@napi-rs/cli": "3.1.5",
     "@napi-rs/wasm-runtime": "^1.0.3",
-    "@types/node": "^24.3.0",
-    "buffer": "^6.0.3",
+    "@oxc-node/core": "^0.0.32",
+    "@taplo/cli": "^0.7.0",
+    "@tybys/wasm-util": "^0.10.0",
+    "@types/node": "^24.3.1",
+    "ava": "^6.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "npm-run-all2": "^8.0.4",
+    "oxlint": "^1.14.0",
     "prettier": "^3.6.2",
-    "vite": "^7.1.3",
-    "vite-plugin-node-polyfills": "0.24.0",
-    "vitest": "^3.2.4"
+    "tinybench": "^5.0.1"
   },
   "engines": {
-    "node": ">=20.0.0 <25.0.0"
+    "node": ">= 10.16.0 < 11 || >= 11.8.0 < 12 || >= 12.0.0"
+  },
+  "lint-staged": {
+    "*.@(js|ts|tsx)": [
+      "oxlint --fix"
+    ],
+    "*.@(js|ts|tsx|yml|yaml|md|json)": [
+      "prettier --write"
+    ],
+    "*.toml": [
+      "taplo format"
+    ]
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "scripts": {
     "create-dirs": "napi create-npm-dirs",
-    "build": "napi build --release --platform --strip --pipe \"prettier -w\"",
-    "build:wasm": "pnpm run build --target wasm32-wasip1-threads --no-default-features --features tokenize,sql",
-    "build:debug": "napi build --pipe \"prettier -w\"",
+    "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
+    "build:node": "napi build --release --platform --features node",
+    "build:wasm": "napi build --release --platform --target wasm32-wasip1-threads",
+    "build:debug": "napi build --platform --pipe \"prettier -w\"",
+    "format": "run-p format:prettier format:rs format:toml",
+    "format:prettier": "prettier . -w",
+    "format:toml": "taplo format",
+    "format:rs": "cargo fmt",
+    "lint": "oxlint .",
     "dev:wasm": "vite dev",
-    "test": "vitest --no-watch",
+    "test": "ava --serial",
     "universalize": "napi universalize",
     "artifacts": "napi artifacts",
+    "preversion": "napi build --platform && git add .",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "timeout": "2m",
+    "workerThreads": false,
+    "environmentVariables": {
+      "OXC_TSCONFIG_PATH": "./__test__/tsconfig.json"
+    },
+    "nodeArguments": [
+      "--import",
+      "@oxc-node/core/register"
+    ]
   }
 }

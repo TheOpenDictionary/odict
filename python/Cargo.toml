@@ -3,14 +3,19 @@ name = "odict_python"
 version = "1.8.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 name = "theopendictionary"
 crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = { version = "0.26.0", features = ["either"] }
+pyo3-async-runtimes = { version = "0.26.0", features = [
+  "tokio-runtime",
+  "attributes",
+] }
 odict = { path = "../lib", features = ["config", "sql", "tokenize", "search"] }
-internal = { path = "../internal" }
+internal = { path = "../internal", features = ["load"] }
 either = { version = "*" }
 structural-convert = { workspace = true }
+merge = { workspace = true }
+tokio = { version = "1.47", features = ["full"] }

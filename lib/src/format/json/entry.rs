@@ -1,6 +1,6 @@
 use std::hash::{Hash, Hasher};
 
-use crate::{ArchivedEntry, Entry};
+use crate::schema::{ArchivedEntry, Entry};
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;
@@ -24,7 +24,7 @@ pub struct EntryJSON {
 
 impl TryFrom<&ArchivedEntry> for EntryJSON {
     fn try_from(entry: &ArchivedEntry) -> crate::Result<Self> {
-        Ok(entry.to_entry()?.into())
+        Ok(entry.deserialize()?.into())
     }
     type Error = crate::Error;
 }

@@ -18,5 +18,5 @@ pub const DEFAULT_TOKENIZER: LazyLock<TextAnalyzer> = LazyLock::new(|| {
         .build();
 
     #[cfg(feature = "charabia")]
-    return CharabiaTokenizer::default().into();
+    return CharabiaTokenizer.into();
 });

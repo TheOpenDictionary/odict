@@ -5,17 +5,17 @@ mod tokenize_tests {
 
     use std::str::FromStr;
 
-    use odict::lookup::{Language, TokenizeOptions};
+    use odict::tokenize::{Language, TokenizeOptions};
 
     use crate::helpers::EXAMPLE_DICT_1;
 
     #[test]
     fn test_tokenize() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
-        let result = dict.tokenize("poo run", &TokenizeOptions::default());
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
+        let result = dict.tokenize("poo run", TokenizeOptions::default());
         let res = result.as_ref().unwrap();
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), 2);
 
         assert_eq!(res[0].entries.len(), 1);
@@ -29,12 +29,12 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_chinese() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
-        let result = dict.tokenize("你不知道的事", &TokenizeOptions::default());
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
+        let result = dict.tokenize("你不知道的事", TokenizeOptions::default());
         let res = result.as_ref().unwrap();
         let expected_lemmas = ["你", "不", "知道", "的", "事"];
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), expected_lemmas.len());
 
         for (i, token) in res.iter().enumerate() {
@@ -45,10 +45,10 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_accents() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
         let result = dict.tokenize(
             "Chào bạn, hôm nay trời đẹp quá!",
-            &TokenizeOptions::default().allow_list(vec![
+            TokenizeOptions::default().allow_list(vec![
                 Language::Vie,
                 Language::Cmn,
                 Language::Eng,
@@ -58,7 +58,7 @@ mod tokenize_tests {
         let res = result.as_ref().unwrap();
         let expected_lemmas = ["Chào", "bạn", "hôm", "nay", "trời", "đẹp", "quá"];
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), expected_lemmas.len());
 
         for (i, token) in res.iter().enumerate() {
@@ -69,13 +69,13 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_case_sensitive() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Default behavior (case-sensitive)
-        let result = dict.tokenize("DOG run", &TokenizeOptions::default().insensitive(false));
+        let result = dict.tokenize("DOG run", TokenizeOptions::default().insensitive(false));
         let res = result.as_ref().unwrap();
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), 2);
 
         // "DOG" should not match "dog", so entry list should be empty
@@ -89,13 +89,13 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_case_insensitive() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // With case insensitivity enabled
-        let result = dict.tokenize("DOG RUN", &TokenizeOptions::default().insensitive(true));
+        let result = dict.tokenize("DOG RUN", TokenizeOptions::default().insensitive(true));
         let res = result.as_ref().unwrap();
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), 2);
 
         // "DOG" should match "dog" with insensitive flag
@@ -111,13 +111,13 @@ mod tokenize_tests {
 
     #[test]
     fn test_tokenize_mixed_case() {
-        let dict = EXAMPLE_DICT_1.to_archive().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
 
         // Test with mixed case text
-        let result = dict.tokenize("DoG CaT", &TokenizeOptions::default().insensitive(true));
+        let result = dict.tokenize("DoG CaT", TokenizeOptions::default().insensitive(true));
         let res = result.as_ref().unwrap();
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), 2);
 
         assert_eq!(res[0].entries.len(), 1);
@@ -141,24 +141,24 @@ mod tokenize_tests {
         </dictionary>
         "#;
 
-        let dict = odict::Dictionary::from_str(xml).unwrap();
+        let dict = odict::schema::Dictionary::from_str(xml).unwrap();
 
         // Test case insensitivity combined with follow option
         let result = dict.tokenize(
             "RUNS",
-            &TokenizeOptions::default()
+            TokenizeOptions::default()
                 .follow(u32::MAX)
                 .insensitive(true),
         );
         let res = result.as_ref().unwrap();
 
-        assert_eq!(result.is_ok(), true);
+        assert!(result.is_ok());
         assert_eq!(res.len(), 1);
 
         // Should find "runs" and follow to "run"
         assert_eq!(res[0].entries.len(), 1);
         assert_eq!(res[0].entries[0].entry.term, "run");
-        assert_eq!(res[0].entries[0].directed_from.is_some(), true);
+        assert!(res[0].entries[0].directed_from.is_some());
         assert_eq!(res[0].entries[0].directed_from.unwrap().term, "runs");
     }
 }

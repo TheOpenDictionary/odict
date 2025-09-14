@@ -11,8 +11,8 @@ pub struct Token {
   pub end: u16,
 }
 
-impl From<odict::Token<odict::Entry>> for Token {
-  fn from(token: odict::Token<odict::Entry>) -> Self {
+impl From<odict::tokenize::Token<odict::schema::Entry>> for Token {
+  fn from(token: odict::tokenize::Token<odict::schema::Entry>) -> Self {
     Token {
       lemma: token.lemma.clone(),
       language: token.language.map(|s| s.code().to_string()),

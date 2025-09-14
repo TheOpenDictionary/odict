@@ -12,6 +12,15 @@ exclude = ["benches/*", "tests/*"]
 sql = ["dep:sea-query"]
 config = ["dep:dirs"]
 js = ["uuid/js"]
+alias = ["config"]
+http = [
+  "dep:reqwest",
+  "dep:reqwest-middleware",
+  "dep:reqwest-retry",
+  "dep:regex",
+  "dep:futures-util",
+  "config",
+]
 html = ["markdown"]
 search = ["dep:tantivy", "config"]
 markdown = ["dep:pulldown-cmark"]
@@ -49,7 +58,11 @@ rayon = "1.11.0"
 charabia = { version = "0.9.7", optional = true, default-features = false }
 rkyv = { version = "0.8.11" }
 serde = { version = "1.0.219", features = ["serde_derive"] }
-uuid = { version = "1.18.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
+uuid = { version = "1.18.1", features = [
+  "v4",
+  "fast-rng",
+  "macro-diagnostics",
+] }
 url = "2.5.7"
 serde_json = "1.0.143"
 thiserror = "2.0.16"
@@ -58,6 +71,16 @@ structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
+# feature=http
+reqwest = { version = "0.12.23", optional = true, default-features = false, features = [
+  "rustls-tls",
+  "http2",
+  "stream",
+] }
+reqwest-middleware = { version = "0.4.2", optional = true }
+reqwest-retry = { version = "0.7.0", optional = true }
+futures-util = { version = "0.3", optional = true }
+regex = { version = "1.11.2", optional = true }
 # feature=search
 tantivy = { version = "0.25.0", optional = true }
 # feature=config
@@ -67,9 +90,11 @@ sea-query = { version = "0.32.7", optional = true }
 strum = { version = "0.27.2", features = ["derive"] }
 
 [dev-dependencies]
+criterion = { version = "0.7.0", features = ["async_tokio", "html_reports"] }
 insta = "1.43.1"
 map-macro = { version = "0.3.0" }
-criterion = { version = "0.7.0", features = ["html_reports"] }
+tokio = { version = "1.47.1", features = ["rt", "macros"] }
+wiremock = "0.6.5"
 tempfile = "3.21.0"
 regex = "1.11.2"
 

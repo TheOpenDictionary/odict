@@ -1,6 +1,6 @@
 use merge::Merge;
 use napi::bindgen_prelude::*;
-use odict::ArchivedEntry;
+use odict::schema::ArchivedEntry;
 
 use crate::utils::cast_error;
 
@@ -60,8 +60,8 @@ pub struct LookupResult {
   pub directed_from: Option<Entry>,
 }
 
-impl From<odict::lookup::LookupResult<odict::Entry>> for LookupResult {
-  fn from(result: odict::lookup::LookupResult<odict::Entry>) -> Self {
+impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
+  fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
     let entry = Entry::from(result.entry);
     let directed_from = result.directed_from.map(|s| Entry::from(s));
 
@@ -76,10 +76,10 @@ impl TryFrom<&odict::lookup::LookupResult<&ArchivedEntry>> for LookupResult {
   type Error = napi::Error;
 
   fn try_from(result: &odict::lookup::LookupResult<&ArchivedEntry>) -> napi::Result<Self> {
-    let entry = Entry::from(result.entry.to_entry().map_err(cast_error)?);
+    let entry = Entry::from(result.entry.deserialize().map_err(cast_error)?);
 
     let directed_from = match result.directed_from {
-      Some(e) => Some(Entry::from(e.to_entry().map_err(cast_error)?)),
+      Some(e) => Some(Entry::from(e.deserialize().map_err(cast_error)?)),
       None => None,
     };
 

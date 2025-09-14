@@ -1,7 +1,7 @@
 use crate::context::CLIContext;
 use clap::{arg, command, Args};
 use console::Style;
-use humansize::{format_size, DECIMAL};
+use indicatif::DecimalBytes;
 use num_format::{Locale, ToFormattedString};
 
 #[derive(Debug, Args)]
@@ -12,17 +12,15 @@ pub struct InfoArgs {
     dictionary_path: String,
 }
 
-pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
+pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Result<()> {
     let InfoArgs {
         dictionary_path: path,
     } = args;
 
-    let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+    let file = internal::load_dictionary(path).await?;
 
     let bold = Style::new().bold();
-    let dict = file.to_archive()?;
+    let dict = file.contents()?;
 
     let min_rank = dict.min_rank();
     let max_rank = dict.max_rank();
@@ -38,13 +36,13 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
     ctx.println(format!(
         "{} {}",
         bold.apply_to("File Version:"),
-        file.version
+        file.version()
     ));
 
     ctx.println(format!(
         "{} {}",
         bold.apply_to("File Size:"),
-        format_size(file.total_size, DECIMAL)
+        DecimalBytes(file.size()?)
     ));
 
     ctx.println(format!(
@@ -53,20 +51,17 @@ pub fn info(ctx: &mut CLIContext, args: &InfoArgs) -> anyhow::Result<()> {
         dict.entries.len().to_formatted_string(&Locale::en)
     ));
 
-    match (min_rank, max_rank) {
-        (Some(min), Some(max)) => {
-            ctx.println(format!(
-                "{} {}",
-                bold.apply_to("Min Word Rank:"),
-                min.to_formatted_string(&Locale::en)
-            ));
-            ctx.println(format!(
-                "{} {}",
-                bold.apply_to("Max Word Rank:"),
-                max.to_formatted_string(&Locale::en)
-            ));
-        }
-        _ => {}
+    if let (Some(min), Some(max)) = (min_rank, max_rank) {
+        ctx.println(format!(
+            "{} {}",
+            bold.apply_to("Min Word Rank:"),
+            min.to_formatted_string(&Locale::en)
+        ));
+        ctx.println(format!(
+            "{} {}",
+            bold.apply_to("Max Word Rank:"),
+            max.to_formatted_string(&Locale::en)
+        ));
     }
 
     ctx.println("");

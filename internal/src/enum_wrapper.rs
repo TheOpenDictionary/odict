@@ -16,7 +16,7 @@ pub trait ToEnumWrapper {
 
 impl<T> ToEnumWrapper for T
 where
-    T: odict::EnumIdentifier + Display,
+    T: odict::schema::EnumIdentifier + Display,
 {
     fn to_enum_wrapper(&self) -> EnumWrapper {
         let name = type_name::<T>();
@@ -34,7 +34,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use odict::{FormKind, PartOfSpeech, PronunciationKind};
+    use odict::schema::{FormKind, PartOfSpeech, PronunciationKind};
 
     #[test]
     fn test_to_enum_wrapper_pos_custom() {

@@ -1,7 +1,7 @@
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 
-use crate::Definition;
+use crate::schema::Definition;
 
 use super::{ExampleJSON, NoteJSON};
 

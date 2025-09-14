@@ -1,6 +1,5 @@
 use clap::{arg, Args};
-
-use crate::CLIContext;
+use odict::alias::AliasManager;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -13,12 +12,12 @@ pub struct SetArgs {
     path: String,
 }
 
-pub fn set(ctx: &mut CLIContext, args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
-    let dict = ctx.reader.read_from_path(args.path.as_str())?;
+pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
+    let dict = internal::load_dictionary(args.path.as_str()).await?;
 
     if overwrite {
-        anyhow::Ok(ctx.alias_manager.set(args.name.as_str(), &dict)?)
+        anyhow::Ok(AliasManager::default().set(args.name.as_str(), &dict)?)
     } else {
-        anyhow::Ok(ctx.alias_manager.add(args.name.as_str(), &dict)?)
+        anyhow::Ok(AliasManager::default().add(args.name.as_str(), &dict)?)
     }
 }

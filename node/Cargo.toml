@@ -8,25 +8,26 @@ publish = false
 crate-type = ["cdylib"]
 
 [features]
-default = ["search", "sql", "tokenize"]
-tokenize = [
-  "odict/tokenize-latin",
-  "odict/tokenize-chinese",
-  "odict/tokenize-thai",
-  "odict/tokenize-khmer",
-  "odict/tokenize-swedish",
-  "odict/tokenize-german",
-]
-sql = ["odict/sql"]
-config = ["odict/config"]
-search = ["odict/search", "config"]
+default = []
+node = ["odict/http", "internal/load", "odict/alias", "odict/search"]
 
 [dependencies]
 merge = "0.2.0"
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
-napi = { version = "3", default-features = false, features = ["napi4"] }
+napi = { version = "3", default-features = false, features = [
+  "async",
+  "napi4",
+] }
 napi-derive = "3"
-odict = { path = "../lib" }
+odict = { path = "../lib", features = [
+  "tokenize-latin",
+  "tokenize-chinese",
+  "tokenize-thai",
+  "tokenize-khmer",
+  "tokenize-swedish",
+  "tokenize-german",
+  "sql",
+] }
 structural-convert = { workspace = true }
 internal = { path = "../internal" }
 

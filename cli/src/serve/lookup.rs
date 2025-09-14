@@ -73,6 +73,7 @@ async fn handle_lookup(
 
     let file = dictionary_cache
         .get(&dictionary_name)
+        .await
         .map_err(|_e| LookupError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?
@@ -81,7 +82,7 @@ async fn handle_lookup(
         })?;
 
     let dictionary = file
-        .to_archive()
+        .contents()
         .map_err(|_e| LookupError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?;

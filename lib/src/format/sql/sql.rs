@@ -1,4 +1,4 @@
-use crate::{format::sql::SQLDialect, Dictionary};
+use crate::{format::sql::SQLDialect, schema::Dictionary};
 
 use super::{
     definitions::create_definitions,

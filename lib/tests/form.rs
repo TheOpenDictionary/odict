@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod form_tests {
-    use odict::FormKind;
+    use odict::schema::FormKind;
     use quick_xml::de::from_str;
 
     #[test]
@@ -14,11 +14,11 @@ mod form_tests {
 
         assert!(matches!(deserialized, FormKind::Comparative));
 
-        let expected = FormKind::Other("third-person".into());
+        let _expected = FormKind::Other("third-person".into());
 
         let deserialized: FormKind = serde_json::from_str("\"third-person\"").unwrap();
 
-        assert!(matches!(deserialized, expected));
+        assert!(matches!(deserialized, _expected));
     }
 
     #[test]
@@ -33,7 +33,7 @@ mod form_tests {
         </entry>
         "#;
 
-        let entry: odict::Entry = from_str(xml).unwrap();
+        let entry: odict::schema::Entry = from_str(xml).unwrap();
 
         assert_eq!(entry.term, "most");
 
@@ -41,13 +41,13 @@ mod form_tests {
 
         assert!(entry.etymologies[0]
             .senses
-            .get(&odict::PartOfSpeech::Un)
+            .get(&odict::schema::PartOfSpeech::Un)
             .is_some());
 
         assert_eq!(
             entry.etymologies[0]
                 .senses
-                .get(&odict::PartOfSpeech::Un)
+                .get(&odict::schema::PartOfSpeech::Un)
                 .unwrap()
                 .forms
                 .len(),
@@ -56,7 +56,7 @@ mod form_tests {
 
         let form = &entry.etymologies[0]
             .senses
-            .get(&odict::PartOfSpeech::Un)
+            .get(&odict::schema::PartOfSpeech::Un)
             .unwrap()
             .forms[0];
 
@@ -77,12 +77,14 @@ mod form_tests {
             </entry>
         "#;
 
-        let entry: odict::Entry = from_str(xml).unwrap();
+        let entry: odict::schema::Entry = from_str(xml).unwrap();
 
         assert_eq!(entry.etymologies.len(), 1);
         assert_eq!(entry.etymologies[0].senses.len(), 1);
 
-        let sense = entry.etymologies[0].senses.get(&odict::PartOfSpeech::Un);
+        let sense = entry.etymologies[0]
+            .senses
+            .get(&odict::schema::PartOfSpeech::Un);
 
         assert!(sense.is_some());
         assert_eq!(sense.unwrap().forms.len(), 2);

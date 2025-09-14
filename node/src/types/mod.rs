@@ -1,31 +1,40 @@
 mod definition;
-pub mod dictionary;
-pub mod entry;
+mod entry;
 mod enums;
 mod etymology;
 mod example;
 mod form;
 mod group;
-pub mod index;
-pub mod lookup;
+mod index;
+
+#[cfg(feature = "node")]
+mod load;
+
+#[cfg(feature = "node")]
+mod save;
+
+mod lookup;
 mod media_url;
 mod note;
 mod pronunciation;
-pub mod search;
+mod search;
 mod sense;
-mod split;
 mod token;
-pub mod tokenize;
+mod tokenize;
 mod translation;
 
-pub use dictionary::DictionaryOptions;
+#[cfg(feature = "node")]
+pub use load::*;
+
+#[cfg(feature = "node")]
+pub use save::*;
+
 pub use entry::Entry;
 pub use example::Example;
 pub use index::IndexOptions;
 pub use lookup::{LookupOptions, LookupResult};
 pub use pronunciation::Pronunciation;
 pub use search::SearchOptions;
-pub use split::SplitOptions;
 pub use token::Token;
 pub use tokenize::TokenizeOptions;
 pub use translation::Translation;

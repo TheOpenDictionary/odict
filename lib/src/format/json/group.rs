@@ -3,7 +3,7 @@ use structural_convert::StructuralConvert;
 
 use super::DefinitionJSON;
 
-use crate::Group;
+use crate::schema::Group;
 
 #[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Group))]

@@ -80,8 +80,8 @@ mod tests {
 
         // offset should be byte-indexed
         assert_eq!(tokens[0].offset_from, 0);
-        assert_eq!(tokens[0].offset_to, "张".bytes().len());
-        assert_eq!(tokens[1].offset_from, "张".bytes().len());
+        assert_eq!(tokens[0].offset_to, "张".len());
+        assert_eq!(tokens[1].offset_from, "张".len());
 
         // check tokenized text
         assert_eq!(

@@ -15,5 +15,5 @@
     "declaration": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["tests"]
+  "include": ["__test__"]
 }

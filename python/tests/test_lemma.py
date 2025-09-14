@@ -3,7 +3,7 @@ import unittest
 import os
 import uuid
 
-from theopendictionary import Dictionary
+from theopendictionary import OpenDictionary, compile
 
 
 class TestLemma(unittest.TestCase):
@@ -40,12 +40,13 @@ class TestLemma(unittest.TestCase):
         temp_dir = tempfile.gettempdir()
         temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
 
-        # Write XML content to an ODICT file
-        Dictionary.write(xml_content, temp_file)
-
         try:
-            # Create dictionary from the temporary ODICT file
-            dictionary = Dictionary(temp_file)
+            # Compile XML content to bytes and create dictionary
+            compiled_bytes = compile(xml_content)
+            dictionary = OpenDictionary(compiled_bytes)
+
+            # Save to file for testing
+            dictionary.save(temp_file)
 
             # Look up the entries
             running_results = dictionary.lookup("running")
@@ -63,7 +64,8 @@ class TestLemma(unittest.TestCase):
             running_etymology = running_entry.etymologies[0]
             ran_etymology = ran_entry.etymologies[0]
 
-            # Get the first sense from each etymology (in Python it's an ordered list of key-value pairs)
+            # Get the first sense from each etymology (in Python
+            # it's an ordered list of key-value pairs)
             running_sense = list(running_etymology.senses.values())[0]
             ran_sense = list(ran_etymology.senses.values())[0]
 

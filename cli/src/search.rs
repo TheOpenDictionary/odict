@@ -1,5 +1,6 @@
 use clap::{arg, command, Args};
-use odict::search::{get_default_index_dir, SearchOptions};
+use odict::index::get_default_index_dir;
+use odict::search::SearchOptions;
 
 use crate::{enums::PrintFormat, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY};
 
@@ -24,26 +25,22 @@ pub struct SearchArgs {
     query: String,
 }
 
-pub fn search(ctx: &mut CLIContext, args: &SearchArgs) -> anyhow::Result<()> {
-    let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;
+pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
+    let file = internal::load_dictionary(&args.dictionary).await?;
 
-    let dict = file.to_dictionary()?;
+    let dict = file.contents()?;
 
     if args.index {
         let index_path = get_default_index_dir().join(dict.id.as_str());
 
         if !index_path.exists() {
-            crate::index(
-                ctx,
-                &IndexArgs {
-                    dictionary: args.dictionary.clone(),
-                    directory: None,
-                    overwrite: false,
-                    memory: DEFAULT_INDEX_MEMORY,
-                },
-            )?;
+            let index_args = IndexArgs {
+                dictionary: args.dictionary.clone(),
+                directory: None,
+                overwrite: false,
+                memory: DEFAULT_INDEX_MEMORY,
+            };
+            crate::index(ctx, &index_args).await?;
         }
     }
 

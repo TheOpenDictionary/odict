@@ -5,14 +5,16 @@ mod index_tests {
 
     use std::sync::LazyLock;
 
-    use odict::{search::IndexOptions, Dictionary};
+    use odict::{index::IndexOptions, schema::Dictionary};
 
     use crate::helpers::get_example_dict;
 
     static EXAMPLE_DICT: LazyLock<Dictionary> = LazyLock::new(|| {
         get_example_dict("example1")
             .expect("Failed to get example dictionary")
-            .to_dictionary()
+            .contents()
+            .unwrap()
+            .deserialize()
             .unwrap()
     });
 
@@ -21,11 +23,11 @@ mod index_tests {
         let opts = IndexOptions::default().dir(".odict/.idx");
         let result1 = EXAMPLE_DICT.index(&opts);
 
-        assert_eq!(result1.is_err(), false);
+        assert!(result1.is_ok());
 
         let result2 = EXAMPLE_DICT.index(&opts);
 
-        assert_eq!(result2.is_err(), true);
+        assert!(result2.is_err());
         assert_eq!(result2.unwrap_err().to_string(), "Index already exists");
     }
 }

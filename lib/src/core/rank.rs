@@ -1,4 +1,4 @@
-use crate::{ArchivedDictionary, Dictionary};
+use crate::schema::{ArchivedDictionary, Dictionary};
 
 impl ArchivedDictionary {
     fn rank_iter(&self) -> impl Iterator<Item = u32> + '_ {

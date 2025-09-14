@@ -1,4 +1,7 @@
-use crate::{Definition, Entry, Error};
+use crate::{
+    schema::{Definition, Entry},
+    Error,
+};
 
 use super::{example::write_example, note::write_note, utils::indent};
 
@@ -14,14 +17,14 @@ pub fn write_definition(
 
     lines.push(indent(text, indent_width));
 
-    for example in (&definition).examples.iter() {
+    for example in definition.examples.iter() {
         write_example(lines, indent_width + 3, example, entry)?;
     }
 
-    if definition.notes.len() > 0 {
+    if !definition.notes.is_empty() {
         lines.push(indent("\n**Notes**\n\n", indent_width + 3));
 
-        for (ndx, note) in (&definition).notes.iter().enumerate() {
+        for (ndx, note) in definition.notes.iter().enumerate() {
             write_note(lines, ndx, note, entry)?;
         }
 

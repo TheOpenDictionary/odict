@@ -1,4 +1,4 @@
-use crate::EntryRef;
+use crate::schema::EntryRef;
 use serde::{Deserialize, Serialize};
 use structural_convert::StructuralConvert;
 

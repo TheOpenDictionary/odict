@@ -1,4 +1,4 @@
-use crate::{ArchivedDictionary, Dictionary};
+use crate::schema::{ArchivedDictionary, Dictionary};
 
 macro_rules! lexicon {
     ($t:ident) => {

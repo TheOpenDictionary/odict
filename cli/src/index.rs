@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
-use odict::search::{get_default_index_dir, IndexOptions};
+use odict::index::{get_default_index_dir, IndexOptions};
 
 use crate::CLIContext;
 
@@ -29,14 +29,12 @@ pub struct IndexArgs {
     pub(super) memory: usize,
 }
 
-pub fn index(ctx: &mut CLIContext, args: &IndexArgs) -> anyhow::Result<()> {
-    let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?;
+pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
+    let file = internal::load_dictionary(&args.dictionary).await?;
 
-    ctx.println("".to_string());
+    ctx.println("");
 
-    let dict = file.to_dictionary()?;
+    let dict = file.contents()?;
 
     let progress1 = ProgressBar::new(dict.entries.len() as u64).with_style(
         ProgressStyle::with_template("[{eta_precise}] {bar} {pos}/{len} entries indexed").unwrap(),

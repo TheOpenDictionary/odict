@@ -11,11 +11,14 @@ sources = ["python/src/**/*.rs", "python/Cargo.toml"]
 ["lint:python"]
 run = "uv tool run ruff check"
 
+["generate-ci:python"]
+run = "uv tool run maturin generate-ci  -o .github/workflows/python.yml -m python/Cargo.toml --pytest github"
+
 ["format:python"]
 run = "uv --preview-features format format"
 
 ["snapshot:python"]
-run = "uv tool run -w syrupy -w ./python pytest --snapshot-update"
+run = "mise run test:python --snapshot-update"
 
 ["test:python"]
-run = "uv tool run -w syrupy -w ./python pytest -vv"
+run = "uv tool run -w syrupy -w pytest-asyncio -w ./python --refresh pytest -vv"

@@ -1,5 +1,5 @@
 use map_macro::hash_set;
-use odict::{Entry, EntryRef, Form, FormKind, PartOfSpeech, Sense};
+use odict::schema::{Entry, EntryRef, Form, FormKind, PartOfSpeech, Sense};
 
 #[test]
 fn test_form_tags_serialization() {
@@ -94,7 +94,7 @@ fn test_form_with_tags() {
 
     senses.insert(sense);
 
-    let etymology = odict::Etymology {
+    let etymology = odict::schema::Etymology {
         id: None,
         pronunciations: vec![],
         description: None,

@@ -8,14 +8,14 @@ mod dump_tests {
 
     use odict::{
         format::{json::ToJSON, xml::ToXML},
-        Dictionary, ID,
+        schema::Dictionary,
     };
 
     use crate::helpers::EXAMPLE_DICT_1;
 
     #[test]
     fn test_xml() {
-        let dict = EXAMPLE_DICT_1.to_dictionary().unwrap();
+        let dict = EXAMPLE_DICT_1.contents().unwrap().deserialize().unwrap();
 
         let dumped = dict.clone().to_xml(true).unwrap();
 
@@ -28,10 +28,15 @@ mod dump_tests {
 
     #[test]
     fn test_json() {
-        let mut mutable = EXAMPLE_DICT_1.to_dictionary().unwrap().clone();
+        let mut mutable = EXAMPLE_DICT_1
+            .contents()
+            .unwrap()
+            .deserialize()
+            .unwrap()
+            .clone();
 
         // Keep it consistent
-        mutable.id = ID::parse("2ee2a1ae-f7ff-4590-ba2d-de857ba7857f").unwrap();
+        mutable.id = odict::schema::ID::parse("2ee2a1ae-f7ff-4590-ba2d-de857ba7857f").unwrap();
 
         let dumped = mutable.to_json(true).unwrap();
 

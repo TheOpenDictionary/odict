@@ -1,5 +1,5 @@
 use clap::{arg, command, Args};
-use odict::lookup::TokenizeOptions;
+use odict::tokenize::TokenizeOptions;
 
 use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
 
@@ -39,7 +39,7 @@ pub struct TokenizeArgs {
     insensitive: bool,
 }
 
-pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()> {
+pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyhow::Result<()> {
     let TokenizeArgs {
         dictionary_path: path,
         text,
@@ -48,17 +48,14 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
         insensitive,
     } = args;
 
-    let file = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&path, &ctx.alias_manager)?;
+    let file = internal::load_dictionary(path).await?;
 
     let opts = TokenizeOptions::default()
         .follow(*follow)
         .insensitive(*insensitive);
 
-    let archive = file.to_archive()?;
-
-    let result = archive.tokenize(text, opts);
+    let dict = file.contents()?;
+    let result = dict.tokenize(text, opts);
 
     match result {
         Ok(tokens) => {
@@ -69,7 +66,7 @@ pub fn tokenize(ctx: &mut CLIContext, args: &TokenizeArgs) -> anyhow::Result<()>
                 .collect::<Vec<_>>();
 
             if all_entries.is_empty() {
-                ctx.println(format!("No entries found for the text: \"{}\"", text));
+                ctx.println(format!("No entries found for the text: \"{text}\""));
             } else {
                 print_entries(ctx, get_lookup_entries(all_entries), format)?;
             }

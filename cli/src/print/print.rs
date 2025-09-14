@@ -1,6 +1,7 @@
 use odict::{
     format::{html::ToHTML, json::ToJSON, md::ToMarkdown, xml::ToXML},
-    Entry, Error,
+    schema::Entry,
+    Error,
 };
 
 use super::pprint::pretty_print;

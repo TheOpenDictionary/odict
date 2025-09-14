@@ -22,17 +22,17 @@ pub struct DumpArgs {
     output: Option<String>,
 }
 
-pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
+pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Result<()> {
     let DumpArgs {
         input,
         format,
         output,
     } = args;
 
-    let dict = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(input, &ctx.alias_manager)?
-        .to_dictionary()?;
+    let dict = internal::load_dictionary(input)
+        .await?
+        .contents()?
+        .deserialize()?;
 
     let contents = match format {
         DumpFormat::XML => dict.to_xml(true)?,
@@ -42,7 +42,7 @@ pub fn dump(ctx: &mut CLIContext, args: &DumpArgs) -> anyhow::Result<()> {
     };
 
     match output {
-        Some(out) => fs::write(&out, &contents)?,
+        Some(out) => fs::write(out, &contents)?,
         None => ctx.println(contents),
     };
 

@@ -9,6 +9,9 @@ pub enum Error {
     #[error(transparent)]
     FromUtf8(#[from] std::string::FromUtf8Error),
 
+    #[error(transparent)]
+    ConversionError(#[from] std::num::TryFromIntError),
+
     #[error("Failed to compress: {0}")]
     Compression(String),
 
@@ -27,8 +30,21 @@ pub enum Error {
     #[error("This dictionary has no path!")]
     DictionaryMissingPath,
 
+    #[cfg(feature = "alias")]
     #[error("An alias with this name already exists!")]
     AliasExists,
+
+    #[cfg(feature = "alias")]
+    #[error("Alias not found: {0}")]
+    AliasNotFound(String),
+
+    #[cfg(feature = "http")]
+    #[error("Failed to download dictionary: {0} {1}")]
+    DownloadFailed(crate::download::NetworkError, String),
+
+    #[cfg(feature = "http")]
+    #[error("Invalid remote dictionary name: {0}")]
+    InvalidDictionaryName(String),
 
     #[error("This file is not compatible with the current version of ODict")]
     Incompatible,

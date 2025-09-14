@@ -10,16 +10,14 @@ pub struct LexiconArgs {
     dictionary: String,
 }
 
-pub fn lexicon(ctx: &mut CLIContext, args: &LexiconArgs) -> anyhow::Result<()> {
-    let dict = ctx
-        .reader
-        .read_from_path_or_alias_with_manager(&args.dictionary, &ctx.alias_manager)?
-        .to_dictionary()?;
+pub async fn lexicon<'a>(ctx: &mut CLIContext<'a>, args: &LexiconArgs) -> anyhow::Result<()> {
+    let file = internal::load_dictionary(&args.dictionary).await?;
 
+    let dict = file.contents()?;
     let lexicon = dict.lexicon();
 
     for word in lexicon {
-        ctx.println(word.to_string());
+        ctx.println(word);
     }
 
     Ok(())

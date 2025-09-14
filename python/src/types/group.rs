@@ -5,7 +5,7 @@ use super::definition::Definition;
 
 #[pyclass]
 #[derive(Debug, Clone, StructuralConvert)]
-#[convert(from(odict::Group))]
+#[convert(from(odict::schema::Group))]
 pub struct Group {
     #[pyo3(get)]
     pub id: Option<String>,

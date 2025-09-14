@@ -12,6 +12,13 @@ description = "Recursively cleans all packages in the project"
 run = "cargo insta accept"
 description = "Updates all Insta snapshot tests"
 
+[bench]
+run = "cargo bench"
+description = "Runs benchmarks for all Cargo packages"
+
+[why]
+run = "cargo tree -i"
+
 [test]
 run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
 description = "Runs nextest on all Cargo packages"
@@ -20,11 +27,13 @@ description = "Runs nextest on all Cargo packages"
 depends = ["test", "test:*"]
 description = "Recursively tests all packages in the project"
 
-["upgrade:cargo"]
-run = "cargo +nightly update --breaking -Z unstable-options"
+["upgrade"]
+depends = ["upgrade:*"]
+run = "cargo upgrade"
+description = "Updates all dependencies to their latest versions"
 
 [setup]
-run = ["mise install", "corepack enable", "pnpm install"]
+run = ["mise install", "corepack prepare", "corepack enable", "yarn install"]
 depends_post = ["setup:*"]
 description = "Installs all required dependencies"
 
@@ -33,6 +42,7 @@ depends = ["build:*"]
 description = "Recursively builds all packages in the project"
 
 ["format"]
+depends = ["format:*"]
 run = "cargo fmt --all -- **/*.rs"
 description = "Format all Rust files"
 

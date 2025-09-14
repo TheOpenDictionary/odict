@@ -1,28 +1,49 @@
-name: Node bindings
+name: Node
 env:
   DEBUG: napi:*
-  MACOSX_DEPLOYMENT_TARGET: "10.13"
-permissions:
-  contents: write
-  id-token: write
-"on":
+  APP_NAME: node
+  MACOSX_DEPLOYMENT_TARGET: '10.13'
+  CARGO_INCREMENTAL: '1'
+'on':
   workflow_dispatch:
   pull_request:
     paths:
-      - "node/**"
-      - "lib/**"
-      - "**/tasks.toml"
-      - "tasks.toml"
-      - "examples/**"
+      - 'node/**'
+      - 'lib/**'
+      - '**/tasks.toml'
+      - 'tasks.toml'
+      - 'examples/**'
   push:
     branches:
       - main
     tags:
-      - "node**"
+      - 'node**'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - name: Setup node
+  #       uses: actions/setup-node@v5
+  #       with:
+  #         node-version: 22
+  #         cache: yarn
+  #     - name: Install
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         components: clippy, rustfmt
+  #     - name: Install dependencies
+  #       run: yarn install
+  #     - name: Oxlint
+  #       run: yarn workspace @odict/node lint
+  #     - name: Cargo fmt
+  #       run: cargo fmt -- --check
+  #     - name: Clippy
+        # run: cargo clippy
   build:
     strategy:
       fail-fast: false
@@ -30,61 +51,40 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target x86_64-apple-darwin
+            build: yarn workspace @odict/node build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build
+            build: yarn workspace @odict/node build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: pnpm --filter "@odict/node" build --target i686-pc-windows-msvc
+            build: yarn workspace @odict/node build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-musl -x
-          - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-gnu --use-napi-cross
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: pnpm --filter "@odict/node" build --target aarch64-apple-darwin
+            build: yarn workspace @odict/node build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-gnueabihf --use-napi-cross
-          - host: ubuntu-latest
-            target: armv7-unknown-linux-musleabihf
-            build: pnpm --filter "@odict/node" build --target armv7-unknown-linux-musleabihf -x
+            build: yarn workspace @odict/node build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: pnpm --filter "@odict/node" build --target aarch64-linux-android
+            build: yarn workspace @odict/node build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: pnpm --filter "@odict/node" build --target armv7-linux-androideabi
+            build: yarn workspace @odict/node build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: pnpm --filter "@odict/node" build --target aarch64-unknown-linux-musl -x
+            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: pnpm --filter "@odict/node" build --target aarch64-pc-windows-msvc
-          - host: ubuntu-latest
-            target: riscv64gc-unknown-linux-gnu
-            setup: |
-              sudo apt-get update
-              sudo apt-get install gcc-riscv64-linux-gnu -y
-            build: pnpm --filter "@odict/node" build --target riscv64gc-unknown-linux-gnu
-          - host: ubuntu-latest
-            target: powerpc64le-unknown-linux-gnu
-            setup: |
-              sudo apt-get update
-              sudo apt-get install gcc-powerpc64le-linux-gnu -y
-            build: pnpm --filter "@odict/node" build --target powerpc64le-unknown-linux-gnu
-          - host: ubuntu-latest
-            target: s390x-unknown-linux-gnu
-            setup: |
-              sudo apt-get update
-              sudo apt-get install gcc-s390x-linux-gnu -y
-            build: pnpm --filter "@odict/node" build --target s390x-unknown-linux-gnu
+            build: yarn workspace @odict/node build:node --target aarch64-pc-windows-msvc
           - host: macos-latest
             target: wasm32-wasip1-threads
             setup: |
@@ -93,18 +93,16 @@ jobs:
             build: |
               export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
-              pnpm --filter "@odict/node" build:wasm
-    name: stable - ${{ matrix.settings.target }} - node@20
+              yarn workspace @odict/node build:wasm
+    name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v4
-      - name: setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
-          cache: pnpm
+          node-version: 22
+          cache: yarn
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -121,10 +119,10 @@ jobs:
             .cargo-cache
             target/
           key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
-      - uses: goto-bus-stop/setup-zig@v2
+      - uses: mlugg/setup-zig@v2
         if: ${{ contains(matrix.settings.target, 'musl') }}
         with:
-          version: 0.13.0
+          version: 0.14.1
       - name: Install cargo-zigbuild
         uses: taiki-e/install-action@v2
         if: ${{ contains(matrix.settings.target, 'musl') }}
@@ -137,54 +135,41 @@ jobs:
         if: ${{ matrix.settings.setup }}
         shell: bash
       - name: Install dependencies
-        run: pnpm install
-      - name: Setup node x86
-        uses: actions/setup-node@v4
-        if: matrix.settings.target == 'i686-pc-windows-msvc'
-        with:
-          node-version: 20
-          cache: pnpm
-          architecture: x86
+        run: yarn install
       - name: Build
+        env:
+          CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: matrix.settings.target != 'wasm32-wasip1-threads'
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: "node/*.node"
-          if-no-files-found: error
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        if: matrix.settings.target == 'wasm32-wasip1-threads'
-        with:
-          name: bindings-${{ matrix.settings.target }}
-          path: "node/*.wasm"
+          path: |
+            ./node/${{ env.APP_NAME }}.*.node
+            ./node/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
     name: Build FreeBSD
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
       - name: Build
         id: build
-        uses: cross-platform-actions/action@v0.25.0
+        uses: cross-platform-actions/action@v0.29.0
         env:
           DEBUG: napi:*
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: "14.1"
+          version: '14.2'
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
           shell: bash
           run: |
-            sudo pkg install -y -f curl node libnghttp2 npm
-            sudo npm install -g corepack
+            sudo pkg install -y -f curl node libnghttp2 npm cmake
+            sudo npm install -g yarn --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain stable
             source "$HOME/.cargo/env"
@@ -192,26 +177,24 @@ jobs:
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
-            corepack prepare
-            corepack enable
-            echo "~~~~ pnpm --version ~~~~"
-            pnpm --version
+            echo "~~~~ yarn --version ~~~~"
+            yarn --version
             pwd
             ls -lah
             whoami
             env
             freebsd-version
-            pnpm install
-            pnpm --filter "@odict/node" build
-            strip -x node/*.node
-            pnpm --filter "@odict/node" test
+            sudo corepack enable
+            yarn install
+            yarn workspace @odict/node build:node
             rm -rf node_modules
             rm -rf target
+            rm -rf .yarn/cache
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: "node/*.node"
+          path: ./node/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -221,353 +204,183 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-latest
-            target: x86_64-apple-darwin
-            architecture: x64
-          - host: macos-latest
-            target: aarch64-apple-darwin
-            architecture: arm64
           - host: windows-latest
             target: x86_64-pc-windows-msvc
             architecture: x64
+          - host: windows-11-arm
+            target: aarch64-pc-windows-msvc
+            architecture: arm64
+          - host: macos-latest
+            target: aarch64-apple-darwin
+            architecture: arm64
+          - host: macos-latest
+            target: x86_64-apple-darwin
+            architecture: x64
         node:
-          - "22"
-          - "24"
+          - '20'
+          - '22'
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: yarn
           architecture: ${{ matrix.settings.architecture }}
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: node
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Test bindings
-        run: pnpm --filter "@odict/node" test
-  test-linux-x64-musl-binding:
-    name: Test bindings on x86_64-unknown-linux-musl - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - "20"
-          - "22"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-      - name: Install dependencies
-        run: |
-          pnpm config set supportedArchitectures.libc "musl"
-          pnpm install
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-x86_64-unknown-linux-musl
           path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run:
-          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine sh -c "
-          corepack prepare &&
-          corepack enable &&
-          pnpm --filter '@odict/node' test
-          "
-  test-linux-x64-gnu-binding:
-    name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
+        run: yarn workspace @odict/node test
+  test-linux-binding:
+    name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
       - build
     strategy:
       fail-fast: false
       matrix:
+        target:
+          - x86_64-unknown-linux-gnu
+          - x86_64-unknown-linux-musl
+          - aarch64-unknown-linux-gnu
+          - aarch64-unknown-linux-musl
+          - armv7-unknown-linux-gnueabihf
         node:
-          - "22"
-          - "24"
-    runs-on: ubuntu-latest
+          - '20'
+          - '22'
+    runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node }}
-          cache: pnpm
+          cache: yarn
+      - name: Output docker params
+        id: docker
+        run: |
+          node -e "
+            if ('${{ matrix.target }}'.startsWith('aarch64')) {
+              console.log('PLATFORM=linux/arm64')
+            } else if ('${{ matrix.target }}'.startsWith('armv7')) {
+              console.log('PLATFORM=linux/arm/v7')
+            } else {
+              console.log('PLATFORM=linux/amd64')
+            }
+          " >> $GITHUB_OUTPUT
+          node -e "
+            if ('${{ matrix.target }}'.endsWith('-musl')) {
+              console.log('IMAGE=node:${{ matrix.node }}-alpine')
+            } else {
+              console.log('IMAGE=node:${{ matrix.node }}-slim')
+            }
+          " >> $GITHUB_OUTPUT
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
+          yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
+          yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          name: bindings-x86_64-unknown-linux-gnu
-          path: node
+          name: bindings-${{ matrix.target }}
+          path: ./node
+      - name: List packages
+        run: ls -R .
+        shell: bash
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        if: ${{ contains(matrix.target, 'armv7') }}
+        with:
+          platforms: all
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        if: ${{ contains(matrix.target, 'armv7') }}
+      - name: Test bindings
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ${{ steps.docker.outputs.IMAGE }}
+          options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
+          run: NO_NETWORK=1 yarn workspace @odict/node test
+  test-wasi:
+    name: Test WASI target
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: yarn
+      - name: Install dependencies
+        run: |
+          yarn config set supportedArchitectures.cpu "wasm32"
+          yarn install
+      - name: Download artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: bindings-wasm32-wasip1-threads
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: |
-          docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim sh -c "
-            corepack prepare &&
-            corepack enable &&
-            pnpm --filter '@odict/node' test
-          "
-  test-linux-aarch64-gnu-binding:
-    name: Test bindings on aarch64-unknown-linux-gnu - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - "20"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-aarch64-unknown-linux-gnu
-          path: node
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Setup and run tests
-        uses: addnab/docker-run-action@v3
-        with:
-          image: node:${{ matrix.node }}-slim
-          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
-          run: |
-            set -e
-            corepack prepare
-            corepack enable
-            pnpm config set supportedArchitectures.cpu "arm64"
-            pnpm config set supportedArchitectures.libc "glibc"
-            pnpm install
-            pnpm --filter "@odict/node" test
-            ls -la
-  test-linux-aarch64-musl-binding:
-    name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - "22"
-          - "24"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-aarch64-unknown-linux-musl
-          path: node
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Setup and run tests
-        uses: addnab/docker-run-action@v3
-        with:
-          image: node:${{ matrix.node }}-alpine
-          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build"
-          run: |
-            corepack prepare
-            corepack enable
-            pnpm config set supportedArchitectures.cpu "arm64"
-            pnpm config set supportedArchitectures.libc "musl"
-            pnpm install
-            pnpm --filter "@odict/node" test
-  test-linux-arm-gnueabihf-binding:
-    name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - "20"
-          - "22"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-armv7-unknown-linux-gnueabihf
-          path: node
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Setup and run tests
-        uses: addnab/docker-run-action@v3
-        with:
-          image: node:${{ matrix.node }}-bullseye-slim
-          options: "--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build"
-          run: |
-            set -e
-            corepack prepare
-            corepack enable
-            pnpm config set supportedArchitectures.cpu "arm"
-            pnpm install
-            pnpm --filter "@odict/node" test
-            ls -la
-  universal-macOS:
-    name: Build universal macOS binary
-    needs:
-      - build
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install
-      - name: Download macOS x64 artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-x86_64-apple-darwin
-          path: node
-      - name: Download macOS arm64 artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-aarch64-apple-darwin
-          path: node
-      - name: Combine binaries
-        run: pnpm --filter="@odict/node" universalize
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bindings-universal-apple-darwin
-          path: "node/*.node"
-          if-no-files-found: error
-  test-wasi-nodejs:
-    name: Test bindings on wasi - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - "22"
-          - "24"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-wasm32-wasip1-threads
-          path: node
-      - name: List packages
-        run: ls -R .
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install
-      - name: Test
-        run: pnpm --filter "@odict/node" test
+        run: yarn workspace @odict/node test
         env:
-          NAPI_RS_FORCE_WASI: true
+          NAPI_RS_FORCE_WASI: 1
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     needs:
+      # - lint
       - build-freebsd
       - test-macOS-windows-binding
-      - test-linux-x64-gnu-binding
-      - test-linux-x64-musl-binding
-      - test-linux-aarch64-gnu-binding
-      - test-linux-aarch64-musl-binding
-      - test-linux-arm-gnueabihf-binding
-      - universal-macOS
-      - test-wasi-nodejs
+      - test-linux-binding
+      - test-wasi
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
-          cache: pnpm
+          node-version: 22
+          cache: yarn
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
+      - name: create npm dirs
+        run: yarn workspace @odict/node napi create-npm-dirs
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
-          path: node/artifacts
-      - name: Create dirs
-        run: pnpm --filter "@odict/node" create-dirs
+          path: ./node/artifacts
       - name: Move artifacts
-        run: pnpm --filter "@odict/node" artifacts
+        run: yarn workspace @odict/node artifacts
       - name: List packages
         run: ls -R ./node/npm
         shell: bash
-      - uses: olegtarasov/get-tag@v2.1.4
-        id: tagName
-        with:
-          tagRegex: "node/(.*)"
-      - name: Print tag name
-        run: echo $GIT_TAG_NAME
       - name: Publish
-        shell: bash
         if: ${{ github.event_name != 'workflow_dispatch' }}
         run: |
           npm config set provenance true
-          if [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+$ ]];
+          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --no-git-checks --access public
-          elif [[ $GIT_TAG_NAME =~ ^v?[0-9]+.[0-9]+.[0-9]+ ]];
+            cd node && npm publish --access public
+          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            pnpm --filter="@odict/node" publish --tag next --no-git-checks --access public
+            cd node && npm publish --tag next --access public
           else
             echo "Not a release, skipping publish"
           fi
@@ -580,7 +393,7 @@ jobs:
         run: |
           npm config set provenance true
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          pnpm --filter="@odict/node" publish --no-git-checks --access public
+          cd node && npm publish --no-git-checks --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
