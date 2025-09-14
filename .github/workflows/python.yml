@@ -62,7 +62,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
           cd python && pytest
       - name: pytest
@@ -78,7 +78,7 @@ jobs:
             pip3 install -U pip pytest syrupy pytest-asyncio
           run: |
             set -e
-            pip3 install theopendictionary --find-links dist --force-reinstall
+            pip3 install theopendictionary --no-index --find-links dist --force-reinstall
             cd python && pytest
 
   musllinux:
