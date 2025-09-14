@@ -3,7 +3,8 @@ use std::{env::var, fs::create_dir, path::PathBuf};
 
 pub fn get_config_dir() -> crate::Result<PathBuf> {
     let dir_name = var("ODICT_CONFIG_DIR").ok().unwrap_or_else(|| {
-        home_dir().expect("Failed to get home directory")
+        home_dir()
+            .expect("Failed to get home directory")
             .join(".odict")
             .to_string_lossy()
             .to_string()
@@ -12,7 +13,7 @@ pub fn get_config_dir() -> crate::Result<PathBuf> {
     let path = PathBuf::from(&dir_name.as_str());
 
     if !path.exists() {
-        create_dir(&path)?;
+        std::fs::create_dir_all(&path)?;
     }
 
     Ok(path)
