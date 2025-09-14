@@ -153,7 +153,7 @@ describe('Dictionary', () => {
     })
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should tokenize text and find entries', () => {
+  it('should tokenize text and find entries', () => {
     const tokens = dict3.tokenize('你好！你是谁？')
 
     expect(tokens).toMatchSnapshot()
@@ -163,7 +163,7 @@ describe('Dictionary', () => {
     expect(tokens[0].entries[1].entry.term).toBe('好')
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should tokenize text case-sensitively by default', () => {
+  it('should tokenize text case-sensitively by default', () => {
     const tokens = dict1.tokenize('DOG cat')
 
     expect(tokens.length).toBe(2)
@@ -173,7 +173,7 @@ describe('Dictionary', () => {
     expect(tokens[1].entries[0].entry.term).toBe('cat')
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should tokenize text case-insensitively when specified', () => {
+  it('should tokenize text case-insensitively when specified', () => {
     const tokens = dict1.tokenize('DOG cat', { insensitive: true })
 
     expect(tokens.length).toBe(2)
@@ -184,7 +184,7 @@ describe('Dictionary', () => {
     expect(tokens[1].entries[0].entry.term).toBe('cat')
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should support follow=true for infinite following in tokenize', () => {
+  it('should support follow=true for infinite following in tokenize', () => {
     const tokens = dict1.tokenize('ran', { follow: true })
 
     expect(tokens.length).toBe(1)
@@ -194,7 +194,7 @@ describe('Dictionary', () => {
     expect(tokens[0].entries[0].directedFrom?.term).toBe('ran')
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should support follow=false to disable following in tokenize', () => {
+  it('should support follow=false to disable following in tokenize', () => {
     const tokens = dict1.tokenize('ran', { follow: false })
 
     expect(tokens.length).toBe(1)
@@ -202,7 +202,7 @@ describe('Dictionary', () => {
     expect(tokens[0].entries[0].entry.term).toBe('ran')
   })
 
-  it.skipIf(process.env.NO_TOKENIZE)('should support follow with specific number in tokenize', () => {
+  it('should support follow with specific number in tokenize', () => {
     const tokens = dict1.tokenize('ran', { follow: 5 })
 
     expect(tokens.length).toBe(1)
@@ -302,14 +302,16 @@ describe('Dictionary', () => {
       }
     })
 
-    it.skipIf(process.env.SKIP_NETWORK_TESTS)('handles download failure', { timeout: 30_000 }, async () => {
-      const validFormat = 'wiktionary/some-fake-dict'
-      await expect(OpenDictionary.load(validFormat)).rejects.toThrow(/E_HTTP_404/)
-    })
+    describe.skipIf(process.env.NO_NETWORK)('network tests', () => {
+      it('handles download failure', { timeout: 30_000 }, async () => {
+        const validFormat = 'wiktionary/some-fake-dict'
+        await expect(OpenDictionary.load(validFormat)).rejects.toThrow(/E_HTTP_404/)
+      })
 
-    it.skipIf(process.env.SKIP_NETWORK_TESTS)('handles download success', { timeout: 30_000 }, async () => {
-      const validFormat = 'wiktionary/jpn'
-      expect(await OpenDictionary.load(validFormat)).toBeDefined()
+      it('handles download success', { timeout: 30_000 }, async () => {
+        const validFormat = 'wiktionary/jpn'
+        expect(await OpenDictionary.load(validFormat)).toBeDefined()
+      })
     })
 
     it('loads empty dictionary file', async () => {

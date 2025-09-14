@@ -1,4 +1,4 @@
-name: CI
+name: Node
 env:
   DEBUG: napi:*
   APP_NAME: node
@@ -69,7 +69,7 @@ jobs:
             build: yarn workspace @odict/node build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: CFLAGS_aarch64_unknown_linux_gnu="-D__ARM_ARCH=8" yarn workspace @odict/node build:node --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             build: yarn workspace @odict/node build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
@@ -137,6 +137,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Build
+        env:
+          CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
@@ -184,7 +186,7 @@ jobs:
             freebsd-version
             sudo corepack enable
             yarn install
-            yarn workspace @odict/node build
+            yarn workspace @odict/node build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -306,7 +308,7 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          run: yarn workspace @odict/node test
+          run: NO_NETWORK=1 yarn workspace @odict/node test
   test-wasi:
     name: Test WASI target
     needs:

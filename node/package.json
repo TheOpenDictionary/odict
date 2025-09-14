@@ -89,5 +89,8 @@
     "preversion": "napi build --platform && git add .",
     "version": "napi version",
     "prepublishOnly": "napi prepublish --no-gh-release"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.50.1"
   }
 }

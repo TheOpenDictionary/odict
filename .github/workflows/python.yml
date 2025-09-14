@@ -66,11 +66,12 @@ jobs:
         shell: bash
         run: |
           set -e
+          cd python
           python3 -m venv .venv
           source .venv/bin/activate
           pip install theopendictionary --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
-          cd python && pytest
+          pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') && matrix.platform.target != 'ppc64' }}
         uses: uraimo/run-on-arch-action@v2
@@ -84,8 +85,9 @@ jobs:
             pip3 install -U pip pytest syrupy pytest-asyncio
           run: |
             set -e
+            cd python
             pip3 install theopendictionary --find-links dist --force-reinstall
-            cd python && pytest
+            pytest
 
   musllinux:
     runs-on: ${{ matrix.platform.runner }}
@@ -128,11 +130,12 @@ jobs:
           run: |
             set -e
             apk add py3-pip py3-virtualenv
+            cd python
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install theopendictionary --no-index --find-links dist --force-reinstall
             pip install pytest syrupy pytest-asyncio
-            cd python && pytest
+            pytest
       - name: pytest
         if: ${{ !startsWith(matrix.platform.target, 'x86') }}
         uses: uraimo/run-on-arch-action@v2
@@ -144,11 +147,12 @@ jobs:
             apk add py3-virtualenv
           run: |
             set -e
+            cd python
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install pytest syrupy pytest-asyncio
             pip install theopendictionary --find-links dist --force-reinstall
-            cd python && pytest
+            pytest
 
   windows:
     runs-on: ${{ matrix.platform.runner }}
@@ -181,11 +185,12 @@ jobs:
         shell: bash
         run: |
           set -e
+          cd python
           python3 -m venv .venv
           source .venv/Scripts/activate
           pip install theopendictionary --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
-          cd python && pytest
+          pytest
 
   macos:
     runs-on: ${{ matrix.platform.runner }}
@@ -215,11 +220,12 @@ jobs:
       - name: pytest
         run: |
           set -e
+          cd python
           python3 -m venv .venv
           source .venv/bin/activate
           pip install theopendictionary --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
-          cd python && pytest
+          pytest
 
   sdist:
     runs-on: ubuntu-latest

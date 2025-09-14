@@ -1219,6 +1219,7 @@ __metadata:
     "@napi-rs/cli": "npm:3.1.5"
     "@napi-rs/wasm-runtime": "npm:^1.0.3"
     "@oxc-node/core": "npm:^0.0.32"
+    "@rollup/rollup-linux-x64-gnu": "npm:^4.50.1"
     "@taplo/cli": "npm:^0.7.0"
     "@tybys/wasm-util": "npm:^0.10.0"
     "@types/node": "npm:^24.3.1"
@@ -1231,6 +1232,9 @@ __metadata:
     vite: "npm:^7.1.5"
     vite-plugin-node-polyfills: "npm:0.24.0"
     vitest: "npm:^3.2.4"
+  dependenciesMeta:
+    "@rollup/rollup-linux-x64-gnu":
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -1616,7 +1620,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.50.1":
+"@rollup/rollup-linux-x64-gnu@npm:4.50.1, @rollup/rollup-linux-x64-gnu@npm:^4.50.1":
   version: 4.50.1
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.50.1"
   conditions: os=linux & cpu=x64 & libc=glibc
