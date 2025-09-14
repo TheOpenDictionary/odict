@@ -23,15 +23,18 @@ run = "yarn up"
 
 ["publish:node"]
 depends = ["setup:node"]
-run = "yarn --filter=\"@odict/node\" npm publish"
+dir = "node"
+run = "yarn npm publish"
 
 ["test:node"]
 depends = ["setup:node", "build:node"]
-run = "yarn --filter=\"@odict/node\" test"
+dir = "node"
+run = "yarn test"
 
 ["snapshot:node"]
 depends = ["setup:node", "build:node"]
-run = "yarn --filter=\"@odict/node\" test -u"
+dir = "node"
+run = "yarn test -u"
 
 ["ci:node"]
 depends = ["setup:node"]
