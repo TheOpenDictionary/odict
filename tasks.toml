@@ -19,6 +19,14 @@ description = "Runs benchmarks for all Cargo packages"
 [why]
 run = "cargo tree -i"
 
+[lint]
+depends = ["lint:*"]
+run = "cargo clippy --all-targets --all-features -- -D warnings"
+
+[fix]
+depends = ["fix:*"]
+run = "cargo clippy --all-targets --all-features --fix --allow-dirty -- -D warnings"
+
 [test]
 run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
 description = "Runs nextest on all Cargo packages"

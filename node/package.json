@@ -79,7 +79,6 @@
     "format:toml": "taplo format",
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
-    "dev:wasm": "vite dev",
     "test": "ava --serial",
     "universalize": "napi universalize",
     "artifacts": "napi artifacts",

@@ -49,7 +49,10 @@ where
     let version = SemanticVersion::from(version_bytes);
 
     if !version.is_compatible(&VERSION) {
-        return Err(Error::Incompatible);
+        return Err(Error::Incompatible(
+            version.to_string(),
+            VERSION.to_string(),
+        ));
     }
 
     Ok(version)

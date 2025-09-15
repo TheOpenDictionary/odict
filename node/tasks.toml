@@ -13,6 +13,11 @@ depends = ["setup:node"]
 dir = "node"
 run = "yarn build:wasm"
 
+["lint:node"]
+depends = ["setup:node"]
+dir = "node"
+run = "yarn lint"
+
 ["dev:wasm"]
 depends = ["build:wasm"]
 dir = "node"

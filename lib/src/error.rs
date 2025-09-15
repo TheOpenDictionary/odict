@@ -46,8 +46,11 @@ pub enum Error {
     #[error("Invalid remote dictionary name: {0}")]
     InvalidDictionaryName(String),
 
-    #[error("This file is not compatible with the current version of ODict")]
-    Incompatible,
+    #[error("This file version ({0}) is not compatible with the current version of ODict ({1})")]
+    Incompatible(String, String),
+
+    #[error("The input buffer is invalid or corrupted")]
+    InvalidBuffer(#[from] rkyv::rancor::Error),
 
     #[error("The input does not have a valid ODict file signature")]
     InvalidSignature,

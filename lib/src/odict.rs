@@ -4,8 +4,6 @@
 
 use std::path::PathBuf;
 
-use rkyv::access_unchecked;
-
 use crate::version::SemanticVersion;
 
 #[derive(Clone)]
@@ -42,6 +40,9 @@ impl OpenDictionary {
     }
 
     pub fn contents(&self) -> crate::Result<&crate::schema::ArchivedDictionary> {
-        Ok(unsafe { access_unchecked::<crate::schema::ArchivedDictionary>(&self.bytes[..]) })
+        Ok(rkyv::access::<
+            crate::schema::ArchivedDictionary,
+            rkyv::rancor::Error,
+        >(&self.bytes[..])?)
     }
 }
