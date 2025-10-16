@@ -1,4 +1,12 @@
 {
   "java.compile.nullAnalysis.mode": "automatic",
-  "rust-analyzer.procMacro.ignored": { "napi-derive": ["napi"] }
+  "rust-analyzer.procMacro.ignored": {
+    "napi-derive": [
+      "napi"
+    ]
+  },
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/Users/tjnickerson/.local/share/mise/shims/node"
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv"
 }

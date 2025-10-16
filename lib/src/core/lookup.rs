@@ -12,9 +12,9 @@ pub enum LookupStrategy {
 
 #[derive(Debug, Clone)]
 pub struct LookupOptions {
-    /// Maximum number of redirects to follow via see_also links.
-    /// None means no following, Some(u32::MAX) provides infinite following (old behavior).
-    pub follow: Option<u32>,
+    /// Whether to follow see_also links until finding an entry with etymologies.
+    /// true means follow redirects until etymology found, false means no following.
+    pub follow: bool,
     pub strategy: LookupStrategy,
     pub insensitive: bool,
 }
@@ -28,14 +28,14 @@ impl AsRef<LookupOptions> for LookupOptions {
 impl LookupOptions {
     pub fn default() -> Self {
         Self {
-            follow: None,
+            follow: false,
             strategy: LookupStrategy::Exact,
             insensitive: false,
         }
     }
 
-    pub fn follow(mut self, follow: u32) -> Self {
-        self.follow = Some(follow);
+    pub fn follow(mut self, follow: bool) -> Self {
+        self.follow = follow;
         self
     }
 
@@ -65,39 +65,51 @@ macro_rules! lookup {
         impl $tys {
             fn find_entry<'a>(
                 &'a self,
-                follow: &Option<u32>,
+                follow: &bool,
                 insensitive: &bool,
                 query: &str,
                 directed_from: Option<&'a $ret>,
-            ) -> $opt<LookupResult<&'a $ret>> {
+                path: &mut Vec<String>,
+            ) -> crate::Result<$opt<LookupResult<&'a $ret>>> {
+                // Check for redirect loop
+                if path.contains(&query.to_string()) {
+                    // Build the loop chain from the path in order
+                    let mut chain = path.clone();
+                    chain.push(query.to_string());
+                    return Err(crate::Error::RedirectLoop(chain.join(" -> ")));
+                }
+
+                // Add current query to path
+                path.push(query.to_string());
+
                 // Try exact match first
                 if let Some(entry) = self.entries.get(query) {
-                    // Follow an alias if it exists and we have redirects remaining
-                    if let Some(max_redirects) = follow {
-                        if *max_redirects > 0 {
-                            if let Option::Some(also) = &entry.see_also.as_ref() {
-                                if also.len() > 0 {
-                                    // Decrement redirect count for recursive call
-                                    let remaining_redirects = if *max_redirects == u32::MAX {
-                                        Some(u32::MAX) // Keep infinite
-                                    } else {
-                                        Some(max_redirects - 1)
-                                    };
-                                    return self.find_entry(
-                                        &remaining_redirects,
-                                        insensitive,
-                                        also,
-                                        directed_from.or(Some(entry)),
-                                    );
-                                }
+                    // Follow an alias if follow is true, entry has no etymologies, and see_also exists
+                    if *follow && entry.etymologies.is_empty() {
+                        if let Option::Some(also) = &entry.see_also.as_ref() {
+                            if also.len() > 0 {
+                                // Recursively follow the redirect
+                                let result = self.find_entry(
+                                    follow,
+                                    insensitive,
+                                    also,
+                                    directed_from.or(Some(entry)),
+                                    path,
+                                );
+
+                                path.pop();
+
+                                return result;
                             }
                         }
                     }
 
-                    return $opt::Some(LookupResult {
+                    path.pop();
+
+                    return Ok($opt::Some(LookupResult {
                         entry,
                         directed_from,
-                    });
+                    }));
                 }
 
                 // If insensitive flag is true and exact match failed, try with lowercase
@@ -106,16 +118,20 @@ macro_rules! lookup {
 
                     // Only try lowercase if it's different from the original query
                     if query_lower != query {
-                        // Try direct lookup with lowercase (reuse all the same logic)
-                        if let $opt::Some(result) =
-                            self.find_entry(follow, &false, &query_lower, directed_from)
+                        // Try direct lookup with lowercase (keep insensitive flag for redirect following)
+                        if let Ok($opt::Some(result)) =
+                            self.find_entry(follow, insensitive, &query_lower, directed_from, path)
                         {
-                            return $opt::Some(result);
+                            path.pop();
+                            return Ok($opt::Some(result));
                         }
                     }
                 }
 
-                $opt::None
+                // Remove from path since we're not following any redirects
+                path.pop();
+
+                Ok($opt::None)
             }
 
             fn perform_lookup<'a, Options>(
@@ -132,38 +148,53 @@ macro_rules! lookup {
                     insensitive,
                 } = options.as_ref();
 
-                if let $opt::Some(result) = self.find_entry(follow, insensitive, query, None) {
-                    return Ok(vec![result]);
-                }
+                let mut path = Vec::new();
 
-                let mut results: Vec<LookupResult<&$ret>> = Vec::new();
+                return match self.find_entry(follow, insensitive, query, None, &mut path)? {
+                    $opt::Some(result) => Ok(vec![result]),
+                    $opt::None => {
+                        let mut results: Vec<LookupResult<&$ret>> = Vec::new();
 
-                if let LookupStrategy::Split(min_length) = strategy {
-                    let chars: Vec<_> = query.chars().collect();
-                    let mut start = 0;
-                    let mut end = chars.len();
+                        if let LookupStrategy::Split(min_length) = strategy {
+                            let chars: Vec<_> = query.chars().collect();
+                            let mut start = 0;
+                            let mut end = chars.len();
 
-                    while start < end {
-                        let substr: String = chars[start..end].iter().collect();
-                        let maybe_entry =
-                            self.find_entry(follow, insensitive, substr.as_str(), None);
+                            while start < end {
+                                let substr: String = chars[start..end].iter().collect();
+                                let mut substr_path = Vec::new();
+                                let maybe_entry = self.find_entry(
+                                    follow,
+                                    insensitive,
+                                    substr.as_str(),
+                                    None,
+                                    &mut substr_path,
+                                );
 
-                        if maybe_entry.is_some() || substr.len() <= *min_length {
-                            start = end;
-                            end = chars.len();
+                                match maybe_entry {
+                                    Ok($opt::Some(result)) => {
+                                        results.push(result);
+                                        start = end;
+                                        end = chars.len();
+                                        continue;
+                                    }
+                                    Ok($opt::None) => {
+                                        if substr.len() <= *min_length {
+                                            start = end;
+                                            end = chars.len();
+                                            continue;
+                                        }
+                                    }
+                                    Err(e) => return Err(e),
+                                }
 
-                            if let $opt::Some(result) = maybe_entry {
-                                results.push(result);
+                                end -= 1;
                             }
-
-                            continue;
                         }
 
-                        end -= 1;
+                        Ok(results)
                     }
-                }
-
-                Ok(results)
+                };
             }
 
             pub fn lookup<'a, 'b, Query, Options>(

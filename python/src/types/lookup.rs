@@ -57,9 +57,9 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 
         if let Some(follow) = opts.follow {
             options = options.follow(match follow {
-                Either::Left(true) => u32::MAX,
-                Either::Left(false) => 0,
-                Either::Right(num) => num,
+                Either::Left(bool_val) => bool_val,
+                Either::Right(0) => false,
+                Either::Right(_) => true, // Any non-zero number means follow
             });
         }
 
