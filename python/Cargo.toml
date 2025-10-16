@@ -18,4 +18,4 @@ internal = { path = "../internal", features = ["load"] }
 either = { version = "*" }
 structural-convert = { workspace = true }
 merge = { workspace = true }
-tokio = { version = "1.47", features = ["full"] }
+tokio = { version = "1.48", features = ["full"] }
