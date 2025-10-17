@@ -2,7 +2,7 @@
 "cargo:cargo-nextest" = "0.9.92"
 node = "22.19.0"
 "cargo:cargo-dist" = "0.30.0"
-python = "3.13.7"
+python = "3.14.0"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
 uv = "latest"
