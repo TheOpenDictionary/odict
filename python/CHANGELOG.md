@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.8.0...python/v2.0.0) (2025-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282))
+
+### Features
+
+* **lookup:** Update follow logic ([#1307](https://github.com/TheOpenDictionary/odict/issues/1307)) ([0aa9a53](https://github.com/TheOpenDictionary/odict/commit/0aa9a532def5b1f544f75f2e7ad3540e3f90cf55))
+* Support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282)) ([326b325](https://github.com/TheOpenDictionary/odict/commit/326b325efd4a1ea1327ae2e36f55fe6c13663ca1))
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.7.0...python/v1.8.0) (2025-07-12)
 
 
