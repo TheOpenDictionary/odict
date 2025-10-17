@@ -9,83 +9,83 @@ use super::Entry;
 #[napi(object)]
 #[derive(Merge, Clone)]
 pub struct LookupOptions {
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub split: Option<u32>,
-  /// Maximum number of redirects to follow via see_also links.
-  /// Pass true for infinite following, false for no following, or a number for specific limit.
-  #[napi(ts_type = "boolean | number")]
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub follow: Option<Either<bool, u32>>,
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub insensitive: Option<bool>,
+    #[merge(strategy = merge::option::overwrite_none)]
+    pub split: Option<u32>,
+    /// Whether to follow see_also redirects until finding an entry with etymologies.
+    /// Pass true to follow until etymology found, false for no following. Numbers are converted to boolean for backward compatibility (0=false, >0=true).
+    #[napi(ts_type = "boolean | number")]
+    #[merge(strategy = merge::option::overwrite_none)]
+    pub follow: Option<Either<bool, u32>>,
+    #[merge(strategy = merge::option::overwrite_none)]
+    pub insensitive: Option<bool>,
 }
 
 impl Default for LookupOptions {
-  fn default() -> Self {
-    LookupOptions {
-      split: None,
-      follow: None,
-      insensitive: None,
+    fn default() -> Self {
+        LookupOptions {
+            split: None,
+            follow: None,
+            insensitive: None,
+        }
     }
-  }
 }
 
 impl From<LookupOptions> for odict::lookup::LookupOptions {
-  fn from(opts: LookupOptions) -> Self {
-    let mut options = odict::lookup::LookupOptions::default();
+    fn from(opts: LookupOptions) -> Self {
+        let mut options = odict::lookup::LookupOptions::default();
 
-    if let Some(split) = opts.split {
-      options = options.strategy(odict::lookup::LookupStrategy::Split(split as usize));
+        if let Some(split) = opts.split {
+            options = options.strategy(odict::lookup::LookupStrategy::Split(split as usize));
+        }
+
+        if let Some(follow) = opts.follow {
+            options = options.follow(match follow {
+                Either::A(bool_val) => bool_val,
+                Either::B(0) => false,
+                Either::B(_) => true, // Any non-zero number means follow
+            });
+        }
+
+        if let Some(insensitive) = opts.insensitive {
+            options = options.insensitive(insensitive);
+        }
+
+        options
     }
-
-    if let Some(follow) = opts.follow {
-      options = options.follow(match follow {
-        Either::A(true) => u32::MAX,
-        Either::A(false) => 0,
-        Either::B(num) => num,
-      });
-    }
-
-    if let Some(insensitive) = opts.insensitive {
-      options = options.insensitive(insensitive);
-    }
-
-    options
-  }
 }
 
 #[napi(object)]
 pub struct LookupResult {
-  pub entry: Entry,
-  pub directed_from: Option<Entry>,
+    pub entry: Entry,
+    pub directed_from: Option<Entry>,
 }
 
 impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
-  fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
-    let entry = Entry::from(result.entry);
-    let directed_from = result.directed_from.map(|s| Entry::from(s));
+    fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
+        let entry = Entry::from(result.entry);
+        let directed_from = result.directed_from.map(|s| Entry::from(s));
 
-    Self {
-      entry,
-      directed_from,
+        Self {
+            entry,
+            directed_from,
+        }
     }
-  }
 }
 
 impl TryFrom<&odict::lookup::LookupResult<&ArchivedEntry>> for LookupResult {
-  type Error = napi::Error;
+    type Error = napi::Error;
 
-  fn try_from(result: &odict::lookup::LookupResult<&ArchivedEntry>) -> napi::Result<Self> {
-    let entry = Entry::from(result.entry.deserialize().map_err(cast_error)?);
+    fn try_from(result: &odict::lookup::LookupResult<&ArchivedEntry>) -> napi::Result<Self> {
+        let entry = Entry::from(result.entry.deserialize().map_err(cast_error)?);
 
-    let directed_from = match result.directed_from {
-      Some(e) => Some(Entry::from(e.deserialize().map_err(cast_error)?)),
-      None => None,
-    };
+        let directed_from = match result.directed_from {
+            Some(e) => Some(Entry::from(e.deserialize().map_err(cast_error)?)),
+            None => None,
+        };
 
-    Ok(LookupResult {
-      entry,
-      directed_from,
-    })
-  }
+        Ok(LookupResult {
+            entry,
+            directed_from,
+        })
+    }
 }

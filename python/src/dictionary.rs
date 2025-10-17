@@ -180,9 +180,9 @@ impl OpenDictionary {
 
         if let Some(f) = follow {
             opts = opts.follow(match f {
-                Either::Left(true) => u32::MAX,
-                Either::Left(false) => 0,
-                Either::Right(num) => num,
+                Either::Left(bool_val) => bool_val,
+                Either::Right(0) => false,
+                Either::Right(_) => true, // Any non-zero number means follow
             });
         }
 

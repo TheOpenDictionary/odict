@@ -25,10 +25,9 @@ pub struct TokenizeArgs {
     #[arg(
         short = 'F',
         long,
-        default_value_t = 0,
-        help = "Number of redirects to follow via \"see also\" attributes. Use a high number like 999999 for infinite following (old behavior)."
+        help = "Follow see_also redirects until finding an entry with etymologies"
     )]
-    follow: u32,
+    follow: bool,
 
     #[arg(
         short = 'i',

@@ -85,8 +85,8 @@ export interface LoadOptions {
 export interface LookupOptions {
   split?: number
   /**
-   * Maximum number of redirects to follow via see_also links.
-   * Pass true for infinite following, false for no following, or a number for specific limit.
+   * Whether to follow see_also redirects until finding an entry with etymologies.
+   * Pass true to follow until etymology found, false for no following. Numbers are converted to boolean for backward compatibility (0=false, >0=true).
    */
   follow?: boolean | number
   insensitive?: boolean

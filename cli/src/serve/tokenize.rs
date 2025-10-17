@@ -11,7 +11,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct TokenizeRequest {
     text: String,
-    follow: Option<u32>,
+    follow: Option<bool>,
 }
 
 #[derive(Debug, Display, Error)]
@@ -72,7 +72,7 @@ async fn handle_tokenize(
             name: dictionary_name.to_string(),
         })?;
 
-    let opts = TokenizeOptions::default().follow(follow.unwrap_or(0));
+    let opts = TokenizeOptions::default().follow(follow.unwrap_or(false));
 
     let tokens = dictionary
         .tokenize(&text, opts)
