@@ -13,7 +13,6 @@ pub enum LookupStrategy {
 #[derive(Debug, Clone)]
 pub struct LookupOptions {
     /// Whether to follow see_also links until finding an entry with etymologies.
-    /// true means follow redirects until etymology found, false means no following.
     pub follow: bool,
     pub strategy: LookupStrategy,
     pub insensitive: bool,
@@ -118,7 +117,6 @@ macro_rules! lookup {
 
                     // Only try lowercase if it's different from the original query
                     if query_lower != query {
-                        // Try direct lookup with lowercase (keep insensitive flag for redirect following)
                         if let Ok($opt::Some(result)) =
                             self.find_entry(follow, insensitive, &query_lower, directed_from, path)
                         {
@@ -150,51 +148,52 @@ macro_rules! lookup {
 
                 let mut path = Vec::new();
 
-                return match self.find_entry(follow, insensitive, query, None, &mut path)? {
-                    $opt::Some(result) => Ok(vec![result]),
-                    $opt::None => {
-                        let mut results: Vec<LookupResult<&$ret>> = Vec::new();
+                if let $opt::Some(result) =
+                    self.find_entry(follow, insensitive, query, None, &mut path)?
+                {
+                    return Ok(vec![result]);
+                }
 
-                        if let LookupStrategy::Split(min_length) = strategy {
-                            let chars: Vec<_> = query.chars().collect();
-                            let mut start = 0;
-                            let mut end = chars.len();
+                let mut results: Vec<LookupResult<&$ret>> = Vec::new();
 
-                            while start < end {
-                                let substr: String = chars[start..end].iter().collect();
-                                let mut substr_path = Vec::new();
-                                let maybe_entry = self.find_entry(
-                                    follow,
-                                    insensitive,
-                                    substr.as_str(),
-                                    None,
-                                    &mut substr_path,
-                                );
+                if let LookupStrategy::Split(min_length) = strategy {
+                    let chars: Vec<_> = query.chars().collect();
+                    let mut start = 0;
+                    let mut end = chars.len();
 
-                                match maybe_entry {
-                                    Ok($opt::Some(result)) => {
-                                        results.push(result);
-                                        start = end;
-                                        end = chars.len();
-                                        continue;
-                                    }
-                                    Ok($opt::None) => {
-                                        if substr.len() <= *min_length {
-                                            start = end;
-                                            end = chars.len();
-                                            continue;
-                                        }
-                                    }
-                                    Err(e) => return Err(e),
-                                }
+                    while start < end {
+                        let substr: String = chars[start..end].iter().collect();
+                        let mut substr_path = Vec::new();
+                        let maybe_entry = self.find_entry(
+                            follow,
+                            insensitive,
+                            substr.as_str(),
+                            None,
+                            &mut substr_path,
+                        );
 
-                                end -= 1;
+                        match maybe_entry {
+                            Ok($opt::Some(result)) => {
+                                results.push(result);
+                                start = end;
+                                end = chars.len();
+                                continue;
                             }
+                            Ok($opt::None) => {
+                                if substr.len() <= *min_length {
+                                    start = end;
+                                    end = chars.len();
+                                    continue;
+                                }
+                            }
+                            Err(e) => return Err(e),
                         }
 
-                        Ok(results)
+                        end -= 1;
                     }
-                };
+                }
+
+                Ok(results)
             }
 
             pub fn lookup<'a, 'b, Query, Options>(

@@ -1,13 +1,11 @@
 use merge::Merge;
-use napi::bindgen_prelude::*;
 use odict::tokenize::Language;
 
 #[napi(object)]
 #[derive(Merge, Clone)]
 pub struct TokenizeOptions {
-    #[napi(ts_type = "boolean | number")]
     #[merge(strategy = merge::option::overwrite_none)]
-    pub follow: Option<Either<bool, u32>>,
+    pub follow: Option<bool>,
     #[merge(strategy = merge::option::overwrite_none)]
     pub allow_list: Option<Vec<String>>,
     #[merge(strategy = merge::option::overwrite_none)]
@@ -29,11 +27,7 @@ impl From<TokenizeOptions> for odict::tokenize::TokenizeOptions {
         let mut options = odict::tokenize::TokenizeOptions::default();
 
         if let Some(follow) = opts.follow {
-            options = options.follow(match follow {
-                Either::A(bool_val) => bool_val,
-                Either::B(0) => false,
-                Either::B(_) => true, // Any non-zero number means follow
-            });
+            options = options.follow(follow);
         }
 
         if let Some(insensitive) = opts.insensitive {
