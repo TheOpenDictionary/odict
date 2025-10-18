@@ -51,8 +51,12 @@ impl OpenDictionary {
     }
 
     #[new]
-    pub fn new(data: Vec<u8>) -> PyResult<Self> {
-        let dict = odict::OpenDictionary::from_bytes(data).map_err(cast_error)?;
+    pub fn new(data: Either<Vec<u8>, String>) -> PyResult<Self> {
+        let bytes = match data {
+            Either::Left(bytes) => bytes,
+            Either::Right(string) => compile(string)?,
+        };
+        let dict = odict::OpenDictionary::from_bytes(bytes).map_err(cast_error)?;
         Ok(Self { dict })
     }
 

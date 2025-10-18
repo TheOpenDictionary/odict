@@ -24,11 +24,7 @@ pub struct LookupOptions {
 impl LookupOptions {
     #[new]
     #[pyo3(signature = (split=None, follow=None, insensitive=None))]
-    pub fn new(
-        split: Option<u32>,
-        follow: Option<Either<bool, u32>>,
-        insensitive: Option<bool>,
-    ) -> Self {
+    pub fn new(split: Option<u32>, follow: Option<bool>, insensitive: Option<bool>) -> Self {
         LookupOptions {
             split,
             follow,
