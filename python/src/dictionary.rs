@@ -100,7 +100,7 @@ impl OpenDictionary {
         &self,
         query: Either<String, Vec<String>>,
         split: Option<u32>,
-        follow: Option<Either<bool, u32>>,
+        follow: Option<bool>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];

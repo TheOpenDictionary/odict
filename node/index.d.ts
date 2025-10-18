@@ -84,11 +84,7 @@ export interface LoadOptions {
 
 export interface LookupOptions {
   split?: number
-  /**
-   * Whether to follow see_also redirects until finding an entry with etymologies.
-   * Pass true to follow until etymology found, false for no following. Numbers are converted to boolean for backward compatibility (0=false, >0=true).
-   */
-  follow?: boolean | number
+  follow?: boolean
   insensitive?: boolean
 }
 
@@ -146,7 +142,7 @@ export interface Token {
 }
 
 export interface TokenizeOptions {
-  follow?: boolean | number
+  follow?: boolean
   allowList?: Array<string>
   insensitive?: boolean
 }
