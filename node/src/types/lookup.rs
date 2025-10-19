@@ -1,4 +1,5 @@
 use merge::Merge;
+use napi::bindgen_prelude::*;
 use odict::schema::ArchivedEntry;
 
 use crate::utils::cast_error;
@@ -10,8 +11,11 @@ use super::Entry;
 pub struct LookupOptions {
     #[merge(strategy = merge::option::overwrite_none)]
     pub split: Option<u32>,
+    /// Whether to follow see_also redirects until finding an entry with etymologies.
+    /// Pass true to follow until etymology found, false for no following. Numbers are converted to boolean for backward compatibility (0=false, >0=true).
+    #[napi(ts_type = "boolean | number")]
     #[merge(strategy = merge::option::overwrite_none)]
-    pub follow: Option<bool>,
+    pub follow: Option<Either<bool, u32>>,
     #[merge(strategy = merge::option::overwrite_none)]
     pub insensitive: Option<bool>,
 }
@@ -35,7 +39,11 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
         }
 
         if let Some(follow) = opts.follow {
-            options = options.follow(follow);
+            options = options.follow(match follow {
+                Either::A(bool_val) => bool_val,
+                Either::B(0) => false,
+                Either::B(_) => true, // Any non-zero number means follow
+            });
         }
 
         if let Some(insensitive) = opts.insensitive {

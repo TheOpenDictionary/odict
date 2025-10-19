@@ -134,7 +134,7 @@ def test_lookup_case_insensitive(dict1):
 def test_lookup_case_insensitive_with_follow(dict1):
     # Test case-insensitive lookup combined with follow option
     # (using high number for infinite following)
-    result = dict1.lookup("RaN", follow=True, insensitive=True)
+    result = dict1.lookup("RaN", follow=999999, insensitive=True)
     assert len(result) == 1
     assert result[0].entry.term == "run"
     assert result[0].directed_from.term == "ran"
@@ -156,7 +156,7 @@ def test_lookup_follow_boolean_false(dict1):
 
 def test_lookup_follow_number(dict1):
     # Test follow with specific number
-    result = dict1.lookup("ran", follow=True)
+    result = dict1.lookup("ran", follow=5)
     assert len(result) == 1
     assert result[0].entry.term == "run"
     assert result[0].directed_from.term == "ran"

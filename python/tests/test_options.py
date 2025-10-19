@@ -58,8 +58,8 @@ def test_lookup_options_creation():
     assert opts1.insensitive is True
 
     # Test with follow as number
-    opts2 = LookupOptions(follow=True)
-    assert opts2.follow == True
+    opts2 = LookupOptions(follow=10)
+    assert opts2.follow == 10
 
     # Test with follow as False
     opts3 = LookupOptions(follow=False)

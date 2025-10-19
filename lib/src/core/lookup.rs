@@ -13,6 +13,7 @@ pub enum LookupStrategy {
 #[derive(Debug, Clone)]
 pub struct LookupOptions {
     /// Whether to follow see_also links until finding an entry with etymologies.
+    /// true means follow redirects until etymology found, false means no following.
     pub follow: bool,
     pub strategy: LookupStrategy,
     pub insensitive: bool,
@@ -117,6 +118,7 @@ macro_rules! lookup {
 
                     // Only try lowercase if it's different from the original query
                     if query_lower != query {
+                        // Try direct lookup with lowercase (keep insensitive flag for redirect following)
                         if let Ok($opt::Some(result)) =
                             self.find_entry(follow, insensitive, &query_lower, directed_from, path)
                         {
@@ -148,52 +150,51 @@ macro_rules! lookup {
 
                 let mut path = Vec::new();
 
-                if let $opt::Some(result) =
-                    self.find_entry(follow, insensitive, query, None, &mut path)?
-                {
-                    return Ok(vec![result]);
-                }
+                return match self.find_entry(follow, insensitive, query, None, &mut path)? {
+                    $opt::Some(result) => Ok(vec![result]),
+                    $opt::None => {
+                        let mut results: Vec<LookupResult<&$ret>> = Vec::new();
 
-                let mut results: Vec<LookupResult<&$ret>> = Vec::new();
+                        if let LookupStrategy::Split(min_length) = strategy {
+                            let chars: Vec<_> = query.chars().collect();
+                            let mut start = 0;
+                            let mut end = chars.len();
 
-                if let LookupStrategy::Split(min_length) = strategy {
-                    let chars: Vec<_> = query.chars().collect();
-                    let mut start = 0;
-                    let mut end = chars.len();
+                            while start < end {
+                                let substr: String = chars[start..end].iter().collect();
+                                let mut substr_path = Vec::new();
+                                let maybe_entry = self.find_entry(
+                                    follow,
+                                    insensitive,
+                                    substr.as_str(),
+                                    None,
+                                    &mut substr_path,
+                                );
 
-                    while start < end {
-                        let substr: String = chars[start..end].iter().collect();
-                        let mut substr_path = Vec::new();
-                        let maybe_entry = self.find_entry(
-                            follow,
-                            insensitive,
-                            substr.as_str(),
-                            None,
-                            &mut substr_path,
-                        );
-
-                        match maybe_entry {
-                            Ok($opt::Some(result)) => {
-                                results.push(result);
-                                start = end;
-                                end = chars.len();
-                                continue;
-                            }
-                            Ok($opt::None) => {
-                                if substr.len() <= *min_length {
-                                    start = end;
-                                    end = chars.len();
-                                    continue;
+                                match maybe_entry {
+                                    Ok($opt::Some(result)) => {
+                                        results.push(result);
+                                        start = end;
+                                        end = chars.len();
+                                        continue;
+                                    }
+                                    Ok($opt::None) => {
+                                        if substr.len() <= *min_length {
+                                            start = end;
+                                            end = chars.len();
+                                            continue;
+                                        }
+                                    }
+                                    Err(e) => return Err(e),
                                 }
+
+                                end -= 1;
                             }
-                            Err(e) => return Err(e),
                         }
 
-                        end -= 1;
+                        Ok(results)
                     }
-                }
-
-                Ok(results)
+                };
             }
 
             pub fn lookup<'a, 'b, Query, Options>(

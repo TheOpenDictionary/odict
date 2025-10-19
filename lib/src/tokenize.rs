@@ -26,6 +26,7 @@ pub struct Token<T> {
 #[derive(Default)]
 pub struct TokenizeOptions {
     /// Whether to follow see_also links until finding an entry with etymologies.
+    /// true means follow redirects until etymology found, false means no following.
     pub follow: bool,
     // The list of languages to be considered during tokenization. Defaults to all languages supported by whatlang.
     pub allow_list: Option<Vec<Language>>,
