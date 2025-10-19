@@ -1,5 +1,5 @@
 use rkyv::{
-    deserialize, to_bytes,
+    deserialize,
     with::{AsBox, MapNiche},
 };
 use std::{
@@ -7,7 +7,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use crate::{error::Error, schema::Etymology, serializable};
+use crate::{error::Error, schema::Etymology, se::serialize_interned, serializable};
 
 use super::{EntryRef, MediaURL};
 
@@ -68,9 +68,7 @@ impl Borrow<str> for ArchivedEntry {
 
 impl Entry {
     pub fn serialize(&self) -> crate::Result<Vec<u8>> {
-        let bytes =
-            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
-
+        let bytes = serialize_interned::<_, rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 }

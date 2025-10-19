@@ -1,4 +1,5 @@
 use rkyv::with::{AsBox, MapNiche};
+use rkyv_intern::Intern;
 
 use crate::serializable;
 
@@ -13,6 +14,7 @@ serializable! {
     pub id: Option<String>,
 
     #[serde(rename = "@value")]
+    #[rkyv(with = Intern)]
     pub value: String,
 
     #[serde(default, rename="example")]

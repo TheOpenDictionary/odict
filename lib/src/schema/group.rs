@@ -14,6 +14,7 @@ serializable! {
     pub id: Option<String>,
 
     #[serde(rename = "@description")]
+    #[rkyv(with = rkyv_intern::Intern)]
     pub description: String,
 
     #[serde(default, rename = "definition")]

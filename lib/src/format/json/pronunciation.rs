@@ -1,13 +1,14 @@
+use icu_locale_core::LanguageIdentifier;
 use serde::Serialize;
 use structural_convert::StructuralConvert;
 
 use super::media_url::MediaURLJSON;
-use crate::schema::{Pronunciation, PronunciationKind};
+use crate::schema::Pronunciation;
 
 #[derive(Serialize, PartialEq, Eq, StructuralConvert)]
 #[convert(from(Pronunciation))]
 pub struct PronunciationJSON {
-    pub kind: Option<PronunciationKind>,
+    pub kind: LanguageIdentifier,
 
     pub value: String,
 

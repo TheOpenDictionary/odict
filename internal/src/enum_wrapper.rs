@@ -34,7 +34,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use odict::schema::{FormKind, PartOfSpeech, PronunciationKind};
+    use odict::schema::{FormKind, PartOfSpeech};
 
     #[test]
     fn test_to_enum_wrapper_pos_custom() {
@@ -52,24 +52,6 @@ mod tests {
         assert_eq!(wrapper.name, "PartOfSpeech");
         assert_eq!(wrapper.variant, "adj_kari");
         assert_eq!(wrapper.value, "'kari' adjective (archaic)");
-    }
-
-    #[test]
-    fn test_to_enum_wrapper_pronunciation_kind_custom() {
-        let wrapper = PronunciationKind::Other("Custom".to_string()).to_enum_wrapper();
-
-        assert_eq!(wrapper.name, "PronunciationKind");
-        assert_eq!(wrapper.variant, "other");
-        assert_eq!(wrapper.value, "Custom");
-    }
-
-    #[test]
-    fn test_to_enum_wrapper_pronunciation_kind() {
-        let wrapper = PronunciationKind::IPA.to_enum_wrapper();
-
-        assert_eq!(wrapper.name, "PronunciationKind");
-        assert_eq!(wrapper.variant, "ipa");
-        assert_eq!(wrapper.value, "ipa");
     }
 
     #[test]
