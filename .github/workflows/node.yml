@@ -2,22 +2,22 @@ name: Node
 env:
   DEBUG: napi:*
   APP_NAME: node
-  MACOSX_DEPLOYMENT_TARGET: '10.13'
-  CARGO_INCREMENTAL: '1'
-'on':
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
+  CARGO_INCREMENTAL: "1"
+"on":
   workflow_dispatch:
   pull_request:
     paths:
-      - 'node/**'
-      - 'lib/**'
-      - '**/tasks.toml'
-      - 'tasks.toml'
-      - 'examples/**'
+      - "node/**"
+      - "lib/**"
+      - "**/tasks.toml"
+      - "tasks.toml"
+      - "examples/**"
   push:
     branches:
       - main
     tags:
-      - 'node**'
+      - "node**"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -43,7 +43,7 @@ jobs:
   #     - name: Cargo fmt
   #       run: cargo fmt -- --check
   #     - name: Clippy
-        # run: cargo clippy
+  # run: cargo clippy
   build:
     strategy:
       fail-fast: false
@@ -162,7 +162,7 @@ jobs:
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: '14.2'
+          version: "14.2"
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
@@ -217,8 +217,8 @@ jobs:
             target: x86_64-apple-darwin
             architecture: x64
         node:
-          - '20'
-          - '22'
+          - "20"
+          - "22"
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v5
@@ -254,8 +254,8 @@ jobs:
           - aarch64-unknown-linux-musl
           - armv7-unknown-linux-gnueabihf
         node:
-          - '20'
-          - '22'
+          - "20"
+          - "22"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v5
@@ -307,8 +307,8 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
-          options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          run: NO_NETWORK=1 yarn workspace @odict/node test
+          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
+          run: yarn workspace @odict/node test
   test-wasi:
     name: Test WASI target
     needs:

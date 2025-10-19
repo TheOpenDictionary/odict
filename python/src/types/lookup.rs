@@ -13,7 +13,7 @@ pub struct LookupOptions {
 
     #[pyo3(get, set)]
     #[merge(strategy = merge::option::overwrite_none)]
-    pub follow: Option<Either<bool, u32>>,
+    pub follow: Option<bool>,
 
     #[pyo3(get, set)]
     #[merge(strategy = merge::option::overwrite_none)]
@@ -24,11 +24,7 @@ pub struct LookupOptions {
 impl LookupOptions {
     #[new]
     #[pyo3(signature = (split=None, follow=None, insensitive=None))]
-    pub fn new(
-        split: Option<u32>,
-        follow: Option<Either<bool, u32>>,
-        insensitive: Option<bool>,
-    ) -> Self {
+    pub fn new(split: Option<u32>, follow: Option<bool>, insensitive: Option<bool>) -> Self {
         LookupOptions {
             split,
             follow,
@@ -56,11 +52,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
         }
 
         if let Some(follow) = opts.follow {
-            options = options.follow(match follow {
-                Either::Left(bool_val) => bool_val,
-                Either::Right(0) => false,
-                Either::Right(_) => true, // Any non-zero number means follow
-            });
+            options = options.follow(follow);
         }
 
         if let Some(insensitive) = opts.insensitive {
