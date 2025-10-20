@@ -45,12 +45,12 @@ impl Default for DownloadOptions<'_> {
 }
 
 impl<'a> DownloadOptions<'a> {
-    pub fn with_caching(mut self, value: bool) -> Self {
+    pub fn caching(mut self, value: bool) -> Self {
         self.caching = value;
         self
     }
 
-    pub fn with_out_dir<P: AsRef<Path>>(mut self, path: P) -> Self {
+    pub fn out_dir<P: AsRef<Path>>(mut self, path: P) -> Self {
         self.out_dir = Some(path.as_ref().to_path_buf());
         self
     }

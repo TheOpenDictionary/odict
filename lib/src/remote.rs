@@ -24,13 +24,13 @@ impl<'a> RemoteOptions<'a> {
         self
     }
 
-    pub fn with_caching(mut self, caching: bool) -> Self {
-        self.download_options = self.download_options.with_caching(caching);
+    pub fn caching(mut self, caching: bool) -> Self {
+        self.download_options = self.download_options.caching(caching);
         self
     }
 
-    pub fn with_out_dir<P: AsRef<Path>>(mut self, out_dir: P) -> Self {
-        self.download_options = self.download_options.with_out_dir(out_dir);
+    pub fn out_dir<P: AsRef<Path>>(mut self, out_dir: P) -> Self {
+        self.download_options = self.download_options.out_dir(out_dir);
         self
     }
 

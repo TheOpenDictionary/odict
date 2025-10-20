@@ -38,12 +38,12 @@ impl RemoteLoadOptions {
         RemoteLoadOptions { out_dir, caching }
     }
 
-    pub fn with_out_dir(&mut self, out_dir: String) -> Self {
+    pub fn out_dir(&mut self, out_dir: String) -> Self {
         self.out_dir = Some(out_dir);
         self.clone()
     }
 
-    pub fn with_caching(&mut self, caching: bool) -> Self {
+    pub fn caching(&mut self, caching: bool) -> Self {
         self.caching = Some(caching);
         self.clone()
     }
@@ -81,11 +81,11 @@ impl TryFrom<LoadOptions> for internal::LoadDictionaryOptions<'_> {
             let mut ro = odict::remote::RemoteOptions::default();
 
             if let Some(caching) = remote_opts.caching {
-                ro = ro.with_caching(caching);
+                ro = ro.caching(caching);
             }
 
             if let Some(out_dir) = remote_opts.out_dir {
-                ro = ro.with_out_dir(out_dir);
+                ro = ro.out_dir(out_dir);
             }
 
             options = options.with_remote_options(ro);

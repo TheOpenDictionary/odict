@@ -50,11 +50,11 @@ impl TryFrom<LoadOptions> for internal::LoadDictionaryOptions<'_> {
             let mut ro = odict::remote::RemoteOptions::default();
 
             if let Some(caching) = remote_opts.caching {
-                ro = ro.with_caching(caching);
+                ro = ro.caching(caching);
             }
 
             if let Some(out_dir) = remote_opts.out_dir {
-                ro = ro.with_out_dir(out_dir);
+                ro = ro.out_dir(out_dir);
             }
 
             options = options.with_remote_options(ro);
