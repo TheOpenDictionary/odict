@@ -139,7 +139,7 @@ jobs:
             python3 -m virtualenv .venv
             source .venv/bin/activate
             pip install pytest syrupy pytest-asyncio
-            pip install theopendictionary --find-links dist --force-reinstall
+            pip install theopendictionary --no-index  --find-links dist --force-reinstall
             cd python && pytest
 
   windows:
@@ -175,7 +175,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/Scripts/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
           cd python && pytest
 
@@ -209,7 +209,7 @@ jobs:
           set -e
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install theopendictionary --find-links dist --force-reinstall
+          pip install theopendictionary --no-index --find-links dist --force-reinstall
           pip install pytest syrupy pytest-asyncio
           cd python && pytest
 

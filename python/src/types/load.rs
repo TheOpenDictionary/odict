@@ -14,11 +14,6 @@ impl AliasLoadOptions {
     pub fn new(path: Option<String>) -> Self {
         AliasLoadOptions { path }
     }
-
-    pub fn with_path(&mut self, path: String) -> Self {
-        self.path = Some(path);
-        self.clone()
-    }
 }
 
 #[pyclass]
@@ -36,16 +31,6 @@ impl RemoteLoadOptions {
     #[pyo3(signature = (out_dir=None, caching=None))]
     pub fn new(out_dir: Option<String>, caching: Option<bool>) -> Self {
         RemoteLoadOptions { out_dir, caching }
-    }
-
-    pub fn out_dir(&mut self, out_dir: String) -> Self {
-        self.out_dir = Some(out_dir);
-        self.clone()
-    }
-
-    pub fn caching(&mut self, caching: bool) -> Self {
-        self.caching = Some(caching);
-        self.clone()
     }
 }
 
