@@ -1,5 +1,7 @@
 use std::fmt::{Debug, Display};
 
+use crate::schema::PronunciationKind;
+
 use super::{FormKind, PartOfSpeech};
 
 pub trait EnumIdentifier {
@@ -30,3 +32,4 @@ macro_rules! impl_enum_identifier {
 
 impl_enum_identifier!(PartOfSpeech);
 impl_enum_identifier!(FormKind);
+impl_enum_identifier!(PronunciationKind);

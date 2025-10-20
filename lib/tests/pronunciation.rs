@@ -1,19 +1,24 @@
 #[cfg(test)]
 mod pronunciation_tests {
-    use icu_locale_core::{langid, LanguageIdentifier};
-    use odict::schema::MediaURL;
+    use odict::schema::{MediaURL, PronunciationKind};
     use quick_xml::de::from_str;
 
     #[test]
     fn test_pronunciation_kind_serialization() {
-        let kind = langid!("und-fonipa");
+        let kind = PronunciationKind::IPA;
         let serialized = serde_json::to_string(&kind).unwrap();
+        assert_eq!(serialized, "\"ipa\"");
 
-        assert_eq!(serialized, "\"und-fonipa\"");
+        // Test deserialization including case-insensitivity
+        let deserialized: PronunciationKind = serde_json::from_str("\"ipa\"").unwrap();
 
-        let deserialized: LanguageIdentifier = serde_json::from_str("\"und-fonipa\"").unwrap();
+        assert!(matches!(deserialized, PronunciationKind::IPA));
 
-        assert_eq!(deserialized, kind);
+        let _expected = PronunciationKind::Other("wagegiles".into());
+
+        // Test Other variant
+        let deserialized: PronunciationKind = serde_json::from_str("\"wadegiles\"").unwrap();
+        assert!(matches!(deserialized, _expected));
     }
 
     #[test]
@@ -40,7 +45,7 @@ mod pronunciation_tests {
         let xml = r#"
         <entry term="你好">
           <ety>
-            <pronunciation kind="zh-latn-pinyin" value="ni hao">
+            <pronunciation kind="pinyin" value="ni hao">
               <url src="./audio.mp3" type="audio/mpeg" />
             </pronunciation>
           </ety>
@@ -54,8 +59,10 @@ mod pronunciation_tests {
         assert_eq!(entry.etymologies[0].pronunciations.len(), 1);
 
         let pronunciation = &entry.etymologies[0].pronunciations[0];
-
-        assert_eq!(pronunciation.kind, langid!("zh-Latn-pinyin"));
+        assert!(matches!(
+            pronunciation.kind,
+            Some(PronunciationKind::Pinyin)
+        ));
         assert_eq!(pronunciation.value, "ni hao");
         assert_eq!(pronunciation.media.len(), 1);
         assert_eq!(pronunciation.media[0].src, "./audio.mp3");
@@ -69,7 +76,7 @@ mod pronunciation_tests {
     fn test_parse_example_with_pronunciation() {
         let xml = r#"
         <example value="Hello, world!">
-          <pronunciation kind="und-fonipa" value="həˈləʊ wɜːld">
+          <pronunciation kind="ipa" value="həˈləʊ wɜːld">
             <url src="./hello.mp3" />
           </pronunciation>
         </example>
@@ -79,7 +86,7 @@ mod pronunciation_tests {
         assert_eq!(example.value, "Hello, world!");
         assert_eq!(example.pronunciations.len(), 1);
         let pronunciation = &example.pronunciations[0];
-        assert_eq!(pronunciation.kind, langid!("und-fonipa"));
+        assert!(matches!(pronunciation.kind, Some(PronunciationKind::IPA)));
         assert_eq!(pronunciation.value, "həˈləʊ wɜːld");
         assert_eq!(pronunciation.media.len(), 1);
         assert_eq!(pronunciation.media[0].src, "./hello.mp3");
@@ -90,10 +97,10 @@ mod pronunciation_tests {
         let xml = r#"
         <entry term="你好">
           <ety>
-            <pronunciation kind="zh-latn-pinyin" value="ni hao">
+            <pronunciation kind="pinyin" value="ni hao">
               <url src="./audio1.mp3" />
             </pronunciation>
-            <pronunciation kind="und-fonipa" value="ni˨˩ xɑʊ̯˧˥">
+            <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥">
               <url src="./audio2.mp3" />
             </pronunciation>
           </ety>
@@ -106,11 +113,11 @@ mod pronunciation_tests {
         assert_eq!(entry.etymologies[0].pronunciations.len(), 2);
 
         let pinyin = &entry.etymologies[0].pronunciations[0];
-        assert_eq!(pinyin.kind, langid!("zh-Latn-pinyin"));
+        assert!(matches!(pinyin.kind, Some(PronunciationKind::Pinyin)));
         assert_eq!(pinyin.value, "ni hao");
 
         let ipa = &entry.etymologies[0].pronunciations[1];
-        assert_eq!(ipa.kind, langid!("und-fonipa"));
+        assert!(matches!(ipa.kind, Some(PronunciationKind::IPA)));
         assert_eq!(ipa.value, "ni˨˩ xɑʊ̯˧˥");
     }
 }

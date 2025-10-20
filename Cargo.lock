@@ -1723,7 +1723,6 @@ checksum = "0cde2700ccaed3872079a65fb1a78f6c0a36c91570f28755dda67bc8f7d9f00a"
 dependencies = [
  "displaydoc",
  "litemap",
- "serde",
  "tinystr",
  "writeable",
  "zerovec",
@@ -2582,7 +2581,6 @@ dependencies = [
  "criterion",
  "dirs",
  "futures-util",
- "icu_locale_core",
  "insta",
  "map-macro",
  "pulldown-cmark",
@@ -4101,7 +4099,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5d4f6d1145dcb577acf783d4e601bc1d76a13337bb54e6233add580b07344c8b"
 dependencies = [
  "displaydoc",
- "serde",
  "zerovec",
 ]
 

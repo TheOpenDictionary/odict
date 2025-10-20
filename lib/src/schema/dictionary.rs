@@ -18,7 +18,7 @@ serializable! {
       pub id: ID,
 
       #[serde(rename = "@name")]
-      #[rkyv(with = MapNiche<AsBox>)]
+      #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
