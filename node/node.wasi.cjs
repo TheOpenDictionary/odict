@@ -110,4 +110,3 @@ const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule
 module.exports = __napiModule.exports
 module.exports.OpenDictionary = __napiModule.exports.OpenDictionary
 module.exports.compile = __napiModule.exports.compile
-module.exports.compile = __napiModule.exports.compile
