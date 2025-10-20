@@ -1,4 +1,3 @@
-use either::Either;
 use merge::Merge;
 use pyo3::prelude::*;
 

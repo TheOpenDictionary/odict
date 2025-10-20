@@ -79,6 +79,7 @@ export interface IndexOptions {
 
 export interface LoadOptions {
   alias?: AliasLoadOptions
+  remote?: RemoteLoadOptions
 }
 
 export interface LookupOptions {
@@ -108,6 +109,11 @@ export interface Pronunciation {
   kind?: EnumWrapper
   value: string
   media: Array<MediaUrl>
+}
+
+export interface RemoteLoadOptions {
+  outDir?: string
+  caching?: boolean
 }
 
 export interface SaveOptions {
