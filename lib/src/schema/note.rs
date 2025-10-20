@@ -1,5 +1,3 @@
-use rkyv::with::{AsBox, MapNiche};
-
 use crate::serializable;
 
 use super::example::Example;
@@ -12,11 +10,12 @@ serializable! {
     pub examples: Vec<Example>,
 
     #[serde(rename = "@id")]
-    #[rkyv(with = MapNiche<AsBox>)]
+    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
     #[serde(rename = "@value")]
+    #[rkyv(with = rkyv_intern::Intern)]
     pub value: String,
   }
 }

@@ -77,6 +77,13 @@ export interface IndexOptions {
   overwrite?: boolean
 }
 
+export interface LanguageIdentifier {
+  language: string
+  script?: string
+  region?: string
+  variants: Array<string>
+}
+
 export interface LoadOptions {
   alias?: AliasLoadOptions
 }
@@ -105,7 +112,7 @@ export interface Note {
 }
 
 export interface Pronunciation {
-  kind?: EnumWrapper
+  kind: LanguageIdentifier
   value: string
   media: Array<MediaUrl>
 }

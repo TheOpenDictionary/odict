@@ -1,11 +1,9 @@
-use rkyv::{
-    deserialize, to_bytes,
-    with::{AsBox, MapNiche},
-};
+use rkyv::deserialize;
+
 use std::collections::HashSet;
 use std::str::FromStr;
 
-use crate::{error::Error, serializable};
+use crate::{error::Error, se::serialize_interned, serializable};
 
 use super::{entry::Entry, id::ID};
 
@@ -17,7 +15,7 @@ serializable! {
       pub id: ID,
 
       #[serde(rename = "@name")]
-      #[rkyv(with = MapNiche<AsBox>)]
+      #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
@@ -66,8 +64,7 @@ impl FromStr for Dictionary {
 
 impl Dictionary {
     pub(crate) fn serialize(&self) -> crate::Result<Vec<u8>> {
-        let bytes =
-            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
+        let bytes = serialize_interned::<_, rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 }

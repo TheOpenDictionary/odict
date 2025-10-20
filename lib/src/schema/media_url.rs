@@ -1,5 +1,4 @@
 use crate::{serializable, Error};
-use rkyv::with::{AsBox, MapNiche};
 use url::Url;
 
 serializable! {
@@ -7,15 +6,16 @@ serializable! {
   #[serde(rename = "url")]
   pub struct MediaURL {
     #[serde(rename = "@src")]
+    #[rkyv(with = rkyv_intern::Intern)]
     pub src: String,
 
     #[serde(rename = "@type")]
-    #[rkyv(with = MapNiche<AsBox>)]
+    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mime_type: Option<String>,
 
     #[serde(rename = "@description")]
-    #[rkyv(with = MapNiche<AsBox>)]
+    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
   }

@@ -37,6 +37,7 @@ serializable! {
 
     #[serde(default, rename = "tag")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
     pub tags: Vec<String>,
 
     #[serde(default, rename = "translation")]

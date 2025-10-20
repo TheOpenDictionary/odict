@@ -1,4 +1,4 @@
-use rkyv::with::{AsBox, MapNiche};
+use rkyv_intern::Intern;
 
 use crate::serializable;
 
@@ -8,11 +8,12 @@ serializable! {
   #[derive(Default)]
   pub struct Definition {
     #[serde(rename = "@id")]
-    #[rkyv(with = MapNiche<AsBox>)]
+    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
 
     #[serde(rename = "@value")]
+    #[rkyv(with = Intern)]
     pub value: String,
 
     #[serde(default, rename="example")]
