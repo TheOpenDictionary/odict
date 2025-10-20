@@ -235,7 +235,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_download_with_caching_enabled() {
+    async fn test_download_caching_enabled() {
         let mock_server = MockServer::start().await;
         let test_data = b"cached dictionary data";
 
@@ -267,7 +267,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_download_with_caching_disabled() {
+    async fn test_download_caching_disabled() {
         let mock_server = MockServer::start().await;
         let test_data = b"non-cached dictionary data";
 

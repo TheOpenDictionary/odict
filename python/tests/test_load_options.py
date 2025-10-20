@@ -10,6 +10,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from theopendictionary import (  # noqa: E402
     OpenDictionary,
     compile,
+    LoadOptions,
+    AliasLoadOptions,
+    RemoteLoadOptions,
 )
 
 
@@ -43,8 +46,10 @@ async def test_load_with_alias_options():
         with open(alias_file, "w") as f:
             f.write("{}")
 
-        # Test load with alias options using kwargs
-        loaded_dict = await OpenDictionary.load(temp_file, alias_path=alias_file)
+        # Test load with alias options using LoadOptions
+        alias_opts = AliasLoadOptions(path=alias_file)
+        load_opts = LoadOptions(alias=alias_opts)
+        loaded_dict = await OpenDictionary.load(temp_file, options=load_opts)
         results = loaded_dict.lookup("alias-test")
 
         assert len(results) == 1
@@ -157,9 +162,9 @@ async def test_load_with_invalid_alias_path():
         # Test load with invalid alias path - should either work or fail
         # gracefully
         try:
-            loaded_dict = await OpenDictionary.load(
-                temp_file, alias_path=invalid_alias_path
-            )
+            alias_opts = AliasLoadOptions(path=invalid_alias_path)
+            load_opts = LoadOptions(alias=alias_opts)
+            loaded_dict = await OpenDictionary.load(temp_file, options=load_opts)
             results = loaded_dict.lookup("invalid-alias-test")
             # If it succeeds, verify it still works
             assert len(results) == 1
@@ -173,18 +178,41 @@ async def test_load_with_invalid_alias_path():
             os.remove(temp_file)
 
 
-def test_load_kwargs_api():
-    """Test that load method accepts kwargs properly"""
-    # These are just API tests - no actual loading needed
+def test_load_options_api():
+    """Test that LoadOptions and RemoteLoadOptions can be created"""
+    # Test AliasLoadOptions
+    alias_opts = AliasLoadOptions(path="/some/path")
+    assert alias_opts.path == "/some/path"
 
-    # Test that method signature accepts alias_path
-    import inspect
+    # Test RemoteLoadOptions
+    remote_opts = RemoteLoadOptions(out_dir="/tmp/cache", caching=True)
+    assert remote_opts.out_dir == "/tmp/cache"
+    assert remote_opts.caching is True
 
-    sig = inspect.signature(OpenDictionary.load)
-    params = list(sig.parameters.keys())
+    # Test RemoteLoadOptions with only out_dir
+    remote_opts2 = RemoteLoadOptions(out_dir="/tmp/cache")
+    assert remote_opts2.out_dir == "/tmp/cache"
+    assert remote_opts2.caching is None
 
-    assert "dictionary" in params
-    assert "alias_path" in params
+    # Test RemoteLoadOptions with only caching
+    remote_opts3 = RemoteLoadOptions(caching=False)
+    assert remote_opts3.out_dir is None
+    assert remote_opts3.caching is False
+
+    # Test LoadOptions with both alias and remote
+    load_opts = LoadOptions(alias=alias_opts, remote=remote_opts)
+    assert load_opts.alias is not None
+    assert load_opts.remote is not None
+
+    # Test LoadOptions with only alias
+    load_opts2 = LoadOptions(alias=alias_opts)
+    assert load_opts2.alias is not None
+    assert load_opts2.remote is None
+
+    # Test LoadOptions with only remote
+    load_opts3 = LoadOptions(remote=remote_opts)
+    assert load_opts3.alias is None
+    assert load_opts3.remote is not None
 
 
 @pytest.mark.asyncio

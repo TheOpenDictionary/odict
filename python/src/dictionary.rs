@@ -5,7 +5,7 @@ use pyo3_async_runtimes::tokio::future_into_py;
 use odict::ToDictionary;
 
 use crate::{
-    types::{Entry, IndexOptions, LookupOptions, LookupResult, SearchOptions, Token},
+    types::{Entry, IndexOptions, LoadOptions, LookupOptions, LookupResult, SearchOptions, Token},
     utils::cast_error,
 };
 
@@ -27,20 +27,14 @@ pub struct OpenDictionary {
 #[pymethods]
 impl OpenDictionary {
     #[staticmethod]
-    #[pyo3(signature = (dictionary, alias_path=None))]
+    #[pyo3(signature = (dictionary, options=None))]
     pub fn load<'py>(
         py: Python<'py>,
         dictionary: String,
-        alias_path: Option<String>,
+        options: Option<LoadOptions>,
     ) -> PyResult<Bound<'py, PyAny>> {
         future_into_py(py, async move {
-            let mut opts = internal::LoadDictionaryOptions::default();
-
-            if let Some(path) = alias_path {
-                opts = opts.with_alias_manager(
-                    odict::alias::AliasManager::new(&path).map_err(cast_error)?,
-                );
-            }
+            let opts = options.unwrap_or_default().try_into().map_err(cast_error)?;
 
             let dict = internal::load_dictionary_with_options(&dictionary, opts)
                 .await

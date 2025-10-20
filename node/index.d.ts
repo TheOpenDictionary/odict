@@ -86,6 +86,7 @@ export interface LanguageIdentifier {
 
 export interface LoadOptions {
   alias?: AliasLoadOptions
+  remote?: RemoteLoadOptions
 }
 
 export interface LookupOptions {
@@ -115,6 +116,11 @@ export interface Pronunciation {
   kind: LanguageIdentifier
   value: string
   media: Array<MediaUrl>
+}
+
+export interface RemoteLoadOptions {
+  outDir?: string
+  caching?: boolean
 }
 
 export interface SaveOptions {

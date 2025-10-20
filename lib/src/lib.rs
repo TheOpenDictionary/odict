@@ -7,6 +7,9 @@ pub mod alias;
 #[cfg(feature = "http")]
 pub mod download;
 
+#[cfg(feature = "http")]
+pub mod remote;
+
 #[cfg(feature = "search")]
 pub mod search;
 

@@ -1,39 +1,45 @@
-use odict::{OpenDictionary, alias::AliasOptions};
+use odict::{
+    OpenDictionary,
+    alias::{AliasManager, AliasOptions},
+    remote::RemoteOptions,
+};
 
-pub struct LoadDictionaryOptions {
-    alias_manager: Option<odict::alias::AliasManager>,
+pub struct LoadDictionaryOptions<'a> {
+    alias_options: odict::alias::AliasOptions,
+    remote_options: odict::remote::RemoteOptions<'a>,
 }
 
-impl Default for LoadDictionaryOptions {
+impl<'a> Default for LoadDictionaryOptions<'a> {
     fn default() -> Self {
         LoadDictionaryOptions {
-            alias_manager: None,
+            alias_options: AliasOptions::default(),
+            remote_options: RemoteOptions::default(),
         }
     }
 }
 
-impl LoadDictionaryOptions {
-    pub fn with_alias_manager(mut self, manager: odict::alias::AliasManager) -> Self {
-        self.alias_manager = Some(manager);
+impl<'a> LoadDictionaryOptions<'a> {
+    pub fn with_alias_manager(mut self, manager: AliasManager) -> Self {
+        self.alias_options = AliasOptions::default().with_manager(manager);
+        self
+    }
+
+    pub fn with_remote_options(mut self, options: RemoteOptions<'a>) -> Self {
+        self.remote_options = options;
         self
     }
 }
 
-pub async fn load_dictionary_with_options(
+pub async fn load_dictionary_with_options<'a>(
     name: &str,
-    options: LoadDictionaryOptions,
+    options: LoadDictionaryOptions<'a>,
 ) -> odict::Result<OpenDictionary> {
     // Attempt to load first from the remote if the request matches the regex
-    match OpenDictionary::from_remote(name).await {
+    match OpenDictionary::from_remote_with_options(name, options.remote_options).await {
         Ok(dictionary) => Ok(dictionary),
         // If the name is invalid, try loading from an alias
         Err(odict::Error::InvalidDictionaryName(_)) => {
-            let opts: AliasOptions = match options.alias_manager {
-                Some(manager) => AliasOptions::default().with_manager(manager),
-                None => AliasOptions::default(),
-            };
-
-            match OpenDictionary::from_alias_with_options(name, opts) {
+            match OpenDictionary::from_alias_with_options(name, options.alias_options) {
                 Ok(dictionary) => Ok(dictionary),
                 // If no alias found, try loading from path
                 Err(odict::Error::AliasNotFound(_)) => OpenDictionary::from_path(name),
