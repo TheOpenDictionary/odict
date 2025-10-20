@@ -4,7 +4,10 @@ use crate::serializable;
 
 serializable! {
   #[derive(Default)]
-  pub struct EntryRef(pub String);
+  pub struct EntryRef(
+      #[rkyv(with = rkyv_intern::Intern)]
+      pub String
+  );
 }
 
 impl EntryRef {

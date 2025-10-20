@@ -1,5 +1,3 @@
-use rkyv::with::{AsBox, MapNiche};
-
 use crate::serializable;
 
 use super::definition::Definition;

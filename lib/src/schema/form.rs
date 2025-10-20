@@ -14,7 +14,6 @@ serializable! {
     pub kind: Option<FormKind>,
 
     #[serde(rename = "@term")]
-    // TODO: intern
     pub term: EntryRef,
 
     #[serde(default, rename = "tag")]

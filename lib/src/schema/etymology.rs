@@ -1,7 +1,5 @@
 use std::collections::HashSet;
 
-use rkyv_intern::Intern;
-
 use crate::schema::pronunciation::Pronunciation;
 use crate::serializable;
 
