@@ -101,7 +101,7 @@ pub fn insert_pronunciation(
             ])
             .values([
                 id.as_str().into(),
-                pronunciation.kind.clone().map(|k| k.to_string()).into(),
+                pronunciation.kind.to_string().into(),
                 pronunciation.value.clone().into(),
                 etymology_id.into(),
             ])?,

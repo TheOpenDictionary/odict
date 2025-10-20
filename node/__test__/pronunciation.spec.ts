@@ -6,7 +6,7 @@ test('Pronunciation support - should parse entries with pronunciations', async (
     <dictionary>
       <entry term="你好">
         <ety>
-          <pronunciation kind="pinyin" value="ni hao">
+          <pronunciation kind="zh-latn-pinyin" value="ni hao">
             <url src="./audio.mp3" />
           </pronunciation>
         </ety>
@@ -25,9 +25,9 @@ test('Pronunciation support - should parse entries with pronunciations', async (
   t.truthy(entry.etymologies[0].pronunciations)
   t.is(entry.etymologies[0].pronunciations.length, 1)
   t.deepEqual(entry.etymologies[0].pronunciations[0].kind, {
-    name: 'PronunciationKind',
-    value: 'pinyin',
-    variant: 'pinyin',
+    language: 'zh',
+    script: 'Latn',
+    variants: ['pinyin'],
   })
   t.is(entry.etymologies[0].pronunciations[0].value, 'ni hao')
   t.is(entry.etymologies[0].pronunciations[0].media.length, 1)
@@ -42,7 +42,7 @@ test('Pronunciation support - should parse examples with pronunciations', async 
           <sense pos="n">
             <definition value="An example definition">
               <example value="An example sentence">
-                <pronunciation kind="ipa" value="ɪɡˈzæmpl ˈsɛntəns">
+                <pronunciation kind="und-fonipa" value="ɪɡˈzæmpl ˈsɛntəns">
                   <url src="./example.mp3" type="audio/mpeg" />
                 </pronunciation>
               </example>
@@ -65,9 +65,8 @@ test('Pronunciation support - should parse examples with pronunciations', async 
   t.truthy(example.pronunciations)
   t.is(example.pronunciations.length, 1)
   t.deepEqual(example.pronunciations[0].kind, {
-    name: 'PronunciationKind',
-    value: 'ipa',
-    variant: 'ipa',
+    language: 'und',
+    variants: ['fonipa'],
   })
   t.is(example.pronunciations[0].value, 'ɪɡˈzæmpl ˈsɛntəns')
   t.is(example.pronunciations[0].media.length, 1)

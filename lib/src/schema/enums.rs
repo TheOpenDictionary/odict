@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display};
 
-use super::{FormKind, PartOfSpeech, PronunciationKind};
+use super::{FormKind, PartOfSpeech};
 
 pub trait EnumIdentifier {
     fn id(&self) -> String;
@@ -30,4 +30,3 @@ macro_rules! impl_enum_identifier {
 
 impl_enum_identifier!(PartOfSpeech);
 impl_enum_identifier!(FormKind);
-impl_enum_identifier!(PronunciationKind);
