@@ -6,6 +6,7 @@ mod example;
 mod form;
 mod group;
 mod index;
+mod langid;
 
 #[cfg(feature = "node")]
 mod load;
@@ -32,6 +33,7 @@ pub use save::*;
 pub use entry::Entry;
 pub use example::Example;
 pub use index::IndexOptions;
+pub use langid::LanguageIdentifier;
 pub use lookup::{LookupOptions, LookupResult};
 pub use pronunciation::Pronunciation;
 pub use search::SearchOptions;
