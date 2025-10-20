@@ -1,15 +1,5 @@
 # Changelog
 
-## [3.1.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.0.0...lib/v3.1.0) (2025-10-20)
-
-
-### Features
-
-* Allow passing remote load options to Node and Python ([#1315](https://github.com/TheOpenDictionary/odict/issues/1315)) ([80a8361](https://github.com/TheOpenDictionary/odict/commit/80a8361e1cff88bffb5bf36cb354ca04ad89a343))
-* Remove backwards compatibility for legacy follow for Node and Python ([#1308](https://github.com/TheOpenDictionary/odict/issues/1308)) ([785fac5](https://github.com/TheOpenDictionary/odict/commit/785fac54001df45841fa18d0c6822e36a337b5ec))
-* Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
-* String interning ([#1313](https://github.com/TheOpenDictionary/odict/issues/1313)) ([a1ce402](https://github.com/TheOpenDictionary/odict/commit/a1ce4025950f840674e1e4e159b60311672febc2))
-
 ## [3.0.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.9.1...lib/v3.0.0) (2025-10-17)
 
 
