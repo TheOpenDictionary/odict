@@ -6,16 +6,16 @@ serializable! {
   #[serde(rename = "url")]
   pub struct MediaURL {
     #[serde(rename = "@src")]
-    #[rkyv(with = rkyv_intern::Intern)]
+    #[rkyv(with = crate::intern::Intern)]
     pub src: String,
 
     #[serde(rename = "@type")]
-    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
+    #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mime_type: Option<String>,
 
     #[serde(rename = "@description")]
-    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
+    #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
   }

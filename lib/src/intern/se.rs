@@ -1,3 +1,4 @@
+use super::{Interner, InterningAdapter};
 use rkyv::{
     api::serialize_using,
     rancor::Strategy,
@@ -5,7 +6,6 @@ use rkyv::{
     util::{with_arena, AlignedVec},
     Serialize,
 };
-use rkyv_intern::{Interner, InterningAdapter};
 
 type InterningSerializer<'a, E> =
     Strategy<InterningAdapter<Serializer<AlignedVec<8>, ArenaHandle<'a>, ()>, Interner<String>>, E>;

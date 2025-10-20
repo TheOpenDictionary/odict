@@ -5,7 +5,7 @@ use crate::serializable;
 serializable! {
   #[derive(Default)]
   pub struct EntryRef(
-      #[rkyv(with = rkyv_intern::Intern)]
+      #[rkyv(with = crate::intern::Intern)]
       pub String
   );
 }

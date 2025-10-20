@@ -7,7 +7,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use crate::{error::Error, schema::Etymology, se::serialize_interned, serializable};
+use crate::{error::Error, intern::serialize_interned, schema::Etymology, serializable};
 
 use super::{EntryRef, MediaURL};
 

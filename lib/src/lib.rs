@@ -23,8 +23,8 @@ mod compress;
 mod core;
 mod error;
 mod ext;
+mod intern;
 mod odict;
-mod se;
 
 pub mod format;
 pub mod fs;

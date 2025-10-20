@@ -10,7 +10,7 @@ serializable! {
     pub kind: Option<PronunciationKind>,
 
     #[serde(rename = "@value")]
-    #[rkyv(with = rkyv_intern::Intern)]
+    #[rkyv(with = crate::intern::Intern)]
     pub value: String,
 
     #[serde(default, rename = "url")]

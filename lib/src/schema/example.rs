@@ -6,7 +6,7 @@ serializable! {
   #[serde(rename = "example")]
   pub struct Example {
     #[serde(rename = "@value")]
-    #[rkyv(with = rkyv_intern::Intern)]
+    #[rkyv(with = crate::intern::Intern)]
     pub value: String,
 
     #[serde(default, rename = "translation")]

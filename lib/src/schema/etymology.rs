@@ -11,7 +11,7 @@ serializable! {
   pub struct Etymology {
     #[serde(rename = "@id")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
+    #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
     pub id: Option<String>,
 
     #[serde(default, rename = "pronunciation")]
@@ -22,7 +22,7 @@ serializable! {
     pub senses: HashSet<Sense>,
 
     #[serde(rename = "@description")]
-    #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
+    #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
   }

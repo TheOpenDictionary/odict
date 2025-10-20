@@ -77,13 +77,6 @@ export interface IndexOptions {
   overwrite?: boolean
 }
 
-export interface LanguageIdentifier {
-  language: string
-  script?: string
-  region?: string
-  variants: Array<string>
-}
-
 export interface LoadOptions {
   alias?: AliasLoadOptions
   remote?: RemoteLoadOptions
@@ -113,7 +106,7 @@ export interface Note {
 }
 
 export interface Pronunciation {
-  kind: LanguageIdentifier
+  kind?: EnumWrapper
   value: string
   media: Array<MediaUrl>
 }

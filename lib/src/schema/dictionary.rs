@@ -3,7 +3,7 @@ use rkyv::deserialize;
 use std::collections::HashSet;
 use std::str::FromStr;
 
-use crate::{error::Error, se::serialize_interned, serializable};
+use crate::{error::Error, intern::serialize_interned, serializable};
 
 use super::{entry::Entry, id::ID};
 
@@ -15,7 +15,7 @@ serializable! {
       pub id: ID,
 
       #[serde(rename = "@name")]
-      #[rkyv(with = rkyv::with::Map<rkyv_intern::Intern>)]
+      #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
