@@ -1,19 +1,21 @@
+use futures_util::future::lazy;
 use serde_json::to_vec;
 use std::{
     collections::HashMap,
     ffi::OsStr,
     fs::{self, read_to_string},
     path::PathBuf,
+    sync::LazyLock,
 };
 
 use crate::OpenDictionary;
 
 use super::config::get_config_dir;
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct AliasManager {
     path: PathBuf,
-    aliases: HashMap<String, String>,
+    aliases: LazyLock<HashMap<String, String>>,
 }
 
 impl AsRef<AliasManager> for AliasManager {
@@ -23,26 +25,29 @@ impl AsRef<AliasManager> for AliasManager {
 }
 
 impl AliasManager {
-    pub fn new<S: AsRef<OsStr> + ?Sized>(
-        config_path: &S, // May be used in the future?
-    ) -> crate::Result<Self> {
+    pub fn new<S: AsRef<OsStr> + ?Sized>(config_path: &S, // May be used in the future?
+    ) -> Self {
         let path = PathBuf::from(config_path);
+        Self {
+            path,
+            aliases: LazyLock::new(|| {
+                if !path.exists() {
+                    fs::write(&path, "{}")?;
+                }
 
-        if !path.exists() {
-            fs::write(&path, "{}")?;
+                let config = read_to_string(path)?;
+                let aliases: HashMap<String, String> = serde_json::from_str(&config)?;
+
+                return aliases;
+            }),
         }
-
-        let config = read_to_string(&path)?;
-        let aliases: HashMap<String, String> = serde_json::from_str(&config)?;
-
-        Ok(Self { path, aliases })
     }
 }
 
 impl Default for AliasManager {
     fn default() -> Self {
         let config_path = get_config_dir().unwrap().join("aliases.json");
-        Self::new(&config_path).unwrap()
+        Self::new(&config_path)
     }
 }
 
@@ -51,6 +56,24 @@ impl AliasManager {
         let config_bytes = to_vec(&self.aliases)?;
         fs::write(&self.path, config_bytes)?;
         Ok(())
+    }
+
+    fn get_aliases<'a>(&'a mut self) -> crate::Result<&'a HashMap<String, String>> {
+        match &self.aliases {
+            Some(aliases) => Ok(aliases),
+            None => {
+                if !self.path.exists() {
+                    fs::write(&self.path, "{}")?;
+                }
+
+                let config = read_to_string(&self.path)?;
+                let aliases: HashMap<String, String> = serde_json::from_str(&config)?;
+
+                self.aliases = Some(aliases);
+
+                Ok(&self.aliases.as_ref().unwrap())
+            }
+        }
     }
 
     pub fn add(&mut self, alias: &str, file: &OpenDictionary) -> crate::Result<()> {
@@ -64,7 +87,7 @@ impl AliasManager {
     pub fn set(&mut self, alias: &str, file: &OpenDictionary) -> crate::Result<()> {
         match &file.path() {
             Some(path) => {
-                self.aliases
+                self.get_aliases()
                     .insert(alias.to_string(), path.to_string_lossy().to_string());
                 self.save_to_disk()
             }
@@ -112,7 +135,7 @@ impl OpenDictionary {
         alias: &str,
         options: Options,
     ) -> crate::Result<OpenDictionary> {
-        options.as_ref().manager.get(alias).map_or_else(
+        options.as_ref().manager.as_ref().get(alias).map_or_else(
             || Err(crate::Error::AliasNotFound(alias.to_string())),
             OpenDictionary::from_path,
         )

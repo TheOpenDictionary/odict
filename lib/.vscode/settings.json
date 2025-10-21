@@ -1,0 +1,6 @@
+{
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/Users/tjnickerson/.local/share/mise/shims/node"
+  },
+  "python.defaultInterpreterPath": "/Users/tjnickerson/Documents/GitHub/TheOpenDictionary/odict/.venv"
+}
