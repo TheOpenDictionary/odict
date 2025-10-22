@@ -1,21 +1,17 @@
-use merge::Merge;
 use pyo3::prelude::*;
 
 use super::Entry;
 
 #[pyclass]
-#[derive(Merge, Clone)]
+#[derive(Clone)]
 pub struct LookupOptions {
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub split: Option<u32>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub follow: Option<bool>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub insensitive: Option<bool>,
 }
 

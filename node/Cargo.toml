@@ -12,7 +12,6 @@ default = []
 node = ["odict/http", "internal/load", "odict/alias", "odict/search"]
 
 [dependencies]
-merge = "0.2.0"
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
 napi = { version = "3", default-features = false, features = [
   "async",

@@ -1,14 +1,10 @@
-use merge::Merge;
 use odict::tokenize::Language;
 
 #[napi(object)]
-#[derive(Merge, Clone)]
+#[derive(Clone)]
 pub struct TokenizeOptions {
-    #[merge(strategy = merge::option::overwrite_none)]
     pub follow: Option<bool>,
-    #[merge(strategy = merge::option::overwrite_none)]
     pub allow_list: Option<Vec<String>>,
-    #[merge(strategy = merge::option::overwrite_none)]
     pub insensitive: Option<bool>,
 }
 
