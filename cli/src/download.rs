@@ -52,10 +52,10 @@ pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::
 
     let downloader = DictionaryDownloader::default();
 
-    let mut options = DownloadOptions::default().caching(!no_cache);
+    let mut options = DownloadOptions::default().with_caching(!no_cache);
 
     if let Some(out_dir) = output {
-        options = options.out_dir(out_dir);
+        options = options.with_out_dir(out_dir);
     }
 
     options = options.on_progress(|downloaded, total, _progress| {

@@ -221,3 +221,154 @@ macro_rules! lookup {
 
 lookup!(Dictionary, Entry, Option);
 lookup!(ArchivedDictionary, ArchivedEntry, ArchivedOption);
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+
+    use crate::{lookup::LookupOptions, schema::Dictionary};
+
+    #[test]
+    fn test_lookup_follow_limit() {
+        // Create a dictionary with a chain of redirects: alias1 -> alias2 -> target
+        let xml = r#"
+        <dictionary>
+            <entry term="target">
+                <ety>
+                    <sense pos="n">
+                        <definition value="The final destination" />
+                    </sense>
+                </ety>
+            </entry>
+            <entry term="alias2" see="target" />
+            <entry term="alias1" see="alias2" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test with follow=false (no following)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(false))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "alias1");
+        assert_eq!(result[0].directed_from.is_none(), true);
+
+        // Test with follow=true (follows until entry with etymologies found)
+        // Should follow alias1 -> alias2 -> target and stop at target since it has etymologies
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias1");
+
+        // Test starting from alias2 should also reach target
+        let result = dict
+            .lookup(&vec!["alias2"], LookupOptions::default().follow(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias2");
+    }
+
+    #[test]
+    fn test_lookup_redirect_loop_detection() {
+        // Create a dictionary with circular redirects: loop1 -> loop2 -> loop1
+        let xml = r#"
+        <dictionary>
+            <entry term="loop1" see="loop2" />
+            <entry term="loop2" see="loop1" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test that circular redirects are detected and return an error
+        let result = dict.lookup(&vec!["loop1"], LookupOptions::default().follow(true));
+
+        assert!(result.is_err());
+
+        let error_message = result.unwrap_err().to_string();
+
+        assert_eq!(
+            error_message,
+            "Redirect loop detected: loop1 -> loop2 -> loop1"
+        );
+
+        assert!(error_message.contains("loop1"));
+        assert!(error_message.contains("loop2"));
+    }
+
+    #[test]
+    fn test_lookup_redirect_case_insensitive() {
+        // Create a dictionary with redirects where case differs in queries
+        let xml = r#"
+        <dictionary>
+            <entry term="target">
+                <ety>
+                    <sense pos="n">
+                        <definition value="The final destination" />
+                    </sense>
+                </ety>
+            </entry>
+            <entry term="alias" see="target" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test case insensitive redirect following with uppercase query
+        let result = dict
+            .lookup(
+                &vec!["ALIAS"],
+                LookupOptions::default().follow(true).insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias");
+
+        // Test case insensitive redirect following with mixed case query
+        let result = dict
+            .lookup(
+                &vec!["Alias"],
+                LookupOptions::default().follow(true).insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias");
+
+        // Test that case sensitive mode doesn't find mismatched case
+        let result = dict
+            .lookup(
+                &vec!["ALIAS"],
+                LookupOptions::default().follow(true).insensitive(false),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 0);
+
+        // Test that exact case match works in case sensitive mode
+        let result = dict
+            .lookup(
+                &vec!["alias"],
+                LookupOptions::default().follow(true).insensitive(false),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+    }
+}

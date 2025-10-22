@@ -1,8 +1,12 @@
-use std::{path::PathBuf, time::SystemTime};
+use std::{
+    path::{Path, PathBuf},
+    time::SystemTime,
+};
 
 use crate::{
-    config::get_config_dir,
+    config::DEFAULT_CONFIG_DIR,
     download::{
+        constants::{DEFAULT_BASE_URL, DEFAULT_DICTIONARIES_DIR},
         metadata::{get_metadata, set_metadata, DictionaryMetadata},
         options::{DownloadOptions, ProgressCallback},
         utils::parse_remote_dictionary_name,
@@ -14,19 +18,20 @@ use futures_util::StreamExt;
 use reqwest::Client;
 use reqwest_middleware::ClientWithMiddleware;
 
-#[derive(Clone, Debug)]
-pub struct DictionaryDownloader {
+#[derive(Debug, Clone)]
+pub struct DictionaryDownloader<'a> {
     base_url: String,
     client: ClientWithMiddleware,
+    pub(crate) options: DownloadOptions<'a>,
 }
 
-impl AsRef<DictionaryDownloader> for DictionaryDownloader {
-    fn as_ref(&self) -> &DictionaryDownloader {
+impl<'a> AsRef<DictionaryDownloader<'a>> for DictionaryDownloader<'a> {
+    fn as_ref(&self) -> &DictionaryDownloader<'a> {
         self
     }
 }
 
-impl Default for DictionaryDownloader {
+impl<'a> Default for DictionaryDownloader<'a> {
     fn default() -> Self {
         let retry_policy =
             reqwest_retry::policies::ExponentialBackoff::builder().build_with_max_retries(3);
@@ -43,19 +48,44 @@ impl Default for DictionaryDownloader {
             .build();
 
         Self {
-            base_url: "https://dictionaries.odict.org".to_string(),
+            base_url: DEFAULT_BASE_URL.to_string(),
             client,
+            options: DownloadOptions::default(),
         }
     }
 }
 
-impl DictionaryDownloader {
-    pub fn new(client: ClientWithMiddleware, base_url: String) -> Self {
-        Self { client, base_url }
+impl<'a> DictionaryDownloader<'a> {
+    pub fn with_client(mut self, client: Client) -> Self {
+        self.client = client.into();
+        self
     }
 
-    pub fn with_client<F>(mut self, client: Client) -> Self {
-        self.client = client.into();
+    pub fn with_base_url<U: AsRef<str>>(mut self, url: U) -> Self {
+        self.base_url = url.as_ref().into();
+        self
+    }
+
+    pub fn with_options(mut self, options: DownloadOptions<'a>) -> Self {
+        self.options = options;
+        self
+    }
+
+    pub fn with_caching(mut self, caching: bool) -> Self {
+        self.options = self.options.with_caching(caching);
+        self
+    }
+
+    pub fn with_out_dir<P: AsRef<Path>>(mut self, out_dir: P) -> Self {
+        self.options = self.options.with_out_dir(out_dir);
+        self
+    }
+
+    pub fn on_progress<F>(mut self, callback: F) -> Self
+    where
+        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'a,
+    {
+        self.options = self.options.on_progress(callback);
         self
     }
 
@@ -69,18 +99,38 @@ impl DictionaryDownloader {
             .await
     }
 
-    pub async fn download_with_options<'a, Options: AsRef<DownloadOptions<'a>>>(
+    pub async fn download_with_options<Options: AsRef<DownloadOptions<'a>>>(
         &self,
         dictionary_name: &str,
         options: Options,
     ) -> crate::Result<PathBuf> {
         let (dictionary, language) = parse_remote_dictionary_name(dictionary_name)?;
 
-        let opts = options.as_ref();
+        let mut opts = self.options.clone();
+        let override_opts = options.as_ref();
+
+        if opts.caching != override_opts.caching {
+            opts.caching = override_opts.caching;
+        }
+
+        if let Some(dir) = &override_opts.config_dir {
+            opts.config_dir = Some(dir.clone());
+        }
+
+        if let Some(dir) = &override_opts.out_dir {
+            opts.out_dir = Some(dir.clone())
+        }
+
+        if let Some(cb) = override_opts.on_progress.as_ref() {
+            opts.on_progress = Some(cb.clone());
+        }
 
         let out_dir = match opts.out_dir {
-            Some(ref dir) => dir.clone(),
-            None => get_config_dir()?.join("dictionaries").join(&dictionary),
+            Some(dir) => dir,
+            None => opts
+                .config_dir
+                .unwrap_or(DEFAULT_CONFIG_DIR.to_path_buf())
+                .join(DEFAULT_DICTIONARIES_DIR),
         };
 
         if !out_dir.exists() {
@@ -125,7 +175,7 @@ impl DictionaryDownloader {
         Ok(out_path)
     }
 
-    async fn fetch_with_etag<'a>(
+    async fn fetch_with_etag(
         &self,
         url: &str,
         etag: Option<&str>,
@@ -201,8 +251,10 @@ mod tests {
     use wiremock::matchers::{header, method, path};
     use wiremock::{Mock, MockServer, ResponseTemplate};
 
-    fn create_test_downloader(base_url: String) -> DictionaryDownloader {
-        DictionaryDownloader::new(reqwest::Client::new().into(), base_url)
+    fn create_test_downloader<'a>(base_url: String) -> DictionaryDownloader<'a> {
+        DictionaryDownloader::default()
+            .with_client(reqwest::Client::new().into())
+            .with_base_url(base_url)
     }
 
     #[tokio::test]
@@ -222,7 +274,7 @@ mod tests {
         let result = downloader
             .download_with_options(
                 "wiktionary/eng",
-                DownloadOptions::default().out_dir(temp_dir.path()),
+                DownloadOptions::default().with_out_dir(temp_dir.path()),
             )
             .await
             .unwrap();
@@ -252,8 +304,8 @@ mod tests {
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
         let options = DownloadOptions::default()
-            .caching(true)
-            .out_dir(temp_dir.path());
+            .with_caching(true)
+            .with_out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/eng", &options)
@@ -280,8 +332,8 @@ mod tests {
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
         let options = DownloadOptions::default()
-            .caching(true)
-            .out_dir(temp_dir.path());
+            .with_caching(true)
+            .with_out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/de", &options)
@@ -325,8 +377,8 @@ mod tests {
 
         let downloader = create_test_downloader(mock_server.uri());
         let options = DownloadOptions::default()
-            .caching(true)
-            .out_dir(temp_dir.path());
+            .with_caching(true)
+            .with_out_dir(temp_dir.path());
 
         let result = downloader
             .download_with_options("wiktionary/es", &options)
@@ -367,7 +419,7 @@ mod tests {
         let result = downloader
             .download_with_options(
                 "invalid-name",
-                DownloadOptions::default().out_dir(temp_dir.path()),
+                DownloadOptions::default().with_out_dir(temp_dir.path()),
             )
             .await;
 
@@ -392,7 +444,7 @@ mod tests {
         let result = downloader
             .download_with_options(
                 "wiktionary/ger",
-                DownloadOptions::default().out_dir(&nested_dir),
+                DownloadOptions::default().with_out_dir(&nested_dir),
             )
             .await;
 
@@ -410,7 +462,9 @@ mod tests {
     async fn test_downloader_new() {
         let custom_url = "https://custom.example.com";
         let client = reqwest::Client::new();
-        let downloader = DictionaryDownloader::new(client.into(), custom_url.to_string());
+        let downloader = DictionaryDownloader::default()
+            .with_client(client)
+            .with_base_url(custom_url.to_string());
         assert_eq!(downloader.base_url, custom_url);
     }
 
@@ -438,7 +492,7 @@ mod tests {
         let progress_calls_clone = progress_calls.clone();
 
         let options = DownloadOptions::default()
-            .out_dir(temp_dir.path())
+            .with_out_dir(temp_dir.path())
             .on_progress(move |downloaded, total, progress| {
                 let mut calls = progress_calls_clone.lock().unwrap();
                 calls.push((downloaded, total, progress));

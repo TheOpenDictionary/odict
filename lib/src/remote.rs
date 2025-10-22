@@ -1,67 +1,19 @@
-use std::path::Path;
-
-use crate::download::{parse_remote_dictionary_name, DictionaryDownloader, DownloadOptions};
+use crate::download::{parse_remote_dictionary_name, DictionaryDownloader};
 
 use crate::OpenDictionary;
-
-pub struct RemoteOptions<'a> {
-    downloader: DictionaryDownloader,
-    download_options: DownloadOptions<'a>,
-}
-
-impl Default for RemoteOptions<'_> {
-    fn default() -> Self {
-        Self {
-            downloader: DictionaryDownloader::default(),
-            download_options: DownloadOptions::default(),
-        }
-    }
-}
-
-impl<'a> RemoteOptions<'a> {
-    pub fn with_downloader(mut self, downloader: DictionaryDownloader) -> Self {
-        self.downloader = downloader;
-        self
-    }
-
-    pub fn caching(mut self, caching: bool) -> Self {
-        self.download_options = self.download_options.caching(caching);
-        self
-    }
-
-    pub fn out_dir<P: AsRef<Path>>(mut self, out_dir: P) -> Self {
-        self.download_options = self.download_options.out_dir(out_dir);
-        self
-    }
-
-    pub fn on_progress<F>(mut self, callback: F) -> Self
-    where
-        F: Fn(u64, Option<u64>, f64) + Send + Sync + 'a,
-    {
-        self.download_options = self.download_options.on_progress(callback);
-        self
-    }
-}
-
-impl<'a> AsRef<RemoteOptions<'a>> for RemoteOptions<'a> {
-    fn as_ref(&self) -> &RemoteOptions<'a> {
-        self
-    }
-}
 
 impl OpenDictionary {
     /// Attempts to download and load a dictionary if the input looks like a dictionary name.
     ///
     /// Dictionary names must be in the format "dictionary/language" (e.g., "wiktionary/en").
-    pub async fn from_remote_with_options<'a, Options: AsRef<RemoteOptions<'a>>>(
+    pub async fn from_remote_with_downloader<'a, Downloader: AsRef<DictionaryDownloader<'a>>>(
         dictionary: &str,
-        options: Options,
+        downloader: Downloader,
     ) -> crate::Result<OpenDictionary> {
         if parse_remote_dictionary_name(dictionary).is_ok() {
-            let path = options
+            let path = downloader
                 .as_ref()
-                .downloader
-                .download_with_options(dictionary, &options.as_ref().download_options)
+                .download(dictionary)
                 .await
                 .map_err(|e| match e {
                     crate::Error::DownloadFailed(kind, msg) => {
@@ -79,6 +31,6 @@ impl OpenDictionary {
     }
 
     pub async fn from_remote(dictionary: &str) -> crate::Result<OpenDictionary> {
-        Self::from_remote_with_options(dictionary, RemoteOptions::default()).await
+        Self::from_remote_with_downloader(dictionary, DictionaryDownloader::default()).await
     }
 }

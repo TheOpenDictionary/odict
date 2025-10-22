@@ -1,4 +1,5 @@
 use clap::{arg, command, Args};
+use odict::OpenDictionary;
 
 use crate::CLIContext;
 
@@ -11,7 +12,7 @@ pub struct LexiconArgs {
 }
 
 pub async fn lexicon<'a>(ctx: &mut CLIContext<'a>, args: &LexiconArgs) -> anyhow::Result<()> {
-    let file = internal::load_dictionary(&args.dictionary).await?;
+    let file = OpenDictionary::load(&args.dictionary).await?;
 
     let dict = file.contents()?;
     let lexicon = dict.lexicon();

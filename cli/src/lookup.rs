@@ -5,6 +5,7 @@ use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
 use odict::lookup::{LookupOptions, LookupStrategy};
+use odict::OpenDictionary;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -63,7 +64,7 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
 
     spinner.enable_steady_tick(Duration::from_millis(100));
 
-    let file = internal::load_dictionary(path).await?;
+    let file = OpenDictionary::load(path).await?;
 
     let mut opts: LookupOptions = LookupOptions::default()
         .follow(*follow)

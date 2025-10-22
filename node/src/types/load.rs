@@ -1,11 +1,3 @@
-use odict::alias::AliasManager;
-
-#[napi(object)]
-#[derive(Default)]
-pub struct AliasLoadOptions {
-    pub path: Option<String>,
-}
-
 #[napi(object)]
 pub struct RemoteLoadOptions {
     pub out_dir: Option<String>,
@@ -23,41 +15,41 @@ impl Default for RemoteLoadOptions {
 
 #[napi(object)]
 pub struct LoadOptions {
-    pub alias: Option<AliasLoadOptions>,
+    pub config_dir: Option<String>,
     pub remote: Option<RemoteLoadOptions>,
 }
 
 impl Default for LoadOptions {
     fn default() -> Self {
         Self {
-            alias: None,
+            config_dir: None,
             remote: None,
         }
     }
 }
 
-impl TryFrom<LoadOptions> for internal::LoadDictionaryOptions<'_> {
+impl TryFrom<LoadOptions> for odict::LoadOptions<'_> {
     type Error = odict::Error;
 
     fn try_from(opts: LoadOptions) -> Result<Self, Self::Error> {
-        let mut options = internal::LoadDictionaryOptions::default();
+        let mut options = odict::LoadOptions::default();
 
-        if let Some(path) = opts.alias.and_then(|a| a.path) {
-            options = options.with_alias_manager(AliasManager::new(&path)?);
+        if let Some(config_dir) = opts.config_dir {
+            options = options.with_config_dir(&config_dir)
         }
 
         if let Some(remote_opts) = opts.remote {
-            let mut ro = odict::remote::RemoteOptions::default();
+            let mut downloader = odict::download::DictionaryDownloader::default();
 
             if let Some(caching) = remote_opts.caching {
-                ro = ro.caching(caching);
+                downloader = downloader.with_caching(caching);
             }
 
             if let Some(out_dir) = remote_opts.out_dir {
-                ro = ro.out_dir(out_dir);
+                downloader = downloader.with_out_dir(out_dir);
             }
 
-            options = options.with_remote_options(ro);
+            options = options.with_downloader(downloader);
         }
 
         Ok(options)

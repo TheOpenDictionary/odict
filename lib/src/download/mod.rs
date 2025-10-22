@@ -1,5 +1,6 @@
 use crate::error::Result;
 
+pub(crate) mod constants;
 mod download;
 mod metadata;
 mod options;

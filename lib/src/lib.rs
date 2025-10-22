@@ -24,6 +24,7 @@ mod core;
 mod error;
 mod ext;
 mod intern;
+mod load;
 mod odict;
 
 pub mod format;
@@ -34,6 +35,7 @@ pub use self::compress::CompressOptions;
 pub use self::core::*;
 pub use self::error::*;
 pub use self::ext::*;
+pub use self::load::*;
 pub use self::odict::*;
 
 #[cfg(feature = "search")]
