@@ -13,8 +13,15 @@ pyo3-async-runtimes = { version = "0.26.0", features = [
   "tokio-runtime",
   "attributes",
 ] }
-odict = { path = "../lib", features = ["config", "sql", "tokenize", "search"] }
-internal = { path = "../internal", features = ["load"] }
+odict = { path = "../lib", features = [
+  "config",
+  "sql",
+  "http",
+  "alias",
+  "tokenize",
+  "search",
+] }
+internal = { path = "../internal" }
 either = { version = "*" }
 structural-convert = { workspace = true }
 tokio = { version = "1.48", features = ["full"] }

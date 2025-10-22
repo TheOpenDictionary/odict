@@ -14,10 +14,6 @@ export declare class OpenDictionary {
   tokenize(text: string, options?: TokenizeOptions | undefined | null): Array<Token>
 }
 
-export interface AliasLoadOptions {
-  path?: string
-}
-
 export declare function compile(xml: string): Buffer
 
 export interface CompressOptions {
@@ -78,7 +74,7 @@ export interface IndexOptions {
 }
 
 export interface LoadOptions {
-  alias?: AliasLoadOptions
+  configDir?: string
   remote?: RemoteLoadOptions
 }
 

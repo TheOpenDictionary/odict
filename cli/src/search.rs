@@ -1,6 +1,6 @@
 use clap::{arg, command, Args};
-use odict::index::get_default_index_dir;
 use odict::search::SearchOptions;
+use odict::{index::get_default_index_dir, OpenDictionary};
 
 use crate::{enums::PrintFormat, print_entries, CLIContext, IndexArgs, DEFAULT_INDEX_MEMORY};
 
@@ -26,7 +26,7 @@ pub struct SearchArgs {
 }
 
 pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
-    let file = internal::load_dictionary(&args.dictionary).await?;
+    let file = OpenDictionary::load(&args.dictionary).await?;
 
     let dict = file.contents()?;
 

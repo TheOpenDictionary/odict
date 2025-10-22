@@ -2,7 +2,10 @@ use std::path::PathBuf;
 
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
-use odict::index::{get_default_index_dir, IndexOptions};
+use odict::{
+    index::{get_default_index_dir, IndexOptions},
+    OpenDictionary,
+};
 
 use crate::CLIContext;
 
@@ -30,7 +33,7 @@ pub struct IndexArgs {
 }
 
 pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
-    let file = internal::load_dictionary(&args.dictionary).await?;
+    let file = OpenDictionary::load(&args.dictionary).await?;
 
     ctx.println("");
 

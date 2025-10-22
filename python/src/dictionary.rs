@@ -34,11 +34,17 @@ impl OpenDictionary {
         options: Option<LoadOptions>,
     ) -> PyResult<Bound<'py, PyAny>> {
         future_into_py(py, async move {
-            let opts = options.unwrap_or_default().try_into().map_err(cast_error)?;
-
-            let dict = internal::load_dictionary_with_options(&dictionary, opts)
-                .await
-                .map_err(cast_error)?;
+            let dict = match options {
+                Some(opts) => {
+                    let load_opts = opts.try_into().map_err(cast_error)?;
+                    odict::OpenDictionary::load_with_options(&dictionary, load_opts)
+                        .await
+                        .map_err(cast_error)?
+                }
+                None => odict::OpenDictionary::load(&dictionary)
+                    .await
+                    .map_err(cast_error)?,
+            };
 
             Ok(OpenDictionary { dict })
         })

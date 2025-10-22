@@ -3,6 +3,7 @@ use clap::{arg, command, Args};
 use console::Style;
 use indicatif::DecimalBytes;
 use num_format::{Locale, ToFormattedString};
+use odict::OpenDictionary;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -17,7 +18,7 @@ pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Resu
         dictionary_path: path,
     } = args;
 
-    let file = internal::load_dictionary(path).await?;
+    let file = OpenDictionary::load(path).await?;
 
     let bold = Style::new().bold();
     let dict = file.contents()?;

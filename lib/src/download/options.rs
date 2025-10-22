@@ -1,12 +1,15 @@
 use std::{
     fmt,
     path::{Path, PathBuf},
+    sync::Arc,
 };
 
-pub type ProgressCallback<'a> = Box<dyn Fn(u64, Option<u64>, f64) + Send + Sync + 'a>;
+pub type ProgressCallback<'a> = Arc<dyn Fn(u64, Option<u64>, f64) + Send + Sync + 'a>;
 
+#[derive(Clone)]
 pub struct DownloadOptions<'a> {
     pub caching: bool,
+    pub(crate) config_dir: Option<PathBuf>,
     pub out_dir: Option<PathBuf>,
     pub on_progress: Option<ProgressCallback<'a>>,
 }
@@ -24,20 +27,11 @@ impl fmt::Debug for DownloadOptions<'_> {
     }
 }
 
-impl Clone for DownloadOptions<'_> {
-    fn clone(&self) -> Self {
-        Self {
-            caching: self.caching,
-            out_dir: self.out_dir.clone(),
-            on_progress: None, // Function pointers can't be cloned, so we set to None
-        }
-    }
-}
-
 impl Default for DownloadOptions<'_> {
     fn default() -> Self {
         Self {
             caching: true,
+            config_dir: None,
             out_dir: None,
             on_progress: None,
         }
@@ -45,12 +39,17 @@ impl Default for DownloadOptions<'_> {
 }
 
 impl<'a> DownloadOptions<'a> {
-    pub fn caching(mut self, value: bool) -> Self {
+    pub fn with_caching(mut self, value: bool) -> Self {
         self.caching = value;
         self
     }
 
-    pub fn out_dir<P: AsRef<Path>>(mut self, path: P) -> Self {
+    pub fn with_config_dir<P: AsRef<Path>>(mut self, dir: P) -> Self {
+        self.config_dir = Some(dir.as_ref().to_path_buf());
+        self
+    }
+
+    pub fn with_out_dir<P: AsRef<Path>>(mut self, path: P) -> Self {
         self.out_dir = Some(path.as_ref().to_path_buf());
         self
     }
@@ -59,7 +58,7 @@ impl<'a> DownloadOptions<'a> {
     where
         F: Fn(u64, Option<u64>, f64) + Send + Sync + 'a,
     {
-        self.on_progress = Some(Box::new(callback));
+        self.on_progress = Some(Arc::new(callback));
         self
     }
 }

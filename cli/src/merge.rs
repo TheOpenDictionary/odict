@@ -1,4 +1,5 @@
 use clap::{arg, command, Args};
+use odict::OpenDictionary;
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -18,13 +19,13 @@ pub struct MergeArgs {
 }
 
 pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
-    let mut dict = internal::load_dictionary(&args.destination)
+    let mut dict = OpenDictionary::load(&args.destination)
         .await?
         .contents()?
         .deserialize()?;
 
     for source in &args.sources {
-        let source_dict = internal::load_dictionary(source)
+        let source_dict = OpenDictionary::load(source)
             .await?
             .contents()?
             .deserialize()?;

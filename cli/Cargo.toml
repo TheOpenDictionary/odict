@@ -19,7 +19,7 @@ odict = { path = "../lib", features = [
   "html",
   "tokenize",
 ] }
-internal = { path = "../internal", features = ["load"] }
+internal = { path = "../internal" }
 clap = { version = "4.5.49", features = ["derive", "cargo"] }
 console = "0.16.1"
 indicatif = "0.18.0"

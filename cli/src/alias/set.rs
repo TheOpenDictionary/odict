@@ -1,5 +1,5 @@
 use clap::{arg, Args};
-use odict::alias::AliasManager;
+use odict::{alias::AliasManager, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -13,7 +13,7 @@ pub struct SetArgs {
 }
 
 pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
-    let dict = internal::load_dictionary(args.path.as_str()).await?;
+    let dict = OpenDictionary::load(args.path.as_str()).await?;
 
     if overwrite {
         anyhow::Ok(AliasManager::default().set(args.name.as_str(), &dict)?)

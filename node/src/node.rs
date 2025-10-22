@@ -44,17 +44,17 @@ impl OpenDictionary {
 
     #[napi(factory)]
     pub async fn load(dictionary: String, options: Option<LoadOptions>) -> Result<Self> {
-        use internal::LoadDictionaryOptions;
-
-        let opts = options
-            .map(|o| LoadDictionaryOptions::try_from(o))
-            .transpose()
-            .map_err(cast_error)?
-            .unwrap_or_default();
-
-        let dict = internal::load_dictionary_with_options(&dictionary, opts)
-            .await
-            .map_err(cast_error)?;
+        let dict = match options {
+            Some(opts) => {
+                let load_opts = odict::LoadOptions::try_from(opts).map_err(cast_error)?;
+                odict::OpenDictionary::load_with_options(&dictionary, load_opts)
+                    .await
+                    .map_err(cast_error)?
+            }
+            None => odict::OpenDictionary::load(&dictionary)
+                .await
+                .map_err(cast_error)?,
+        };
 
         Ok(Self { dict })
     }

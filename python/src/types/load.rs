@@ -2,22 +2,6 @@ use pyo3::prelude::*;
 
 #[pyclass]
 #[derive(PartialEq, Default, Clone, Eq)]
-pub struct AliasLoadOptions {
-    #[pyo3(get, set)]
-    pub path: Option<String>,
-}
-
-#[pymethods]
-impl AliasLoadOptions {
-    #[new]
-    #[pyo3(signature = (path=None))]
-    pub fn new(path: Option<String>) -> Self {
-        AliasLoadOptions { path }
-    }
-}
-
-#[pyclass]
-#[derive(PartialEq, Default, Clone, Eq)]
 pub struct RemoteLoadOptions {
     #[pyo3(get, set)]
     pub out_dir: Option<String>,
@@ -38,7 +22,7 @@ impl RemoteLoadOptions {
 #[derive(PartialEq, Default, Clone, Eq)]
 pub struct LoadOptions {
     #[pyo3(get, set)]
-    pub alias: Option<AliasLoadOptions>,
+    pub config_dir: Option<String>,
     #[pyo3(get, set)]
     pub remote: Option<RemoteLoadOptions>,
 }
@@ -46,34 +30,36 @@ pub struct LoadOptions {
 #[pymethods]
 impl LoadOptions {
     #[new]
-    #[pyo3(signature = (alias=None, remote=None))]
-    pub fn new(alias: Option<AliasLoadOptions>, remote: Option<RemoteLoadOptions>) -> Self {
-        LoadOptions { alias, remote }
+    #[pyo3(signature = (config_dir=None, remote=None))]
+    pub fn new(config_dir: Option<String>, remote: Option<RemoteLoadOptions>) -> Self {
+        LoadOptions { config_dir, remote }
     }
 }
 
-impl TryFrom<LoadOptions> for internal::LoadDictionaryOptions<'_> {
+impl TryFrom<LoadOptions> for odict::LoadOptions<'_> {
     type Error = odict::Error;
 
     fn try_from(opts: LoadOptions) -> Result<Self, Self::Error> {
-        let mut options = internal::LoadDictionaryOptions::default();
+        let mut options = odict::LoadOptions::default();
 
-        if let Some(path) = opts.alias.and_then(|a| a.path) {
-            options = options.with_alias_manager(odict::alias::AliasManager::new(&path)?);
+        if let Some(config_dir) = opts.config_dir {
+            options = options
+                .with_config_dir(&config_dir)
+                .with_alias_manager(odict::alias::AliasManager::new(&config_dir));
         }
 
         if let Some(remote_opts) = opts.remote {
-            let mut ro = odict::remote::RemoteOptions::default();
+            let mut downloader = odict::download::DictionaryDownloader::default();
 
             if let Some(caching) = remote_opts.caching {
-                ro = ro.caching(caching);
+                downloader = downloader.with_caching(caching);
             }
 
             if let Some(out_dir) = remote_opts.out_dir {
-                ro = ro.out_dir(out_dir);
+                downloader = downloader.with_out_dir(out_dir);
             }
 
-            options = options.with_remote_options(ro);
+            options = options.with_downloader(downloader);
         }
 
         Ok(options)

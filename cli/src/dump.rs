@@ -1,9 +1,12 @@
 use std::fs;
 
 use clap::{arg, command, Args};
-use odict::format::{
-    sql::{SQLDialect, ToSQL},
-    xml::ToXML,
+use odict::{
+    format::{
+        sql::{SQLDialect, ToSQL},
+        xml::ToXML,
+    },
+    OpenDictionary,
 };
 
 use crate::{enums::DumpFormat, CLIContext};
@@ -29,7 +32,7 @@ pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Resu
         output,
     } = args;
 
-    let dict = internal::load_dictionary(input)
+    let dict = OpenDictionary::load(input)
         .await?
         .contents()?
         .deserialize()?;
