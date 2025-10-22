@@ -24,5 +24,4 @@ odict = { path = "../lib", features = [
 internal = { path = "../internal" }
 either = { version = "*" }
 structural-convert = { workspace = true }
-merge = { workspace = true }
 tokio = { version = "1.48", features = ["full"] }

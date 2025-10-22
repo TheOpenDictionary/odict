@@ -1,23 +1,18 @@
-use merge::Merge;
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Merge, Clone)]
+#[derive(Clone)]
 pub struct SearchOptions {
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub directory: Option<String>,
-    
+
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub threshold: Option<u32>,
-    
+
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub autoindex: Option<bool>,
-    
+
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub limit: Option<usize>,
 }
 

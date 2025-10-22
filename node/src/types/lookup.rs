@@ -1,4 +1,3 @@
-use merge::Merge;
 use odict::schema::ArchivedEntry;
 
 use crate::utils::cast_error;
@@ -6,13 +5,10 @@ use crate::utils::cast_error;
 use super::Entry;
 
 #[napi(object)]
-#[derive(Merge, Clone)]
+#[derive( Clone)]
 pub struct LookupOptions {
-    #[merge(strategy = merge::option::overwrite_none)]
     pub split: Option<u32>,
-    #[merge(strategy = merge::option::overwrite_none)]
     pub follow: Option<bool>,
-    #[merge(strategy = merge::option::overwrite_none)]
     pub insensitive: Option<bool>,
 }
 
