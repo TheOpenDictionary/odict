@@ -151,11 +151,20 @@ impl OpenDictionary {
 mod tests {
     use tempfile::TempDir;
 
-    use crate::alias::DEFAULT_ALIAS_FILE;
+    use crate::{alias::DEFAULT_ALIAS_FILE, config::DEFAULT_CONFIG_DIR};
 
     use super::AliasManager;
 
-    /// Test that custom config directory is properly passed to alias manager by creating an alias
+    #[test]
+    fn test_default_config_dir() {
+        let alias_manager = AliasManager::default();
+
+        assert_eq!(
+            alias_manager.path(),
+            DEFAULT_CONFIG_DIR.join(DEFAULT_ALIAS_FILE)
+        );
+    }
+
     #[test]
     fn test_custom_config_dir() {
         let temp_dir = TempDir::new().unwrap();

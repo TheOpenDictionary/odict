@@ -2,10 +2,26 @@ mod helpers;
 
 #[cfg(test)]
 mod alias_tests {
-    use odict::alias::AliasManager;
+    use odict::{alias::AliasManager, config::DEFAULT_CONFIG_DIR};
     use tempfile::TempDir;
 
     use crate::helpers::get_example_dict;
+
+    /// Test that custom config directory is properly passed to alias manager by creating an alias
+    #[test]
+    fn test_default_behavior() {
+        let mut alias_manager = AliasManager::default();
+        let dict = get_example_dict("example1").unwrap();
+
+        alias_manager.set("test_alias", &dict).unwrap();
+
+        let alias_file = DEFAULT_CONFIG_DIR.join("aliases.json");
+
+        assert!(
+            alias_file.exists(),
+            "Alias file should be created in default config directory"
+        );
+    }
 
     /// Test that custom config directory is properly passed to alias manager by creating an alias
     #[test]
