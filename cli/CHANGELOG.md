@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.0...cli/v3.1.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
+
 ## [3.1.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.0.0...cli/v3.1.0) (2025-10-20)
 
 

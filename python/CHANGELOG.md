@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.0...python/v2.1.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
+* Remove unused merge crate from python and node ([81d6685](https://github.com/TheOpenDictionary/odict/commit/81d668530caa068660c76dc5235241335d37ff98))
+
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.0.0...python/v2.1.0) (2025-10-20)
 
 
