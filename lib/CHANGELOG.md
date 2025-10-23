@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.1...lib/v3.2.0) (2025-10-23)
+
+
+### Features
+
+* **http:** Expose download methods on OpenDictionary ([99cd786](https://github.com/TheOpenDictionary/odict/commit/99cd786bd2aba9321670c890fe32f923165b3cbc))
+
 ## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.0...lib/v3.1.1) (2025-10-22)
 
 
