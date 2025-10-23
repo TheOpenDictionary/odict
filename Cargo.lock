@@ -2531,7 +2531,7 @@ dependencies = [
 
 [[package]]
 name = "odict"
-version = "3.1.0"
+version = "3.1.1"
 dependencies = [
  "brotli",
  "byteorder",
@@ -2565,7 +2565,7 @@ dependencies = [
 
 [[package]]
 name = "odict-cli"
-version = "3.1.0"
+version = "3.1.1"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -2597,7 +2597,7 @@ dependencies = [
 
 [[package]]
 name = "odict_python"
-version = "2.1.0"
+version = "2.1.1"
 dependencies = [
  "either",
  "internal",

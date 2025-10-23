@@ -11,7 +11,7 @@ use crate::{
         options::{DownloadOptions, ProgressCallback},
         utils::parse_remote_dictionary_name,
     },
-    Error,
+    Error, OpenDictionary,
 };
 
 use futures_util::StreamExt;
@@ -238,6 +238,24 @@ impl<'a> DictionaryDownloader<'a> {
         }
     }
 }
+
+impl OpenDictionary {
+    pub async fn download(dictionary_name: &str) -> Result<PathBuf, Error> {
+        DictionaryDownloader::default()
+            .download(dictionary_name)
+            .await
+    }
+
+    pub async fn download_with_options<'a, Options: AsRef<DownloadOptions<'a>>>(
+        dictionary_name: &str,
+        options: Options,
+    ) -> Result<PathBuf, Error> {
+        DictionaryDownloader::default()
+            .download_with_options(dictionary_name, options)
+            .await
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::fs;
