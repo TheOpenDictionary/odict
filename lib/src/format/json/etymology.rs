@@ -1,9 +1,9 @@
-use std::collections::{BTreeMap, HashSet};
+use std::collections::HashSet;
 use structural_convert::StructuralConvert;
 
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
-use crate::schema::{EnumIdentifier, Etymology};
+use crate::schema::Etymology;
 
 use super::{PronunciationJSON, SenseJSON};
 
@@ -19,22 +19,6 @@ pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
-    #[serde(
-        serialize_with = "hash_senses",
-        skip_serializing_if = "HashSet::is_empty"
-    )]
+    #[serde(skip_serializing_if = "HashSet::is_empty")]
     pub senses: HashSet<SenseJSON>,
-}
-
-pub fn hash_senses<S>(value: &HashSet<SenseJSON>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut ordered_map = BTreeMap::new();
-
-    for item in value {
-        ordered_map.insert(item.pos.id(), item);
-    }
-
-    ordered_map.serialize(serializer)
 }

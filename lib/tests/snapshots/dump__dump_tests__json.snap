@@ -11,8 +11,8 @@ expression: dumped
       "etymologies": [
         {
           "description": "Latin root",
-          "senses": {
-            "n": {
+          "senses": [
+            {
               "pos": "n",
               "definitions": [
                 {
@@ -36,7 +36,7 @@ expression: dumped
                 }
               ]
             }
-          }
+          ]
         }
       ]
     },
@@ -45,8 +45,8 @@ expression: dumped
       "etymologies": [
         {
           "description": "Latin root",
-          "senses": {
-            "un": {
+          "senses": [
+            {
               "pos": "un",
               "definitions": [
                 {
@@ -55,7 +55,7 @@ expression: dumped
                 }
               ]
             }
-          }
+          ]
         }
       ]
     },
@@ -64,8 +64,8 @@ expression: dumped
       "etymologies": [
         {
           "description": "Latin root",
-          "senses": {
-            "un": {
+          "senses": [
+            {
               "pos": "un",
               "definitions": [
                 {
@@ -79,7 +79,7 @@ expression: dumped
                 }
               ]
             }
-          }
+          ]
         }
       ]
     },
@@ -93,8 +93,8 @@ expression: dumped
       "etymologies": [
         {
           "description": "Latin root",
-          "senses": {
-            "n": {
+          "senses": [
+            {
               "pos": "n",
               "definitions": [
                 {
@@ -131,7 +131,7 @@ expression: dumped
                 }
               ]
             },
-            "v": {
+            {
               "pos": "v",
               "definitions": [
                 {
@@ -168,7 +168,7 @@ expression: dumped
                 }
               ]
             }
-          }
+          ]
         }
       ]
     }

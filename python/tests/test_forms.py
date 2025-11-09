@@ -47,7 +47,7 @@ class TestForms(unittest.TestCase):
             etymology = entry.etymologies[0]
 
             # Get the first sense (they're stored in a dict by part of speech)
-            sense = list(etymology.senses.values())[0]
+            sense = list(etymology.senses)[0]
 
             # Forms are now at the Sense level
             self.assertEqual(len(sense.forms), 3)
