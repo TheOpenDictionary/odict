@@ -95,43 +95,6 @@ expression: dumped
           "description": "Latin root",
           "senses": [
             {
-              "pos": "n",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "(vertebrates) To move swiftly",
-                  "examples": [
-                    {
-                      "value": "The dog runs after the cat."
-                    },
-                    {
-                      "value": "The horse ran away."
-                    }
-                  ]
-                },
-                {
-                  "type": "definition",
-                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
-                },
-                {
-                  "type": "definition",
-                  "value": "A pleasure trip."
-                },
-                {
-                  "type": "definition",
-                  "value": "Flight, instance or period of fleeing."
-                },
-                {
-                  "type": "definition",
-                  "value": "Migration (of fish)."
-                },
-                {
-                  "type": "definition",
-                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
-                }
-              ]
-            },
-            {
               "pos": "v",
               "definitions": [
                 {
@@ -165,6 +128,43 @@ expression: dumped
                       "value": "(transitive) To execute or carry out a plan, procedure or program."
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "pos": "n",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "(vertebrates) To move swiftly",
+                  "examples": [
+                    {
+                      "value": "The dog runs after the cat."
+                    },
+                    {
+                      "value": "The horse ran away."
+                    }
+                  ]
+                },
+                {
+                  "type": "definition",
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "A pleasure trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "Flight, instance or period of fleeing."
+                },
+                {
+                  "type": "definition",
+                  "value": "Migration (of fish)."
+                },
+                {
+                  "type": "definition",
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
                 }
               ]
             }

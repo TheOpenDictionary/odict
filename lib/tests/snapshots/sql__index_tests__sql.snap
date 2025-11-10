@@ -20,10 +20,6 @@ INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUE
 INSERT INTO "notes" ("id", "value", "index", "definition_id") VALUES ('', 'Some definition note', 0, '');
 INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'Some example', 0, NULL, '');
 INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'There goes a cat!', 0, '', NULL);
-INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'dog', '');
-INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
-INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'unknown', '');
-INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'a dog', 0, '', NULL);
 INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'poo', '');
 INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
 INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'unknown', '');
@@ -31,6 +27,8 @@ INSERT INTO "groups" ("id", "description", "index", "sense_id") VALUES ('', 'A n
 INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'ran', '');
 INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'run', '');
 INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'verb', '');
+INSERT INTO "groups" ("id", "description", "index", "sense_id") VALUES ('', 'A number of verb senses', 0, '');
 INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'noun', '');
 INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', '(vertebrates) To move swiftly', 0, '', NULL);
 INSERT INTO "examples" ("id", "value", "index", "definition_id", "note_id") VALUES ('', 'The dog runs after the cat.', 0, '', NULL);
@@ -40,5 +38,7 @@ INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUE
 INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Flight, instance or period of fleeing.', 3, '', NULL);
 INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'Migration (of fish).', 4, '', NULL);
 INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'A group of fish that migrate, or ascend a river for the purpose of spawning.', 5, '', NULL);
-INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'verb', '');
-INSERT INTO "groups" ("id", "description", "index", "sense_id") VALUES ('', 'A number of verb senses', 0, '')
+INSERT INTO "entries" ("id", "term", "dictionary_id") VALUES ('', 'dog', '');
+INSERT INTO "etymologies" ("id", "description", "entry_id") VALUES ('', 'Latin root', '');
+INSERT INTO "senses" ("id", "pos", "etymology_id") VALUES ('', 'unknown', '');
+INSERT INTO "definitions" ("id", "value", "index", "sense_id", "group_id") VALUES ('', 'a dog', 0, '', NULL)
