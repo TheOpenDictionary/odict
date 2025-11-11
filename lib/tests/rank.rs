@@ -2,7 +2,8 @@ mod helpers;
 
 #[cfg(test)]
 mod rank_tests {
-    use indexmap::IndexSet;
+
+    use odict::schema::EntrySet;
 
     use crate::helpers::{EXAMPLE_DICT_1, EXAMPLE_DICT_2};
 
@@ -78,7 +79,7 @@ mod rank_tests {
 
         dict.name = Some("Test Dictionary".to_string());
 
-        let mut entries = IndexSet::new();
+        let mut entries = EntrySet::new();
 
         let mut entry1 = Entry::default();
         entry1.term = "low".to_string();
@@ -117,7 +118,7 @@ mod rank_tests {
         let mut dict = Dictionary::default();
         dict.name = Some("Single Rank Test".to_string());
 
-        let mut entries = IndexSet::new();
+        let mut entries = EntrySet::new();
 
         let mut entry1 = Entry::default();
         entry1.term = "single".to_string();
@@ -155,7 +156,7 @@ mod rank_tests {
 
         dict.name = Some("Extreme Values Test".to_string());
 
-        let mut entries = IndexSet::new();
+        let mut entries = EntrySet::new();
         let mut entry1 = Entry::default();
 
         entry1.term = "min".to_string();

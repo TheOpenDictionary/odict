@@ -8,6 +8,7 @@ mod pos_tests {
     use odict::{
         format::xml::ToXML,
         schema::{Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense},
+        senseset,
     };
 
     #[test]
@@ -35,7 +36,7 @@ mod pos_tests {
             term: "dog".into(),
             etymologies: vec![Etymology {
                 description: None,
-                senses: indexset![Sense {
+                senses: senseset![Sense {
                     pos: PartOfSpeech::Other("cusTom".into()),
                     ..Sense::default()
                 }],
@@ -80,7 +81,7 @@ mod pos_tests {
         dict.entries.insert(Entry {
             term: "dog".into(),
             etymologies: vec![Etymology {
-                senses: indexset![Sense {
+                senses: senseset![Sense {
                     pos: PartOfSpeech::AdjKari,
                     ..Sense::default()
                 }],

@@ -37,7 +37,6 @@ pub use self::error::*;
 pub use self::ext::*;
 pub use self::load::*;
 pub use self::odict::*;
-pub use indexmap::IndexSet;
 
 #[cfg(feature = "search")]
 pub use self::search::*;

@@ -5,7 +5,7 @@ use crate::serializable;
 
 use super::sense::Sense;
 
-pub type SenseList = IndexSet<Sense>;
+pub type SenseSet = IndexSet<Sense>;
 
 serializable! {
   #[derive(Default)]
@@ -21,7 +21,7 @@ serializable! {
     pub pronunciations: Vec<Pronunciation>,
 
     #[serde(rename = "sense", default, with = "senses")]
-    pub senses: SenseList,
+    pub senses: SenseSet,
 
     #[serde(rename = "@description")]
     #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]

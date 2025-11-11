@@ -7,7 +7,7 @@ use crate::{error::Error, intern::serialize_interned, serializable};
 
 use super::{entry::Entry, id::ID};
 
-pub type EntryList = IndexSet<Entry>;
+pub type EntrySet = IndexSet<Entry>;
 
 serializable! {
   #[derive(Default)]
@@ -22,7 +22,7 @@ serializable! {
       pub name: Option<String>,
 
       #[serde(default, rename = "entry")]
-      pub entries: EntryList
+      pub entries: EntrySet
   }
 }
 
