@@ -7,6 +7,8 @@ use crate::{error::Error, intern::serialize_interned, serializable};
 
 use super::{entry::Entry, id::ID};
 
+pub type EntryList = IndexSet<Entry>;
+
 serializable! {
   #[derive(Default)]
   #[serde(rename = "dictionary")]
@@ -19,39 +21,9 @@ serializable! {
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
-      #[serde(default, rename = "entry", with = "entries")]
-      pub entries: IndexSet<Entry>,
+      #[serde(default, rename = "entry")]
+      pub entries: EntryList
   }
-}
-
-mod entries {
-
-    use indexmap::IndexSet;
-    use serde::de::Deserializer;
-    use serde::ser::Serializer;
-    use serde::Deserialize;
-
-    use crate::schema::Entry;
-
-    pub fn serialize<S>(set: &IndexSet<Entry>, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.collect_seq(set.iter())
-    }
-
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<IndexSet<Entry>, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let mut set = IndexSet::new();
-
-        for item in Vec::<Entry>::deserialize(deserializer)? {
-            set.insert(item);
-        }
-
-        Ok(set)
-    }
 }
 
 impl FromStr for Dictionary {
