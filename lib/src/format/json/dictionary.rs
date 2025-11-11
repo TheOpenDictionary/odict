@@ -1,7 +1,7 @@
-use std::collections::{BTreeMap, HashSet};
+use indexmap::IndexSet;
 use structural_convert::StructuralConvert;
 
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
 use crate::schema::{Dictionary, ID};
 
@@ -15,22 +15,6 @@ pub struct DictionaryJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 
-    #[serde(
-        serialize_with = "hash_entries",
-        skip_serializing_if = "HashSet::is_empty"
-    )]
-    pub entries: HashSet<EntryJSON>,
-}
-
-pub fn hash_entries<S>(value: &HashSet<EntryJSON>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut ordered_map = BTreeMap::new();
-
-    for item in value {
-        ordered_map.insert(item.term.to_string(), item);
-    }
-
-    ordered_map.serialize(serializer)
+    #[serde(skip_serializing_if = "indexmap::IndexSet::is_empty")]
+    pub entries: IndexSet<EntryJSON>,
 }

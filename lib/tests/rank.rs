@@ -2,6 +2,8 @@ mod helpers;
 
 #[cfg(test)]
 mod rank_tests {
+    use indexmap::IndexSet;
+
     use crate::helpers::{EXAMPLE_DICT_1, EXAMPLE_DICT_2};
 
     #[test]
@@ -71,12 +73,12 @@ mod rank_tests {
     #[test]
     fn test_rank_with_multiple_values() {
         use odict::schema::{Dictionary, Entry, Etymology};
-        use std::collections::HashSet;
 
         let mut dict = Dictionary::default();
+
         dict.name = Some("Test Dictionary".to_string());
 
-        let mut entries = HashSet::new();
+        let mut entries = IndexSet::new();
 
         let mut entry1 = Entry::default();
         entry1.term = "low".to_string();
@@ -111,12 +113,11 @@ mod rank_tests {
     #[test]
     fn test_rank_single_value() {
         use odict::schema::{Dictionary, Entry, Etymology};
-        use std::collections::HashSet;
 
         let mut dict = Dictionary::default();
         dict.name = Some("Single Rank Test".to_string());
 
-        let mut entries = HashSet::new();
+        let mut entries = IndexSet::new();
 
         let mut entry1 = Entry::default();
         entry1.term = "single".to_string();
@@ -149,14 +150,14 @@ mod rank_tests {
     #[test]
     fn test_rank_extreme_values() {
         use odict::schema::{Dictionary, Entry, Etymology};
-        use std::collections::HashSet;
 
         let mut dict = Dictionary::default();
+
         dict.name = Some("Extreme Values Test".to_string());
 
-        let mut entries = HashSet::new();
-
+        let mut entries = IndexSet::new();
         let mut entry1 = Entry::default();
+
         entry1.term = "min".to_string();
         entry1.rank = Some(0);
         entry1.etymologies = vec![Etymology::default()];

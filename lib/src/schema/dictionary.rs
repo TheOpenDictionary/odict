@@ -1,6 +1,6 @@
+use indexmap::IndexSet;
 use rkyv::deserialize;
 
-use std::collections::HashSet;
 use std::str::FromStr;
 
 use crate::{error::Error, intern::serialize_interned, serializable};
@@ -20,31 +20,31 @@ serializable! {
       pub name: Option<String>,
 
       #[serde(default, rename = "entry", with = "entries")]
-      pub entries: HashSet<Entry>,
+      pub entries: IndexSet<Entry>,
   }
 }
 
 mod entries {
-    use std::collections::HashSet;
 
+    use indexmap::IndexSet;
     use serde::de::Deserializer;
     use serde::ser::Serializer;
     use serde::Deserialize;
 
     use crate::schema::Entry;
 
-    pub fn serialize<S>(set: &HashSet<Entry>, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(set: &IndexSet<Entry>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
         serializer.collect_seq(set.iter())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashSet<Entry>, D::Error>
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<IndexSet<Entry>, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let mut set = HashSet::new();
+        let mut set = IndexSet::new();
 
         for item in Vec::<Entry>::deserialize(deserializer)? {
             set.insert(item);

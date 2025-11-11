@@ -68,7 +68,9 @@ pub fn insert_etymology(
         insert_pronunciation(builder, id.as_str(), pronunciation)?;
     }
 
-    let senses = etymology.senses.iter().collect::<Vec<&Sense>>();
+    let mut senses = etymology.senses.iter().collect::<Vec<&Sense>>();
+
+    senses.sort_by(|a, b| a.pos.cmp(&b.pos));
 
     for sense in senses {
         insert_sense(builder, id.as_str(), sense)?;

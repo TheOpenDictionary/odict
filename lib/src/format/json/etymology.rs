@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use indexmap::IndexSet;
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;
@@ -19,6 +19,6 @@ pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
-    #[serde(skip_serializing_if = "HashSet::is_empty")]
-    pub senses: HashSet<SenseJSON>,
+    #[serde(skip_serializing_if = "indexmap::IndexSet::is_empty")]
+    pub senses: IndexSet<SenseJSON>,
 }
