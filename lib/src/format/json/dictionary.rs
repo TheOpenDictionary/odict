@@ -1,15 +1,12 @@
 use indexmap::IndexSet;
 
-use structural_convert::StructuralConvert;
-
 use serde::Serialize;
 
 use crate::schema::{Dictionary, ID};
 
 use super::EntryJSON;
 
-#[derive(Serialize, StructuralConvert)]
-#[convert(from(Dictionary))]
+#[derive(Serialize)]
 pub struct DictionaryJSON {
     pub id: ID,
 
@@ -18,4 +15,14 @@ pub struct DictionaryJSON {
 
     #[serde(skip_serializing_if = "indexmap::IndexSet::is_empty")]
     pub entries: IndexSet<EntryJSON>,
+}
+
+impl From<Dictionary> for DictionaryJSON {
+    fn from(dictionary: Dictionary) -> Self {
+        Self {
+            id: dictionary.id,
+            name: dictionary.name,
+            entries: dictionary.entries.into_iter().map(Into::into).collect(),
+        }
+    }
 }

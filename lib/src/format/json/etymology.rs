@@ -1,5 +1,4 @@
 use indexmap::IndexSet;
-use structural_convert::StructuralConvert;
 
 use serde::Serialize;
 
@@ -7,8 +6,7 @@ use crate::schema::Etymology;
 
 use super::{PronunciationJSON, SenseJSON};
 
-#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
-#[convert(from(Etymology))]
+#[derive(Serialize, PartialEq, Eq)]
 pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -21,4 +19,19 @@ pub struct EtymologyJSON {
 
     #[serde(skip_serializing_if = "indexmap::IndexSet::is_empty")]
     pub senses: IndexSet<SenseJSON>,
+}
+
+impl From<Etymology> for EtymologyJSON {
+    fn from(etymology: Etymology) -> Self {
+        Self {
+            id: etymology.id,
+            pronunciations: etymology
+                .pronunciations
+                .into_iter()
+                .map(Into::into)
+                .collect(),
+            description: etymology.description,
+            senses: etymology.senses.into_iter().map(Into::into).collect(),
+        }
+    }
 }

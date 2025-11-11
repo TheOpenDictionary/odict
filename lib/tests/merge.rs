@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod merge_tests {
-    use map_macro::hash_set;
+    use indexmap::indexset;
 
     use odict::schema::{
         Definition, DefinitionType, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID,
@@ -11,7 +11,7 @@ mod merge_tests {
         let dict1 = Dictionary {
             id: ID::new(),
             name: None,
-            entries: hash_set![Entry {
+            entries: indexset![Entry {
                 rank: None,
                 media: vec![],
                 term: "dog".to_string(),
@@ -20,7 +20,7 @@ mod merge_tests {
                     id: None,
                     description: None,
                     pronunciations: vec![],
-                    senses: hash_set![Sense {
+                    senses: indexset![Sense {
                         tags: vec![],
                         translations: vec![],
                         forms: vec![],
@@ -40,7 +40,7 @@ mod merge_tests {
         let dict2 = Dictionary {
             id: ID::new(),
             name: None,
-            entries: hash_set! {
+            entries: indexset! {
               Entry {
                   rank: None,
                   media: vec![],
@@ -50,7 +50,7 @@ mod merge_tests {
                     id: None,
                     pronunciations: vec![],
                     description: None,
-                      senses:hash_set! [
+                      senses:indexset! [
                           Sense {
                               tags: vec![],
                               pos: PartOfSpeech::N,
@@ -77,11 +77,11 @@ mod merge_tests {
         let expected = Dictionary {
             id: ID::new(),
             name: None,
-            entries: hash_set![
+            entries: indexset![
                 Entry {
                     term: "dog".to_string(),
                     etymologies: vec![Etymology {
-                        senses: hash_set![Sense {
+                        senses: indexset![Sense {
                             pos: PartOfSpeech::N,
                             definitions: vec![DefinitionType::Definition(Definition {
                                 id: None,
@@ -98,7 +98,7 @@ mod merge_tests {
                 Entry {
                     term: "cat".to_string(),
                     etymologies: vec![Etymology {
-                        senses: hash_set![Sense {
+                        senses: indexset![Sense {
                             pos: PartOfSpeech::N,
                             definitions: vec![DefinitionType::Definition(Definition {
                                 id: None,

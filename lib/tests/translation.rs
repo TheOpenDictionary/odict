@@ -1,4 +1,4 @@
-use map_macro::hash_set;
+use indexmap::indexset;
 use odict::format::json::ToJSON;
 use odict::{
     schema::{DefinitionType, Entry, Example, Translation},
@@ -59,7 +59,7 @@ fn test_translation_in_entry() {
     };
 
     // Create an etymology with the sense
-    let mut senses = hash_set![];
+    let mut senses = indexset![];
 
     senses.insert(sense);
 

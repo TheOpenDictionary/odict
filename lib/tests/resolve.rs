@@ -2,7 +2,7 @@ mod helpers;
 
 #[cfg(test)]
 mod resolve_tests {
-    use map_macro::hash_set;
+    use indexmap::indexset;
 
     use odict::schema::{
         Definition, DefinitionType, Dictionary, Entry, Etymology, PartOfSpeech, Sense, ID,
@@ -13,7 +13,7 @@ mod resolve_tests {
         let dict = Dictionary {
             id: ID::new(),
             name: None,
-            entries: hash_set! {
+            entries: indexset! {
               Entry {
                 rank: None,
                 media: vec![],
@@ -24,7 +24,7 @@ mod resolve_tests {
                     id: None,
                     description: None,
                     pronunciations: vec![],
-                    senses: hash_set![ Sense {
+                    senses: indexset![ Sense {
                         pos: PartOfSpeech::N,
                         lemma: None,
                         forms: vec![],

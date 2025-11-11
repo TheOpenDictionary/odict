@@ -1,7 +1,6 @@
-use std::hash::{Hash, Hasher};
+use std::hash::Hasher;
 
 use crate::schema::{ArchivedEntry, Entry};
-use indexmap::IndexSet;
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;
@@ -21,12 +20,6 @@ pub struct EntryJSON {
 
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub etymologies: Vec<EtymologyJSON>,
-}
-
-impl From<IndexSet<crate::schema::Entry>> for IndexSet<EntryJSON> {
-    fn from(value: IndexSet<crate::schema::Entry>) -> Self {
-        value.iter().map(|e| EntryJSON::from(e.clone())).collect()
-    }
 }
 
 impl std::hash::Hash for EntryJSON {
