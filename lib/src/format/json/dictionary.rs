@@ -1,4 +1,5 @@
 use indexmap::IndexSet;
+
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;

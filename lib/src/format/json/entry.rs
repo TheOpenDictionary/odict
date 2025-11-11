@@ -1,6 +1,7 @@
 use std::hash::{Hash, Hasher};
 
 use crate::schema::{ArchivedEntry, Entry};
+use indexmap::IndexSet;
 use structural_convert::StructuralConvert;
 
 use serde::Serialize;
@@ -22,15 +23,21 @@ pub struct EntryJSON {
     pub etymologies: Vec<EtymologyJSON>,
 }
 
+impl From<IndexSet<crate::schema::Entry>> for IndexSet<EntryJSON> {
+    fn from(value: IndexSet<crate::schema::Entry>) -> Self {
+        value.iter().map(|e| EntryJSON::from(e.clone())).collect()
+    }
+}
+
+impl std::hash::Hash for EntryJSON {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.term.hash(state)
+    }
+}
+
 impl TryFrom<&ArchivedEntry> for EntryJSON {
     fn try_from(entry: &ArchivedEntry) -> crate::Result<Self> {
         Ok(entry.deserialize()?.into())
     }
     type Error = crate::Error;
-}
-
-impl Hash for EntryJSON {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.term.hash(state);
-    }
 }
