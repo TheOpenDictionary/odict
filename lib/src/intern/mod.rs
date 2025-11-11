@@ -153,6 +153,7 @@ where
 ///     name: String,
 /// }
 /// ```
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct DerefIntern;
 
@@ -228,6 +229,7 @@ where
 ///     name: String,
 /// }
 /// ```
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct BorrowIntern<B: ?Sized> {
     _phantom: PhantomData<B>,
@@ -312,6 +314,7 @@ impl<S, I> InterningAdapter<S, I> {
     }
 
     /// Consumes the adapter and returns the components.
+    #[allow(dead_code)]
     pub fn into_components(self) -> (S, I) {
         (self.serializer, self.interning)
     }
