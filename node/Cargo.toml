@@ -18,15 +18,7 @@ napi = { version = "3", default-features = false, features = [
   "napi4",
 ] }
 napi-derive = "3"
-odict = { path = "../lib", features = [
-  "tokenize-latin",
-  "tokenize-chinese",
-  "tokenize-thai",
-  "tokenize-khmer",
-  "tokenize-swedish",
-  "tokenize-german",
-  "sql",
-] }
+odict = { path = "../lib", features = ["tokenize", "sql"] }
 structural-convert = { workspace = true }
 internal = { path = "../internal" }
 
