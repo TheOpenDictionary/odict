@@ -66,8 +66,8 @@ class TestLemma(unittest.TestCase):
 
             # Get the first sense from each etymology (in Python
             # it's an ordered list of key-value pairs)
-            running_sense = list(running_etymology.senses.values())[0]
-            ran_sense = list(ran_etymology.senses.values())[0]
+            running_sense = list(running_etymology.senses)[0]
+            ran_sense = list(ran_etymology.senses)[0]
 
             # Verify lemma references are on the sense objects
             self.assertIsNotNone(running_sense.lemma)

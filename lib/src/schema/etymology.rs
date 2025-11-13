@@ -1,9 +1,11 @@
-use std::collections::HashSet;
+use indexmap::IndexSet;
 
 use crate::schema::pronunciation::Pronunciation;
 use crate::serializable;
 
 use super::sense::Sense;
+
+pub type SenseSet = IndexSet<Sense>;
 
 serializable! {
   #[derive(Default)]
@@ -19,7 +21,7 @@ serializable! {
     pub pronunciations: Vec<Pronunciation>,
 
     #[serde(rename = "sense", default, with = "senses")]
-    pub senses: HashSet<Sense>,
+    pub senses: SenseSet,
 
     #[serde(rename = "@description")]
     #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
@@ -29,22 +31,21 @@ serializable! {
 }
 
 mod senses {
-    use std::collections::HashSet;
-
+    use indexmap::IndexSet;
     use serde::de::Deserializer;
     use serde::ser::Serializer;
     use serde::Deserialize;
 
     use crate::schema::Sense;
 
-    pub fn serialize<S>(set: &HashSet<Sense>, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S>(set: &IndexSet<Sense>, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
         serializer.collect_seq(set.iter())
     }
 
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashSet<Sense>, D::Error>
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<IndexSet<Sense>, D::Error>
     where
         D: Deserializer<'de>,
     {

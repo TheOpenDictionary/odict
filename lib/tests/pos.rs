@@ -3,11 +3,12 @@ mod pos_tests {
 
     use std::str::FromStr;
 
+    use indexmap::indexset;
     use insta::assert_snapshot;
-    use map_macro::hash_set;
     use odict::{
         format::xml::ToXML,
         schema::{Dictionary, Entry, EnumIdentifier, Etymology, PartOfSpeech, Sense},
+        senseset,
     };
 
     #[test]
@@ -35,7 +36,7 @@ mod pos_tests {
             term: "dog".into(),
             etymologies: vec![Etymology {
                 description: None,
-                senses: hash_set![Sense {
+                senses: senseset![Sense {
                     pos: PartOfSpeech::Other("cusTom".into()),
                     ..Sense::default()
                 }],
@@ -80,7 +81,7 @@ mod pos_tests {
         dict.entries.insert(Entry {
             term: "dog".into(),
             etymologies: vec![Etymology {
-                senses: hash_set![Sense {
+                senses: senseset![Sense {
                     pos: PartOfSpeech::AdjKari,
                     ..Sense::default()
                 }],
