@@ -16,10 +16,8 @@ mod pos;
 mod pronunciation;
 mod pronunciation_kind;
 mod sense;
-mod translation;
-
-#[macro_use]
 mod serializable;
+mod translation;
 
 pub use self::definition::*;
 pub use self::dictionary::*;

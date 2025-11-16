@@ -46,7 +46,7 @@ export interface Etymology {
   id?: string
   pronunciations: Array<Pronunciation>
   description?: string
-  senses: Record<string, Sense>
+  senses: Array<Sense>
 }
 
 export interface Example {

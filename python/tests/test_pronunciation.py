@@ -97,7 +97,7 @@ def test_example_with_pronunciation():
         entry = results[0].entry
 
         # Access the example through the definition
-        first_sense = next(iter(entry.etymologies[0].senses.values()))
+        first_sense = next(iter(entry.etymologies[0].senses))
         definition = first_sense.definitions[0]
         example = definition.examples[0]
 

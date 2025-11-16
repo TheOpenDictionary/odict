@@ -5,133 +5,15 @@ expression: dumped
 {
   "id": "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f",
   "name": "Example Dictionary 1",
-  "entries": {
-    "cat": {
-      "term": "cat",
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "n": {
-              "pos": "n",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "a cat",
-                  "examples": [
-                    {
-                      "value": "There goes a cat!"
-                    }
-                  ],
-                  "notes": [
-                    {
-                      "value": "Some definition note",
-                      "examples": [
-                        {
-                          "value": "Some example"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "dog": {
-      "term": "dog",
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "un": {
-              "pos": "un",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "a dog"
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "poo": {
-      "term": "poo",
-      "etymologies": [
-        {
-          "description": "Latin root",
-          "senses": {
-            "un": {
-              "pos": "un",
-              "definitions": [
-                {
-                  "type": "group",
-                  "description": "A number of verb senses",
-                  "definitions": [
-                    {
-                      "value": "crap, shit"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "ran": {
-      "term": "ran",
-      "see_also": "run"
-    },
-    "run": {
+  "entries": [
+    {
       "term": "run",
       "rank": 100,
       "etymologies": [
         {
           "description": "Latin root",
-          "senses": {
-            "n": {
-              "pos": "n",
-              "definitions": [
-                {
-                  "type": "definition",
-                  "value": "(vertebrates) To move swiftly",
-                  "examples": [
-                    {
-                      "value": "The dog runs after the cat."
-                    },
-                    {
-                      "value": "The horse ran away."
-                    }
-                  ]
-                },
-                {
-                  "type": "definition",
-                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
-                },
-                {
-                  "type": "definition",
-                  "value": "A pleasure trip."
-                },
-                {
-                  "type": "definition",
-                  "value": "Flight, instance or period of fleeing."
-                },
-                {
-                  "type": "definition",
-                  "value": "Migration (of fish)."
-                },
-                {
-                  "type": "definition",
-                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
-                }
-              ]
-            },
-            "v": {
+          "senses": [
+            {
               "pos": "v",
               "definitions": [
                 {
@@ -167,10 +49,128 @@ expression: dumped
                   ]
                 }
               ]
+            },
+            {
+              "pos": "n",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "(vertebrates) To move swiftly",
+                  "examples": [
+                    {
+                      "value": "The dog runs after the cat."
+                    },
+                    {
+                      "value": "The horse ran away."
+                    }
+                  ]
+                },
+                {
+                  "type": "definition",
+                  "value": "Act or instance of hurrying (to or from a place) (not necessarily by foot); dash or errand, trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "A pleasure trip."
+                },
+                {
+                  "type": "definition",
+                  "value": "Flight, instance or period of fleeing."
+                },
+                {
+                  "type": "definition",
+                  "value": "Migration (of fish)."
+                },
+                {
+                  "type": "definition",
+                  "value": "A group of fish that migrate, or ascend a river for the purpose of spawning."
+                }
+              ]
             }
-          }
+          ]
+        }
+      ]
+    },
+    {
+      "term": "poo",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": [
+            {
+              "pos": "un",
+              "definitions": [
+                {
+                  "type": "group",
+                  "description": "A number of verb senses",
+                  "definitions": [
+                    {
+                      "value": "crap, shit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "term": "dog",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": [
+            {
+              "pos": "un",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "a dog"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "term": "ran",
+      "see_also": "run"
+    },
+    {
+      "term": "cat",
+      "etymologies": [
+        {
+          "description": "Latin root",
+          "senses": [
+            {
+              "pos": "n",
+              "definitions": [
+                {
+                  "type": "definition",
+                  "value": "a cat",
+                  "examples": [
+                    {
+                      "value": "There goes a cat!"
+                    }
+                  ],
+                  "notes": [
+                    {
+                      "value": "Some definition note",
+                      "examples": [
+                        {
+                          "value": "Some example"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
-  }
+  ]
 }

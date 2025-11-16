@@ -26,7 +26,7 @@ impl EntryPopup {
 }
 
 #[derive(Debug, Default)]
-pub struct EntryList {
+pub struct EntrySet {
     pub items: Vec<String>,
     pub state: ListState,
 }
@@ -34,7 +34,7 @@ pub struct EntryList {
 #[derive(Debug)]
 pub struct App<'a> {
     pub search_field: Input,
-    pub entries: EntryList,
+    pub entries: EntrySet,
     pub entry: Option<EntryPopup>,
     pub running_state: RunningState,
     pub title: String,
@@ -57,7 +57,7 @@ impl App<'_> {
 
         let model = App {
             search_field: Input::default(),
-            entries: EntryList {
+            entries: EntrySet {
                 items: entries,
                 state: list_state,
             },

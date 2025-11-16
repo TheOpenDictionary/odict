@@ -1,14 +1,12 @@
-use std::collections::{BTreeMap, HashSet};
-use structural_convert::StructuralConvert;
+use indexmap::IndexSet;
 
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
-use crate::schema::{EnumIdentifier, Etymology};
+use crate::schema::Etymology;
 
 use super::{PronunciationJSON, SenseJSON};
 
-#[derive(Serialize, PartialEq, Eq, StructuralConvert)]
-#[convert(from(Etymology))]
+#[derive(Serialize, PartialEq, Eq)]
 pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -19,22 +17,21 @@ pub struct EtymologyJSON {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 
-    #[serde(
-        serialize_with = "hash_senses",
-        skip_serializing_if = "HashSet::is_empty"
-    )]
-    pub senses: HashSet<SenseJSON>,
+    #[serde(skip_serializing_if = "indexmap::IndexSet::is_empty")]
+    pub senses: IndexSet<SenseJSON>,
 }
 
-pub fn hash_senses<S>(value: &HashSet<SenseJSON>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut ordered_map = BTreeMap::new();
-
-    for item in value {
-        ordered_map.insert(item.pos.id(), item);
+impl From<Etymology> for EtymologyJSON {
+    fn from(etymology: Etymology) -> Self {
+        Self {
+            id: etymology.id,
+            pronunciations: etymology
+                .pronunciations
+                .into_iter()
+                .map(Into::into)
+                .collect(),
+            description: etymology.description,
+            senses: etymology.senses.into_iter().map(Into::into).collect(),
+        }
     }
-
-    ordered_map.serialize(serializer)
 }

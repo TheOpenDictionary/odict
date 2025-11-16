@@ -60,7 +60,7 @@ test('Pronunciation support - should parse examples with pronunciations', async 
   t.is(results.length, 1)
 
   const entry = results[0].entry
-  const example = (entry.etymologies[0].senses['n'].definitions[0] as Definition).examples[0]
+  const example = (entry.etymologies[0].senses[0].definitions[0] as Definition).examples[0]
 
   t.truthy(example.pronunciations)
   t.is(example.pronunciations.length, 1)

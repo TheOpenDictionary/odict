@@ -45,8 +45,6 @@ fn underline_target(example: &str, target: &str) -> String {
         parts.push(STYLE_EXAMPLE.apply_to(&example[last_index..]).to_string());
     }
 
-    
-
     parts.concat()
 }
 
@@ -149,6 +147,7 @@ fn print_group(ctx: &CLIContext, index: usize, group: &Group, entry: &Entry) -> 
 
     Ok(())
 }
+
 fn print_sense(ctx: &CLIContext, sense: &Sense, entry: &Entry) -> Result<(), Error> {
     let out = &ctx.stdout;
 
