@@ -6,12 +6,12 @@ __metadata:
   cacheKey: 10c0
 
 "@emnapi/core@npm:^1.5.0, @emnapi/core@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@emnapi/core@npm:1.7.0"
+  version: 1.7.1
+  resolution: "@emnapi/core@npm:1.7.1"
   dependencies:
     "@emnapi/wasi-threads": "npm:1.1.0"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/ea57802079fda31f87506bba63f1299f0fa60546c1a1a424d2d5926f98f1ffc4a94ae3c885155f4a60114c19d314addb45d94dc0e427ac1594cbfca7cd910a31
+  checksum: 10c0/f3740be23440b439333e3ae3832163f60c96c4e35337f3220ceba88f36ee89a57a871d27c94eb7a9ff98a09911ed9a2089e477ab549f4d30029f8b907f84a351
   languageName: node
   linkType: hard
 
