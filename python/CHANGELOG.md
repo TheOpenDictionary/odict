@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.1...python/v2.2.0) (2025-11-22)
+
+
+### Features
+
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
 ## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.0...python/v2.1.1) (2025-10-22)
 
 
