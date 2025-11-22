@@ -5,7 +5,7 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@emnapi/core@npm:^1.5.0, @emnapi/core@npm:^1.7.0":
+"@emnapi/core@npm:^1.5.0, @emnapi/core@npm:^1.7.1":
   version: 1.7.1
   resolution: "@emnapi/core@npm:1.7.1"
   dependencies:
@@ -15,7 +15,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emnapi/runtime@npm:^1.5.0, @emnapi/runtime@npm:^1.7.0":
+"@emnapi/runtime@npm:^1.5.0, @emnapi/runtime@npm:^1.7.1":
   version: 1.7.1
   resolution: "@emnapi/runtime@npm:1.7.1"
   dependencies:
@@ -1052,19 +1052,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@odict/node@workspace:node"
   dependencies:
-    "@emnapi/core": "npm:^1.7.0"
-    "@emnapi/runtime": "npm:^1.7.0"
+    "@emnapi/core": "npm:^1.7.1"
+    "@emnapi/runtime": "npm:^1.7.1"
     "@napi-rs/cli": "npm:3.4.1"
     "@napi-rs/wasm-runtime": "npm:^1.0.7"
     "@oxc-node/core": "npm:^0.0.34"
     "@taplo/cli": "npm:^0.7.0"
     "@tybys/wasm-util": "npm:^0.10.1"
-    "@types/node": "npm:^24.10.0"
+    "@types/node": "npm:^24.10.1"
     ava: "npm:^6.4.1"
     husky: "npm:^9.1.7"
-    lint-staged: "npm:^16.2.6"
+    lint-staged: "npm:^16.2.7"
     npm-run-all2: "npm:^8.0.4"
-    oxlint: "npm:^1.28.0"
+    oxlint: "npm:^1.29.0"
     prettier: "npm:^3.6.2"
     tinybench: "npm:^5.1.0"
   languageName: unknown
@@ -1363,7 +1363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^24.10.0":
+"@types/node@npm:^24.10.1":
   version: 24.10.1
   resolution: "@types/node@npm:24.10.1"
   dependencies:
@@ -2311,7 +2311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^16.2.6":
+"lint-staged@npm:^16.2.7":
   version: 16.2.7
   resolution: "lint-staged@npm:16.2.7"
   dependencies:
@@ -2560,7 +2560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxlint@npm:^1.28.0":
+"oxlint@npm:^1.29.0":
   version: 1.29.0
   resolution: "oxlint@npm:1.29.0"
   dependencies:

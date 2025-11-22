@@ -53,9 +53,9 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.38.3", features = ["serialize"] }
+quick-xml = { version = "0.38.4", features = ["serialize"] }
 rayon = "1.11.0"
-indexmap = { version = "2.12.0", features = ["serde", "rayon"] }
+indexmap = { version = "2.12.1", features = ["serde", "rayon"] }
 charabia = { version = "0.9.8", optional = true, default-features = false }
 rkyv = { version = "0.8.12", features = ["indexmap-2", "uuid-1"] }
 serde = { version = "1.0.228", features = ["serde_derive"] }
@@ -93,7 +93,7 @@ sea-query = { version = "0.32.7", optional = true }
 
 [dev-dependencies]
 criterion = { version = "0.7.0", features = ["async_tokio", "html_reports"] }
-insta = "1.43.2"
+insta = "1.44.1"
 map-macro = { version = "0.3.0" }
 tokio = { version = "1.48.0", features = ["rt", "macros"] }
 wiremock = "0.6.5"
