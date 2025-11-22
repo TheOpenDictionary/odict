@@ -1,13 +1,39 @@
 use std::ops::Deref;
 
-use crate::serializable;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-serializable! {
+use crate::{serializable, serializable_custom};
+
+serializable_custom! {
   #[derive(Default)]
   pub struct EntryRef(
-      #[rkyv(with = crate::intern::Intern)]
-      pub String
+      pub Box<super::Entry>
   );
+}
+
+impl Serialize for EntryRef {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        self.0.term.serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for EntryRef {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let term = String::deserialize(deserializer)?;
+        Ok(EntryRef(Box::new(super::Entry {
+            term,
+            see_also: None,
+            etymologies: Vec::new(),
+            media: Vec::new(),
+            rank: None,
+        })))
+    }
 }
 
 impl EntryRef {
