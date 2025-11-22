@@ -4,6 +4,19 @@
 
 
 
+## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.1...node/v2.2.0) (2025-11-22)
+
+
+### Features
+
+* **node:** Add Japanese tokenizer to Node package ([#1341](https://github.com/TheOpenDictionary/odict/issues/1341)) ([2c92c30](https://github.com/TheOpenDictionary/odict/commit/2c92c30c28dd6b665a5ed9158038afc963ff0d41))
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+
+### Bug Fixes
+
+* Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
+
 ## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.0...node/v2.1.1) (2025-10-22)
 
 

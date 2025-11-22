@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.1...lib/v3.2.0) (2025-11-22)
+
+
+### Features
+
+* **http:** Expose download methods on OpenDictionary ([99cd786](https://github.com/TheOpenDictionary/odict/commit/99cd786bd2aba9321670c890fe32f923165b3cbc))
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+
+### Bug Fixes
+
+* Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
+
 ## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.0...lib/v3.1.1) (2025-10-22)
 
 

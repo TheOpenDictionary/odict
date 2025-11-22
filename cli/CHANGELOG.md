@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.1...cli/v3.2.0) (2025-11-22)
+
+
+### Features
+
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+
+### Bug Fixes
+
+* Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
+
 ## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.0...cli/v3.1.1) (2025-10-22)
 
 
