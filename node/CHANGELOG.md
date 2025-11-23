@@ -4,6 +4,13 @@
 
 
 
+## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.0...node/v2.2.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* Fix missing Japanese tokenization ([16f7f56](https://github.com/TheOpenDictionary/odict/commit/16f7f5654c0ec53a976fdaebf3acfd25ca75b958))
+
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.1...node/v2.2.0) (2025-11-22)
 
 
