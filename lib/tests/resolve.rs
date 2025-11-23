@@ -2,7 +2,6 @@ mod helpers;
 
 #[cfg(test)]
 mod resolve_tests {
-    use indexmap::indexset;
 
     use odict::{
         entryset,

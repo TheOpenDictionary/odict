@@ -560,6 +560,7 @@ dependencies = [
  "serde",
  "slice-group-by",
  "unicode-normalization",
+ "wana_kana",
  "whatlang",
 ]
 
@@ -1938,6 +1939,15 @@ checksum = "a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695"
 
 [[package]]
 name = "itertools"
+version = "0.10.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
@@ -2525,7 +2535,7 @@ dependencies = [
 
 [[package]]
 name = "odict"
-version = "3.1.1"
+version = "3.2.0"
 dependencies = [
  "brotli",
  "byteorder",
@@ -2560,7 +2570,7 @@ dependencies = [
 
 [[package]]
 name = "odict-cli"
-version = "3.1.1"
+version = "3.2.0"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -2592,7 +2602,7 @@ dependencies = [
 
 [[package]]
 name = "odict_python"
-version = "2.1.1"
+version = "2.2.0"
 dependencies = [
  "either",
  "internal",
@@ -4344,6 +4354,17 @@ checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
 dependencies = [
  "same-file",
  "winapi-util",
+]
+
+[[package]]
+name = "wana_kana"
+version = "4.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a74666202acfcb4f9b995be2e3e9f7f530deb65e05a1407b8d0b30c9c451238a"
+dependencies = [
+ "fnv",
+ "itertools 0.10.5",
+ "lazy_static",
 ]
 
 [[package]]

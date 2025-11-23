@@ -68,6 +68,22 @@ mod tokenize_tests {
     }
 
     #[test]
+    fn test_tokenize_japanese() {
+        let dict = EXAMPLE_DICT_1.contents().unwrap();
+        let result = dict.tokenize("今日は良い天気です", TokenizeOptions::default());
+        let res = result.as_ref().unwrap();
+        let expected_lemmas = ["今日", "は", "良い", "天気", "です"];
+
+        assert!(result.is_ok());
+        assert_eq!(res.len(), expected_lemmas.len());
+
+        for (i, token) in res.iter().enumerate() {
+            assert_eq!(token.language, Some(Language::Jpn));
+            assert_eq!(token.lemma, expected_lemmas[i]);
+        }
+    }
+
+    #[test]
     fn test_tokenize_case_sensitive() {
         let dict = EXAMPLE_DICT_1.contents().unwrap();
 

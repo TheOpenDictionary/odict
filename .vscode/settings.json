@@ -8,5 +8,6 @@
   "debug.javascript.defaultRuntimeExecutable": {
     "pwa-node": "/Users/tjnickerson/.local/share/mise/shims/node"
   },
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv"
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+  "python.languageServer": "None"
 }

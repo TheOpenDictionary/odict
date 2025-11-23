@@ -40,7 +40,7 @@ tokenize = [
 ]
 tokenize-latin = ["dep:charabia"]
 tokenize-chinese = ["tokenize-latin", "charabia/chinese-segmentation"]
-tokenize-japanese = ["tokenize-latin", "charabia/japanese-segmentation-unidic"]
+tokenize-japanese = ["tokenize-latin", "charabia/japanese"]
 tokenize-thai = ["tokenize-latin", "charabia/thai"]
 tokenize-korean = ["tokenize-latin", "charabia/korean"]
 tokenize-khmer = ["tokenize-latin", "charabia/khmer"]
