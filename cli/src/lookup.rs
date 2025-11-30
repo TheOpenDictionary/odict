@@ -55,8 +55,8 @@ pub struct LookupArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -78,9 +78,8 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
 
     let file = OpenDictionary::load_with_options(
         path,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(*retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
     )
     .await?;
 

@@ -28,8 +28,8 @@ pub struct DumpArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -44,9 +44,8 @@ pub async fn dump<'a>(ctx: &mut CLIContext<'a>, args: &DumpArgs) -> anyhow::Resu
 
     let dict = OpenDictionary::load_with_options(
         input,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(*retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
     )
     .await?
     .contents()?

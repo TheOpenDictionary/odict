@@ -1,8 +1,5 @@
 use clap::{arg, command, Args};
-use odict::{
-    download::DictionaryDownloader,
-    LoadOptions, OpenDictionary,
-};
+use odict::{download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -23,8 +20,8 @@ pub struct MergeArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }

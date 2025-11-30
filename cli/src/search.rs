@@ -1,8 +1,6 @@
 use clap::{arg, command, Args};
 use odict::{
-    download::DictionaryDownloader,
-    index::get_default_index_dir,
-    search::SearchOptions,
+    download::DictionaryDownloader, index::get_default_index_dir, search::SearchOptions,
     LoadOptions, OpenDictionary,
 };
 
@@ -31,8 +29,8 @@ pub struct SearchArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -40,9 +38,8 @@ pub struct SearchArgs {
 pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::Result<()> {
     let file = OpenDictionary::load_with_options(
         &args.dictionary,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(args.retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(args.retries)),
     )
     .await?;
 
@@ -55,7 +52,7 @@ pub async fn search<'a>(ctx: &mut CLIContext<'a>, args: &SearchArgs) -> anyhow::
             let index_args = IndexArgs {
                 dictionary: args.dictionary.clone(),
                 directory: None,
-                retries: 3,
+                retries: crate::DEFAULT_RETRIES,
                 overwrite: false,
                 memory: DEFAULT_INDEX_MEMORY,
             };

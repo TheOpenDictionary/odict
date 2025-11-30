@@ -1,9 +1,5 @@
 use clap::{arg, Args};
-use odict::{
-    alias::AliasManager,
-    download::DictionaryDownloader,
-    LoadOptions, OpenDictionary,
-};
+use odict::{alias::AliasManager, download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -18,8 +14,8 @@ pub struct SetArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -27,9 +23,8 @@ pub struct SetArgs {
 pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
     let dict = OpenDictionary::load_with_options(
         args.path.as_str(),
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(args.retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(args.retries)),
     )
     .await?;
 

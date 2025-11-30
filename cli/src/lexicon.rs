@@ -1,8 +1,5 @@
 use clap::{arg, command, Args};
-use odict::{
-    download::DictionaryDownloader,
-    LoadOptions, OpenDictionary,
-};
+use odict::{download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 use crate::CLIContext;
 
@@ -16,8 +13,8 @@ pub struct LexiconArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -25,9 +22,8 @@ pub struct LexiconArgs {
 pub async fn lexicon<'a>(ctx: &mut CLIContext<'a>, args: &LexiconArgs) -> anyhow::Result<()> {
     let file = OpenDictionary::load_with_options(
         &args.dictionary,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(args.retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(args.retries)),
     )
     .await?;
 

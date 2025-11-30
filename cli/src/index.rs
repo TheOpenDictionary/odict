@@ -35,8 +35,8 @@ pub struct IndexArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     pub(super) retries: u32,
 }
@@ -44,9 +44,8 @@ pub struct IndexArgs {
 pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
     let file = OpenDictionary::load_with_options(
         &args.dictionary,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(args.retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(args.retries)),
     )
     .await?;
 

@@ -3,10 +3,7 @@ use clap::{arg, command, Args};
 use console::Style;
 use indicatif::DecimalBytes;
 use num_format::{Locale, ToFormattedString};
-use odict::{
-    download::DictionaryDownloader,
-    LoadOptions, OpenDictionary,
-};
+use odict::{download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -18,8 +15,8 @@ pub struct InfoArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -32,9 +29,8 @@ pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Resu
 
     let file = OpenDictionary::load_with_options(
         path,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(*retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
     )
     .await?;
 

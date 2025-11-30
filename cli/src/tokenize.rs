@@ -1,8 +1,6 @@
 use clap::{arg, command, Args};
 use odict::{
-    download::DictionaryDownloader,
-    tokenize::TokenizeOptions,
-    LoadOptions, OpenDictionary,
+    download::DictionaryDownloader, tokenize::TokenizeOptions, LoadOptions, OpenDictionary,
 };
 
 use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
@@ -44,8 +42,8 @@ pub struct TokenizeArgs {
     #[arg(
         short = 'r',
         long,
-        default_value_t = 3,
-        help = "Number of retry attempts for corrupted downloads"
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
     )]
     retries: u32,
 }
@@ -62,9 +60,8 @@ pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyh
 
     let file = OpenDictionary::load_with_options(
         path,
-        LoadOptions::default().with_downloader(
-            DictionaryDownloader::default().with_retries(*retries),
-        ),
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
     )
     .await?;
 
