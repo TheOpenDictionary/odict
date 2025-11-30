@@ -3,8 +3,9 @@ use std::path::PathBuf;
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
 use odict::{
+    download::DictionaryDownloader,
     index::{get_default_index_dir, IndexOptions},
-    OpenDictionary,
+    LoadOptions, OpenDictionary,
 };
 
 use crate::CLIContext;
@@ -30,10 +31,24 @@ pub struct IndexArgs {
     /// Memory arena per thread in bytes. Must be above 15MB.
     #[arg(short, default_value_t = DEFAULT_INDEX_MEMORY)]
     pub(super) memory: usize,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = 3,
+        help = "Number of retry attempts for corrupted downloads"
+    )]
+    pub(super) retries: u32,
 }
 
 pub async fn index<'a>(ctx: &mut CLIContext<'a>, args: &IndexArgs) -> anyhow::Result<()> {
-    let file = OpenDictionary::load(&args.dictionary).await?;
+    let file = OpenDictionary::load_with_options(
+        &args.dictionary,
+        LoadOptions::default().with_downloader(
+            DictionaryDownloader::default().with_retries(args.retries),
+        ),
+    )
+    .await?;
 
     ctx.println("");
 

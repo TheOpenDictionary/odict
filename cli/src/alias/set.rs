@@ -1,5 +1,9 @@
 use clap::{arg, Args};
-use odict::{alias::AliasManager, OpenDictionary};
+use odict::{
+    alias::AliasManager,
+    download::DictionaryDownloader,
+    LoadOptions, OpenDictionary,
+};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -10,10 +14,24 @@ pub struct SetArgs {
 
     #[arg(required = true, help = "Dictionary path")]
     path: String,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = 3,
+        help = "Number of retry attempts for corrupted downloads"
+    )]
+    retries: u32,
 }
 
 pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
-    let dict = OpenDictionary::load(args.path.as_str()).await?;
+    let dict = OpenDictionary::load_with_options(
+        args.path.as_str(),
+        LoadOptions::default().with_downloader(
+            DictionaryDownloader::default().with_retries(args.retries),
+        ),
+    )
+    .await?;
 
     if overwrite {
         anyhow::Ok(AliasManager::default().set(args.name.as_str(), &dict)?)

@@ -4,8 +4,11 @@ use crate::enums::PrintFormat;
 use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
 use clap::{arg, command, Args};
-use odict::lookup::{LookupOptions, LookupStrategy};
-use odict::OpenDictionary;
+use odict::{
+    download::DictionaryDownloader,
+    lookup::{LookupOptions, LookupStrategy},
+    LoadOptions, OpenDictionary,
+};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -48,6 +51,14 @@ pub struct LookupArgs {
         help = "Perform case-insensitive lookups"
     )]
     insensitive: bool,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = 3,
+        help = "Number of retry attempts for corrupted downloads"
+    )]
+    retries: u32,
 }
 
 pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::Result<()> {
@@ -58,13 +69,20 @@ pub async fn lookup<'a>(ctx: &mut CLIContext<'a>, args: &LookupArgs) -> anyhow::
         follow,
         split,
         insensitive,
+        retries,
     } = args;
 
     let spinner = indicatif::ProgressBar::new_spinner();
 
     spinner.enable_steady_tick(Duration::from_millis(100));
 
-    let file = OpenDictionary::load(path).await?;
+    let file = OpenDictionary::load_with_options(
+        path,
+        LoadOptions::default().with_downloader(
+            DictionaryDownloader::default().with_retries(*retries),
+        ),
+    )
+    .await?;
 
     let mut opts: LookupOptions = LookupOptions::default()
         .follow(*follow)

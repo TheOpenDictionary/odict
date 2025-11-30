@@ -2,6 +2,7 @@
 pub struct RemoteLoadOptions {
     pub out_dir: Option<String>,
     pub caching: Option<bool>,
+    pub retries: Option<u32>,
 }
 
 impl Default for RemoteLoadOptions {
@@ -9,6 +10,7 @@ impl Default for RemoteLoadOptions {
         Self {
             out_dir: None,
             caching: None,
+            retries: None,
         }
     }
 }
@@ -47,6 +49,10 @@ impl TryFrom<LoadOptions> for odict::LoadOptions<'_> {
 
             if let Some(out_dir) = remote_opts.out_dir {
                 downloader = downloader.with_out_dir(out_dir);
+            }
+
+            if let Some(retries) = remote_opts.retries {
+                downloader = downloader.with_retries(retries);
             }
 
             options = options.with_downloader(downloader);

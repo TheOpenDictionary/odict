@@ -7,14 +7,16 @@ pub struct RemoteLoadOptions {
     pub out_dir: Option<String>,
     #[pyo3(get, set)]
     pub caching: Option<bool>,
+    #[pyo3(get, set)]
+    pub retries: Option<u32>,
 }
 
 #[pymethods]
 impl RemoteLoadOptions {
     #[new]
-    #[pyo3(signature = (out_dir=None, caching=None))]
-    pub fn new(out_dir: Option<String>, caching: Option<bool>) -> Self {
-        RemoteLoadOptions { out_dir, caching }
+    #[pyo3(signature = (out_dir=None, caching=None, retries=None))]
+    pub fn new(out_dir: Option<String>, caching: Option<bool>, retries: Option<u32>) -> Self {
+        RemoteLoadOptions { out_dir, caching, retries }
     }
 }
 
@@ -57,6 +59,10 @@ impl TryFrom<LoadOptions> for odict::LoadOptions<'_> {
 
             if let Some(out_dir) = remote_opts.out_dir {
                 downloader = downloader.with_out_dir(out_dir);
+            }
+
+            if let Some(retries) = remote_opts.retries {
+                downloader = downloader.with_retries(retries);
             }
 
             options = options.with_downloader(downloader);
