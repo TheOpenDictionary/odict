@@ -3,7 +3,6 @@ mod pos_tests {
 
     use std::str::FromStr;
 
-    use indexmap::indexset;
     use insta::assert_snapshot;
     use odict::{
         format::xml::ToXML,

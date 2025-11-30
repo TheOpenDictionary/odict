@@ -110,6 +110,7 @@ export interface Pronunciation {
 export interface RemoteLoadOptions {
   outDir?: string
   caching?: boolean
+  retries?: number
 }
 
 export interface SaveOptions {

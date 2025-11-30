@@ -1,6 +1,7 @@
 mod alias;
 mod cli;
 mod compile;
+mod consts;
 mod context;
 mod download;
 mod dump;
@@ -20,6 +21,7 @@ mod utils;
 pub use alias::*;
 pub use cli::*;
 pub use compile::*;
+pub use consts::*;
 pub use context::*;
 pub use download::*;
 pub use dump::*;

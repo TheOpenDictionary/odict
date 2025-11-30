@@ -1,5 +1,5 @@
 use clap::{arg, command, Args};
-use odict::OpenDictionary;
+use odict::{download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -16,16 +16,26 @@ pub struct MergeArgs {
 
     #[arg(short, long, help = "Separate output path for the compiled dictionary")]
     output: Option<String>,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
+    )]
+    retries: u32,
 }
 
 pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
-    let mut dict = OpenDictionary::load(&args.destination)
+    let downloader = DictionaryDownloader::default().with_retries(args.retries);
+    let load_opts = LoadOptions::default().with_downloader(downloader);
+    let mut dict = OpenDictionary::load_with_options(&args.destination, load_opts.clone())
         .await?
         .contents()?
         .deserialize()?;
 
     for source in &args.sources {
-        let source_dict = OpenDictionary::load(source)
+        let source_dict = OpenDictionary::load_with_options(source, load_opts.clone())
             .await?
             .contents()?
             .deserialize()?;

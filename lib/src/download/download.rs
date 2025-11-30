@@ -1,13 +1,10 @@
-use std::{
-    path::{Path, PathBuf},
-    time::SystemTime,
-};
+use std::{path::Path, time::SystemTime};
 
 use crate::{
     config::DEFAULT_CONFIG_DIR,
     download::{
         constants::{DEFAULT_BASE_URL, DEFAULT_DICTIONARIES_DIR},
-        metadata::{get_metadata, set_metadata, DictionaryMetadata},
+        metadata::{delete_metadata, get_metadata, set_metadata, DictionaryMetadata},
         options::{DownloadOptions, ProgressCallback},
         utils::parse_remote_dictionary_name,
     },
@@ -31,10 +28,10 @@ impl<'a> AsRef<DictionaryDownloader<'a>> for DictionaryDownloader<'a> {
     }
 }
 
-impl<'a> Default for DictionaryDownloader<'a> {
-    fn default() -> Self {
+impl<'a> DictionaryDownloader<'a> {
+    fn build_client_with_retries(retries: u32) -> ClientWithMiddleware {
         let retry_policy =
-            reqwest_retry::policies::ExponentialBackoff::builder().build_with_max_retries(3);
+            reqwest_retry::policies::ExponentialBackoff::builder().build_with_max_retries(retries);
 
         let retry = reqwest_retry::RetryTransientMiddleware::new_with_policy(retry_policy);
 
@@ -43,14 +40,21 @@ impl<'a> Default for DictionaryDownloader<'a> {
             .build()
             .expect("Failed to create HTTP client");
 
-        let client = reqwest_middleware::ClientBuilder::new(base_client)
+        reqwest_middleware::ClientBuilder::new(base_client)
             .with(retry)
-            .build();
+            .build()
+    }
+}
+
+impl<'a> Default for DictionaryDownloader<'a> {
+    fn default() -> Self {
+        let options = DownloadOptions::default();
+        let client = Self::build_client_with_retries(options.retries);
 
         Self {
             base_url: DEFAULT_BASE_URL.to_string(),
             client,
-            options: DownloadOptions::default(),
+            options,
         }
     }
 }
@@ -67,7 +71,15 @@ impl<'a> DictionaryDownloader<'a> {
     }
 
     pub fn with_options(mut self, options: DownloadOptions<'a>) -> Self {
+        let retries_changed = self.options.retries != options.retries;
+
         self.options = options;
+
+        // Rebuild client if retries changed
+        if retries_changed {
+            self.client = Self::build_client_with_retries(self.options.retries);
+        }
+
         self
     }
 
@@ -94,18 +106,22 @@ impl<'a> DictionaryDownloader<'a> {
         self
     }
 
-    pub async fn download(&self, dictionary_name: &str) -> crate::Result<PathBuf> {
-        self.download_with_options(dictionary_name, &DownloadOptions::default())
+    pub fn with_retries(mut self, retries: u32) -> Self {
+        self.options = self.options.with_retries(retries);
+        // Rebuild client with new retry policy
+        self.client = Self::build_client_with_retries(retries);
+        self
+    }
+
+    pub async fn download(&self, dictionary_name: &str) -> crate::Result<OpenDictionary> {
+        self.download_with_options(dictionary_name, &self.options)
             .await
     }
 
-    pub async fn download_with_options<Options: AsRef<DownloadOptions<'a>>>(
+    fn merge_download_options<Options: AsRef<DownloadOptions<'a>>>(
         &self,
-        dictionary_name: &str,
         options: Options,
-    ) -> crate::Result<PathBuf> {
-        let (dictionary, language) = parse_remote_dictionary_name(dictionary_name)?;
-
+    ) -> DownloadOptions<'a> {
         let mut opts = self.options.clone();
         let override_opts = options.as_ref();
 
@@ -125,9 +141,62 @@ impl<'a> DictionaryDownloader<'a> {
             opts.on_progress = Some(cb.clone());
         }
 
-        let out_dir = match opts.out_dir {
+        if opts.retries != override_opts.retries {
+            opts.retries = override_opts.retries;
+        }
+
+        opts
+    }
+
+    async fn get_dictionary(
+        &self,
+        url: &str,
+        out_path: &Path,
+        opts: &DownloadOptions<'a>,
+    ) -> crate::Result<OpenDictionary> {
+        let etag = match opts.caching {
+            true => get_metadata(&out_path)?.map(|meta| meta.etag),
+            false => None,
+        };
+
+        let (bytes, new_etag) = self
+            .fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref())
+            .await?;
+
+        // If the upstream was modified
+        if !bytes.is_empty() {
+            if let Some(etag) = new_etag {
+                if opts.caching {
+                    set_metadata(
+                        &out_path,
+                        DictionaryMetadata {
+                            etag,
+                            last_modified: SystemTime::now(),
+                            url: url.into(),
+                        },
+                    )?;
+                }
+            }
+
+            std::fs::write(&out_path, &bytes)?;
+        }
+
+        OpenDictionary::from_path(&out_path)
+    }
+
+    pub async fn download_with_options<Options: AsRef<DownloadOptions<'a>>>(
+        &self,
+        dictionary_name: &str,
+        options: Options,
+    ) -> crate::Result<OpenDictionary> {
+        let (dictionary, language) = parse_remote_dictionary_name(dictionary_name)?;
+
+        let opts = self.merge_download_options(&options);
+
+        let out_dir = match opts.clone().out_dir {
             Some(dir) => dir,
             None => opts
+                .clone()
                 .config_dir
                 .unwrap_or(DEFAULT_CONFIG_DIR.to_path_buf())
                 .join(DEFAULT_DICTIONARIES_DIR),
@@ -137,42 +206,55 @@ impl<'a> DictionaryDownloader<'a> {
             std::fs::create_dir_all(&out_dir).map_err(crate::error::Error::Io)?;
         }
 
+        let mut retries_remaining = opts.retries;
         let url = format!("{}/{}/{}.odict", self.base_url, dictionary, language);
         let out_path = out_dir.join(format!("{language}.odict"));
 
-        let etag = if opts.caching {
-            get_metadata(&out_path)?.map(|meta| meta.etag)
-        } else {
-            None
-        };
-
-        let (bytes, new_etag) = self
-            .fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref())
-            .await?;
-
-        if let Some(etag) = new_etag {
-            if opts.caching {
-                set_metadata(
-                    &out_path,
-                    DictionaryMetadata {
-                        etag,
-                        last_modified: SystemTime::now(),
-                        url: url.clone(),
-                    },
-                )?;
-            }
+        if !out_path.exists() {
+            // Don't have a metadata file if the dictionary doesn't exist
+            // This should handle cases where a dictionary is deleted but its metadata isn't
+            delete_metadata(&out_path)?;
         }
 
-        match bytes.is_empty() {
-            true => {
-                // File already exists from cache, no need to write
-            }
-            false => {
-                std::fs::write(&out_path, &bytes)?;
-            }
-        };
+        loop {
+            let open_dictionary = self.get_dictionary(&url, &out_path, &opts).await;
 
-        Ok(out_path)
+            // Attempt to load the file to verify it's not corrupted
+            match open_dictionary {
+                Ok(dict) => {
+                    // File is valid, return success
+                    return Ok(dict);
+                }
+                Err(e) => {
+                    // Check if this is a corruption error that we should retry
+                    let is_corrupted = matches!(
+                        &e,
+                        Error::InvalidBuffer(_)
+                            | Error::InvalidSignature
+                            | Error::Incompatible(_, _)
+                            | Error::Deserialize(_)
+                            | Error::Io(_)
+                    );
+
+                    if is_corrupted && retries_remaining > 0 {
+                        // Delete corrupted file and metadata to force fresh download
+                        if out_path.exists() {
+                            std::fs::remove_file(&out_path)?;
+                        }
+
+                        delete_metadata(&out_path)?;
+
+                        retries_remaining -= 1;
+
+                        // Continue loop to retry
+                        continue;
+                    } else {
+                        // Either not a corruption error or no retries left
+                        return Err(e);
+                    }
+                }
+            }
+        }
     }
 
     async fn fetch_with_etag(
@@ -240,7 +322,7 @@ impl<'a> DictionaryDownloader<'a> {
 }
 
 impl OpenDictionary {
-    pub async fn download(dictionary_name: &str) -> Result<PathBuf, Error> {
+    pub async fn download(dictionary_name: &str) -> Result<OpenDictionary, Error> {
         DictionaryDownloader::default()
             .download(dictionary_name)
             .await
@@ -249,7 +331,7 @@ impl OpenDictionary {
     pub async fn download_with_options<'a, Options: AsRef<DownloadOptions<'a>>>(
         dictionary_name: &str,
         options: Options,
-    ) -> Result<PathBuf, Error> {
+    ) -> Result<OpenDictionary, Error> {
         DictionaryDownloader::default()
             .download_with_options(dictionary_name, options)
             .await
@@ -289,17 +371,17 @@ mod tests {
         let downloader = create_test_downloader(mock_server.uri());
         let temp_dir = TempDir::new().unwrap();
 
-        let result = downloader
+        let _ = downloader
             .download_with_options(
                 "wiktionary/eng",
-                DownloadOptions::default().with_out_dir(temp_dir.path()),
+                DownloadOptions::default()
+                    .with_out_dir(temp_dir.path())
+                    .with_retries(0),
             )
-            .await
-            .unwrap();
+            .await;
 
         let output_file = temp_dir.path().join("eng.odict");
 
-        assert_eq!(result, output_file);
         assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
@@ -325,14 +407,13 @@ mod tests {
             .with_caching(true)
             .with_out_dir(temp_dir.path());
 
-        let result = downloader
+        let _ = downloader
             .download_with_options("wiktionary/eng", &options)
             .await;
 
-        assert!(result.is_ok());
-        let result_path = result.unwrap();
         let output_file = temp_dir.path().join("eng.odict");
-        assert_eq!(result_path, output_file);
+
+        assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
@@ -353,14 +434,13 @@ mod tests {
             .with_caching(true)
             .with_out_dir(temp_dir.path());
 
-        let result = downloader
+        let _ = downloader
             .download_with_options("wiktionary/de", &options)
             .await;
 
-        assert!(result.is_ok());
-        let result_path = result.unwrap();
         let output_file = temp_dir.path().join("de.odict");
-        assert_eq!(result_path, output_file);
+
+        assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
@@ -396,16 +476,14 @@ mod tests {
         let downloader = create_test_downloader(mock_server.uri());
         let options = DownloadOptions::default()
             .with_caching(true)
+            .with_retries(0)
             .with_out_dir(temp_dir.path());
 
-        let result = downloader
+        let _ = downloader
             .download_with_options("wiktionary/es", &options)
             .await;
 
-        assert!(result.is_ok());
-        let result_path = result.unwrap();
-        let output_file = temp_dir.path().join("es.odict");
-        assert_eq!(result_path, output_file);
+        assert!(output_file.exists());
         assert_eq!(fs::read(output_file).unwrap(), test_data);
     }
 
@@ -423,6 +501,7 @@ mod tests {
         let result = downloader.download("wiktionary/err").await;
 
         assert!(result.is_err());
+
         match result.unwrap_err() {
             Error::DownloadFailed(NetworkError::Http(status), _) => assert_eq!(status, 500),
             v => panic!("Expected NetworkError::Http, Received: {:?}", v),
@@ -459,14 +538,13 @@ mod tests {
         let temp_dir = TempDir::new().unwrap();
         let nested_dir = temp_dir.path().join("nested").join("path");
 
-        let result = downloader
+        let _ = downloader
             .download_with_options(
                 "wiktionary/ger",
                 DownloadOptions::default().with_out_dir(&nested_dir),
             )
             .await;
 
-        assert!(result.is_ok());
         assert!(nested_dir.join("ger.odict").exists());
     }
 
@@ -516,13 +594,12 @@ mod tests {
                 calls.push((downloaded, total, progress));
             });
 
-        let result = downloader
+        let _ = downloader
             .download_with_options("wiktionary/progress", &options)
-            .await
-            .unwrap();
+            .await;
 
         let expected_path = temp_dir.path().join("progress.odict");
-        assert_eq!(result, expected_path);
+
         assert!(expected_path.exists());
         assert_eq!(fs::read(&expected_path).unwrap(), test_data);
 

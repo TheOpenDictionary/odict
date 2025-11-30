@@ -12,6 +12,7 @@ pub struct DownloadOptions<'a> {
     pub(crate) config_dir: Option<PathBuf>,
     pub out_dir: Option<PathBuf>,
     pub on_progress: Option<ProgressCallback<'a>>,
+    pub retries: u32,
 }
 
 impl fmt::Debug for DownloadOptions<'_> {
@@ -19,6 +20,7 @@ impl fmt::Debug for DownloadOptions<'_> {
         f.debug_struct("DownloadOptions")
             .field("caching", &self.caching)
             .field("out_dir", &self.out_dir)
+            .field("retries", &self.retries)
             .field(
                 "on_progress",
                 &self.on_progress.as_ref().map(|_| "Some(callback)"),
@@ -34,6 +36,7 @@ impl Default for DownloadOptions<'_> {
             config_dir: None,
             out_dir: None,
             on_progress: None,
+            retries: 3,
         }
     }
 }
@@ -59,6 +62,11 @@ impl<'a> DownloadOptions<'a> {
         F: Fn(u64, Option<u64>, f64) + Send + Sync + 'a,
     {
         self.on_progress = Some(Arc::new(callback));
+        self
+    }
+
+    pub fn with_retries(mut self, retries: u32) -> Self {
+        self.retries = retries;
         self
     }
 }

@@ -1,5 +1,7 @@
 use clap::{arg, command, Args};
-use odict::{tokenize::TokenizeOptions, OpenDictionary};
+use odict::{
+    download::DictionaryDownloader, tokenize::TokenizeOptions, LoadOptions, OpenDictionary,
+};
 
 use crate::{enums::PrintFormat, get_lookup_entries, print_entries, CLIContext};
 
@@ -36,6 +38,14 @@ pub struct TokenizeArgs {
         help = "Perform case-insensitive lookups when matching tokens"
     )]
     insensitive: bool,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
+    )]
+    retries: u32,
 }
 
 pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyhow::Result<()> {
@@ -45,9 +55,15 @@ pub async fn tokenize<'a>(ctx: &mut CLIContext<'a>, args: &TokenizeArgs) -> anyh
         format,
         follow,
         insensitive,
+        retries,
     } = args;
 
-    let file = OpenDictionary::load(path).await?;
+    let file = OpenDictionary::load_with_options(
+        path,
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
+    )
+    .await?;
 
     let opts = TokenizeOptions::default()
         .follow(*follow)

@@ -4,10 +4,7 @@ use std::time::Duration;
 use crate::CLIContext;
 use clap::{arg, command, Args};
 use indicatif::{ProgressBar, ProgressStyle};
-use odict::{
-    download::{DictionaryDownloader, DownloadOptions},
-    OpenDictionary,
-};
+use odict::download::{DictionaryDownloader, DownloadOptions};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -32,6 +29,14 @@ pub struct DownloadArgs {
         help = "Disable caching (always download fresh copy)"
     )]
     no_cache: bool,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
+    )]
+    retries: u32,
 }
 
 pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::Result<()> {
@@ -39,6 +44,7 @@ pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::
         dictionary,
         output,
         no_cache,
+        retries,
     } = args;
 
     let progress_bar = ProgressBar::new(0);
@@ -50,15 +56,15 @@ pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::
 
     progress_bar.enable_steady_tick(Duration::from_millis(100));
 
-    let downloader = DictionaryDownloader::default();
-
-    let mut options = DownloadOptions::default().with_caching(!no_cache);
+    let mut downloader = DictionaryDownloader::default()
+        .with_retries(*retries)
+        .with_caching(!no_cache);
 
     if let Some(out_dir) = output {
-        options = options.with_out_dir(out_dir);
+        downloader = downloader.with_out_dir(out_dir);
     }
 
-    options = options.on_progress(|downloaded, total, _progress| {
+    let options = DownloadOptions::default().on_progress(|downloaded, total, _progress| {
         if let Some(total_bytes) = total {
             progress_bar.set_length(total_bytes);
         }
@@ -66,8 +72,7 @@ pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::
     });
 
     match downloader.download_with_options(dictionary, &options).await {
-        Ok(out_path) => {
-            let file = OpenDictionary::from_path(&out_path)?;
+        Ok(file) => {
             let dict = file.contents()?;
 
             progress_bar.finish_and_clear();
@@ -78,7 +83,7 @@ pub async fn download(ctx: &mut CLIContext<'_>, args: &DownloadArgs) -> anyhow::
                     .as_ref()
                     .map(|s| s.to_string())
                     .unwrap_or(dictionary.to_string()),
-                out_path.display()
+                file.path().as_ref().unwrap().display()
             ));
 
             Ok(())
