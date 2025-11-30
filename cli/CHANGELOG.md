@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.1...cli/v3.2.2) (2025-11-30)
+
+
+### Bug Fixes
+
+* Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
+
 ## [3.2.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.0...cli/v3.2.1) (2025-11-23)
 
 

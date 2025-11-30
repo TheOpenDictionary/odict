@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
+
+
+### Bug Fixes
+
+* Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
+
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.1...python/v2.2.0) (2025-11-22)
 
 
