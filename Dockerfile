@@ -1,14 +1,21 @@
-ARG ODICT_VERSION=2.1.0
-
-FROM debian:slim
+ARG ODICT_VERSION=3.2.2
 
 ARG ODICT_VERSION
-ENV ODICT_VERSION=${ODICT_VERSION}
 
-RUN curl -fsSL https://github.com/TheOpenDictionary/odict/releases/download/cli%2F${ODICT_VERSION}/odict-cli-installer.sh | sh
+FROM jdxcode/mise AS builder
 
-WORKDIR /dictionaries
-VOLUME /dictionaries
+SHELL ["/bin/bash", "-c"]
+
+WORKDIR /odict
+COPY . .
+
+RUN mise trust -y
+RUN mise install rust
+RUN mise run build --release 
+
+FROM debian:latest
+
+COPY --from=builder /odict/target/release/odict /usr/local/bin/odict
 
 ENTRYPOINT ["odict", "serve"]
 CMD []

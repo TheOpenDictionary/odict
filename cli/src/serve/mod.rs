@@ -105,6 +105,7 @@ impl DictionaryCache {
     pub async fn get(&self, key: &str) -> anyhow::Result<Option<Arc<OpenDictionary>>> {
         {
             let cache = self.cache.read().unwrap();
+
             if let Some(file) = cache.peek(key) {
                 // Return a clone of the Arc (cheap operation)
                 return Ok(Some(Arc::clone(file)));
@@ -112,14 +113,15 @@ impl DictionaryCache {
         }
 
         // Not in cache, need to load it
-        if let Some(path) = self.dictionaries.get(key) {
-            let dict = OpenDictionary::from_path(path.to_string_lossy().as_ref())?;
+        if let Some(dict) = self.dictionaries.get(key) {
+            let dict = OpenDictionary::load(dict.to_string_lossy().as_ref()).await?;
 
             // Now get a write lock to update the cache
             let mut cache = self.cache.write().unwrap();
 
             // Wrap in Arc before putting in cache
             let arc_dict = Arc::new(dict);
+
             cache.put(String::from(key), Arc::clone(&arc_dict));
 
             return Ok(Some(arc_dict));
@@ -174,7 +176,7 @@ pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Re
             .service(search::handle_search)
             .service(tokenize::handle_tokenize)
     })
-    .bind(("127.0.0.1", *port))?
+    .bind(("0.0.0.0", *port))?
     .run()
     .await?;
 
