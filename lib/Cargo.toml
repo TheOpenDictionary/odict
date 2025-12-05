@@ -59,7 +59,7 @@ indexmap = { version = "2.12.1", features = ["serde", "rayon"] }
 charabia = { version = "0.9.9", optional = true, default-features = false }
 rkyv = { version = "0.8.12", features = ["indexmap-2", "uuid-1"] }
 serde = { version = "1.0.228", features = ["serde_derive"] }
-uuid = { version = "1.18.1", features = [
+uuid = { version = "1.19.0", features = [
   "v4",
   "fast-rng",
   "macro-diagnostics",
