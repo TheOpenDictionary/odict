@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.1...python/v2.2.2) (2025-12-05)
+
+
+### Bug Fixes
+
+* Update dependencies ([28b474f](https://github.com/TheOpenDictionary/odict/commit/28b474fe74b7f6dd6017f8cb3f9f51dfe2e1b34d))
+
 ## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
 
 

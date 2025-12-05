@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.3.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.2...cli/v3.3.0) (2025-12-05)
+
+
+### Features
+
+* Add Dockerfile publishing ([8ac816e](https://github.com/TheOpenDictionary/odict/commit/8ac816ef36532bf0b4503533398051d366633204))
+
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.1...cli/v3.2.2) (2025-11-30)
 
 
