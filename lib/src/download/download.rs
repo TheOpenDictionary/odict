@@ -199,7 +199,8 @@ impl<'a> DictionaryDownloader<'a> {
                 .clone()
                 .config_dir
                 .unwrap_or(DEFAULT_CONFIG_DIR.to_path_buf())
-                .join(DEFAULT_DICTIONARIES_DIR),
+                .join(DEFAULT_DICTIONARIES_DIR)
+                .join(&dictionary),
         };
 
         if !out_dir.exists() {
