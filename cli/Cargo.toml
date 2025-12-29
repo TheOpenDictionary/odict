@@ -21,7 +21,7 @@ odict = { path = "../lib", features = [
 ] }
 internal = { path = "../internal" }
 clap = { version = "4.5.53", features = ["derive", "cargo"] }
-console = "0.16.1"
+console = "0.16.2"
 indicatif = "0.18.3"
 pulldown-cmark = "0.13.0"
 actix-web = "4.12.1"
