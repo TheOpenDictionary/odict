@@ -34,20 +34,20 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.7.1",
-    "@emnapi/runtime": "^1.7.1",
-    "@napi-rs/cli": "3.5.0",
-    "@napi-rs/wasm-runtime": "^1.1.0",
+    "@emnapi/core": "^1.8.1",
+    "@emnapi/runtime": "^1.8.1",
+    "@napi-rs/cli": "3.5.1",
+    "@napi-rs/wasm-runtime": "^1.1.1",
     "@oxc-node/core": "^0.0.35",
     "@taplo/cli": "^0.7.0",
     "@tybys/wasm-util": "^0.10.1",
-    "@types/node": "^25.0.3",
+    "@types/node": "^25.0.9",
     "ava": "^6.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
-    "oxlint": "^1.35.0",
-    "prettier": "^3.7.4",
+    "oxlint": "^1.39.0",
+    "prettier": "^3.8.0",
     "tinybench": "^6.0.0"
   },
   "engines": {
