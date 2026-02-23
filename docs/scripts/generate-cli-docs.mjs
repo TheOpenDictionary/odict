@@ -1,13 +1,13 @@
 /**
  * Generates CLI reference documentation by parsing the clap arg definitions
- * from the Rust source files in cli/src/.
+ * directly from the Rust source files in cli/src/.
  *
  * Run: node scripts/generate-cli-docs.mjs
  *
  * Outputs: src/content/docs/cli/reference.md
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,299 +16,275 @@ const cliSrc = join(__dirname, "../../cli/src");
 const outPath = join(__dirname, "../src/content/docs/cli/reference.md");
 
 // ---------------------------------------------------------------------------
-// We define the CLI structure based on parsing the clap source.
-// This is more reliable than regex-parsing Rust macros and gives us
-// full control over the documentation output.
+// Read all Rust source files
 // ---------------------------------------------------------------------------
 
-const commands = [
-  {
-    name: "new",
-    summary: "Scaffolds a new ODict XML dictionary",
-    usage: "odict new <file_name> [-n <name>]",
-    args: [
-      { name: "file_name", required: true, description: "Name of your new dictionary file (without extension)" },
-    ],
-    flags: [
-      { short: "-n", long: null, arg: "<name>", description: "Name attribute of the `<dictionary>` element" },
-    ],
-    example: `# Create a new dictionary file
-odict new my-dictionary -n "My Dictionary"
-# Creates my-dictionary.xml`,
-  },
-  {
-    name: "compile",
-    summary: "Compiles a dictionary from ODXML",
-    usage: "odict compile <input> [-o <output>] [-q <quality>] [-w <window_size>]",
-    args: [
-      { name: "input", required: true, description: "Path to ODXML file" },
-    ],
-    flags: [
-      { short: "-o", long: null, arg: "<path>", description: "Output path of compiled dictionary. Defaults to the input path with a `.odict` extension." },
-      { short: "-q", long: null, arg: "<0-11>", description: "Brotli compression level (default: `8`)" },
-      { short: "-w", long: null, arg: "<0-22>", description: "Brotli large window size (default: `22`)" },
-    ],
-    example: `# Compile with default settings
-odict compile my-dictionary.xml
+function readRustFile(relPath) {
+  return readFileSync(join(cliSrc, relPath), "utf-8");
+}
 
-# Compile with custom output and compression
-odict compile my-dictionary.xml -o out/dict.odict -q 11`,
-  },
-  {
-    name: "lookup",
-    summary: "Looks up entries in a compiled dictionary without indexing",
-    usage: "odict lookup <dictionary> <queries...> [-f <format>] [-F <follow>] [-s <split>] [-i]",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary or an alias" },
-      { name: "queries", required: true, description: "One or more words to look up" },
-    ],
-    flags: [
-      { short: "-f", long: "--format", arg: "<format>", description: "Output format: `print`, `json`, `xml`, `markdown`, `html` (default: `print`)" },
-      { short: "-F", long: "--follow", arg: "<n>", description: "Number of redirects to follow via `see` attributes (default: `0`). Use a high number for infinite following." },
-      { short: "-s", long: "--split", arg: "<n>", description: "If not found, split the query into words of at least length `n` and look up each separately (default: `0`, disabled)" },
-      { short: "-i", long: "--insensitive", arg: null, description: "Perform case-insensitive lookups" },
-    ],
-    example: `# Simple lookup
-odict lookup my-dictionary.odict cat
+// ---------------------------------------------------------------------------
+// Parse the Commands enum from cli.rs to get command descriptions
+// ---------------------------------------------------------------------------
 
-# Lookup with JSON output and follow redirects
-odict lookup my-dictionary.odict ran -f json -F 1
+function parseCommandsEnum(source) {
+  const commands = {};
+  // Match: /// doc comment followed by variant name
+  const re = /\/\/\/\s*(.*)\n\s*(?:#\[.*\]\n\s*)*(\w+)\((\w+)\)/g;
+  let m;
+  while ((m = re.exec(source)) !== null) {
+    const doc = m[1].trim();
+    const variant = m[2];
+    commands[variant] = doc;
+  }
+  return commands;
+}
 
-# Case-insensitive lookup with splitting
-odict lookup my-dictionary.odict "catdog" -s 3 -i`,
-  },
-  {
-    name: "search",
-    summary: "Runs a full-text query on a compiled dictionary",
-    usage: "odict search <dictionary> <query> [-f <format>] [--index]",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary or an alias" },
-      { name: "query", required: true, description: "Search query" },
-    ],
-    flags: [
-      { short: "-f", long: "--format", arg: "<format>", description: "Output format: `json`, `xml`, `markdown`, `html`, `print` (default: `json`)" },
-      { short: null, long: "--index", arg: null, description: "Creates a new index if one doesn't already exist" },
-    ],
-    example: `# Search with auto-indexing
-odict search my-dictionary.odict "move swiftly" --index
+// ---------------------------------------------------------------------------
+// Parse #[arg(...)] fields from an Args struct
+// ---------------------------------------------------------------------------
 
-# Search with specific output format
-odict search my-dictionary.odict "greeting" -f xml`,
-  },
-  {
-    name: "index",
-    summary: "Creates a full-text index of a compiled dictionary",
-    usage: "odict index <dictionary> [-d <directory>] [-f] [-m <memory>]",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary or an alias" },
-    ],
-    flags: [
-      { short: "-d", long: null, arg: "<path>", description: "Custom directory to store the index" },
-      { short: "-f", long: null, arg: null, description: "Whether to overwrite the index if it already exists" },
-      { short: "-m", long: null, arg: "<bytes>", description: "Memory arena per thread in bytes. Must be above 15MB. (default: `15000000`)" },
-    ],
-    example: `# Create an index with default settings
-odict index my-dictionary.odict
+function parseArgsStruct(source) {
+  const fields = [];
 
-# Overwrite existing index with custom memory
-odict index my-dictionary.odict -f -m 50000000`,
-  },
-  {
-    name: "tokenize",
-    summary: "Tokenizes text and finds dictionary entries for each token",
-    usage: "odict tokenize <dictionary> <text> [-f <format>] [-F <follow>] [-i]",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary" },
-      { name: "text", required: true, description: "Text to tokenize" },
-    ],
-    flags: [
-      { short: "-f", long: "--format", arg: "<format>", description: "Output format: `print`, `json`, `xml`, `markdown`, `html` (default: `print`)" },
-      { short: "-F", long: "--follow", arg: "<n>", description: "Number of redirects to follow via `see` attributes (default: `0`)" },
-      { short: "-i", long: "--insensitive", arg: null, description: "Perform case-insensitive lookups when matching tokens" },
-    ],
-    example: `# Tokenize Chinese text
-odict tokenize chinese.odict "你好世界"
+  // Find the struct body (everything between the first { and last })
+  const structMatch = source.match(
+    /pub\s+struct\s+\w+Args\s*\{([\s\S]*?)\n\}/
+  );
+  if (!structMatch) return fields;
 
-# Tokenize with redirect following
-odict tokenize my-dictionary.odict "the cat ran" -F 1 -f json`,
-  },
-  {
-    name: "dump",
-    summary: "Outputs a dictionary in a human-readable format",
-    usage: "odict dump <input> [-f <format>] [-o <output>]",
-    args: [
-      { name: "input", required: true, description: "Path to a compiled dictionary" },
-    ],
-    flags: [
-      { short: "-f", long: null, arg: "<format>", description: "Dump format: `xml`, `sqlite`, `postgres`, `mysql` (default: `xml`)" },
-      { short: "-o", long: null, arg: "<path>", description: "Output path. Defaults to stdout." },
-    ],
-    example: `# Dump as XML to stdout
-odict dump my-dictionary.odict
+  const body = structMatch[1];
 
-# Dump as SQL to a file
-odict dump my-dictionary.odict -f sqlite -o dictionary.sql`,
-  },
-  {
-    name: "merge",
-    summary: "Merges entries from multiple dictionaries into one",
-    usage: "odict merge <destination> <sources...> [-o <output>]",
-    args: [
-      { name: "destination", required: true, description: "Path of the dictionary to merge into (unless `--output` is specified)" },
-      { name: "sources", required: true, description: "Paths of dictionaries to merge" },
-    ],
-    flags: [
-      { short: "-o", long: "--output", arg: "<path>", description: "Separate output path for the compiled dictionary" },
-    ],
-    example: `# Merge two dictionaries into the first
-odict merge base.odict extra1.odict extra2.odict
+  // Split by field declarations - each field may have preceding attributes and doc comments
+  // We look for patterns like:
+  //   /// doc comment
+  //   #[arg(...)]
+  //   pub field_name: Type,
+  //   -- or --
+  //   #[arg(..., help = "...")]
+  //   field_name: Type,
 
-# Merge into a new file
-odict merge base.odict extra.odict -o combined.odict`,
-  },
-  {
-    name: "info",
-    summary: "Prints the metadata for a dictionary file",
-    usage: "odict info <dictionary>",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary" },
-    ],
-    flags: [],
-    example: `odict info my-dictionary.odict
-# Output:
-#   My Dictionary
-#   ─────────────
-#   File Version: 3
-#   File Size: 1.23 KB
-#   Entries: 5,000`,
-  },
-  {
-    name: "lexicon",
-    summary: "Lists all words defined in a dictionary",
-    usage: "odict lexicon <dictionary>",
-    args: [
-      { name: "dictionary", required: true, description: "Path to a compiled dictionary" },
-    ],
-    flags: [],
-    example: `odict lexicon my-dictionary.odict
-# cat
-# dog
-# run
-# ...`,
-  },
-  {
-    name: "download",
-    summary: "Downloads a dictionary from the remote registry",
-    usage: "odict download <dictionary> [-o <output>] [--no-cache]",
-    args: [
-      { name: "dictionary", required: true, description: "Dictionary to download (e.g. `wiktionary/eng`)" },
-    ],
-    flags: [
-      { short: "-o", long: "--output", arg: "<path>", description: "Directory to download to (defaults to config directory)" },
-      { short: null, long: "--no-cache", arg: null, description: "Disable caching (always download a fresh copy)" },
-    ],
-    example: `# Download English Wiktionary dictionary
-odict download wiktionary/eng
+  const fieldRegex =
+    /((?:\/\/\/[^\n]*\n\s*|#\[(?:arg|pyo3)[^\]]*\]\n\s*)*)\s*(?:pub(?:\((?:super|crate)\))?\s+)?(\w+)\s*:\s*([^,\n]+)/g;
 
-# Download Japanese dictionary to a specific directory
-odict download wiktionary/jpn -o ./dicts/`,
-  },
-  {
-    name: "serve",
-    summary: "Starts a local HTTP server to serve one or several dictionaries",
-    usage: "odict serve [dictionaries...] [-p <port>] [-c <capacity>] [-l <level>]",
-    args: [
-      { name: "dictionaries", required: false, description: "Paths to compiled dictionaries or directories containing `.odict` files" },
-    ],
-    flags: [
-      { short: "-p", long: null, arg: "<port>", description: "Port to listen on (default: `5005`)" },
-      { short: "-c", long: "--capacity", arg: "<n>", description: "Maximum number of dictionaries to keep in memory (default: `5`)" },
-      { short: "-l", long: "--level", arg: "<level>", description: "Log level: `trace`, `debug`, `info`, `warn`, `error`" },
-    ],
-    example: `# Serve a single dictionary
-odict serve my-dictionary.odict
+  let fm;
+  while ((fm = fieldRegex.exec(body)) !== null) {
+    const attrs = fm[1];
+    const name = fm[2];
+    const type = fm[3].trim();
 
-# Serve a directory of dictionaries on a custom port
-odict serve ./dicts/ -p 8080 -c 10`,
-    extra: `### HTTP endpoints
+    // Skip command subcommand fields
+    if (attrs.includes("#[command")) continue;
 
-When running \`odict serve\`, the following REST endpoints become available:
+    // Parse #[arg(...)] attributes
+    const argAttr = attrs.match(/#\[arg\(([\s\S]*?)\)\]/);
+    const argContent = argAttr ? argAttr[1] : "";
 
-#### \`GET /{name}/lookup\`
+    // Extract help text
+    let help = extractQuoted(argContent, "help");
 
-Look up entries by exact match.
+    // Fall back to /// doc comments
+    if (!help) {
+      const docMatch = attrs.match(/\/\/\/\s*(.*)/);
+      if (docMatch) help = docMatch[1].trim();
+    }
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| \`queries\` | string | Comma-separated list of terms to look up |
-| \`follow\` | number | Number of redirects to follow (optional) |
-| \`split\` | number | Minimum word length for splitting (optional) |
+    // Extract short flag
+    let short = null;
+    const shortMatch = argContent.match(
+      /short\s*=\s*'([^']+)'/
+    );
+    if (shortMatch) {
+      short = `-${shortMatch[1]}`;
+    } else if (/\bshort\b/.test(argContent) && !/short\s*=/.test(argContent)) {
+      // bare `short` means use first char of field name
+      short = `-${name[0]}`;
+    }
 
-\`\`\`bash
-curl "http://localhost:5005/my-dictionary/lookup?queries=cat,dog&follow=1"
-\`\`\`
+    // Extract long flag
+    let long = null;
+    const longMatch = argContent.match(
+      /long\s*=\s*"([^"]+)"/
+    );
+    if (longMatch) {
+      long = `--${longMatch[1]}`;
+    } else if (/\blong\b/.test(argContent) && !/long\s*=/.test(argContent)) {
+      // bare `long` means use field name with _ -> -
+      long = `--${name.replace(/_/g, "-")}`;
+    }
 
-#### \`GET /{name}/search\`
+    // Check if required
+    const required =
+      argContent.includes("required = true") ||
+      (type !== "bool" &&
+        !type.startsWith("Option<") &&
+        !type.startsWith("Vec<") &&
+        !short &&
+        !long &&
+        !argContent.includes("default_value"));
 
-Full-text search across definitions.
+    // Check for default value
+    let defaultVal = null;
+    const defaultMatch = argContent.match(
+      /default_value_t\s*=\s*([^,\)]+)/
+    );
+    if (defaultMatch) {
+      defaultVal = defaultMatch[1].trim();
+      // Clean up Rust-specific patterns
+      defaultVal = defaultVal
+        .replace(/crate::DEFAULT_RETRIES/, "3")
+        .replace(/DEFAULT_INDEX_MEMORY/, "15000000")
+        .replace(/DumpFormat::XML/, "xml")
+        .replace(/PrintFormat::Print/, "print")
+        .replace(/PrintFormat::JSON/, "json");
+    }
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| \`query\` | string | Search query |
-| \`limit\` | number | Maximum results to return (default: 10) |
+    // Determine if this is a positional arg or a flag
+    const isPositional = !short && !long && !argContent.includes("default_value_t") && type !== "bool";
 
-\`\`\`bash
-curl "http://localhost:5005/my-dictionary/search?query=move+swiftly&limit=5"
-\`\`\`
+    // Extract value_enum
+    const isValueEnum = argContent.includes("value_enum");
 
-#### \`GET /{name}/tokenize\`
+    // Determine the arg type for display
+    let argType = null;
+    if (type === "bool" || type === "Option<bool>") {
+      argType = null; // boolean flags don't take a value
+    } else if (isValueEnum) {
+      argType = `<${name}>`;
+    } else if (type.includes("PathBuf") || type.includes("String")) {
+      argType = `<${name}>`;
+    } else if (type.includes("u32") || type.includes("usize") || type.includes("u16")) {
+      argType = `<${name}>`;
+    } else if (type.includes("Vec<String>")) {
+      argType = `<${name}...>`;
+    }
 
-Tokenize text and find matching entries.
+    // Extract value_parser range info for help
+    const rangeMatch = argContent.match(/value_parser.*?range\((\d+)\.\.=(\d+)\)/);
+    if (rangeMatch) {
+      const rangeInfo = `(${rangeMatch[1]}–${rangeMatch[2]})`;
+      if (help && !help.includes(rangeMatch[1])) {
+        help = `${help} ${rangeInfo}`;
+      }
+    }
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| \`text\` | string | Text to tokenize |
-| \`follow\` | number | Number of redirects to follow (optional) |
+    fields.push({
+      name,
+      type,
+      short,
+      long,
+      help: help || "",
+      required,
+      isPositional,
+      defaultVal,
+      argType,
+    });
+  }
 
-\`\`\`bash
-curl "http://localhost:5005/chinese/tokenize?text=你好世界"
-\`\`\`
+  return fields;
+}
 
-All endpoints return JSON.`,
-  },
-  {
-    name: "alias add",
-    summary: "Creates a new dictionary alias (fails if one already exists)",
-    usage: "odict alias add <name> <path>",
-    args: [
-      { name: "name", required: true, description: "Name of the alias" },
-      { name: "path", required: true, description: "Dictionary path" },
-    ],
-    flags: [],
-    example: `odict alias add eng ./dicts/english.odict`,
-  },
-  {
-    name: "alias set",
-    summary: "Creates or updates a dictionary alias",
-    usage: "odict alias set <name> <path>",
-    args: [
-      { name: "name", required: true, description: "Name of the alias" },
-      { name: "path", required: true, description: "Dictionary path" },
-    ],
-    flags: [],
-    example: `odict alias set eng ./dicts/english-v2.odict`,
-  },
-  {
-    name: "alias delete",
-    summary: "Deletes an alias with the given name",
-    usage: "odict alias delete <name>",
-    args: [
-      { name: "name", required: true, description: "Name of the alias to delete" },
-    ],
-    flags: [],
-    example: `odict alias delete eng`,
-  },
-];
+function extractQuoted(text, key) {
+  // Match: key = "value" where value may span multiple lines due to formatting
+  const re = new RegExp(`${key}\\s*=\\s*"([^"]*)"`, "s");
+  const m = re.exec(text);
+  return m ? m[1].trim() : null;
+}
+
+// ---------------------------------------------------------------------------
+// Parse the AliasCommands enum
+// ---------------------------------------------------------------------------
+
+function parseAliasCommands(source) {
+  const commands = {};
+  const re = /\/\/\/\s*(.*)\n\s*(?:#\[.*\]\n\s*)*(\w+)\((\w+)\)/g;
+  let m;
+  while ((m = re.exec(source)) !== null) {
+    commands[m[2]] = m[1].trim();
+  }
+  return commands;
+}
+
+// ---------------------------------------------------------------------------
+// Parse HTTP serve endpoint structs from serve/ directory
+// ---------------------------------------------------------------------------
+
+function parseServeEndpoints() {
+  const endpoints = [];
+
+  for (const file of ["lookup.rs", "search.rs", "tokenize.rs"]) {
+    const source = readRustFile(`serve/${file}`);
+
+    // Extract route path: #[get("/{name}/...")]
+    const routeMatch = source.match(/#\[get\("([^"]+)"\)\]/);
+    if (!routeMatch) continue;
+    const route = routeMatch[1];
+
+    // Extract request struct fields
+    const structMatch = source.match(
+      /pub\s+struct\s+(\w+Request)\s*\{([\s\S]*?)\}/
+    );
+    if (!structMatch) continue;
+
+    const structName = structMatch[1];
+    const body = structMatch[2];
+
+    const params = [];
+    const fieldRe = /(\w+)\s*:\s*([^,\n]+)/g;
+    let fm;
+    while ((fm = fieldRe.exec(body)) !== null) {
+      const name = fm[1];
+      const type = fm[2].trim().replace(/,$/, "");
+      const isOptional = type.startsWith("Option<");
+      const innerType = isOptional
+        ? type.match(/Option<(\w+)>/)?.[1] || type
+        : type;
+      params.push({
+        name,
+        type: innerType === "String" ? "string" : innerType === "bool" ? "boolean" : "number",
+        optional: isOptional,
+      });
+    }
+
+    endpoints.push({ route, params });
+  }
+
+  return endpoints;
+}
+
+// ---------------------------------------------------------------------------
+// Build CLI documentation from parsed source
+// ---------------------------------------------------------------------------
+
+const cliSource = readRustFile("cli.rs");
+const commandDescs = parseCommandsEnum(cliSource);
+const aliasSource = readRustFile("alias/alias.rs");
+const aliasDescs = parseAliasCommands(aliasSource);
+
+// Map command variant names to their source files
+const commandFiles = {
+  Compile: "compile.rs",
+  Download: "download.rs",
+  Dump: "dump.rs",
+  Index: "index.rs",
+  Info: "info.rs",
+  Lexicon: "lexicon.rs",
+  Lookup: "lookup.rs",
+  Merge: "merge.rs",
+  New: "new.rs",
+  Search: "search.rs",
+  Serve: "serve/mod.rs",
+  Tokenize: "tokenize.rs",
+};
+
+const aliasFiles = {
+  Add: "alias/set.rs",
+  Set: "alias/set.rs",
+  Delete: "alias/delete.rs",
+};
+
+// Parse serve HTTP endpoints
+const serveEndpoints = parseServeEndpoints();
 
 // ---------------------------------------------------------------------------
 // Render Markdown
@@ -319,7 +295,7 @@ title: CLI Reference
 description: Complete reference for the ODict command-line interface.
 ---
 
-{/* This file is auto-generated by scripts/generate-cli-docs.mjs. Do not edit manually. */}
+{/* This file is auto-generated by scripts/generate-cli-docs.mjs — do not edit manually. */}
 
 \`\`\`
 odict [OPTIONS] <COMMAND>
@@ -341,47 +317,133 @@ The ODict CLI is the primary tool for creating, compiling, and querying ODict di
 
 `;
 
-for (const cmd of commands) {
-  md += `### \`odict ${cmd.name}\`\n\n`;
-  md += `${cmd.summary}.\n\n`;
-  md += `\`\`\`\n${cmd.usage}\n\`\`\`\n\n`;
+// Render each main command
+for (const [variant, file] of Object.entries(commandFiles)) {
+  const source = readRustFile(file);
+  const fields = parseArgsStruct(source);
+  const desc = commandDescs[variant] || variant;
+  const cmdName = variant.toLowerCase();
 
-  // Arguments
-  if (cmd.args.length > 0) {
+  md += `### \`odict ${cmdName}\`\n\n`;
+  md += `${desc}.\n\n`;
+
+  // Build usage string
+  const positionals = fields.filter((f) => f.isPositional);
+  const options = fields.filter((f) => !f.isPositional);
+  let usage = `odict ${cmdName}`;
+  for (const p of positionals) {
+    if (p.type.includes("Vec<")) {
+      usage += p.required ? ` <${p.name}...>` : ` [${p.name}...]`;
+    } else {
+      usage += p.required ? ` <${p.name}>` : ` [${p.name}]`;
+    }
+  }
+  for (const o of options) {
+    if (o.name === "retries") continue; // skip common retries flag in usage
+    const flag = o.short || o.long;
+    if (flag) {
+      if (o.argType) {
+        usage += ` [${flag} ${o.argType}]`;
+      } else {
+        usage += ` [${flag}]`;
+      }
+    }
+  }
+  md += `\`\`\`\n${usage}\n\`\`\`\n\n`;
+
+  // Positional arguments table
+  if (positionals.length > 0) {
     md += `#### Arguments\n\n`;
     md += `| Argument | Required | Description |\n`;
     md += `|----------|----------|-------------|\n`;
-    for (const a of cmd.args) {
-      md += `| \`${a.name}\` | ${a.required ? "Yes" : "No"} | ${a.description} |\n`;
+    for (const p of positionals) {
+      md += `| \`${p.name}\` | ${p.required ? "Yes" : "No"} | ${p.help} |\n`;
     }
     md += `\n`;
   }
 
-  // Flags
-  if (cmd.flags.length > 0) {
+  // Options table
+  if (options.length > 0) {
     md += `#### Options\n\n`;
-    md += `| Flag | Argument | Description |\n`;
-    md += `|------|----------|-------------|\n`;
-    for (const f of cmd.flags) {
-      const flag = [f.short, f.long].filter(Boolean).join(", ");
-      md += `| \`${flag}\` | ${f.arg ? `\`${f.arg}\`` : "—"} | ${f.description} |\n`;
+    md += `| Flag | Description |\n`;
+    md += `|------|-------------|\n`;
+    for (const o of options) {
+      const flags = [o.short, o.long].filter(Boolean).join(", ");
+      let desc = o.help;
+      if (o.defaultVal && !desc.includes("default")) {
+        desc += ` (default: \`${o.defaultVal}\`)`;
+      }
+      md += `| \`${flags}\` | ${desc} |\n`;
     }
     md += `\n`;
   }
 
-  // Example
-  if (cmd.example) {
-    md += `#### Example\n\n`;
-    md += `\`\`\`bash\n${cmd.example}\n\`\`\`\n\n`;
-  }
+  // HTTP endpoints for serve command
+  if (cmdName === "serve" && serveEndpoints.length > 0) {
+    md += `#### HTTP endpoints\n\n`;
+    md += `When running \`odict serve\`, the following REST endpoints become available. All return JSON.\n\n`;
 
-  // Extra content (for serve endpoints)
-  if (cmd.extra) {
-    md += `${cmd.extra}\n\n`;
+    for (const ep of serveEndpoints) {
+      md += `##### \`GET ${ep.route}\`\n\n`;
+      md += `| Parameter | Type | Required | Description |\n`;
+      md += `|-----------|------|----------|-------------|\n`;
+      for (const p of ep.params) {
+        md += `| \`${p.name}\` | ${p.type} | ${p.optional ? "No" : "Yes"} | |\n`;
+      }
+      md += `\n`;
+    }
   }
 
   md += `---\n\n`;
 }
+
+// Render alias subcommands
+md += `### \`odict alias\`\n\n`;
+md += `Manage dictionary aliases.\n\n`;
+
+for (const [variant, file] of Object.entries(aliasFiles)) {
+  const source = readRustFile(file);
+  const fields = parseArgsStruct(source);
+  const desc = aliasDescs[variant] || variant;
+  const cmdName = variant.toLowerCase();
+
+  md += `#### \`odict alias ${cmdName}\`\n\n`;
+  md += `${desc}.\n\n`;
+
+  // Build usage
+  const positionals = fields.filter((f) => f.isPositional);
+  const options = fields.filter((f) => !f.isPositional);
+  let usage = `odict alias ${cmdName}`;
+  for (const p of positionals) {
+    usage += p.required ? ` <${p.name}>` : ` [${p.name}]`;
+  }
+  md += `\`\`\`\n${usage}\n\`\`\`\n\n`;
+
+  if (positionals.length > 0) {
+    md += `| Argument | Required | Description |\n`;
+    md += `|----------|----------|-------------|\n`;
+    for (const p of positionals) {
+      md += `| \`${p.name}\` | ${p.required ? "Yes" : "No"} | ${p.help} |\n`;
+    }
+    md += `\n`;
+  }
+
+  if (options.length > 0) {
+    md += `| Flag | Description |\n`;
+    md += `|------|-------------|\n`;
+    for (const o of options) {
+      const flags = [o.short, o.long].filter(Boolean).join(", ");
+      let desc = o.help;
+      if (o.defaultVal && !desc.includes("default")) {
+        desc += ` (default: \`${o.defaultVal}\`)`;
+      }
+      md += `| \`${flags}\` | ${desc} |\n`;
+    }
+    md += `\n`;
+  }
+}
+
+md += `---\n`;
 
 // ---------------------------------------------------------------------------
 // Write output
