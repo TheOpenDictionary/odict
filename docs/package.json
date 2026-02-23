@@ -1,0 +1,19 @@
+{
+  "name": "@odict/docs",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "npm run generate && astro dev",
+    "start": "npm run generate && astro dev",
+    "build": "npm run generate && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "generate": "node scripts/generate-schema-docs.mjs && node scripts/generate-cli-docs.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.32.0",
+    "astro": "^5.3.0",
+    "sharp": "^0.33.0"
+  }
+}
