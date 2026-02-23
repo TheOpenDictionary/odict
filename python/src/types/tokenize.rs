@@ -1,12 +1,15 @@
 use either::Either;
 use pyo3::prelude::*;
 
+/// Options for configuring text tokenization.
 #[pyclass]
 #[derive(Clone)]
 pub struct TokenizeOptions {
+    /// Whether to follow `see_also` cross-references. Accepts `True`/`False` or a number (nonzero = follow).
     #[pyo3(get, set)]
     pub follow: Option<Either<bool, u32>>,
 
+    /// Whether to enable case-insensitive matching.
     #[pyo3(get, set)]
     pub insensitive: Option<bool>,
 }

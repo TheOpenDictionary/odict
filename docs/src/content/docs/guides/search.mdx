@@ -1,0 +1,176 @@
+---
+title: Searching Dictionaries
+description: How to index and run full-text searches on ODict dictionaries from Rust, Python, and JavaScript.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Full-text search lets you find entries by matching against their definitions, not just their headwords. Unlike [lookup](/guides/lookup/) which requires an exact term match, search uses a [Tantivy](https://github.com/quickwit-oss/tantivy)-powered full-text index.
+
+## Creating an index
+
+Before you can search, you need to create a full-text index. This only needs to be done once per dictionary (the index is persisted to disk).
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::{OpenDictionary, index::IndexOptions};
+
+fn main() -> odict::Result<()> {
+    let file = OpenDictionary::from_path("my-dictionary.odict")?;
+    let dict = file.contents()?;
+
+    dict.index(IndexOptions::default())?;
+
+    Ok(())
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+from theopendictionary import OpenDictionary
+
+dictionary = await OpenDictionary.load("./my-dictionary.odict")
+dictionary.index()
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+import { OpenDictionary } from "@odict/node";
+
+const dictionary = await OpenDictionary.load("./my-dictionary.odict");
+dictionary.index();
+```
+</TabItem>
+</Tabs>
+
+## Index options
+
+You can configure the indexing behavior.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::index::IndexOptions;
+
+let options = IndexOptions::default()
+    .dir("./my-index")         // Custom index directory
+    .overwrite(true)           // Overwrite existing index
+    .memory(50_000_000);       // 50MB memory arena per thread
+
+dict.index(options)?;
+```
+</TabItem>
+<TabItem label="Python">
+```python
+from theopendictionary import IndexOptions
+
+dictionary.index(IndexOptions(
+    directory="./my-index",    # Custom index directory
+    overwrite=True,            # Overwrite existing index
+    memory=50_000_000          # 50MB memory arena per thread
+))
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+dictionary.index({
+  directory: "./my-index",     // Custom index directory
+  overwrite: true,             // Overwrite existing index
+  memory: 50_000_000,          // 50MB memory arena per thread
+});
+```
+</TabItem>
+</Tabs>
+
+## Running a search
+
+Once indexed, you can search across all definitions in the dictionary.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::search::SearchOptions;
+
+let results = dict.search("domesticated mammal", SearchOptions::default())?;
+
+for entry in &results {
+    println!("{}", entry.term);
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+results = dictionary.search("domesticated mammal")
+
+for entry in results:
+    print(entry.term)
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.search("domesticated mammal");
+
+for (const entry of results) {
+  console.log(entry.term);
+}
+```
+</TabItem>
+</Tabs>
+
+## Search options
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::search::SearchOptions;
+
+let options = SearchOptions::default()
+    .dir("./my-index")        // Custom index directory
+    .autoindex(true)           // Auto-create index if missing
+    .limit(10)                 // Max results to return
+    .threshold(50);            // Relevance threshold
+
+let results = dict.search("greeting", options)?;
+```
+</TabItem>
+<TabItem label="Python">
+```python
+from theopendictionary import SearchOptions
+
+results = dictionary.search("greeting", SearchOptions(
+    directory="./my-index",    # Custom index directory
+    autoindex=True,            # Auto-create index if missing
+    limit=10,                  # Max results to return
+    threshold=50               # Relevance threshold
+))
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.search("greeting", {
+  directory: "./my-index",     // Custom index directory
+  autoindex: true,             // Auto-create index if missing
+  limit: 10,                   // Max results to return
+  threshold: 50,               // Relevance threshold
+});
+```
+</TabItem>
+</Tabs>
+
+:::tip
+The `autoindex` option is convenient for one-off scripts — it creates the index on the fly if one doesn't exist yet. For production use, create the index ahead of time with `index()` to avoid the startup cost on first search.
+:::
+
+## Search vs. lookup
+
+| | Lookup | Search |
+|---|--------|--------|
+| **Matches against** | Entry terms (headwords) | Definition text |
+| **Requires index** | No | Yes |
+| **Speed** | O(1) per term | Depends on index size |
+| **Use case** | You know the exact word | You're searching by meaning |
+| **Supports splitting** | Yes | No |
+| **Supports follow** | Yes | No |
+
+In most applications you'll use both: lookup for direct dictionary access, and search for discovery.

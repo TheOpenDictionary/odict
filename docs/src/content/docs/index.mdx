@@ -1,0 +1,38 @@
+---
+title: ODict
+description: The lightning-fast open-source dictionary file format for human languages.
+template: splash
+hero:
+  title: ODict
+  tagline: The lightning-fast open-source dictionary file format for human languages.
+  actions:
+    - text: Get Started
+      link: /getting-started/introduction/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/TheOpenDictionary/odict
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+<CardGrid stagger>
+  <Card title="Write dictionaries in XML" icon="pencil">
+    Define your dictionary entries using a simple, well-documented XML schema
+    (ODXML) that supports etymologies, senses, definitions, examples,
+    pronunciations, and more.
+  </Card>
+  <Card title="Compile to a binary format" icon="rocket">
+    Compile your XML dictionaries into compact, blazingly-fast binary `.odict`
+    files using zero-copy deserialization via rkyv and Brotli compression.
+  </Card>
+  <Card title="Full-text search" icon="magnifier">
+    Index and search your compiled dictionaries with built-in full-text search
+    powered by Tantivy, with multi-language tokenization support.
+  </Card>
+  <Card title="Use from any language" icon="puzzle">
+    Native bindings for Python, JavaScript (Node.js and browser via WASI), and
+    Rust. Plus a powerful CLI and HTTP server for language-agnostic access.
+  </Card>
+</CardGrid>

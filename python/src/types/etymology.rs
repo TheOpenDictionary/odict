@@ -5,15 +5,23 @@ use pyo3::prelude::*;
 use super::pronunciation::Pronunciation;
 use super::sense::Sense;
 
+/// An etymology grouping for a dictionary entry.
+///
+/// Etymologies group together senses that share a common word origin.
+/// Each etymology can have its own pronunciations and description.
 #[pyclass]
 #[derive(Clone)]
 pub struct Etymology {
+    /// Optional identifier for this etymology.
     #[pyo3(get)]
     pub id: Option<String>,
+    /// Pronunciations associated with this etymology.
     #[pyo3(get)]
     pub pronunciations: Vec<Pronunciation>,
+    /// Optional description of the word origin.
     #[pyo3(get)]
     pub description: Option<String>,
+    /// The senses (meanings) under this etymology.
     #[pyo3(get)]
     pub senses: Vec<Sense>,
 }

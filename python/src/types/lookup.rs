@@ -2,15 +2,19 @@ use pyo3::prelude::*;
 
 use super::Entry;
 
+/// Options for configuring term lookups.
 #[pyclass]
 #[derive(Clone)]
 pub struct LookupOptions {
+    /// Minimum word length for compound splitting.
     #[pyo3(get, set)]
     pub split: Option<u32>,
 
+    /// Whether to follow `see_also` cross-references.
     #[pyo3(get, set)]
     pub follow: Option<bool>,
 
+    /// Whether to enable case-insensitive matching.
     #[pyo3(get, set)]
     pub insensitive: Option<bool>,
 }
@@ -58,11 +62,17 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
     }
 }
 
+/// The result of a dictionary lookup.
+///
+/// Contains the matched entry and, if a `see_also` redirect was followed,
+/// the original entry that initiated the redirect.
 #[pyclass]
 #[derive(Debug, Clone)]
 pub struct LookupResult {
+    /// The matched dictionary entry.
     #[pyo3(get)]
     pub entry: Entry,
+    /// The original entry if a `see_also` redirect was followed, or `None`.
     #[pyo3(get)]
     pub directed_from: Option<Entry>,
 }

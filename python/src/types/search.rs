@@ -1,17 +1,22 @@
 use pyo3::prelude::*;
 
+/// Options for configuring full-text search.
 #[pyclass]
 #[derive(Clone)]
 pub struct SearchOptions {
+    /// Custom directory for the search index.
     #[pyo3(get, set)]
     pub directory: Option<String>,
 
+    /// Relevance score threshold for filtering results.
     #[pyo3(get, set)]
     pub threshold: Option<u32>,
 
+    /// Whether to automatically create an index if one does not exist.
     #[pyo3(get, set)]
     pub autoindex: Option<bool>,
 
+    /// Maximum number of results to return.
     #[pyo3(get, set)]
     pub limit: Option<usize>,
 }
