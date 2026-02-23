@@ -2,16 +2,20 @@ use pyo3::prelude::*;
 use std::fmt;
 use structural_convert::StructuralConvert;
 
+/// A reference to an external media resource (audio, image, etc.).
 #[pyclass]
 #[derive(Clone, Debug, StructuralConvert)]
 #[convert(from(odict::schema::MediaURL))]
 pub struct MediaURL {
+    /// URL or path to the media file.
     #[pyo3(get)]
     pub src: String,
 
+    /// MIME type (e.g. `audio/mpeg`), or `None`.
     #[pyo3(get)]
     pub mime_type: Option<String>,
 
+    /// Human-readable description of the media.
     #[pyo3(get)]
     pub description: Option<String>,
 }

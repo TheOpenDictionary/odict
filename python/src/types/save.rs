@@ -1,11 +1,14 @@
 use pyo3::prelude::*;
 
+/// Brotli compression options for saving dictionaries.
 #[pyclass]
 #[derive(PartialEq, Default, Clone, Eq)]
 pub struct CompressOptions {
+    /// Compression quality level (0–11).
     #[pyo3(get, set)]
     pub quality: Option<u32>,
-    
+
+    /// Compression window size (0–22).
     #[pyo3(get, set)]
     pub window_size: Option<u32>,
 }
@@ -22,9 +25,11 @@ impl CompressOptions {
     }
 }
 
+/// Options for saving a dictionary to disk.
 #[pyclass]
 #[derive(PartialEq, Default, Clone, Eq)]
 pub struct SaveOptions {
+    /// Optional Brotli compression settings.
     #[pyo3(get, set)]
     pub compress: Option<CompressOptions>,
 }

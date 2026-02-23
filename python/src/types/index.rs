@@ -1,14 +1,18 @@
 use pyo3::prelude::*;
 
+/// Options for configuring full-text index creation.
 #[pyclass]
 #[derive(Clone)]
 pub struct IndexOptions {
+    /// Custom directory for storing the index.
     #[pyo3(get, set)]
     pub directory: Option<String>,
 
+    /// Memory arena size per thread in bytes (must be >15 MB).
     #[pyo3(get, set)]
     pub memory: Option<usize>,
 
+    /// Whether to overwrite an existing index.
     #[pyo3(get, set)]
     pub overwrite: Option<bool>,
 }

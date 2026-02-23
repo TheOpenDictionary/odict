@@ -9,6 +9,16 @@ use crate::{
     utils::cast_error,
 };
 
+/// Compiles an ODXML string into binary `.odict` data.
+///
+/// Takes an XML string conforming to the ODict XML schema and returns
+/// the compiled binary representation as a byte vector. The resulting
+/// bytes can be passed to [`OpenDictionary::new`] or saved to disk.
+///
+/// # Errors
+///
+/// Returns an error if the XML is malformed or does not conform to the
+/// ODict schema.
 #[pyfunction]
 pub fn compile(xml: String) -> PyResult<Vec<u8>> {
     let bytes = xml
@@ -19,6 +29,15 @@ pub fn compile(xml: String) -> PyResult<Vec<u8>> {
     Ok(bytes)
 }
 
+/// The main class for working with compiled ODict dictionaries.
+///
+/// An `OpenDictionary` wraps a compiled binary dictionary and provides
+/// methods for looking up terms, full-text search, tokenization, and more.
+///
+/// # Construction
+///
+/// Create from compiled bytes or an XML string using [`OpenDictionary::new`],
+/// or load from a file path or remote registry using [`OpenDictionary::load`].
 #[pyclass]
 pub struct OpenDictionary {
     dict: odict::OpenDictionary,
@@ -26,6 +45,11 @@ pub struct OpenDictionary {
 
 #[pymethods]
 impl OpenDictionary {
+    /// Loads a dictionary from a file path, alias, or remote identifier.
+    ///
+    /// This is an async method. If `dictionary` is a path to a `.odict` file,
+    /// it loads from disk. If it matches the format `org/lang` (e.g. `wiktionary/eng`),
+    /// it downloads from the remote registry.
     #[staticmethod]
     #[pyo3(signature = (dictionary, options=None))]
     pub fn load<'py>(
@@ -50,6 +74,10 @@ impl OpenDictionary {
         })
     }
 
+    /// Creates a dictionary from compiled binary data or directly from an XML string.
+    ///
+    /// Accepts either `bytes` (as returned by [`compile`]) or a `str` containing
+    /// ODXML markup.
     #[new]
     pub fn new(data: Either<Vec<u8>, String>) -> PyResult<Self> {
         let bytes = match data {
@@ -60,6 +88,10 @@ impl OpenDictionary {
         Ok(Self { dict })
     }
 
+    /// Saves the dictionary to disk as a `.odict` file.
+    ///
+    /// Optionally configure Brotli compression via `quality` (0–11) and
+    /// `window_size` (0–22).
     #[pyo3(signature = (path, quality=None, window_size=None))]
     pub fn save(
         &mut self,
@@ -89,16 +121,24 @@ impl OpenDictionary {
         }
     }
 
+    /// The minimum rank value across all entries, or `None` if no entries have ranks.
     #[getter]
     pub fn min_rank(&self) -> PyResult<Option<u32>> {
         Ok(self.dict.contents().map_err(cast_error)?.min_rank())
     }
 
+    /// The maximum rank value across all entries, or `None` if no entries have ranks.
     #[getter]
     pub fn max_rank(&self) -> PyResult<Option<u32>> {
         Ok(self.dict.contents().map_err(cast_error)?.max_rank())
     }
 
+    /// Looks up one or more terms by exact match.
+    ///
+    /// - `query` — a single term or list of terms to look up.
+    /// - `split` — minimum word length for compound splitting.
+    /// - `follow` — follow `see_also` cross-references until an entry with etymologies is found.
+    /// - `insensitive` — enable case-insensitive matching.
     #[pyo3(signature = (query, split=None, follow=None, insensitive=None))]
     pub fn lookup(
         &self,
@@ -135,6 +175,7 @@ impl OpenDictionary {
         Ok(mapped)
     }
 
+    /// Returns all terms defined in the dictionary, sorted alphabetically.
     pub fn lexicon(&self) -> PyResult<Vec<&str>> {
         let dict = self.dict.contents().map_err(cast_error)?;
         let lexicon = dict.lexicon();
@@ -142,6 +183,9 @@ impl OpenDictionary {
         Ok(lexicon)
     }
 
+    /// Creates a full-text search index for the dictionary.
+    ///
+    /// Must be called before [`OpenDictionary::search`].
     #[pyo3(signature = (options=None))]
     pub fn index(&self, options: Option<IndexOptions>) -> PyResult<()> {
         let dict = self.dict.contents().map_err(cast_error)?;
@@ -153,6 +197,9 @@ impl OpenDictionary {
         Ok(())
     }
 
+    /// Runs a full-text search across the dictionary.
+    ///
+    /// Requires an index — call [`OpenDictionary::index`] first.
     #[pyo3(signature = (query, options=None))]
     pub fn search(&self, query: String, options: Option<SearchOptions>) -> PyResult<Vec<Entry>> {
         let dict = self.dict.contents().map_err(cast_error)?;
@@ -170,6 +217,14 @@ impl OpenDictionary {
         Ok(entries)
     }
 
+    /// Tokenizes text using NLP-based segmentation and matches each token against the dictionary.
+    ///
+    /// Supports Chinese, Japanese, Korean, Thai, Khmer, German, Swedish,
+    /// and Latin-script languages.
+    ///
+    /// - `text` — the text to tokenize.
+    /// - `follow` — follow `see_also` cross-references. Accepts `True`/`False` or a number (nonzero = follow).
+    /// - `insensitive` — enable case-insensitive matching.
     #[pyo3(signature = (text, follow=None, insensitive=None))]
     pub fn tokenize(
         &self,

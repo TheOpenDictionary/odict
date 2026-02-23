@@ -5,15 +5,22 @@ use super::media_url::MediaURL;
 
 use internal::ToEnumWrapper;
 
+/// A pronunciation entry for a word or etymology.
+///
+/// Represents how a word is pronounced in a given notation system
+/// (e.g. IPA, Pinyin), with optional audio media.
 #[pyclass]
 #[derive(Clone, Debug)]
 pub struct Pronunciation {
+    /// The pronunciation system (e.g. IPA, Pinyin), or `None`.
     #[pyo3(get)]
     pub kind: Option<EnumWrapper>,
 
+    /// The pronunciation notation string.
     #[pyo3(get)]
     pub value: String,
 
+    /// Audio media URLs for this pronunciation.
     #[pyo3(get)]
     pub media: Vec<MediaURL>,
 }
