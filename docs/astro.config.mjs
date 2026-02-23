@@ -37,11 +37,20 @@ export default defineConfig({
           ],
         },
         {
+          label: "Guides",
+          items: [
+            { label: "Compiling Dictionaries", slug: "guides/compiling" },
+            { label: "Looking Up Entries", slug: "guides/lookup" },
+            { label: "Searching Dictionaries", slug: "guides/search" },
+            { label: "Tokenizing Text", slug: "guides/tokenize" },
+          ],
+        },
+        {
           label: "CLI",
           items: [{ label: "Command Reference", slug: "cli/reference" }],
         },
         {
-          label: "API",
+          label: "API Reference",
           items: [
             { label: "Rust", slug: "api/rust" },
             { label: "Python", slug: "api/python" },

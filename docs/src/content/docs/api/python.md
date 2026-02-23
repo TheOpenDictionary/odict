@@ -63,28 +63,31 @@ The main class for working with compiled dictionaries.
 
 ### Constructors
 
-#### `OpenDictionary(data: bytes)`
+#### `OpenDictionary(data: bytes | str)`
 
-Creates a dictionary from compiled binary data (as returned by `compile()`).
+Creates a dictionary from compiled binary data (as returned by `compile()`) or directly from an XML string.
 
 ```python
 from theopendictionary import OpenDictionary, compile
 
+# From compiled bytes
 data = compile(xml_string)
 dictionary = OpenDictionary(data)
+
+# Directly from XML string
+dictionary = OpenDictionary(xml_string)
 ```
 
-#### `await OpenDictionary.load(dictionary: str, alias_path: str | None = None) -> OpenDictionary`
+#### `await OpenDictionary.load(dictionary: str, options: LoadOptions | None = None) -> OpenDictionary`
 
 Loads a dictionary from a file path, alias, or remote identifier. This is an **async** method.
 
 - If `dictionary` is a path to a `.odict` file, it loads from disk.
 - If it matches the format `org/lang` (e.g. `wiktionary/eng`), it downloads from the remote registry.
-- `alias_path` optionally specifies a custom alias file path.
 
 ```python
 import asyncio
-from theopendictionary import OpenDictionary
+from theopendictionary import OpenDictionary, LoadOptions, RemoteLoadOptions
 
 async def main():
     # Load from file
@@ -92,6 +95,13 @@ async def main():
 
     # Load from remote registry
     dictionary = await OpenDictionary.load("wiktionary/eng")
+
+    # Load with options
+    opts = LoadOptions(
+        config_dir="./config",
+        remote=RemoteLoadOptions(caching=True)
+    )
+    dictionary = await OpenDictionary.load("wiktionary/eng", opts)
 
 asyncio.run(main())
 ```
@@ -128,7 +138,7 @@ Looks up one or more terms by exact match.
 |-----------|------|---------|-------------|
 | `query` | `str \| list[str]` | — | Term(s) to look up |
 | `split` | `int \| None` | `None` | Minimum word length for compound splitting |
-| `follow` | `bool \| int \| None` | `None` | Follow `see` cross-references. `True` = infinite, `False` = disabled, `int` = max depth |
+| `follow` | `bool \| None` | `None` | Follow `see` cross-references until an entry with etymologies is found |
 | `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
 
 ```python
@@ -195,7 +205,7 @@ Tokenizes text using NLP-based segmentation and matches each token against the d
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `text` | `str` | — | Text to tokenize |
-| `follow` | `bool \| int \| None` | `None` | Follow `see` cross-references |
+| `follow` | `bool \| int \| None` | `None` | Follow `see` cross-references. Accepts `True`/`False` or a number (nonzero = follow) |
 | `insensitive` | `bool \| None` | `None` | Case-insensitive matching |
 
 ```python

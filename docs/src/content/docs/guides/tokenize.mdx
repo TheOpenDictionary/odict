@@ -1,0 +1,228 @@
+---
+title: Tokenizing Text
+description: How to tokenize text and match tokens against dictionary entries using ODict's NLP tokenizer.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+ODict includes a built-in NLP tokenizer that segments text into words and automatically matches each token against dictionary entries. This is especially useful for languages without whitespace-delimited words (Chinese, Japanese, Korean, Thai, Khmer) as well as compound-word languages (German, Swedish).
+
+## Supported languages
+
+| Language family | Languages | Tokenizer |
+|----------------|-----------|-----------|
+| Chinese | Simplified & Traditional Chinese | jieba |
+| Japanese | Japanese | Lindera (UniDic) |
+| Korean | Korean | Lindera (KoDic) |
+| Thai | Thai | ICU-based |
+| Khmer | Khmer | ICU-based |
+| Germanic | German, Swedish | Compound word splitting |
+| Latin-script | English, French, Spanish, etc. | Unicode word boundaries |
+
+## Basic tokenization
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::{OpenDictionary, tokenize::TokenizeOptions};
+
+fn main() -> odict::Result<()> {
+    let file = OpenDictionary::from_path("my-dictionary.odict")?;
+    let dict = file.contents()?;
+
+    let tokens = dict.tokenize(
+        "the cat ran",
+        TokenizeOptions::default(),
+    )?;
+
+    for token in &tokens {
+        println!("'{}' ({} entries found)",
+            token.lemma,
+            token.entries.len()
+        );
+    }
+
+    Ok(())
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+from theopendictionary import OpenDictionary
+
+dictionary = OpenDictionary("<dictionary>...</dictionary>")
+
+tokens = dictionary.tokenize("the cat ran")
+
+for token in tokens:
+    print(f"'{token.lemma}' ({len(token.entries)} entries found)")
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+import { OpenDictionary } from "@odict/node";
+
+const dictionary = await OpenDictionary.load("./my-dictionary.odict");
+
+const tokens = dictionary.tokenize("the cat ran");
+
+for (const token of tokens) {
+  console.log(`'${token.lemma}' (${token.entries.length} entries found)`);
+}
+```
+</TabItem>
+</Tabs>
+
+## Chinese text tokenization
+
+For Chinese (and other CJK languages), ODict automatically detects the script and uses the appropriate segmenter.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let tokens = dict.tokenize("你好世界", TokenizeOptions::default())?;
+
+for token in &tokens {
+    println!("Lemma: {}, Script: {:?}, Language: {:?}",
+        token.lemma,
+        token.script.name(),
+        token.language.as_ref().map(|l| l.code())
+    );
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+tokens = dictionary.tokenize("你好世界")
+
+for token in tokens:
+    print(f"Lemma: {token.lemma}, Script: {token.script}, Language: {token.language}")
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const tokens = dictionary.tokenize("你好世界");
+
+for (const token of tokens) {
+  console.log(`Lemma: ${token.lemma}, Script: ${token.script}, Language: ${token.language}`);
+}
+```
+</TabItem>
+</Tabs>
+
+## Following cross-references
+
+Like [lookup](/guides/lookup/), tokenization supports following `see` cross-references.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let options = TokenizeOptions::default().follow(true);
+
+let tokens = dict.tokenize("the cat ran", options)?;
+
+for token in &tokens {
+    for result in &token.entries {
+        if let Some(from) = &result.directed_from {
+            println!("'{}' → '{}'",
+                from.term.as_str(),
+                result.entry.term.as_str()
+            );
+        }
+    }
+}
+// e.g. 'ran' → 'run'
+```
+</TabItem>
+<TabItem label="Python">
+```python
+tokens = dictionary.tokenize("the cat ran", follow=True)
+
+for token in tokens:
+    for result in token.entries:
+        if result.directed_from:
+            print(f"'{result.directed_from.term}' → '{result.entry.term}'")
+# e.g. 'ran' → 'run'
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const tokens = dictionary.tokenize("the cat ran", { follow: true });
+
+for (const token of tokens) {
+  for (const result of token.entries) {
+    if (result.directedFrom) {
+      console.log(`'${result.directedFrom.term}' → '${result.entry.term}'`);
+    }
+  }
+}
+// e.g. 'ran' → 'run'
+```
+</TabItem>
+</Tabs>
+
+## Case-insensitive tokenization
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let options = TokenizeOptions::default().insensitive(true);
+
+// "DOG" will match the "dog" entry
+let tokens = dict.tokenize("DOG cat", options)?;
+```
+</TabItem>
+<TabItem label="Python">
+```python
+# "DOG" will match the "dog" entry
+tokens = dictionary.tokenize("DOG cat", insensitive=True)
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+// "DOG" will match the "dog" entry
+const tokens = dictionary.tokenize("DOG cat", { insensitive: true });
+```
+</TabItem>
+</Tabs>
+
+## Token properties
+
+Each token returned by `tokenize()` includes metadata about the match.
+
+| Property | Description |
+|----------|-------------|
+| `lemma` | The original text of the token as it appears in the input |
+| `language` | Detected language code (e.g. `"cmn"` for Mandarin), if applicable |
+| `script` | Detected script name (e.g. `"Han"`, `"Latin"`) |
+| `kind` | Token kind (e.g. `"Word"`, `"Punctuation"`) |
+| `start` | Start byte offset in the original text |
+| `end` | End byte offset in the original text |
+| `entries` | Array of `LookupResult` objects for matched dictionary entries |
+
+## Combining options
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let options = TokenizeOptions::default()
+    .follow(true)
+    .insensitive(true);
+
+let tokens = dict.tokenize("The CAT RaN away", options)?;
+```
+</TabItem>
+<TabItem label="Python">
+```python
+tokens = dictionary.tokenize("The CAT RaN away", follow=True, insensitive=True)
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const tokens = dictionary.tokenize("The CAT RaN away", {
+  follow: true,
+  insensitive: true,
+});
+```
+</TabItem>
+</Tabs>

@@ -56,15 +56,19 @@ The main class for working with compiled dictionaries.
 
 ### Constructors
 
-#### `new OpenDictionary(data: Buffer)`
+#### `new OpenDictionary(data: Buffer | string)`
 
-Creates a dictionary from compiled binary data (as returned by `compile()`).
+Creates a dictionary from compiled binary data (as returned by `compile()`) or directly from an XML string.
 
 ```typescript
 import { compile, OpenDictionary } from "@odict/node";
 
+// From compiled buffer
 const data = compile(xmlString);
 const dictionary = new OpenDictionary(data);
+
+// Directly from XML string
+const dictionary = new OpenDictionary(xmlString);
 ```
 
 #### `OpenDictionary.load(dictionary: string, options?: LoadOptions): Promise<OpenDictionary>`
@@ -83,9 +87,10 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 // Load from remote registry
 const dictionary = await OpenDictionary.load("wiktionary/eng");
 
-// Load with alias options
-const dictionary = await OpenDictionary.load("./dict.odict", {
-  alias: { path: "./aliases.json" },
+// Load with options
+const dictionary = await OpenDictionary.load("wiktionary/eng", {
+  configDir: "./config",
+  remote: { caching: true, retries: 3 },
 });
 ```
 
@@ -117,7 +122,7 @@ Looks up one or more terms by exact match.
 |-----------|------|---------|-------------|
 | `query` | `string \| string[]` | — | Term(s) to look up |
 | `options.split` | `number` | — | Minimum word length for compound splitting |
-| `options.follow` | `boolean \| number` | — | Follow `see` cross-references. `true` = infinite, `false` = disabled, number = max depth |
+| `options.follow` | `boolean` | — | Follow `see` cross-references until an entry with etymologies is found |
 | `options.insensitive` | `boolean` | — | Enable case-insensitive matching |
 
 ```typescript
@@ -217,7 +222,7 @@ interface Etymology {
   id?: string;
   pronunciations: Pronunciation[];
   description?: string;
-  senses: Record<string, Sense>;
+  senses: Sense[];
 }
 ```
 
@@ -323,11 +328,14 @@ interface EnumWrapper {
 
 ```typescript
 interface LoadOptions {
-  alias?: AliasLoadOptions;
+  configDir?: string;
+  remote?: RemoteLoadOptions;
 }
 
-interface AliasLoadOptions {
-  path?: string;
+interface RemoteLoadOptions {
+  outDir?: string;
+  caching?: boolean;
+  retries?: number;
 }
 
 interface SaveOptions {
@@ -341,7 +349,7 @@ interface CompressOptions {
 
 interface LookupOptions {
   split?: number;
-  follow?: boolean | number;
+  follow?: boolean;
   insensitive?: boolean;
 }
 
@@ -359,7 +367,7 @@ interface SearchOptions {
 }
 
 interface TokenizeOptions {
-  follow?: boolean | number;
+  follow?: boolean;
   allowList?: string[];
   insensitive?: boolean;
 }

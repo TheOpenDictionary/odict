@@ -1,0 +1,312 @@
+---
+title: Looking Up Entries
+description: How to look up dictionary entries by exact match from Rust, Python, and JavaScript.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Lookup is the fastest way to query a dictionary — it finds entries by exact term match without requiring an index.
+
+## Basic lookup
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::{OpenDictionary, lookup::LookupOptions};
+
+fn main() -> odict::Result<()> {
+    let file = OpenDictionary::from_path("my-dictionary.odict")?;
+    let dict = file.contents()?;
+
+    let results = dict.lookup(
+        &vec!["cat"],
+        LookupOptions::default(),
+    )?;
+
+    for result in &results {
+        println!("{}", result.entry.term.as_str());
+    }
+
+    Ok(())
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+from theopendictionary import OpenDictionary, compile
+
+dictionary = OpenDictionary("<dictionary>...</dictionary>")
+
+results = dictionary.lookup("cat")
+print(results[0].entry.term)  # "cat"
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+import { OpenDictionary } from "@odict/node";
+
+const dictionary = await OpenDictionary.load("./my-dictionary.odict");
+
+const results = dictionary.lookup("cat");
+console.log(results[0].entry.term); // "cat"
+```
+</TabItem>
+</Tabs>
+
+## Looking up multiple terms
+
+You can look up several terms in a single call. Results are returned for each matched term.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let results = dict.lookup(
+    &vec!["cat", "dog", "run"],
+    LookupOptions::default(),
+)?;
+
+for result in &results {
+    println!("Found: {}", result.entry.term.as_str());
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+results = dictionary.lookup(["cat", "dog", "run"])
+
+for result in results:
+    print(f"Found: {result.entry.term}")
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.lookup(["cat", "dog", "run"]);
+
+for (const result of results) {
+  console.log(`Found: ${result.entry.term}`);
+}
+```
+</TabItem>
+</Tabs>
+
+## Following cross-references
+
+Entries can redirect to other entries using the `see` attribute (e.g. "ran" → "run"). Enable `follow` to automatically resolve these.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::lookup::LookupOptions;
+
+let options = LookupOptions::default().follow(true);
+
+let results = dict.lookup(&vec!["ran"], options)?;
+
+// "ran" redirects to "run"
+assert_eq!(results[0].entry.term.as_str(), "run");
+
+// directed_from tells you the original entry
+if let Some(from) = &results[0].directed_from {
+    println!("Redirected from: {}", from.term.as_str());
+}
+```
+</TabItem>
+<TabItem label="Python">
+```python
+results = dictionary.lookup("ran", follow=True)
+
+# "ran" redirects to "run"
+print(results[0].entry.term)          # "run"
+print(results[0].directed_from.term)  # "ran"
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.lookup("ran", { follow: true });
+
+// "ran" redirects to "run"
+console.log(results[0].entry.term);           // "run"
+console.log(results[0].directedFrom?.term);   // "ran"
+```
+</TabItem>
+</Tabs>
+
+:::tip
+When `follow` is enabled, ODict walks the `see` chain until it finds an entry with etymologies. It also detects circular references and returns an error instead of looping infinitely.
+:::
+
+## Case-insensitive lookup
+
+By default, lookups are case-sensitive. Enable `insensitive` to fall back to lowercase matching when the exact case doesn't match.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let options = LookupOptions::default().insensitive(true);
+
+// "CAT" will match "cat"
+let results = dict.lookup(&vec!["CAT"], options)?;
+
+assert_eq!(results[0].entry.term.as_str(), "cat");
+```
+</TabItem>
+<TabItem label="Python">
+```python
+# "CAT" will match "cat"
+results = dictionary.lookup("CAT", insensitive=True)
+
+print(results[0].entry.term)  # "cat"
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+// "CAT" will match "cat"
+const results = dictionary.lookup("CAT", { insensitive: true });
+
+console.log(results[0].entry.term); // "cat"
+```
+</TabItem>
+</Tabs>
+
+## Compound word splitting
+
+If a term isn't found, ODict can split it into substrings and look up each part. The `split` parameter sets the minimum character length for each fragment.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+use odict::lookup::{LookupOptions, LookupStrategy};
+
+let options = LookupOptions::default()
+    .strategy(LookupStrategy::Split(3));
+
+// "catdog" isn't a word, but "cat" and "dog" are
+let results = dict.lookup(&vec!["catdog"], options)?;
+
+for result in &results {
+    println!("Found: {}", result.entry.term.as_str());
+}
+// Prints: "cat", "dog"
+```
+</TabItem>
+<TabItem label="Python">
+```python
+# "catdog" isn't a word, but "cat" and "dog" are
+results = dictionary.lookup("catdog", split=3)
+
+for result in results:
+    print(result.entry.term)
+# Prints: "cat", "dog"
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+// "catdog" isn't a word, but "cat" and "dog" are
+const results = dictionary.lookup("catdog", { split: 3 });
+
+for (const result of results) {
+  console.log(result.entry.term);
+}
+// Prints: "cat", "dog"
+```
+</TabItem>
+</Tabs>
+
+## Combining options
+
+All lookup options can be combined.
+
+<Tabs>
+<TabItem label="Rust">
+```rust
+let options = LookupOptions::default()
+    .follow(true)
+    .insensitive(true)
+    .strategy(LookupStrategy::Split(3));
+
+let results = dict.lookup(&vec!["RaN"], options)?;
+```
+</TabItem>
+<TabItem label="Python">
+```python
+results = dictionary.lookup("RaN", follow=True, insensitive=True, split=3)
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.lookup("RaN", {
+  follow: true,
+  insensitive: true,
+  split: 3,
+});
+```
+</TabItem>
+</Tabs>
+
+## Reading entry data
+
+Once you have a `LookupResult`, you can traverse the entry's structure: etymologies, senses, definitions, examples, and more.
+
+<Tabs>
+<TabItem label="Python">
+```python
+results = dictionary.lookup("cat")
+entry = results[0].entry
+
+print(f"Term: {entry.term}")
+
+for ety in entry.etymologies:
+    for sense in ety.senses:
+        print(f"  Part of speech: {sense.pos}")
+        for defn in sense.definitions:
+            print(f"    {defn.value}")
+            for example in defn.examples:
+                print(f"      e.g. {example.value}")
+```
+</TabItem>
+<TabItem label="JavaScript">
+```typescript
+const results = dictionary.lookup("cat");
+const entry = results[0].entry;
+
+console.log(`Term: ${entry.term}`);
+
+for (const ety of entry.etymologies) {
+  for (const sense of ety.senses) {
+    console.log(`  Part of speech: ${sense.pos.value}`);
+    for (const defn of sense.definitions) {
+      if ("value" in defn) {
+        console.log(`    ${defn.value}`);
+        for (const example of defn.examples) {
+          console.log(`      e.g. ${example.value}`);
+        }
+      }
+    }
+  }
+}
+```
+</TabItem>
+<TabItem label="Rust">
+```rust
+let results = dict.lookup(&vec!["cat"], LookupOptions::default())?;
+
+for result in &results {
+    let entry = result.entry.deserialize()?;
+
+    println!("Term: {}", entry.term);
+
+    for ety in &entry.etymologies {
+        for (pos, sense) in &ety.senses {
+            println!("  Part of speech: {}", pos);
+            for defn in &sense.definitions {
+                println!("    {}", defn.value);
+                for example in &defn.examples {
+                    println!("      e.g. {}", example.value);
+                }
+            }
+        }
+    }
+}
+```
+</TabItem>
+</Tabs>
