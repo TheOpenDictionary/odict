@@ -7,9 +7,9 @@ use super::media_url::MediaURL;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::Entry))]
 pub struct Entry {
-  pub term: String,
-  pub rank: Option<u32>,
-  pub see_also: Option<String>,
-  pub etymologies: Vec<Etymology>,
-  pub media: Vec<MediaURL>,
+    pub term: String,
+    pub rank: Option<u32>,
+    pub see_also: Option<String>,
+    pub etymologies: Vec<Etymology>,
+    pub media: Vec<MediaURL>,
 }

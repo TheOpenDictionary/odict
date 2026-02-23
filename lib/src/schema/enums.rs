@@ -1,6 +1,8 @@
 use std::fmt::{Debug, Display};
 
-use super::{FormKind, PartOfSpeech, PronunciationKind};
+use crate::schema::PronunciationKind;
+
+use super::{FormKind, PartOfSpeech};
 
 pub trait EnumIdentifier {
     fn id(&self) -> String;

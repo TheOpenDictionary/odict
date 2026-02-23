@@ -1,5 +1,5 @@
 use rkyv::{
-    deserialize, to_bytes,
+    deserialize,
     with::{AsBox, MapNiche},
 };
 use std::{
@@ -7,9 +7,37 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use crate::{error::Error, schema::Etymology, serializable};
+use crate::{error::Error, intern::serialize_interned, schema::Etymology, serializable};
 
 use super::{EntryRef, MediaURL};
+
+/// Creates an `EntrySet` from a list of elements.
+///
+/// This macro provides a convenient way to create an `EntrySet` (which is a type alias for `IndexSet<Entry>`)
+/// with pre-allocated capacity based on the number of elements provided.
+///
+/// # Examples
+///
+/// ```ignore
+/// use odict::entryset;
+/// use odict::schema::Entry;
+///
+/// let set = entryset![entry1, entry2, entry3];
+/// ```
+#[macro_export]
+macro_rules! entryset {
+    ($($value:expr,)+) => { entryset!($($value),+) };
+    ($($value:expr),*) => {
+        {
+            const CAP: usize = <[()]>::len(&[$({ stringify!($value); }),*]);
+            let mut set = $crate::schema::EntrySet::with_capacity(CAP);
+            $(
+                set.insert($value);
+            )*
+            set
+        }
+    };
+}
 
 serializable! {
   #[derive(Default)]
@@ -68,9 +96,7 @@ impl Borrow<str> for ArchivedEntry {
 
 impl Entry {
     pub fn serialize(&self) -> crate::Result<Vec<u8>> {
-        let bytes =
-            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
-
+        let bytes = serialize_interned::<_, rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 }

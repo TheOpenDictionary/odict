@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 use crate::version::SemanticVersion;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct OpenDictionary {
     pub(crate) signature: String,
     pub(crate) version: SemanticVersion,

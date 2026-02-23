@@ -1,13 +1,13 @@
-use rkyv::{
-    deserialize, to_bytes,
-    with::{AsBox, MapNiche},
-};
-use std::collections::HashSet;
+use indexmap::IndexSet;
+use rkyv::deserialize;
+
 use std::str::FromStr;
 
-use crate::{error::Error, serializable};
+use crate::{error::Error, intern::serialize_interned, serializable};
 
 use super::{entry::Entry, id::ID};
+
+pub type EntrySet = IndexSet<Entry>;
 
 serializable! {
   #[derive(Default)]
@@ -17,43 +17,13 @@ serializable! {
       pub id: ID,
 
       #[serde(rename = "@name")]
-      #[rkyv(with = MapNiche<AsBox>)]
+      #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
       #[serde(skip_serializing_if = "Option::is_none")]
       pub name: Option<String>,
 
-      #[serde(default, rename = "entry", with = "entries")]
-      pub entries: HashSet<Entry>,
+      #[serde(default, rename = "entry")]
+      pub entries: EntrySet
   }
-}
-
-mod entries {
-    use std::collections::HashSet;
-
-    use serde::de::Deserializer;
-    use serde::ser::Serializer;
-    use serde::Deserialize;
-
-    use crate::schema::Entry;
-
-    pub fn serialize<S>(set: &HashSet<Entry>, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.collect_seq(set.iter())
-    }
-
-    pub fn deserialize<'de, D>(deserializer: D) -> Result<HashSet<Entry>, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let mut set = HashSet::new();
-
-        for item in Vec::<Entry>::deserialize(deserializer)? {
-            set.insert(item);
-        }
-
-        Ok(set)
-    }
 }
 
 impl FromStr for Dictionary {
@@ -66,8 +36,7 @@ impl FromStr for Dictionary {
 
 impl Dictionary {
     pub(crate) fn serialize(&self) -> crate::Result<Vec<u8>> {
-        let bytes =
-            to_bytes::<rkyv::rancor::Error>(self).map_err(|e| Error::Serialize(e.to_string()))?;
+        let bytes = serialize_interned::<_, rkyv::rancor::Error>(self)?;
         Ok(bytes.to_vec())
     }
 }

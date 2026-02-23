@@ -1,19 +1,15 @@
-use merge::Merge;
 use pyo3::prelude::*;
 
 #[pyclass]
-#[derive(Merge, Clone)]
+#[derive(Clone)]
 pub struct IndexOptions {
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub directory: Option<String>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub memory: Option<usize>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub overwrite: Option<bool>,
 }
 

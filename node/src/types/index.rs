@@ -1,43 +1,38 @@
-use merge::Merge;
-
 #[napi(object)]
-#[derive(PartialEq, Debug, Merge, Clone, Eq)]
+#[derive(PartialEq, Debug, Clone, Eq)]
 pub struct IndexOptions {
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub directory: Option<String>,
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub memory: Option<u32>,
-  #[merge(strategy = merge::option::overwrite_none)]
-  pub overwrite: Option<bool>,
+    pub directory: Option<String>,
+    pub memory: Option<u32>,
+    pub overwrite: Option<bool>,
 }
 
 impl Default for IndexOptions {
-  fn default() -> Self {
-    IndexOptions {
-      overwrite: None,
-      directory: None,
-      memory: None,
+    fn default() -> Self {
+        IndexOptions {
+            overwrite: None,
+            directory: None,
+            memory: None,
+        }
     }
-  }
 }
 
 #[cfg(feature = "node")]
 impl From<IndexOptions> for odict::index::IndexOptions {
-  fn from(opts: IndexOptions) -> Self {
-    let mut options = odict::index::IndexOptions::default();
+    fn from(opts: IndexOptions) -> Self {
+        let mut options = odict::index::IndexOptions::default();
 
-    if let Some(dir) = opts.directory {
-      options = options.dir(dir.as_str());
+        if let Some(dir) = opts.directory {
+            options = options.dir(dir.as_str());
+        }
+
+        if let Some(memory) = opts.memory {
+            options = options.memory(memory as usize);
+        }
+
+        if let Some(overwrite) = opts.overwrite {
+            options = options.overwrite(overwrite);
+        }
+
+        options
     }
-
-    if let Some(memory) = opts.memory {
-      options = options.memory(memory as usize);
-    }
-
-    if let Some(overwrite) = opts.overwrite {
-      options = options.overwrite(overwrite);
-    }
-
-    options
-  }
 }

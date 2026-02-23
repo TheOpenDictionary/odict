@@ -4,6 +4,70 @@
 
 
 
+## [2.2.2](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.1...node/v2.2.2) (2025-11-30)
+
+
+### Bug Fixes
+
+* Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
+
+## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.0...node/v2.2.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* Fix missing Japanese tokenization ([16f7f56](https://github.com/TheOpenDictionary/odict/commit/16f7f5654c0ec53a976fdaebf3acfd25ca75b958))
+
+## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.1...node/v2.2.0) (2025-11-22)
+
+
+### Features
+
+* **node:** Add Japanese tokenizer to Node package ([#1341](https://github.com/TheOpenDictionary/odict/issues/1341)) ([2c92c30](https://github.com/TheOpenDictionary/odict/commit/2c92c30c28dd6b665a5ed9158038afc963ff0d41))
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+
+### Bug Fixes
+
+* Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
+
+## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.0...node/v2.1.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
+* Remove unused merge crate from python and node ([81d6685](https://github.com/TheOpenDictionary/odict/commit/81d668530caa068660c76dc5235241335d37ff98))
+
+## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.0.0...node/v2.1.0) (2025-10-20)
+
+
+### Features
+
+* Allow passing remote load options to Node and Python ([#1315](https://github.com/TheOpenDictionary/odict/issues/1315)) ([80a8361](https://github.com/TheOpenDictionary/odict/commit/80a8361e1cff88bffb5bf36cb354ca04ad89a343))
+* Remove backwards compatibility for legacy follow for Node and Python ([#1308](https://github.com/TheOpenDictionary/odict/issues/1308)) ([785fac5](https://github.com/TheOpenDictionary/odict/commit/785fac54001df45841fa18d0c6822e36a337b5ec))
+* Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
+* String interning ([#1313](https://github.com/TheOpenDictionary/odict/issues/1313)) ([a1ce402](https://github.com/TheOpenDictionary/odict/commit/a1ce4025950f840674e1e4e159b60311672febc2))
+
+
+### Bug Fixes
+
+* Inline interning library ([5833965](https://github.com/TheOpenDictionary/odict/commit/583396596017cc2a979d45de3237885671c136e7))
+
+## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.1...node/v2.0.0) (2025-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282))
+
+### Features
+
+* **lookup:** Update follow logic ([#1307](https://github.com/TheOpenDictionary/odict/issues/1307)) ([0aa9a53](https://github.com/TheOpenDictionary/odict/commit/0aa9a532def5b1f544f75f2e7ad3540e3f90cf55))
+* Support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282)) ([326b325](https://github.com/TheOpenDictionary/odict/commit/326b325efd4a1ea1327ae2e36f55fe6c13663ca1))
+* Use safe API for rkyv access ([dd3fd60](https://github.com/TheOpenDictionary/odict/commit/dd3fd60d1795538108ed0cb02281ccc792eec4f1))
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.0...node/v1.9.1) (2025-08-16)
 
 

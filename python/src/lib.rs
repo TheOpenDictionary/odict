@@ -1,8 +1,8 @@
 use dictionary::{compile, OpenDictionary};
 use pyo3::prelude::*;
 use types::{
-    AliasLoadOptions, CompressOptions, EnumWrapper, IndexOptions, LoadOptions, LookupOptions,
-    LookupResult, MediaURL, Pronunciation, SaveOptions, SearchOptions, TokenizeOptions,
+    CompressOptions, EnumWrapper, IndexOptions, LoadOptions, LookupOptions, LookupResult, MediaURL,
+    Pronunciation, RemoteLoadOptions, SaveOptions, SearchOptions, TokenizeOptions,
 };
 
 mod dictionary;
@@ -28,7 +28,7 @@ fn theopendictionary(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<IndexOptions>()?;
     m.add_class::<TokenizeOptions>()?;
     m.add_class::<CompressOptions>()?;
-    m.add_class::<AliasLoadOptions>()?;
+    m.add_class::<RemoteLoadOptions>()?;
 
     // Functions
     m.add_function(wrap_pyfunction!(compile, m)?)?;

@@ -9,6 +9,34 @@ use crate::serializable;
 use super::ArchivedPartOfSpeech;
 use super::{pos::PartOfSpeech, Definition, EntryRef, Group};
 
+/// Creates a `SenseSet` from a list of elements.
+///
+/// This macro provides a convenient way to create a `SenseSet` (which is a type alias for `IndexSet<Sense>`)
+/// with pre-allocated capacity based on the number of elements provided.
+///
+/// # Examples
+///
+/// ```ignore
+/// use odict::senseset;
+/// use odict::schema::Sense;
+///
+/// let set = senseset![sense1, sense2, sense3];
+/// ```
+#[macro_export]
+macro_rules! senseset {
+    ($($value:expr,)+) => { senseset!($($value),+) };
+    ($($value:expr),*) => {
+        {
+            const CAP: usize = <[()]>::len(&[$({ stringify!($value); }),*]);
+            let mut set = $crate::schema::SenseSet::with_capacity(CAP);
+            $(
+                set.insert($value);
+            )*
+            set
+        }
+    };
+}
+
 serializable! {
   #[repr(u8)]
   pub enum DefinitionType {
@@ -37,6 +65,7 @@ serializable! {
 
     #[serde(default, rename = "tag")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
+    #[rkyv(with = rkyv::with::Map<crate::intern::Intern>)]
     pub tags: Vec<String>,
 
     #[serde(default, rename = "translation")]

@@ -43,6 +43,18 @@ pub fn set_metadata<P: AsRef<Path>>(local_path: P, metadata: DictionaryMetadata)
         .map_err(|e| Error::Other(format!("Failed to write metadata json: {e}")))
 }
 
+/// Delete metadata file to clear ETAG cache
+pub fn delete_metadata<P: AsRef<Path>>(local_path: P) -> Result<()> {
+    let metadata_path = local_path.as_ref().with_extension(METADATA_EXTENSION);
+
+    if metadata_path.exists() {
+        std::fs::remove_file(&metadata_path)
+            .map_err(|e| Error::Other(format!("Failed to delete metadata json: {e}")))?;
+    }
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

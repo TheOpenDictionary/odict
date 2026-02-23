@@ -2,7 +2,7 @@ use std::{ffi::OsStr, fs::create_dir_all, fs::remove_dir_all, path::PathBuf};
 use tantivy::{doc, tokenizer::TextAnalyzer, Index};
 
 use crate::{
-    config::get_config_dir,
+    config::DEFAULT_CONFIG_DIR,
     preview::PreviewOptions,
     schema::{ArchivedDictionary, ArchivedEntry, Dictionary},
 };
@@ -19,7 +19,7 @@ pub struct IndexOptions {
 }
 
 pub fn get_default_index_dir() -> PathBuf {
-    get_config_dir().unwrap().join(".idx")
+    DEFAULT_CONFIG_DIR.join(".idx")
 }
 
 impl IndexOptions {

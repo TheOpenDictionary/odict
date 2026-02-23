@@ -1,5 +1,49 @@
 # Changelog
 
+## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
+
+
+### Bug Fixes
+
+* Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
+
+## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.1...python/v2.2.0) (2025-11-22)
+
+
+### Features
+
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.0...python/v2.1.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
+* Remove unused merge crate from python and node ([81d6685](https://github.com/TheOpenDictionary/odict/commit/81d668530caa068660c76dc5235241335d37ff98))
+
+## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.0.0...python/v2.1.0) (2025-10-20)
+
+
+### Features
+
+* Allow passing remote load options to Node and Python ([#1315](https://github.com/TheOpenDictionary/odict/issues/1315)) ([80a8361](https://github.com/TheOpenDictionary/odict/commit/80a8361e1cff88bffb5bf36cb354ca04ad89a343))
+* Remove backwards compatibility for legacy follow for Node and Python ([#1308](https://github.com/TheOpenDictionary/odict/issues/1308)) ([785fac5](https://github.com/TheOpenDictionary/odict/commit/785fac54001df45841fa18d0c6822e36a337b5ec))
+* Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
+
+## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.8.0...python/v2.0.0) (2025-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282))
+
+### Features
+
+* **lookup:** Update follow logic ([#1307](https://github.com/TheOpenDictionary/odict/issues/1307)) ([0aa9a53](https://github.com/TheOpenDictionary/odict/commit/0aa9a532def5b1f544f75f2e7ad3540e3f90cf55))
+* Support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282)) ([326b325](https://github.com/TheOpenDictionary/odict/commit/326b325efd4a1ea1327ae2e36f55fe6c13663ca1))
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.7.0...python/v1.8.0) (2025-07-12)
 
 

@@ -5,7 +5,7 @@ use pyo3_async_runtimes::tokio::future_into_py;
 use odict::ToDictionary;
 
 use crate::{
-    types::{Entry, IndexOptions, LookupOptions, LookupResult, SearchOptions, Token},
+    types::{Entry, IndexOptions, LoadOptions, LookupOptions, LookupResult, SearchOptions, Token},
     utils::cast_error,
 };
 
@@ -27,32 +27,36 @@ pub struct OpenDictionary {
 #[pymethods]
 impl OpenDictionary {
     #[staticmethod]
-    #[pyo3(signature = (dictionary, alias_path=None))]
+    #[pyo3(signature = (dictionary, options=None))]
     pub fn load<'py>(
         py: Python<'py>,
         dictionary: String,
-        alias_path: Option<String>,
+        options: Option<LoadOptions>,
     ) -> PyResult<Bound<'py, PyAny>> {
         future_into_py(py, async move {
-            let mut opts = internal::LoadDictionaryOptions::default();
-
-            if let Some(path) = alias_path {
-                opts = opts.with_alias_manager(
-                    odict::alias::AliasManager::new(&path).map_err(cast_error)?,
-                );
-            }
-
-            let dict = internal::load_dictionary_with_options(&dictionary, opts)
-                .await
-                .map_err(cast_error)?;
+            let dict = match options {
+                Some(opts) => {
+                    let load_opts = opts.try_into().map_err(cast_error)?;
+                    odict::OpenDictionary::load_with_options(&dictionary, load_opts)
+                        .await
+                        .map_err(cast_error)?
+                }
+                None => odict::OpenDictionary::load(&dictionary)
+                    .await
+                    .map_err(cast_error)?,
+            };
 
             Ok(OpenDictionary { dict })
         })
     }
 
     #[new]
-    pub fn new(data: Vec<u8>) -> PyResult<Self> {
-        let dict = odict::OpenDictionary::from_bytes(data).map_err(cast_error)?;
+    pub fn new(data: Either<Vec<u8>, String>) -> PyResult<Self> {
+        let bytes = match data {
+            Either::Left(bytes) => bytes,
+            Either::Right(string) => compile(string)?,
+        };
+        let dict = odict::OpenDictionary::from_bytes(bytes).map_err(cast_error)?;
         Ok(Self { dict })
     }
 
@@ -100,7 +104,7 @@ impl OpenDictionary {
         &self,
         query: Either<String, Vec<String>>,
         split: Option<u32>,
-        follow: Option<Either<bool, u32>>,
+        follow: Option<bool>,
         insensitive: Option<bool>,
     ) -> PyResult<Vec<LookupResult>> {
         let mut queries: Vec<String> = vec![];
@@ -180,9 +184,9 @@ impl OpenDictionary {
 
         if let Some(f) = follow {
             opts = opts.follow(match f {
-                Either::Left(true) => u32::MAX,
-                Either::Left(false) => 0,
-                Either::Right(num) => num,
+                Either::Left(bool_val) => bool_val,
+                Either::Right(0) => false,
+                Either::Right(_) => true, // Any non-zero number means follow
             });
         }
 

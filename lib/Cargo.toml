@@ -3,7 +3,7 @@ name = "odict"
 description = "A blazingly-fast dictionary file format for human languages"
 homepage = "https://odict.org"
 repository = "https://github.com/TheOpenDictionary/odict"
-version = "2.9.1"
+version = "3.2.2"
 edition = "2021"
 license = "MIT"
 exclude = ["benches/*", "tests/*"]
@@ -40,7 +40,7 @@ tokenize = [
 ]
 tokenize-latin = ["dep:charabia"]
 tokenize-chinese = ["tokenize-latin", "charabia/chinese-segmentation"]
-tokenize-japanese = ["tokenize-latin", "charabia/japanese-segmentation-unidic"]
+tokenize-japanese = ["tokenize-latin", "charabia/japanese"]
 tokenize-thai = ["tokenize-latin", "charabia/thai"]
 tokenize-korean = ["tokenize-latin", "charabia/korean"]
 tokenize-khmer = ["tokenize-latin", "charabia/khmer"]
@@ -53,50 +53,51 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.38.3", features = ["serialize"] }
+quick-xml = { version = "0.39.0", features = ["serialize"] }
 rayon = "1.11.0"
-charabia = { version = "0.9.7", optional = true, default-features = false }
-rkyv = { version = "0.8.11" }
-serde = { version = "1.0.221", features = ["serde_derive"] }
-uuid = { version = "1.18.1", features = [
+indexmap = { version = "2.13.0", features = ["serde", "rayon"] }
+charabia = { version = "0.9.9", optional = true, default-features = false }
+rkyv = { version = "0.8.14", features = ["indexmap-2", "uuid-1"] }
+serde = { version = "1.0.228", features = ["serde_derive"] }
+uuid = { version = "1.19.0", features = [
   "v4",
   "fast-rng",
   "macro-diagnostics",
 ] }
-url = "2.5.7"
-serde_json = "1.0.145"
-thiserror = "2.0.16"
+url = "2.5.8"
+serde_json = "1.0.149"
+thiserror = "2.0.17"
 brotli = "8.0.2"
 structural-convert = { workspace = true }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.0", optional = true }
 # feature=http
-reqwest = { version = "0.12.23", optional = true, default-features = false, features = [
-  "rustls-tls",
+reqwest = { version = "0.13.1", optional = true, default-features = false, features = [
   "http2",
   "stream",
 ] }
-reqwest-middleware = { version = "0.4.2", optional = true }
-reqwest-retry = { version = "0.7.0", optional = true }
+strum = { version = "0.27.2", features = ["derive"] }
+reqwest-middleware = { version = "0.5.0", optional = true }
+reqwest-retry = { version = "0.9.0", optional = true }
 futures-util = { version = "0.3", optional = true }
-regex = { version = "1.11.2", optional = true }
+regex = { version = "1.12.2", optional = true }
 # feature=search
 tantivy = { version = "0.25.0", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
 sea-query = { version = "0.32.7", optional = true }
-strum = { version = "0.27.2", features = ["derive"] }
+
 
 [dev-dependencies]
-criterion = { version = "0.7.0", features = ["async_tokio", "html_reports"] }
-insta = "1.43.2"
+criterion = { version = "0.8.1", features = ["async_tokio", "html_reports"] }
+insta = "1.46.1"
 map-macro = { version = "0.3.0" }
-tokio = { version = "1.47.1", features = ["rt", "macros"] }
+tokio = { version = "1.49.0", features = ["rt", "macros"] }
 wiremock = "0.6.5"
-tempfile = "3.22.0"
-regex = "1.11.2"
+tempfile = "3.24.0"
+regex = "1.12.2"
 
 [lib]
 name = "odict"

@@ -1,22 +1,17 @@
-use either::Either;
-use merge::Merge;
 use pyo3::prelude::*;
 
 use super::Entry;
 
 #[pyclass]
-#[derive(Merge, Clone)]
+#[derive(Clone)]
 pub struct LookupOptions {
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub split: Option<u32>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
-    pub follow: Option<Either<bool, u32>>,
+    pub follow: Option<bool>,
 
     #[pyo3(get, set)]
-    #[merge(strategy = merge::option::overwrite_none)]
     pub insensitive: Option<bool>,
 }
 
@@ -24,11 +19,7 @@ pub struct LookupOptions {
 impl LookupOptions {
     #[new]
     #[pyo3(signature = (split=None, follow=None, insensitive=None))]
-    pub fn new(
-        split: Option<u32>,
-        follow: Option<Either<bool, u32>>,
-        insensitive: Option<bool>,
-    ) -> Self {
+    pub fn new(split: Option<u32>, follow: Option<bool>, insensitive: Option<bool>) -> Self {
         LookupOptions {
             split,
             follow,
@@ -56,11 +47,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
         }
 
         if let Some(follow) = opts.follow {
-            options = options.follow(match follow {
-                Either::Left(true) => u32::MAX,
-                Either::Left(false) => 0,
-                Either::Right(num) => num,
-            });
+            options = options.follow(follow);
         }
 
         if let Some(insensitive) = opts.insensitive {

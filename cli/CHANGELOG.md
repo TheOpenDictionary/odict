@@ -1,5 +1,60 @@
 # Changelog
 
+## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.1...cli/v3.2.2) (2025-11-30)
+
+
+### Bug Fixes
+
+* Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
+
+## [3.2.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.0...cli/v3.2.1) (2025-11-23)
+
+
+### Miscellaneous Chores
+
+* **cli:** Synchronize odict versions
+
+## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.1...cli/v3.2.0) (2025-11-22)
+
+
+### Features
+
+* Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
+
+
+### Bug Fixes
+
+* Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
+
+## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.0...cli/v3.1.1) (2025-10-22)
+
+
+### Bug Fixes
+
+* Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
+
+## [3.1.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.0.0...cli/v3.1.0) (2025-10-20)
+
+
+### Miscellaneous Chores
+
+* **cli:** Synchronize odict versions
+
+## [3.0.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.1...cli/v3.0.0) (2025-10-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282))
+
+### Features
+
+* **lookup:** Update follow logic ([#1307](https://github.com/TheOpenDictionary/odict/issues/1307)) ([0aa9a53](https://github.com/TheOpenDictionary/odict/commit/0aa9a532def5b1f544f75f2e7ad3540e3f90cf55))
+* Support for remote dictionaries ([#1282](https://github.com/TheOpenDictionary/odict/issues/1282)) ([326b325](https://github.com/TheOpenDictionary/odict/commit/326b325efd4a1ea1327ae2e36f55fe6c13663ca1))
+* Use safe API for rkyv access ([dd3fd60](https://github.com/TheOpenDictionary/odict/commit/dd3fd60d1795538108ed0cb02281ccc792eec4f1))
+* Use u8 repr for enums ([b8bca1d](https://github.com/TheOpenDictionary/odict/commit/b8bca1d8bb94a6cfa552e30e91bd3d1a02ebd9e9))
+* Use uv for python management ([9b1971c](https://github.com/TheOpenDictionary/odict/commit/9b1971c645310103364fb96e1efb3c01a64ba536))
+
 ## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.0...cli/v2.9.1) (2025-08-16)
 
 

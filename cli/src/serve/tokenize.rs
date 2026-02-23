@@ -11,7 +11,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct TokenizeRequest {
     text: String,
-    follow: Option<u32>,
+    follow: Option<bool>,
 }
 
 #[derive(Debug, Display, Error)]
@@ -55,12 +55,13 @@ async fn handle_tokenize(
     let TokenizeRequest { text, follow } = params.0;
 
     let dictionary_name = dict.into_inner();
+    println!("dictionary_name: {}", dictionary_name);
 
     let file = dictionary_cache
         .get(&dictionary_name)
         .await
-        .map_err(|_e| TokenizeError::DictionaryReadError {
-            name: dictionary_name.to_string(),
+        .map_err(|e| TokenizeError::DictionaryReadError {
+            name: format!("{}: {}", dictionary_name, e),
         })?
         .ok_or(TokenizeError::DictionaryNotFound {
             name: dictionary_name.to_string(),
@@ -68,11 +69,11 @@ async fn handle_tokenize(
 
     let dictionary = file
         .contents()
-        .map_err(|_e| TokenizeError::DictionaryReadError {
+        .map_err(|_| TokenizeError::DictionaryReadError {
             name: dictionary_name.to_string(),
         })?;
 
-    let opts = TokenizeOptions::default().follow(follow.unwrap_or(0));
+    let opts = TokenizeOptions::default().follow(follow.unwrap_or(false));
 
     let tokens = dictionary
         .tokenize(&text, opts)

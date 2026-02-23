@@ -1,5 +1,4 @@
-use map_macro::hash_set;
-use odict::schema::{Entry, EntryRef, Form, FormKind, PartOfSpeech, Sense};
+use odict::schema::{Entry, EntryRef, Form, FormKind, PartOfSpeech, Sense, SenseSet};
 
 #[test]
 fn test_form_tags_serialization() {
@@ -90,7 +89,7 @@ fn test_form_with_tags() {
     };
 
     // Create an etymology with the sense
-    let mut senses = hash_set![];
+    let mut senses = SenseSet::new();
 
     senses.insert(sense);
 

@@ -55,6 +55,9 @@ pub enum Error {
     #[error("The input does not have a valid ODict file signature")]
     InvalidSignature,
 
+    #[error("Redirect loop detected: {0}")]
+    RedirectLoop(String),
+
     /* -------------------------------------------------------------------------- */
     /*                                 Formatting                                 */
     /* -------------------------------------------------------------------------- */

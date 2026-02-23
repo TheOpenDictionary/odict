@@ -8,8 +8,8 @@ expression: result.to_json(true).unwrap()
     "etymologies": [
       {
         "description": "Latin root",
-        "senses": {
-          "un": {
+        "senses": [
+          {
             "pos": "un",
             "definitions": [
               {
@@ -18,7 +18,7 @@ expression: result.to_json(true).unwrap()
               }
             ]
           }
-        }
+        ]
       }
     ]
   }

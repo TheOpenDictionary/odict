@@ -198,22 +198,8 @@ pub enum LookupStrategy {
 /// ```
 #[derive(Debug, Clone)]
 pub struct LookupOptions {
-    /// Maximum number of redirects to follow via see_also links.
-    ///
-    /// - `None`: No redirect following (default, safest option)
-    /// - `Some(n)`: Follow up to n redirects before stopping
-    /// - `Some(u32::MAX)`: Unlimited following (use with caution)
-    ///
-    /// Redirect following allows automatic traversal of see_also links,
-    /// which is useful for abbreviations, alternative spellings, and
-    /// cross-references. However, it can potentially create infinite
-    /// loops if the dictionary has circular references.
-    pub follow: Option<u32>,
-
-    /// Query matching strategy to use for lookups.
-    ///
-    /// Determines how queries are matched against dictionary entries.
-    /// See [`LookupStrategy`] for detailed information about each option.
+    /// Whether to follow see_also links until finding an entry with etymologies.
+    pub follow: bool,
     pub strategy: LookupStrategy,
 
     /// Whether to fall back to case-insensitive search if exact match fails.
@@ -258,41 +244,14 @@ impl LookupOptions {
     /// ```
     pub fn default() -> Self {
         Self {
-            follow: None,
+            follow: false,
             strategy: LookupStrategy::Exact,
             insensitive: false,
         }
     }
 
-    /// Set the maximum number of redirects to follow via see_also links.
-    ///
-    /// This method enables redirect following with a specified limit to prevent
-    /// infinite loops in dictionaries with circular references. Redirects are
-    /// useful for handling abbreviations, alternative spellings, and cross-references.
-    ///
-    /// # Arguments
-    ///
-    /// * `follow` - Maximum number of redirects to follow (use `u32::MAX` for unlimited)
-    ///
-    /// # Safety Considerations
-    ///
-    /// - Use reasonable limits (e.g., 5-10) to prevent performance issues
-    /// - `u32::MAX` allows unlimited following but may cause infinite loops
-    /// - Each redirect adds one additional lookup operation
-    ///
-    /// # Examples
-    ///
-    /// ```rust
-    /// use odict::LookupOptions;
-    ///
-    /// // Follow up to 5 redirects
-    /// let options = LookupOptions::default().follow(5);
-    ///
-    /// // Unlimited following (use with caution)
-    /// let unlimited = LookupOptions::default().follow(u32::MAX);
-    /// ```
-    pub fn follow(mut self, follow: u32) -> Self {
-        self.follow = Some(follow);
+    pub fn follow(mut self, follow: bool) -> Self {
+        self.follow = follow;
         self
     }
 
@@ -448,39 +407,51 @@ case-insensitive retry (lowercasing the query) when configured.
 Returns Some(LookupResult) on a match, or None if not found."#]
             fn find_entry<'a>(
                 &'a self,
-                follow: &Option<u32>,
+                follow: &bool,
                 insensitive: &bool,
                 query: &str,
                 directed_from: Option<&'a $ret>,
-            ) -> $opt<LookupResult<&'a $ret>> {
+                path: &mut Vec<String>,
+            ) -> crate::Result<$opt<LookupResult<&'a $ret>>> {
+                // Check for redirect loop
+                if path.contains(&query.to_string()) {
+                    // Build the loop chain from the path in order
+                    let mut chain = path.clone();
+                    chain.push(query.to_string());
+                    return Err(crate::Error::RedirectLoop(chain.join(" -> ")));
+                }
+
+                // Add current query to path
+                path.push(query.to_string());
+
                 // Try exact match first
                 if let Some(entry) = self.entries.get(query) {
-                    // Follow an alias if it exists and we have redirects remaining
-                    if let Some(max_redirects) = follow {
-                        if *max_redirects > 0 {
-                            if let Option::Some(also) = &entry.see_also.as_ref() {
-                                if also.len() > 0 {
-                                    // Decrement redirect count for recursive call
-                                    let remaining_redirects = if *max_redirects == u32::MAX {
-                                        Some(u32::MAX) // Keep infinite
-                                    } else {
-                                        Some(max_redirects - 1)
-                                    };
-                                    return self.find_entry(
-                                        &remaining_redirects,
-                                        insensitive,
-                                        also,
-                                        directed_from.or(Some(entry)),
-                                    );
-                                }
+                    // Follow an alias if follow is true, entry has no etymologies, and see_also exists
+                    if *follow && entry.etymologies.is_empty() {
+                        if let Option::Some(also) = &entry.see_also.as_ref() {
+                            if also.len() > 0 {
+                                // Recursively follow the redirect
+                                let result = self.find_entry(
+                                    follow,
+                                    insensitive,
+                                    also,
+                                    directed_from.or(Some(entry)),
+                                    path,
+                                );
+
+                                path.pop();
+
+                                return result;
                             }
                         }
                     }
 
-                    return $opt::Some(LookupResult {
+                    path.pop();
+
+                    return Ok($opt::Some(LookupResult {
                         entry,
                         directed_from,
-                    });
+                    }));
                 }
 
                 // If insensitive flag is true and exact match failed, try with lowercase
@@ -489,16 +460,19 @@ Returns Some(LookupResult) on a match, or None if not found."#]
 
                     // Only try lowercase if it's different from the original query
                     if query_lower != query {
-                        // Try direct lookup with lowercase (reuse all the same logic)
-                        if let $opt::Some(result) =
-                            self.find_entry(follow, &false, &query_lower, directed_from)
+                        if let Ok($opt::Some(result)) =
+                            self.find_entry(follow, insensitive, &query_lower, directed_from, path)
                         {
-                            return $opt::Some(result);
+                            path.pop();
+                            return Ok($opt::Some(result));
                         }
                     }
                 }
 
-                $opt::None
+                // Remove from path since we're not following any redirects
+                path.pop();
+
+                Ok($opt::None)
             }
 
             #[doc = r#"Perform lookup for a single query using the provided options.
@@ -518,7 +492,11 @@ Depending on the strategy, this may return zero or more results."#]
                     insensitive,
                 } = options.as_ref();
 
-                if let $opt::Some(result) = self.find_entry(follow, insensitive, query, None) {
+                let mut path = Vec::new();
+
+                if let $opt::Some(result) =
+                    self.find_entry(follow, insensitive, query, None, &mut path)?
+                {
                     return Ok(vec![result]);
                 }
 
@@ -531,18 +509,30 @@ Depending on the strategy, this may return zero or more results."#]
 
                     while start < end {
                         let substr: String = chars[start..end].iter().collect();
-                        let maybe_entry =
-                            self.find_entry(follow, insensitive, substr.as_str(), None);
+                        let mut substr_path = Vec::new();
+                        let maybe_entry = self.find_entry(
+                            follow,
+                            insensitive,
+                            substr.as_str(),
+                            None,
+                            &mut substr_path,
+                        );
 
-                        if maybe_entry.is_some() || substr.len() <= *min_length {
-                            start = end;
-                            end = chars.len();
-
-                            if let $opt::Some(result) = maybe_entry {
+                        match maybe_entry {
+                            Ok($opt::Some(result)) => {
                                 results.push(result);
+                                start = end;
+                                end = chars.len();
+                                continue;
                             }
-
-                            continue;
+                            Ok($opt::None) => {
+                                if substr.len() <= *min_length {
+                                    start = end;
+                                    end = chars.len();
+                                    continue;
+                                }
+                            }
+                            Err(e) => return Err(e),
                         }
 
                         end -= 1;
@@ -597,3 +587,154 @@ let results = archived.lookup(&queries, options)?;
 
 lookup!(Dictionary, Entry, Option);
 lookup!(ArchivedDictionary, ArchivedEntry, ArchivedOption);
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+
+    use crate::{lookup::LookupOptions, schema::Dictionary};
+
+    #[test]
+    fn test_lookup_follow_limit() {
+        // Create a dictionary with a chain of redirects: alias1 -> alias2 -> target
+        let xml = r#"
+        <dictionary>
+            <entry term="target">
+                <ety>
+                    <sense pos="n">
+                        <definition value="The final destination" />
+                    </sense>
+                </ety>
+            </entry>
+            <entry term="alias2" see="target" />
+            <entry term="alias1" see="alias2" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test with follow=false (no following)
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(false))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "alias1");
+        assert_eq!(result[0].directed_from.is_none(), true);
+
+        // Test with follow=true (follows until entry with etymologies found)
+        // Should follow alias1 -> alias2 -> target and stop at target since it has etymologies
+        let result = dict
+            .lookup(&vec!["alias1"], LookupOptions::default().follow(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias1");
+
+        // Test starting from alias2 should also reach target
+        let result = dict
+            .lookup(&vec!["alias2"], LookupOptions::default().follow(true))
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias2");
+    }
+
+    #[test]
+    fn test_lookup_redirect_loop_detection() {
+        // Create a dictionary with circular redirects: loop1 -> loop2 -> loop1
+        let xml = r#"
+        <dictionary>
+            <entry term="loop1" see="loop2" />
+            <entry term="loop2" see="loop1" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test that circular redirects are detected and return an error
+        let result = dict.lookup(&vec!["loop1"], LookupOptions::default().follow(true));
+
+        assert!(result.is_err());
+
+        let error_message = result.unwrap_err().to_string();
+
+        assert_eq!(
+            error_message,
+            "Redirect loop detected: loop1 -> loop2 -> loop1"
+        );
+
+        assert!(error_message.contains("loop1"));
+        assert!(error_message.contains("loop2"));
+    }
+
+    #[test]
+    fn test_lookup_redirect_case_insensitive() {
+        // Create a dictionary with redirects where case differs in queries
+        let xml = r#"
+        <dictionary>
+            <entry term="target">
+                <ety>
+                    <sense pos="n">
+                        <definition value="The final destination" />
+                    </sense>
+                </ety>
+            </entry>
+            <entry term="alias" see="target" />
+        </dictionary>
+        "#;
+
+        let dict = Dictionary::from_str(xml).unwrap();
+
+        // Test case insensitive redirect following with uppercase query
+        let result = dict
+            .lookup(
+                &vec!["ALIAS"],
+                LookupOptions::default().follow(true).insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias");
+
+        // Test case insensitive redirect following with mixed case query
+        let result = dict
+            .lookup(
+                &vec!["Alias"],
+                LookupOptions::default().follow(true).insensitive(true),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+        assert_eq!(result[0].directed_from.is_some(), true);
+        assert_eq!(result[0].directed_from.unwrap().term, "alias");
+
+        // Test that case sensitive mode doesn't find mismatched case
+        let result = dict
+            .lookup(
+                &vec!["ALIAS"],
+                LookupOptions::default().follow(true).insensitive(false),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 0);
+
+        // Test that exact case match works in case sensitive mode
+        let result = dict
+            .lookup(
+                &vec!["alias"],
+                LookupOptions::default().follow(true).insensitive(false),
+            )
+            .unwrap();
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].entry.term, "target");
+    }
+}

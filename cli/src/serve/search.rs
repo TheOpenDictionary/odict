@@ -10,7 +10,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct SearchRequest {
-    query: String,
+    q: String,
     limit: Option<usize>,
 }
 
@@ -52,7 +52,7 @@ async fn handle_search(
     dict: Path<String>,
     dictionary_cache: Data<crate::serve::DictionaryCache>,
 ) -> Result<impl Responder, SearchError> {
-    let SearchRequest { query, limit } = params.0;
+    let SearchRequest { q, limit } = params.0;
 
     let dictionary_name = dict.into_inner();
 
@@ -73,7 +73,7 @@ async fn handle_search(
         })?;
 
     let entries = dictionary
-        .search(&query, SearchOptions::default().limit(limit.unwrap_or(10)))
+        .search(&q, SearchOptions::default().limit(limit.unwrap_or(10)))
         .map_err(|e| SearchError::SearchError {
             message: e.to_string(),
         })?;

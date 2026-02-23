@@ -1,6 +1,6 @@
 [package]
 name = "odict-cli"
-version = "2.9.1"
+version = "3.2.2"
 edition = "2021"
 description = "Lightning-fast dictionary file format and toolchain"
 homepage = "https://odict.org"
@@ -19,16 +19,16 @@ odict = { path = "../lib", features = [
   "html",
   "tokenize",
 ] }
-internal = { path = "../internal", features = ["load"] }
-clap = { version = "4.5.47", features = ["derive", "cargo"] }
-console = "0.16.1"
-indicatif = "0.18.0"
+internal = { path = "../internal" }
+clap = { version = "4.5.54", features = ["derive", "cargo"] }
+console = "0.16.2"
+indicatif = "0.18.3"
 pulldown-cmark = "0.13.0"
-actix-web = "4.11.0"
-serde = { version = "1.0.221", features = ["derive"] }
+actix-web = "4.12.1"
+serde = { version = "1.0.228", features = ["derive"] }
 env_logger = "0.11.8"
 derive_more = { version = "2", features = ["display", "error"] }
 num-format = "0.4.4"
-anyhow = "1.0.99"
-lru = "0.16.1"
-tokio = { version = "1.47", features = ["full"] }
+anyhow = "1.0.100"
+lru = "0.16.3"
+tokio = { version = "1.49", features = ["full"] }

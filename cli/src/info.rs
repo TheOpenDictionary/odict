@@ -3,6 +3,7 @@ use clap::{arg, command, Args};
 use console::Style;
 use indicatif::DecimalBytes;
 use num_format::{Locale, ToFormattedString};
+use odict::{download::DictionaryDownloader, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
@@ -10,14 +11,28 @@ use num_format::{Locale, ToFormattedString};
 pub struct InfoArgs {
     #[arg(required = true, help = "Path to a compiled dictionary")]
     dictionary_path: String,
+
+    #[arg(
+        short = 'r',
+        long,
+        default_value_t = crate::DEFAULT_RETRIES,
+        help = "Number of times to retry loading the dictionary (remote-only)"
+    )]
+    retries: u32,
 }
 
 pub async fn info<'a>(ctx: &mut CLIContext<'a>, args: &InfoArgs) -> anyhow::Result<()> {
     let InfoArgs {
         dictionary_path: path,
+        retries,
     } = args;
 
-    let file = internal::load_dictionary(path).await?;
+    let file = OpenDictionary::load_with_options(
+        path,
+        LoadOptions::default()
+            .with_downloader(DictionaryDownloader::default().with_retries(*retries)),
+    )
+    .await?;
 
     let bold = Style::new().bold();
     let dict = file.contents()?;

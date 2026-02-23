@@ -1,12 +1,12 @@
-use pyo3::prelude::*;
 use either::Either;
+use pyo3::prelude::*;
 
 #[pyclass]
 #[derive(Clone)]
 pub struct TokenizeOptions {
     #[pyo3(get, set)]
     pub follow: Option<Either<bool, u32>>,
-    
+
     #[pyo3(get, set)]
     pub insensitive: Option<bool>,
 }
@@ -15,10 +15,7 @@ pub struct TokenizeOptions {
 impl TokenizeOptions {
     #[new]
     #[pyo3(signature = (follow=None, insensitive=None))]
-    pub fn new(
-        follow: Option<Either<bool, u32>>,
-        insensitive: Option<bool>,
-    ) -> Self {
+    pub fn new(follow: Option<Either<bool, u32>>, insensitive: Option<bool>) -> Self {
         TokenizeOptions {
             follow,
             insensitive,
@@ -41,9 +38,9 @@ impl From<TokenizeOptions> for odict::tokenize::TokenizeOptions {
 
         if let Some(follow) = opts.follow {
             options = options.follow(match follow {
-                Either::Left(true) => u32::MAX,
-                Either::Left(false) => 0,
-                Either::Right(num) => num,
+                Either::Left(bool_val) => bool_val,
+                Either::Right(0) => false,
+                Either::Right(_) => true, // Any non-zero number means follow
             });
         }
 
