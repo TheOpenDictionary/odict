@@ -132,6 +132,47 @@ macro_rules! lookup {
                 Ok($opt::None)
             }
 
+            fn perform_split<'a>(
+                &'a self,
+                query: &str,
+                options: &crate::split::SplitOptions,
+            ) -> crate::Result<Vec<LookupResult<&'a $ret>>> {
+                let crate::split::SplitOptions {
+                    threshold,
+                    follow,
+                    insensitive,
+                } = options;
+
+                let chars: Vec<_> = query.chars().collect();
+                let mut results: Vec<LookupResult<&'a $ret>> = Vec::new();
+                let mut start = 0;
+                let mut end = chars.len();
+
+                while start < end {
+                    let substr: String = chars[start..end].iter().collect();
+                    let mut path = Vec::new();
+
+                    match self.find_entry(follow, insensitive, substr.as_str(), None, &mut path) {
+                        Ok($opt::Some(result)) => {
+                            results.push(result);
+                            start = end;
+                            end = chars.len();
+                        }
+                        Ok($opt::None) => {
+                            if end - start <= *threshold {
+                                start = end;
+                                end = chars.len();
+                            } else {
+                                end -= 1;
+                            }
+                        }
+                        Err(e) => return Err(e),
+                    }
+                }
+
+                Ok(results)
+            }
+
             fn perform_lookup<'a, Options>(
                 &'a self,
                 query: &str,
@@ -154,46 +195,32 @@ macro_rules! lookup {
                     return Ok(vec![result]);
                 }
 
-                let mut results: Vec<LookupResult<&$ret>> = Vec::new();
-
                 if let LookupStrategy::Split(min_length) = strategy {
-                    let chars: Vec<_> = query.chars().collect();
-                    let mut start = 0;
-                    let mut end = chars.len();
+                    let split_opts = crate::split::SplitOptions::default()
+                        .threshold(*min_length)
+                        .follow(*follow)
+                        .insensitive(*insensitive);
 
-                    while start < end {
-                        let substr: String = chars[start..end].iter().collect();
-                        let mut substr_path = Vec::new();
-                        let maybe_entry = self.find_entry(
-                            follow,
-                            insensitive,
-                            substr.as_str(),
-                            None,
-                            &mut substr_path,
-                        );
-
-                        match maybe_entry {
-                            Ok($opt::Some(result)) => {
-                                results.push(result);
-                                start = end;
-                                end = chars.len();
-                                continue;
-                            }
-                            Ok($opt::None) => {
-                                if substr.len() <= *min_length {
-                                    start = end;
-                                    end = chars.len();
-                                    continue;
-                                }
-                            }
-                            Err(e) => return Err(e),
-                        }
-
-                        end -= 1;
-                    }
+                    return self.perform_split(query, &split_opts);
                 }
 
-                Ok(results)
+                Ok(vec![])
+            }
+
+            pub fn split<'a, Query, Options>(
+                &'a self,
+                queries: &Vec<Query>,
+                options: Options,
+            ) -> crate::Result<Vec<LookupResult<&'a $ret>>>
+            where
+                Query: AsRef<str> + Send + Sync,
+                Options: AsRef<crate::split::SplitOptions> + Send + Sync,
+            {
+                queries
+                    .par_iter()
+                    .map(|q| self.perform_split(q.as_ref(), options.as_ref()))
+                    .collect::<crate::Result<Vec<_>>>()
+                    .map(|v| v.into_iter().flatten().collect())
             }
 
             pub fn lookup<'a, 'b, Query, Options>(

@@ -4,7 +4,7 @@ use crate::types::LoadOptions;
 use crate::types::SaveOptions;
 use crate::{
     shared::compile,
-    types::{self, Entry},
+    types::{self, Entry, SplitOptions},
     utils::cast_error,
 };
 
@@ -79,6 +79,33 @@ impl OpenDictionary {
         options: Option<types::LookupOptions>,
     ) -> Result<Vec<types::LookupResult>> {
         crate::shared::perform_lookup(&self.dict, query, options)
+    }
+
+    #[napi]
+    pub fn split(
+        &self,
+        query: Either<String, Vec<String>>,
+        options: Option<SplitOptions>,
+    ) -> Result<Vec<types::LookupResult>> {
+        let mut queries: Vec<String> = vec![];
+
+        match query {
+            Either::A(a) => queries.push(a.into()),
+            Either::B(mut c) => queries.append(&mut c),
+        }
+
+        let dict = self.dict.contents().map_err(cast_error)?;
+
+        let opts = odict::split::SplitOptions::from(options.unwrap_or_default());
+
+        let results = dict.split(&queries, &opts).map_err(cast_error)?;
+
+        let mapped = results
+            .iter()
+            .map(|result| result.try_into())
+            .collect::<Result<Vec<types::LookupResult>>>()?;
+
+        Ok(mapped)
     }
 
     #[napi]

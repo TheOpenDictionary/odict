@@ -15,6 +15,7 @@ mod new;
 mod print;
 mod search;
 mod serve;
+mod split;
 mod tokenize;
 mod utils;
 
@@ -34,5 +35,6 @@ pub use new::*;
 pub use print::*;
 pub use search::*;
 pub use serve::*;
+pub use split::*;
 pub use tokenize::*;
 pub use utils::*;
