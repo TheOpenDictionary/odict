@@ -41,13 +41,13 @@
     "@oxc-node/core": "^0.0.35",
     "@taplo/cli": "^0.7.0",
     "@tybys/wasm-util": "^0.10.1",
-    "@types/node": "^25.0.9",
+    "@types/node": "^25.3.0",
     "ava": "^6.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "npm-run-all2": "^8.0.4",
-    "oxlint": "^1.39.0",
-    "prettier": "^3.8.0",
+    "oxlint": "^1.50.0",
+    "prettier": "^3.8.1",
     "tinybench": "^6.0.0"
   },
   "engines": {

@@ -1,4 +1,4 @@
-use clap::{arg, command, Args};
+use clap::Args;
 use odict::{
     download::DictionaryDownloader, tokenize::TokenizeOptions, LoadOptions, OpenDictionary,
 };
