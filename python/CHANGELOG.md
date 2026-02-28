@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.1...python/v2.3.0) (2026-02-28)
+
+
+### Features
+
+* Update dependencies ([8da5521](https://github.com/TheOpenDictionary/odict/commit/8da55213548dd2baf6d128e3ee8219db2b492189))
+
+
+### Bug Fixes
+
+* Update dependencies ([28b474f](https://github.com/TheOpenDictionary/odict/commit/28b474fe74b7f6dd6017f8cb3f9f51dfe2e1b34d))
+
 ## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
 
 

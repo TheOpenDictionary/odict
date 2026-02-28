@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.3.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.2...lib/v3.3.0) (2026-02-28)
+
+
+### Features
+
+* Update dependencies ([8da5521](https://github.com/TheOpenDictionary/odict/commit/8da55213548dd2baf6d128e3ee8219db2b492189))
+
+
+### Bug Fixes
+
+* Create dictionary folder when downloading ([e6dab7e](https://github.com/TheOpenDictionary/odict/commit/e6dab7eab8ebd64bfa4475047ccc8fbeb43a4215))
+* Update dependencies ([28b474f](https://github.com/TheOpenDictionary/odict/commit/28b474fe74b7f6dd6017f8cb3f9f51dfe2e1b34d))
+
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.1...lib/v3.2.2) (2025-11-30)
 
 
