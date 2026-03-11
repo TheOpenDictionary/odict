@@ -2551,6 +2551,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"odict-uniffi@workspace:uniffi":
+  version: 0.0.0-use.local
+  resolution: "odict-uniffi@workspace:uniffi"
+  languageName: unknown
+  linkType: soft
+
 "onetime@npm:^7.0.0":
   version: 7.0.0
   resolution: "onetime@npm:7.0.0"
