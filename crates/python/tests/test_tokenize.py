@@ -1,0 +1,255 @@
+import pytest
+from pathlib import Path
+from theopendictionary import OpenDictionary, compile
+
+
+@pytest.fixture(scope="module")
+def dict3_path():
+    current_file = Path(__file__).resolve()
+    return str(current_file.parent.parent.parent.parent / "examples" / "example3.xml")
+
+
+@pytest.fixture(scope="module")
+def dict3(dict3_path):
+    # Read XML file and compile to bytes
+    with open(dict3_path, "r", encoding="utf-8") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
+
+
+@pytest.fixture(scope="module")
+def dict1_path():
+    current_file = Path(__file__).resolve()
+    return str(current_file.parent.parent.parent.parent / "examples" / "example1.xml")
+
+
+@pytest.fixture(scope="module")
+def dict1(dict1_path):
+    # Read XML file and compile to bytes
+    with open(dict1_path, "r", encoding="utf-8") as f:
+        xml_content = f.read()
+    compiled_bytes = compile(xml_content)
+    return OpenDictionary(compiled_bytes)
+
+
+def test_tokenize(dict3, snapshot):
+    # Test tokenization similar to the Node.js test
+    tokens = dict3.tokenize("你好！你是谁？")
+
+    # Verify we got some tokens
+    assert len(tokens) > 0
+
+    # Check specific token values
+    assert tokens[0].lemma == "你好"
+    assert len(tokens[0].entries) == 2
+    assert tokens[0].entries[0].entry.term == "你"
+    assert tokens[0].entries[1].entry.term == "好"
+
+    # Use snapshot testing for the full result
+    assert tokens == snapshot
+
+
+def test_tokenize_case_sensitive(dict1):
+    # By default tokenize should be case-sensitive
+    tokens = dict1.tokenize("DOG cat")
+
+    assert len(tokens) == 2
+    assert tokens[0].lemma == "DOG"
+    assert len(tokens[0].entries) == 0  # "DOG" shouldn't match "dog"
+    assert tokens[1].lemma == "cat"
+    assert len(tokens[1].entries) == 1
+    assert tokens[1].entries[0].entry.term == "cat"
+
+
+def test_tokenize_case_insensitive(dict1):
+    # Test case-insensitive tokenization
+    tokens = dict1.tokenize("DOG cat", insensitive=True)
+
+    assert len(tokens) == 2
+    assert tokens[0].lemma == "DOG"
+    assert (
+        len(tokens[0].entries) == 1
+    )  # Now "DOG" should match "dog" with insensitivity
+    assert tokens[0].entries[0].entry.term == "dog"
+    assert tokens[1].lemma == "cat"
+    assert tokens[1].entries[0].entry.term == "cat"
+
+
+def test_tokenize_case_insensitive_mixed_case(dict1):
+    # Test with mixed case text
+    tokens = dict1.tokenize("DoG CaT", insensitive=True)
+
+    assert len(tokens) == 2
+    assert tokens[0].lemma == "DoG"
+    assert len(tokens[0].entries) == 1
+    assert tokens[0].entries[0].entry.term == "dog"
+    assert tokens[1].lemma == "CaT"
+    assert len(tokens[1].entries) == 1
+    assert tokens[1].entries[0].entry.term == "cat"
+
+
+def test_tokenize_case_insensitive_with_follow():
+    # Create a dictionary with aliases for this test
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    # Create a temporary dictionary
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
+
+    try:
+        # Test case insensitivity with follow option
+        # (using high number for infinite following)
+        tokens = dict_instance.tokenize("RUNS", follow=999999, insensitive=True)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "RUNS"
+        assert len(tokens[0].entries) == 1
+        assert tokens[0].entries[0].entry.term == "run"
+        assert tokens[0].entries[0].directed_from.term == "runs"
+
+    finally:
+        # Clean up the temporary file
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_boolean_true():
+    # Test follow=True (should be equivalent to u32::MAX)
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
+
+    try:
+        tokens = dict_instance.tokenize("runs", follow=True)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert len(tokens[0].entries) == 1
+        assert tokens[0].entries[0].entry.term == "run"
+        assert tokens[0].entries[0].directed_from.term == "runs"
+
+    finally:
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_boolean_false():
+    # Test follow=False (should disable following)
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
+
+    try:
+        tokens = dict_instance.tokenize("runs", follow=False)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert tokens[0].entries[0].entry.term == "runs"
+
+    finally:
+        os.unlink(temp_path)
+
+
+def test_tokenize_follow_number():
+    # Test follow with specific number
+    xml_content = """
+    <dictionary>
+        <entry term="run">
+            <ety>
+                <sense pos="v">
+                    <definition value="To move quickly" />
+                </sense>
+            </ety>
+        </entry>
+        <entry term="runs" see="run" />
+    </dictionary>
+    """
+
+    import tempfile
+    import os
+
+    with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
+        temp_path = temp_file.name
+
+    # Compile XML and create dictionary
+    compiled_bytes = compile(xml_content)
+    dict_instance = OpenDictionary(compiled_bytes)
+
+    # Save to temp file for testing
+    dict_instance.save(temp_path)
+
+    try:
+        tokens = dict_instance.tokenize("runs", follow=5)
+
+        assert len(tokens) == 1
+        assert tokens[0].lemma == "runs"
+        assert len(tokens[0].entries) == 1
+        assert tokens[0].entries[0].entry.term == "run"
+        assert tokens[0].entries[0].directed_from.term == "runs"
+
+    finally:
+        os.unlink(temp_path)

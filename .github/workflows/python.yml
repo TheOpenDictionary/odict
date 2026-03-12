@@ -11,7 +11,7 @@ on:
       - main
       - master
     tags:
-      - 'python/*'
+      - 'crates/python/*'
   pull_request:
   workflow_dispatch:
 

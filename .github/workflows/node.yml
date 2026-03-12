@@ -8,10 +8,10 @@ env:
   workflow_dispatch:
   pull_request:
     paths:
-      - "node/**"
-      - "lib/**"
-      - "**/tasks.toml"
-      - "tasks.toml"
+      - "crates/node/**"
+      - "crates/lib/**"
+      - "**/mise.toml"
+      - "mise.toml"
       - "examples/**"
   push:
     branches:
@@ -146,8 +146,8 @@ jobs:
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
-            ./node/${{ env.APP_NAME }}.*.node
-            ./node/${{ env.APP_NAME }}.*.wasm
+            ./crates/node/${{ env.APP_NAME }}.*.node
+            ./crates/node/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -194,7 +194,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ./node/${{ env.APP_NAME }}.*.node
+          path: ./crates/node/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -363,11 +363,11 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v5
         with:
-          path: ./node/artifacts
+          path: ./crates/node/artifacts
       - name: Move artifacts
         run: yarn workspace @odict/node artifacts
       - name: List packages
-        run: ls -R ./node/npm
+        run: ls -R ./crates/node/npm
         shell: bash
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}

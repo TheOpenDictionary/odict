@@ -1,22 +1,78 @@
+experimental_monorepo_root = true
+
 [tools]
+act = "latest"
 "cargo:cargo-nextest" = "0.9.92"
-node = "24.11.1"
 "cargo:cargo-dist" = "0.30.0"
-python = "3.14.0"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
-uv = "latest"
-yarn = "latest"
 rust = "latest"
 
-[settings]
-python.uv_venv_auto = true
+[monorepo]
+config_roots = ["crates/*"]
 
-[task_config]
-includes = [
-  "tasks.toml",
-  "lib/tasks.toml",
-  "cli/tasks.toml",
-  "node/tasks.toml",
-  "python/tasks.toml",
-]
+[settings]
+lockfile = true
+
+[tasks.run]
+depends = ["//crates/cli:run"]
+
+[tasks.build]
+depends = ["//crates/cli:build"]
+
+[tasks.clean]
+run = "cargo clean"
+description = "Removes all Rust build artifacts via Cargo"
+
+[tasks."clean:all"]
+run = "git clean -xdf"
+description = "Recursively cleans all packages in the project"
+
+[tasks."snapshot"]
+run = "cargo insta accept"
+description = "Updates all Insta snapshot tests"
+
+[tasks.bench]
+run = "cargo bench"
+description = "Runs benchmarks for all Cargo packages"
+
+[tasks.why]
+run = "cargo tree -i"
+
+[tasks.lint]
+depends = ["//crates/...:lint"]
+run = "cargo clippy --all-targets --all-features -- -D warnings"
+
+[tasks.fix]
+depends = ["//crates/...:fix"]
+run = "cargo clippy --all-targets --all-features --fix --allow-dirty -- -D warnings"
+
+[tasks."test"]
+run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
+description = "Runs nextest on all Cargo packages"
+
+[tasks."test:all"]
+depends = ["test", "//crates/...:test"]
+description = "Recursively tests all packages in the project"
+
+[tasks."upgrade"]
+depends = ["//crates/...:upgrade"]
+run = "cargo upgrade"
+description = "Updates all dependencies to their latest versions"
+
+[tasks.setup]
+depends_post = ["//crates/...:setup"]
+description = "Installs all required dependencies"
+
+[tasks."build:all"]
+depends = ["//crates/...:build"]
+description = "Recursively builds all packages in the project"
+
+[tasks."format"]
+depends = ["//crates/...:format"]
+run = "cargo fmt --all -- **/*.rs"
+description = "Format all Rust files"
+
+[tasks."ci"]
+run = 'act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+hide = true

@@ -5,17 +5,17 @@ on:
     branches:
       - main
     paths:
-      - 'cli/**'
-      - 'lib/**'
-      - '**/tasks.toml'
-      - 'tasks.toml'
+      - 'crates/cli/**'
+      - 'crates/lib/**'
+      - '**/mise.toml'
+      - 'mise.toml'
       - 'examples/**'      
   pull_request:
     paths:
-      - 'cli/**'
-      - 'lib/**'
-      - '**/tasks.toml'
-      - 'tasks.toml'
+      - 'crates/cli/**'
+      - 'crates/lib/**'
+      - '**/mise.toml'
+      - 'mise.toml'
       - 'examples/**'
 jobs:
   test:
