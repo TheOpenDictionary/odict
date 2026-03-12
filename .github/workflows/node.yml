@@ -51,40 +51,40 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: yarn workspace @odict/node build:node --target x86_64-apple-darwin
+            build: yarn build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: yarn workspace @odict/node build:node --target x86_64-pc-windows-msvc
+            build: yarn build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: yarn workspace @odict/node build:node --target i686-pc-windows-msvc
+            build: yarn build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: yarn build:node --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-musl -x
+            build: yarn build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: yarn workspace @odict/node build:node --target aarch64-apple-darwin
+            build: yarn build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: yarn build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: yarn workspace @odict/node build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: yarn build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: yarn workspace @odict/node build:node --target aarch64-linux-android
+            build: yarn build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: yarn workspace @odict/node build:node --target armv7-linux-androideabi
+            build: yarn build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-musl -x
+            build: yarn build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: yarn workspace @odict/node build:node --target aarch64-pc-windows-msvc
+            build: yarn build:node --target aarch64-pc-windows-msvc
           - host: macos-latest
             target: wasm32-wasip1-threads
             setup: |
@@ -93,7 +93,7 @@ jobs:
             build: |
               export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
-              yarn workspace @odict/node build:wasm
+              yarn build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -103,6 +103,7 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -135,10 +136,12 @@ jobs:
         if: ${{ matrix.settings.setup }}
         shell: bash
       - name: Install dependencies
+        working-directory: crates/node
         run: yarn install
       - name: Build
         env:
           CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
+        working-directory: crates/node
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
@@ -185,8 +188,9 @@ jobs:
             env
             freebsd-version
             sudo corepack enable
+            cd crates/node
             yarn install
-            yarn workspace @odict/node build:node
+            yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -227,19 +231,22 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
           architecture: ${{ matrix.settings.architecture }}
       - name: Install dependencies
+        working-directory: crates/node
         run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn workspace @odict/node test
+        working-directory: crates/node
+        run: yarn test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -264,6 +271,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Output docker params
         id: docker
         run: |
@@ -284,6 +292,7 @@ jobs:
             }
           " >> $GITHUB_OUTPUT
       - name: Install dependencies
+        working-directory: crates/node
         run: |
           yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
@@ -292,7 +301,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: bindings-${{ matrix.target }}
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -307,8 +316,8 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
-          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
-          run: yarn workspace @odict/node test
+          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}"
+          run: yarn test
   test-wasi:
     name: Test WASI target
     needs:
@@ -321,7 +330,9 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Install dependencies
+        working-directory: crates/node
         run: |
           yarn config set supportedArchitectures.cpu "wasm32"
           yarn install
@@ -329,12 +340,13 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: bindings-wasm32-wasip1-threads
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn workspace @odict/node test
+        working-directory: crates/node
+        run: yarn test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -356,31 +368,36 @@ jobs:
         with:
           node-version: 22
           cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Install dependencies
+        working-directory: crates/node
         run: yarn install
       - name: create npm dirs
-        run: yarn workspace @odict/node napi create-npm-dirs
+        working-directory: crates/node
+        run: yarn create-dirs
       - name: Download all artifacts
         uses: actions/download-artifact@v5
         with:
           path: ./crates/node/artifacts
       - name: Move artifacts
-        run: yarn workspace @odict/node artifacts
+        working-directory: crates/node
+        run: yarn artifacts
       - name: List packages
         run: ls -R ./crates/node/npm
         shell: bash
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            cd node && npm publish --access public
+            npm publish --access public
           elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            cd node && npm publish --tag next --access public
+            npm publish --tag next --access public
           else
             echo "Not a release, skipping publish"
           fi
@@ -390,10 +407,11 @@ jobs:
       - name: Publish
         shell: bash
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          cd node && npm publish --no-git-checks --access public
+          npm publish --no-git-checks --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
