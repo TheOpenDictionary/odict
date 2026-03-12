@@ -3,7 +3,7 @@ experimental_monorepo_root = true
 [tools]
 act = "latest"
 "cargo:cargo-nextest" = "0.9.92"
-"cargo:cargo-dist" = "0.30.0"
+"cargo:cargo-dist" = "0.31.0"
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
 rust = "latest"
