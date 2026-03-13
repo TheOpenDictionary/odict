@@ -8,6 +8,13 @@ use odict_cli::{
 #[tokio::main]
 async fn main() {
     let cli = CLI::parse();
+
+    if let Some(ref path) = cli.storage_path {
+        odict::init(path);
+    } else {
+        odict::init(".");
+    }
+
     let mut ctx = CLIContext::default(&cli);
 
     let result = match cli.command {

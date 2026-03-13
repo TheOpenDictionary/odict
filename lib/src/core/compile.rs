@@ -24,10 +24,6 @@ impl CompilerOptions {
 }
 
 impl OpenDictionary {
-    pub fn to_bytes(&self) -> crate::Result<Vec<u8>> {
-        self.to_bytes_with_options(CompilerOptions::default())
-    }
-
     pub fn to_bytes_with_options<Options: AsRef<CompilerOptions>>(
         &self,
         options: Options,

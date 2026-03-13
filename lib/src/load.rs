@@ -1,8 +1,6 @@
-#[cfg(feature = "config")]
 use std::ffi::OsStr;
 
 use std::marker::PhantomData;
-#[cfg(feature = "config")]
 use std::path::PathBuf;
 
 #[cfg(feature = "alias")]
@@ -11,7 +9,7 @@ use crate::alias::AliasManager;
 use crate::OpenDictionary;
 
 #[cfg(feature = "config")]
-use crate::config::DEFAULT_CONFIG_DIR;
+use crate::config::get_config_dir;
 
 #[cfg(feature = "http")]
 use crate::download::DictionaryDownloader;
@@ -31,7 +29,7 @@ impl<'a> Default for LoadOptions<'a> {
     fn default() -> Self {
         LoadOptions {
             #[cfg(feature = "config")]
-            config_dir: DEFAULT_CONFIG_DIR.to_path_buf(),
+            config_dir: get_config_dir(),
             #[cfg(feature = "alias")]
             alias_manager: crate::alias::AliasManager::default(),
             #[cfg(feature = "http")]
@@ -82,7 +80,6 @@ impl OpenDictionary {
             Ok(dictionary) => {
                 return Ok(dictionary);
             }
-            // If the name is invalid, skip
             Err(crate::Error::InvalidDictionaryName(_)) => {}
             Err(e) => {
                 return Err(e);
@@ -94,7 +91,6 @@ impl OpenDictionary {
             Ok(dictionary) => {
                 return Ok(dictionary);
             }
-            // If no alias found, skip
             Err(crate::Error::AliasNotFound(_)) => {}
             Err(e) => {
                 return Err(e);
@@ -112,11 +108,14 @@ impl OpenDictionary {
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
-
+    use tempfile::tempdir;
+    use crate::init;
     use super::LoadOptions;
 
     #[test]
     fn test_config_set() {
+        let tmp = tempdir().unwrap();
+        init(tmp.path());
         let path = PathBuf::from("some/config/dir");
         let options = LoadOptions::default().with_config_dir(&path);
 

@@ -10,11 +10,17 @@ use crate::{
 };
 
 #[pyfunction]
-pub fn compile(xml: String) -> PyResult<Vec<u8>> {
+pub fn init(storage_path: String) {
+    odict::init(storage_path);
+}
+
+#[pyfunction]
+pub fn compile(storage_path: String, xml: String) -> PyResult<Vec<u8>> {
+    odict::init(storage_path);
     let bytes = xml
         .to_dictionary()
         .and_then(|d| d.build())
-        .and_then(|d| d.to_bytes())
+        .and_then(|d| d.to_bytes_with_options(odict::compile::CompilerOptions::default()))
         .map_err(cast_error)?;
     Ok(bytes)
 }
@@ -27,12 +33,14 @@ pub struct OpenDictionary {
 #[pymethods]
 impl OpenDictionary {
     #[staticmethod]
-    #[pyo3(signature = (dictionary, options=None))]
+    #[pyo3(signature = (storage_path, dictionary, options=None))]
     pub fn load<'py>(
         py: Python<'py>,
+        storage_path: String,
         dictionary: String,
         options: Option<LoadOptions>,
     ) -> PyResult<Bound<'py, PyAny>> {
+        odict::init(storage_path);
         future_into_py(py, async move {
             let dict = match options {
                 Some(opts) => {
@@ -51,10 +59,11 @@ impl OpenDictionary {
     }
 
     #[new]
-    pub fn new(data: Either<Vec<u8>, String>) -> PyResult<Self> {
+    pub fn new(storage_path: String, data: Either<Vec<u8>, String>) -> PyResult<Self> {
+        odict::init(storage_path.clone());
         let bytes = match data {
             Either::Left(bytes) => bytes,
-            Either::Right(string) => compile(string)?,
+            Either::Right(string) => compile(storage_path, string)?,
         };
         let dict = odict::OpenDictionary::from_bytes(bytes).map_err(cast_error)?;
         Ok(Self { dict })
@@ -66,26 +75,22 @@ impl OpenDictionary {
         quality: Option<u32>,
         window_size: Option<u32>,
     ) -> PyResult<Vec<u8>> {
-        if quality.is_some() || window_size.is_some() {
-            let mut compress_options = odict::CompressOptions::default();
+        let mut compress_options = odict::CompressOptions::default();
 
-            if let Some(q) = quality {
-                compress_options = compress_options.quality(q);
-            }
-
-            if let Some(ws) = window_size {
-                compress_options = compress_options.window_size(ws);
-            }
-
-            let compiler_options =
-                odict::compile::CompilerOptions::default().with_compression(compress_options);
-
-            self.dict
-                .to_bytes_with_options(compiler_options)
-                .map_err(cast_error)
-        } else {
-            self.dict.to_bytes().map_err(cast_error)
+        if let Some(q) = quality {
+            compress_options = compress_options.quality(q);
         }
+
+        if let Some(ws) = window_size {
+            compress_options = compress_options.window_size(ws);
+        }
+
+        let compiler_options =
+            odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+        self.dict
+            .to_bytes_with_options(compiler_options)
+            .map_err(cast_error)
     }
 
     #[pyo3(signature = (path, quality=None, window_size=None))]
@@ -95,26 +100,22 @@ impl OpenDictionary {
         quality: Option<u32>,
         window_size: Option<u32>,
     ) -> PyResult<()> {
-        if quality.is_some() || window_size.is_some() {
-            let mut compress_options = odict::CompressOptions::default();
+        let mut compress_options = odict::CompressOptions::default();
 
-            if let Some(q) = quality {
-                compress_options = compress_options.quality(q);
-            }
-
-            if let Some(ws) = window_size {
-                compress_options = compress_options.window_size(ws);
-            }
-
-            let compiler_options =
-                odict::compile::CompilerOptions::default().with_compression(compress_options);
-
-            self.dict
-                .to_disk_with_options(&path, compiler_options)
-                .map_err(cast_error)
-        } else {
-            self.dict.to_disk(&path).map_err(cast_error)
+        if let Some(q) = quality {
+            compress_options = compress_options.quality(q);
         }
+
+        if let Some(ws) = window_size {
+            compress_options = compress_options.window_size(ws);
+        }
+
+        let compiler_options =
+            odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+        self.dict
+            .to_disk_with_options(&path, compiler_options)
+            .map_err(cast_error)
     }
 
     #[getter]
@@ -142,7 +143,6 @@ impl OpenDictionary {
             Either::Right(mut c) => queries.append(&mut c),
         }
 
-        // Build LookupOptions from kwargs
         let options = LookupOptions {
             split,
             follow,
@@ -207,14 +207,13 @@ impl OpenDictionary {
     ) -> PyResult<Vec<Token>> {
         let dict = self.dict.contents().map_err(cast_error)?;
 
-        // Build TokenizeOptions from kwargs
         let mut opts = odict::tokenize::TokenizeOptions::default();
 
         if let Some(f) = follow {
             opts = opts.follow(match f {
                 Either::Left(bool_val) => bool_val,
                 Either::Right(0) => false,
-                Either::Right(_) => true, // Any non-zero number means follow
+                Either::Right(_) => true,
             });
         }
 

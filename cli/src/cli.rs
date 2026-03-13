@@ -19,6 +19,13 @@ pub struct CLI {
         help = "Silence any non-important output"
     )]
     pub quiet: bool,
+
+    #[arg(
+        short,
+        long,
+        help = "Specify a custom storage path for dictionaries and config"
+    )]
+    pub storage_path: Option<String>,
 }
 
 #[derive(Debug, Subcommand)]

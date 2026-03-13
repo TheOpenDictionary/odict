@@ -1,5 +1,4 @@
 use std::sync::LazyLock;
-
 use odict::{schema::Dictionary, OpenDictionary, Result};
 use tempfile::NamedTempFile;
 
@@ -14,9 +13,13 @@ pub fn get_example_dict(name: &str) -> Result<OpenDictionary> {
 }
 
 #[allow(dead_code)]
-pub static EXAMPLE_DICT_1: LazyLock<OpenDictionary> =
-    LazyLock::new(|| get_example_dict("example1").expect("Failed to get example dictionary 1"));
+pub static EXAMPLE_DICT_1: LazyLock<OpenDictionary> = LazyLock::new(|| {
+    odict::init(std::env::temp_dir());
+    get_example_dict("example1").expect("Failed to get example dictionary 1")
+});
 
 #[allow(dead_code)]
-pub static EXAMPLE_DICT_2: LazyLock<OpenDictionary> =
-    LazyLock::new(|| get_example_dict("example2").expect("Failed to get example dictionary 2"));
+pub static EXAMPLE_DICT_2: LazyLock<OpenDictionary> = LazyLock::new(|| {
+    odict::init(std::env::temp_dir());
+    get_example_dict("example2").expect("Failed to get example dictionary 2")
+});

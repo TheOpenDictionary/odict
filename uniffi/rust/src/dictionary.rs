@@ -9,20 +9,28 @@ use odict::format::md::ToMarkdown;
 use odict::schema::ArchivedEntry;
 
 #[export]
-pub fn compile(xml: String) -> Result<Vec<u8>, Error> {
+pub fn init(storage_path: String) {
+    odict::init(storage_path);
+}
+
+#[export]
+pub fn compile(storage_path: String, xml: String) -> Result<Vec<u8>, Error> {
+    odict::init(storage_path);
     let bytes = xml
         .to_dictionary()
         .and_then(|d| d.build())
-        .and_then(|d| d.to_bytes())
+        .and_then(|d| d.to_bytes_with_options(odict::compile::CompilerOptions::default()))
         .map_err(Error::from)?;
     Ok(bytes)
 }
 
 #[export]
 pub async fn load_dictionary(
+    storage_path: String,
     dictionary: String,
     options: Option<LoadOptions>,
 ) -> Result<Arc<OpenDictionary>, Error> {
+    odict::init(storage_path);
     let dict = match options {
         Some(opts) => {
             let load_opts = opts.try_into().map_err(Error::from)?;
@@ -39,15 +47,16 @@ pub async fn load_dictionary(
 }
 
 #[export]
-pub fn dictionary_from_bytes(bytes: Vec<u8>) -> Result<Arc<OpenDictionary>, Error> {
+pub fn dictionary_from_bytes(storage_path: String, bytes: Vec<u8>) -> Result<Arc<OpenDictionary>, Error> {
+    odict::init(storage_path);
     let dict = odict::OpenDictionary::from_bytes(bytes).map_err(Error::from)?;
     Ok(Arc::new(OpenDictionary { dict: RwLock::new(dict) }))
 }
 
 #[export]
-pub fn dictionary_from_xml(xml: String) -> Result<Arc<OpenDictionary>, Error> {
-    let bytes = compile(xml)?;
-    dictionary_from_bytes(bytes)
+pub fn dictionary_from_xml(storage_path: String, xml: String) -> Result<Arc<OpenDictionary>, Error> {
+    let bytes = compile(storage_path.clone(), xml)?;
+    dictionary_from_bytes(storage_path, bytes)
 }
 
 #[derive(uniffi::Object)]
@@ -59,7 +68,7 @@ pub struct OpenDictionary {
 impl OpenDictionary {
     pub fn to_bytes(&self) -> Result<Vec<u8>, Error> {
         let dict = self.dict.read().map_err(|e| Error::Odict(format!("Lock error: {}", e)))?;
-        dict.to_bytes().map_err(Error::from)
+        dict.to_bytes_with_options(odict::compile::CompilerOptions::default()).map_err(Error::from)
     }
 
     pub fn to_bytes_with_options(
@@ -68,25 +77,21 @@ impl OpenDictionary {
         window_size: Option<u32>,
     ) -> Result<Vec<u8>, Error> {
         let dict = self.dict.read().map_err(|e| Error::Odict(format!("Lock error: {}", e)))?;
-        if quality.is_some() || window_size.is_some() {
-            let mut compress_options = odict::CompressOptions::default();
+        let mut compress_options = odict::CompressOptions::default();
 
-            if let Some(q) = quality {
-                compress_options = compress_options.quality(q);
-            }
-
-            if let Some(ws) = window_size {
-                compress_options = compress_options.window_size(ws);
-            }
-
-            let compiler_options =
-                odict::compile::CompilerOptions::default().with_compression(compress_options);
-
-            dict.to_bytes_with_options(compiler_options)
-                .map_err(Error::from)
-        } else {
-            dict.to_bytes().map_err(Error::from)
+        if let Some(q) = quality {
+            compress_options = compress_options.quality(q);
         }
+
+        if let Some(ws) = window_size {
+            compress_options = compress_options.window_size(ws);
+        }
+
+        let compiler_options =
+            odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+        dict.to_bytes_with_options(compiler_options)
+            .map_err(Error::from)
     }
 
     pub fn save(
@@ -96,25 +101,21 @@ impl OpenDictionary {
         window_size: Option<u32>,
     ) -> Result<(), Error> {
         let mut dict = self.dict.write().map_err(|e| Error::Odict(format!("Lock error: {}", e)))?;
-        if quality.is_some() || window_size.is_some() {
-            let mut compress_options = odict::CompressOptions::default();
+        let mut compress_options = odict::CompressOptions::default();
 
-            if let Some(q) = quality {
-                compress_options = compress_options.quality(q);
-            }
-
-            if let Some(ws) = window_size {
-                compress_options = compress_options.window_size(ws);
-            }
-
-            let compiler_options =
-                odict::compile::CompilerOptions::default().with_compression(compress_options);
-
-            dict.to_disk_with_options(&path, compiler_options)
-                .map_err(Error::from)
-        } else {
-            dict.to_disk(&path).map_err(Error::from)
+        if let Some(q) = quality {
+            compress_options = compress_options.quality(q);
         }
+
+        if let Some(ws) = window_size {
+            compress_options = compress_options.window_size(ws);
+        }
+
+        let compiler_options =
+            odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+        dict.to_disk_with_options(&path, compiler_options)
+            .map_err(Error::from)
     }
 
     pub fn min_rank(&self) -> Result<Option<u32>, Error> {

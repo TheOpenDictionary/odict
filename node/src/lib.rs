@@ -12,3 +12,8 @@ mod node;
 mod shared;
 mod types;
 mod utils;
+
+#[napi]
+pub fn init(storage_path: String) {
+    odict::init(storage_path);
+}

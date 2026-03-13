@@ -10,11 +10,12 @@ use crate::{
 };
 
 #[napi]
-pub fn compile(xml: String) -> Result<Buffer> {
+pub fn compile(storage_path: String, xml: String) -> Result<Buffer> {
+    odict::init(storage_path);
     let bytes = xml
         .to_dictionary()
         .and_then(|d| d.build())
-        .and_then(|d| d.to_bytes())
+        .and_then(|d| d.to_bytes_with_options(odict::compile::CompilerOptions::default()))
         .map_err(cast_error)?;
     Ok(bytes.into())
 }
@@ -53,7 +54,6 @@ pub fn perform_tokenization(
 
     let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
 
-    // Convert tokens manually
     let mut mapped_tokens = Vec::new();
 
     for token in tokens {

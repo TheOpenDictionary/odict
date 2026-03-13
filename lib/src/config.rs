@@ -1,28 +1,23 @@
-use dirs::home_dir;
-use std::{env::var, path::PathBuf, sync::LazyLock};
+use std::path::PathBuf;
+use crate::get_storage_path;
 
-pub const DEFAULT_CONFIG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
-    var("ODICT_CONFIG_DIR")
-        .map(|d| PathBuf::from(d))
-        .ok()
-        .unwrap_or_else(|| {
-            home_dir()
-                .expect("Failed to get home directory")
-                .join(".odict")
-        })
-});
+pub fn get_config_dir() -> PathBuf {
+    get_storage_path().join(".odict")
+}
 
 #[cfg(test)]
 mod test {
-    use dirs::home_dir;
-
-    use crate::config::DEFAULT_CONFIG_DIR;
+    use tempfile::tempdir;
+    use crate::init;
+    use super::get_config_dir;
 
     #[test]
     fn test_get_config_dir() {
-        let home_dir = home_dir().expect("Failed to get home directory");
-        let expected = home_dir.join(".odict");
+        let tmp = tempdir().unwrap();
+        let storage_path = tmp.path().to_path_buf();
+        init(storage_path.clone());
+        let expected = storage_path.join(".odict");
 
-        assert_eq!(*DEFAULT_CONFIG_DIR, expected);
+        assert_eq!(get_config_dir(), expected);
     }
 }

@@ -1,4 +1,4 @@
-use dictionary::{compile, OpenDictionary};
+use dictionary::{compile, init, OpenDictionary};
 use pyo3::prelude::*;
 use types::{
     CompressOptions, EnumWrapper, IndexOptions, LoadOptions, LookupOptions, LookupResult, MediaURL,
@@ -32,6 +32,7 @@ fn theopendictionary(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     // Functions
     m.add_function(wrap_pyfunction!(compile, m)?)?;
+    m.add_function(wrap_pyfunction!(init, m)?)?;
 
     Ok(())
 }

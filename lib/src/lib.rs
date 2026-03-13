@@ -1,3 +1,17 @@
+use std::path::PathBuf;
+use std::sync::RwLock;
+
+static STORAGE_PATH: RwLock<Option<PathBuf>> = RwLock::new(None);
+
+pub fn init(storage_path: impl Into<PathBuf>) {
+    let mut path = STORAGE_PATH.write().unwrap();
+    *path = Some(storage_path.into());
+}
+
+pub(crate) fn get_storage_path() -> PathBuf {
+    STORAGE_PATH.read().unwrap().clone().expect("odict core not initialized with a storage path")
+}
+
 #[cfg(feature = "config")]
 pub mod config;
 

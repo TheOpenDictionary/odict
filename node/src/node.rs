@@ -16,10 +16,11 @@ pub struct OpenDictionary {
 #[napi]
 impl OpenDictionary {
     #[napi(constructor)]
-    pub fn new(data: Either<Buffer, String>) -> Result<Self> {
+    pub fn new(storage_path: String, data: Either<Buffer, String>) -> Result<Self> {
+        odict::init(storage_path.clone());
         let bytes = match data {
             Either::A(buffer) => buffer,
-            Either::B(xml) => compile(xml)?,
+            Either::B(xml) => compile(storage_path, xml)?,
         };
 
         let dict = crate::shared::new_from_bytes(&bytes)?;
@@ -34,15 +35,13 @@ impl OpenDictionary {
 
     #[napi]
     pub fn to_bytes(&self, options: Option<SaveOptions>) -> Result<Vec<u8>> {
-        match options {
-            Some(opts) => {
-                let compiler_options = odict::compile::CompilerOptions::from(opts);
-                self.dict
-                    .to_bytes_with_options(compiler_options)
-                    .map_err(cast_error)
-            }
-            None => self.dict.to_bytes().map_err(cast_error),
-        }
+        let compiler_options = match options {
+            Some(opts) => odict::compile::CompilerOptions::from(opts),
+            None => odict::compile::CompilerOptions::default(),
+        };
+        self.dict
+            .to_bytes_with_options(compiler_options)
+            .map_err(cast_error)
     }
 
     #[napi(getter)]
@@ -56,7 +55,8 @@ impl OpenDictionary {
     }
 
     #[napi(factory)]
-    pub async fn load(dictionary: String, options: Option<LoadOptions>) -> Result<Self> {
+    pub async fn load(storage_path: String, dictionary: String, options: Option<LoadOptions>) -> Result<Self> {
+        odict::init(storage_path);
         let dict = match options {
             Some(opts) => {
                 let load_opts = odict::LoadOptions::try_from(opts).map_err(cast_error)?;
@@ -74,15 +74,13 @@ impl OpenDictionary {
 
     #[napi]
     pub fn save(&mut self, path: String, options: Option<SaveOptions>) -> Result<()> {
-        match options {
-            Some(opts) => {
-                let compiler_options = odict::compile::CompilerOptions::from(opts);
-                self.dict
-                    .to_disk_with_options(&path, compiler_options)
-                    .map_err(cast_error)
-            }
-            None => self.dict.to_disk(&path).map_err(cast_error),
-        }
+        let compiler_options = match options {
+            Some(opts) => odict::compile::CompilerOptions::from(opts),
+            None => odict::compile::CompilerOptions::default(),
+        };
+        self.dict
+            .to_disk_with_options(&path, compiler_options)
+            .map_err(cast_error)
     }
 
     #[napi]
@@ -119,12 +117,10 @@ impl OpenDictionary {
         let dict = self.dict.contents().map_err(cast_error)?;
         let opts = options.unwrap_or_default();
 
-        // Use our helper function to avoid orphan rule issues
         let results = dict
             .search(query.as_str(), odict::search::SearchOptions::from(opts))
             .map_err(cast_error)?;
 
-        // Use the new from_entry function for Entry types
         let entries = results
             .iter()
             .map(|e| e.clone().into())

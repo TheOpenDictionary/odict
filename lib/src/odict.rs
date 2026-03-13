@@ -34,7 +34,7 @@ impl OpenDictionary {
             }
         }
 
-        let bytes = self.to_bytes()?;
+        let bytes = self.to_bytes_with_options(crate::compile::CompilerOptions::default())?;
 
         Ok(bytes.len().try_into()?)
     }
