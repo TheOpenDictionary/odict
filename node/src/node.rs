@@ -29,7 +29,20 @@ impl OpenDictionary {
 
     #[napi(getter)]
     pub fn bytes(&self) -> Result<Vec<u8>> {
-        Ok(self.dict.to_bytes().map_err(cast_error)?)
+        self.to_bytes(None)
+    }
+
+    #[napi]
+    pub fn to_bytes(&self, options: Option<SaveOptions>) -> Result<Vec<u8>> {
+        match options {
+            Some(opts) => {
+                let compiler_options = odict::compile::CompilerOptions::from(opts);
+                self.dict
+                    .to_bytes_with_options(compiler_options)
+                    .map_err(cast_error)
+            }
+            None => self.dict.to_bytes().map_err(cast_error),
+        }
     }
 
     #[napi(getter)]

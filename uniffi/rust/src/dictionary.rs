@@ -57,6 +57,38 @@ pub struct OpenDictionary {
 
 #[export]
 impl OpenDictionary {
+    pub fn to_bytes(&self) -> Result<Vec<u8>, Error> {
+        let dict = self.dict.read().map_err(|e| Error::Odict(format!("Lock error: {}", e)))?;
+        dict.to_bytes().map_err(Error::from)
+    }
+
+    pub fn to_bytes_with_options(
+        &self,
+        quality: Option<u32>,
+        window_size: Option<u32>,
+    ) -> Result<Vec<u8>, Error> {
+        let dict = self.dict.read().map_err(|e| Error::Odict(format!("Lock error: {}", e)))?;
+        if quality.is_some() || window_size.is_some() {
+            let mut compress_options = odict::CompressOptions::default();
+
+            if let Some(q) = quality {
+                compress_options = compress_options.quality(q);
+            }
+
+            if let Some(ws) = window_size {
+                compress_options = compress_options.window_size(ws);
+            }
+
+            let compiler_options =
+                odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+            dict.to_bytes_with_options(compiler_options)
+                .map_err(Error::from)
+        } else {
+            dict.to_bytes().map_err(Error::from)
+        }
+    }
+
     pub fn save(
         &self,
         path: String,

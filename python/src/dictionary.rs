@@ -60,6 +60,34 @@ impl OpenDictionary {
         Ok(Self { dict })
     }
 
+    #[pyo3(signature = (quality=None, window_size=None))]
+    pub fn to_bytes(
+        &self,
+        quality: Option<u32>,
+        window_size: Option<u32>,
+    ) -> PyResult<Vec<u8>> {
+        if quality.is_some() || window_size.is_some() {
+            let mut compress_options = odict::CompressOptions::default();
+
+            if let Some(q) = quality {
+                compress_options = compress_options.quality(q);
+            }
+
+            if let Some(ws) = window_size {
+                compress_options = compress_options.window_size(ws);
+            }
+
+            let compiler_options =
+                odict::compile::CompilerOptions::default().with_compression(compress_options);
+
+            self.dict
+                .to_bytes_with_options(compiler_options)
+                .map_err(cast_error)
+        } else {
+            self.dict.to_bytes().map_err(cast_error)
+        }
+    }
+
     #[pyo3(signature = (path, quality=None, window_size=None))]
     pub fn save(
         &mut self,

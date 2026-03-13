@@ -22,6 +22,24 @@ test.before(async () => {
   dict3 = await getDictionary('example3')
 })
 
+test('to_bytes - returns dictionary as bytes and supports options', async (t) => {
+  const bytes = dict1.toBytes()
+  t.true(bytes instanceof Buffer || bytes instanceof Uint8Array)
+  t.true(bytes.length > 0)
+
+  // Verify it can be loaded
+  const loadedDict = new OpenDictionary(bytes)
+  t.deepEqual(loadedDict.lexicon(), dict1.lexicon())
+
+  // Test with options
+  const compressedBytes = dict1.toBytes({ quality: 9, windowSize: 32 })
+  t.true(compressedBytes.length > 0)
+
+  // Verify compressed dictionary works
+  const loadedCompressedDict = new OpenDictionary(compressedBytes)
+  t.deepEqual(loadedCompressedDict.lexicon(), dict1.lexicon())
+})
+
 test('lookup - looks up terms properly', async (t) => {
   const result = dict1.lookup('cat')
   t.snapshot(result)

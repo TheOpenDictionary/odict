@@ -242,6 +242,44 @@ def test_save_without_options():
             os.remove(temp_file)
 
 
+def test_to_bytes():
+    """Test to_bytes method"""
+    xml = """
+    <dictionary>
+      <entry term="to-bytes-test">
+        <ety>
+          <sense pos="n">
+            <definition value="A test for to_bytes method" />
+          </sense>
+        </ety>
+      </entry>
+    </dictionary>
+    """
+
+    compiled_bytes = compile(xml)
+    dictionary = OpenDictionary(compiled_bytes)
+
+    # Test to_bytes without options
+    bytes_data = dictionary.to_bytes()
+    assert isinstance(bytes_data, (bytes, bytearray, list))
+    assert len(bytes_data) > 0
+
+    # Load from bytes and verify
+    dict_from_bytes = OpenDictionary(bytes_data)
+    results = dict_from_bytes.lookup("to-bytes-test")
+    assert len(results) == 1
+    assert results[0].entry.term == "to-bytes-test"
+
+    # Test to_bytes with options
+    bytes_data_compressed = dictionary.to_bytes(quality=9, window_size=32)
+    assert len(bytes_data_compressed) > 0
+
+    # Load and verify
+    dict_from_compressed = OpenDictionary(bytes_data_compressed)
+    results = dict_from_compressed.lookup("to-bytes-test")
+    assert len(results) == 1
+
+
 def test_save_with_empty_save_options():
     """Test saving with empty SaveOptions object"""
     xml = """

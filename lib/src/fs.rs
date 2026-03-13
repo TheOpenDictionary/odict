@@ -1,6 +1,6 @@
 use std::{
     ffi::OsStr,
-    fs::{canonicalize, File},
+    fs::File,
     io::Read,
     path::{Path, PathBuf},
 };
@@ -16,7 +16,7 @@ pub fn infer_path<P: Into<PathBuf> + AsRef<OsStr>>(path: P) -> PathBuf {
 }
 
 fn open_file<P: AsRef<Path>>(path: P) -> crate::Result<File> {
-    let file = File::open(canonicalize(path.as_ref())?)?;
+    let file = File::open(path.as_ref())?;
     Ok(file)
 }
 

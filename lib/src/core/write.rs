@@ -21,9 +21,10 @@ impl OpenDictionary {
         file.write_all(&buf)?;
         file.flush()?;
 
-        self.path = canonicalize(path)?
-            .to_str()
-            .map(std::path::PathBuf::from);
+        self.path = match canonicalize(path.as_ref()) {
+            Ok(p) => p.to_str().map(std::path::PathBuf::from),
+            Err(_) => Some(path.as_ref().to_path_buf()),
+        };
 
         Ok(())
     }
