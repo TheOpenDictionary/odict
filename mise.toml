@@ -15,10 +15,10 @@ config_roots = ["crates/*"]
 lockfile = true
 
 [tasks.run]
-depends = ["//crates/cli:run"]
+run = "cargo run --release -p odict-cli --"
 
 [tasks.build]
-depends = ["//crates/cli:build"]
+run = "cargo build -p odict-cli"
 
 [tasks.clean]
 run = "cargo clean"
