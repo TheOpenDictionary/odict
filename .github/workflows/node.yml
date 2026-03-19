@@ -101,8 +101,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable && corepack install --global
-        working-directory: crates/node
+        run: corepack enable && corepack prepare yarn@4.13.0 --activate
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -232,8 +231,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable && corepack install --global
-        working-directory: crates/node
+        run: corepack enable && corepack prepare yarn@4.13.0 --activate
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -275,8 +273,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable && corepack install --global
-        working-directory: crates/node
+        run: corepack enable && corepack prepare yarn@4.13.0 --activate
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -337,8 +334,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable && corepack install --global
-        working-directory: crates/node
+        run: corepack enable && corepack prepare yarn@4.13.0 --activate
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -378,8 +374,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable && corepack install --global
-        working-directory: crates/node
+        run: corepack enable && corepack prepare yarn@4.13.0 --activate
       - name: Setup node
         uses: actions/setup-node@v5
         with:
