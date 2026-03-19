@@ -26,9 +26,9 @@ jobs:
   #   name: Lint
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v5
+  #     - uses: actions/checkout@v6
   #     - name: Setup node
-  #       uses: actions/setup-node@v5
+  #       uses: actions/setup-node@v6
   #       with:
   #         node-version: 22
   #         cache: yarn
@@ -85,37 +85,37 @@ jobs:
           - host: windows-latest
             target: aarch64-pc-windows-msvc
             build: yarn build:node --target aarch64-pc-windows-msvc
-          - host: macos-latest
+          - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
-              wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-macos.tar.gz
-              tar -xvf wasi-sdk-22.0-macos.tar.gz
+              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-linux.tar.gz
+              tar -xf wasi-sdk-22.0-linux.tar.gz
             build: |
-              export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-22.0"
               export CC="${WASI_SDK_PATH}/bin/clang"
               export AR="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
               yarn build:wasm
-    name: stable - ${{ matrix.settings.target }} - node@22
+    name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Enable Corepack
         run: corepack enable && corepack prepare --activate
         working-directory: crates/node
-      - name: Setup node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: stable
           targets: ${{ matrix.settings.target }}
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/registry/index/
@@ -150,7 +150,7 @@ jobs:
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
@@ -161,16 +161,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Build FreeBSD
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Build
         id: build
-        uses: cross-platform-actions/action@v0.29.0
+        uses: cross-platform-actions/action@v0.32.0
         env:
           DEBUG: napi:*
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: "14.2"
+          version: "15.0"
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
@@ -200,7 +200,7 @@ jobs:
             rm -rf target
             rm -rf .yarn/cache
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bindings-freebsd
           path: ./crates/node/${{ env.APP_NAME }}.*.node
@@ -230,22 +230,22 @@ jobs:
           - "22"
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v5
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
+      - uses: actions/checkout@v6
       - name: Setup node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
           cache-dependency-path: crates/node/yarn.lock
           architecture: ${{ matrix.settings.architecture }}
+      - name: Enable Corepack
+        run: corepack enable && corepack prepare --activate
+        working-directory: crates/node
       - name: Install dependencies
         working-directory: crates/node
         run: yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.settings.target }}
           path: ./crates/node
@@ -273,16 +273,16 @@ jobs:
           - "22"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v5
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
+      - uses: actions/checkout@v6
       - name: Setup node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
           cache-dependency-path: crates/node/yarn.lock
+      - name: Enable Corepack
+        run: corepack enable && corepack prepare --activate
+        working-directory: crates/node
       - name: Output docker params
         id: docker
         run: |
@@ -309,7 +309,7 @@ jobs:
           yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
           yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.target }}
           path: ./crates/node
@@ -317,41 +317,42 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         if: ${{ contains(matrix.target, 'armv7') }}
         with:
           platforms: all
       - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         if: ${{ contains(matrix.target, 'armv7') }}
       - name: Test bindings
-        uses: addnab/docker-run-action@v3
+        uses: tj-actions/docker-run@v2
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
-          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}"
-          run: yarn test
+          name: test-bindings-${{ matrix.target }}
+          options: -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}
+          args: yarn test
   test-wasi:
     name: Test WASI target
     needs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Enable Corepack
         run: corepack enable && corepack prepare --activate
         working-directory: crates/node
-      - name: Setup node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
       - name: Install dependencies
         working-directory: crates/node
         run: |
           yarn config set supportedArchitectures.cpu "wasm32"
           yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-wasm32-wasip1-threads
           path: ./crates/node
@@ -376,16 +377,16 @@ jobs:
       - test-linux-binding
       - test-wasi
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: crates/node/yarn.lock
       - name: Enable Corepack
         run: corepack enable && corepack prepare --activate
         working-directory: crates/node
-      - name: Setup node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
       - name: Install dependencies
         working-directory: crates/node
         run: yarn install
@@ -393,7 +394,7 @@ jobs:
         working-directory: crates/node
         run: yarn create-dirs
       - name: Download all artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           path: ./crates/node/artifacts
       - name: Move artifacts
