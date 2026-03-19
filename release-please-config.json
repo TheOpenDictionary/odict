@@ -15,19 +15,19 @@
   "include-component-in-tag": true,
   "tag-separator": "/",
   "packages": {
-    "cli": {
+    "crates/cli": {
       "release-type": "rust",
       "component": "cli"
     },
-    "lib": {
+    "crates/lib": {
       "release-type": "rust",
       "component": "lib"
     },
-    "node": {
+    "crates/node": {
       "release-type": "node",
       "component": "node"
     },
-    "python": { 
+    "crates/python": {
       "release-type": "rust",
       "component": "python"
     }

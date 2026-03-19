@@ -92,6 +92,8 @@ jobs:
               tar -xvf wasi-sdk-22.0-macos.tar.gz
             build: |
               export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
+              export CC="${WASI_SDK_PATH}/bin/clang"
+              export AR="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
               yarn build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
@@ -99,7 +101,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable
+        run: corepack enable && corepack install --global
+        working-directory: crates/node
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -229,7 +232,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable
+        run: corepack enable && corepack install --global
+        working-directory: crates/node
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -271,7 +275,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable
+        run: corepack enable && corepack install --global
+        working-directory: crates/node
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -332,7 +337,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable
+        run: corepack enable && corepack install --global
+        working-directory: crates/node
       - name: Setup node
         uses: actions/setup-node@v5
         with:
@@ -372,7 +378,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Enable Corepack
-        run: corepack enable
+        run: corepack enable && corepack install --global
+        working-directory: crates/node
       - name: Setup node
         uses: actions/setup-node@v5
         with:
