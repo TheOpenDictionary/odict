@@ -22,28 +22,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v6
-  #     - name: Setup node
-  #       uses: actions/setup-node@v6
-  #       with:
-  #         node-version: 22
-  #         cache: yarn
-  #     - name: Install
-  #       uses: dtolnay/rust-toolchain@stable
-  #       with:
-  #         components: clippy, rustfmt
-  #     - name: Install dependencies
-  #       run: yarn install
-  #     - name: Oxlint
-  #       run: yarn workspace @odict/node lint
-  #     - name: Cargo fmt
-  #       run: cargo fmt -- --check
-  #     - name: Clippy
-  # run: cargo clippy
   build:
     strategy:
       fail-fast: false
@@ -51,40 +29,40 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: yarn build:node --target x86_64-apple-darwin
+            build: mise run //crates/node:build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: yarn build:node --target x86_64-pc-windows-msvc
+            build: mise run //crates/node:build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: yarn build:node --target i686-pc-windows-msvc
+            build: mise run //crates/node:build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: yarn build:node --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: yarn build:node --target x86_64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: yarn build:node --target aarch64-apple-darwin
+            build: mise run //crates/node:build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: yarn build:node --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: yarn build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: mise run //crates/node:build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: yarn build:node --target aarch64-linux-android
+            build: mise run //crates/node:build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: yarn build:node --target armv7-linux-androideabi
+            build: mise run //crates/node:build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: yarn build:node --target aarch64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: yarn build:node --target aarch64-pc-windows-msvc
+            build: mise run //crates/node:build:node --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
@@ -95,20 +73,17 @@ jobs:
               export CC="${WASI_SDK_PATH}/bin/clang"
               export AR="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
-              yarn build:wasm
+              mise run //crates/node:build:wasm
     name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 24
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
+          install: true
+          cache: true
+          working_directory: crates/node
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -121,7 +96,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            ~/.napi-rs
+            .napi-rs
             .cargo-cache
             target/
           key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
@@ -140,9 +115,6 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
-      - name: Install dependencies
-        working-directory: crates/node
-        run: yarn install
       - name: Build
         env:
           CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
@@ -231,19 +203,14 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
-          architecture: ${{ matrix.settings.architecture }}
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
-      - name: Install dependencies
-        working-directory: crates/node
-        run: yarn install
+          install: true
+          cache: true
+          working_directory: crates/node
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -253,8 +220,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        working-directory: crates/node
-        run: yarn test
+        run: mise run //crates/node:test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -274,15 +240,14 @@ jobs:
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
+          install: true
+          cache: true
+          working_directory: crates/node
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Output docker params
         id: docker
         run: |
@@ -302,12 +267,11 @@ jobs:
               console.log('IMAGE=node:${{ matrix.node }}-slim')
             }
           " >> $GITHUB_OUTPUT
-      - name: Install dependencies
+      - name: Configure yarn architectures
         working-directory: crates/node
         run: |
           yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
-          yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -329,7 +293,7 @@ jobs:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
           options: -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}
-          args: yarn test
+          args: sh -c "corepack enable && yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -337,20 +301,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 24
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
+          install: true
+          cache: true
+          working_directory: crates/node
+      - name: Configure yarn for wasm32
         working-directory: crates/node
-      - name: Install dependencies
-        working-directory: crates/node
-        run: |
-          yarn config set supportedArchitectures.cpu "wasm32"
-          yarn install
+        run: yarn config set supportedArchitectures.cpu "wasm32"
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -360,8 +319,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        working-directory: crates/node
-        run: yarn test
+        run: mise run //crates/node:test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -371,25 +329,18 @@ jobs:
       contents: write
       id-token: write
     needs:
-      # - lint
       - build-freebsd
       - test-macOS-windows-binding
       - test-linux-binding
       - test-wasi
     steps:
       - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 24
-          cache: yarn
-          cache-dependency-path: crates/node/yarn.lock
-      - name: Enable Corepack
-        run: corepack enable && corepack prepare --activate
-        working-directory: crates/node
-      - name: Install dependencies
-        working-directory: crates/node
-        run: yarn install
+          install: true
+          cache: true
+          working_directory: crates/node
       - name: create npm dirs
         working-directory: crates/node
         run: yarn create-dirs

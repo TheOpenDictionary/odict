@@ -2,22 +2,17 @@
 node = "24.11.1"
 yarn = "latest"
 
-[tasks.setup]
-run = ["corepack prepare", "corepack enable", "yarn install"]
-sources = ["package.json"]
-outputs = { auto = true }
+[prepare.yarn]
+auto = true
 
 [tasks."build:node"]
 alias = "build"
-depends = ["setup"]
 run = "yarn build:node"
 
 [tasks."build:wasm"]
-depends = ["setup"]
 run = ["rustup target add wasm32-wasip1-threads", "yarn build:wasm"]
 
 [tasks.lint]
-depends = ["setup"]
 run = "yarn lint"
 
 [tasks."dev:wasm"]
@@ -28,17 +23,15 @@ run = "yarn dev:wasm"
 run = "yarn up"
 
 [tasks.publish]
-depends = ["setup"]
 run = "yarn npm publish"
 
 [tasks.test]
-depends = [":setup", ":build"]
+depends = [":build"]
 run = "yarn test"
 
 [tasks.snapshot]
 depends = [":test -u"]
 
 [tasks.ci]
-depends = ["setup"]
 run = 'act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true

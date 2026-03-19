@@ -2,8 +2,8 @@
 python = "3.14.3"
 uv = "latest"
 
-[settings]
-python.uv_venv_auto = true
+[prepare.uv]
+auto = true
 
 [tasks.dev]
 run = "uv tool run maturin develop -m ./Cargo.toml"

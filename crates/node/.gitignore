@@ -193,6 +193,7 @@ Cargo.lock
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.mise/*
 
 artifacts
 *.wasm

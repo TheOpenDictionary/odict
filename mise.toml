@@ -1,5 +1,8 @@
 experimental_monorepo_root = true
 
+[env]
+MISE_EXPERIMENTAL = 1
+
 [tools]
 act = "latest"
 "cargo:cargo-nextest" = "0.9.92"
@@ -12,6 +15,7 @@ rust = "latest"
 config_roots = ["crates/*"]
 
 [settings]
+python.uv_venv_auto = true
 lockfile = true
 
 [tasks.run]
@@ -59,10 +63,6 @@ description = "Recursively tests all packages in the project"
 depends = ["//crates/...:upgrade"]
 run = "cargo upgrade"
 description = "Updates all dependencies to their latest versions"
-
-[tasks.setup]
-depends_post = ["//crates/...:setup"]
-description = "Installs all required dependencies"
 
 [tasks."build:all"]
 depends = ["//crates/...:build"]

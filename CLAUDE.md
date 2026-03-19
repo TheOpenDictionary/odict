@@ -23,7 +23,7 @@ This project uses `mise` as the monorepo task runner. All tasks are defined in `
 | `mise format` | Format all Rust code (`cargo fmt --all`) |
 | `mise snapshot` | Accept insta snapshot updates (`cargo insta accept`) |
 | `mise bench` | Run criterion benchmarks |
-| `mise setup` | Install all dependencies |
+| `mise prepare` | Install all dependencies |
 
 ### Running a Single Test
 
