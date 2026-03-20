@@ -3,12 +3,8 @@ use std::time::Duration;
 use crate::enums::PrintFormat;
 use crate::get_lookup_entries;
 use crate::{context::CLIContext, print_entries};
-use clap::{arg, command, Args};
-use odict::{
-    download::DictionaryDownloader,
-    split::SplitOptions,
-    LoadOptions, OpenDictionary,
-};
+use clap::Args;
+use odict::{download::DictionaryDownloader, split::SplitOptions, LoadOptions, OpenDictionary};
 
 #[derive(Debug, Args)]
 #[command(args_conflicts_with_subcommands = true)]
