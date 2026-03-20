@@ -34,8 +34,8 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.9.0",
-    "@emnapi/runtime": "^1.9.0",
+    "@emnapi/core": "^1.9.1",
+    "@emnapi/runtime": "^1.9.1",
     "@napi-rs/cli": "3.5.1",
     "@napi-rs/wasm-runtime": "^1.1.1",
     "@oxc-node/core": "^0.0.35",
