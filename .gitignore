@@ -769,3 +769,4 @@ semicolon_delimited_script
 *.pdf
 .aider*
 .ruff_cache
+worktrees

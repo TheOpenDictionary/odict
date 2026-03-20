@@ -33,5 +33,5 @@ run = "yarn test"
 depends = [":test -u"]
 
 [tasks.ci]
-run = 'act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+run = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true

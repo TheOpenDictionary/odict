@@ -4,7 +4,6 @@ experimental_monorepo_root = true
 MISE_EXPERIMENTAL = 1
 
 [tools]
-act = "latest"
 "cargo:cargo-nextest" = "0.9.92"
 "cargo:cargo-dist" = "0.30.0"
 "cargo:cargo-insta" = "1.42.2"
@@ -74,5 +73,5 @@ run = "cargo fmt --all -- **/*.rs"
 description = "Format all Rust files"
 
 [tasks."ci"]
-run = 'act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+run = 'mise x act@latest -- act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true
