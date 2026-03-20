@@ -1,0 +1,37 @@
+[tools]
+node = "24.11.1"
+yarn = "latest"
+
+[prepare.yarn]
+auto = true
+
+[tasks."build:node"]
+alias = "build"
+run = "yarn build:node"
+
+[tasks."build:wasm"]
+run = ["rustup target add wasm32-wasip1-threads", "yarn build:wasm"]
+
+[tasks.lint]
+run = "yarn lint"
+
+[tasks."dev:wasm"]
+depends = ["build"]
+run = "yarn dev:wasm"
+
+[tasks.upgrade]
+run = "yarn up"
+
+[tasks.publish]
+run = "yarn npm publish"
+
+[tasks.test]
+depends = [":build"]
+run = "yarn test"
+
+[tasks.snapshot]
+depends = [":test -u"]
+
+[tasks.ci]
+run = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+hide = true

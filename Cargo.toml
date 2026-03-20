@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["cli", "lib", "python", "node", "internal"]
+members = ["crates/*"]
 
 [profile.release]
 codegen-units = 1

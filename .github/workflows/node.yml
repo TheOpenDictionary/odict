@@ -8,10 +8,10 @@ env:
   workflow_dispatch:
   pull_request:
     paths:
-      - "node/**"
-      - "lib/**"
-      - "**/tasks.toml"
-      - "tasks.toml"
+      - "crates/node/**"
+      - "crates/lib/**"
+      - "**/mise.toml"
+      - "mise.toml"
       - "examples/**"
   push:
     branches:
@@ -22,28 +22,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #     - name: Setup node
-  #       uses: actions/setup-node@v5
-  #       with:
-  #         node-version: 22
-  #         cache: yarn
-  #     - name: Install
-  #       uses: dtolnay/rust-toolchain@stable
-  #       with:
-  #         components: clippy, rustfmt
-  #     - name: Install dependencies
-  #       run: yarn install
-  #     - name: Oxlint
-  #       run: yarn workspace @odict/node lint
-  #     - name: Cargo fmt
-  #       run: cargo fmt -- --check
-  #     - name: Clippy
-  # run: cargo clippy
   build:
     strategy:
       fail-fast: false
@@ -51,71 +29,75 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: yarn workspace @odict/node build:node --target x86_64-apple-darwin
+            build: mise run //crates/node:build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: yarn workspace @odict/node build:node --target x86_64-pc-windows-msvc
+            build: mise run //crates/node:build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: yarn workspace @odict/node build:node --target i686-pc-windows-msvc
+            build: mise run //crates/node:build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: yarn workspace @odict/node build:node --target x86_64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: yarn workspace @odict/node build:node --target aarch64-apple-darwin
+            build: mise run //crates/node:build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: yarn workspace @odict/node build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: mise run //crates/node:build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: yarn workspace @odict/node build:node --target aarch64-linux-android
+            build: mise run //crates/node:build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: yarn workspace @odict/node build:node --target armv7-linux-androideabi
+            build: mise run //crates/node:build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: yarn workspace @odict/node build:node --target aarch64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: yarn workspace @odict/node build:node --target aarch64-pc-windows-msvc
-          - host: macos-latest
+            build: mise run //crates/node:build:node --target aarch64-pc-windows-msvc
+          - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
-              wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-macos.tar.gz
-              tar -xvf wasi-sdk-22.0-macos.tar.gz
+              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-linux.tar.gz
+              tar -xf wasi-sdk-22.0-linux.tar.gz
             build: |
-              export WASI_SDK_PATH="$(pwd)/wasi-sdk-22.0"
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-22.0"
+              export CC="${WASI_SDK_PATH}/bin/clang"
+              export AR="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
-              yarn workspace @odict/node build:wasm
-    name: stable - ${{ matrix.settings.target }} - node@22
+              mise run //crates/node:build:wasm
+    name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 22
-          cache: yarn
-      - name: Install
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          targets: ${{ matrix.settings.target }}
+          install: true
+          cache: true
+          working_directory: crates/node
+      - name: Enable Corepack
+        if: ${{ runner.os == 'Windows' }}
+        run: corepack enable
+        shell: bash
+      - name: Add Rust target
+        run: rustup target add ${{ matrix.settings.target }}
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            ~/.napi-rs
+            .napi-rs
             .cargo-cache
             target/
           key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
@@ -134,35 +116,34 @@ jobs:
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
-      - name: Install dependencies
-        run: yarn install
       - name: Build
         env:
           CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
+        working-directory: crates/node
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
-            ./node/${{ env.APP_NAME }}.*.node
-            ./node/${{ env.APP_NAME }}.*.wasm
+            ./crates/node/${{ env.APP_NAME }}.*.node
+            ./crates/node/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
     name: Build FreeBSD
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Build
         id: build
-        uses: cross-platform-actions/action@v0.29.0
+        uses: cross-platform-actions/action@v0.32.0
         env:
           DEBUG: napi:*
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: "14.2"
+          version: "15.0"
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
@@ -185,16 +166,17 @@ jobs:
             env
             freebsd-version
             sudo corepack enable
+            cd crates/node
             yarn install
-            yarn workspace @odict/node build:node
+            yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bindings-freebsd
-          path: ./node/${{ env.APP_NAME }}.*.node
+          path: ./crates/node/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -221,25 +203,25 @@ jobs:
           - "22"
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-          architecture: ${{ matrix.settings.architecture }}
-      - name: Install dependencies
-        run: yarn install
+          install: true
+          cache: true
+          working_directory: crates/node
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn workspace @odict/node test
+        run: mise run //crates/node:test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -258,12 +240,15 @@ jobs:
           - "22"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
+          install: true
+          cache: true
+          working_directory: crates/node
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Output docker params
         id: docker
         run: |
@@ -283,58 +268,59 @@ jobs:
               console.log('IMAGE=node:${{ matrix.node }}-slim')
             }
           " >> $GITHUB_OUTPUT
-      - name: Install dependencies
+      - name: Configure yarn architectures
+        working-directory: crates/node
         run: |
           yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
-          yarn install
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.target }}
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         if: ${{ contains(matrix.target, 'armv7') }}
         with:
           platforms: all
       - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
         if: ${{ contains(matrix.target, 'armv7') }}
       - name: Test bindings
-        uses: addnab/docker-run-action@v3
+        uses: tj-actions/docker-run@v2
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
-          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
-          run: yarn workspace @odict/node test
+          name: test-bindings-${{ matrix.target }}
+          options: -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}
+          args: sh -c "corepack enable && yarn test"
   test-wasi:
     name: Test WASI target
     needs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 22
-          cache: yarn
-      - name: Install dependencies
-        run: |
-          yarn config set supportedArchitectures.cpu "wasm32"
-          yarn install
+          install: true
+          cache: true
+          working_directory: crates/node
+      - name: Configure yarn for wasm32
+        working-directory: crates/node
+        run: yarn config set supportedArchitectures.cpu "wasm32"
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: bindings-wasm32-wasip1-threads
-          path: ./node
+          path: ./crates/node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn workspace @odict/node test
+        run: mise run //crates/node:test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -344,43 +330,44 @@ jobs:
       contents: write
       id-token: write
     needs:
-      # - lint
       - build-freebsd
       - test-macOS-windows-binding
       - test-linux-binding
       - test-wasi
     steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          node-version: 22
-          cache: yarn
-      - name: Install dependencies
-        run: yarn install
+          install: true
+          cache: true
+          working_directory: crates/node
       - name: create npm dirs
-        run: yarn workspace @odict/node napi create-npm-dirs
+        working-directory: crates/node
+        run: yarn create-dirs
       - name: Download all artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
-          path: ./node/artifacts
+          path: ./crates/node/artifacts
       - name: Move artifacts
-        run: yarn workspace @odict/node artifacts
+        working-directory: crates/node
+        run: yarn artifacts
       - name: List packages
-        run: ls -R ./node/npm
+        run: ls -R ./crates/node/npm
         shell: bash
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            cd node && npm publish --access public
+            npm publish --access public
           elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            cd node && npm publish --tag next --access public
+            npm publish --tag next --access public
           else
             echo "Not a release, skipping publish"
           fi
@@ -390,10 +377,11 @@ jobs:
       - name: Publish
         shell: bash
         if: ${{ github.event_name == 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          cd node && npm publish --no-git-checks --access public
+          npm publish --no-git-checks --access public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
