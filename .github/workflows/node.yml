@@ -84,10 +84,6 @@ jobs:
           install: true
           cache: true
           working_directory: crates/node
-      - name: Enable Corepack
-        if: ${{ runner.os == 'Windows' }}
-        run: corepack enable
-        shell: bash
       - name: Add Rust target
         run: rustup target add ${{ matrix.settings.target }}
       - name: Cache cargo
@@ -119,7 +115,6 @@ jobs:
       - name: Build
         env:
           CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
-        working-directory: crates/node
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
@@ -246,7 +241,6 @@ jobs:
         with:
           install: true
           cache: true
-          working_directory: crates/node
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Output docker params
@@ -271,8 +265,8 @@ jobs:
       - name: Configure yarn architectures
         working-directory: crates/node
         run: |
-          yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
-          yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
+          mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
+          mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -294,7 +288,7 @@ jobs:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
           options: -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}
-          args: sh -c "corepack enable && yarn test"
+          args: sh -c "mise x -- corepack enable && mise x -- yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -307,10 +301,9 @@ jobs:
         with:
           install: true
           cache: true
-          working_directory: crates/node
       - name: Configure yarn for wasm32
         working-directory: crates/node
-        run: yarn config set supportedArchitectures.cpu "wasm32"
+        run: mise x -- yarn config set supportedArchitectures.cpu "wasm32"
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -341,17 +334,14 @@ jobs:
         with:
           install: true
           cache: true
-          working_directory: crates/node
       - name: create npm dirs
-        working-directory: crates/node
-        run: yarn create-dirs
+        run: mise run //crates/node:create-dirs
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
           path: ./crates/node/artifacts
       - name: Move artifacts
-        working-directory: crates/node
-        run: yarn artifacts
+        run: mise run //crates/node:artifacts
       - name: List packages
         run: ls -R ./crates/node/npm
         shell: bash
