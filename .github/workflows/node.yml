@@ -78,7 +78,15 @@ jobs:
             build: mise //crates/node:build --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
-            build: mise //crates/node:build:wasm --target wasm32-wasip1-threads
+            setup: |
+              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-linux.tar.gz
+              tar -xf wasi-sdk-22.0-linux.tar.gz
+            build: |
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-22.0"
+              export CC="${WASI_SDK_PATH}/bin/clang"
+              export AR="${WASI_SDK_PATH}/bin/llvm-ar"
+              export CMAKE_BUILD_PARALLEL_LEVEL=2
+              mise run //crates/node:build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -157,7 +165,7 @@ jobs:
             sudo corepack enable
             cd crates/node
             yarn install
-            mise //crates/node:build
+            yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache

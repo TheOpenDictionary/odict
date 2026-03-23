@@ -10,6 +10,7 @@ outputs = { auto = true }
 [tasks."build:node"]
 depends = [":prepare"]
 alias = "build"
+env = { "AWS_LC_SYS_NO_JITTER_ENTROPY" = 1 }
 run = "yarn build:node"
 
 [tasks."create-dirs"]
