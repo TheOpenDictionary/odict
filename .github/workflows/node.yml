@@ -15,6 +15,7 @@ env:
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"
+      - ".github/workflows/node.yml"
     tags:
       - "node**"
   pull_request: null
