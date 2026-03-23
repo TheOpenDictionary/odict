@@ -20,7 +20,7 @@ run = "yarn artifacts"
 
 [tasks."build:wasm"]
 depends = [":prepare"]
-run = ["rustup target add wasm32-wasip1-threads", "mise x -- yarn build:wasm"]
+run = ["yarn build:wasm"]
 
 [tasks.lint]
 depends = [":prepare"]

@@ -1,40 +1,27 @@
-name: CI
+name: Node
 env:
   DEBUG: napi:*
   APP_NAME: node
   MACOSX_DEPLOYMENT_TARGET: "10.13"
   CARGO_INCREMENTAL: "1"
-'on': 
+"on":
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
       - "crates/node/**"
       - "crates/lib/**"
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"
+  push:
+    branches:
+      - main
     tags:
       - "node**"
-  pull_request: null
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup mise
-        uses: jdx/mise-action@v4
-        with:
-          install: true
-          cache: true
-          experimental: true
-      - name: Run lint
-        run: mise //crates/node:lint
   build:
     strategy:
       fail-fast: false
@@ -42,44 +29,52 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: mise //crates/node:build --target x86_64-apple-darwin
+            build: mise run //crates/node:build:node --target x86_64-apple-darwin
           - host: windows-latest
-            build: mise //crates/node:build --target x86_64-pc-windows-msvc
+            build: mise run //crates/node:build:node --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: mise //crates/node:build --target i686-pc-windows-msvc
+            build: mise run //crates/node:build:node --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: mise //crates/node:build --target x86_64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: mise //crates/node:build --target x86_64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: mise //crates/node:build --target aarch64-apple-darwin
+            build: mise run //crates/node:build:node --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: mise //crates/node:build --target aarch64-unknown-linux-gnu --use-napi-cross
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: mise //crates/node:build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+            build: mise run //crates/node:build:node --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: mise //crates/node:build --target aarch64-linux-android
+            build: mise run //crates/node:build:node --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: mise //crates/node:build --target armv7-linux-androideabi
+            build: mise run //crates/node:build:node --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: mise //crates/node:build --target aarch64-unknown-linux-musl -x
+            build: mise run //crates/node:build:node --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: mise //crates/node:build --target aarch64-pc-windows-msvc
+            build: mise run //crates/node:build:node --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
-            build: mise //crates/node:build:wasm --target wasm32-wasip1-threads
-    name: stable - ${{ matrix.settings.target }} - node@22
+            setup: |
+              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-linux.tar.gz
+              tar -xf wasi-sdk-22.0-linux.tar.gz
+            build: |
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-22.0"
+              export CC="${WASI_SDK_PATH}/bin/clang"
+              export AR="${WASI_SDK_PATH}/bin/llvm-ar"
+              export CMAKE_BUILD_PARALLEL_LEVEL=2
+              mise run //crates/node:build:wasm
+    name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
@@ -88,9 +83,7 @@ jobs:
         with:
           install: true
           cache: true
-          experimental: true
-        env:
-          MISE_ENV: ${{ contains(matrix.settings.target, 'musl') && 'musl' || '' }}
+          working_directory: crates/node
       - name: Add Rust target
         run: rustup target add ${{ matrix.settings.target }}
       - name: Cache cargo
@@ -100,15 +93,28 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            ~/.napi-rs
+            .napi-rs
             .cargo-cache
             target/
           key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
+      - uses: mlugg/setup-zig@v2
+        if: ${{ contains(matrix.settings.target, 'musl') }}
+        with:
+          version: 0.14.1
+      - name: Install cargo-zigbuild
+        uses: taiki-e/install-action@v2
+        if: ${{ contains(matrix.settings.target, 'musl') }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tool: cargo-zigbuild
       - name: Setup toolchain
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
       - name: Build
+        env:
+          CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.settings.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
         run: ${{ matrix.settings.build }}
         shell: bash
       - name: Upload artifact
@@ -132,14 +138,14 @@ jobs:
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: '15.0'
+          version: "15.0"
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm cmake
-            sudo npm install -g yarn corepack --ignore-scripts
+            sudo npm install -g yarn --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain stable
             source "$HOME/.cargo/env"
@@ -157,7 +163,7 @@ jobs:
             sudo corepack enable
             cd crates/node
             yarn install
-            mise //crates/node:build
+            yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -188,8 +194,8 @@ jobs:
             target: x86_64-apple-darwin
             architecture: x64
         node:
-          - '20'
-          - '22'
+          - "20"
+          - "22"
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
@@ -198,7 +204,7 @@ jobs:
         with:
           install: true
           cache: true
-          experimental: true
+          working_directory: crates/node
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Download artifacts
@@ -225,8 +231,8 @@ jobs:
           - aarch64-unknown-linux-musl
           - armv7-unknown-linux-gnueabihf
         node:
-          - '20'
-          - '22'
+          - "20"
+          - "22"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v6
@@ -235,7 +241,8 @@ jobs:
         with:
           install: true
           cache: true
-          experimental: true
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Output docker params
         id: docker
         run: |
@@ -255,11 +262,11 @@ jobs:
               console.log('IMAGE=node:${{ matrix.node }}-slim')
             }
           " >> $GITHUB_OUTPUT
-      - name: Install dependencies
+      - name: Configure yarn architectures
+        working-directory: crates/node
         run: |
           mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
-          mise x -- yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -280,8 +287,8 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
-          options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          args: mise //crates/node:test
+          options: -v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }}/crates/node --platform ${{ steps.docker.outputs.PLATFORM }}
+          args: sh -c "mise x -- corepack enable && mise x -- yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -294,11 +301,9 @@ jobs:
         with:
           install: true
           cache: true
-          experimental: true
-      - name: Install dependencies
-        run: |
-          mise x -- yarn config set supportedArchitectures.cpu "wasm32"
-          mise x -- yarn install
+      - name: Configure yarn for wasm32
+        working-directory: crates/node
+        run: mise x -- yarn config set supportedArchitectures.cpu "wasm32"
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -308,7 +313,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: mise //crates/node:test
+        run: mise run //crates/node:test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -318,7 +323,6 @@ jobs:
       contents: write
       id-token: write
     needs:
-      - lint
       - build-freebsd
       - test-macOS-windows-binding
       - test-linux-binding
@@ -330,7 +334,6 @@ jobs:
         with:
           install: true
           cache: true
-          experimental: true
       - name: create npm dirs
         run: mise run //crates/node:create-dirs
       - name: Download all artifacts
@@ -340,10 +343,11 @@ jobs:
       - name: Move artifacts
         run: mise run //crates/node:artifacts
       - name: List packages
-        run: ls -R ./npm
+        run: ls -R ./crates/node/npm
         shell: bash
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
@@ -371,4 +375,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
