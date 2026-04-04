@@ -23,12 +23,12 @@ internal = { path = "../internal" }
 clap = { version = "4.6.0", features = ["derive", "cargo"] }
 console = "0.16.3"
 indicatif = "0.18.4"
-pulldown-cmark = "0.13.1"
+pulldown-cmark = "0.13.3"
 actix-web = "4.13.0"
 serde = { version = "1.0.228", features = ["derive"] }
-env_logger = "0.11.9"
+env_logger = "0.11.10"
 derive_more = { version = "2", features = ["display", "error"] }
 num-format = "0.4.4"
 anyhow = "1.0.102"
 lru = "0.16.3"
-tokio = { version = "1.50", features = ["full"] }
+tokio = { version = "1.51", features = ["full"] }

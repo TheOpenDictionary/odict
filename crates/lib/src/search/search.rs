@@ -106,7 +106,10 @@ macro_rules! search {
                 let query_parser =
                     QueryParser::for_index(&index, vec![*FIELD_TERM, *FIELD_DEFINITIONS]);
                 let query_obj = query_parser.parse_query(query)?;
-                let top_docs = searcher.search(&query_obj, &TopDocs::with_limit(opts.limit))?;
+                let top_docs = searcher.search(
+                    &query_obj,
+                    &TopDocs::with_limit(opts.limit).order_by_score(),
+                )?;
                 let entries = top_docs
                     .par_iter()
                     .filter(|(score, _)| score >= &(opts.threshold as f32))

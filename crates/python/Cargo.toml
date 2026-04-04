@@ -8,7 +8,7 @@ name = "theopendictionary"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.28.2", features = ["either"] }
+pyo3 = { version = "0.28.3", features = ["either"] }
 pyo3-async-runtimes = { version = "0.28.0", features = [
   "tokio-runtime",
   "attributes",
@@ -24,4 +24,4 @@ odict = { path = "../lib", features = [
 internal = { path = "../internal" }
 either = { version = "*" }
 structural-convert = { workspace = true }
-tokio = { version = "1.50", features = ["full"] }
+tokio = { version = "1.51", features = ["full"] }
