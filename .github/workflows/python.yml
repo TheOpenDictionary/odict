@@ -1,9 +1,5 @@
 name: Python
 
-env:
-  MACOSX_DEPLOYMENT_TARGET: "10.13"
-  CARGO_INCREMENTAL: "1"
-
 on:
   workflow_dispatch:
   push:
@@ -19,10 +15,6 @@ on:
     tags:
       - "crates/python/*"
   pull_request: null
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
