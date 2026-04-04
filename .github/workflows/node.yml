@@ -80,10 +80,10 @@ jobs:
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
-              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sdk-22.0-linux.tar.gz
-              tar -xf wasi-sdk-22.0-linux.tar.gz
+              wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-32/wasi-sdk-32.0-x86_64-linux.tar.gz
+              tar -xf wasi-sdk-32.0-x86_64-linux.tar.gz
             build: |
-              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-22.0"
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-32.0"
               export CC="${WASI_SDK_PATH}/bin/clang"
               export AR="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
