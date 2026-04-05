@@ -55,7 +55,7 @@ jobs:
             build: mise //crates/node:build --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: mise //crates/node:build --target x86_64-unknown-linux-musl -x
+            build: mise x zig -- mise //crates/node:build --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
             build: mise //crates/node:build --target aarch64-apple-darwin
@@ -73,7 +73,7 @@ jobs:
             build: mise //crates/node:build --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: mise //crates/node:build --target aarch64-unknown-linux-musl -x
+            build: mise x zig -- mise //crates/node:build --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
             build: mise //crates/node:build --target aarch64-pc-windows-msvc
@@ -83,7 +83,7 @@ jobs:
               wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-32/wasi-sdk-32.0-x86_64-linux.tar.gz
               tar -xf wasi-sdk-32.0-x86_64-linux.tar.gz
             build: |
-              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-32.0"
+              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux"
               export CC_wasm32_wasip1_threads="${WASI_SDK_PATH}/bin/clang"
               export AR_wasm32_wasip1_threads="${WASI_SDK_PATH}/bin/llvm-ar"
               export CMAKE_BUILD_PARALLEL_LEVEL=2
@@ -98,8 +98,6 @@ jobs:
           install: true
           cache: true
           experimental: true
-        env:
-          MISE_ENV: ${{ contains(matrix.settings.target, 'musl') && 'musl' || '' }}
       - name: Add Rust target
         run: rustup target add ${{ matrix.settings.target }}
       - name: Cache cargo
