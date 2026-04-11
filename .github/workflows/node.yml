@@ -82,12 +82,11 @@ jobs:
             setup: |
               wget -q https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-32/wasi-sdk-32.0-x86_64-linux.tar.gz
               tar -xf wasi-sdk-32.0-x86_64-linux.tar.gz
-            build: |
-              export WASI_SDK_PATH="${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux"
-              export CC_wasm32_wasip1_threads="${WASI_SDK_PATH}/bin/clang"
-              export AR_wasm32_wasip1_threads="${WASI_SDK_PATH}/bin/llvm-ar"
-              export CMAKE_BUILD_PARALLEL_LEVEL=2
-              mise run //crates/node:build:wasm
+              echo "WASI_SDK_PATH=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux" >> $GITHUB_ENV
+              echo "CC_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/clang" >> $GITHUB_ENV
+              echo "AR_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/llvm-ar" >> $GITHUB_ENV
+              echo "CMAKE_BUILD_PARALLEL_LEVEL=2" >> $GITHUB_ENV
+            build: mise run //crates/node:build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
