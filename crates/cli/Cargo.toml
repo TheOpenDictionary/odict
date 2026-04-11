@@ -4,7 +4,14 @@ version = "3.2.2"
 edition = "2021"
 description = "Lightning-fast dictionary file format and toolchain"
 homepage = "https://odict.org"
+authors = ["Tyler Nickerson"]
 repository = "https://github.com/TheOpenDictionary/odict"
+
+[package.metadata.wix]
+upgrade-guid = "1D09FCDB-8615-4B4C-A350-5CD4DAF45B57"
+path-guid = "679C0F53-2DA0-4E10-92B8-5B447190BA3D"
+license = false
+eula = false
 
 [[bin]]
 name = "odict"
