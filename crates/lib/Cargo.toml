@@ -55,7 +55,7 @@ harness = false
 byteorder = "1.5.0"
 quick-xml = { version = "0.39.2", features = ["serialize"] }
 rayon = "1.11.0"
-indexmap = { version = "2.13.1", features = ["serde", "rayon"] }
+indexmap = { version = "2.14.0", features = ["serde", "rayon"] }
 charabia = { version = "0.9.9", optional = true, default-features = false }
 rkyv = { version = "0.8.15", features = ["indexmap-2", "uuid-1"] }
 serde = { version = "1.0.228", features = ["serde_derive"] }
@@ -94,7 +94,7 @@ sea-query = { version = "0.32.7", optional = true }
 criterion = { version = "0.8.2", features = ["async_tokio", "html_reports"] }
 insta = "1.47.2"
 map-macro = { version = "0.3.0" }
-tokio = { version = "1.51.0", features = ["rt", "macros"] }
+tokio = { version = "1.51.1", features = ["rt", "macros"] }
 wiremock = "0.6.5"
 tempfile = "3.27.0"
 regex = "1.12.3"
