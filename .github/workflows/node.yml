@@ -262,6 +262,7 @@ jobs:
             }
           " >> $GITHUB_OUTPUT
       - name: Install dependencies
+        working-directory: crates/node
         run: |
           mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
@@ -302,6 +303,7 @@ jobs:
           cache: true
           experimental: true
       - name: Install dependencies
+        working-directory: crates/node
         run: |
           mise x -- yarn config set supportedArchitectures.cpu "wasm32"
           mise x -- yarn install
