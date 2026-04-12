@@ -71,10 +71,9 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
+          args: --release --zig --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
           sccache: false
           manylinux: auto
-          docker-options: -e AWS_LC_SYS_NO_JITTER_ENTROPY=1
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
@@ -132,10 +131,9 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
+          args: --release --zig --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
           sccache: false
           manylinux: musllinux_1_2
-          docker-options: -e AWS_LC_SYS_NO_JITTER_ENTROPY=1
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
