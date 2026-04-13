@@ -288,7 +288,7 @@ jobs:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
           options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          args: sh -c "corepack enable && cd crates/node && npm_config_optional=true yarn test"
+          args: sh -c "apt-get update -y && apt-get install -y ca-certificates && corepack enable && cd crates/node && npm_config_optional=true yarn test"
   test-wasi:
     name: Test WASI target
     needs:

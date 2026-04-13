@@ -45,14 +45,19 @@ jobs:
         platform:
           - runner: ubuntu-22.04
             target: x86_64
+            use_zig: true
           - runner: ubuntu-22.04
             target: x86
+            use_zig: true
           - runner: ubuntu-22.04
             target: aarch64
+            use_zig: true
           - runner: ubuntu-22.04
             target: armv7
+            use_zig: true
           - runner: ubuntu-22.04
             target: ppc64le
+            use_zig: false
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -71,7 +76,7 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --zig --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
+          args: --release ${{ matrix.platform.use_zig && '--zig' || '' }} --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
           sccache: false
           manylinux: auto
       - name: Upload wheels
