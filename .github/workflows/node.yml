@@ -350,8 +350,10 @@ jobs:
       - name: List packages
         run: ls -R ./npm
         shell: bash
+        working-directory: crates/node
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}
+        working-directory: crates/node
         run: |
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
