@@ -1,29 +1,48 @@
 [tools]
 node = "24.11.1"
-yarn = "latest"
+"npm:corepack" = "latest"
 
-[prepare.yarn]
+[deps.yarn]
 auto = true
 
+[tasks.prepare]
+run = ["corepack enable", "yarn install"]
+sources = ["package.json"]
+outputs = { auto = true }
+
 [tasks."build:node"]
+depends = [":prepare"]
 alias = "build"
+env = { "AWS_LC_SYS_NO_JITTER_ENTROPY" = 1 }
 run = "yarn build:node"
 
+[tasks."create-dirs"]
+depends = [":prepare"]
+run = "yarn create-dirs"
+
+[tasks.artifacts]
+depends = [":prepare"]
+run = "yarn artifacts"
+
 [tasks."build:wasm"]
-run = ["rustup target add wasm32-wasip1-threads", "yarn build:wasm"]
+depends = [":prepare"]
+run = ["yarn build:wasm"]
 
 [tasks.lint]
+depends = [":prepare"]
 run = "yarn lint"
 
 [tasks."dev:wasm"]
-depends = ["build"]
+depends = [":prepare", ":build:wasm"]
 run = "yarn dev:wasm"
 
 [tasks.upgrade]
+depends = [":prepare"]
 run = "yarn up"
 
 [tasks.publish]
-run = "yarn npm publish"
+depends = [":prepare"]
+run = "npm publish"
 
 [tasks.test]
 depends = [":build"]
