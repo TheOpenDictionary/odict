@@ -4,6 +4,24 @@
 
 
 
+## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.2...node/v2.3.0) (2026-04-24)
+
+
+### Features
+
+* **dx:** Move to using mise monorepo ([2745c41](https://github.com/TheOpenDictionary/odict/commit/2745c41e90783dd3743d1b8555990a70fb9667a9))
+
+
+### Bug Fixes
+
+* **ci:** Attempt to fix CI ([8086c42](https://github.com/TheOpenDictionary/odict/commit/8086c42f5c51cff907661a476f7a43ebcdf3eea8))
+* **ci:** Finally fix the CI ([#1398](https://github.com/TheOpenDictionary/odict/issues/1398)) ([a604b52](https://github.com/TheOpenDictionary/odict/commit/a604b52274c62799005b00091cbeeafded65862b))
+* **ci:** Update node build ([99ff7dd](https://github.com/TheOpenDictionary/odict/commit/99ff7ddfbaf6f3ff93df0c5d60936e5ef386abea))
+* **ci:** Update node ci ([c5f4bf0](https://github.com/TheOpenDictionary/odict/commit/c5f4bf0765e5c5abeeb2ab52bfedcd9433eabc4b))
+* **ci:** Update node ci ([36645b6](https://github.com/TheOpenDictionary/odict/commit/36645b621159a152c48daad24676792c83291036))
+* **ci:** Use mise for Node CI ([bcd0526](https://github.com/TheOpenDictionary/odict/commit/bcd0526c0ddec6b8270d9d3cf4d5c6b47afaed27))
+* **ci:** Use zig for aarch64 linux build ([1d2bf90](https://github.com/TheOpenDictionary/odict/commit/1d2bf907101fa4699f6412cf4a2cdc22d271acc1))
+
 ## [2.2.2](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.1...node/v2.2.2) (2025-11-30)
 
 

@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.3.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.2...lib/v3.3.0) (2026-04-24)
+
+
+### Features
+
+* **dx:** Move to using mise monorepo ([2745c41](https://github.com/TheOpenDictionary/odict/commit/2745c41e90783dd3743d1b8555990a70fb9667a9))
+
+
+### Bug Fixes
+
+* **ci:** Finally fix the CI ([#1398](https://github.com/TheOpenDictionary/odict/issues/1398)) ([a604b52](https://github.com/TheOpenDictionary/odict/commit/a604b52274c62799005b00091cbeeafded65862b))
+* **ci:** Use zig for aarch64 linux build ([1d2bf90](https://github.com/TheOpenDictionary/odict/commit/1d2bf907101fa4699f6412cf4a2cdc22d271acc1))
+* **http:** Add rustls TLS backend to reqwest ([d90a573](https://github.com/TheOpenDictionary/odict/commit/d90a573acc022abf47b8a193fa9653422e2ca19b))
+* **http:** Use default features for reqwest ([f21478f](https://github.com/TheOpenDictionary/odict/commit/f21478fd43ae001fe0b55841039a7ed5e7923616))
+
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.1...lib/v3.2.2) (2025-11-30)
 
 
