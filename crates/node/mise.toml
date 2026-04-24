@@ -14,9 +14,11 @@ env = { "AWS_LC_SYS_NO_JITTER_ENTROPY" = 1 }
 run = "yarn build:node"
 
 [tasks."create-dirs"]
+depends = [":prepare"]
 run = "yarn create-dirs"
 
 [tasks.artifacts]
+depends = [":prepare"]
 run = "yarn artifacts"
 
 [tasks."build:wasm"]

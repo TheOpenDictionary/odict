@@ -1,5 +1,8 @@
 name: Python
 
+env:
+  AWS_LC_SYS_NO_JITTER_ENTROPY: "1"
+
 on:
   workflow_dispatch:
   push:
@@ -42,14 +45,19 @@ jobs:
         platform:
           - runner: ubuntu-22.04
             target: x86_64
+            use_zig: true
           - runner: ubuntu-22.04
             target: x86
+            use_zig: true
           - runner: ubuntu-22.04
             target: aarch64
+            use_zig: true
           - runner: ubuntu-22.04
             target: armv7
+            use_zig: true
           - runner: ubuntu-22.04
             target: ppc64le
+            use_zig: false
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
@@ -58,12 +66,18 @@ jobs:
           install: true
           cache: true
           experimental: true
+      - name: Register QEMU handlers (allow running foreign-arch containers)
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: linux/arm64,linux/arm/v7,linux/ppc64le
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          args: --release ${{ matrix.platform.use_zig && '--zig' || '' }} --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
+          sccache: false
           manylinux: auto
       - name: Upload wheels
         uses: actions/upload-artifact@v7
@@ -122,8 +136,8 @@ jobs:
         uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          args: --release --zig --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
+          sccache: false
           manylinux: musllinux_1_2
       - name: Upload wheels
         uses: actions/upload-artifact@v7
@@ -191,7 +205,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          sccache: false
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
@@ -233,7 +247,7 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           args: --release --out dist --find-interpreter --manifest-path crates/python/Cargo.toml
-          sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+          sccache: false
       - name: Upload wheels
         uses: actions/upload-artifact@v7
         with:
