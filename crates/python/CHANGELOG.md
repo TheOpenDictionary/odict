@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.1...python/v2.3.0) (2026-04-24)
+
+
+### Features
+
+* **dx:** Move to using mise monorepo ([2745c41](https://github.com/TheOpenDictionary/odict/commit/2745c41e90783dd3743d1b8555990a70fb9667a9))
+
+
+### Bug Fixes
+
+* **ci:** Use mise for Node CI ([bcd0526](https://github.com/TheOpenDictionary/odict/commit/bcd0526c0ddec6b8270d9d3cf4d5c6b47afaed27))
+
 ## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
 
 
