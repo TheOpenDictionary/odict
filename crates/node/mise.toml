@@ -2,6 +2,9 @@
 node = "24.11.1"
 "npm:corepack" = "latest"
 
+[deps.yarn]
+auto = true
+
 [tasks.prepare]
 run = ["corepack enable", "yarn install"]
 sources = ["package.json"]

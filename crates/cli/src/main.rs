@@ -1,7 +1,7 @@
 use clap::Parser;
 use console::style;
 use odict_cli::{
-    alias, compile, download, dump, index, info, lexicon, lookup, merge, new, search, serve,
+    alias, compile, download, dump, index, info, lexicon, lookup, merge, new, search, serve, split,
     tokenize, CLIContext, Commands, CLI,
 };
 
@@ -23,6 +23,7 @@ async fn main() {
         Commands::Search(ref args) => search(&mut ctx, args).await,
         Commands::Serve(ref args) => serve(&mut ctx, args).await,
         Commands::Info(ref args) => info(&mut ctx, args).await,
+        Commands::Split(ref args) => split(&mut ctx, args).await,
         Commands::Tokenize(ref args) => tokenize(&mut ctx, args).await,
     };
 
