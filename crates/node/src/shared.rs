@@ -5,7 +5,7 @@ use napi::bindgen_prelude::*;
 use odict::{OpenDictionary, ToDictionary};
 
 use crate::{
-    types::{self, TokenizeOptions},
+    types::{self, SplitOptions, TokenizeOptions},
     utils::cast_error,
 };
 
@@ -85,6 +85,32 @@ pub fn perform_tokenization(
     }
 
     Ok(mapped_tokens)
+}
+
+pub fn perform_split(
+    dict: &OpenDictionary,
+    query: Either<String, Vec<String>>,
+    options: Option<SplitOptions>,
+) -> Result<Vec<types::LookupResult>> {
+    let mut queries: Vec<String> = vec![];
+
+    match query {
+        Either::A(a) => queries.push(a),
+        Either::B(mut c) => queries.append(&mut c),
+    }
+
+    let dict = dict.contents().map_err(cast_error)?;
+
+    let opts = odict::split::SplitOptions::from(options.unwrap_or_default());
+
+    let results = dict.split(&queries, &opts).map_err(cast_error)?;
+
+    let mapped = results
+        .iter()
+        .map(|result| result.try_into())
+        .collect::<Result<Vec<types::LookupResult>>>()?;
+
+    Ok(mapped)
 }
 
 pub fn perform_lookup(
