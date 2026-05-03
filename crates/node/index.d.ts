@@ -8,6 +8,7 @@ export declare class OpenDictionary {
   static load(dictionary: string, options?: LoadOptions | undefined | null): Promise<OpenDictionary>
   save(path: string, options?: SaveOptions | undefined | null): void
   lookup(query: string | Array<string>, options?: LookupOptions | undefined | null): Array<LookupResult>
+  split(query: string | Array<string>, options?: SplitOptions | undefined | null): Array<LookupResult>
   lexicon(): Array<string>
   index(options?: IndexOptions | undefined | null): void
   search(query: string, options?: SearchOptions | undefined | null): Array<Entry>
@@ -131,6 +132,12 @@ export interface Sense {
   tags: Array<string>
   translations: Array<Translation>
   forms: Array<Form>
+}
+
+export interface SplitOptions {
+  minLength?: number
+  follow?: boolean
+  insensitive?: boolean
 }
 
 export interface Token {
