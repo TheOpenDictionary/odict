@@ -3000,9 +3000,9 @@ __metadata:
   linkType: hard
 
 "tinybench@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "tinybench@npm:6.0.0"
-  checksum: 10c0/d0a0c3cf53881d227e8bdeae03e456e6ad0abc362440d296efc8fa14f8acdb97304c547bae90db2c56d18697432f359785f5866ff35ed2ae539380f8f5d4eb19
+  version: 6.0.1
+  resolution: "tinybench@npm:6.0.1"
+  checksum: 10c0/6c34b9e6de944499c0781c0434211bfe23ed9793f769b2fb34bb8d314e86cd90b4f40d95b9bc49712a53ac570cc58d599c6c4304460812a6a4bc219159334949
   languageName: node
   linkType: hard
 
