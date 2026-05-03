@@ -1,6 +1,6 @@
 {
-  "crates/node": "2.2.2",
-  "crates/cli": "3.2.2",
-  "crates/lib": "3.2.2",
-  "crates/python": "2.2.1"
+  "crates/node": "2.3.0",
+  "crates/cli": "3.3.0",
+  "crates/lib": "3.3.0",
+  "crates/python": "2.3.0"
 }
