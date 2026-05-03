@@ -78,6 +78,34 @@ test('lookup - supports follow=false to disable following', async (t) => {
   t.is(result[0].entry.term, 'ran')
 })
 
+test('split - splits compound text into dictionary words', async (t) => {
+  const result = dict1.split('catdog')
+  t.is(result.length, 2)
+  t.is(result[0].entry.term, 'cat')
+  t.is(result[1].entry.term, 'dog')
+})
+
+test('split - does not attempt whole-word lookup first', async (t) => {
+  // 'catdog' does not exist as a whole word; split should still find 'cat' and 'dog'
+  const lookupResult = dict1.lookup('catdog')
+  t.is(lookupResult.length, 0)
+
+  const splitResult = dict1.split('catdog')
+  t.is(splitResult.length, 2)
+})
+
+test('split - returns single word when it matches a dictionary entry', async (t) => {
+  const result = dict1.split('cat')
+  t.is(result.length, 1)
+  t.is(result[0].entry.term, 'cat')
+})
+
+test('split - respects minLength option', async (t) => {
+  const result = dict1.split('catdog', { minLength: 4 })
+  // 'cat' is only 3 chars, so with minLength=4 it won't be found as a segment
+  t.is(result.length, 0)
+})
+
 test('can return the lexicon', async (t) => {
   const result = dict1.lexicon()
   t.deepEqual(result, ['cat', 'dog', 'poo', 'ran', 'run'])

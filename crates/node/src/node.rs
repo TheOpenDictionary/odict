@@ -4,7 +4,7 @@ use crate::types::LoadOptions;
 use crate::types::SaveOptions;
 use crate::{
     shared::compile,
-    types::{self, Entry},
+    types::{self, Entry, SplitOptions},
     utils::cast_error,
 };
 
@@ -79,6 +79,15 @@ impl OpenDictionary {
         options: Option<types::LookupOptions>,
     ) -> Result<Vec<types::LookupResult>> {
         crate::shared::perform_lookup(&self.dict, query, options)
+    }
+
+    #[napi]
+    pub fn split(
+        &self,
+        query: Either<String, Vec<String>>,
+        options: Option<SplitOptions>,
+    ) -> Result<Vec<types::LookupResult>> {
+        crate::shared::perform_split(&self.dict, query, options)
     }
 
     #[napi]

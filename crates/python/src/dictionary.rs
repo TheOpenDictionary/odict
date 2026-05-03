@@ -5,7 +5,10 @@ use pyo3_async_runtimes::tokio::future_into_py;
 use odict::ToDictionary;
 
 use crate::{
-    types::{Entry, IndexOptions, LoadOptions, LookupOptions, LookupResult, SearchOptions, Token},
+    types::{
+        Entry, IndexOptions, LoadOptions, LookupOptions, LookupResult, SearchOptions, SplitOptions,
+        Token,
+    },
     utils::cast_error,
 };
 
@@ -125,6 +128,41 @@ impl OpenDictionary {
 
         let results = dict
             .lookup(&queries, &odict::lookup::LookupOptions::from(options))
+            .map_err(cast_error)?;
+
+        let mapped = results
+            .iter()
+            .map(|result| LookupResult::from_archive(result))
+            .collect::<Result<Vec<LookupResult>, _>>()?;
+
+        Ok(mapped)
+    }
+
+    #[pyo3(signature = (query, min_length=None, follow=None, insensitive=None))]
+    pub fn split(
+        &self,
+        query: Either<String, Vec<String>>,
+        min_length: Option<u32>,
+        follow: Option<bool>,
+        insensitive: Option<bool>,
+    ) -> PyResult<Vec<LookupResult>> {
+        let mut queries: Vec<String> = vec![];
+
+        match query {
+            Either::Left(a) => queries.push(a),
+            Either::Right(mut c) => queries.append(&mut c),
+        }
+
+        let options = SplitOptions {
+            min_length,
+            follow,
+            insensitive,
+        };
+
+        let dict = self.dict.contents().map_err(cast_error)?;
+
+        let results = dict
+            .split(&queries, &odict::split::SplitOptions::from(options))
             .map_err(cast_error)?;
 
         let mapped = results

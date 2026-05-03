@@ -35,6 +35,15 @@ impl OpenDictionary {
   }
 
   #[napi]
+  pub fn split(
+    &self,
+    query: Either<String, Vec<String>>,
+    options: Option<types::SplitOptions>,
+  ) -> Result<Vec<types::LookupResult>> {
+    crate::shared::perform_split(&self.dict, query, options)
+  }
+
+  #[napi]
   pub fn lexicon(&self) -> Result<Vec<&str>> {
     crate::shared::get_lexicon(&self.dict)
   }

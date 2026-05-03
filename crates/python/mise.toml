@@ -2,7 +2,7 @@
 python = "3.14.3"
 uv = "latest"
 
-[prepare.uv]
+[deps.uv]
 auto = true
 
 [tasks.dev]

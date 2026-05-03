@@ -18,6 +18,7 @@ use crate::CLIContext;
 
 mod lookup;
 mod search;
+mod split;
 mod tokenize;
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -174,6 +175,7 @@ pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Re
             .app_data(Data::clone(&data))
             .service(lookup::handle_lookup)
             .service(search::handle_search)
+            .service(split::handle_split)
             .service(tokenize::handle_tokenize)
     })
     .bind(("0.0.0.0", *port))?
