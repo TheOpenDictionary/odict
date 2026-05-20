@@ -100,5 +100,5 @@
       "@oxc-node/core/register"
     ]
   },
-  "packageManager": "yarn@4.13.0"
+  "packageManager": "yarn@4.15.0"
 }
