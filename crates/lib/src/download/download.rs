@@ -268,7 +268,7 @@ impl<'a> DictionaryDownloader<'a> {
         let mut request = client.get(url);
 
         if let Some(tag) = etag {
-            request = request.header("If-None-Match", tag);
+            request = request.header("If-None-Match", super::utils::normalize_if_none_match(tag));
         }
 
         let response = request
@@ -647,7 +647,7 @@ mod tests {
         assert!(result.is_ok());
         let (bytes, etag) = result.unwrap();
         assert_eq!(bytes, test_data);
-        assert_eq!(etag, Some("fetch-etag".to_string()));
+        assert_eq!(etag, Some("\"fetch-etag\"".to_string()));
     }
 
     #[tokio::test]
@@ -664,6 +664,28 @@ mod tests {
         let url = format!("{}/not-modified.odict", mock_server.uri());
         let result = DictionaryDownloader::default()
             .fetch_with_etag(&url, Some("\"existing-etag\""), None)
+            .await;
+
+        assert!(result.is_ok());
+        let (bytes, etag) = result.unwrap();
+        assert!(bytes.is_empty());
+        assert!(etag.is_none());
+    }
+
+    #[tokio::test]
+    async fn test_fetch_with_legacy_unquoted_etag_not_modified() {
+        let mock_server = MockServer::start().await;
+
+        Mock::given(method("GET"))
+            .and(path("/not-modified.odict"))
+            .and(header("If-None-Match", "\"existing-etag\""))
+            .respond_with(ResponseTemplate::new(304))
+            .mount(&mock_server)
+            .await;
+
+        let url = format!("{}/not-modified.odict", mock_server.uri());
+        let result = DictionaryDownloader::default()
+            .fetch_with_etag(&url, Some("existing-etag"), None)
             .await;
 
         assert!(result.is_ok());

@@ -73,5 +73,13 @@ pub(super) fn extract_etag(response: &reqwest::Response) -> Option<String> {
         .headers()
         .get("etag")
         .and_then(|v| v.to_str().ok())
-        .map(|s| s.trim_matches('"').to_string())
+        .map(|s| s.to_string())
+}
+
+pub(super) fn normalize_if_none_match(etag: &str) -> String {
+    if etag == "*" || etag.starts_with('"') || etag.starts_with("W/\"") {
+        etag.to_string()
+    } else {
+        format!("\"{etag}\"")
+    }
 }
