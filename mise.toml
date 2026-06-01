@@ -9,6 +9,7 @@ MISE_EXPERIMENTAL = 1
 "cargo:cargo-insta" = "1.42.2"
 "cargo:cargo-edit" = "latest"
 rust = "latest"
+zig = "latest"
 
 [monorepo]
 config_roots = ["crates/*"]

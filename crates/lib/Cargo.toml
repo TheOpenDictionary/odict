@@ -53,32 +53,32 @@ harness = false
 
 [dependencies]
 byteorder = "1.5.0"
-quick-xml = { version = "0.39.2", features = ["serialize"] }
+quick-xml = { version = "0.40.1", features = ["serialize"] }
 rayon = "1.12.0"
 indexmap = { version = "2.14.0", features = ["serde", "rayon"] }
 charabia = { version = "0.9.9", optional = true, default-features = false }
 rkyv = { version = "0.8.16", features = ["indexmap-2", "uuid-1"] }
 serde = { version = "1.0.228", features = ["serde_derive"] }
-uuid = { version = "1.23.1", features = [
+uuid = { version = "1.23.2", features = [
   "v4",
   "fast-rng",
   "macro-diagnostics",
 ] }
 url = "2.5.8"
-serde_json = "1.0.149"
+serde_json = "1.0.150"
 thiserror = "2.0.18"
-brotli = "8.0.2"
+brotli = "8.0.3"
 structural-convert = { workspace = true }
 
 # feature=markdown
-pulldown-cmark = { version = "0.13.3", optional = true }
+pulldown-cmark = { version = "0.13.4", optional = true }
 # feature=http
-reqwest = { version = "0.13.3", optional = true, features = [
+reqwest = { version = "0.13.4", optional = true, features = [
   "rustls",
   "stream",
 ] }
 strum = { version = "0.28.0", features = ["derive"] }
-reqwest-middleware = { version = "0.5.1", optional = true }
+reqwest-middleware = { version = "0.5.2", optional = true }
 reqwest-retry = { version = "0.9.1", optional = true }
 futures-util = { version = "0.3", optional = true }
 regex = { version = "1.12.3", optional = true }
@@ -87,14 +87,14 @@ tantivy = { version = "0.26.1", optional = true }
 # feature=config
 dirs = { version = "6.0.0", optional = true }
 # feature=sql
-sea-query = { version = "0.32.7", optional = true }
+sea-query = { version = "1.0.1", optional = true }
 
 
 [dev-dependencies]
 criterion = { version = "0.8.2", features = ["async_tokio", "html_reports"] }
 insta = "1.47.2"
 map-macro = { version = "0.3.0" }
-tokio = { version = "1.52.1", features = ["rt", "macros"] }
+tokio = { version = "1.52.3", features = ["rt", "macros"] }
 wiremock = "0.6.5"
 tempfile = "3.27.0"
 regex = "1.12.3"
