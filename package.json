@@ -1,8 +1,0 @@
-{
-  "name": "root",
-  "private": true,
-  "workspaces": [
-    "node"
-  ],
-  "packageManager": "yarn@4.11.0"
-}

@@ -1,0 +1,13 @@
+[package]
+name = "internal"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+odict = { path = "../lib", default-features = false }
+strum = { version = "0.28.0", features = ["derive"] }
+
+[lib]
+name = "internal"
+crate-type = ["cdylib", "staticlib", "lib"]

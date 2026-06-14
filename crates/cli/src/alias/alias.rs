@@ -1,0 +1,29 @@
+use super::{
+    delete::{delete, DeleteArgs},
+    set::{set, SetArgs},
+};
+
+use clap::Subcommand;
+
+#[derive(Debug, Subcommand)]
+pub enum AliasCommands {
+    /// Attempts to create a new dictionary alias, failing if one already exists with the given name
+    #[command(arg_required_else_help = true)]
+    Add(SetArgs),
+
+    /// Creates or updates an existing dictionary alias
+    #[command(arg_required_else_help = true)]
+    Set(SetArgs),
+
+    /// Deletes an alias with the given name if it exists
+    #[command(arg_required_else_help = true)]
+    Delete(DeleteArgs),
+}
+
+pub async fn alias<'a>(command: &AliasCommands) -> anyhow::Result<()> {
+    match command {
+        AliasCommands::Add(args) => set(args, false).await,
+        AliasCommands::Set(args) => set(args, true).await,
+        AliasCommands::Delete(args) => delete(args),
+    }
+}

@@ -1,0 +1,41 @@
+[package]
+name = "odict-cli"
+version = "3.2.2"
+edition = "2021"
+description = "Lightning-fast dictionary file format and toolchain"
+homepage = "https://odict.org"
+authors = ["Tyler Nickerson"]
+repository = "https://github.com/TheOpenDictionary/odict"
+
+[package.metadata.wix]
+upgrade-guid = "1D09FCDB-8615-4B4C-A350-5CD4DAF45B57"
+path-guid = "679C0F53-2DA0-4E10-92B8-5B447190BA3D"
+license = false
+eula = false
+
+[[bin]]
+name = "odict"
+path = "src/main.rs"
+
+[dependencies]
+odict = { path = "../lib", features = [
+  "sql",
+  "search",
+  "http",
+  "alias",
+  "html",
+  "tokenize",
+] }
+internal = { path = "../internal" }
+clap = { version = "4.6.1", features = ["derive", "cargo"] }
+console = "0.16.3"
+indicatif = "0.18.4"
+pulldown-cmark = "0.13.4"
+actix-web = "4.13.0"
+serde = { version = "1.0.228", features = ["derive"] }
+env_logger = "0.11.10"
+derive_more = { version = "2", features = ["display", "error"] }
+num-format = "0.4.4"
+anyhow = "1.0.102"
+lru = "0.18.0"
+tokio = { version = "1.52", features = ["full"] }

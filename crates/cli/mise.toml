@@ -1,0 +1,8 @@
+[tasks]
+clean = "cargo clean -p odict-cli"
+run = "cargo run --release -p odict-cli"
+
+[tasks.build]
+run = "cargo build -p odict-cli"
+sources = ["src/**/*.rs", "Cargo.toml"]
+outputs = { auto = true }

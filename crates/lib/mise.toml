@@ -1,0 +1,9 @@
+[tasks]
+publish = "cargo publish -p odict"
+clean = "cargo clean -p odict"
+bench = "cargo bench -p odict"
+
+[tasks.build]
+run = "cargo build -p odict"
+sources = ["lib/src/**/*.rs", "lib/Cargo.toml"]
+outputs = { auto = true }

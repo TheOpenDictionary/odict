@@ -11,7 +11,7 @@ COPY . .
 
 RUN mise trust -y
 RUN mise install rust
-RUN mise run build --release 
+RUN mise run build -- --release
 
 FROM debian:latest
 
