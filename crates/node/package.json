@@ -87,9 +87,9 @@
     "prepublishOnly": "napi prepublish --no-gh-release"
   },
   "ava": {
-    "extensions": {
-      "ts": "module"
-    },
+    "extensions": [
+      "ts"
+    ],
     "timeout": "2m",
     "workerThreads": false,
     "environmentVariables": {
