@@ -9,11 +9,8 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 pyo3 = { version = "0.28.3", features = ["either"] }
-pyo3-async-runtimes = { version = "0.28.0", features = [
-  "tokio-runtime",
-  "attributes",
-] }
-odict = { path = "../lib", features = [
+pyo3-async-runtimes = { version = "0.28.0", features = ["tokio-runtime", "attributes"] }
+odict = { path = "../crates/odict", features = [
   "config",
   "sql",
   "http",
@@ -21,7 +18,7 @@ odict = { path = "../lib", features = [
   "tokenize",
   "search",
 ] }
-internal = { path = "../internal" }
+internal = { path = "../crates/internal" }
 either = { version = "*" }
 structural-convert = { workspace = true }
 tokio = { version = "1.52", features = ["full"] }

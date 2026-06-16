@@ -1,0 +1,91 @@
+@layer base, starlight, theme, components, utilities;
+
+@import "@astrojs/starlight-tailwind";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  /* Your preferred text font. Starlight uses a system font stack by default. */
+  --font-sans: "Atkinson Hyperlegible";
+  /* Your preferred code font. Starlight uses system monospace fonts by default. */
+  --font-mono: "IBM Plex Mono";
+  /* Your preferred accent color. Indigo is closest to Starlight’s defaults. */
+  --color-accent-50: var(--color-blue-50);
+  --color-accent-100: var(--color-blue-100);
+  --color-accent-200: var(--color-blue-200);
+  --color-accent-300: var(--color-blue-300);
+  --color-accent-400: var(--color-blue-400);
+  --color-accent-500: var(--color-blue-500);
+  --color-accent-600: var(--color-blue-600);
+  --color-accent-700: var(--color-blue-700);
+  --color-accent-800: var(--color-blue-800);
+  --color-accent-900: var(--color-blue-900);
+  --color-accent-950: var(--color-blue-950);
+
+  --font-display: var(--ff-display);
+  --font-sans: var(--ff-sans);
+}
+
+#starlight__sidebar {
+  @apply border-r border-white/6;
+}
+
+body {
+  @apply antialiased;
+}
+
+* {
+  border-color: var(--sl-color-hairline);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  @apply font-display font-normal tracking-normal;
+}
+
+.sl-heading-wrapper,
+h1 {
+  @apply border-b pb-4;
+}
+
+.sl-heading-wrapper {
+  &.level-h2 {
+    @apply w-full mb-0 grid grid-cols-[1fr_auto];
+  }
+}
+
+.right-sidebar {
+  @apply border-l-0;
+
+  #starlight__on-this-page {
+    @apply py-2 font-sans uppercase text-xs text-gray-500 tracking-widest font-medium;
+  }
+
+  a {
+    @apply text-sm py-2;
+  }
+}
+
+:root {
+  --sl-color-accent-high: var(--color-white);
+  --sl-color-bg: var(--color-gray-900);
+  --sl-color-bg-nav: var(--sl-color-bg);
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+  --sl-color-hairline: --alpha(var(--color-white) / 5%);
+  --ec-frm-edBg: --alpha(var(--color-white)/4%);
+  --ec-brdRad: 0.8rem;
+}
+
+[data-theme="light"] {
+}
+
+main .content-panel + .content-panel {
+  @apply border-t-0 pt-0;
+}
+
+.expressive-code code {
+  @apply rounded-xl;
+}

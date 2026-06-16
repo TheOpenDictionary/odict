@@ -18,7 +18,7 @@ name = "odict"
 path = "src/main.rs"
 
 [dependencies]
-odict = { path = "../lib", features = [
+odict = { path = "../crates/odict", features = [
   "sql",
   "search",
   "http",
@@ -26,7 +26,7 @@ odict = { path = "../lib", features = [
   "html",
   "tokenize",
 ] }
-internal = { path = "../internal" }
+internal = { path = "../crates/internal" }
 clap = { version = "4.6.1", features = ["derive", "cargo"] }
 console = "0.16.3"
 indicatif = "0.18.4"

@@ -13,14 +13,11 @@ node = ["odict/http", "odict/alias", "odict/search"]
 
 [dependencies]
 # Default enable napi4 feature, see https://nodejs.org/api/n-api.html#node-api-version-matrix
-napi = { version = "3", default-features = false, features = [
-  "async",
-  "napi4",
-] }
+napi = { version = "3", default-features = false, features = ["async", "napi4"] }
 napi-derive = "3"
-odict = { path = "../lib", features = ["tokenize", "sql"] }
+odict = { path = "../crates/odict", features = ["tokenize", "sql"] }
 structural-convert = { workspace = true }
-internal = { path = "../internal" }
+internal = { path = "../crates/internal" }
 
 [build-dependencies]
 napi-build = "2"

@@ -1,25 +1,47 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import starlight from "@astrojs/starlight";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Hedvig Letters Serif",
+      cssVariable: "--ff-display",
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Inter",
+      weights: ["100 900"],
+      options: {
+        experimental: {
+          variableAxis: {
+            opsz: [["14", "32"]],
+          },
+        },
+      },
+      cssVariable: "--ff-sans",
+    },
+  ],
   integrations: [
     starlight({
-      title: "ODict",
-      description:
-        "The lightning-fast open-source dictionary file format for human languages",
+      components: {
+        Head: "./src/components/Head.astro",
+      },
+      title: "My Docs",
+      customCss: [
+        // Path to your Tailwind base styles:
+        "./src/styles/global.css",
+      ],
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/TheOpenDictionary/odict",
+          href: "https://github.com/withastro/starlight",
         },
       ],
-      editLink: {
-        baseUrl:
-          "https://github.com/TheOpenDictionary/odict/edit/main/docs/",
-      },
       sidebar: [
         {
           label: "Getting Started",
@@ -60,4 +82,8 @@ export default defineConfig({
       ],
     }),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
