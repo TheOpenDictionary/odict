@@ -3,13 +3,13 @@
 @import "@astrojs/starlight-tailwind";
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
 
 @theme {
-  /* Your preferred text font. Starlight uses a system font stack by default. */
-  --font-sans: "Atkinson Hyperlegible";
-  /* Your preferred code font. Starlight uses system monospace fonts by default. */
+  --font-display: var(--ff-display);
+  --font-sans: var(--ff-sans);
   --font-mono: "IBM Plex Mono";
-  /* Your preferred accent color. Indigo is closest to Starlight’s defaults. */
+
   --color-accent-50: var(--color-blue-50);
   --color-accent-100: var(--color-blue-100);
   --color-accent-200: var(--color-blue-200);
@@ -21,9 +21,6 @@
   --color-accent-800: var(--color-blue-800);
   --color-accent-900: var(--color-blue-900);
   --color-accent-950: var(--color-blue-950);
-
-  --font-display: var(--ff-display);
-  --font-sans: var(--ff-sans);
 }
 
 #starlight__sidebar {
@@ -73,8 +70,10 @@ h1 {
   --sl-color-accent-high: var(--color-white);
   --sl-color-bg: var(--color-gray-900);
   --sl-color-bg-nav: var(--sl-color-bg);
+  --sl-font: var(--font-sans);
   --sl-color-bg-sidebar: var(--sl-color-bg);
   --sl-color-hairline: --alpha(var(--color-white) / 5%);
+  --sl-color-input: --alpha(var(--color-white) / 5%);
   --ec-frm-edBg: --alpha(var(--color-white)/4%);
   --ec-brdRad: 0.8rem;
 }
@@ -88,4 +87,74 @@ main .content-panel + .content-panel {
 
 .expressive-code code {
   @apply rounded-xl;
+}
+
+site-search button {
+  @apply border-0 bg-(--sl-color-input) rounded-full px-4 active:opacity-75 transition-opacity duration-300 ease-out;
+}
+
+dialog {
+  @apply shadow-2xl rounded-2xl;
+
+  &[open] {
+    @apply animate-in zoom-in-95 duration-250 ease-out fade-in;
+  }
+}
+
+.expressive-code .ec-line .code {
+  @apply border-0;
+}
+
+p code {
+  @apply rounded-sm bg-(--sl-color-input);
+}
+
+starlight-tabs {
+  [role="tabpanel"] {
+    @apply mt-3;
+  }
+
+  [role="tablist"] {
+    @apply border-0;
+
+    .tab {
+      a {
+        @apply rounded-full shadow-none;
+
+        &[aria-selected="true"] {
+          @apply bg-(--sl-color-input);
+        }
+      }
+    }
+  }
+}
+.pagination-links {
+  @apply border-t;
+
+  a {
+    @apply rounded-none border-0 shadow-none;
+
+    & > span {
+      @apply font-semibold tracking-[0.2em] uppercase text-[0.65rem];
+
+      .link-title {
+        @apply tracking-normal normal-case text-xl font-medium;
+      }
+    }
+  }
+}
+
+ul {
+  --sl-sidebar-item-padding-inline: 0.4rem;
+}
+
+.sidebar-content {
+  summary,
+  a {
+    @apply py-(--sl-sidebar-item-padding-inline);
+  }
+
+  a {
+    @apply rounded-full pl-4 not-aria-[current=page]:hover:bg-(--sl-color-input);
+  }
 }

@@ -31,6 +31,11 @@ export default defineConfig({
         Head: "./src/components/Head.astro",
       },
       title: "My Docs",
+      logo: {
+        light: "./src/assets/odict-light.svg",
+        dark: "./src/assets/odict-dark.svg",
+        replacesTitle: true,
+      },
       customCss: [
         // Path to your Tailwind base styles:
         "./src/styles/global.css",
