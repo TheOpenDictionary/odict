@@ -6,6 +6,7 @@ import mermaid from "astro-mermaid";
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: true,
   site: "https://www.odict.org",
   fonts: [
     {

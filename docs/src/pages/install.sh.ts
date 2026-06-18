@@ -1,8 +1,7 @@
 import type { APIRoute } from "astro";
 
-export const prerender = false;
-
-const releasesUrl = "https://api.github.com/repos/TheOpenDictionary/odict/releases";
+const releasesUrl =
+  "https://api.github.com/repos/TheOpenDictionary/odict/releases";
 const cliTagPrefix = "cli/";
 const installerAssetName = "odict-cli-installer.sh";
 
