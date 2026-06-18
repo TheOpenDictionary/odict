@@ -1,0 +1,12 @@
+table {
+  @apply bg-(--sl-color-input) text-base rounded-lg border;
+
+  th,
+  td {
+    @apply px-4 py-2;
+  }
+
+  tr:last-of-type td {
+    @apply border-0;
+  }
+}

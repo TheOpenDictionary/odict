@@ -1,0 +1,17 @@
+@import "./aside.css";
+@import "./code.css";
+@import "./dialog.css";
+@import "./headings.css";
+@import "./header.css";
+@import "./pagination.css";
+@import "./search.css";
+@import "./sidebar-left.css";
+@import "./sidebar-right.css";
+@import "./steps.css";
+@import "./tabs.css";
+@import "./table.css";
+@import "./theme.css";
+
+main .content-panel + .content-panel {
+  @apply border-t-0 pt-0;
+}

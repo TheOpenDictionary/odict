@@ -1,0 +1,139 @@
+---
+title: Downloading Dictionaries
+description: How to download remote dictionaries and control caching.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+ODict can load dictionaries from the remote registry as well as from local files. Remote names use the form `dictionary/language`, for example `wiktionary/eng`.
+
+## Download with the CLI
+
+```bash
+odict download wiktionary/eng
+```
+
+By default, downloaded dictionaries are cached in ODict's config directory under `dictionaries/<dictionary>/`. The command stores the downloaded file as `<language>.odict`.
+
+Use `--output` to choose a directory:
+
+```bash
+odict download wiktionary/eng --output ./dictionaries
+```
+
+Use `--no-cache` when you always want a fresh copy:
+
+```bash
+odict download wiktionary/eng --no-cache
+```
+
+Use `--retries` to control retry behavior for remote loads:
+
+```bash
+odict download wiktionary/eng --retries 5
+```
+
+## Load remote dictionaries in code
+
+<Tabs>
+<TabItem label="Rust">
+
+```rust
+use odict::OpenDictionary;
+
+#[tokio::main]
+async fn main() -> odict::Result<()> {
+    let dictionary = OpenDictionary::load("wiktionary/eng").await?;
+    println!("{:?}", dictionary.path());
+    Ok(())
+}
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+from theopendictionary import OpenDictionary
+
+dictionary = await OpenDictionary.load("wiktionary/eng")
+print(dictionary.lexicon()[:10])
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```typescript
+import { OpenDictionary } from "@odict/node";
+
+const dictionary = await OpenDictionary.load("wiktionary/eng");
+console.log(dictionary.lexicon().slice(0, 10));
+```
+
+</TabItem>
+</Tabs>
+
+## Cache and retry options
+
+<Tabs>
+<TabItem label="Rust">
+
+```rust
+use odict::{
+    download::DictionaryDownloader,
+    LoadOptions,
+    OpenDictionary,
+};
+
+let downloader = DictionaryDownloader::default()
+    .with_caching(false)
+    .with_out_dir("./dictionaries")
+    .with_retries(5);
+
+let dictionary = OpenDictionary::load_with_options(
+    "wiktionary/eng",
+    LoadOptions::default().with_downloader(downloader),
+)
+.await?;
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+from theopendictionary import (
+    LoadOptions,
+    OpenDictionary,
+    RemoteLoadOptions,
+)
+
+dictionary = await OpenDictionary.load(
+    "wiktionary/eng",
+    LoadOptions(
+        remote=RemoteLoadOptions(
+            out_dir="./dictionaries",
+            caching=False,
+            retries=5,
+        )
+    ),
+)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```typescript
+const dictionary = await OpenDictionary.load("wiktionary/eng", {
+  remote: {
+    outDir: "./dictionaries",
+    caching: false,
+    retries: 5,
+  },
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+`OpenDictionary.load()` tries to treat `dictionary/language` values as remote names. If the string is not a remote name, ODict falls back to aliases and local paths when those features are available.
+:::

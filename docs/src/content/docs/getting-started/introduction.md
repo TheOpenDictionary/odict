@@ -3,7 +3,11 @@ title: Introduction
 description: What is ODict and why does it exist?
 ---
 
-**ODict** (The Open Dictionary) is a blazingly-fast, open-source dictionary file format designed for human languages. It provides a complete pipeline for defining, compiling, and querying dictionaries:
+**ODict** (The Open Dictionary) is a fast, open-source dictionary file format for human languages. It is built for offline retrieval of lexical data such as etymologies, senses, pronunciations, examples, and definitions.
+
+Similar projects include [StarDict](https://en.wikipedia.org/wiki/StarDict), [DICT](https://en.wikipedia.org/wiki/DICT), [XDXF](https://en.wikipedia.org/wiki/XDXF), and platform-specific dictionary formats. ODict's goal is to keep the authoring format simple while making the compiled dictionary small, portable, and quick to query.
+
+ODict provides a complete pipeline for defining, compiling, and querying dictionaries:
 
 1. **Define** your dictionary entries in a simple XML format (ODXML)
 2. **Compile** the XML into a compact binary `.odict` file
@@ -19,24 +23,24 @@ Most dictionary data is locked in proprietary formats, scattered across inconsis
 - **Multi-language tokenization** — Tokenize text in Chinese, Japanese, Korean, Thai, Khmer, German, Swedish, and Latin-script languages, and automatically match tokens to dictionary entries.
 - **Cross-platform bindings** — Use ODict from Rust, Python, JavaScript (Node.js and browser), or through the CLI and HTTP server.
 
-## Architecture
+## Binary file layout
 
-```
-┌─────────────┐     ┌──────────┐     ┌─────────────┐
-│  ODXML file  │────▶│ Compiler │────▶│  .odict file │
-│  (XML)       │     │          │     │  (binary)    │
-└─────────────┘     └──────────┘     └──────┬──────┘
-                                            │
-                    ┌───────────────────────┬┴──────────────────────┐
-                    │                       │                       │
-              ┌─────▼─────┐         ┌──────▼──────┐        ┌──────▼──────┐
-              │   Lookup   │         │   Search    │        │  Tokenize   │
-              │ (exact key)│         │ (full-text) │        │ (NLP-based) │
-              └───────────┘         └─────────────┘        └─────────────┘
+An `.odict` file wraps a compressed dictionary payload with a small binary header. Readers validate the magic signature and version before decompressing the rkyv-serialized dictionary data.
+
+```mermaid
+%%{init: {"flowchart": {"rankSpacing": 12, "nodeSpacing": 10}} }%%
+flowchart TB
+  signature["<table width='420' height='58' style='height: 58px; margin: 0; border: 0; border-collapse: collapse; background: transparent;'><tr><td width='300' style='padding: 0; border: 0; background: transparent; text-align: left; vertical-align: middle;'><b>Signature</b><br/>Should always be <code>ODICT</code></td><td width='120' style='padding: 0; border: 0; background: transparent; text-align: right; vertical-align: middle;'><code>5 bytes</code></td></tr></table>"]
+  versionLength["<table width='420' height='74' style='height: 74px; margin: 0; border: 0; border-collapse: collapse; background: transparent;'><tr><td width='300' style='padding: 0; border: 0; background: transparent; text-align: left; vertical-align: middle;'><b>Version length</b><br/><code>u64</code>, little-endian</td><td width='120' style='padding: 0; border: 0; background: transparent; text-align: right; vertical-align: middle;'><code>8 bytes</code></td></tr></table>"]
+  version["<table width='420' height='86' style='height: 86px; margin: 0; border: 0; border-collapse: collapse; background: transparent;'><tr><td width='300' style='padding: 0; border: 0; background: transparent; text-align: left; vertical-align: middle;'><b>Version</b><br/>UTF-8 semantic version string</td><td width='120' style='padding: 0; border: 0; background: transparent; text-align: right; vertical-align: middle;'><code>variable</code></td></tr></table>"]
+  contentLength["<table width='420' height='74' style='height: 74px; margin: 0; border: 0; border-collapse: collapse; background: transparent;'><tr><td width='300' style='padding: 0; border: 0; background: transparent; text-align: left; vertical-align: middle;'><b>Content length</b><br/><code>u64</code>, little-endian</td><td width='120' style='padding: 0; border: 0; background: transparent; text-align: right; vertical-align: middle;'><code>8 bytes</code></td></tr></table>"]
+  content["<table width='420' height='112' style='height: 112px; margin: 0; border: 0; border-collapse: collapse; background: transparent;'><tr><td width='300' style='padding: 0; border: 0; background: transparent; text-align: left; vertical-align: middle;'><b>Content</b><br/>Brotli-compressed rkyv dictionary payload</td><td width='120' style='padding: 0; border: 0; background: transparent; text-align: right; vertical-align: middle;'><code>variable</code></td></tr></table>"]
+
+  signature ~~~ versionLength ~~~ version ~~~ contentLength ~~~ content
 ```
 
 ## What's next?
 
 - [Install the CLI](/getting-started/installation/) to start working with dictionaries
 - [Quick Start](/getting-started/quickstart/) walks you through creating and compiling your first dictionary
-- Browse the [XML Schema Reference](/schema/reference/) to learn the full data model
+- Browse the [Schema Overview](/schema/overview/) to learn the data model

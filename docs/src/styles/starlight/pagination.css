@@ -1,0 +1,15 @@
+.pagination-links {
+  @apply border-t;
+
+  a {
+    @apply rounded-none border-0 shadow-none;
+
+    & > span {
+      @apply font-semibold tracking-[0.2em] uppercase text-[0.65rem];
+
+      .link-title {
+        @apply tracking-normal normal-case text-xl font-medium;
+      }
+    }
+  }
+}

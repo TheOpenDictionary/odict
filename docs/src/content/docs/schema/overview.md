@@ -1,27 +1,46 @@
 ---
 title: Schema Overview
-description: An overview of the ODict XML (ODXML) schema and how dictionaries are structured.
+description: An overview of the ODict XML (ODXML) schema, core hierarchy, and richer lexical fields.
 ---
 
-ODict dictionaries are authored in XML using the **ODXML** (Open Dictionary XML) format. This page provides a conceptual overview of how the schema is structured. For the full element-by-element reference, see the [Schema Reference](/schema/reference/).
+ODict dictionaries are authored in XML using the **ODXML** (Open Dictionary XML) format. This page provides a conceptual overview of how the schema is structured, from minimal dictionary entries to richer lexical data such as ranks, pronunciations, media, forms, tags, translations, lemmas, notes, and examples. For the element-by-element reference, see the [Schema Reference](/schema/reference/).
 
 ## Structure
 
 An ODXML file describes a dictionary as a hierarchy:
 
-```
-dictionary
-└── entry (one per headword)
-    ├── pronunciation (optional, entry-level)
-    └── ety (etymology — groups senses by word origin)
-        └── sense (groups definitions by part of speech)
-            ├── group (optional grouping of definitions)
-            │   └── definition
-            │       ├── example
-            │       └── note
-            └── definition
-                ├── example
-                └── note
+```mermaid
+flowchart TB
+  dictionary["`&lt;dictionary&gt;`"]
+  entry["`&lt;entry&gt;`"]
+  pronunciation["`&lt;pronunciation&gt;`"]
+  ety["`&lt;ety&gt;`"]
+  sense["`&lt;sense&gt;`"]
+  form["`&lt;form&gt;`"]
+  tag["`&lt;tag&gt;`"]
+  translation["`&lt;translation&gt;`"]
+  group["`&lt;group&gt;`"]
+  groupedDefinition["`&lt;definition&gt;`"]
+  definition["`&lt;definition&gt;`"]
+  example["`&lt;example&gt;`"]
+  note["`&lt;note&gt;`"]
+  noteExample["`&lt;example&gt;`"]
+
+  dictionary --> entry
+  entry --> pronunciation
+  entry --> ety
+  ety --> sense
+  sense --> form
+  sense --> tag
+  sense --> translation
+  sense --> group
+  sense --> definition
+  group --> groupedDefinition
+  groupedDefinition --> example
+  groupedDefinition --> note
+  definition --> example
+  definition --> note
+  note --> noteExample
 ```
 
 ## Minimal example
@@ -59,6 +78,18 @@ Each `<entry>` represents a headword. Entries can either contain full definition
 
 When looking up "ran" with the `follow` option enabled, ODict will resolve the cross-reference and return the "run" entry.
 
+Use `rank` on an entry when you have frequency data. Lower or higher rank semantics are up to the source dictionary, but ODict exposes `min_rank` and `max_rank` in the language bindings so applications can normalize the values.
+
+```xml
+<entry term="run" rank="100">
+  <ety>
+    <sense pos="v">
+      <definition value="To move swiftly on foot" />
+    </sense>
+  </ety>
+</entry>
+```
+
 ## Etymologies
 
 If a word has multiple distinct origins, you can define multiple `<ety>` elements:
@@ -93,6 +124,70 @@ Within an etymology, `<sense>` elements group definitions by part of speech. The
 
 If the part of speech is unknown or not applicable, you can omit `pos` entirely.
 
+Use `lemma` on a sense when the sense should point back to another headword:
+
+```xml
+<entry term="running">
+  <ety>
+    <sense pos="v" lemma="run">
+      <definition value="The present participle of run" />
+    </sense>
+  </ety>
+</entry>
+```
+
+## Forms
+
+Use `<form>` to describe inflections, conjugations, plurals, comparatives, and other related forms:
+
+```xml
+<entry term="run">
+  <ety>
+    <sense pos="v">
+      <form kind="conjugation" term="ran" />
+      <form kind="conjugation" term="running" />
+      <definition value="To move swiftly on foot" />
+    </sense>
+  </ety>
+</entry>
+```
+
+Forms can also carry tags:
+
+```xml
+<form kind="plural" term="words">
+  <tag>archaic</tag>
+</form>
+```
+
+## Tags
+
+Tags describe usage labels such as register, dialect, domain, or grammar notes:
+
+```xml
+<sense pos="n">
+  <tag>informal</tag>
+  <tag>slang</tag>
+  <definition value="A person, especially a man" />
+</sense>
+```
+
+## Translations
+
+Translations can appear on senses and examples:
+
+```xml
+<sense pos="intj">
+  <translation lang="es" value="hola" />
+  <translation lang="fr" value="bonjour" />
+  <definition value="A greeting">
+    <example value="Hello, world!">
+      <translation lang="es" value="Hola, mundo!" />
+    </example>
+  </definition>
+</sense>
+```
+
 ## Definition groups
 
 When a sense has many definitions, you can organize them with `<group>`:
@@ -112,7 +207,7 @@ When a sense has many definitions, you can organize them with `<group>`:
 
 ## Examples and notes
 
-Definitions can have `<example>` and `<note>` children:
+Definitions can have `<example>` and `<note>` children. Use notes for extra context tied to a definition:
 
 ```xml
 <definition value="A small domesticated mammal">
@@ -124,9 +219,9 @@ Definitions can have `<example>` and `<note>` children:
 </definition>
 ```
 
-## Pronunciations
+## Pronunciations and media
 
-Pronunciations can be attached at the entry level and support any phonetic system:
+Pronunciations can be attached at the entry level and support any phonetic system. Media URLs can point to absolute URLs or relative paths:
 
 ```xml
 <entry term="hello">
@@ -172,3 +267,7 @@ The schema is formally defined in [`odict.xsd`](https://github.com/TheOpenDictio
 ```
 
 Most XML editors (VS Code with the XML extension, IntelliJ, etc.) will provide autocomplete and validation when the XSD is referenced.
+
+:::note
+The XSD covers the stable core shape. ODict's Rust schema and language bindings also expose richer fields such as ranks, tags, forms, and translations when modeling larger dictionaries.
+:::

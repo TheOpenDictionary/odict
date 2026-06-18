@@ -144,6 +144,25 @@ const results = dictionary.lookup("RaN", {
 const results = dictionary.lookup("catdog", { split: 3 });
 ```
 
+#### `split(query: string | string[], options?: SplitOptions): LookupResult[]`
+
+Splits one or more compound terms into component dictionary entries. Unlike `lookup(query, { split })`, this does not try the whole query first.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `query` | `string \| string[]` | — | Term(s) to split |
+| `options.minLength` | `number` | — | Minimum character length for each segment |
+| `options.follow` | `boolean` | — | Follow `see` cross-references |
+| `options.insensitive` | `boolean` | — | Enable case-insensitive matching |
+
+```typescript
+const splitResults = dictionary.split("catdog", { minLength: 3 });
+const insensitiveResults = dictionary.split("CATdog", {
+  minLength: 3,
+  insensitive: true,
+});
+```
+
 #### `lexicon(): string[]`
 
 Returns all terms defined in the dictionary, sorted alphabetically.

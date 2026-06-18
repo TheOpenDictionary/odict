@@ -2,9 +2,11 @@
 import { defineConfig, fontProviders } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
+import mermaid from "astro-mermaid";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://www.odict.org",
   fonts: [
     {
       provider: fontProviders.google(),
@@ -26,25 +28,29 @@ export default defineConfig({
     },
   ],
   integrations: [
+    mermaid({
+      autoTheme: true,
+      enableLog: false,
+    }),
     starlight({
       components: {
         Head: "./src/components/Head.astro",
+        Header: "./src/components/Header.astro",
+        Hero: "./src/components/Hero.astro",
+        Footer: "./src/components/Footer.astro",
       },
-      title: "My Docs",
+      title: "ODict",
       logo: {
         light: "./src/assets/odict-light.svg",
         dark: "./src/assets/odict-dark.svg",
         replacesTitle: true,
       },
-      customCss: [
-        // Path to your Tailwind base styles:
-        "./src/styles/global.css",
-      ],
+      customCss: ["./src/styles/global.css"],
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/withastro/starlight",
+          href: "https://github.com/TheOpenDictionary/odict",
         },
       ],
       sidebar: [
@@ -52,6 +58,7 @@ export default defineConfig({
           label: "Getting Started",
           items: [
             { label: "Introduction", slug: "getting-started/introduction" },
+            { label: "Feature Comparison", slug: "getting-started/comparison" },
             { label: "Installation", slug: "getting-started/installation" },
             { label: "Quick Start", slug: "getting-started/quickstart" },
           ],
@@ -66,20 +73,26 @@ export default defineConfig({
         {
           label: "Guides",
           items: [
-            { label: "Compiling Dictionaries", slug: "guides/compiling" },
-            { label: "Looking Up Entries", slug: "guides/lookup" },
-            { label: "Searching Dictionaries", slug: "guides/search" },
+            { label: "Aliases and Loading", slug: "guides/aliases" },
+            { label: "Full-Text Search", slug: "guides/search" },
+            { label: "Quick Lookups", slug: "guides/lookup" },
+            { label: "Running a Dictionary Server", slug: "guides/serving" },
             { label: "Tokenizing Text", slug: "guides/tokenize" },
+            { label: "Using Remote Dictionaries", slug: "guides/downloading" },
+            { label: "Writing Dictionaries", slug: "guides/compiling" },
           ],
         },
         {
           label: "CLI",
-          items: [{ label: "Command Reference", slug: "cli/reference" }],
+          items: [
+            { label: "Overview", slug: "cli/overview" },
+            { label: "Command Reference", slug: "cli/reference" },
+          ],
         },
         {
           label: "API Reference",
           items: [
-            { label: "Rust", slug: "api/rust" },
+            { label: "Rust", link: "https://docs.rs/odict" },
             { label: "Python", slug: "api/python" },
             { label: "JavaScript", slug: "api/javascript" },
           ],

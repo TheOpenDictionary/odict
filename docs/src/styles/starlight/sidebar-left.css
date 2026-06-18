@@ -1,0 +1,26 @@
+#starlight__sidebar {
+  @apply border-r border-white/6;
+
+  a[href^="http"]::after {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-inline-start: 0.25em;
+    vertical-align: -0.1em;
+    background-color: currentColor;
+    mask: url("../../assets/external.svg") center / contain no-repeat;
+  }
+}
+
+.sidebar-content {
+  summary,
+  a {
+    @apply py-(--sl-sidebar-item-padding-inline);
+  }
+
+  a {
+    @apply rounded-full pl-4 not-aria-[current=page]:hover:bg-(--sl-color-input);
+    @apply not-dark:aria-[current=page]:mask-b-to-black/80 dark:mask-t-to-black/80;
+  }
+}

@@ -1,0 +1,21 @@
+.expressive-code {
+  .ec-line .code {
+    @apply border-0;
+  }
+
+  code {
+    @apply rounded-xl;
+  }
+}
+
+:not(.frame.is-terminal) code {
+  @apply rounded-sm bg-(--sl-color-input);
+}
+
+pre.mermaid[data-processed] {
+  @apply bg-transparent!;
+
+  code {
+    @apply bg-transparent;
+  }
+}

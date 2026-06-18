@@ -1,0 +1,170 @@
+---
+title: Quick Start
+description: Create, compile, and query your first ODict dictionary.
+---
+
+import { Steps } from "@astrojs/starlight/components";
+
+This guide walks you through creating a simple dictionary, compiling it, and querying it with the CLI.
+
+<Steps>
+
+1. ## Create a new dictionary
+
+   Use the `odict new` command to scaffold a blank XML file:
+
+   ```bash
+   odict new animals -n "Animal Dictionary"
+   ```
+
+   This creates `animals.xml`:
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <dictionary name="Animal Dictionary">
+   </dictionary>
+   ```
+
+2. ## Add entries
+
+   Open `animals.xml` and add some entries:
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   <dictionary name="Animal Dictionary">
+     <entry term="cat">
+       <ety description="From Latin cattus">
+         <sense pos="n">
+           <definition value="A small domesticated carnivorous mammal with soft fur">
+             <example value="The cat sat on the mat." />
+             <example value="She adopted two cats from the shelter." />
+           </definition>
+           <definition value="(informal) A person, especially a man">
+             <example value="He's a cool cat." />
+           </definition>
+         </sense>
+       </ety>
+     </entry>
+
+     <entry term="dog">
+       <ety description="From Old English docga">
+         <sense pos="n">
+           <definition value="A domesticated carnivorous mammal kept as a pet or for work">
+             <example value="The dog fetched the ball." />
+           </definition>
+         </sense>
+         <sense pos="v">
+           <definition value="To follow someone closely and persistently">
+             <example value="Reporters dogged the politician." />
+           </definition>
+         </sense>
+       </ety>
+     </entry>
+
+     <entry term="kitty" see="cat" />
+   </dictionary>
+   ```
+
+   What's happening here:
+
+   - `<dictionary>` is the top-level element. It can include a human-readable `name`.
+   - `<entry>` defines one headword. The `term` attribute is the lookup key.
+   - `<ety>` groups senses by etymology or origin. A word can have more than one.
+   - `<sense>` groups definitions by part of speech. Here, `n` means noun and `v` means verb.
+   - `<definition>` stores one meaning for the sense.
+   - `<example>` shows the definition in context.
+   - `see` creates a cross-reference. When you look up "kitty", ODict can follow it to "cat".
+
+3. ## Compile the dictionary
+
+   ```bash
+   odict compile animals.xml
+   ```
+
+   This produces `animals.odict`, a compact binary file. You can inspect it with:
+
+   ```bash
+   odict info animals.odict
+   ```
+
+   ```text
+   Animal Dictionary
+   ─────────────────
+
+   File Version: 3
+   File Size: 312 B
+   Entries: 3
+   ```
+
+4. ## Look up entries
+
+   ```bash
+   odict lookup animals.odict cat
+   ```
+
+   Output:
+
+   ```text
+   cat (From Latin cattus)
+
+     noun
+       1. A small domesticated carnivorous mammal with soft fur
+          • "The cat sat on the mat."
+          • "She adopted two cats from the shelter."
+       2. (informal) A person, especially a man
+          • "He's a cool cat."
+   ```
+
+   Follow cross-references with `-F`:
+
+   ```bash
+   odict lookup animals.odict kitty -F
+   ```
+
+   Return structured JSON with `-f json`:
+
+   ```bash
+   odict lookup animals.odict cat -f json
+   ```
+
+5. ## Search definitions
+
+   To search across all definitions, first create an index:
+
+   ```bash
+   odict index animals.odict
+   ```
+
+   Then search:
+
+   ```bash
+   odict search animals.odict "domesticated mammal"
+   ```
+
+   This returns entries whose definitions match the query. You can also pass `--index` to `odict search` to create the index on the fly.
+
+6. ## Serve over HTTP
+
+   Start a local server to query dictionaries via REST:
+
+   ```bash
+   odict serve animals.odict -p 8080
+   ```
+
+   Then query from any HTTP client:
+
+   ```bash
+   curl "http://localhost:8080/animals/lookup?q=cat,dog"
+   curl "http://localhost:8080/animals/search?q=domesticated"
+   curl "http://localhost:8080/animals/split?q=catdog&min_length=3"
+   curl "http://localhost:8080/animals/tokenize?text=the+cat+and+the+dog"
+   ```
+
+</Steps>
+
+## What's next?
+
+- [XML Schema Reference](/schema/reference/) — learn the full XML format including pronunciations, notes, and groups
+- [CLI Overview](/cli/overview/) — learn when to use each command
+- [Serving Dictionaries](/guides/serving/) — use ODict over HTTP
+- Language bindings: [Python](/api/python/), [JavaScript](/api/javascript/), [Rust](/api/rust/)

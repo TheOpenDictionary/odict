@@ -4,27 +4,40 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
 @import "tw-animate-css";
+@import "./starlight/starlight.css";
 
 @theme {
   --font-display: var(--ff-display);
   --font-sans: var(--ff-sans);
   --font-mono: "IBM Plex Mono";
 
-  --color-accent-50: var(--color-blue-50);
-  --color-accent-100: var(--color-blue-100);
-  --color-accent-200: var(--color-blue-200);
-  --color-accent-300: var(--color-blue-300);
-  --color-accent-400: var(--color-blue-400);
-  --color-accent-500: var(--color-blue-500);
-  --color-accent-600: var(--color-blue-600);
-  --color-accent-700: var(--color-blue-700);
-  --color-accent-800: var(--color-blue-800);
-  --color-accent-900: var(--color-blue-900);
-  --color-accent-950: var(--color-blue-950);
+  --color-accent-50: var(--color-stone-50);
+  --color-accent-100: var(--color-stone-100);
+  --color-accent-200: var(--color-stone-200);
+  --color-accent-300: var(--color-stone-300);
+  --color-accent-400: var(--color-stone-400);
+  --color-accent-500: var(--color-stone-500);
+  --color-accent-600: var(--color-stone-600);
+  --color-accent-700: var(--color-stone-700);
+  --color-accent-800: var(--color-stone-800);
+  --color-accent-900: var(--color-stone-900);
+  --color-accent-950: var(--color-stone-950);
+
+  --color-gray-50: var(--color-stone-50);
+  --color-gray-100: var(--color-stone-100);
+  --color-gray-200: var(--color-stone-200);
+  --color-gray-300: var(--color-stone-300);
+  --color-gray-400: var(--color-stone-400);
+  --color-gray-500: var(--color-stone-500);
+  --color-gray-600: var(--color-stone-600);
+  --color-gray-700: var(--color-stone-700);
+  --color-gray-800: var(--color-stone-800);
+  --color-gray-900: var(--color-stone-900);
+  --color-gray-950: var(--color-stone-950);
 }
 
-#starlight__sidebar {
-  @apply border-r border-white/6;
+@theme inline {
+  --color-foreground: var(--foreground);
 }
 
 body {
@@ -33,128 +46,4 @@ body {
 
 * {
   border-color: var(--sl-color-hairline);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  @apply font-display font-normal tracking-normal;
-}
-
-.sl-heading-wrapper,
-h1 {
-  @apply border-b pb-4;
-}
-
-.sl-heading-wrapper {
-  &.level-h2 {
-    @apply w-full mb-0 grid grid-cols-[1fr_auto];
-  }
-}
-
-.right-sidebar {
-  @apply border-l-0;
-
-  #starlight__on-this-page {
-    @apply py-2 font-sans uppercase text-xs text-gray-500 tracking-widest font-medium;
-  }
-
-  a {
-    @apply text-sm py-2;
-  }
-}
-
-:root {
-  --sl-color-accent-high: var(--color-white);
-  --sl-color-bg: var(--color-gray-900);
-  --sl-color-bg-nav: var(--sl-color-bg);
-  --sl-font: var(--font-sans);
-  --sl-color-bg-sidebar: var(--sl-color-bg);
-  --sl-color-hairline: --alpha(var(--color-white) / 5%);
-  --sl-color-input: --alpha(var(--color-white) / 5%);
-  --ec-frm-edBg: --alpha(var(--color-white)/4%);
-  --ec-brdRad: 0.8rem;
-}
-
-[data-theme="light"] {
-}
-
-main .content-panel + .content-panel {
-  @apply border-t-0 pt-0;
-}
-
-.expressive-code code {
-  @apply rounded-xl;
-}
-
-site-search button {
-  @apply border-0 bg-(--sl-color-input) rounded-full px-4 active:opacity-75 transition-opacity duration-300 ease-out;
-}
-
-dialog {
-  @apply shadow-2xl rounded-2xl;
-
-  &[open] {
-    @apply animate-in zoom-in-95 duration-250 ease-out fade-in;
-  }
-}
-
-.expressive-code .ec-line .code {
-  @apply border-0;
-}
-
-p code {
-  @apply rounded-sm bg-(--sl-color-input);
-}
-
-starlight-tabs {
-  [role="tabpanel"] {
-    @apply mt-3;
-  }
-
-  [role="tablist"] {
-    @apply border-0;
-
-    .tab {
-      a {
-        @apply rounded-full shadow-none;
-
-        &[aria-selected="true"] {
-          @apply bg-(--sl-color-input);
-        }
-      }
-    }
-  }
-}
-.pagination-links {
-  @apply border-t;
-
-  a {
-    @apply rounded-none border-0 shadow-none;
-
-    & > span {
-      @apply font-semibold tracking-[0.2em] uppercase text-[0.65rem];
-
-      .link-title {
-        @apply tracking-normal normal-case text-xl font-medium;
-      }
-    }
-  }
-}
-
-ul {
-  --sl-sidebar-item-padding-inline: 0.4rem;
-}
-
-.sidebar-content {
-  summary,
-  a {
-    @apply py-(--sl-sidebar-item-padding-inline);
-  }
-
-  a {
-    @apply rounded-full pl-4 not-aria-[current=page]:hover:bg-(--sl-color-input);
-  }
 }

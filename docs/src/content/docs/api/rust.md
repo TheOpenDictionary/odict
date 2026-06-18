@@ -11,14 +11,16 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-odict = "2"
+odict = "3"
 ```
 
 ## Documentation
 
-Full API documentation is available on **docs.rs**:
+Full API documentation is available on **docs.rs**. Use these docs for exhaustive method signatures, trait details, and module-level examples:
 
 **[docs.rs/odict](https://docs.rs/odict)**
+
+This page focuses on the decisions you need before using the crate: installation, feature flags, and the main entry points.
 
 ## Feature flags
 
@@ -95,4 +97,4 @@ fn main() -> odict::Result<()> {
 | `index::IndexOptions` | Options for creating a search index |
 | `tokenize::TokenizeOptions` | Options for text tokenization |
 
-Refer to the [docs.rs documentation](https://docs.rs/odict) for complete details on all types, traits, and methods.
+For complete details on all types, traits, and methods, use the [published crate documentation](https://docs.rs/odict).

@@ -157,6 +157,22 @@ results = dictionary.lookup("RaN", follow=True, insensitive=True)
 results = dictionary.lookup("catdog", split=3)
 ```
 
+#### `split(query, min_length=None, follow=None, insensitive=None) -> list[LookupResult]`
+
+Splits one or more compound terms into component dictionary entries. Unlike `lookup(..., split=N)`, this does not try the whole query first.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `query` | `str \| list[str]` | — | Term(s) to split |
+| `min_length` | `int \| None` | `None` | Minimum character length for each segment |
+| `follow` | `bool \| None` | `None` | Follow `see` cross-references |
+| `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
+
+```python
+results = dictionary.split("catdog", min_length=3)
+results = dictionary.split("CATdog", min_length=3, insensitive=True)
+```
+
 #### `lexicon() -> list[str]`
 
 Returns all terms defined in the dictionary, sorted alphabetically.
@@ -263,6 +279,14 @@ for token in tokens:
 | `threshold` | `int \| None` | `None` | Relevance threshold |
 | `autoindex` | `bool \| None` | `None` | Auto-create index if missing |
 | `limit` | `int \| None` | `None` | Maximum results |
+
+### `SplitOptions`
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `min_length` | `int \| None` | `None` | Minimum character length for each segment |
+| `follow` | `bool \| None` | `None` | Follow `see` cross-references |
+| `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
 
 ### `Pronunciation`
 

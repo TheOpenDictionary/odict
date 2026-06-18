@@ -3,47 +3,65 @@ title: Installation
 description: How to install the ODict CLI and language bindings.
 ---
 
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
 ## CLI
 
-### Homebrew (macOS)
+Choose the installer for your platform or install from source if you want to build the CLI locally.
+
+<Tabs>
+<TabItem label="macOS / Linux">
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://odict.org/install.sh | sh
+```
+
+This shell installer downloads the latest release binary for macOS or Linux.
+
+</TabItem>
+
+<TabItem label="Homebrew">
 
 ```bash
 brew install TheOpenDictionary/odict/odict
 ```
 
-### Shell installer (macOS / Linux)
+Homebrew is the simplest option on macOS.
 
-```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/TheOpenDictionary/odict/releases/latest/download/odict-installer.sh | sh
-```
+</TabItem>
 
-### PowerShell installer (Windows)
+<TabItem label="Windows">
 
 ```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://github.com/TheOpenDictionary/odict/releases/latest/download/odict-installer.ps1 | iex"
 ```
 
-### From source
+</TabItem>
 
-Requires [Rust](https://rustup.rs/) 1.75+.
+<TabItem label="From source">
 
 ```bash
 git clone https://github.com/TheOpenDictionary/odict.git
 cd odict
+# Requires Rust 1.75+.
 cargo install --path cli
 ```
 
-### Verify installation
+</TabItem>
+</Tabs>
+
+### Verify the CLI
 
 ```bash
 odict --version
 ```
 
----
-
 ## Language bindings
 
-### Python
+Install the package for the language you are using.
+
+<Tabs>
+<TabItem label="Python">
 
 ```bash
 pip install theopendictionary
@@ -51,7 +69,8 @@ pip install theopendictionary
 
 Requires Python 3.8.1+. See the [Python API docs](/api/python/) for usage.
 
-### JavaScript (Node.js)
+</TabItem>
+<TabItem label="JavaScript">
 
 ```bash
 npm install @odict/node
@@ -59,13 +78,17 @@ npm install @odict/node
 
 Requires Node.js 12+. The package includes native binaries for all major platforms. See the [JavaScript API docs](/api/javascript/) for usage.
 
-### Rust
+</TabItem>
+<TabItem label="Rust">
 
 Add the crate to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-odict = "2"
+odict = "3"
 ```
 
 See the [Rust API docs](/api/rust/) for usage and feature flags.
+
+</TabItem>
+</Tabs>

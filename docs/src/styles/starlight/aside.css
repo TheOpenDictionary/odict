@@ -1,0 +1,11 @@
+aside.starlight-aside {
+  @apply rounded-xl border-0;
+
+  .starlight-aside__title {
+    @apply text-xs uppercase leading-4 tracking-widest;
+
+    svg {
+      @apply size-4;
+    }
+  }
+}
