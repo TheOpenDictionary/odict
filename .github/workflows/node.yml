@@ -4,13 +4,13 @@ env:
   APP_NAME: node
   MACOSX_DEPLOYMENT_TARGET: "10.13"
   CARGO_INCREMENTAL: "1"
-'on': 
+"on":
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - "crates/node/**"
+      - "node/**"
       - "crates/lib/**"
       - "**/mise.toml"
       - "mise.toml"
@@ -35,7 +35,7 @@ jobs:
           cache: true
           experimental: true
       - name: Run lint
-        run: mise //crates/node:lint
+        run: mise //node:lint
   build:
     strategy:
       fail-fast: false
@@ -43,40 +43,40 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: mise //crates/node:build --target x86_64-apple-darwin
+            build: mise //node:build --target x86_64-apple-darwin
           - host: windows-latest
-            build: mise //crates/node:build --target x86_64-pc-windows-msvc
+            build: mise //node:build --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: mise //crates/node:build --target i686-pc-windows-msvc
+            build: mise //node:build --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: mise x zig -- mise //crates/node:build --target x86_64-unknown-linux-gnu -x
+            build: mise x zig -- mise //node:build --target x86_64-unknown-linux-gnu -x
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: mise x zig -- mise //crates/node:build --target x86_64-unknown-linux-musl -x
+            build: mise x zig -- mise //node:build --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: mise //crates/node:build --target aarch64-apple-darwin
+            build: mise //node:build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: mise x zig -- mise //crates/node:build --target aarch64-unknown-linux-gnu -x
+            build: mise x zig -- mise //node:build --target aarch64-unknown-linux-gnu -x
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
-            build: mise x zig -- mise //crates/node:build --target armv7-unknown-linux-gnueabihf -x
+            build: mise x zig -- mise //node:build --target armv7-unknown-linux-gnueabihf -x
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: mise //crates/node:build --target aarch64-linux-android
+            build: mise //node:build --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: mise //crates/node:build --target armv7-linux-androideabi
+            build: mise //node:build --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: mise x zig -- mise //crates/node:build --target aarch64-unknown-linux-musl -x
+            build: mise x zig -- mise //node:build --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: mise //crates/node:build --target aarch64-pc-windows-msvc
+            build: mise //node:build --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
@@ -86,7 +86,7 @@ jobs:
               echo "CC_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/clang" >> $GITHUB_ENV
               echo "AR_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/llvm-ar" >> $GITHUB_ENV
               echo "CMAKE_BUILD_PARALLEL_LEVEL=2" >> $GITHUB_ENV
-            build: mise run //crates/node:build:wasm
+            build: mise run //node:build:wasm
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -122,8 +122,8 @@ jobs:
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
-            ./crates/node/${{ env.APP_NAME }}.*.node
-            ./crates/node/${{ env.APP_NAME }}.*.wasm
+            ./node/${{ env.APP_NAME }}.*.node
+            ./node/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -138,7 +138,7 @@ jobs:
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: '15.0'
+          version: "15.0"
           memory: 8G
           cpu_count: 3
           environment_variables: DEBUG RUSTUP_IO_THREADS
@@ -161,7 +161,7 @@ jobs:
             env
             freebsd-version
             sudo corepack enable
-            cd crates/node
+            cd node
             yarn install
             yarn build:node
             rm -rf node_modules
@@ -171,7 +171,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: bindings-freebsd
-          path: ./crates/node/${{ env.APP_NAME }}.*.node
+          path: ./node/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -194,7 +194,7 @@ jobs:
             target: x86_64-apple-darwin
             architecture: x64
         node:
-          - '22'
+          - "22"
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
@@ -210,12 +210,12 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ./crates/node
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: mise run //crates/node:test
+        run: mise run //node:test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -230,7 +230,7 @@ jobs:
           - aarch64-unknown-linux-musl
           - armv7-unknown-linux-gnueabihf
         node:
-          - '22'
+          - "22"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v6
@@ -260,7 +260,7 @@ jobs:
             }
           " >> $GITHUB_OUTPUT
       - name: Install dependencies
-        working-directory: crates/node
+        working-directory: node
         run: |
           mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
@@ -269,7 +269,7 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: bindings-${{ matrix.target }}
-          path: ./crates/node
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
@@ -285,8 +285,8 @@ jobs:
         with:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
-          options: '-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}'
-          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); corepack enable && cd crates/node && npm_config_optional=true yarn test"
+          options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
+          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); corepack enable && cd node && npm_config_optional=true yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -301,7 +301,7 @@ jobs:
           cache: true
           experimental: true
       - name: Install dependencies
-        working-directory: crates/node
+        working-directory: node
         run: |
           mise x -- yarn config set supportedArchitectures.cpu "wasm32"
           mise x -- yarn install
@@ -309,12 +309,12 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: bindings-wasm32-wasip1-threads
-          path: ./crates/node
+          path: ./node
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: mise //crates/node:test
+        run: mise //node:test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -338,20 +338,20 @@ jobs:
           cache: true
           experimental: true
       - name: create npm dirs
-        run: mise run //crates/node:create-dirs
+        run: mise run //node:create-dirs
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
-          path: ./crates/node/artifacts
+          path: ./node/artifacts
       - name: Move artifacts
-        run: mise run //crates/node:artifacts
+        run: mise run //node:artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash
-        working-directory: crates/node
+        working-directory: node
       - name: Publish
         if: ${{ github.event_name != 'workflow_dispatch' }}
-        working-directory: crates/node
+        working-directory: node
         run: |
           npm config set provenance true
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
@@ -371,7 +371,7 @@ jobs:
       - name: Publish
         shell: bash
         if: ${{ github.event_name == 'workflow_dispatch' }}
-        working-directory: crates/node
+        working-directory: node
         run: |
           npm config set provenance true
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
