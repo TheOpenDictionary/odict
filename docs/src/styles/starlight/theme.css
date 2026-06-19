@@ -5,6 +5,7 @@
   --sl-font: var(--font-sans);
 
   --sl-color-accent-high: var(--color-white);
+  --sl-color-accent: var(--color-accent-800);
 
   --sl-color-blue-high: var(--color-blue-700);
   --sl-color-blue-low: var(--color-blue-100);
@@ -12,7 +13,7 @@
   --sl-color-bg: var(--background);
   --sl-color-bg-nav: var(--background);
   --sl-color-bg-sidebar: var(--background);
-  --sl-color-hairline: --alpha(var(--foreground) / 5%);
+  --sl-color-hairline: --alpha(var(--foreground) / 10%);
   --sl-color-input: --alpha(var(--foreground) / 5%);
 
   --ec-frm-edBg: --alpha(var(--color-white)/4%);

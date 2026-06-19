@@ -4,6 +4,7 @@ const releasesUrl =
   "https://api.github.com/repos/TheOpenDictionary/odict/releases";
 const cliTagPrefix = "cli/";
 const installerAssetName = "odict-cli-installer.sh";
+const githubToken = import.meta.env.GITHUB_TOKEN as string | undefined;
 
 type GitHubReleaseAsset = {
   name?: string;
@@ -21,6 +22,7 @@ const githubHeaders = {
   Accept: "application/vnd.github+json",
   "User-Agent": "odict-docs-install-endpoint",
   "X-GitHub-Api-Version": "2022-11-28",
+  ...(githubToken ? { Authorization: `Bearer ${githubToken}` } : {}),
 };
 
 const shellHeaders = {

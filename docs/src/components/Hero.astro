@@ -11,7 +11,7 @@ const { title = data.title, tagline, image, actions = [] } = data.hero || {};
   class="size-full flex flex-row max-lg:flex-col px-8 gap-x-16 gap-y-0 justify-center-safe items-center-safe"
 >
   <LogoLight class="mx-auto aspect-[6] max-w-full dark:hidden" />
-  <LogoDark class="mx-auto aspect-[6] max-w-full light:hidden" />
+  <LogoDark class="mx-auto aspect-[6] max-w-full not-dark:hidden" />
   <div>
     <p
       class="text-lg max-lg:text-base text-foreground/70 max-lg:text-center mt-4 text-left"
@@ -32,10 +32,13 @@ const { title = data.title, tagline, image, actions = [] } = data.hero || {};
               {href}
               {variant}
               icon={icon?.name}
-              class:list={["max-w-none px-4 py-2", className]}
+              class:list={[
+                "max-w-none px-3 hover:opacity-80 transition-all duration-300 ease-out active:opacity-50 active:scale-98 gap-0 [&_svg]:size-5 py-3",
+                className,
+              ]}
               {...attrs}
             >
-              {text}
+              <span class="px-2">{text}</span>
               {icon?.html && <Fragment set:html={icon.html} />}
             </LinkButton>
           ),
