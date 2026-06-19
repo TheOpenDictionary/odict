@@ -87,7 +87,7 @@ jobs:
               echo "AR_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/llvm-ar" >> $GITHUB_ENV
               echo "CMAKE_BUILD_PARALLEL_LEVEL=2" >> $GITHUB_ENV
             build: mise run //node:build:wasm
-    name: stable - ${{ matrix.settings.target }} - node@22
+    name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
@@ -196,7 +196,7 @@ jobs:
             target: x86_64-apple-darwin
             architecture: x64
         node:
-          - "22"
+          - "24"
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
@@ -232,7 +232,7 @@ jobs:
           - aarch64-unknown-linux-musl
           - armv7-unknown-linux-gnueabihf
         node:
-          - "22"
+          - "24"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v6

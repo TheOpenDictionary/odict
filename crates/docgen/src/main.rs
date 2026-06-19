@@ -1,8 +1,11 @@
-use crate::rustdoc::generate_docs;
+use std::path::Path;
 
-mod rustdoc;
+mod cli_reference;
 
-fn main() {
-    let manifest_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../odict/Cargo.toml");
-    generate_docs(manifest_path, "test.md").unwrap();
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let workspace_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+
+    cli_reference::generate_docs(workspace_root.join("docs/src/content/docs/cli/reference.md"))?;
+
+    Ok(())
 }

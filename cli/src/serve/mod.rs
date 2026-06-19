@@ -57,11 +57,11 @@ pub struct ServeArgs {
     )]
     capacity: usize,
 
-    // Sets the default log level
+    /// Log level (`trace`, `debug`, `info`, `warn`, or `error`)
     #[arg(short, long)]
     level: Option<LogLevel>,
 
-    // List of dictionary paths or aliases to serve
+    /// Dictionary files or directories containing `.odict` files
     #[arg()]
     dictionaries: Vec<String>,
 }
