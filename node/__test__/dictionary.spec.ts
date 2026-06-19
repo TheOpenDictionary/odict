@@ -7,7 +7,7 @@ import { compile, OpenDictionary } from '../index.js'
 
 async function getDictionary(name: string) {
   return new OpenDictionary(
-    compile(await readFile(join(fileURLToPath(new URL(import.meta.url)), `../../../../examples/${name}.xml`), 'utf-8')),
+    compile(await readFile(join(fileURLToPath(new URL(import.meta.url)), `../../../examples/${name}.xml`), 'utf-8')),
   )
 }
 
@@ -261,9 +261,9 @@ test('throws errors inside JavaScript', async (t) => {
 
 // Load tests - only run if OpenDictionary.load is available
 if (typeof OpenDictionary.load === 'function') {
-  const dict1Path = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/example1.odict')
-  const dict2Path = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/example2.odict')
-  const emptyPath = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/empty.odict')
+  const dict1Path = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/example1.odict')
+  const dict2Path = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/example2.odict')
+  const emptyPath = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/empty.odict')
 
   test.before('setup odict files', async () => {
     const dict1 = await getDictionary('example1')
@@ -276,7 +276,7 @@ if (typeof OpenDictionary.load === 'function') {
   })
 
   test('load - loads dictionary from local .odict file path', async (t) => {
-    const dictPath = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/example1.odict')
+    const dictPath = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/example1.odict')
 
     const loadedDict = await OpenDictionary.load(dictPath)
 
@@ -289,7 +289,7 @@ if (typeof OpenDictionary.load === 'function') {
   })
 
   test('load - loads dictionary without options', async (t) => {
-    const dictPath = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/example2.odict')
+    const dictPath = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/example2.odict')
 
     const loadedDict = await OpenDictionary.load(dictPath)
 
@@ -298,7 +298,7 @@ if (typeof OpenDictionary.load === 'function') {
   })
 
   test('load - throws error for non-existent file', async (t) => {
-    const nonExistentPath = join(fileURLToPath(new URL(import.meta.url)), '../../../../examples/does-not-exist.odict')
+    const nonExistentPath = join(fileURLToPath(new URL(import.meta.url)), '../../../examples/does-not-exist.odict')
 
     await t.throwsAsync(OpenDictionary.load(nonExistentPath))
   })
