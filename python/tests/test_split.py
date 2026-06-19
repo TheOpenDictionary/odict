@@ -7,7 +7,7 @@ from theopendictionary import OpenDictionary, compile
 @pytest.fixture(scope="module")
 def dict1():
     current_file = Path(__file__).resolve()
-    xml_path = current_file.parent.parent.parent.parent / "examples" / "example1.xml"
+    xml_path = current_file.parents[2] / "examples" / "example1.xml"
     with open(xml_path, "r") as f:
         xml_content = f.read()
     compiled_bytes = compile(xml_content)

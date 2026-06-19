@@ -9,13 +9,13 @@ from theopendictionary import OpenDictionary, compile
 @pytest.fixture(scope="module")
 def dict1_path():
     current_file = Path(__file__).resolve()
-    return str(current_file.parent.parent.parent.parent / "examples" / "example1.xml")
+    return str(current_file.parents[2] / "examples" / "example1.xml")
 
 
 @pytest.fixture(scope="module")
 def dict2_path():
     current_file = Path(__file__).resolve()
-    return str(current_file.parent.parent.parent.parent / "examples" / "example2.xml")
+    return str(current_file.parents[2] / "examples" / "example2.xml")
 
 
 @pytest.fixture(scope="module")
