@@ -1,5 +1,5 @@
 {
-  "crates/node": "2.2.2",
+  "node": "2.2.2",
   "cli": "3.2.2",
   "crates/lib": "3.2.2",
   "python": "2.2.1"

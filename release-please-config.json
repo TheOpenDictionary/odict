@@ -21,7 +21,7 @@
       "release-type": "rust",
       "component": "lib"
     },
-    "crates/node": {
+    "node": {
       "release-type": "node",
       "component": "node"
     },
