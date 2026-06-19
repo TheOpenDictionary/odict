@@ -43,10 +43,10 @@ cd crates/node && mise test    # runs yarn test (AVA)
 cd crates/node && mise build   # builds native extension
 ```
 
-**Python** (`crates/python/`): Uses PyO3 + maturin, pytest + syrupy for snapshot tests, ruff for linting.
+**Python** (`python/`): Uses PyO3 + maturin, pytest + syrupy for snapshot tests, ruff for linting.
 ```bash
-cd crates/python && mise test    # runs pytest
-cd crates/python && mise build   # builds wheel via maturin
+cd python && mise test    # runs pytest
+cd python && mise build   # builds wheel via maturin
 ```
 
 ## Architecture

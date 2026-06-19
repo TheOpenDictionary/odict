@@ -7,15 +7,13 @@
     {
       "type": "linked-versions",
       "groupName": "odict",
-      "components": [
-        "lib", "cli"
-      ]
+      "components": ["lib", "cli"]
     }
   ],
   "include-component-in-tag": true,
   "tag-separator": "/",
   "packages": {
-    "crates/cli": {
+    "cli": {
       "release-type": "rust",
       "component": "cli"
     },
@@ -27,7 +25,7 @@
       "release-type": "node",
       "component": "node"
     },
-    "crates/python": {
+    "python": {
       "release-type": "rust",
       "component": "python"
     }
