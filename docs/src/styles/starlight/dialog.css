@@ -1,0 +1,7 @@
+dialog {
+  @apply shadow-2xl rounded-2xl;
+
+  &[open] {
+    @apply animate-in zoom-in-95 duration-250 ease-out fade-in;
+  }
+}

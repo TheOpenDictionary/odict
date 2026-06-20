@@ -1,0 +1,21 @@
+[tools]
+node = "24"
+
+[deps.yarn]
+auto = true
+
+[tasks.dev]
+depends = ["//:docgen"]
+run = "yarn dev"
+
+[tasks.build]
+run = "yarn build"
+depends = ["//:docgen"]
+outputs = { auto = true }
+sources = ["src/**/*", "package.json"]
+
+[tasks.lint]
+run = "yarn check"
+
+[tasks.format]
+run = "yarn format"

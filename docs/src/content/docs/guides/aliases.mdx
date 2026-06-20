@@ -1,0 +1,88 @@
+---
+title: Aliases and Loading
+description: How ODict resolves remote names, aliases, and local dictionary paths.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+Aliases give a dictionary a short local name. They are useful when a command or application repeatedly loads the same `.odict` file.
+
+## Create an alias
+
+```bash
+odict alias set animals ./animals.odict
+```
+
+Use the alias anywhere a dictionary path is accepted:
+
+```bash
+odict lookup animals cat
+odict search animals "domesticated mammal" --index
+```
+
+`alias add` fails if the alias already exists. `alias set` creates or replaces it.
+
+```bash
+odict alias add animals ./animals.odict
+odict alias set animals ./updated-animals.odict
+odict alias delete animals
+```
+
+## Loading order
+
+When ODict loads a dictionary by name, it checks sources in this order:
+
+| Step | Source                 | Example           |
+| ---- | ---------------------- | ----------------- |
+| 1    | Remote dictionary name | `wiktionary/eng`  |
+| 2    | Alias                  | `animals`         |
+| 3    | Local path             | `./animals.odict` |
+
+Remote dictionary names must use lowercase `dictionary/language` format. If the name is not a valid remote name, ODict continues to alias and path loading.
+
+## Config directory
+
+Aliases are stored in `aliases.json` inside ODict's config directory. Remote downloads are cached beneath the same config directory by default.
+
+In code, set a custom config directory when you need predictable writable paths:
+
+<Tabs>
+<TabItem label="Rust">
+
+```rust
+use odict::{LoadOptions, OpenDictionary};
+
+let dictionary = OpenDictionary::load_with_options(
+    "animals",
+    LoadOptions::default().with_config_dir("./config"),
+)
+.await?;
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+from theopendictionary import LoadOptions, OpenDictionary
+
+dictionary = await OpenDictionary.load(
+    "animals",
+    LoadOptions(config_dir="./config"),
+)
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```typescript
+const dictionary = await OpenDictionary.load("animals", {
+  configDir: "./config",
+});
+```
+
+</TabItem>
+</Tabs>
+
+## When to use aliases
+
+Use aliases for local workflows, scripts, and development machines where the dictionary path is stable for one user. For reproducible builds, CI, and deployed services, pass an explicit path or download directory so the environment is clear.

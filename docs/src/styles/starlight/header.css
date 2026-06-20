@@ -1,0 +1,7 @@
+header {
+  @apply border-0;
+
+  &:has(div) {
+    @apply border-b;
+  }
+}

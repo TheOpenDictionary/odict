@@ -1,0 +1,11 @@
+.right-sidebar {
+  @apply border-l-0;
+
+  #starlight__on-this-page {
+    @apply py-2 font-sans uppercase text-xs text-gray-500 tracking-widest font-medium;
+  }
+
+  a {
+    @apply text-sm py-2;
+  }
+}

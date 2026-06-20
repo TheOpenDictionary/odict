@@ -1,0 +1,19 @@
+starlight-tabs {
+  [role="tabpanel"] {
+    @apply mt-3;
+  }
+
+  [role="tablist"] {
+    @apply border-0;
+
+    .tab {
+      a {
+        @apply rounded-full text-sm font-medium shadow-none;
+
+        &[aria-selected="true"] {
+          @apply bg-(--sl-color-input);
+        }
+      }
+    }
+  }
+}

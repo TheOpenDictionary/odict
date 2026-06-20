@@ -5,7 +5,7 @@ edition = "2024"
 publish = false
 
 [dependencies]
-odict = { path = "../lib", default-features = false }
+odict = { path = "../odict", default-features = false }
 strum = { version = "0.28.0", features = ["derive"] }
 
 [lib]

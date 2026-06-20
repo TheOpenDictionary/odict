@@ -5,18 +5,18 @@ on:
     branches:
       - main
     paths:
-      - 'crates/cli/**'
-      - 'crates/lib/**'
-      - '**/mise.toml'
-      - 'mise.toml'
-      - 'examples/**'      
+      - "cli/**"
+      - "crates/lib/**"
+      - "**/mise.toml"
+      - "mise.toml"
+      - "examples/**"
   pull_request:
     paths:
-      - 'crates/cli/**'
-      - 'crates/lib/**'
-      - '**/mise.toml'
-      - 'mise.toml'
-      - 'examples/**'
+      - "cli/**"
+      - "crates/lib/**"
+      - "**/mise.toml"
+      - "mise.toml"
+      - "examples/**"
 jobs:
   test:
     name: Build
@@ -43,10 +43,10 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: "${{ matrix.target }}"
-      - name: Add Rust target 
+      - name: Add Rust target
         run: rustup target add ${{ matrix.target }}
       - name: Cache Rust
-        uses: Swatinem/rust-cache@v2      
+        uses: Swatinem/rust-cache@v2
       - name: Install Nextest
         run: cargo install --locked --force cargo-nextest
       - name: Build CLI

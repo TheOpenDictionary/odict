@@ -1,0 +1,26 @@
+name: Build Docs
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v7
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        working-directory: docs
+        run: yarn install --immutable
+      - name: Build site
+        working-directory: docs
+        run: yarn build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
