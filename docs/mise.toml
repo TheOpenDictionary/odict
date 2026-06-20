@@ -5,10 +5,12 @@ node = "24"
 auto = true
 
 [tasks.dev]
+depends = ["//:docgen"]
 run = "yarn dev"
 
 [tasks.build]
 run = "yarn build"
+depends = ["//:docgen"]
 outputs = { auto = true }
 sources = ["src/**/*", "package.json"]
 
