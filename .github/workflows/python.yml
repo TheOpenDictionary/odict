@@ -182,20 +182,27 @@ jobs:
           - runner: windows-latest
             target: x64
             python_arch: x64
+            rust_target: x86_64-pc-windows-msvc
           - runner: windows-latest
             target: x86
             python_arch: x86
+            rust_target: i686-pc-windows-msvc
           - runner: windows-11-arm
             target: aarch64
             python_arch: arm64
+            rust_target: aarch64-pc-windows-msvc
     steps:
       - uses: actions/checkout@v6
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install Rust
+        run: |
+          mise install rust
+          rustup target add ${{ matrix.platform.rust_target }}
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
