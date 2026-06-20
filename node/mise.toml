@@ -1,5 +1,5 @@
 [tools]
-node = "24.11.1"
+node = "24.17.0"
 
 [deps.yarn]
 auto = true
