@@ -1,5 +1,5 @@
 [tools]
-python = "3.14.3"
+python = "3.14.6"
 uv = "latest"
 
 [deps.uv]
