@@ -72,7 +72,6 @@ depends = ["//...:build"]
 description = "Recursively builds all packages in the project"
 
 [tasks."format"]
-depends = ["//node:format", "//python:format", "//crates/...:format"]
 run = "cargo fmt --all -- **/*.rs"
 description = "Format all Rust files"
 
