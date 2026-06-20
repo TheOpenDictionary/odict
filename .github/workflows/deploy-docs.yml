@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - ".github/workflows/deploy-docs.yml"
       - "docs/**"
   release:
     types: [published]
@@ -20,13 +21,25 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v7
-      - name: Install, build, and upload your site
-        uses: withastro/action@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Node
+        uses: actions/setup-node@v6
         with:
-          path: docs
-          package-manager: yarn
+          node-version: 24
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Install dependencies
+        working-directory: docs
+        run: yarn install --immutable
+      - name: Build site
+        working-directory: docs
+        run: yarn build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: docs/dist/
+          include-hidden-files: true
   deploy:
     needs: build
     if: ${{ github.event_name == 'push' || (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'cli/')) }}

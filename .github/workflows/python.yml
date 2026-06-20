@@ -32,10 +32,13 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: python uv
           cache: true
           experimental: true
+          working_directory: python
       - name: Run lint
-        run: mise //python:lint
+        run: mise lint
+        working-directory: python
 
   linux:
     runs-on: ${{ matrix.platform.runner }}
@@ -64,6 +67,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: ${{ matrix.platform.use_zig && 'rust zig' || 'rust' }}
           cache: true
           experimental: true
       - name: Register QEMU handlers (allow running foreign-arch containers)
@@ -130,6 +134,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: rust zig
           cache: true
           experimental: true
       - name: Build wheels
@@ -244,6 +249,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: rust
           cache: true
           experimental: true
       - uses: actions/setup-python@v6
@@ -277,6 +283,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: rust
           cache: true
           experimental: true
       - name: Build sdist
