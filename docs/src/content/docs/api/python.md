@@ -108,8 +108,8 @@ asyncio.run(main())
 
 ### Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
+| Property   | Type          | Description                                                                   |
+| ---------- | ------------- | ----------------------------------------------------------------------------- |
 | `min_rank` | `int \| None` | The minimum rank value across all entries, or `None` if no entries have ranks |
 | `max_rank` | `int \| None` | The maximum rank value across all entries, or `None` if no entries have ranks |
 
@@ -119,11 +119,11 @@ asyncio.run(main())
 
 Saves the dictionary to disk as a `.odict` file. Optionally configure Brotli compression.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `path` | `str` | — | Output file path |
-| `quality` | `int \| None` | `None` | Brotli compression level (0–11) |
-| `window_size` | `int \| None` | `None` | Brotli window size (0–22) |
+| Parameter     | Type          | Default | Description                     |
+| ------------- | ------------- | ------- | ------------------------------- |
+| `path`        | `str`         | —       | Output file path                |
+| `quality`     | `int \| None` | `None`  | Brotli compression level (0–11) |
+| `window_size` | `int \| None` | `None`  | Brotli window size (0–22)       |
 
 ```python
 dictionary.save("output.odict")
@@ -134,12 +134,12 @@ dictionary.save("output.odict", quality=11, window_size=22)
 
 Looks up one or more terms by exact match.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | `str \| list[str]` | — | Term(s) to look up |
-| `split` | `int \| None` | `None` | Minimum word length for compound splitting |
-| `follow` | `bool \| None` | `None` | Follow `see` cross-references until an entry with etymologies is found |
-| `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
+| Parameter     | Type               | Default | Description                                                            |
+| ------------- | ------------------ | ------- | ---------------------------------------------------------------------- |
+| `query`       | `str \| list[str]` | —       | Term(s) to look up                                                     |
+| `split`       | `int \| None`      | `None`  | Minimum word length for compound splitting                             |
+| `follow`      | `bool \| None`     | `None`  | Follow `see` cross-references until an entry with etymologies is found |
+| `insensitive` | `bool \| None`     | `None`  | Enable case-insensitive matching                                       |
 
 ```python
 # Simple lookup
@@ -161,12 +161,12 @@ results = dictionary.lookup("catdog", split=3)
 
 Splits one or more compound terms into component dictionary entries. Unlike `lookup(..., split=N)`, this does not try the whole query first.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | `str \| list[str]` | — | Term(s) to split |
-| `min_length` | `int \| None` | `None` | Minimum character length for each segment |
-| `follow` | `bool \| None` | `None` | Follow `see` cross-references |
-| `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
+| Parameter     | Type               | Default | Description                               |
+| ------------- | ------------------ | ------- | ----------------------------------------- |
+| `query`       | `str \| list[str]` | —       | Term(s) to split                          |
+| `min_length`  | `int \| None`      | `None`  | Minimum character length for each segment |
+| `follow`      | `bool \| None`     | `None`  | Follow `see` cross-references             |
+| `insensitive` | `bool \| None`     | `None`  | Enable case-insensitive matching          |
 
 ```python
 results = dictionary.split("catdog", min_length=3)
@@ -186,9 +186,9 @@ words = dictionary.lexicon()
 
 Creates a full-text search index for the dictionary.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `options` | `IndexOptions \| None` | `None` | Indexing configuration |
+| Parameter | Type                   | Default | Description            |
+| --------- | ---------------------- | ------- | ---------------------- |
+| `options` | `IndexOptions \| None` | `None`  | Indexing configuration |
 
 ```python
 from theopendictionary import IndexOptions
@@ -201,10 +201,10 @@ dictionary.index(IndexOptions(overwrite=True, memory=50_000_000))
 
 Runs a full-text search across the dictionary. Requires an index (call `index()` first).
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | `str` | — | Search query |
-| `options` | `SearchOptions \| None` | `None` | Search configuration |
+| Parameter | Type                    | Default | Description          |
+| --------- | ----------------------- | ------- | -------------------- |
+| `query`   | `str`                   | —       | Search query         |
+| `options` | `SearchOptions \| None` | `None`  | Search configuration |
 
 ```python
 from theopendictionary import SearchOptions
@@ -218,11 +218,11 @@ results = dictionary.search("greeting", SearchOptions(limit=5))
 
 Tokenizes text using NLP-based segmentation and matches each token against the dictionary. Supports Chinese, Japanese, Korean, Thai, Khmer, German, Swedish, and Latin-script languages.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `text` | `str` | — | Text to tokenize |
-| `follow` | `bool \| int \| None` | `None` | Follow `see` cross-references. Accepts `True`/`False` or a number (nonzero = follow) |
-| `insensitive` | `bool \| None` | `None` | Case-insensitive matching |
+| Parameter     | Type                  | Default | Description                                                                          |
+| ------------- | --------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `text`        | `str`                 | —       | Text to tokenize                                                                     |
+| `follow`      | `bool \| int \| None` | `None`  | Follow `see` cross-references. Accepts `True`/`False` or a number (nonzero = follow) |
+| `insensitive` | `bool \| None`        | `None`  | Case-insensitive matching                                                            |
 
 ```python
 tokens = dictionary.tokenize("the cat ran")
@@ -236,70 +236,70 @@ for token in tokens:
 
 ### `LookupResult`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `entry` | `Entry` | The matched entry |
+| Property        | Type            | Description                                         |
+| --------------- | --------------- | --------------------------------------------------- |
+| `entry`         | `Entry`         | The matched entry                                   |
 | `directed_from` | `Entry \| None` | The original entry if a `see` redirect was followed |
 
 ### `Entry`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `term` | `str` | The headword |
-| `rank` | `int \| None` | Optional frequency rank |
-| `see_also` | `str \| None` | Cross-reference target term |
-| `etymologies` | `list[Etymology]` | List of etymologies |
-| `media` | `list[MediaURL]` | Media URLs |
+| Property      | Type              | Description                 |
+| ------------- | ----------------- | --------------------------- |
+| `term`        | `str`             | The headword                |
+| `rank`        | `int \| None`     | Optional frequency rank     |
+| `see_also`    | `str \| None`     | Cross-reference target term |
+| `etymologies` | `list[Etymology]` | List of etymologies         |
+| `media`       | `list[MediaURL]`  | Media URLs                  |
 
 ### `Token`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `lemma` | `str` | The original token text |
-| `language` | `str \| None` | Detected language code |
-| `script` | `str` | Detected script name |
-| `kind` | `str` | Token kind |
-| `start` | `int` | Start offset in the original text |
-| `end` | `int` | End offset in the original text |
-| `entries` | `list[LookupResult]` | Matched dictionary entries |
+| Property   | Type                 | Description                       |
+| ---------- | -------------------- | --------------------------------- |
+| `lemma`    | `str`                | The original token text           |
+| `language` | `str \| None`        | Detected language code            |
+| `script`   | `str`                | Detected script name              |
+| `kind`     | `str`                | Token kind                        |
+| `start`    | `int`                | Start offset in the original text |
+| `end`      | `int`                | End offset in the original text   |
+| `entries`  | `list[LookupResult]` | Matched dictionary entries        |
 
 ### `IndexOptions`
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `directory` | `str \| None` | `None` | Custom directory for the index |
-| `memory` | `int \| None` | `None` | Memory arena per thread in bytes (must be >15MB) |
-| `overwrite` | `bool \| None` | `None` | Overwrite existing index |
+| Parameter   | Type           | Default | Description                                      |
+| ----------- | -------------- | ------- | ------------------------------------------------ |
+| `directory` | `str \| None`  | `None`  | Custom directory for the index                   |
+| `memory`    | `int \| None`  | `None`  | Memory arena per thread in bytes (must be >15MB) |
+| `overwrite` | `bool \| None` | `None`  | Overwrite existing index                         |
 
 ### `SearchOptions`
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `directory` | `str \| None` | `None` | Custom index directory |
-| `threshold` | `int \| None` | `None` | Relevance threshold |
-| `autoindex` | `bool \| None` | `None` | Auto-create index if missing |
-| `limit` | `int \| None` | `None` | Maximum results |
+| Parameter   | Type           | Default | Description                  |
+| ----------- | -------------- | ------- | ---------------------------- |
+| `directory` | `str \| None`  | `None`  | Custom index directory       |
+| `threshold` | `int \| None`  | `None`  | Relevance threshold          |
+| `autoindex` | `bool \| None` | `None`  | Auto-create index if missing |
+| `limit`     | `int \| None`  | `None`  | Maximum results              |
 
 ### `SplitOptions`
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `min_length` | `int \| None` | `None` | Minimum character length for each segment |
-| `follow` | `bool \| None` | `None` | Follow `see` cross-references |
-| `insensitive` | `bool \| None` | `None` | Enable case-insensitive matching |
+| Parameter     | Type           | Default | Description                               |
+| ------------- | -------------- | ------- | ----------------------------------------- |
+| `min_length`  | `int \| None`  | `None`  | Minimum character length for each segment |
+| `follow`      | `bool \| None` | `None`  | Follow `see` cross-references             |
+| `insensitive` | `bool \| None` | `None`  | Enable case-insensitive matching          |
 
 ### `Pronunciation`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `kind` | `EnumWrapper \| None` | The pronunciation system (e.g. IPA, Pinyin) |
-| `value` | `str` | The pronunciation notation |
-| `media` | `list[MediaURL]` | Audio URLs |
+| Property | Type                  | Description                                 |
+| -------- | --------------------- | ------------------------------------------- |
+| `kind`   | `EnumWrapper \| None` | The pronunciation system (e.g. IPA, Pinyin) |
+| `value`  | `str`                 | The pronunciation notation                  |
+| `media`  | `list[MediaURL]`      | Audio URLs                                  |
 
 ### `MediaURL`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `src` | `str` | URL or path to the media file |
-| `mime_type` | `str \| None` | MIME type (e.g. `audio/mpeg`) |
-| `description` | `str \| None` | Description of the media |
+| Property      | Type          | Description                   |
+| ------------- | ------------- | ----------------------------- |
+| `src`         | `str`         | URL or path to the media file |
+| `mime_type`   | `str \| None` | MIME type (e.g. `audio/mpeg`) |
+| `description` | `str \| None` | Description of the media      |

@@ -41,7 +41,7 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-latest
+          - host: macos-15-intel
             target: x86_64-apple-darwin
             build: mise //node:build --target x86_64-apple-darwin
           - host: windows-latest
@@ -63,14 +63,8 @@ jobs:
             target: aarch64-unknown-linux-gnu
             build: mise x zig -- mise //node:build --target aarch64-unknown-linux-gnu -x
           - host: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-            build: mise x zig -- mise //node:build --target armv7-unknown-linux-gnueabihf -x
-          - host: ubuntu-latest
             target: aarch64-linux-android
             build: mise //node:build --target aarch64-linux-android
-          - host: ubuntu-latest
-            target: armv7-linux-androideabi
-            build: mise //node:build --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
             build: mise x zig -- mise //node:build --target aarch64-unknown-linux-musl -x
@@ -192,7 +186,7 @@ jobs:
           - host: macos-latest
             target: aarch64-apple-darwin
             architecture: arm64
-          - host: macos-latest
+          - host: macos-15-intel
             target: x86_64-apple-darwin
             architecture: x64
         node:
@@ -230,7 +224,6 @@ jobs:
           - x86_64-unknown-linux-musl
           - aarch64-unknown-linux-gnu
           - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-gnueabihf
         node:
           - "24"
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
@@ -248,8 +241,6 @@ jobs:
           node -e "
             if ('${{ matrix.target }}'.startsWith('aarch64')) {
               console.log('PLATFORM=linux/arm64')
-            } else if ('${{ matrix.target }}'.startsWith('armv7')) {
-              console.log('PLATFORM=linux/arm/v7')
             } else {
               console.log('PLATFORM=linux/amd64')
             }
@@ -264,7 +255,7 @@ jobs:
       - name: Install dependencies
         working-directory: node
         run: |
-          mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
+          mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64"]'
           mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
           mise x -- yarn install
       - name: Download artifacts
@@ -275,13 +266,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-        if: ${{ contains(matrix.target, 'armv7') }}
-        with:
-          platforms: all
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-        if: ${{ contains(matrix.target, 'armv7') }}
       - name: Test bindings
         uses: tj-actions/docker-run@v2
         with:

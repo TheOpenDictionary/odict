@@ -24,12 +24,12 @@ odict serve ./dictionaries -p 8080
 
 All successful responses are JSON.
 
-| Endpoint | Parameters | Use it for |
-|----------|------------|------------|
-| `GET /{name}/lookup` | `q`, `follow`, `split` | Exact headword lookup. Use commas in `q` for multiple terms. |
-| `GET /{name}/search` | `q`, `limit` | Full-text search across definitions. |
-| `GET /{name}/split` | `q`, `follow`, `min_length` | Compound splitting without first trying the whole query. |
-| `GET /{name}/tokenize` | `text`, `follow` | Language-aware tokenization and dictionary matching. |
+| Endpoint               | Parameters                  | Use it for                                                   |
+| ---------------------- | --------------------------- | ------------------------------------------------------------ |
+| `GET /{name}/lookup`   | `q`, `follow`, `split`      | Exact headword lookup. Use commas in `q` for multiple terms. |
+| `GET /{name}/search`   | `q`, `limit`                | Full-text search across definitions.                         |
+| `GET /{name}/split`    | `q`, `follow`, `min_length` | Compound splitting without first trying the whole query.     |
+| `GET /{name}/tokenize` | `text`, `follow`            | Language-aware tokenization and dictionary matching.         |
 
 ## Examples
 

@@ -15,8 +15,8 @@ Lookup is the fastest way to query a dictionary — it finds entries by exact te
 use odict::{OpenDictionary, lookup::LookupOptions};
 
 fn main() -> odict::Result<()> {
-    let file = OpenDictionary::from_path("my-dictionary.odict")?;
-    let dict = file.contents()?;
+let file = OpenDictionary::from_path("my-dictionary.odict")?;
+let dict = file.contents()?;
 
     let results = dict.lookup(
         &vec!["cat"],
@@ -28,8 +28,10 @@ fn main() -> odict::Result<()> {
     }
 
     Ok(())
+
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -39,7 +41,8 @@ dictionary = OpenDictionary("<dictionary>...</dictionary>")
 
 results = dictionary.lookup("cat")
 print(results[0].entry.term)  # "cat"
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -49,7 +52,8 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 
 const results = dictionary.lookup("cat");
 console.log(results[0].entry.term); // "cat"
-```
+
+````
 </TabItem>
 </Tabs>
 
@@ -68,15 +72,17 @@ let results = dict.lookup(
 for result in &results {
     println!("Found: {}", result.entry.term.as_str());
 }
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
 results = dictionary.lookup(["cat", "dog", "run"])
 
 for result in results:
-    print(f"Found: {result.entry.term}")
-```
+print(f"Found: {result.entry.term}")
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -85,7 +91,8 @@ const results = dictionary.lookup(["cat", "dog", "run"]);
 for (const result of results) {
   console.log(`Found: ${result.entry.term}`);
 }
-```
+````
+
 </TabItem>
 </Tabs>
 
@@ -107,9 +114,10 @@ assert_eq!(results[0].entry.term.as_str(), "run");
 
 // directed_from tells you the original entry
 if let Some(from) = &results[0].directed_from {
-    println!("Redirected from: {}", from.term.as_str());
+println!("Redirected from: {}", from.term.as_str());
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -118,16 +126,18 @@ results = dictionary.lookup("ran", follow=True)
 # "ran" redirects to "run"
 print(results[0].entry.term)          # "run"
 print(results[0].directed_from.term)  # "ran"
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
 const results = dictionary.lookup("ran", { follow: true });
 
 // "ran" redirects to "run"
-console.log(results[0].entry.term);           // "run"
-console.log(results[0].directedFrom?.term);   // "ran"
-```
+console.log(results[0].entry.term); // "run"
+console.log(results[0].directedFrom?.term); // "ran"
+
+````
 </TabItem>
 </Tabs>
 
@@ -148,15 +158,17 @@ let options = LookupOptions::default().insensitive(true);
 let results = dict.lookup(&vec!["CAT"], options)?;
 
 assert_eq!(results[0].entry.term.as_str(), "cat");
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
 # "CAT" will match "cat"
 results = dictionary.lookup("CAT", insensitive=True)
 
-print(results[0].entry.term)  # "cat"
-```
+print(results[0].entry.term) # "cat"
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -164,7 +176,8 @@ print(results[0].entry.term)  # "cat"
 const results = dictionary.lookup("CAT", { insensitive: true });
 
 console.log(results[0].entry.term); // "cat"
-```
+````
+
 </TabItem>
 </Tabs>
 
@@ -178,16 +191,17 @@ If a term isn't found, ODict can split it into substrings and look up each part.
 use odict::lookup::{LookupOptions, LookupStrategy};
 
 let options = LookupOptions::default()
-    .strategy(LookupStrategy::Split(3));
+.strategy(LookupStrategy::Split(3));
 
 // "catdog" isn't a word, but "cat" and "dog" are
 let results = dict.lookup(&vec!["catdog"], options)?;
 
 for result in &results {
-    println!("Found: {}", result.entry.term.as_str());
+println!("Found: {}", result.entry.term.as_str());
 }
 // Prints: "cat", "dog"
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -197,7 +211,8 @@ results = dictionary.lookup("catdog", split=3)
 for result in results:
     print(result.entry.term)
 # Prints: "cat", "dog"
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -205,10 +220,11 @@ for result in results:
 const results = dictionary.lookup("catdog", { split: 3 });
 
 for (const result of results) {
-  console.log(result.entry.term);
+console.log(result.entry.term);
 }
 // Prints: "cat", "dog"
-```
+
+````
 </TabItem>
 </Tabs>
 
@@ -225,7 +241,8 @@ let options = LookupOptions::default()
     .strategy(LookupStrategy::Split(3));
 
 let results = dict.lookup(&vec!["RaN"], options)?;
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -256,13 +273,14 @@ entry = results[0].entry
 print(f"Term: {entry.term}")
 
 for ety in entry.etymologies:
-    for sense in ety.senses:
-        print(f"  Part of speech: {sense.pos}")
-        for defn in sense.definitions:
-            print(f"    {defn.value}")
-            for example in defn.examples:
-                print(f"      e.g. {example.value}")
-```
+for sense in ety.senses:
+print(f" Part of speech: {sense.pos}")
+for defn in sense.definitions:
+print(f" {defn.value}")
+for example in defn.examples:
+print(f" e.g. {example.value}")
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -284,14 +302,15 @@ for (const ety of entry.etymologies) {
     }
   }
 }
-```
+````
+
 </TabItem>
 <TabItem label="Rust">
 ```rust
 let results = dict.lookup(&vec!["cat"], LookupOptions::default())?;
 
 for result in &results {
-    let entry = result.entry.deserialize()?;
+let entry = result.entry.deserialize()?;
 
     println!("Term: {}", entry.term);
 
@@ -306,7 +325,10 @@ for result in &results {
             }
         }
     }
+
 }
+
 ```
 </TabItem>
 </Tabs>
+```

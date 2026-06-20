@@ -27,12 +27,12 @@ Static assets, like favicons, can be placed in the `public/` directory.
 
 All commands are run from this `docs/` directory.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `yarn install`            | Installs dependencies                            |
-| `yarn dev`                | Starts local dev server at `localhost:4321`      |
-| `yarn build`              | Builds the production site to `./dist/`          |
-| `yarn preview`            | Previews the production build locally            |
-| `yarn astro ...`          | Runs Astro CLI commands                          |
+| Command          | Action                                      |
+| :--------------- | :------------------------------------------ |
+| `yarn install`   | Installs dependencies                       |
+| `yarn dev`       | Starts local dev server at `localhost:4321` |
+| `yarn build`     | Builds the production site to `./dist/`     |
+| `yarn preview`   | Previews the production build locally       |
+| `yarn astro ...` | Runs Astro CLI commands                     |
 
 Use the main ODict workspace commands for library, CLI, Python, and Node development.

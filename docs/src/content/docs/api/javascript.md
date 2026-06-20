@@ -96,8 +96,8 @@ const dictionary = await OpenDictionary.load("wiktionary/eng", {
 
 ### Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
+| Property  | Type             | Description                                                                   |
+| --------- | ---------------- | ----------------------------------------------------------------------------- |
 | `minRank` | `number \| null` | The minimum rank value across all entries, or `null` if no entries have ranks |
 | `maxRank` | `number \| null` | The maximum rank value across all entries, or `null` if no entries have ranks |
 
@@ -118,12 +118,12 @@ dictionary.save("output.odict", {
 
 Looks up one or more terms by exact match.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | `string \| string[]` | — | Term(s) to look up |
-| `options.split` | `number` | — | Minimum word length for compound splitting |
-| `options.follow` | `boolean` | — | Follow `see` cross-references until an entry with etymologies is found |
-| `options.insensitive` | `boolean` | — | Enable case-insensitive matching |
+| Parameter             | Type                 | Default | Description                                                            |
+| --------------------- | -------------------- | ------- | ---------------------------------------------------------------------- |
+| `query`               | `string \| string[]` | —       | Term(s) to look up                                                     |
+| `options.split`       | `number`             | —       | Minimum word length for compound splitting                             |
+| `options.follow`      | `boolean`            | —       | Follow `see` cross-references until an entry with etymologies is found |
+| `options.insensitive` | `boolean`            | —       | Enable case-insensitive matching                                       |
 
 ```typescript
 // Simple lookup
@@ -148,12 +148,12 @@ const results = dictionary.lookup("catdog", { split: 3 });
 
 Splits one or more compound terms into component dictionary entries. Unlike `lookup(query, { split })`, this does not try the whole query first.
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | `string \| string[]` | — | Term(s) to split |
-| `options.minLength` | `number` | — | Minimum character length for each segment |
-| `options.follow` | `boolean` | — | Follow `see` cross-references |
-| `options.insensitive` | `boolean` | — | Enable case-insensitive matching |
+| Parameter             | Type                 | Default | Description                               |
+| --------------------- | -------------------- | ------- | ----------------------------------------- |
+| `query`               | `string \| string[]` | —       | Term(s) to split                          |
+| `options.minLength`   | `number`             | —       | Minimum character length for each segment |
+| `options.follow`      | `boolean`            | —       | Follow `see` cross-references             |
+| `options.insensitive` | `boolean`            | —       | Enable case-insensitive matching          |
 
 ```typescript
 const splitResults = dictionary.split("catdog", { minLength: 3 });

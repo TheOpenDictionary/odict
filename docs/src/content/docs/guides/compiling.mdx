@@ -17,17 +17,18 @@ The simplest approach is to compile an XML string directly into an in-memory dic
 use odict::{OpenDictionary, ToDictionary};
 
 fn main() -> odict::Result<()> {
-    let xml = r#"
-      <dictionary name="My Dictionary">
-        <entry term="hello">
-          <ety>
-            <sense pos="intj">
-              <definition value="A greeting" />
-            </sense>
-          </ety>
-        </entry>
-      </dictionary>
-    "#;
+let xml = r#"
+
+<dictionary name="My Dictionary">
+  <entry term="hello">
+    <ety>
+      <sense pos="intj">
+        <definition value="A greeting" />
+      </sense>
+    </ety>
+  </entry>
+</dictionary>
+"#;
 
     // Parse XML → build binary → get OpenDictionary
     let dict = xml.to_dictionary()?.build()?;
@@ -36,8 +37,10 @@ fn main() -> odict::Result<()> {
     dict.to_disk("my-dictionary.odict")?;
 
     Ok(())
+
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -64,13 +67,15 @@ dictionary = OpenDictionary(xml)
 
 # Save to disk
 dictionary.save("my-dictionary.odict")
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
 import { compile, OpenDictionary } from "@odict/node";
 
 const xml = `
+
 <dictionary name="My Dictionary">
   <entry term="hello">
     <ety>
@@ -91,7 +96,8 @@ const dictionary = new OpenDictionary(xml);
 
 // Save to disk
 dictionary.save("my-dictionary.odict");
-```
+
+````
 </TabItem>
 </Tabs>
 
@@ -113,19 +119,21 @@ fn main() -> odict::Result<()> {
 
     Ok(())
 }
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
 from theopendictionary import OpenDictionary, compile
 
 with open("my-dictionary.xml", "r") as f:
-    xml = f.read()
+xml = f.read()
 
 compiled_bytes = compile(xml)
 dictionary = OpenDictionary(compiled_bytes)
 dictionary.save("my-dictionary.odict")
-```
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -136,7 +144,8 @@ const xml = await readFile("my-dictionary.xml", "utf-8");
 const data = compile(xml);
 const dictionary = new OpenDictionary(data);
 dictionary.save("my-dictionary.odict");
-```
+````
+
 </TabItem>
 </Tabs>
 
@@ -150,7 +159,7 @@ ODict uses Brotli compression. You can configure the compression level when savi
 use odict::{compile::CompilerOptions, CompressOptions, ToDictionary};
 
 fn main() -> odict::Result<()> {
-    let xml = std::fs::read_to_string("my-dictionary.xml")?;
+let xml = std::fs::read_to_string("my-dictionary.xml")?;
 
     let compress = CompressOptions::default()
         .quality(11)       // Maximum compression (0–11)
@@ -165,8 +174,10 @@ fn main() -> odict::Result<()> {
         .to_disk_with_options("my-dictionary.odict", options)?;
 
     Ok(())
+
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -175,7 +186,8 @@ dictionary.save(
     quality=11,       # Maximum compression (0–11)
     window_size=22    # Window size (0–22)
 )
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -199,15 +211,17 @@ Once compiled, you can load `.odict` files from disk or from the remote registry
 use odict::OpenDictionary;
 
 fn main() -> odict::Result<()> {
-    // Load from disk
-    let file = OpenDictionary::from_path("my-dictionary.odict")?;
-    let dict = file.contents()?;
+// Load from disk
+let file = OpenDictionary::from_path("my-dictionary.odict")?;
+let dict = file.contents()?;
 
     println!("Entries: {}", dict.entries.len());
 
     Ok(())
+
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -224,7 +238,8 @@ async def main():
     print(dictionary.lexicon())
 
 asyncio.run(main())
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -237,6 +252,8 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 const dictionary = await OpenDictionary.load("wiktionary/eng");
 
 console.log(dictionary.lexicon());
+
 ```
 </TabItem>
 </Tabs>
+```

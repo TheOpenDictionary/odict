@@ -40,7 +40,7 @@ export default defineConfig({
         Hero: "./src/components/Hero.astro",
         Footer: "./src/components/Footer.astro",
       },
-      title: "ODict",
+      title: "The Open Dictionary",
       logo: {
         light: "./src/assets/odict-light.svg",
         dark: "./src/assets/odict-dark.svg",

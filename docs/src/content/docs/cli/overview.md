@@ -7,22 +7,22 @@ The ODict CLI is the fastest way to create, inspect, combine, and query dictiona
 
 ## What you can do
 
-| Task | Command | Use it when |
-|------|---------|-------------|
-| Create a starter XML file | `odict new` | You want a blank ODXML file with the dictionary name filled in. |
-| Compile XML | `odict compile` | You are ready to turn ODXML into a compact `.odict` file. |
-| Inspect a dictionary | `odict info` | You want basic metadata such as file version, size, and entry count. |
-| List headwords | `odict lexicon` | You need every term defined in a dictionary. |
-| Look up entries | `odict lookup` | You know the word and want an exact dictionary entry. |
-| Split compound text | `odict split` | You want to break a term into known dictionary words without trying the whole term first. |
-| Build a search index | `odict index` | You want full-text search across definitions. |
-| Search definitions | `odict search` | You know the meaning or phrase, but not necessarily the headword. |
-| Tokenize text | `odict tokenize` | You want language-aware tokens matched against dictionary entries. |
-| Convert back to text | `odict dump` | You want XML or SQL output from a compiled dictionary. |
-| Merge dictionaries | `odict merge` | You want to combine entries from multiple dictionaries. |
-| Download dictionaries | `odict download` | You want a dictionary from the remote registry. |
-| Manage aliases | `odict alias` | You want short names for local or downloaded dictionaries. |
-| Serve over HTTP | `odict serve` | You want JSON lookup, search, split, or tokenization endpoints. |
+| Task                      | Command          | Use it when                                                                               |
+| ------------------------- | ---------------- | ----------------------------------------------------------------------------------------- |
+| Create a starter XML file | `odict new`      | You want a blank ODXML file with the dictionary name filled in.                           |
+| Compile XML               | `odict compile`  | You are ready to turn ODXML into a compact `.odict` file.                                 |
+| Inspect a dictionary      | `odict info`     | You want basic metadata such as file version, size, and entry count.                      |
+| List headwords            | `odict lexicon`  | You need every term defined in a dictionary.                                              |
+| Look up entries           | `odict lookup`   | You know the word and want an exact dictionary entry.                                     |
+| Split compound text       | `odict split`    | You want to break a term into known dictionary words without trying the whole term first. |
+| Build a search index      | `odict index`    | You want full-text search across definitions.                                             |
+| Search definitions        | `odict search`   | You know the meaning or phrase, but not necessarily the headword.                         |
+| Tokenize text             | `odict tokenize` | You want language-aware tokens matched against dictionary entries.                        |
+| Convert back to text      | `odict dump`     | You want XML or SQL output from a compiled dictionary.                                    |
+| Merge dictionaries        | `odict merge`    | You want to combine entries from multiple dictionaries.                                   |
+| Download dictionaries     | `odict download` | You want a dictionary from the remote registry.                                           |
+| Manage aliases            | `odict alias`    | You want short names for local or downloaded dictionaries.                                |
+| Serve over HTTP           | `odict serve`    | You want JSON lookup, search, split, or tokenization endpoints.                           |
 
 ## Common workflow
 

@@ -84,22 +84,6 @@ function requireNative() {
       } catch (e) {
         loadErrors.push(e)
       }
-    } else if (process.arch === 'arm') {
-      try {
-        return require('./node.android-arm-eabi.node')
-      } catch (e) {
-        loadErrors.push(e)
-      }
-      try {
-        const binding = require('@odict/node-android-arm-eabi')
-        const bindingPackageVersion = require('@odict/node-android-arm-eabi/package.json').version
-        if (bindingPackageVersion !== '2.2.2' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 2.2.2 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
-        }
-        return binding
-      } catch (e) {
-        loadErrors.push(e)
-      }
     } else {
       loadErrors.push(new Error(`Unsupported architecture on Android ${process.arch}`))
     }
@@ -321,40 +305,6 @@ function requireNative() {
         try {
           const binding = require('@odict/node-linux-arm64-gnu')
           const bindingPackageVersion = require('@odict/node-linux-arm64-gnu/package.json').version
-          if (bindingPackageVersion !== '2.2.2' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 2.2.2 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
-          }
-          return binding
-        } catch (e) {
-          loadErrors.push(e)
-        }
-      }
-    } else if (process.arch === 'arm') {
-      if (isMusl()) {
-        try {
-          return require('./node.linux-arm-musleabihf.node')
-        } catch (e) {
-          loadErrors.push(e)
-        }
-        try {
-          const binding = require('@odict/node-linux-arm-musleabihf')
-          const bindingPackageVersion = require('@odict/node-linux-arm-musleabihf/package.json').version
-          if (bindingPackageVersion !== '2.2.2' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 2.2.2 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
-          }
-          return binding
-        } catch (e) {
-          loadErrors.push(e)
-        }
-      } else {
-        try {
-          return require('./node.linux-arm-gnueabihf.node')
-        } catch (e) {
-          loadErrors.push(e)
-        }
-        try {
-          const binding = require('@odict/node-linux-arm-gnueabihf')
-          const bindingPackageVersion = require('@odict/node-linux-arm-gnueabihf/package.json').version
           if (bindingPackageVersion !== '2.2.2' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
             throw new Error(`Native binding package version mismatch, expected 2.2.2 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }

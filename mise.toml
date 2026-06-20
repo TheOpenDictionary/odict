@@ -12,7 +12,7 @@ rust = "latest"
 zig = "latest"
 
 [monorepo]
-config_roots = ["crates/*", "node", "python", "cli"]
+config_roots = ["crates/*", "node", "python", "cli", "docs"]
 
 [settings]
 python.uv_venv_auto = true

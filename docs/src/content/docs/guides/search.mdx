@@ -17,14 +17,16 @@ Before you can search, you need to create a full-text index. This only needs to 
 use odict::{OpenDictionary, index::IndexOptions};
 
 fn main() -> odict::Result<()> {
-    let file = OpenDictionary::from_path("my-dictionary.odict")?;
-    let dict = file.contents()?;
+let file = OpenDictionary::from_path("my-dictionary.odict")?;
+let dict = file.contents()?;
 
     dict.index(IndexOptions::default())?;
 
     Ok(())
+
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -32,7 +34,8 @@ from theopendictionary import OpenDictionary
 
 dictionary = await OpenDictionary.load("./my-dictionary.odict")
 dictionary.index()
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -40,7 +43,8 @@ import { OpenDictionary } from "@odict/node";
 
 const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 dictionary.index();
-```
+
+````
 </TabItem>
 </Tabs>
 
@@ -59,18 +63,20 @@ let options = IndexOptions::default()
     .memory(50_000_000);       // 50MB memory arena per thread
 
 dict.index(options)?;
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
 from theopendictionary import IndexOptions
 
 dictionary.index(IndexOptions(
-    directory="./my-index",    # Custom index directory
-    overwrite=True,            # Overwrite existing index
-    memory=50_000_000          # 50MB memory arena per thread
+directory="./my-index", # Custom index directory
+overwrite=True, # Overwrite existing index
+memory=50_000_000 # 50MB memory arena per thread
 ))
-```
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -79,7 +85,8 @@ dictionary.index({
   overwrite: true,             // Overwrite existing index
   memory: 50_000_000,          // 50MB memory arena per thread
 });
-```
+````
+
 </TabItem>
 </Tabs>
 
@@ -95,9 +102,10 @@ use odict::search::SearchOptions;
 let results = dict.search("domesticated mammal", SearchOptions::default())?;
 
 for entry in &results {
-    println!("{}", entry.term);
+println!("{}", entry.term);
 }
-```
+
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -105,16 +113,18 @@ results = dictionary.search("domesticated mammal")
 
 for entry in results:
     print(entry.term)
-```
+````
+
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
 const results = dictionary.search("domesticated mammal");
 
 for (const entry of results) {
-  console.log(entry.term);
+console.log(entry.term);
 }
-```
+
+````
 </TabItem>
 </Tabs>
 
@@ -132,19 +142,21 @@ let options = SearchOptions::default()
     .threshold(50);            // Relevance threshold
 
 let results = dict.search("greeting", options)?;
-```
+````
+
 </TabItem>
 <TabItem label="Python">
 ```python
 from theopendictionary import SearchOptions
 
 results = dictionary.search("greeting", SearchOptions(
-    directory="./my-index",    # Custom index directory
-    autoindex=True,            # Auto-create index if missing
-    limit=10,                  # Max results to return
-    threshold=50               # Relevance threshold
+directory="./my-index", # Custom index directory
+autoindex=True, # Auto-create index if missing
+limit=10, # Max results to return
+threshold=50 # Relevance threshold
 ))
-```
+
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -154,7 +166,8 @@ const results = dictionary.search("greeting", {
   limit: 10,                   // Max results to return
   threshold: 50,               // Relevance threshold
 });
-```
+````
+
 </TabItem>
 </Tabs>
 
@@ -164,13 +177,13 @@ The `autoindex` option is convenient for one-off scripts — it creates the inde
 
 ## Search vs. lookup
 
-| | Lookup | Search |
-|---|--------|--------|
-| **Matches against** | Entry terms (headwords) | Definition text |
-| **Requires index** | No | Yes |
-| **Speed** | O(1) per term | Depends on index size |
-| **Use case** | You know the exact word | You're searching by meaning |
-| **Supports splitting** | Yes | No |
-| **Supports follow** | Yes | No |
+|                        | Lookup                  | Search                      |
+| ---------------------- | ----------------------- | --------------------------- |
+| **Matches against**    | Entry terms (headwords) | Definition text             |
+| **Requires index**     | No                      | Yes                         |
+| **Speed**              | O(1) per term           | Depends on index size       |
+| **Use case**           | You know the exact word | You're searching by meaning |
+| **Supports splitting** | Yes                     | No                          |
+| **Supports follow**    | Yes                     | No                          |
 
 In most applications you'll use both: lookup for direct dictionary access, and search for discovery.
