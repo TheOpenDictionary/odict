@@ -5,6 +5,8 @@ const cliTagPrefix = "cli/";
 const installerAssetName = "odict-cli-installer.sh";
 const githubToken = import.meta.env.GITHUB_TOKEN as string | undefined;
 
+export const prerender = false;
+
 type GitHubReleaseAsset = {
   name?: string;
   url?: string;
