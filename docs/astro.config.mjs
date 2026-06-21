@@ -4,10 +4,13 @@ import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import mermaid from "astro-mermaid";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // https://astro.build/config
 export default defineConfig({
   prefetch: true,
   site: "https://www.odict.org",
+
   fonts: [
     {
       provider: fontProviders.google(),
@@ -28,6 +31,7 @@ export default defineConfig({
       cssVariable: "--ff-sans",
     },
   ],
+
   integrations: [
     mermaid({
       autoTheme: true,
@@ -105,4 +109,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });

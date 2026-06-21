@@ -1,9 +1,12 @@
 import type { APIRoute } from "astro";
 
-const releasesUrl = "https://api.github.com/repos/TheOpenDictionary/odict/releases";
+const releasesUrl =
+  "https://api.github.com/repos/TheOpenDictionary/odict/releases";
 const cliTagPrefix = "cli/";
 const installerAssetName = "odict-cli-installer.sh";
 const githubToken = import.meta.env.GITHUB_TOKEN as string | undefined;
+
+export const prerender = false;
 
 type GitHubReleaseAsset = {
   name?: string;
@@ -46,7 +49,9 @@ const fetchLatestCliRelease = async () => {
     });
 
     if (!response.ok) {
-      throw new Error(`GitHub releases request failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `GitHub releases request failed: ${response.status} ${response.statusText}`,
+      );
     }
 
     const releases = (await response.json()) as GitHubRelease[];
@@ -76,7 +81,9 @@ export const GET: APIRoute = async () => {
       return errorResponse("No CLI release found.", 404);
     }
 
-    const installerAsset = release.assets?.find(({ name }) => name === installerAssetName);
+    const installerAsset = release.assets?.find(
+      ({ name }) => name === installerAssetName,
+    );
 
     if (!installerAsset?.url) {
       return errorResponse(
@@ -93,14 +100,18 @@ export const GET: APIRoute = async () => {
     });
 
     if (!script.ok) {
-      return errorResponse(`Installer download failed: ${script.status} ${script.statusText}`, 502);
+      return errorResponse(
+        `Installer download failed: ${script.status} ${script.statusText}`,
+        502,
+      );
     }
 
     return new Response(await script.text(), {
       headers: shellHeaders,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unexpected installer failure.";
+    const message =
+      error instanceof Error ? error.message : "Unexpected installer failure.";
 
     return errorResponse(message, 502);
   }
