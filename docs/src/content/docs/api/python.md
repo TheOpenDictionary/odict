@@ -216,7 +216,8 @@ results = dictionary.search("greeting", SearchOptions(limit=5))
 
 #### `tokenize(text: str, follow=None, insensitive=None) -> list[Token]`
 
-Tokenizes text using NLP-based segmentation and matches each token against the dictionary. Supports Chinese, Japanese, Korean, Thai, Khmer, German, Swedish, and Latin-script languages.
+Tokenizes text using NLP-based segmentation and matches each token against the dictionary. Supports Chinese, Japanese, Korean, Thai, Khmer, German,
+Swedish, and Latin-script languages.
 
 | Parameter     | Type                  | Default | Description                                                                          |
 | ------------- | --------------------- | ------- | ------------------------------------------------------------------------------------ |

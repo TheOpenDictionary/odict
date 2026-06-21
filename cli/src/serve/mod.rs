@@ -147,7 +147,7 @@ pub async fn serve<'a>(ctx: &mut CLIContext<'a>, args: &ServeArgs) -> anyhow::Re
         DictionaryCache::new(NonZero::new(*capacity).unwrap(), dictionary_map.to_owned());
 
     if dictionary_map.is_empty() {
-        ctx.println("\n⚠️  No dictionaries found to serve. Please provide valid dictionary files or directories containing .odict files.".to_string());
+        ctx.println("\n⚠️  No dictionaries found to serve. Please provide valid dictionary files or directories containing .odict files.");
         return Ok(());
     }
 

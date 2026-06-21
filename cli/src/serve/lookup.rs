@@ -20,6 +20,7 @@ pub struct LookupRequest {
     split: Option<usize>,
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Display, Error)]
 enum LookupError {
     #[display("Dictionary not found: {}", name)]
@@ -89,8 +90,8 @@ async fn handle_lookup(
 
     let mut opts = LookupOptions::default().follow(follow.unwrap_or(false));
 
-    if split.is_some() {
-        opts = opts.strategy(LookupStrategy::Split(split.unwrap()));
+    if let Some(split) = split {
+        opts = opts.strategy(LookupStrategy::Split(split));
     }
 
     let entries = dictionary

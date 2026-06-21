@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
 
 /// Options for loading dictionaries from remote registries.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(PartialEq, Default, Clone, Eq)]
 pub struct RemoteLoadOptions {
     /// Custom output directory for downloaded files.
@@ -29,7 +29,7 @@ impl RemoteLoadOptions {
 }
 
 /// Options for loading a dictionary from a file path, alias, or remote registry.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(PartialEq, Default, Clone, Eq)]
 pub struct LoadOptions {
     /// Custom configuration directory.

@@ -5,7 +5,9 @@ description: How to tokenize text and match tokens against dictionary entries us
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-ODict includes a built-in NLP tokenizer that segments text into words and automatically matches each token against dictionary entries. This is especially useful for languages without whitespace-delimited words (Chinese, Japanese, Korean, Thai, Khmer) as well as compound-word languages (German, Swedish).
+ODict includes a built-in NLP tokenizer that segments text into words and automatically matches each token against dictionary entries. This is
+especially useful for languages without whitespace-delimited words (Chinese, Japanese, Korean, Thai, Khmer) as well as compound-word languages
+(German, Swedish).
 
 ## Supported languages
 
@@ -46,7 +48,7 @@ let dict = file.contents()?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -73,7 +75,7 @@ for (const token of tokens) {
 console.log(`'${token.lemma}' (${token.entries.length} entries found)`);
 }
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -103,7 +105,7 @@ tokens = dictionary.tokenize("你好世界")
 for token in tokens:
 print(f"Lemma: {token.lemma}, Script: {token.script}, Language: {token.language}")
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -140,7 +142,7 @@ result.entry.term.as_str()
 }
 // e.g. 'ran' → 'run'
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -167,7 +169,7 @@ console.log(`'${result.directedFrom.term}' → '${result.entry.term}'`);
 }
 // e.g. 'ran' → 'run'
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -222,7 +224,7 @@ let options = TokenizeOptions::default()
 
 let tokens = dict.tokenize("The CAT RaN away", options)?;
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python

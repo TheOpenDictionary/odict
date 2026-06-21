@@ -3,7 +3,7 @@ use std::fmt;
 use structural_convert::StructuralConvert;
 
 /// A reference to an external media resource (audio, image, etc.).
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone, Debug, StructuralConvert)]
 #[convert(from(odict::schema::MediaURL))]
 pub struct MediaURL {

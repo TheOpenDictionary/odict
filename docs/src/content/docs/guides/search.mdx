@@ -5,7 +5,8 @@ description: How to index and run full-text searches on ODict dictionaries from 
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-Full-text search lets you find entries by matching against their definitions, not just their headwords. Unlike [lookup](/guides/lookup/) which requires an exact term match, search uses a [Tantivy](https://github.com/quickwit-oss/tantivy)-powered full-text index.
+Full-text search lets you find entries by matching against their definitions, not just their headwords. Unlike [lookup](/guides/lookup/) which
+requires an exact term match, search uses a [Tantivy](https://github.com/quickwit-oss/tantivy)-powered full-text index.
 
 ## Creating an index
 
@@ -26,7 +27,7 @@ let dict = file.contents()?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -44,7 +45,7 @@ import { OpenDictionary } from "@odict/node";
 const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 dictionary.index();
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -76,7 +77,7 @@ overwrite=True, # Overwrite existing index
 memory=50_000_000 # 50MB memory arena per thread
 ))
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -105,7 +106,7 @@ for entry in &results {
 println!("{}", entry.term);
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -124,7 +125,7 @@ for (const entry of results) {
 console.log(entry.term);
 }
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -156,7 +157,7 @@ limit=10, # Max results to return
 threshold=50 # Relevance threshold
 ))
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -172,7 +173,8 @@ const results = dictionary.search("greeting", {
 </Tabs>
 
 :::tip
-The `autoindex` option is convenient for one-off scripts — it creates the index on the fly if one doesn't exist yet. For production use, create the index ahead of time with `index()` to avoid the startup cost on first search.
+The `autoindex` option is convenient for one-off scripts — it creates the index on the fly if one doesn't exist yet. For production use, create the
+index ahead of time with `index()` to avoid the startup cost on first search.
 :::
 
 ## Search vs. lookup

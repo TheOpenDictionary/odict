@@ -1,8 +1,8 @@
 use pyo3::prelude::*;
 
 /// Options for configuring full-text search.
-#[pyclass]
-#[derive(Clone)]
+#[pyclass(from_py_object)]
+#[derive(Clone, Default)]
 pub struct SearchOptions {
     /// Custom directory for the search index.
     #[pyo3(get, set)]
@@ -36,17 +36,6 @@ impl SearchOptions {
             threshold,
             autoindex,
             limit,
-        }
-    }
-}
-
-impl Default for SearchOptions {
-    fn default() -> Self {
-        SearchOptions {
-            directory: None,
-            threshold: None,
-            autoindex: None,
-            limit: None,
         }
     }
 }

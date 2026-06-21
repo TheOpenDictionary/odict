@@ -3,7 +3,9 @@ title: Schema Overview
 description: An overview of the ODict XML (ODXML) schema, core hierarchy, and richer lexical fields.
 ---
 
-ODict dictionaries are authored in XML using the **ODXML** (Open Dictionary XML) format. This page provides a conceptual overview of how the schema is structured, from minimal dictionary entries to richer lexical data such as ranks, pronunciations, media, forms, tags, translations, lemmas, notes, and examples. For the element-by-element reference, see the [Schema Reference](/schema/reference/).
+ODict dictionaries are authored in XML using the **ODXML** (Open Dictionary XML) format. This page provides a conceptual overview of how the schema is
+structured, from minimal dictionary entries to richer lexical data such as ranks, pronunciations, media, forms, tags, translations, lemmas, notes, and
+examples. For the element-by-element reference, see the [Schema Reference](/schema/reference/).
 
 ## Structure
 
@@ -61,7 +63,8 @@ The simplest valid dictionary:
 
 ## Entries and cross-references
 
-Each `<entry>` represents a headword. Entries can either contain full definitions (via `<ety>` children) or redirect to another entry using the `see` attribute:
+Each `<entry>` represents a headword. Entries can either contain full definitions (via `<ety>` children) or redirect to another entry using the `see`
+attribute:
 
 ```xml
 <entry term="run">
@@ -78,7 +81,8 @@ Each `<entry>` represents a headword. Entries can either contain full definition
 
 When looking up "ran" with the `follow` option enabled, ODict will resolve the cross-reference and return the "run" entry.
 
-Use `rank` on an entry when you have frequency data. Lower or higher rank semantics are up to the source dictionary, but ODict exposes `min_rank` and `max_rank` in the language bindings so applications can normalize the values.
+Use `rank` on an entry when you have frequency data. Lower or higher rank semantics are up to the source dictionary, but ODict exposes `min_rank` and
+`max_rank` in the language bindings so applications can normalize the values.
 
 ```xml
 <entry term="run" rank="100">
@@ -111,7 +115,8 @@ If a word has multiple distinct origins, you can define multiple `<ety>` element
 
 ## Senses and parts of speech
 
-Within an etymology, `<sense>` elements group definitions by part of speech. The `pos` attribute accepts standard codes like `n` (noun), `v` (verb), `adj` (adjective), etc. See the [reference](/schema/reference/#parts-of-speech) for the full list.
+Within an etymology, `<sense>` elements group definitions by part of speech. The `pos` attribute accepts standard codes like `n` (noun), `v` (verb),
+`adj` (adjective), etc. See the [reference](/schema/reference/#parts-of-speech) for the full list.
 
 ```xml
 <sense pos="n">
@@ -269,5 +274,6 @@ The schema is formally defined in [`odict.xsd`](https://github.com/TheOpenDictio
 Most XML editors (VS Code with the XML extension, IntelliJ, etc.) will provide autocomplete and validation when the XSD is referenced.
 
 :::note
-The XSD covers the stable core shape. ODict's Rust schema and language bindings also expose richer fields such as ranks, tags, forms, and translations when modeling larger dictionaries.
+The XSD covers the stable core shape. ODict's Rust schema and language bindings also expose richer fields such as ranks, tags, forms, and translations
+when modeling larger dictionaries.
 :::

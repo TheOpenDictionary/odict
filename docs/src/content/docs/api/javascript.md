@@ -3,7 +3,8 @@ title: JavaScript API
 description: Using ODict from JavaScript/TypeScript via the @odict/node package.
 ---
 
-The JavaScript bindings are distributed as `@odict/node` on npm. They are native extensions built with [NAPI-RS](https://napi.rs/) and also support the browser via WASI.
+The JavaScript bindings are distributed as `@odict/node` on npm. They are native extensions built with [NAPI-RS](https://napi.rs/) and also support
+the browser via WASI.
 
 ## Installation
 
@@ -194,7 +195,8 @@ const results = dictionary.search("greeting", { limit: 5 });
 
 #### `tokenize(text: string, options?: TokenizeOptions): Token[]`
 
-Tokenizes text and matches each token against the dictionary. Supports Chinese, Japanese, Korean, Thai, Khmer, German, Swedish, and Latin-script languages.
+Tokenizes text and matches each token against the dictionary. Supports Chinese, Japanese, Korean, Thai, Khmer, German, Swedish, and Latin-script
+languages.
 
 ```typescript
 const tokens = dictionary.tokenize("the cat ran");
@@ -401,5 +403,6 @@ import { compile, OpenDictionary } from "@odict/node/browser";
 ```
 
 :::note
-Browser support runs ODict compiled to WebAssembly via WASI. The `load()` method (which accesses the filesystem and network) is not available in the browser — use `new OpenDictionary(data)` with pre-compiled data instead.
+Browser support runs ODict compiled to WebAssembly via WASI. The `load()` method (which accesses the filesystem and network) is not available in the
+browser — use `new OpenDictionary(data)` with pre-compiled data instead.
 :::

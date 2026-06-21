@@ -10,12 +10,12 @@ use crate::CLIContext;
 
 use super::md::print_md;
 
-const STYLE_POS: LazyLock<Style> = LazyLock::new(|| Style::new().italic());
-const STYLE_TITLE: LazyLock<Style> = LazyLock::new(|| Style::new().bold().underlined());
-const STYLE_EXAMPLE_BULLET: LazyLock<Style> = LazyLock::new(|| Style::new().dim());
-const STYLE_EXAMPLE: LazyLock<Style> =
+static STYLE_POS: LazyLock<Style> = LazyLock::new(|| Style::new().italic());
+static STYLE_TITLE: LazyLock<Style> = LazyLock::new(|| Style::new().bold().underlined());
+static STYLE_EXAMPLE_BULLET: LazyLock<Style> = LazyLock::new(|| Style::new().dim());
+static STYLE_EXAMPLE: LazyLock<Style> =
     LazyLock::new(|| STYLE_EXAMPLE_BULLET.clone().italic().dim());
-const STYLE_EXAMPLE_TARGET: LazyLock<Style> = LazyLock::new(|| STYLE_EXAMPLE.clone().underlined());
+static STYLE_EXAMPLE_TARGET: LazyLock<Style> = LazyLock::new(|| STYLE_EXAMPLE.clone().underlined());
 
 fn divider() -> String {
     "─".repeat(32)

@@ -4,7 +4,7 @@ use tantivy::schema::{Field, IndexRecordOption, Schema, TextFieldIndexing, TextO
 
 use super::constants::CUSTOM_TOKENIZER;
 
-pub(super) const SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
+pub(super) static SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
     let mut schema_builder = Schema::builder();
 
     let text_options = TextOptions::default().set_indexing_options(
@@ -19,10 +19,10 @@ pub(super) const SCHEMA: LazyLock<Schema> = LazyLock::new(|| {
     schema_builder.build()
 });
 
-pub(super) const FIELD_TERM: LazyLock<Field> = LazyLock::new(|| SCHEMA.get_field("term").unwrap());
+pub(super) static FIELD_TERM: LazyLock<Field> = LazyLock::new(|| SCHEMA.get_field("term").unwrap());
 
-pub(super) const FIELD_DEFINITIONS: LazyLock<Field> =
+pub(super) static FIELD_DEFINITIONS: LazyLock<Field> =
     LazyLock::new(|| SCHEMA.get_field("definitions").unwrap());
 
-pub(super) const FIELD_BUFFER: LazyLock<Field> =
+pub(super) static FIELD_BUFFER: LazyLock<Field> =
     LazyLock::new(|| SCHEMA.get_field("buffer").unwrap());

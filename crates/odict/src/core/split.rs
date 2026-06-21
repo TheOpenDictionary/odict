@@ -10,15 +10,17 @@ impl AsRef<SplitOptions> for SplitOptions {
     }
 }
 
-impl SplitOptions {
-    pub fn default() -> Self {
+impl Default for SplitOptions {
+    fn default() -> Self {
         Self {
             threshold: 1,
             follow: false,
             insensitive: false,
         }
     }
+}
 
+impl SplitOptions {
     pub fn threshold(mut self, threshold: usize) -> Self {
         self.threshold = threshold;
         self

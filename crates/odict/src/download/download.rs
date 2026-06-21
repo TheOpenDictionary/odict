@@ -155,12 +155,12 @@ impl<'a> DictionaryDownloader<'a> {
         opts: &DownloadOptions<'a>,
     ) -> crate::Result<OpenDictionary> {
         let etag = match opts.caching {
-            true => get_metadata(&out_path)?.map(|meta| meta.etag),
+            true => get_metadata(out_path)?.map(|meta| meta.etag),
             false => None,
         };
 
         let (bytes, new_etag) = self
-            .fetch_with_etag(&url, etag.as_deref(), opts.on_progress.as_ref())
+            .fetch_with_etag(url, etag.as_deref(), opts.on_progress.as_ref())
             .await?;
 
         // If the upstream was modified
@@ -168,7 +168,7 @@ impl<'a> DictionaryDownloader<'a> {
             if let Some(etag) = new_etag {
                 if opts.caching {
                     set_metadata(
-                        &out_path,
+                        out_path,
                         DictionaryMetadata {
                             etag,
                             last_modified: SystemTime::now(),
@@ -178,10 +178,10 @@ impl<'a> DictionaryDownloader<'a> {
                 }
             }
 
-            std::fs::write(&out_path, &bytes)?;
+            std::fs::write(out_path, &bytes)?;
         }
 
-        OpenDictionary::from_path(&out_path)
+        OpenDictionary::from_path(out_path)
     }
 
     pub async fn download_with_options<Options: AsRef<DownloadOptions<'a>>>(
@@ -198,7 +198,7 @@ impl<'a> DictionaryDownloader<'a> {
             None => opts
                 .clone()
                 .config_dir
-                .unwrap_or(DEFAULT_CONFIG_DIR.to_path_buf())
+                .unwrap_or_else(|| DEFAULT_CONFIG_DIR.to_path_buf())
                 .join(DEFAULT_DICTIONARIES_DIR)
                 .join(&dictionary),
         };
@@ -354,7 +354,7 @@ mod tests {
 
     fn create_test_downloader<'a>(base_url: String) -> DictionaryDownloader<'a> {
         DictionaryDownloader::default()
-            .with_client(reqwest::Client::new().into())
+            .with_client(reqwest::Client::new())
             .with_base_url(base_url)
     }
 
@@ -561,7 +561,7 @@ mod tests {
         let client = reqwest::Client::new();
         let downloader = DictionaryDownloader::default()
             .with_client(client)
-            .with_base_url(custom_url.to_string());
+            .with_base_url(custom_url);
         assert_eq!(downloader.base_url, custom_url);
     }
 

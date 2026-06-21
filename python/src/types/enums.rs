@@ -5,7 +5,7 @@ use structural_convert::StructuralConvert;
 ///
 /// ODict enums are represented as string triples: the enum name,
 /// the variant name, and the variant's string value.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, PartialEq, Clone, StructuralConvert)]
 #[convert(from(internal::EnumWrapper))]
 pub struct EnumWrapper {

@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
 
-#[pyclass]
-#[derive(Clone)]
+#[pyclass(from_py_object)]
+#[derive(Clone, Default)]
 pub struct SplitOptions {
     #[pyo3(get, set)]
     pub min_length: Option<u32>,
@@ -22,16 +22,6 @@ impl SplitOptions {
             min_length,
             follow,
             insensitive,
-        }
-    }
-}
-
-impl Default for SplitOptions {
-    fn default() -> Self {
-        SplitOptions {
-            min_length: None,
-            follow: None,
-            insensitive: None,
         }
     }
 }

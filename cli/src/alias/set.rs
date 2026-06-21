@@ -20,7 +20,7 @@ pub struct SetArgs {
     retries: u32,
 }
 
-pub async fn set<'a>(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
+pub async fn set(args: &SetArgs, overwrite: bool) -> anyhow::Result<()> {
     let dict = OpenDictionary::load_with_options(
         args.path.as_str(),
         LoadOptions::default()

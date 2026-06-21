@@ -31,7 +31,7 @@ let dict = file.contents()?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -53,7 +53,7 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 const results = dictionary.lookup("cat");
 console.log(results[0].entry.term); // "cat"
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -82,7 +82,7 @@ results = dictionary.lookup(["cat", "dog", "run"])
 for result in results:
 print(f"Found: {result.entry.term}")
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -117,7 +117,7 @@ if let Some(from) = &results[0].directed_from {
 println!("Redirected from: {}", from.term.as_str());
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -137,7 +137,7 @@ const results = dictionary.lookup("ran", { follow: true });
 console.log(results[0].entry.term); // "run"
 console.log(results[0].directedFrom?.term); // "ran"
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -168,7 +168,7 @@ results = dictionary.lookup("CAT", insensitive=True)
 
 print(results[0].entry.term) # "cat"
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -183,7 +183,8 @@ console.log(results[0].entry.term); // "cat"
 
 ## Compound word splitting
 
-If a term isn't found, ODict can split it into substrings and look up each part. The `split` parameter sets the minimum character length for each fragment.
+If a term isn't found, ODict can split it into substrings and look up each part. The `split` parameter sets the minimum character length for each
+fragment.
 
 <Tabs>
 <TabItem label="Rust">
@@ -201,7 +202,7 @@ println!("Found: {}", result.entry.term.as_str());
 }
 // Prints: "cat", "dog"
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -224,7 +225,7 @@ console.log(result.entry.term);
 }
 // Prints: "cat", "dog"
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -280,7 +281,7 @@ print(f" {defn.value}")
 for example in defn.examples:
 print(f" e.g. {example.value}")
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -328,7 +329,7 @@ let entry = result.entry.deserialize()?;
 
 }
 
-```
+```text
 </TabItem>
 </Tabs>
 ```

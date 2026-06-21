@@ -6,7 +6,7 @@ use structural_convert::StructuralConvert;
 /// A usage example illustrating a definition.
 ///
 /// Examples can optionally include translations and pronunciations.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Example))]
 pub struct Example {

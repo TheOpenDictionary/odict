@@ -6,13 +6,13 @@ uv = "latest"
 auto = true
 
 [tasks.dev]
+outputs = { auto = true }
 run = "uvx maturin develop -m ./Cargo.toml"
 sources = ["src/**/*.rs", "Cargo.toml"]
-outputs = { auto = true }
 
 [tasks.build]
-run = "uvx maturin build -m ./Cargo.toml"
 outputs = { auto = true }
+run = "uvx maturin build -m ./Cargo.toml"
 sources = ["src/**/*.rs", "Cargo.toml"]
 
 [tasks.lint]
@@ -25,9 +25,9 @@ depends = [":lint"]
 run = "uvx maturin generate-ci  -o ../../.github/workflows/python.yml -m ./Cargo.toml --pytest github"
 
 [tasks.format]
+outputs = { auto = true }
 run = ["cargo fmt", "ruff format"]
 sources = ["src/**/*.rs", "src/**/*.py"]
-outputs = { auto = true }
 
 [tasks.snapshot]
 depends = [":test --snapshot-update"]

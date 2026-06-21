@@ -50,18 +50,15 @@ impl AsMut<AliasManager> for AliasManager {
 impl AliasManager {
     fn save_to_disk(&mut self) -> crate::Result<()> {
         let config_bytes = to_vec(&self.get_aliases()?.clone())?;
-        fs::write(&self.path(), config_bytes)?;
+        fs::write(self.path(), config_bytes)?;
         Ok(())
     }
 
     fn path(&self) -> PathBuf {
-        PathBuf::from(
-            self.config_dir
-                .clone()
-                .unwrap_or(DEFAULT_CONFIG_DIR.to_path_buf())
-                .clone(),
-        )
-        .join(DEFAULT_ALIAS_FILE)
+        self.config_dir
+            .clone()
+            .unwrap_or_else(|| DEFAULT_CONFIG_DIR.to_path_buf())
+            .join(DEFAULT_ALIAS_FILE)
     }
 
     fn get_aliases(&mut self) -> crate::Result<&mut HashMap<String, String>> {

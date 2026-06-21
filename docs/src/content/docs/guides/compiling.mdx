@@ -40,7 +40,7 @@ let xml = r#"
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -97,7 +97,7 @@ const dictionary = new OpenDictionary(xml);
 // Save to disk
 dictionary.save("my-dictionary.odict");
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -132,7 +132,7 @@ compiled_bytes = compile(xml)
 dictionary = OpenDictionary(compiled_bytes)
 dictionary.save("my-dictionary.odict")
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -176,7 +176,7 @@ let xml = std::fs::read_to_string("my-dictionary.xml")?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -219,7 +219,7 @@ let dict = file.contents()?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -251,7 +251,7 @@ const dictionary = await OpenDictionary.load("wiktionary/eng");
 
 console.log(dictionary.lexicon());
 
-```
+```text
 </TabItem>
 </Tabs>
 ```

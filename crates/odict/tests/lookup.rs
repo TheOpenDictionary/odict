@@ -61,7 +61,7 @@ mod lookup_tests {
             .unwrap();
 
         assert_eq!(basic.len(), 1);
-        assert_eq!(basic[0].directed_from.is_some(), true);
+        assert!(basic[0].directed_from.is_some());
         assert_eq!(basic[0].directed_from.unwrap().term, "runners");
         assert_eq!(basic[0].entry.term, "runner");
 
@@ -147,7 +147,7 @@ mod lookup_tests {
             .unwrap();
 
         assert_eq!(result.len(), 1);
-        assert_eq!(result[0].directed_from.is_some(), true);
+        assert!(result[0].directed_from.is_some());
         assert_eq!(result[0].directed_from.unwrap().term, "runners");
         assert_eq!(result[0].entry.term, "runner");
     }

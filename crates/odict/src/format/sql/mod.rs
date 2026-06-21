@@ -7,6 +7,7 @@ mod groups;
 mod notes;
 mod pronunciations;
 mod senses;
+#[allow(clippy::module_inception)]
 mod sql;
 mod utils;
 

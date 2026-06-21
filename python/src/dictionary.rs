@@ -167,7 +167,7 @@ impl OpenDictionary {
         let dict = self.dict.contents().map_err(cast_error)?;
 
         let results = dict
-            .lookup(&queries, &odict::lookup::LookupOptions::from(options))
+            .lookup(&queries, odict::lookup::LookupOptions::from(options))
             .map_err(cast_error)?;
 
         let mapped = results
@@ -202,7 +202,7 @@ impl OpenDictionary {
         let dict = self.dict.contents().map_err(cast_error)?;
 
         let results = dict
-            .split(&queries, &odict::split::SplitOptions::from(options))
+            .split(&queries, odict::split::SplitOptions::from(options))
             .map_err(cast_error)?;
 
         let mapped = results

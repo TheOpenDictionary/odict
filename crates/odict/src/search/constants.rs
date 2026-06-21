@@ -10,7 +10,7 @@ use tantivy::tokenizer::{LowerCaser, RemoveLongFilter, SimpleTokenizer};
 
 pub const CUSTOM_TOKENIZER: &str = "CUSTOM_TOKENIZER";
 
-pub const DEFAULT_TOKENIZER: LazyLock<TextAnalyzer> = LazyLock::new(|| {
+pub static DEFAULT_TOKENIZER: LazyLock<TextAnalyzer> = LazyLock::new(|| {
     #[cfg(not(feature = "charabia"))]
     return TextAnalyzer::builder(SimpleTokenizer::default())
         .filter(RemoveLongFilter::limit(40))

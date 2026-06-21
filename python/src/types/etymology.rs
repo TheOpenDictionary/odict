@@ -9,7 +9,7 @@ use super::sense::Sense;
 ///
 /// Etymologies group together senses that share a common word origin.
 /// Each etymology can have its own pronunciations and description.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone)]
 pub struct Etymology {
     /// Optional identifier for this etymology.

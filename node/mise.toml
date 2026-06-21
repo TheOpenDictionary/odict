@@ -23,9 +23,9 @@ run = ["yarn build:wasm"]
 run = ["oxfmt --write .", "taplo format", "cargo fmt"]
 
 [tasks.check]
-run = ["cargo clippy --manifest-path Cargo.toml --all-features", "oxlint ."]
-sources = ["src/**/*.rs", "*.js"]
 outputs = { auto = true }
+run = ["cargo clippy --manifest-path Cargo.toml --quiet", "oxlint ."]
+sources = ["src/**/*.rs", "*.js"]
 
 [tasks."dev:wasm"]
 depends = [":build:wasm"]
@@ -44,5 +44,5 @@ run = "yarn test"
 depends = [":test -u"]
 
 [tasks.ci]
-run = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true
+run = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'

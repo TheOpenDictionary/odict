@@ -17,6 +17,7 @@ pub struct SplitRequest {
     min_length: Option<usize>,
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Display, Error)]
 enum SplitError {
     #[display("Dictionary not found: {}", name)]

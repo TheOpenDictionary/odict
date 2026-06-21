@@ -26,7 +26,7 @@ pub struct MergeArgs {
     retries: u32,
 }
 
-pub async fn merge<'a>(args: &MergeArgs) -> anyhow::Result<()> {
+pub async fn merge(args: &MergeArgs) -> anyhow::Result<()> {
     let downloader = DictionaryDownloader::default().with_retries(args.retries);
     let load_opts = LoadOptions::default().with_downloader(downloader);
     let mut dict = OpenDictionary::load_with_options(&args.destination, load_opts.clone())

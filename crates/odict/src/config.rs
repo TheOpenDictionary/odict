@@ -1,9 +1,9 @@
 use dirs::home_dir;
 use std::{env::var, path::PathBuf, sync::LazyLock};
 
-pub const DEFAULT_CONFIG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+pub static DEFAULT_CONFIG_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
     var("ODICT_CONFIG_DIR")
-        .map(|d| PathBuf::from(d))
+        .map(PathBuf::from)
         .ok()
         .unwrap_or_else(|| {
             home_dir()

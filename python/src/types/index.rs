@@ -1,8 +1,8 @@
 use pyo3::prelude::*;
 
 /// Options for configuring full-text index creation.
-#[pyclass]
-#[derive(Clone)]
+#[pyclass(from_py_object)]
+#[derive(Clone, Default)]
 pub struct IndexOptions {
     /// Custom directory for storing the index.
     #[pyo3(get, set)]
@@ -26,16 +26,6 @@ impl IndexOptions {
             directory,
             memory,
             overwrite,
-        }
-    }
-}
-
-impl Default for IndexOptions {
-    fn default() -> Self {
-        IndexOptions {
-            directory: None,
-            memory: None,
-            overwrite: None,
         }
     }
 }

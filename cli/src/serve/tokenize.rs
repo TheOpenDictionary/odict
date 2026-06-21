@@ -14,6 +14,7 @@ pub struct TokenizeRequest {
     follow: Option<bool>,
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Display, Error)]
 enum TokenizeError {
     #[display("Dictionary not found: {}", name)]

@@ -3,7 +3,8 @@ title: CLI Overview
 description: What the ODict CLI can do and when to use each command.
 ---
 
-The ODict CLI is the fastest way to create, inspect, combine, and query dictionaries from a terminal. Most workflows start with XML, compile it to a `.odict` file, and then use the compiled file for lookup, search, tokenization, or serving over HTTP.
+The ODict CLI is the fastest way to create, inspect, combine, and query dictionaries from a terminal. Most workflows start with XML, compile it to a
+`.odict` file, and then use the compiled file for lookup, search, tokenization, or serving over HTTP.
 
 ## What you can do
 
@@ -66,4 +67,5 @@ Remote dictionary names use the form `dictionary/language`, such as `wiktionary/
 
 ## Reference
 
-For every flag and argument, see the [Command Reference](/cli/reference/). For guided workflows, see [Downloading Dictionaries](/guides/downloading/), [Aliases and Loading](/guides/aliases/), and [Serving Dictionaries](/guides/serving/).
+For every flag and argument, see the [Command Reference](/cli/reference/). For guided workflows, see [Downloading Dictionaries](/guides/downloading/),
+[Aliases and Loading](/guides/aliases/), and [Serving Dictionaries](/guides/serving/).

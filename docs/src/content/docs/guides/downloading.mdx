@@ -5,7 +5,8 @@ description: How to download remote dictionaries and control caching.
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-ODict can load dictionaries from the remote registry as well as from local files. Remote names use the form `dictionary/language`, for example `wiktionary/eng`.
+ODict can load dictionaries from the remote registry as well as from local files. Remote names use the form `dictionary/language`, for example
+`wiktionary/eng`.
 
 ## Download with the CLI
 
@@ -13,7 +14,8 @@ ODict can load dictionaries from the remote registry as well as from local files
 odict download wiktionary/eng
 ```
 
-By default, downloaded dictionaries are cached in ODict's config directory under `dictionaries/<dictionary>/`. The command stores the downloaded file as `<language>.odict`.
+By default, downloaded dictionaries are cached in ODict's config directory under `dictionaries/<dictionary>/`. The command stores the downloaded file
+as `<language>.odict`.
 
 Use `--output` to choose a directory:
 
@@ -135,5 +137,6 @@ const dictionary = await OpenDictionary.load("wiktionary/eng", {
 </Tabs>
 
 :::note
-`OpenDictionary.load()` tries to treat `dictionary/language` values as remote names. If the string is not a remote name, ODict falls back to aliases and local paths when those features are available.
+`OpenDictionary.load()` tries to treat `dictionary/language` values as remote names. If the string is not a remote name, ODict falls back to aliases
+and local paths when those features are available.
 :::

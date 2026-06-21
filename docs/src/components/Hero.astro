@@ -1,10 +1,10 @@
 ---
 import LogoLight from "../assets/odict-light.svg";
 import LogoDark from "../assets/odict-dark.svg";
-import { Code, LinkButton } from "@astrojs/starlight/components";
+import { LinkButton } from "@astrojs/starlight/components";
 
 const { data } = Astro.locals.starlightRoute.entry;
-const { title = data.title, tagline, image, actions = [] } = data.hero || {};
+const { tagline, actions = [] } = data.hero || {};
 ---
 
 <div

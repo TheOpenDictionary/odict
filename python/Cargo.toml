@@ -1,18 +1,15 @@
 [package]
+edition = "2021"
 name = "odict_python"
 version = "2.2.1"
-edition = "2021"
 
 [lib]
-name = "theopendictionary"
 crate-type = ["cdylib", "rlib"]
+name = "theopendictionary"
 
 [dependencies]
-pyo3 = { version = "0.29.0", features = ["either"] }
-pyo3-async-runtimes = { version = "0.29.0", features = [
-  "tokio-runtime",
-  "attributes",
-] }
+either = { version = "*" }
+internal = { path = "../crates/internal" }
 odict = { path = "../crates/odict", features = [
   "config",
   "sql",
@@ -21,7 +18,7 @@ odict = { path = "../crates/odict", features = [
   "tokenize",
   "search",
 ] }
-internal = { path = "../crates/internal" }
-either = { version = "*" }
+pyo3 = { version = "0.29.0", features = ["either"] }
+pyo3-async-runtimes = { version = "0.29.0", features = ["tokio-runtime", "attributes"] }
 structural-convert = { workspace = true }
 tokio = { version = "1.52", features = ["full"] }

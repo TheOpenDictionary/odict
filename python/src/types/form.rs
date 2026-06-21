@@ -7,7 +7,7 @@ use super::enums::EnumWrapper;
 ///
 /// Forms represent morphological variants such as plurals, conjugations,
 /// or other inflections.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone, Debug)]
 pub struct Form {
     /// The inflected form text.

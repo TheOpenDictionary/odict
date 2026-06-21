@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 use clap::ValueEnum;
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Clone, ValueEnum)]
 pub enum PrintFormat {
     Print,
@@ -11,6 +12,7 @@ pub enum PrintFormat {
     HTML,
 }
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, Clone, ValueEnum)]
 pub enum DumpFormat {
     XML,

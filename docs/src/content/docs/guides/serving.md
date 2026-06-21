@@ -3,7 +3,8 @@ title: Serving Dictionaries
 description: How to serve ODict dictionaries over HTTP.
 ---
 
-`odict serve` starts a local JSON API for lookup, search, split, and tokenization. It is useful when an application in another language needs dictionary access without embedding a native binding.
+`odict serve` starts a local JSON API for lookup, search, split, and tokenization. It is useful when an application in another language needs
+dictionary access without embedding a native binding.
 
 ## Start the server
 
@@ -56,5 +57,6 @@ odict serve animals.odict --level debug
 ```
 
 :::note
-Search endpoints require an index. Build it ahead of time with `odict index`, or use CLI search with `--index` when you want the index created automatically.
+Search endpoints require an index. Build it ahead of time with `odict index`, or use CLI search with `--index` when you want the index created
+automatically.
 :::

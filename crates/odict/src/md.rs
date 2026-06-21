@@ -32,11 +32,7 @@ fn pt_start_tag(tag: &Tag, buffer: &mut String, tags_stack: &mut Vec<Tag>) {
 fn pt_end_tag(tag: &TagEnd, buffer: &mut String, tags_stack: &[Tag]) {
     match tag {
         TagEnd::Paragraph | TagEnd::Heading { .. } => buffer.push('\n'),
-        TagEnd::CodeBlock => {
-            if !buffer.ends_with('\n') {
-                buffer.push('\n');
-            }
-        }
+        TagEnd::CodeBlock if !buffer.ends_with('\n') => buffer.push('\n'),
         TagEnd::List(_) => {
             let is_sublist = tags_stack.iter().any(|tag| matches!(tag, Tag::List(_)));
             if !is_sublist {

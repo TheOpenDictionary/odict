@@ -6,6 +6,7 @@ mod etymology;
 mod example;
 mod form;
 mod group;
+#[allow(clippy::module_inception)]
 mod json;
 mod media_url;
 mod note;

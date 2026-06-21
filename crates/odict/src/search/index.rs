@@ -10,20 +10,22 @@ use crate::{
 use super::constants::{CUSTOM_TOKENIZER, DEFAULT_TOKENIZER};
 use super::schema::{FIELD_BUFFER, FIELD_DEFINITIONS, FIELD_TERM, SCHEMA};
 
+pub type IndexItemCallback = dyn Fn(usize, &str) + Send + Sync;
+
 pub struct IndexOptions {
     pub memory: usize,
     pub dir: PathBuf,
     pub overwrite: bool,
     pub tokenizer: TextAnalyzer,
-    pub cb_on_item: Box<dyn Fn(usize, &str) + Send + Sync>,
+    pub cb_on_item: Box<IndexItemCallback>,
 }
 
 pub fn get_default_index_dir() -> PathBuf {
     DEFAULT_CONFIG_DIR.join(".idx")
 }
 
-impl IndexOptions {
-    pub fn default() -> Self {
+impl Default for IndexOptions {
+    fn default() -> Self {
         Self {
             memory: 50_000_000,
             overwrite: false,
@@ -32,7 +34,9 @@ impl IndexOptions {
             cb_on_item: Box::new(|_, _| {}),
         }
     }
+}
 
+impl IndexOptions {
     pub fn tokenizer<T>(mut self, tokenizer: T) -> Self
     where
         TextAnalyzer: From<T>,
