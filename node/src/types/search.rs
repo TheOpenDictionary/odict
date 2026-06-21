@@ -1,21 +1,10 @@
 #[napi(object)]
-#[derive(PartialEq, Clone, Eq)]
+#[derive(PartialEq, Clone, Eq, Default)]
 pub struct SearchOptions {
     pub directory: Option<String>,
     pub threshold: Option<u32>,
     pub autoindex: Option<bool>,
     pub limit: Option<u32>,
-}
-
-impl Default for SearchOptions {
-    fn default() -> Self {
-        SearchOptions {
-            threshold: None,
-            directory: None,
-            autoindex: None,
-            limit: None,
-        }
-    }
 }
 
 #[cfg(feature = "node")]

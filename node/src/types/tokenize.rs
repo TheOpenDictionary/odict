@@ -1,21 +1,11 @@
 use odict::tokenize::Language;
 
 #[napi(object)]
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct TokenizeOptions {
     pub follow: Option<bool>,
     pub allow_list: Option<Vec<String>>,
     pub insensitive: Option<bool>,
-}
-
-impl Default for TokenizeOptions {
-    fn default() -> Self {
-        TokenizeOptions {
-            follow: None,
-            allow_list: None,
-            insensitive: None,
-        }
-    }
 }
 
 impl From<TokenizeOptions> for odict::tokenize::TokenizeOptions {
@@ -34,8 +24,7 @@ impl From<TokenizeOptions> for odict::tokenize::TokenizeOptions {
             options = options.allow_list(
                 allow_list
                     .into_iter()
-                    .map(|s| Language::from_code(s))
-                    .filter_map(|l| l)
+                    .filter_map(Language::from_code)
                     .collect::<Vec<Language>>(),
             );
         }

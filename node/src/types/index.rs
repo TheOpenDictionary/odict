@@ -1,19 +1,9 @@
 #[napi(object)]
-#[derive(PartialEq, Debug, Clone, Eq)]
+#[derive(PartialEq, Debug, Clone, Eq, Default)]
 pub struct IndexOptions {
     pub directory: Option<String>,
     pub memory: Option<u32>,
     pub overwrite: Option<bool>,
-}
-
-impl Default for IndexOptions {
-    fn default() -> Self {
-        IndexOptions {
-            overwrite: None,
-            directory: None,
-            memory: None,
-        }
-    }
 }
 
 #[cfg(feature = "node")]

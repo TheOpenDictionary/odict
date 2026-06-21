@@ -1,33 +1,16 @@
 #[napi(object)]
+#[derive(Default)]
 pub struct RemoteLoadOptions {
     pub out_dir: Option<String>,
     pub caching: Option<bool>,
     pub retries: Option<u32>,
 }
 
-impl Default for RemoteLoadOptions {
-    fn default() -> Self {
-        Self {
-            out_dir: None,
-            caching: None,
-            retries: None,
-        }
-    }
-}
-
 #[napi(object)]
+#[derive(Default)]
 pub struct LoadOptions {
     pub config_dir: Option<String>,
     pub remote: Option<RemoteLoadOptions>,
-}
-
-impl Default for LoadOptions {
-    fn default() -> Self {
-        Self {
-            config_dir: None,
-            remote: None,
-        }
-    }
 }
 
 impl TryFrom<LoadOptions> for odict::LoadOptions<'_> {

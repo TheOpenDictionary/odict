@@ -18,6 +18,9 @@ sources = ["src/**/*.rs", "Cargo.toml"]
 [tasks.lint]
 run = "ruff check"
 
+[tasks.check]
+depends = [":lint"]
+
 [tasks."generate-ci"]
 run = "uvx maturin generate-ci  -o ../../.github/workflows/python.yml -m ./Cargo.toml --pytest github"
 

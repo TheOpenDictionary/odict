@@ -5,21 +5,11 @@ use crate::utils::cast_error;
 use super::Entry;
 
 #[napi(object)]
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct LookupOptions {
     pub split: Option<u32>,
     pub follow: Option<bool>,
     pub insensitive: Option<bool>,
-}
-
-impl Default for LookupOptions {
-    fn default() -> Self {
-        LookupOptions {
-            split: None,
-            follow: None,
-            insensitive: None,
-        }
-    }
 }
 
 impl From<LookupOptions> for odict::lookup::LookupOptions {
@@ -51,7 +41,7 @@ pub struct LookupResult {
 impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
     fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
         let entry = Entry::from(result.entry);
-        let directed_from = result.directed_from.map(|s| Entry::from(s));
+        let directed_from = result.directed_from.map(Entry::from);
 
         Self {
             entry,

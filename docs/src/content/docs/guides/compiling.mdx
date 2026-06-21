@@ -40,7 +40,7 @@ let xml = r#"
 
 }
 
-````text
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -97,7 +97,7 @@ const dictionary = new OpenDictionary(xml);
 // Save to disk
 dictionary.save("my-dictionary.odict");
 
-````text
+````
 </TabItem>
 </Tabs>
 
@@ -111,7 +111,6 @@ If your XML lives on disk, read it first and then compile.
 use odict::schema::Dictionary;
 
 fn main() -> odict::Result<()> {
-    // Parse and compile from a file path
     let dict = Dictionary::from_path("my-dictionary.xml")?
         .build()?;
 
@@ -133,7 +132,7 @@ compiled_bytes = compile(xml)
 dictionary = OpenDictionary(compiled_bytes)
 dictionary.save("my-dictionary.odict")
 
-````text
+````
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -162,8 +161,8 @@ fn main() -> odict::Result<()> {
 let xml = std::fs::read_to_string("my-dictionary.xml")?;
 
     let compress = CompressOptions::default()
-        .quality(11)       // Maximum compression (0–11)
-        .window_size(22);  // Window size (0–22)
+        .quality(11)
+        .window_size(22);
 
     let options = CompilerOptions::default()
         .with_compression(compress);
@@ -177,7 +176,7 @@ let xml = std::fs::read_to_string("my-dictionary.xml")?;
 
 }
 
-````text
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -211,7 +210,6 @@ Once compiled, you can load `.odict` files from disk or from the remote registry
 use odict::OpenDictionary;
 
 fn main() -> odict::Result<()> {
-// Load from disk
 let file = OpenDictionary::from_path("my-dictionary.odict")?;
 let dict = file.contents()?;
 
@@ -221,7 +219,7 @@ let dict = file.contents()?;
 
 }
 
-````text
+````
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -253,7 +251,7 @@ const dictionary = await OpenDictionary.load("wiktionary/eng");
 
 console.log(dictionary.lexicon());
 
-```text
+```
 </TabItem>
 </Tabs>
 ```

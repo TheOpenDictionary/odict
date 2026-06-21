@@ -1,19 +1,9 @@
 #[napi(object)]
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct SplitOptions {
     pub min_length: Option<u32>,
     pub follow: Option<bool>,
     pub insensitive: Option<bool>,
-}
-
-impl Default for SplitOptions {
-    fn default() -> Self {
-        SplitOptions {
-            min_length: None,
-            follow: None,
-            insensitive: None,
-        }
-    }
 }
 
 impl From<SplitOptions> for odict::split::SplitOptions {

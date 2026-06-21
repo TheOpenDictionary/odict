@@ -32,8 +32,11 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: rust npm:oxlint
           cache: true
           experimental: true
+      - name: Install clippy
+        run: rustup component add clippy
       - name: Run lint
         run: mise //node:check
   build:
@@ -89,6 +92,7 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           install: true
+          install_args: ${{ contains(matrix.settings.build, 'zig') && 'rust zig' || 'rust' }}
           cache: true
           experimental: true
       - name: Add Rust target
