@@ -1,7 +1,3 @@
-ARG ODICT_VERSION=3.2.2
-
-ARG ODICT_VERSION
-
 FROM jdxcode/mise AS builder
 
 SHELL ["/bin/bash", "-c"]
@@ -11,7 +7,7 @@ COPY . .
 
 RUN mise trust -y
 RUN mise install rust
-RUN mise run build -- --release
+RUN mise run --skip-tools build -- --release
 
 FROM debian:latest
 
