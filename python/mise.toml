@@ -16,13 +16,15 @@ outputs = { auto = true }
 sources = ["src/**/*.rs", "Cargo.toml"]
 
 [tasks.lint]
-run = "uvx ruff check"
+run = "ruff check"
 
 [tasks."generate-ci"]
 run = "uvx maturin generate-ci  -o ../../.github/workflows/python.yml -m ./Cargo.toml --pytest github"
 
 [tasks.format]
-run = "uv --preview-features format format"
+run = ["cargo fmt", "ruff format"]
+sources = ["src/**/*.rs", "src/**/*.py"]
+outputs = { auto = true }
 
 [tasks.snapshot]
 depends = [":test --snapshot-update"]

@@ -10,9 +10,7 @@ pub fn infer_path<P: Into<PathBuf> + AsRef<OsStr>>(path: P) -> PathBuf {
     let name = pb.file_stem().and_then(|s| s.to_str()).unwrap_or_default();
     let directory = pb.parent().and_then(|s| s.to_str()).unwrap_or_default();
 
-    PathBuf::new()
-        .join(directory)
-        .join(format!("{name}.odict"))
+    PathBuf::new().join(directory).join(format!("{name}.odict"))
 }
 
 fn open_file<P: AsRef<Path>>(path: P) -> crate::Result<File> {

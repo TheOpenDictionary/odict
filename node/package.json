@@ -32,35 +32,19 @@
     "url": "git+https://github.com/TheOpenDictionary/odict.git"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.10.0",
-    "@emnapi/runtime": "^1.10.0",
-    "@napi-rs/cli": "3.7.0",
-    "@napi-rs/wasm-runtime": "^1.1.4",
+    "@emnapi/core": "^1.11.1",
+    "@emnapi/runtime": "^1.11.1",
+    "@napi-rs/cli": "3.7.2",
+    "@napi-rs/wasm-runtime": "^1.1.5",
     "@oxc-node/core": "^0.1.0",
-    "@taplo/cli": "^0.7.0",
     "@tybys/wasm-util": "^0.10.2",
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.0.0",
     "ava": "^8.0.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.7",
-    "npm-run-all2": "^9.0.1",
-    "oxlint": "^1.67.0",
-    "prettier": "^3.8.3",
     "tinybench": "^6.0.2"
   },
   "engines": {
     "node": ">= 10.16.0 < 11 || >= 11.8.0 < 12 || >= 12.0.0"
-  },
-  "lint-staged": {
-    "*.@(js|ts|tsx)": [
-      "oxlint --fix"
-    ],
-    "*.@(js|ts|tsx|yml|yaml|md|json)": [
-      "prettier --write"
-    ],
-    "*.toml": [
-      "taplo format"
-    ]
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -72,11 +56,6 @@
     "build:node": "napi build --release --platform --features node",
     "build:wasm": "napi build --release --platform --target wasm32-wasip1-threads",
     "build:debug": "napi build --platform --pipe \"prettier -w\"",
-    "format": "run-p format:prettier format:rs format:toml",
-    "format:prettier": "prettier . -w",
-    "format:toml": "taplo format",
-    "format:rs": "cargo fmt",
-    "lint": "oxlint .",
     "test": "ava --serial",
     "universalize": "napi universalize",
     "artifacts": "napi artifacts",
@@ -98,5 +77,5 @@
       "@oxc-node/core/register"
     ]
   },
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.17.0+sha512.c2957de2f9025ab14d63b24d0d8be1f1655810e22c341042c27f7ecd017b180ec12db73d69ac366d71b304ef9f069349ce462de96f04f8f1da317f4f762c95ae"
 }

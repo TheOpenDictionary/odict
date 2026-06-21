@@ -20,7 +20,11 @@ impl RemoteLoadOptions {
     #[new]
     #[pyo3(signature = (out_dir=None, caching=None, retries=None))]
     pub fn new(out_dir: Option<String>, caching: Option<bool>, retries: Option<u32>) -> Self {
-        RemoteLoadOptions { out_dir, caching, retries }
+        RemoteLoadOptions {
+            out_dir,
+            caching,
+            retries,
+        }
     }
 }
 

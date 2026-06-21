@@ -1,11 +1,6 @@
 # Changelog
 
-
-
-
-
 ## [2.2.2](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.1...node/v2.2.2) (2025-11-30)
-
 
 ### Bug Fixes
 
@@ -13,26 +8,22 @@
 
 ## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.2.0...node/v2.2.1) (2025-11-23)
 
-
 ### Bug Fixes
 
 * Fix missing Japanese tokenization ([16f7f56](https://github.com/TheOpenDictionary/odict/commit/16f7f5654c0ec53a976fdaebf3acfd25ca75b958))
 
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.1...node/v2.2.0) (2025-11-22)
 
-
 ### Features
 
 * **node:** Add Japanese tokenizer to Node package ([#1341](https://github.com/TheOpenDictionary/odict/issues/1341)) ([2c92c30](https://github.com/TheOpenDictionary/odict/commit/2c92c30c28dd6b665a5ed9158038afc963ff0d41))
 * Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
-
 
 ### Bug Fixes
 
 * Update dependencies ([6029b8d](https://github.com/TheOpenDictionary/odict/commit/6029b8d16d314747c180b19ce5385ce4ce78e128))
 
 ## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/node/v2.1.0...node/v2.1.1) (2025-10-22)
-
 
 ### Bug Fixes
 
@@ -41,7 +32,6 @@
 
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/node/v2.0.0...node/v2.1.0) (2025-10-20)
 
-
 ### Features
 
 * Allow passing remote load options to Node and Python ([#1315](https://github.com/TheOpenDictionary/odict/issues/1315)) ([80a8361](https://github.com/TheOpenDictionary/odict/commit/80a8361e1cff88bffb5bf36cb354ca04ad89a343))
@@ -49,13 +39,11 @@
 * Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
 * String interning ([#1313](https://github.com/TheOpenDictionary/odict/issues/1313)) ([a1ce402](https://github.com/TheOpenDictionary/odict/commit/a1ce4025950f840674e1e4e159b60311672febc2))
 
-
 ### Bug Fixes
 
 * Inline interning library ([5833965](https://github.com/TheOpenDictionary/odict/commit/583396596017cc2a979d45de3237885671c136e7))
 
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.1...node/v2.0.0) (2025-10-17)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -70,13 +58,11 @@
 
 ## [1.9.1](https://github.com/TheOpenDictionary/odict/compare/node/v1.9.0...node/v1.9.1) (2025-08-16)
 
-
 ### Bug Fixes
 
 * Update Node requirement ([b9a0a35](https://github.com/TheOpenDictionary/odict/commit/b9a0a3590ca621976a5025c274453a619c84e299))
 
 ## [1.9.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.8.0...node/v1.9.0) (2025-07-12)
-
 
 ### Features
 
@@ -85,7 +71,6 @@
 
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.7.0...node/v1.8.0) (2025-05-14)
 
-
 ### Features
 
 * Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
@@ -93,13 +78,11 @@
 
 ## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.6.0...node/v1.7.0) (2025-05-10)
 
-
 ### Features
 
 * Add `rank` attribute to Entry for storing word frequencies ([#1210](https://github.com/TheOpenDictionary/odict/issues/1210)) ([2b2439a](https://github.com/TheOpenDictionary/odict/commit/2b2439a4dcb82d2b2c247174eb22d4a90d2037d5))
 
 ## [1.6.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.5.0...node/v1.6.0) (2025-04-24)
-
 
 ### Features
 
@@ -111,13 +94,11 @@
 * Remove wrapper components ([0908f01](https://github.com/TheOpenDictionary/odict/commit/0908f0128c1dd1b0749b756d757d8f3aa50e6c1c))
 * Use `structural_convert` macro instead of custom From implementations ([#1199](https://github.com/TheOpenDictionary/odict/issues/1199)) ([392d624](https://github.com/TheOpenDictionary/odict/commit/392d624a4b956f0bc22d0529b4ccb0307807cdfd))
 
-
 ### Bug Fixes
 
 * Remove duplicate Node versions from Changelog ([555301b](https://github.com/TheOpenDictionary/odict/commit/555301bb4ca51ef32193fb64fc486fcbf22f30f9))
 
 ## [1.5.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.4.0...node/v1.5.0) (2025-04-20)
-
 
 ### Features
 
@@ -125,22 +106,18 @@
 
 ## [1.4.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.3.0...node/v1.4.0) (2025-04-13)
 
-
 ### Features
 
 * Add flag to support case insensitivity for lookups and tokenization ([#1179](https://github.com/TheOpenDictionary/odict/issues/1179)) ([a7e7baa](https://github.com/TheOpenDictionary/odict/commit/a7e7baac0f8d02e565a2d01acdc59c9bd1bc3242))
 
 ## [1.3.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.2.0...node/v1.3.0) (2025-04-04)
 
-
 ### Features
 
 * **node:** Add support for TokenizeOptions ([e14fb17](https://github.com/TheOpenDictionary/odict/commit/e14fb17abcaa2f07bfabb482db11402cd2b41fbf))
 * **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
 
-
 ## [1.2.0](https://github.com/TheOpenDictionary/odict/compare/node/v1.1.1...node/v1.2.0) (2025-04-03)
-
 
 ### Features
 
@@ -154,7 +131,6 @@
 * Rename Python library ([928343a](https://github.com/TheOpenDictionary/odict/commit/928343a7df53d64aa25d7e262f21f4aa0f09cc5e))
 * Try updating CI ([c76c684](https://github.com/TheOpenDictionary/odict/commit/c76c684d427ef79df81e4c9a349dadba3a54339c))
 * **v2:** Add Rust Node bindings ([#760](https://github.com/TheOpenDictionary/odict/issues/760)) ([aac5501](https://github.com/TheOpenDictionary/odict/commit/aac550181f6d144649ce9ad0ff823967b29668bf))
-
 
 ### Bug Fixes
 
@@ -170,9 +146,7 @@
 * **node:** Fix prepublish ([6249f4a](https://github.com/TheOpenDictionary/odict/commit/6249f4af2e8c2ff627405bd21e41bd0eaac10a60))
 * Update release please manifest ([3e633d5](https://github.com/TheOpenDictionary/odict/commit/3e633d58e7b56f3268f63b8eb46d4a514c229c31))
 
-
 ## [1.1.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node/v1.1.0) (2025-04-03)
-
 
 ### Features
 
@@ -182,7 +156,6 @@
 
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/node-v1.0.0...node-v1.0.0) (2024-12-26)
 
-
 ### Features
 
 * Add stable Python binding 🎉 ([#1049](https://github.com/TheOpenDictionary/odict/issues/1049)) ([73c6e33](https://github.com/TheOpenDictionary/odict/commit/73c6e339b8614c6eb048de4ee7586dd5aa98803e))
@@ -191,7 +164,6 @@
 * Rename Python library ([928343a](https://github.com/TheOpenDictionary/odict/commit/928343a7df53d64aa25d7e262f21f4aa0f09cc5e))
 * Try updating CI ([c76c684](https://github.com/TheOpenDictionary/odict/commit/c76c684d427ef79df81e4c9a349dadba3a54339c))
 * **v2:** Add Rust Node bindings ([#760](https://github.com/TheOpenDictionary/odict/issues/760)) ([aac5501](https://github.com/TheOpenDictionary/odict/commit/aac550181f6d144649ce9ad0ff823967b29668bf))
-
 
 ### Bug Fixes
 

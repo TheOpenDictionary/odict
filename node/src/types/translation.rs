@@ -4,6 +4,6 @@ use structural_convert::StructuralConvert;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::Translation))]
 pub struct Translation {
-  pub lang: String,
-  pub value: String,
+    pub lang: String,
+    pub value: String,
 }

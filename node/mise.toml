@@ -19,8 +19,13 @@ run = "yarn artifacts"
 [tasks."build:wasm"]
 run = ["yarn build:wasm"]
 
-[tasks.lint]
-run = "yarn lint"
+[tasks.format]
+run = ["oxfmt --write .", "taplo format", "cargo fmt"]
+
+[tasks.check]
+run = ["cargo clippy --manifest-path Cargo.toml --all-features", "oxlint ."]
+sources = ["src/**/*.rs", "*.js"]
+outputs = { auto = true }
 
 [tasks."dev:wasm"]
 depends = [":build:wasm"]

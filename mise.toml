@@ -2,6 +2,10 @@ experimental_monorepo_root = true
 
 [env]
 MISE_EXPERIMENTAL = 1
+HK_MISE = 1
+
+[hooks]
+postinstall = "hk install --mise"
 
 [tools]
 "cargo:cargo-nextest" = "0.9.92"
@@ -10,9 +14,38 @@ MISE_EXPERIMENTAL = 1
 "cargo:cargo-edit" = "latest"
 rust = "latest"
 zig = "latest"
+hk = "latest"
+"npm:astro" = "latest"
+"npm:oxlint" = "latest"
+"npm:oxfmt" = "latest"
+ruff = "latest"
+taplo = "latest"
+rumdl = "latest"
 
 [monorepo]
 config_roots = ["crates/*", "node", "python", "cli", "docs"]
+
+[task_templates."rust:check"]
+description = "Lints the project"
+run = "cargo clippy --manifest-path Cargo.toml --all-features"
+
+[task_templates."rust:build"]
+run = "cargo build"
+sources = ["src/**/*.rs", "Cargo.toml"]
+outputs = { auto = true }
+
+[task_templates."rust:run"]
+run = "cargo run --release"
+sources = ["src/**/*.rs", "Cargo.toml"]
+outputs = { auto = true }
+
+[task_templates."rust:clean"]
+run = "cargo clean"
+
+[task_templates."rust:format"]
+run = "cargo fmt"
+sources = ["src/**/*.rs"]
+outputs = { auto = true }
 
 [settings]
 python.uv_venv_auto = true
@@ -43,9 +76,8 @@ description = "Runs benchmarks for all Cargo packages"
 [tasks.why]
 run = "cargo tree -i"
 
-[tasks.lint]
-depends = ["//crates/...:lint"]
-run = "cargo clippy --all-targets --all-features -- -D warnings"
+[tasks.check]
+depends = ["//...:check"]
 
 [tasks.docgen]
 run = "cargo run --release -p docgen"
@@ -62,8 +94,8 @@ description = "Runs nextest on all Cargo packages"
 depends = ["//...:test"]
 description = "Recursively tests all packages in the project"
 
-[tasks."upgrade"]
-depends = ["//crates/...:upgrade"]
+[tasks."up"]
+depends = ["//...:up"]
 run = "cargo upgrade"
 description = "Updates all dependencies to their latest versions"
 
@@ -71,9 +103,22 @@ description = "Updates all dependencies to their latest versions"
 depends = ["//...:build"]
 description = "Recursively builds all packages in the project"
 
+[tasks."format:markdown"]
+run = "rumdl fmt **/*.md"
+
+[tasks."format:toml"]
+run = "taplo format **/*.toml"
+
+[tasks."format:mise"]
+run = "mise fmt --all"
+
 [tasks."format"]
-run = "cargo fmt --all -- **/*.rs"
-description = "Format all Rust files"
+depends = [
+  "//...:format",
+  "//:format:toml",
+  "//:format:mise",
+  "//:format:markdown",
+]
 
 [tasks."ci"]
 run = 'mise x act@latest -- act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'

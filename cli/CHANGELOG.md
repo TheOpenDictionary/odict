@@ -2,13 +2,11 @@
 
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.1...cli/v3.2.2) (2025-11-30)
 
-
 ### Bug Fixes
 
 * Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
 
 ## [3.2.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.0...cli/v3.2.1) (2025-11-23)
-
 
 ### Miscellaneous Chores
 
@@ -16,11 +14,9 @@
 
 ## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.1...cli/v3.2.0) (2025-11-22)
 
-
 ### Features
 
 * Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
-
 
 ### Bug Fixes
 
@@ -28,20 +24,17 @@
 
 ## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/cli/v3.1.0...cli/v3.1.1) (2025-10-22)
 
-
 ### Bug Fixes
 
 * Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
 
 ## [3.1.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.0.0...cli/v3.1.0) (2025-10-20)
 
-
 ### Miscellaneous Chores
 
 * **cli:** Synchronize odict versions
 
 ## [3.0.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.1...cli/v3.0.0) (2025-10-17)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -57,26 +50,22 @@
 
 ## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/cli/v2.9.0...cli/v2.9.1) (2025-08-16)
 
-
 ### Miscellaneous Chores
 
 * **cli:** Synchronize odict versions
 
 ## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.8.0...cli/v2.9.0) (2025-07-12)
 
-
 ### Features
 
 * Add `min_rank` and `max_rank` methods for retrieving ranking bounds ([#1245](https://github.com/TheOpenDictionary/odict/issues/1245)) ([3cff5ee](https://github.com/TheOpenDictionary/odict/commit/3cff5ee302b5a2281c3ee8fdb75b1ee553760b94))
 * Allow custom `follow` limit by changing from boolean to number ([#1246](https://github.com/TheOpenDictionary/odict/issues/1246)) ([d96187a](https://github.com/TheOpenDictionary/odict/commit/d96187a541220f2e934462a31af363f64786d623))
-
 
 ### Bug Fixes
 
 * **deps:** Update rust crate lru to 0.16.0 ([#1241](https://github.com/TheOpenDictionary/odict/issues/1241)) ([ba9d9a9](https://github.com/TheOpenDictionary/odict/commit/ba9d9a97cef809a3445e4ba89b90024e4520bd44))
 
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.7.0...cli/v2.8.0) (2025-05-14)
-
 
 ### Features
 
@@ -86,13 +75,11 @@
 
 ## [2.7.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.6.0...cli/v2.7.0) (2025-05-10)
 
-
 ### Miscellaneous Chores
 
 * **cli:** Synchronize odict versions
 
 ## [2.6.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.4.1...cli/v2.6.0) (2025-04-24)
-
 
 ### Miscellaneous Chores
 
@@ -102,13 +89,11 @@
 
 ## [2.4.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.3.0...cli/v2.4.0) (2025-04-13)
 
-
 ### Features
 
 * Add flag to support case insensitivity for lookups and tokenization ([#1179](https://github.com/TheOpenDictionary/odict/issues/1179)) ([a7e7baa](https://github.com/TheOpenDictionary/odict/commit/a7e7baac0f8d02e565a2d01acdc59c9bd1bc3242))
 
 ## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.2.0...cli/v2.3.0) (2025-04-04)
-
 
 ### Features
 
@@ -116,13 +101,11 @@
 
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.1.0...cli/v2.2.0) (2025-04-03)
 
-
 ### Features
 
 * **serve:** Cache dictionaries ([#1170](https://github.com/TheOpenDictionary/odict/issues/1170)) ([907918b](https://github.com/TheOpenDictionary/odict/commit/907918ba12b34b44399bfa185a0dd5f8c8575ad0))
 
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/cli/v2.0.0...cli/v2.1.0) (2025-04-03)
-
 
 ### Features
 
@@ -131,7 +114,6 @@
 * **core:** Add new tokenization feature ([#1159](https://github.com/TheOpenDictionary/odict/issues/1159)) ([d9196c1](https://github.com/TheOpenDictionary/odict/commit/d9196c1aae4c275d3c326d5803f7baf65f7b5a89))
 * Expose Brotli compression options for `compile` ([#1067](https://github.com/TheOpenDictionary/odict/issues/1067)) ([0b282cd](https://github.com/TheOpenDictionary/odict/commit/0b282cde171ee3e6b1252c59fa9fc8f050e7c4b4))
 
-
 ### Bug Fixes
 
 * **deps:** Update rust crate derive_more to v2 ([#1100](https://github.com/TheOpenDictionary/odict/issues/1100)) ([959cb1a](https://github.com/TheOpenDictionary/odict/commit/959cb1af01db57e7fef781fccdd16261046a710d))
@@ -139,7 +121,6 @@
 * Fix CLI description ([52e92f7](https://github.com/TheOpenDictionary/odict/commit/52e92f7a45e620ef586217f48b1f6d93ee9104d8))
 
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/cli-v2.0.0...cli/v2.0.0) (2024-12-26)
-
 
 ### Features
 
@@ -160,7 +141,6 @@
 * **v2:** Add serve command ([#748](https://github.com/TheOpenDictionary/odict/issues/748)) ([ff10753](https://github.com/TheOpenDictionary/odict/commit/ff107533fcb25094230770b8c51697348caa6fc2))
 * **v2:** Add SQL dumping ([#747](https://github.com/TheOpenDictionary/odict/issues/747)) ([caceb88](https://github.com/TheOpenDictionary/odict/commit/caceb883e527358a0f0e74221130af572c0f561a))
 * **v2:** Implement basic dumping ([#654](https://github.com/TheOpenDictionary/odict/issues/654)) ([5e29764](https://github.com/TheOpenDictionary/odict/commit/5e29764048767752c56178df5e1ac1e9160894d0))
-
 
 ### Bug Fixes
 

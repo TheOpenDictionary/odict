@@ -14,8 +14,8 @@ depends = ["//:docgen"]
 outputs = { auto = true }
 sources = ["src/**/*", "package.json"]
 
-[tasks.lint]
-run = "yarn check"
+[tasks.check]
+run = ["yarn check", "rumdl lint **/*.md"]
 
 [tasks.format]
-run = "yarn format"
+run = ["oxfmt .", "rumdl format **/*.md"]

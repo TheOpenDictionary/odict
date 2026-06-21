@@ -7,4 +7,6 @@ publish = false
 [dependencies]
 anyhow = "1.0.102"
 clap = "4.6.1"
+odict = { path = "../odict", default-features = false }
 odict-cli = { path = "../../cli" }
+serde-reflection = "0.6.0"

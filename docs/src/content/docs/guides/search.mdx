@@ -26,7 +26,7 @@ let dict = file.contents()?;
 
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -44,7 +44,7 @@ import { OpenDictionary } from "@odict/node";
 const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 dictionary.index();
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -76,7 +76,7 @@ overwrite=True, # Overwrite existing index
 memory=50_000_000 # 50MB memory arena per thread
 ))
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript
@@ -105,7 +105,7 @@ for entry in &results {
 println!("{}", entry.term);
 }
 
-````
+````text
 </TabItem>
 <TabItem label="Python">
 ```python
@@ -124,7 +124,7 @@ for (const entry of results) {
 console.log(entry.term);
 }
 
-````
+````text
 </TabItem>
 </Tabs>
 
@@ -156,7 +156,7 @@ limit=10, # Max results to return
 threshold=50 # Relevance threshold
 ))
 
-````
+````text
 </TabItem>
 <TabItem label="JavaScript">
 ```typescript

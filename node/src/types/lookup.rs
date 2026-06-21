@@ -5,7 +5,7 @@ use crate::utils::cast_error;
 use super::Entry;
 
 #[napi(object)]
-#[derive( Clone)]
+#[derive(Clone)]
 pub struct LookupOptions {
     pub split: Option<u32>,
     pub follow: Option<bool>,

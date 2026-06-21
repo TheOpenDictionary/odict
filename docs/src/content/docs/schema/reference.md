@@ -9,7 +9,7 @@ This page is automatically generated from [`odict.xsd`](https://github.com/TheOp
 
 ## Element hierarchy
 
-```
+```text
 dictionary
 └── entry
     ├── pronunciation

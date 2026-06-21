@@ -4,7 +4,7 @@ use structural_convert::StructuralConvert;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::MediaURL))]
 pub struct MediaURL {
-  pub src: String,
-  pub mime_type: Option<String>,
-  pub description: Option<String>,
+    pub src: String,
+    pub mime_type: Option<String>,
+    pub description: Option<String>,
 }

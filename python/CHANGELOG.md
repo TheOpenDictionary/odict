@@ -2,20 +2,17 @@
 
 ## [2.2.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.2.0...python/v2.2.1) (2025-11-30)
 
-
 ### Bug Fixes
 
 * Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
 
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.1...python/v2.2.0) (2025-11-22)
 
-
 ### Features
 
 * Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
 
 ## [2.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v2.1.0...python/v2.1.1) (2025-10-22)
-
 
 ### Bug Fixes
 
@@ -24,7 +21,6 @@
 
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/python/v2.0.0...python/v2.1.0) (2025-10-20)
 
-
 ### Features
 
 * Allow passing remote load options to Node and Python ([#1315](https://github.com/TheOpenDictionary/odict/issues/1315)) ([80a8361](https://github.com/TheOpenDictionary/odict/commit/80a8361e1cff88bffb5bf36cb354ca04ad89a343))
@@ -32,7 +28,6 @@
 * Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
 
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.8.0...python/v2.0.0) (2025-10-17)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -46,7 +41,6 @@
 
 ## [1.8.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.7.0...python/v1.8.0) (2025-07-12)
 
-
 ### Features
 
 * Add `min_rank` and `max_rank` methods for retrieving ranking bounds ([#1245](https://github.com/TheOpenDictionary/odict/issues/1245)) ([3cff5ee](https://github.com/TheOpenDictionary/odict/commit/3cff5ee302b5a2281c3ee8fdb75b1ee553760b94))
@@ -54,12 +48,10 @@
 
 ## [1.7.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.6.0...python/v1.7.0) (2025-05-14)
 
-
 ### Features
 
 * Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
 * Replace HashMap with HashSet ([#1217](https://github.com/TheOpenDictionary/odict/issues/1217)) ([fdb5e11](https://github.com/TheOpenDictionary/odict/commit/fdb5e111ea84b179156486eacf4b78d843c12efb))
-
 
 ### Bug Fixes
 
@@ -67,13 +59,11 @@
 
 ## [1.6.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.5.0...python/v1.6.0) (2025-05-10)
 
-
 ### Features
 
 * Add `rank` attribute to Entry for storing word frequencies ([#1210](https://github.com/TheOpenDictionary/odict/issues/1210)) ([2b2439a](https://github.com/TheOpenDictionary/odict/commit/2b2439a4dcb82d2b2c247174eb22d4a90d2037d5))
 
 ## [1.5.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.4.0...python/v1.5.0) (2025-04-24)
-
 
 ### Features
 
@@ -87,13 +77,11 @@
 
 ## [1.4.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.3.0...python/v1.4.0) (2025-04-20)
 
-
 ### Features
 
 * Add support for word forms and lemmas ([#1186](https://github.com/TheOpenDictionary/odict/issues/1186)) ([9e37a28](https://github.com/TheOpenDictionary/odict/commit/9e37a2834fda82bfaf558aeab9cc74fbced5a1d4))
 
 ## [1.3.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.2.0...python/v1.3.0) (2025-04-13)
-
 
 ### Features
 
@@ -101,13 +89,11 @@
 
 ## [1.2.0](https://github.com/TheOpenDictionary/odict/compare/python/v1.1.1...python/v1.2.0) (2025-04-04)
 
-
 ### Features
 
 * **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
 
 ## [1.1.1](https://github.com/TheOpenDictionary/odict/compare/python/v1.1.0...python/v1.1.1) (2025-04-03)
-
 
 ### Bug Fixes
 
@@ -115,19 +101,16 @@
 
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python/v1.0.0) (2025-04-03)
 
-
 ### Features
 
 * Add option to print entries as Markdown/HTML ([#1068](https://github.com/TheOpenDictionary/odict/issues/1068)) ([3422533](https://github.com/TheOpenDictionary/odict/commit/3422533514264dbe80e6ff4c6ac4e3c12f289ee8))
 * **core:** Add new tokenization feature ([#1159](https://github.com/TheOpenDictionary/odict/issues/1159)) ([d9196c1](https://github.com/TheOpenDictionary/odict/commit/d9196c1aae4c275d3c326d5803f7baf65f7b5a89))
-
 
 ### Bug Fixes
 
 * **deps:** Update rust crate pyo3 to 0.24.0 ([#1141](https://github.com/TheOpenDictionary/odict/issues/1141)) ([3fb50bd](https://github.com/TheOpenDictionary/odict/commit/3fb50bd371fae1163e2f0acdb2c68e4692555d94))
 
 ## [1.0.0](https://github.com/TheOpenDictionary/odict/compare/python-v1.0.0...python-v1.0.0) (2024-12-25)
-
 
 ### Features
 

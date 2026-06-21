@@ -23,7 +23,8 @@ pub struct NewArgs {
 pub fn new(ctx: &mut CLIContext, args: &NewArgs) -> anyhow::Result<()> {
     let mut template = String::from(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<dictionary",
+<dictionary xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+  xsi:noNamespaceSchemaLocation=\"https://odict.org/odict.xsd\"",
     );
 
     if let Some(name) = &args.name {
