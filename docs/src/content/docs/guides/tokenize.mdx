@@ -25,32 +25,34 @@ especially useful for languages without whitespace-delimited words (Chinese, Jap
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::{OpenDictionary, tokenize::TokenizeOptions};
 
 fn main() -> odict::Result<()> {
-let file = OpenDictionary::from_path("my-dictionary.odict")?;
-let dict = file.contents()?;
+  let file = OpenDictionary::from_path("my-dictionary.odict")?;
+  let dict = file.contents()?;
 
-    let tokens = dict.tokenize(
-        "the cat ran",
-        TokenizeOptions::default(),
-    )?;
+  let tokens = dict.tokenize(
+      "the cat ran",
+      TokenizeOptions::default(),
+  )?;
 
-    for token in &tokens {
-        println!("'{}' ({} entries found)",
-            token.lemma,
-            token.entries.len()
-        );
-    }
+  for token in &tokens {
+      println!("'{}' ({} entries found)",
+          token.lemma,
+          token.entries.len()
+      );
+  }
 
-    Ok(())
-
+  Ok(())
 }
+```
 
-````text
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 from theopendictionary import OpenDictionary
 
@@ -60,10 +62,12 @@ tokens = dictionary.tokenize("the cat ran")
 
 for token in tokens:
     print(f"'{token.lemma}' ({len(token.entries)} entries found)")
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 import { OpenDictionary } from "@odict/node";
 
@@ -72,11 +76,12 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 const tokens = dictionary.tokenize("the cat ran");
 
 for (const token of tokens) {
-console.log(`'${token.lemma}' (${token.entries.length} entries found)`);
+  console.log(`'${token.lemma}' (${token.entries.length} entries found)`);
 }
+```
 
-````text
 </TabItem>
+
 </Tabs>
 
 ## Chinese text tokenization
@@ -85,6 +90,7 @@ For Chinese (and other CJK languages), ODict automatically detects the script an
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let tokens = dict.tokenize("你好世界", TokenizeOptions::default())?;
 
@@ -95,28 +101,33 @@ for token in &tokens {
         token.language.as_ref().map(|l| l.code())
     );
 }
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 tokens = dictionary.tokenize("你好世界")
 
 for token in tokens:
-print(f"Lemma: {token.lemma}, Script: {token.script}, Language: {token.language}")
+  print(f"Lemma: {token.lemma}, Script: {token.script}, Language: {token.language}")
+```
 
-````text
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const tokens = dictionary.tokenize("你好世界");
 
 for (const token of tokens) {
   console.log(`Lemma: ${token.lemma}, Script: ${token.script}, Language: ${token.language}`);
 }
-````
+```
 
 </TabItem>
+
 </Tabs>
 
 ## Following cross-references
@@ -124,27 +135,31 @@ for (const token of tokens) {
 Like [lookup](/guides/lookup/), tokenization supports following `see` cross-references.
 
 <Tabs>
+
 <TabItem label="Rust">
+
 ```rust
 let options = TokenizeOptions::default().follow(true);
 
 let tokens = dict.tokenize("the cat ran", options)?;
 
 for token in &tokens {
-for result in &token.entries {
-if let Some(from) = &result.directed_from {
-println!("'{}' → '{}'",
-from.term.as_str(),
-result.entry.term.as_str()
-);
-}
-}
+  for result in &token.entries {
+    if let Some(from) = &result.directed_from {
+      println!("'{}' → '{}'",
+        from.term.as_str(),
+        result.entry.term.as_str()
+      );
+    }
+  }
 }
 // e.g. 'ran' → 'run'
+```
 
-````text
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 tokens = dictionary.tokenize("the cat ran", follow=True)
 
@@ -153,50 +168,61 @@ for token in tokens:
         if result.directed_from:
             print(f"'{result.directed_from.term}' → '{result.entry.term}'")
 # e.g. 'ran' → 'run'
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const tokens = dictionary.tokenize("the cat ran", { follow: true });
 
 for (const token of tokens) {
-for (const result of token.entries) {
-if (result.directedFrom) {
-console.log(`'${result.directedFrom.term}' → '${result.entry.term}'`);
-}
-}
+  for (const result of token.entries) {
+    if (result.directedFrom) {
+      console.log(`'${result.directedFrom.term}' → '${result.entry.term}'`);
+    }
+  }
 }
 // e.g. 'ran' → 'run'
+```
 
-````text
 </TabItem>
+
 </Tabs>
 
 ## Case-insensitive tokenization
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let options = TokenizeOptions::default().insensitive(true);
 
 // "DOG" will match the "dog" entry
 let tokens = dict.tokenize("DOG cat", options)?;
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 # "DOG" will match the "dog" entry
 tokens = dictionary.tokenize("DOG cat", insensitive=True)
 ```
+
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 // "DOG" will match the "dog" entry
 const tokens = dictionary.tokenize("DOG cat", { insensitive: true });
 ```
+
 </TabItem>
+
 </Tabs>
 
 ## Token properties
@@ -217,27 +243,34 @@ Each token returned by `tokenize()` includes metadata about the match.
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let options = TokenizeOptions::default()
     .follow(true)
     .insensitive(true);
 
 let tokens = dict.tokenize("The CAT RaN away", options)?;
+```
 
-````text
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 tokens = dictionary.tokenize("The CAT RaN away", follow=True, insensitive=True)
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const tokens = dictionary.tokenize("The CAT RaN away", {
   follow: true,
   insensitive: true,
 });
 ```
+
 </TabItem>
+
 </Tabs>

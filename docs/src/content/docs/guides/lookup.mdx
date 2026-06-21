@@ -11,6 +11,7 @@ Lookup is the fastest way to query a dictionary — it finds entries by exact te
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::{OpenDictionary, lookup::LookupOptions};
 
@@ -30,10 +31,12 @@ let dict = file.contents()?;
     Ok(())
 
 }
+```
 
-````text
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 from theopendictionary import OpenDictionary, compile
 
@@ -41,10 +44,12 @@ dictionary = OpenDictionary("<dictionary>...</dictionary>")
 
 results = dictionary.lookup("cat")
 print(results[0].entry.term)  # "cat"
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 import { OpenDictionary } from "@odict/node";
 
@@ -52,9 +57,10 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 
 const results = dictionary.lookup("cat");
 console.log(results[0].entry.term); // "cat"
+```
 
-````text
 </TabItem>
+
 </Tabs>
 
 ## Looking up multiple terms
@@ -63,6 +69,7 @@ You can look up several terms in a single call. Results are returned for each ma
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let results = dict.lookup(
     &vec!["cat", "dog", "run"],
@@ -72,26 +79,30 @@ let results = dict.lookup(
 for result in &results {
     println!("Found: {}", result.entry.term.as_str());
 }
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 results = dictionary.lookup(["cat", "dog", "run"])
 
 for result in results:
 print(f"Found: {result.entry.term}")
+```
 
-````text
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const results = dictionary.lookup(["cat", "dog", "run"]);
 
 for (const result of results) {
   console.log(`Found: ${result.entry.term}`);
 }
-````
+```
 
 </TabItem>
 </Tabs>
@@ -102,6 +113,7 @@ Entries can redirect to other entries using the `see` attribute (e.g. "ran" → 
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::lookup::LookupOptions;
 
@@ -117,28 +129,34 @@ if let Some(from) = &results[0].directed_from {
 println!("Redirected from: {}", from.term.as_str());
 }
 
-````text
+```
+
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 results = dictionary.lookup("ran", follow=True)
 
 # "ran" redirects to "run"
 print(results[0].entry.term)          # "run"
 print(results[0].directed_from.term)  # "ran"
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const results = dictionary.lookup("ran", { follow: true });
 
 // "ran" redirects to "run"
 console.log(results[0].entry.term); // "run"
 console.log(results[0].directedFrom?.term); // "ran"
+```
 
-````text
 </TabItem>
+
 </Tabs>
 
 :::tip
@@ -151,6 +169,7 @@ By default, lookups are case-sensitive. Enable `insensitive` to fall back to low
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let options = LookupOptions::default().insensitive(true);
 
@@ -158,27 +177,32 @@ let options = LookupOptions::default().insensitive(true);
 let results = dict.lookup(&vec!["CAT"], options)?;
 
 assert_eq!(results[0].entry.term.as_str(), "cat");
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 # "CAT" will match "cat"
 results = dictionary.lookup("CAT", insensitive=True)
 
 print(results[0].entry.term) # "cat"
+```
 
-````text
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 // "CAT" will match "cat"
 const results = dictionary.lookup("CAT", { insensitive: true });
 
 console.log(results[0].entry.term); // "cat"
-````
+```
 
 </TabItem>
+
 </Tabs>
 
 ## Compound word splitting
@@ -188,6 +212,7 @@ fragment.
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::lookup::{LookupOptions, LookupStrategy};
 
@@ -201,10 +226,12 @@ for result in &results {
 println!("Found: {}", result.entry.term.as_str());
 }
 // Prints: "cat", "dog"
+```
 
-````text
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 # "catdog" isn't a word, but "cat" and "dog" are
 results = dictionary.lookup("catdog", split=3)
@@ -212,21 +239,24 @@ results = dictionary.lookup("catdog", split=3)
 for result in results:
     print(result.entry.term)
 # Prints: "cat", "dog"
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 // "catdog" isn't a word, but "cat" and "dog" are
 const results = dictionary.lookup("catdog", { split: 3 });
 
 for (const result of results) {
-console.log(result.entry.term);
+  console.log(result.entry.term);
 }
 // Prints: "cat", "dog"
+```
 
-````text
 </TabItem>
+
 </Tabs>
 
 ## Combining options
@@ -235,6 +265,7 @@ All lookup options can be combined.
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 let options = LookupOptions::default()
     .follow(true)
@@ -242,15 +273,20 @@ let options = LookupOptions::default()
     .strategy(LookupStrategy::Split(3));
 
 let results = dict.lookup(&vec!["RaN"], options)?;
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 results = dictionary.lookup("RaN", follow=True, insensitive=True, split=3)
 ```
+
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const results = dictionary.lookup("RaN", {
   follow: true,
@@ -258,7 +294,9 @@ const results = dictionary.lookup("RaN", {
   split: 3,
 });
 ```
+
 </TabItem>
+
 </Tabs>
 
 ## Reading entry data
@@ -267,6 +305,7 @@ Once you have a `LookupResult`, you can traverse the entry's structure: etymolog
 
 <Tabs>
 <TabItem label="Python">
+
 ```python
 results = dictionary.lookup("cat")
 entry = results[0].entry
@@ -274,16 +313,18 @@ entry = results[0].entry
 print(f"Term: {entry.term}")
 
 for ety in entry.etymologies:
-for sense in ety.senses:
-print(f" Part of speech: {sense.pos}")
-for defn in sense.definitions:
-print(f" {defn.value}")
-for example in defn.examples:
-print(f" e.g. {example.value}")
+  for sense in ety.senses:
+    print(f" Part of speech: {sense.pos}")
+  for defn in sense.definitions:
+    print(f" {defn.value}")
+  for example in defn.examples:
+    print(f" e.g. {example.value}")
+```
 
-````text
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 const results = dictionary.lookup("cat");
 const entry = results[0].entry;
@@ -303,33 +344,34 @@ for (const ety of entry.etymologies) {
     }
   }
 }
-````
+```
 
 </TabItem>
+
 <TabItem label="Rust">
+
 ```rust
 let results = dict.lookup(&vec!["cat"], LookupOptions::default())?;
 
 for result in &results {
-let entry = result.entry.deserialize()?;
+  let entry = result.entry.deserialize()?;
 
-    println!("Term: {}", entry.term);
+  println!("Term: {}", entry.term);
 
-    for ety in &entry.etymologies {
-        for (pos, sense) in &ety.senses {
-            println!("  Part of speech: {}", pos);
-            for defn in &sense.definitions {
-                println!("    {}", defn.value);
-                for example in &defn.examples {
-                    println!("      e.g. {}", example.value);
-                }
-            }
-        }
-    }
-
+  for ety in &entry.etymologies {
+      for (pos, sense) in &ety.senses {
+          println!("  Part of speech: {}", pos);
+          for defn in &sense.definitions {
+              println!("    {}", defn.value);
+              for example in &defn.examples {
+                  println!("      e.g. {}", example.value);
+              }
+          }
+      }
+  }
 }
-
-```text
-</TabItem>
-</Tabs>
 ```
+
+</TabItem>
+
+</Tabs>
