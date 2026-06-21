@@ -1,5 +1,6 @@
 #[napi(object)]
 #[derive(PartialEq, Clone, Eq, Default)]
+#[cfg(feature = "node")]
 pub struct SearchOptions {
     pub directory: Option<String>,
     pub threshold: Option<u32>,

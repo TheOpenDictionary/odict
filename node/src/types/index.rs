@@ -1,5 +1,6 @@
 #[napi(object)]
 #[derive(PartialEq, Debug, Clone, Eq, Default)]
+#[cfg(feature = "node")]
 pub struct IndexOptions {
     pub directory: Option<String>,
     pub memory: Option<u32>,

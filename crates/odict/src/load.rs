@@ -75,7 +75,7 @@ impl<'a> LoadOptions<'a> {
 impl OpenDictionary {
     pub async fn load_with_options<'a>(
         name: &str,
-        options: LoadOptions<'a>,
+        #[allow(unused_variables)] options: LoadOptions<'a>,
     ) -> crate::Result<OpenDictionary> {
         #[cfg(feature = "http")]
         match OpenDictionary::from_remote_with_downloader(name, options.downloader).await {
@@ -101,7 +101,7 @@ impl OpenDictionary {
             }
         }
 
-        return OpenDictionary::from_path(name);
+        OpenDictionary::from_path(name)
     }
 
     pub async fn load(name: &str) -> crate::Result<OpenDictionary> {
