@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 use structural_convert::StructuralConvert;
 
 /// A translation of a word, definition, or example into another language.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Translation))]
 pub struct Translation {

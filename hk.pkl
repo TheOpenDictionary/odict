@@ -1,0 +1,30 @@
+amends "package://github.com/jdx/hk/releases/download/v1.48.0/hk@1.48.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.48.0/hk@1.48.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step> {
+    ["ruff"] = Builtins.ruff
+    ["taplo"] = Builtins.taplo
+    ["taplo-format"] = Builtins.taplo_format
+    ["astro"] = Builtins.astro
+    ["ox-lint"] = Builtins.ox_lint
+    ["oxfmt"] = Builtins.oxfmt
+    ["rumdl"] = Builtins.rumdl
+    ["mise"] = Builtins.mise
+    ["cargo-clippy"] = Builtins.cargo_clippy
+    ["cargo-fmt"] = Builtins.cargo_fmt
+}
+
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stash = "git"
+        steps = linters
+    }
+    ["fix"] {
+        fix = true
+        steps = linters
+    }
+    ["check"] {
+        steps = linters
+    }
+}

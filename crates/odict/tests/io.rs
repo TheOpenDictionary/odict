@@ -16,11 +16,11 @@ mod io_tests {
             .unwrap()
             .to_disk("../../examples/empty.odict");
 
-        assert_eq!(write.is_ok(), true);
+        assert!(write.is_ok());
 
         let read = OpenDictionary::from_path("../../examples/empty.odict");
 
-        assert_eq!(read.is_err(), false);
+        assert!(read.is_ok());
 
         let archive = read.as_ref().unwrap().contents().unwrap();
 

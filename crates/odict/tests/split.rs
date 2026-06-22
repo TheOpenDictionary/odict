@@ -39,9 +39,7 @@ mod split_tests {
 
         // "cat" exists as a whole word in the dictionary.
         // split() should still find it via the segmentation path, not a short-circuit exact match.
-        let result = dict
-            .split(&vec!["cat"], SplitOptions::default())
-            .unwrap();
+        let result = dict.split(&vec!["cat"], SplitOptions::default()).unwrap();
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "cat");
@@ -51,9 +49,7 @@ mod split_tests {
     fn test_split_no_matches() {
         let dict = EXAMPLE_DICT_1.contents().unwrap();
 
-        let result = dict
-            .split(&vec!["xyz"], SplitOptions::default())
-            .unwrap();
+        let result = dict.split(&vec!["xyz"], SplitOptions::default()).unwrap();
 
         assert_eq!(result.len(), 0);
     }
@@ -62,9 +58,7 @@ mod split_tests {
     fn test_split_empty_string() {
         let dict = EXAMPLE_DICT_1.contents().unwrap();
 
-        let result = dict
-            .split(&vec![""], SplitOptions::default())
-            .unwrap();
+        let result = dict.split(&vec![""], SplitOptions::default()).unwrap();
 
         assert_eq!(result.len(), 0);
     }

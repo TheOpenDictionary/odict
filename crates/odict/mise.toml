@@ -1,9 +1,17 @@
-[tasks]
-publish = "cargo publish -p odict"
-clean = "cargo clean -p odict"
-bench = "cargo bench -p odict"
+[tasks.publish]
+run = "cargo publish"
+
+[tasks.run]
+extends = "rust:run"
+
+[tasks.clean]
+extends = "rust:clean"
 
 [tasks.build]
-run = "cargo build -p odict"
-sources = ["lib/src/**/*.rs", "lib/Cargo.toml"]
-outputs = { auto = true }
+extends = "rust:build"
+
+[tasks.check]
+extends = "rust:check"
+
+[tasks.format]
+extends = "rust:format"

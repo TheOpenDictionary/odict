@@ -27,9 +27,10 @@ mod pos_tests {
 
     #[test]
     fn test_se_custom() {
-        let mut dict = Dictionary::default();
-
-        dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
+        let mut dict = Dictionary {
+            id: "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap(),
+            ..Dictionary::default()
+        };
 
         dict.entries.insert(Entry {
             term: "dog".into(),
@@ -73,9 +74,10 @@ mod pos_tests {
 
     #[test]
     fn test_se() {
-        let mut dict = Dictionary::default();
-
-        dict.id = "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap();
+        let mut dict = Dictionary {
+            id: "2ee2a1ae-f7ff-4590-ba2d-de857ba7857f".try_into().unwrap(),
+            ..Dictionary::default()
+        };
 
         dict.entries.insert(Entry {
             term: "dog".into(),

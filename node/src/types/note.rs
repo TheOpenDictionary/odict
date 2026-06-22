@@ -6,7 +6,7 @@ use super::Example;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::Note))]
 pub struct Note {
-  pub id: Option<String>,
-  pub value: String,
-  pub examples: Vec<Example>,
+    pub id: Option<String>,
+    pub value: String,
+    pub examples: Vec<Example>,
 }

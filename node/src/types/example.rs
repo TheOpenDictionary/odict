@@ -5,7 +5,7 @@ use structural_convert::StructuralConvert;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::Example))]
 pub struct Example {
-  pub value: String,
-  pub translations: Vec<Translation>,
-  pub pronunciations: Vec<Pronunciation>,
+    pub value: String,
+    pub translations: Vec<Translation>,
+    pub pronunciations: Vec<Pronunciation>,
 }

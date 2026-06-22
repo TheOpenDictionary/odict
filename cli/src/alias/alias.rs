@@ -20,7 +20,7 @@ pub enum AliasCommands {
     Delete(DeleteArgs),
 }
 
-pub async fn alias<'a>(command: &AliasCommands) -> anyhow::Result<()> {
+pub async fn alias(command: &AliasCommands) -> anyhow::Result<()> {
     match command {
         AliasCommands::Add(args) => set(args, false).await,
         AliasCommands::Set(args) => set(args, true).await,

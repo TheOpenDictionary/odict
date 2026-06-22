@@ -9,13 +9,13 @@ depends = ["//:docgen"]
 run = "yarn dev"
 
 [tasks.build]
-run = "yarn build"
 depends = ["//:docgen"]
 outputs = { auto = true }
+run = "yarn build"
 sources = ["src/**/*", "package.json"]
 
-[tasks.lint]
-run = "yarn check"
+[tasks.check]
+run = ["yarn check", "rumdl check ."]
 
 [tasks.format]
-run = "yarn format"
+run = ["oxfmt .", "rumdl fmt ."]

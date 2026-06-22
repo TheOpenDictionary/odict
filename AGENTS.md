@@ -38,12 +38,14 @@ cargo nextest run -p odict-cli --all-features
 ### Language Binding Development
 
 **Node** (`node/`): Uses napi-rs, yarn 4, AVA for tests, oxlint + prettier for linting.
+
 ```bash
 cd node && mise test    # runs yarn test (AVA)
 cd node && mise build   # builds native extension
 ```
 
 **Python** (`python/`): Uses PyO3 + maturin, pytest + syrupy for snapshot tests, ruff for linting.
+
 ```bash
 cd python && mise test    # runs pytest
 cd python && mise build   # builds wheel via maturin
@@ -53,7 +55,7 @@ cd python && mise build   # builds wheel via maturin
 
 ### Workspace Crates
 
-```
+```text
 crates/
 ├── lib/       → `odict` - Core library (cdylib + staticlib + rlib)
 │                 All dictionary logic: compile, lookup, search, merge, serialize

@@ -7,7 +7,7 @@
 
 </div>
 
-The Open Dictionary Project (ODict for short), is an open-source, modern alternative to dictionary file formats like [StarDict](https://github.com/huzheng001/stardict-3), [Babylon](https://www.babylon-software.com/product-category/premium-dictionaries/) and [Apple Dictionaries](https://en.wikipedia.org/wiki/Dictionary_(software)). 
+The Open Dictionary Project (ODict for short), is an open-source, modern alternative to dictionary file formats like [StarDict](https://github.com/huzheng001/stardict-3), [Babylon](https://www.babylon-software.com/product-category/premium-dictionaries/) and [Apple Dictionaries](https://en.wikipedia.org/wiki/Dictionary_(software)).
 
 It is:
 

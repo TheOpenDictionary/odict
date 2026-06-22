@@ -14,6 +14,7 @@ pub struct SearchRequest {
     limit: Option<usize>,
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug, Display, Error)]
 enum SearchError {
     #[display("Dictionary not found: {}", name)]

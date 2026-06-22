@@ -31,11 +31,16 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install lint tools
+        run: |
+          mise --no-hooks install rust npm:oxlint
+      - name: Install clippy
+        run: rustup component add clippy
       - name: Run lint
-        run: mise //node:lint
+        run: mise run --skip-tools //node:check
   build:
     strategy:
       fail-fast: false
@@ -43,34 +48,38 @@ jobs:
         settings:
           - host: macos-15-intel
             target: x86_64-apple-darwin
-            build: mise //node:build --target x86_64-apple-darwin
+            build: mise run --skip-tools //node:build --target x86_64-apple-darwin
           - host: windows-latest
-            build: mise //node:build --target x86_64-pc-windows-msvc
+            build: mise run --skip-tools //node:build --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
-            build: mise //node:build --target i686-pc-windows-msvc
+            build: mise run --skip-tools //node:build --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            build: mise x zig -- mise //node:build --target x86_64-unknown-linux-gnu -x
+            install_zig: true
+            build: mise run --skip-tools //node:build --target x86_64-unknown-linux-gnu -x
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            build: mise x zig -- mise //node:build --target x86_64-unknown-linux-musl -x
+            install_zig: true
+            build: mise run --skip-tools //node:build --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: mise //node:build --target aarch64-apple-darwin
+            build: mise run --skip-tools //node:build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            build: mise x zig -- mise //node:build --target aarch64-unknown-linux-gnu -x
+            install_zig: true
+            build: mise run --skip-tools //node:build --target aarch64-unknown-linux-gnu -x
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: mise //node:build --target aarch64-linux-android
+            build: mise run --skip-tools //node:build --target aarch64-linux-android
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
-            build: mise x zig -- mise //node:build --target aarch64-unknown-linux-musl -x
+            install_zig: true
+            build: mise run --skip-tools //node:build --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: mise //node:build --target aarch64-pc-windows-msvc
+            build: mise run --skip-tools //node:build --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             setup: |
@@ -80,7 +89,7 @@ jobs:
               echo "CC_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/clang" >> $GITHUB_ENV
               echo "AR_wasm32_wasip1_threads=${GITHUB_WORKSPACE}/wasi-sdk-32.0-x86_64-linux/bin/llvm-ar" >> $GITHUB_ENV
               echo "CMAKE_BUILD_PARALLEL_LEVEL=2" >> $GITHUB_ENV
-            build: mise run //node:build:wasm
+            build: mise run --skip-tools //node:build:wasm
     name: stable - ${{ matrix.settings.target }} - node@24
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -88,9 +97,17 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install build tools
+        run: |
+          mise --no-hooks install rust
+          mise --no-hooks install -C node node
+          if [[ "${{ matrix.settings.install_zig == true }}" == "true" ]]; then
+            mise --no-hooks install zig
+          fi
+        shell: bash
       - name: Add Rust target
         run: rustup target add ${{ matrix.settings.target }}
       - name: Cache cargo
@@ -149,8 +166,8 @@ jobs:
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
-            echo "~~~~ yarn --version ~~~~"
-            yarn --version
+            echo "~~~~ corepack yarn --version ~~~~"
+            corepack yarn --version
             pwd
             ls -lah
             whoami
@@ -158,8 +175,8 @@ jobs:
             freebsd-version
             sudo corepack enable
             cd node
-            yarn install
-            yarn build:node
+            corepack yarn install
+            corepack yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -197,9 +214,13 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+        env:
+          MISE_NODE_VERSION: ${{ matrix.node }}
+      - name: Install Node
+        run: mise --no-hooks install -C node node
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Download artifacts
@@ -211,7 +232,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: mise run //node:test
+        run: mise run --skip-tools //node:test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -232,9 +253,11 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install Node
+        run: mise --no-hooks install -C node node
       - name: Output docker params
         id: docker
         run: |
@@ -255,9 +278,11 @@ jobs:
       - name: Install dependencies
         working-directory: node
         run: |
-          mise x -- yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64"]'
-          mise x -- yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
-          mise x -- yarn install
+          corepack enable
+          corepack install
+          corepack yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64"]'
+          corepack yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
+          corepack yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -272,7 +297,7 @@ jobs:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
           options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
-          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); corepack enable && cd node && npm_config_optional=true yarn test"
+          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); corepack enable && cd node && npm_config_optional=true corepack yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -283,14 +308,18 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install Node
+        run: mise --no-hooks install -C node node
       - name: Install dependencies
         working-directory: node
         run: |
-          mise x -- yarn config set supportedArchitectures.cpu "wasm32"
-          mise x -- yarn install
+          corepack enable
+          corepack install
+          corepack yarn config set supportedArchitectures.cpu "wasm32"
+          corepack yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -300,7 +329,7 @@ jobs:
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: mise //node:test
+        run: mise run --skip-tools //node:test
         env:
           NAPI_RS_FORCE_WASI: 1
   publish:
@@ -320,17 +349,19 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
-          install: true
+          install: false
           cache: true
           experimental: true
+      - name: Install Node
+        run: mise --no-hooks install -C node node
       - name: create npm dirs
-        run: mise run //node:create-dirs
+        run: mise run --skip-tools //node:create-dirs
       - name: Download all artifacts
         uses: actions/download-artifact@v8
         with:
           path: ./node/artifacts
       - name: Move artifacts
-        run: mise run //node:artifacts
+        run: mise run --skip-tools //node:artifacts
       - name: List packages
         run: ls -R ./npm
         shell: bash

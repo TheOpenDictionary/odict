@@ -10,7 +10,7 @@ use super::media_url::MediaURL;
 ///
 /// Each entry contains the term itself, optional ranking metadata,
 /// cross-reference information, etymologies, and media attachments.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Entry))]
 pub struct Entry {

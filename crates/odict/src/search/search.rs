@@ -28,8 +28,8 @@ pub struct SearchOptions {
     pub tokenizer: TextAnalyzer,
 }
 
-impl SearchOptions {
-    pub fn default() -> Self {
+impl Default for SearchOptions {
+    fn default() -> Self {
         Self {
             dir: get_default_index_dir(),
             threshold: 1,
@@ -38,7 +38,9 @@ impl SearchOptions {
             tokenizer: DEFAULT_TOKENIZER.to_owned(),
         }
     }
+}
 
+impl SearchOptions {
     pub fn limit(mut self, limit: usize) -> Self {
         self.limit = limit;
         self

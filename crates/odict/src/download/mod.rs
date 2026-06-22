@@ -1,6 +1,7 @@
 use crate::error::Result;
 
 pub(crate) mod constants;
+#[allow(clippy::module_inception)]
 mod download;
 mod metadata;
 mod options;

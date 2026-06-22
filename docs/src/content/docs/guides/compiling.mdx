@@ -13,36 +13,38 @@ The simplest approach is to compile an XML string directly into an in-memory dic
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::{OpenDictionary, ToDictionary};
 
 fn main() -> odict::Result<()> {
-let xml = r#"
+  let xml = r#"
 
-<dictionary name="My Dictionary">
-  <entry term="hello">
-    <ety>
-      <sense pos="intj">
-        <definition value="A greeting" />
-      </sense>
-    </ety>
-  </entry>
-</dictionary>
-"#;
+  <dictionary name="My Dictionary">
+    <entry term="hello">
+      <ety>
+        <sense pos="intj">
+          <definition value="A greeting" />
+        </sense>
+      </ety>
+    </entry>
+  </dictionary>
+  "#;
 
-    // Parse XML → build binary → get OpenDictionary
-    let dict = xml.to_dictionary()?.build()?;
+  // Parse XML → build binary → get OpenDictionary
+  let dict = xml.to_dictionary()?.build()?;
 
-    // Write to disk
-    dict.to_disk("my-dictionary.odict")?;
+  // Write to disk
+  dict.to_disk("my-dictionary.odict")?;
 
-    Ok(())
-
+  Ok(())
 }
+```
 
-````
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 from theopendictionary import OpenDictionary, compile
 
@@ -67,10 +69,12 @@ dictionary = OpenDictionary(xml)
 
 # Save to disk
 dictionary.save("my-dictionary.odict")
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 import { compile, OpenDictionary } from "@odict/node";
 
@@ -96,9 +100,10 @@ const dictionary = new OpenDictionary(xml);
 
 // Save to disk
 dictionary.save("my-dictionary.odict");
+```
 
-````
 </TabItem>
+
 </Tabs>
 
 ## Compiling from an XML file
@@ -107,11 +112,11 @@ If your XML lives on disk, read it first and then compile.
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::schema::Dictionary;
 
 fn main() -> odict::Result<()> {
-    // Parse and compile from a file path
     let dict = Dictionary::from_path("my-dictionary.xml")?
         .build()?;
 
@@ -119,10 +124,12 @@ fn main() -> odict::Result<()> {
 
     Ok(())
 }
-````
+```
 
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 from theopendictionary import OpenDictionary, compile
 
@@ -132,10 +139,12 @@ xml = f.read()
 compiled_bytes = compile(xml)
 dictionary = OpenDictionary(compiled_bytes)
 dictionary.save("my-dictionary.odict")
+```
 
-````
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 import { readFile } from "node:fs/promises";
 import { compile, OpenDictionary } from "@odict/node";
@@ -143,10 +152,12 @@ import { compile, OpenDictionary } from "@odict/node";
 const xml = await readFile("my-dictionary.xml", "utf-8");
 const data = compile(xml);
 const dictionary = new OpenDictionary(data);
+
 dictionary.save("my-dictionary.odict");
-````
+```
 
 </TabItem>
+
 </Tabs>
 
 ## Compression options
@@ -155,50 +166,56 @@ ODict uses Brotli compression. You can configure the compression level when savi
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::{compile::CompilerOptions, CompressOptions, ToDictionary};
 
 fn main() -> odict::Result<()> {
-let xml = std::fs::read_to_string("my-dictionary.xml")?;
+  let xml = std::fs::read_to_string("my-dictionary.xml")?;
 
-    let compress = CompressOptions::default()
-        .quality(11)       // Maximum compression (0–11)
-        .window_size(22);  // Window size (0–22)
+  let compress = CompressOptions::default()
+      .quality(11)
+      .window_size(22);
 
-    let options = CompilerOptions::default()
-        .with_compression(compress);
+  let options = CompilerOptions::default()
+      .with_compression(compress);
 
-    xml.as_str()
-        .to_dictionary()?
-        .build()?
-        .to_disk_with_options("my-dictionary.odict", options)?;
+  xml.as_str()
+      .to_dictionary()?
+      .build()?
+      .to_disk_with_options("my-dictionary.odict", options)?;
 
-    Ok(())
-
+  Ok(())
 }
+```
 
-````
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 dictionary.save(
     "my-dictionary.odict",
     quality=11,       # Maximum compression (0–11)
     window_size=22    # Window size (0–22)
 )
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 dictionary.save("my-dictionary.odict", {
   compress: {
-    quality: 11,     // Maximum compression (0–11)
-    windowSize: 22,  // Window size (0–22)
+    quality: 11, // Maximum compression (0–11)
+    windowSize: 22, // Window size (0–22)
   },
 });
 ```
+
 </TabItem>
+
 </Tabs>
 
 ## Loading compiled dictionaries
@@ -207,41 +224,44 @@ Once compiled, you can load `.odict` files from disk or from the remote registry
 
 <Tabs>
 <TabItem label="Rust">
+
 ```rust
 use odict::OpenDictionary;
 
 fn main() -> odict::Result<()> {
-// Load from disk
-let file = OpenDictionary::from_path("my-dictionary.odict")?;
-let dict = file.contents()?;
+  let file = OpenDictionary::from_path("my-dictionary.odict")?;
+  let dict = file.contents()?;
 
-    println!("Entries: {}", dict.entries.len());
+  println!("Entries: {}", dict.entries.len());
 
-    Ok(())
-
+  Ok(())
 }
+```
 
-````
 </TabItem>
+
 <TabItem label="Python">
+
 ```python
 import asyncio
 from theopendictionary import OpenDictionary
 
 async def main():
-    # Load from disk
-    dictionary = await OpenDictionary.load("./my-dictionary.odict")
+  # Load from disk
+  dictionary = await OpenDictionary.load("./my-dictionary.odict")
 
-    # Load from remote registry
-    dictionary = await OpenDictionary.load("wiktionary/eng")
+  # Load from remote registry
+  dictionary = await OpenDictionary.load("wiktionary/eng")
 
-    print(dictionary.lexicon())
+  print(dictionary.lexicon())
 
 asyncio.run(main())
-````
+```
 
 </TabItem>
+
 <TabItem label="JavaScript">
+
 ```typescript
 import { OpenDictionary } from "@odict/node";
 
@@ -252,8 +272,8 @@ const dictionary = await OpenDictionary.load("./my-dictionary.odict");
 const dictionary = await OpenDictionary.load("wiktionary/eng");
 
 console.log(dictionary.lexicon());
+```
 
-```
 </TabItem>
+
 </Tabs>
-```

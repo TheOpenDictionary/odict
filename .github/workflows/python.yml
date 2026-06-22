@@ -37,7 +37,7 @@ jobs:
           experimental: true
           working_directory: python
       - name: Run lint
-        run: mise lint
+        run: mise check
         working-directory: python
 
   linux:

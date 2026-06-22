@@ -24,7 +24,7 @@ mod index_tests {
         )
         .unwrap();
 
-        assert!(!result.is_err());
+        assert!(result.is_ok());
         assert_snapshot!(re.replace_all(result.unwrap().as_str(), ""));
     }
 }

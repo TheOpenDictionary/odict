@@ -6,7 +6,7 @@ use super::{note::Note, Example};
 /// A single definition of a word sense.
 ///
 /// Contains the definition text along with optional examples and notes.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Definition))]
 pub struct Definition {

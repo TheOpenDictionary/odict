@@ -2,13 +2,11 @@
 
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.1...lib/v3.2.2) (2025-11-30)
 
-
 ### Bug Fixes
 
 * Add automatic retrying if remote downloads are corrupted ([#1355](https://github.com/TheOpenDictionary/odict/issues/1355)) ([333f6ca](https://github.com/TheOpenDictionary/odict/commit/333f6cacfe2c1f966ea2b0528c5de48b99ed4fc5))
 
 ## [3.2.1](https://github.com/TheOpenDictionary/odict/compare/lib/v3.2.0...lib/v3.2.1) (2025-11-23)
-
 
 ### Bug Fixes
 
@@ -16,12 +14,10 @@
 
 ## [3.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.1...lib/v3.2.0) (2025-11-22)
 
-
 ### Features
 
 * **http:** Expose download methods on OpenDictionary ([99cd786](https://github.com/TheOpenDictionary/odict/commit/99cd786bd2aba9321670c890fe32f923165b3cbc))
 * Preserve ordering of sense data ([#1339](https://github.com/TheOpenDictionary/odict/issues/1339)) ([777b8e9](https://github.com/TheOpenDictionary/odict/commit/777b8e96fbb35c0cdfab6f63fcd8f522c6c1cb3f))
-
 
 ### Bug Fixes
 
@@ -29,13 +25,11 @@
 
 ## [3.1.1](https://github.com/TheOpenDictionary/odict/compare/lib/v3.1.0...lib/v3.1.1) (2025-10-22)
 
-
 ### Bug Fixes
 
 * Allow configuring config directory through LoadOptions ([#1323](https://github.com/TheOpenDictionary/odict/issues/1323)) ([3808745](https://github.com/TheOpenDictionary/odict/commit/3808745641f75018f71c29fdfcd8eb32ab1406f0))
 
 ## [3.1.0](https://github.com/TheOpenDictionary/odict/compare/lib/v3.0.0...lib/v3.1.0) (2025-10-20)
-
 
 ### Features
 
@@ -44,13 +38,11 @@
 * Remove backwards compatibility for legacy follow for Node and Python ([#1310](https://github.com/TheOpenDictionary/odict/issues/1310)) ([2efe45d](https://github.com/TheOpenDictionary/odict/commit/2efe45d44babc1357bd10650360b4edd671513dd))
 * String interning ([#1313](https://github.com/TheOpenDictionary/odict/issues/1313)) ([a1ce402](https://github.com/TheOpenDictionary/odict/commit/a1ce4025950f840674e1e4e159b60311672febc2))
 
-
 ### Bug Fixes
 
 * Inline interning library ([5833965](https://github.com/TheOpenDictionary/odict/commit/583396596017cc2a979d45de3237885671c136e7))
 
 ## [3.0.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.9.1...lib/v3.0.0) (2025-10-17)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -66,11 +58,9 @@
 
 ## [2.9.1](https://github.com/TheOpenDictionary/odict/compare/lib/v2.9.0...lib/v2.9.1) (2025-08-16)
 
-
 ### Bug Fixes
 
 * Correct semver partial order implementation ([#1255](https://github.com/TheOpenDictionary/odict/issues/1255)) ([627e3ad](https://github.com/TheOpenDictionary/odict/commit/627e3ad45cf57e5e5e048bd1d727cef81c3e023a))
-
 
 ### Performance Improvements
 
@@ -78,13 +68,11 @@
 
 ## [2.9.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.8.0...lib/v2.9.0) (2025-07-12)
 
-
 ### Features
 
 * Add `min_rank` and `max_rank` methods for retrieving ranking bounds ([#1245](https://github.com/TheOpenDictionary/odict/issues/1245)) ([3cff5ee](https://github.com/TheOpenDictionary/odict/commit/3cff5ee302b5a2281c3ee8fdb75b1ee553760b94))
 * Allow custom `follow` limit by changing from boolean to number ([#1246](https://github.com/TheOpenDictionary/odict/issues/1246)) ([d96187a](https://github.com/TheOpenDictionary/odict/commit/d96187a541220f2e934462a31af363f64786d623))
 * Make mod semver public & implement partial order for SemanticVersion ([#1225](https://github.com/TheOpenDictionary/odict/issues/1225)) ([15b860a](https://github.com/TheOpenDictionary/odict/commit/15b860a06cfd638fb7e4e896cdc9760506322de6))
-
 
 ### Bug Fixes
 
@@ -92,13 +80,11 @@
 
 ## [2.8.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.7.0...lib/v2.8.0) (2025-05-14)
 
-
 ### Features
 
 * Add Niching policies to reduce disk space ([#1218](https://github.com/TheOpenDictionary/odict/issues/1218)) ([c33ac83](https://github.com/TheOpenDictionary/odict/commit/c33ac83972158813f76b5039e2aab55251dd83b8))
 * Add Other(String) to PartOfSpeech enum to handle custom strings ([#1203](https://github.com/TheOpenDictionary/odict/issues/1203)) ([b7f258a](https://github.com/TheOpenDictionary/odict/commit/b7f258aa35a8bb29ccc6f369ae3316435b5f6c03))
 * Replace HashMap with HashSet ([#1217](https://github.com/TheOpenDictionary/odict/issues/1217)) ([fdb5e11](https://github.com/TheOpenDictionary/odict/commit/fdb5e111ea84b179156486eacf4b78d843c12efb))
-
 
 ### Bug Fixes
 
@@ -106,13 +92,11 @@
 
 ## [2.7.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.6.0...lib/v2.7.0) (2025-05-10)
 
-
 ### Features
 
 * Add `rank` attribute to Entry for storing word frequencies ([#1210](https://github.com/TheOpenDictionary/odict/issues/1210)) ([2b2439a](https://github.com/TheOpenDictionary/odict/commit/2b2439a4dcb82d2b2c247174eb22d4a90d2037d5))
 
 ## [2.6.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.5.0...lib/v2.6.0) (2025-04-24)
-
 
 ### Features
 
@@ -125,13 +109,11 @@
 * Remove wrapper components ([0908f01](https://github.com/TheOpenDictionary/odict/commit/0908f0128c1dd1b0749b756d757d8f3aa50e6c1c))
 * Use `structural_convert` macro instead of custom From implementations ([#1199](https://github.com/TheOpenDictionary/odict/issues/1199)) ([392d624](https://github.com/TheOpenDictionary/odict/commit/392d624a4b956f0bc22d0529b4ccb0307807cdfd))
 
-
 ### Bug Fixes
 
 * **deps:** Update rust crate brotli to v8 ([#1189](https://github.com/TheOpenDictionary/odict/issues/1189)) ([a8d61e6](https://github.com/TheOpenDictionary/odict/commit/a8d61e697ad17fc7a69796a7ee0c27f5ee285944))
 
 ## [2.5.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.4.0...lib/v2.5.0) (2025-04-20)
-
 
 ### Features
 
@@ -139,19 +121,16 @@
 
 ## [2.4.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.3.0...lib/v2.4.0) (2025-04-13)
 
-
 ### Features
 
 * Add flag to support case insensitivity for lookups and tokenization ([#1179](https://github.com/TheOpenDictionary/odict/issues/1179)) ([a7e7baa](https://github.com/TheOpenDictionary/odict/commit/a7e7baac0f8d02e565a2d01acdc59c9bd1bc3242))
 
 ## [2.3.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.2.0...lib/v2.3.0) (2025-04-04)
 
-
 ### Features
 
 * **node:** Add support for TokenizeOptions ([e14fb17](https://github.com/TheOpenDictionary/odict/commit/e14fb17abcaa2f07bfabb482db11402cd2b41fbf))
 * **tokenize:** Add additional metadata to Token model ([bd44701](https://github.com/TheOpenDictionary/odict/commit/bd44701bb3ef59fafac31a2b6582c729fd881f1e))
-
 
 ### Bug Fixes
 
@@ -160,13 +139,11 @@
 
 ## [2.2.0](https://github.com/TheOpenDictionary/odict/compare/lib/v2.1.0...lib/v2.2.0) (2025-04-03)
 
-
 ### Features
 
 * **serve:** Cache dictionaries ([#1170](https://github.com/TheOpenDictionary/odict/issues/1170)) ([907918b](https://github.com/TheOpenDictionary/odict/commit/907918ba12b34b44399bfa185a0dd5f8c8575ad0))
 
 ## [2.1.0](https://github.com/TheOpenDictionary/odict/compare/lib-v2.0.0...lib/v2.1.0) (2025-04-03)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -180,7 +157,6 @@
 * Expose Brotli compression options for `compile` ([#1067](https://github.com/TheOpenDictionary/odict/issues/1067)) ([0b282cd](https://github.com/TheOpenDictionary/odict/commit/0b282cde171ee3e6b1252c59fa9fc8f050e7c4b4))
 * **lib:** Change compression from lz4 to brotli ([#1064](https://github.com/TheOpenDictionary/odict/issues/1064)) ([6dc0b9a](https://github.com/TheOpenDictionary/odict/commit/6dc0b9a05d9d7dce4aed1a29ba3b0f54532748af))
 
-
 ### Bug Fixes
 
 * **deps:** Update rust crate dirs to v6 ([#1082](https://github.com/TheOpenDictionary/odict/issues/1082)) ([2b0c37d](https://github.com/TheOpenDictionary/odict/commit/2b0c37daf35a06211be5e2301a315c9262ba9a79))
@@ -188,7 +164,6 @@
 * **error:** Fix build failure when all default features are disabled ([215bd7b](https://github.com/TheOpenDictionary/odict/commit/215bd7becd62422bae64398b188f905bc87dd52d))
 
 ## [2.0.0](https://github.com/TheOpenDictionary/odict/compare/lib-v2.0.0...lib-v2.0.0) (2024-12-25)
-
 
 ### Features
 
@@ -211,7 +186,6 @@
 * **v2:** Add SQL dumping ([#747](https://github.com/TheOpenDictionary/odict/issues/747)) ([caceb88](https://github.com/TheOpenDictionary/odict/commit/caceb883e527358a0f0e74221130af572c0f561a))
 * **v2:** Implement basic dumping ([#654](https://github.com/TheOpenDictionary/odict/issues/654)) ([5e29764](https://github.com/TheOpenDictionary/odict/commit/5e29764048767752c56178df5e1ac1e9160894d0))
 * **v2:** Make tokenizer customizable ([975e4b0](https://github.com/TheOpenDictionary/odict/commit/975e4b0881876b31e7a7d97c01f8178668867deb))
-
 
 ### Bug Fixes
 

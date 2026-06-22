@@ -6,7 +6,7 @@ use super::definition::Definition;
 #[derive(StructuralConvert)]
 #[convert(from(odict::schema::Group))]
 pub struct Group {
-  pub id: Option<String>,
-  pub description: String,
-  pub definitions: Vec<Definition>,
+    pub id: Option<String>,
+    pub description: String,
+    pub definitions: Vec<Definition>,
 }

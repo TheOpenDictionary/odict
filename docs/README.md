@@ -4,7 +4,7 @@ This is the Astro Starlight documentation site for ODict.
 
 ## Project Structure
 
-```
+```text
 .
 ├── public/
 ├── src/

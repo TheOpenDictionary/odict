@@ -7,6 +7,7 @@ use super::{
     utils::SQLBuilder,
 };
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Iden)]
 pub enum Senses {
     Table,

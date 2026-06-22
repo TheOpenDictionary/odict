@@ -74,5 +74,5 @@ pub const SIGNATURE: &[u8] = b"ODICT";
 ///
 /// println!("Library version: {}", *VERSION);
 /// ```
-pub const VERSION: LazyLock<SemanticVersion> =
+pub static VERSION: LazyLock<SemanticVersion> =
     LazyLock::new(|| SemanticVersion::from(env!("CARGO_PKG_VERSION")));

@@ -12,7 +12,7 @@ use super::{
 /// Senses represent distinct meanings of a word under a given etymology.
 /// Each sense has a part of speech and contains definitions (or definition groups),
 /// along with optional tags, translations, and inflected forms.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone)]
 pub struct Sense {
     /// The part of speech for this sense (e.g. noun, verb, adjective).

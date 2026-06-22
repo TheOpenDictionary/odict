@@ -220,7 +220,7 @@ impl AsRef<LookupOptions> for LookupOptions {
     }
 }
 
-impl LookupOptions {
+impl Default for LookupOptions {
     /// Construct default lookup options with safe, predictable settings.
     ///
     /// The default configuration prioritizes safety and performance:
@@ -242,14 +242,16 @@ impl LookupOptions {
     /// assert_eq!(options.strategy, odict::LookupStrategy::Exact);
     /// assert_eq!(options.insensitive, false);
     /// ```
-    pub fn default() -> Self {
+    fn default() -> Self {
         Self {
             follow: false,
             strategy: LookupStrategy::Exact,
             insensitive: false,
         }
     }
+}
 
+impl LookupOptions {
     pub fn follow(mut self, follow: bool) -> Self {
         self.follow = follow;
         self
@@ -647,7 +649,7 @@ mod tests {
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "alias1");
-        assert_eq!(result[0].directed_from.is_none(), true);
+        assert!(result[0].directed_from.is_none());
 
         // Test with follow=true (follows until entry with etymologies found)
         // Should follow alias1 -> alias2 -> target and stop at target since it has etymologies
@@ -657,7 +659,7 @@ mod tests {
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "target");
-        assert_eq!(result[0].directed_from.is_some(), true);
+        assert!(result[0].directed_from.is_some());
         assert_eq!(result[0].directed_from.unwrap().term, "alias1");
 
         // Test starting from alias2 should also reach target
@@ -667,7 +669,7 @@ mod tests {
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "target");
-        assert_eq!(result[0].directed_from.is_some(), true);
+        assert!(result[0].directed_from.is_some());
         assert_eq!(result[0].directed_from.unwrap().term, "alias2");
     }
 
@@ -727,7 +729,7 @@ mod tests {
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "target");
-        assert_eq!(result[0].directed_from.is_some(), true);
+        assert!(result[0].directed_from.is_some());
         assert_eq!(result[0].directed_from.unwrap().term, "alias");
 
         // Test case insensitive redirect following with mixed case query
@@ -740,7 +742,7 @@ mod tests {
 
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].entry.term, "target");
-        assert_eq!(result[0].directed_from.is_some(), true);
+        assert!(result[0].directed_from.is_some());
         assert_eq!(result[0].directed_from.unwrap().term, "alias");
 
         // Test that case sensitive mode doesn't find mismatched case

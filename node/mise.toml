@@ -3,12 +3,12 @@ node = "24.11.1"
 
 [deps.yarn]
 auto = true
-run = "corepack enable && corepack install && yarn install"
+run  = "corepack enable && corepack install && corepack yarn install"
 
 [tasks."build:node"]
 alias = "build"
-env = { "AWS_LC_SYS_NO_JITTER_ENTROPY" = 1 }
-run = "yarn build:node"
+env   = { "AWS_LC_SYS_NO_JITTER_ENTROPY" = 1 }
+run   = "yarn build:node"
 
 [tasks."create-dirs"]
 run = "yarn create-dirs"
@@ -19,12 +19,17 @@ run = "yarn artifacts"
 [tasks."build:wasm"]
 run = ["yarn build:wasm"]
 
-[tasks.lint]
-run = "yarn lint"
+[tasks.format]
+run = ["oxfmt --write .", "taplo format", "cargo fmt"]
+
+[tasks.check]
+outputs = { auto = true }
+run     = ["cargo clippy --manifest-path Cargo.toml --quiet", "oxlint ."]
+sources = ["src/**/*.rs", "*.js"]
 
 [tasks."dev:wasm"]
 depends = [":build:wasm"]
-run = "yarn dev:wasm"
+run     = "yarn dev:wasm"
 
 [tasks.upgrade]
 run = "yarn up"
@@ -39,5 +44,5 @@ run = "yarn test"
 depends = [":test -u"]
 
 [tasks.ci]
-run = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
 hide = true
+run  = 'mise x act@latest -- act napi --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'

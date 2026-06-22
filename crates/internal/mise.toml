@@ -1,9 +1,3 @@
-[tasks.run]
-extends = "rust:run"
-
-[tasks.clean]
-extends = "rust:clean"
-
 [tasks.build]
 extends = "rust:build"
 
@@ -12,3 +6,9 @@ extends = "rust:check"
 
 [tasks.format]
 extends = "rust:format"
+
+[tasks.run]
+extends = "rust:run"
+
+[tasks.clean]
+extends = "rust:clean"

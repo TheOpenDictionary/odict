@@ -20,7 +20,7 @@ pub fn compile(xml: String) -> Result<Buffer> {
 }
 
 pub fn new_from_bytes(bytes: &[u8]) -> Result<OpenDictionary> {
-    let dict = odict::OpenDictionary::from_bytes::<Vec<u8>>(bytes.to_vec()).map_err(cast_error)?;
+    let dict = odict::OpenDictionary::from_bytes(bytes).map_err(cast_error)?;
     Ok(dict)
 }
 
@@ -51,7 +51,7 @@ pub fn perform_tokenization(
         None => odict::tokenize::TokenizeOptions::default(),
     };
 
-    let tokens = dict.tokenize(&text, opts).map_err(cast_error)?;
+    let tokens = dict.tokenize(text, opts).map_err(cast_error)?;
 
     // Convert tokens manually
     let mut mapped_tokens = Vec::new();
@@ -121,21 +121,21 @@ pub fn perform_lookup(
     let mut queries: Vec<String> = vec![];
 
     match query {
-        Either::A(a) => queries.push(a.into()),
+        Either::A(a) => queries.push(a),
         Either::B(mut c) => queries.append(&mut c),
     }
 
     let dict = dict.contents().map_err(cast_error)?;
 
-    let mut opts: types::LookupOptions = options.unwrap_or(types::LookupOptions::default());
+    let mut opts: types::LookupOptions = options.unwrap_or_default();
 
     if let Some(split) = opts.split {
         opts.split = Some(split);
     }
 
     let results = dict
-        .lookup(&queries, &odict::lookup::LookupOptions::from(opts))
-        .map_err(|e| cast_error(e))?;
+        .lookup(&queries, odict::lookup::LookupOptions::from(opts))
+        .map_err(cast_error)?;
 
     let mapped = results
         .iter()

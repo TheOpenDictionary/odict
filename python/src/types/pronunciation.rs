@@ -9,7 +9,7 @@ use internal::ToEnumWrapper;
 ///
 /// Represents how a word is pronounced in a given notation system
 /// (e.g. IPA, Pinyin), with optional audio media.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Clone, Debug)]
 pub struct Pronunciation {
     /// The pronunciation system (e.g. IPA, Pinyin), or `None`.

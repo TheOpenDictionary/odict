@@ -29,7 +29,7 @@ impl OpenDictionary {
 
     #[napi(getter)]
     pub fn bytes(&self) -> Result<Vec<u8>> {
-        Ok(self.dict.to_bytes().map_err(cast_error)?)
+        self.dict.to_bytes().map_err(cast_error)
     }
 
     #[napi(getter)]
@@ -98,7 +98,7 @@ impl OpenDictionary {
     #[napi]
     pub fn index(&self, options: Option<types::IndexOptions>) -> Result<()> {
         let dict = self.dict.contents().map_err(cast_error)?;
-        let opts = options.unwrap_or(types::IndexOptions::default());
+        let opts = options.unwrap_or_default();
 
         dict.index(odict::index::IndexOptions::from(opts))
             .map_err(cast_error)?;
@@ -115,12 +115,10 @@ impl OpenDictionary {
         let dict = self.dict.contents().map_err(cast_error)?;
         let opts = options.unwrap_or_default();
 
-        // Use our helper function to avoid orphan rule issues
         let results = dict
             .search(query.as_str(), odict::search::SearchOptions::from(opts))
             .map_err(cast_error)?;
 
-        // Use the new from_entry function for Entry types
         let entries = results
             .iter()
             .map(|e| e.clone().into())

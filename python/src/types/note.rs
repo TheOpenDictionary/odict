@@ -7,7 +7,7 @@ use super::Example;
 ///
 /// Notes provide supplementary information such as usage guidance,
 /// historical context, or grammatical remarks.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Note))]
 pub struct Note {

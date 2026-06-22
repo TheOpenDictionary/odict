@@ -3,8 +3,8 @@ use pyo3::prelude::*;
 use super::Entry;
 
 /// Options for configuring term lookups.
-#[pyclass]
-#[derive(Clone)]
+#[pyclass(from_py_object)]
+#[derive(Clone, Default)]
 pub struct LookupOptions {
     /// Minimum word length for compound splitting.
     #[pyo3(get, set)]
@@ -28,16 +28,6 @@ impl LookupOptions {
             split,
             follow,
             insensitive,
-        }
-    }
-}
-
-impl Default for LookupOptions {
-    fn default() -> Self {
-        LookupOptions {
-            split: None,
-            follow: None,
-            insensitive: None,
         }
     }
 }
@@ -66,7 +56,7 @@ impl From<LookupOptions> for odict::lookup::LookupOptions {
 ///
 /// Contains the matched entry and, if a `see_also` redirect was followed,
 /// the original entry that initiated the redirect.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone)]
 pub struct LookupResult {
     /// The matched dictionary entry.
@@ -123,7 +113,7 @@ impl From<odict::lookup::LookupResult<&odict::schema::ArchivedEntry>> for Lookup
 impl From<odict::lookup::LookupResult<odict::schema::Entry>> for LookupResult {
     fn from(result: odict::lookup::LookupResult<odict::schema::Entry>) -> Self {
         let entry = Entry::from(result.entry);
-        let directed_from = result.directed_from.map(|s| Entry::from(s));
+        let directed_from = result.directed_from.map(Entry::from);
 
         Self {
             entry,

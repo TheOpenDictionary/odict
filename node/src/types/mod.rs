@@ -32,9 +32,11 @@ pub use save::*;
 
 pub use entry::Entry;
 pub use example::Example;
+#[cfg(feature = "node")]
 pub use index::IndexOptions;
 pub use lookup::{LookupOptions, LookupResult};
 pub use pronunciation::Pronunciation;
+#[cfg(feature = "node")]
 pub use search::SearchOptions;
 pub use split::SplitOptions;
 pub use token::Token;

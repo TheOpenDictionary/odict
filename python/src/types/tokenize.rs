@@ -2,8 +2,8 @@ use either::Either;
 use pyo3::prelude::*;
 
 /// Options for configuring text tokenization.
-#[pyclass]
-#[derive(Clone)]
+#[pyclass(from_py_object)]
+#[derive(Clone, Default)]
 pub struct TokenizeOptions {
     /// Whether to follow `see_also` cross-references. Accepts `True`/`False` or a number (nonzero = follow).
     #[pyo3(get, set)]
@@ -22,15 +22,6 @@ impl TokenizeOptions {
         TokenizeOptions {
             follow,
             insensitive,
-        }
-    }
-}
-
-impl Default for TokenizeOptions {
-    fn default() -> Self {
-        TokenizeOptions {
-            follow: None,
-            insensitive: None,
         }
     }
 }

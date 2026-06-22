@@ -7,7 +7,7 @@ use super::definition::Definition;
 ///
 /// Groups allow organizing multiple definitions under a shared description,
 /// such as grouping definitions by semantic domain.
-#[pyclass]
+#[pyclass(from_py_object)]
 #[derive(Debug, Clone, StructuralConvert)]
 #[convert(from(odict::schema::Group))]
 pub struct Group {
