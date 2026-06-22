@@ -1,42 +1,42 @@
 experimental_monorepo_root = true
 
 [env]
-HK_MISE = 1
+HK_MISE           = 1
 MISE_EXPERIMENTAL = 1
 
 [hooks]
 postinstall = "hk install --mise"
 
 [tools]
-"cargo:cargo-dist" = "0.31.0"
-"cargo:cargo-edit" = "latest"
-"cargo:cargo-insta" = "1.42.2"
+"cargo:cargo-dist"    = "0.31.0"
+"cargo:cargo-edit"    = "latest"
+"cargo:cargo-insta"   = "1.42.2"
 "cargo:cargo-nextest" = "0.9.92"
-hk = "latest"
-"npm:astro" = "latest"
-"npm:oxfmt" = "latest"
-"npm:oxlint" = "latest"
-ruff = "latest"
-rumdl = "latest"
-rust = "latest"
-taplo = "latest"
-zig = "latest"
+hk                    = "latest"
+"npm:astro"           = "latest"
+"npm:oxfmt"           = "latest"
+"npm:oxlint"          = "latest"
+ruff                  = "latest"
+rumdl                 = "latest"
+rust                  = "latest"
+taplo                 = "latest"
+zig                   = "latest"
 
 [monorepo]
 config_roots = ["crates/*", "node", "python", "cli", "docs"]
 
 [task_templates."rust:check"]
 description = "Lints the project"
-run = "cargo clippy --manifest-path Cargo.toml"
+run         = "cargo clippy --manifest-path Cargo.toml"
 
 [task_templates."rust:build"]
 outputs = { auto = true }
-run = "cargo build"
+run     = "cargo build"
 sources = ["src/**/*.rs", "Cargo.toml"]
 
 [task_templates."rust:run"]
 outputs = { auto = true }
-run = "cargo run --release"
+run     = "cargo run --release"
 sources = ["src/**/*.rs", "Cargo.toml"]
 
 [task_templates."rust:clean"]
@@ -44,11 +44,12 @@ run = "cargo clean"
 
 [task_templates."rust:format"]
 outputs = { auto = true }
-run = "cargo fmt"
+run     = "cargo fmt"
 sources = ["src/**/*.rs"]
 
 [settings]
-lockfile = true
+lockfile            = true
+node.corepack       = false
 python.uv_venv_auto = true
 
 [tasks.run]
@@ -59,19 +60,19 @@ run = "cargo build -p odict-cli"
 
 [tasks.clean]
 description = "Removes all Rust build artifacts via Cargo"
-run = "cargo clean"
+run         = "cargo clean"
 
 [tasks."clean:all"]
 description = "Recursively cleans all packages in the project"
-run = "git clean -xdf"
+run         = "git clean -xdf"
 
 [tasks."snapshot"]
 description = "Updates all Insta snapshot tests"
-run = "cargo insta accept"
+run         = "cargo insta accept"
 
 [tasks.bench]
 description = "Runs benchmarks for all Cargo packages"
-run = "cargo bench"
+run         = "cargo bench"
 
 [tasks.why]
 run = "cargo tree -i"
@@ -84,23 +85,23 @@ run = "cargo run --release -p docgen"
 
 [tasks.fix]
 depends = ["//...:fix"]
-run = "cargo clippy --all-targets --all-features --fix --allow-dirty -- -D warnings"
+run     = "cargo clippy --all-targets --all-features --fix --allow-dirty -- -D warnings"
 
 [tasks."test"]
 description = "Runs nextest on all Cargo packages"
-run = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
+run         = "cargo nextest run -p odict-cli -p odict -p internal --all-features --verbose"
 
 [tasks."test:all"]
-depends = ["//...:test"]
+depends     = ["//...:test"]
 description = "Recursively tests all packages in the project"
 
 [tasks."up"]
-depends = ["//...:up"]
+depends     = ["//...:up"]
 description = "Updates all dependencies to their latest versions"
-run = "cargo upgrade"
+run         = "cargo upgrade"
 
 [tasks."build:all"]
-depends = ["//...:build"]
+depends     = ["//...:build"]
 description = "Recursively builds all packages in the project"
 
 [tasks."format:markdown"]
@@ -113,8 +114,13 @@ run = "taplo format **/*.toml"
 run = "mise fmt --all"
 
 [tasks."format"]
-depends = ["//...:format", "//:format:toml", "//:format:mise", "//:format:markdown"]
+depends = [
+  "//...:format",
+  "//:format:toml",
+  "//:format:mise",
+  "//:format:markdown",
+]
 
 [tasks."ci"]
 hide = true
-run = 'mise x act@latest -- act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'
+run  = 'mise x act@latest -- act {{arg(name="workflow", default="ci")}} --container-architecture linux/amd64 --bind --job {{arg(name="job_id")}}'

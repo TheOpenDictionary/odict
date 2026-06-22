@@ -1,9 +1,9 @@
 [tools]
-node = "24.11.1"
+node = "24"
+yarn = "latest"
 
 [deps.yarn]
 auto = true
-run  = "corepack enable && corepack install && corepack yarn install"
 
 [tasks."build:node"]
 alias = "build"
