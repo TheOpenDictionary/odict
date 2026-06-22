@@ -278,11 +278,9 @@ jobs:
       - name: Install dependencies
         working-directory: node
         run: |
-          corepack enable
-          corepack install
-          corepack yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64"]'
-          corepack yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
-          corepack yarn install
+          yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64"]'
+          yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
+          yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -312,14 +310,12 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
-        run: mise --no-hooks install -C node node
+        run: mise --no-hooks install -C node node yarn
       - name: Install dependencies
         working-directory: node
         run: |
-          corepack enable
-          corepack install
-          corepack yarn config set supportedArchitectures.cpu "wasm32"
-          corepack yarn install
+          yarn config set supportedArchitectures.cpu "wasm32"
+          yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:

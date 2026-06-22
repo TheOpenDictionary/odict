@@ -1,17 +1,18 @@
 [tools]
 node = "24"
+yarn = "latest"
 
 [deps.yarn]
 auto = true
 
 [tasks.dev]
 depends = ["//:docgen"]
-run = "yarn dev"
+run     = "yarn dev"
 
 [tasks.build]
 depends = ["//:docgen"]
 outputs = { auto = true }
-run = "yarn build"
+run     = "yarn build"
 sources = ["src/**/*", "package.json"]
 
 [tasks.check]
