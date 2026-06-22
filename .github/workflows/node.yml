@@ -37,6 +37,7 @@ jobs:
       - name: Install lint tools
         run: |
           mise --no-hooks install rust npm:oxlint
+          mise --no-hooks install -C node node yarn
       - name: Install clippy
         run: rustup component add clippy
       - name: Run lint
@@ -103,7 +104,7 @@ jobs:
       - name: Install build tools
         run: |
           mise --no-hooks install rust
-          mise --no-hooks install -C node node
+          mise --no-hooks install -C node node yarn
           if [[ "${{ matrix.settings.install_zig == true }}" == "true" ]]; then
             mise --no-hooks install zig
           fi
@@ -158,7 +159,7 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm cmake
-            sudo npm install -g yarn corepack --ignore-scripts
+            sudo npm install -g @yarnpkg/cli-dist@4.17.0 --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
             sh rustup.sh -y --profile minimal --default-toolchain stable
             source "$HOME/.cargo/env"
@@ -166,17 +167,16 @@ jobs:
             rustc --version
             echo "~~~~ node -v ~~~~"
             node -v
-            echo "~~~~ corepack yarn --version ~~~~"
-            corepack yarn --version
+            echo "~~~~ yarn --version ~~~~"
+            yarn --version
             pwd
             ls -lah
             whoami
             env
             freebsd-version
-            sudo corepack enable
             cd node
-            corepack yarn install
-            corepack yarn build:node
+            yarn install
+            yarn build:node
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -220,7 +220,7 @@ jobs:
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Install Node
-        run: mise --no-hooks install -C node node
+        run: mise --no-hooks install -C node node yarn
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
       - name: Download artifacts
@@ -257,7 +257,7 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
-        run: mise --no-hooks install -C node node
+        run: mise --no-hooks install -C node node yarn
       - name: Output docker params
         id: docker
         run: |
@@ -267,14 +267,14 @@ jobs:
             } else {
               console.log('PLATFORM=linux/amd64')
             }
-          " >> $GITHUB_OUTPUT
+          " >> "$GITHUB_OUTPUT"
           node -e "
             if ('${{ matrix.target }}'.endsWith('-musl')) {
               console.log('IMAGE=node:${{ matrix.node }}-alpine')
             } else {
               console.log('IMAGE=node:${{ matrix.node }}-slim')
             }
-          " >> $GITHUB_OUTPUT
+          " >> "$GITHUB_OUTPUT"
       - name: Install dependencies
         working-directory: node
         run: |
@@ -295,7 +295,7 @@ jobs:
           image: ${{ steps.docker.outputs.IMAGE }}
           name: test-bindings-${{ matrix.target }}
           options: "-v ${{ github.workspace }}:${{ github.workspace }} -w ${{ github.workspace }} --platform ${{ steps.docker.outputs.PLATFORM }}"
-          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); corepack enable && cd node && npm_config_optional=true corepack yarn test"
+          args: sh -c "(command -v apk >/dev/null && apk add --no-cache ca-certificates) || (apt-get update -y && apt-get install -y ca-certificates); npm install -g @yarnpkg/cli-dist@4.17.0 --ignore-scripts && cd node && npm_config_optional=true yarn test"
   test-wasi:
     name: Test WASI target
     needs:
@@ -349,7 +349,7 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
-        run: mise --no-hooks install -C node node
+        run: mise --no-hooks install -C node node yarn
       - name: create npm dirs
         run: mise run --skip-tools //node:create-dirs
       - name: Download all artifacts

@@ -24,6 +24,8 @@ jobs:
           working_directory: "docs"
       - name: Build site
         working-directory: docs
-        run: yarn build
+        run: |
+          yarn install --immutable
+          yarn build
         env:
           GITHUB_TOKEN: ${{ github.token }}
