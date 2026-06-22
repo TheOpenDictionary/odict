@@ -102,6 +102,8 @@ jobs:
           cache: true
           experimental: true
       - name: Install build tools
+        env:
+          MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
         run: |
           mise --no-hooks install rust
           mise --no-hooks install -C node node yarn
@@ -223,6 +225,7 @@ jobs:
         run: mise --no-hooks install -C node node yarn
         env:
           MISE_NODE_VERSION: ${{ matrix.node }}
+          MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
       - name: Download artifacts
         uses: actions/download-artifact@v8
         with:
@@ -257,6 +260,8 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
+        env:
+          MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
         run: mise --no-hooks install -C node node yarn
       - name: Output docker params
         id: docker
@@ -310,6 +315,8 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
+        env:
+          MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
         run: mise --no-hooks install -C node node yarn
       - name: Install dependencies
         working-directory: node
@@ -349,6 +356,8 @@ jobs:
           cache: true
           experimental: true
       - name: Install Node
+        env:
+          MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
         run: mise --no-hooks install -C node node yarn
       - name: create npm dirs
         run: mise run --skip-tools //node:create-dirs
