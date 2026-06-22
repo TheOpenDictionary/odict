@@ -260,20 +260,16 @@ This is especially useful for non-Latin scripts:
 
 ## XSD validation
 
-The schema is formally defined in [`odict.xsd`](https://github.com/TheOpenDictionary/odict/blob/main/odict.xsd). You can validate your XML against it:
+The schema is formally defined in [`odict.xsd`](/odict.xsd). You can validate your XML against it:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <dictionary name="My Dictionary"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="odict.xsd">
+  xsi:noNamespaceSchemaLocation="https://odict.org/odict.xsd">
   ...
 </dictionary>
 ```
 
-Most XML editors (VS Code with the XML extension, IntelliJ, etc.) will provide autocomplete and validation when the XSD is referenced.
-
-:::note
-The XSD covers the stable core shape. ODict's Rust schema and language bindings also expose richer fields such as ranks, tags, forms, and translations
-when modeling larger dictionaries.
-:::
+This schema is included by default when scaffolding dictionaries with `odict new`. Most XML editors (VS Code with the XML extension, IntelliJ, etc.)
+will provide autocomplete and validation when the XSD is referenced.
