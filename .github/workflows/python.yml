@@ -206,8 +206,10 @@ jobs:
           experimental: true
       - name: Install Rust
         run: |
-          mise install rust
-          rustup target add ${{ matrix.platform.rust_target }}
+          mise --no-hooks install rust
+          mise exec --no-deps rust -- rustup target add ${{ matrix.platform.rust_target }}
+        env:
+          MISE_EXEC_AUTO_INSTALL: "false"
       - uses: actions/setup-python@v6
         with:
           python-version: 3.13
