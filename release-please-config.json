@@ -17,7 +17,7 @@
       "release-type": "rust",
       "component": "cli"
     },
-    "crates/lib": {
+    "crates/odict": {
       "release-type": "rust",
       "component": "lib"
     },

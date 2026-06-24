@@ -10,7 +10,7 @@ on:
       - main
     paths:
       - "python/**"
-      - "crates/lib/**"
+      - "crates/odict/**"
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"

@@ -12,7 +12,7 @@ env:
       - main
     paths:
       - "node/**"
-      - "crates/lib/**"
+      - "crates/odict/**"
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"

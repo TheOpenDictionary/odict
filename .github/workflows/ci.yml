@@ -6,14 +6,14 @@ on:
       - main
     paths:
       - "cli/**"
-      - "crates/lib/**"
+      - "crates/odict/**"
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"
   pull_request:
     paths:
       - "cli/**"
-      - "crates/lib/**"
+      - "crates/odict/**"
       - "**/mise.toml"
       - "mise.toml"
       - "examples/**"
