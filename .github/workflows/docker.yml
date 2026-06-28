@@ -1,11 +1,17 @@
 name: Build and Publish Docker Image
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, for example lib/v3.3.0
+        required: false
+        type: string
   push:
     branches:
       - main
     tags:
-      - 'lib**[0-9]+.[0-9]+.[0-9]'
+      - "lib**[0-9]+.[0-9]+.[0-9]"
 
 permissions:
   contents: read
@@ -28,17 +34,24 @@ jobs:
 
       - name: Determine tags
         id: tags
+        env:
+          RELEASE_TAG: ${{ github.event.inputs.tag || '' }}
         run: |
           IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/odict"
           TAGS="${IMAGE}:latest"
-          
-          if [[ "${{ github.ref }}" == refs/tags/lib* ]]; then
+
+          TAG_NAME="${RELEASE_TAG}"
+          if [[ -z "${TAG_NAME}" && "${GITHUB_REF}" == refs/tags/lib* ]]; then
             TAG_NAME=${GITHUB_REF#refs/tags/}
-            # Tag with the full tag name (e.g., lib/1.2.3) and also latest
-            TAGS="${IMAGE}:${TAG_NAME},${TAGS}"
           fi
-          
-          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+
+          if [[ -n "${TAG_NAME}" ]]; then
+            DOCKER_TAG=${TAG_NAME##*/}
+            DOCKER_TAG=${DOCKER_TAG#v}
+            TAGS="${IMAGE}:${DOCKER_TAG},${TAGS}"
+          fi
+
+          echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -49,4 +62,3 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
