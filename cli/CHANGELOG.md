@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.3.0](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.2...cli/v3.3.0) (2026-06-27)
+
+
+### Features
+
+* Add basic documentation ([#1380](https://github.com/TheOpenDictionary/odict/issues/1380)) ([67fec85](https://github.com/TheOpenDictionary/odict/commit/67fec8554b87d50d3b858bed096bf373d6bac057))
+* Add Dockerfile publishing ([8ac816e](https://github.com/TheOpenDictionary/odict/commit/8ac816ef36532bf0b4503533398051d366633204))
+* Add XSD generation and linting hooks ([#1421](https://github.com/TheOpenDictionary/odict/issues/1421)) ([fda5457](https://github.com/TheOpenDictionary/odict/commit/fda5457b0829af5fb1e0ddf51078b3654e5d4ba3))
+* **dx:** Move to using mise monorepo ([2745c41](https://github.com/TheOpenDictionary/odict/commit/2745c41e90783dd3743d1b8555990a70fb9667a9))
+* Update dependencies ([8da5521](https://github.com/TheOpenDictionary/odict/commit/8da55213548dd2baf6d128e3ee8219db2b492189))
+
 ## [3.2.2](https://github.com/TheOpenDictionary/odict/compare/cli/v3.2.1...cli/v3.2.2) (2025-11-30)
 
 ### Bug Fixes

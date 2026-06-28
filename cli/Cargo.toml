@@ -5,7 +5,7 @@ edition = "2021"
 homepage = "https://odict.org"
 name = "odict-cli"
 repository = "https://github.com/TheOpenDictionary/odict"
-version = "3.2.2"
+version = "3.3.0"
 
 [package.metadata.wix]
 eula = false
