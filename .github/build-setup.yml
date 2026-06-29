@@ -1,0 +1,8 @@
+- name: Expose WiX on Windows ARM
+  if: ${{ runner.os == 'Windows' && contains(join(matrix.targets, ','), 'aarch64-pc-windows-msvc') }}
+  shell: pwsh
+  run: |
+    $wixRoot = Join-Path ([Environment]::GetEnvironmentVariable("ProgramFiles(x86)")) "WiX Toolset v3.14"
+    $wixBin = Join-Path $wixRoot "bin"
+    "WIX=$wixRoot\" | Out-File -FilePath "$env:GITHUB_ENV" -Append
+    $wixBin | Out-File -FilePath "$env:GITHUB_PATH" -Append

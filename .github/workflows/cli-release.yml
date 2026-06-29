@@ -131,6 +131,14 @@ jobs:
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
             echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           fi
+      - name: "Expose WiX on Windows ARM"
+        if: "${{ runner.os == 'Windows' && contains(join(matrix.targets, ','), 'aarch64-pc-windows-msvc') }}"
+        run: |
+          $wixRoot = Join-Path ([Environment]::GetEnvironmentVariable("ProgramFiles(x86)")) "WiX Toolset v3.14"
+          $wixBin = Join-Path $wixRoot "bin"
+          "WIX=$wixRoot\" | Out-File -FilePath "$env:GITHUB_ENV" -Append
+          $wixBin | Out-File -FilePath "$env:GITHUB_PATH" -Append
+        shell: "pwsh"
       - name: Install dist
         run: ${{ matrix.install_dist.run }}
       # Get the dist-manifest

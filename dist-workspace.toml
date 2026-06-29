@@ -36,11 +36,14 @@ tag-namespace = "cli"
 # Whether dist should create a Github Release or use an existing draft
 create-release = false
 # Build only the required packages, and individually
-precise-builds = true
+github-build-setup = "../build-setup.yml"
+precise-builds     = true
 
-[dist.github-custom-runners]
-aarch64-pc-windows-msvc = "windows-11-arm"
-global = "ubuntu-latest"
+  [dist.github-custom-runners]
+  aarch64-pc-windows-msvc = "windows-11-arm"
+  global                  = "ubuntu-latest"
 
-[dist.dependencies.chocolatey]
-wixtoolset = { version = "3.14.1.20250415", targets = ["aarch64-pc-windows-msvc"] }
+  [dist.dependencies.chocolatey]
+  wixtoolset = { version = "3.14.1.20250415", targets = [
+    "aarch64-pc-windows-msvc",
+  ] }
