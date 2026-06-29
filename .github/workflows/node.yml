@@ -7,6 +7,11 @@ env:
   MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
 "on":
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, for example node/v2.3.0
+        required: false
+        type: string
   push:
     branches:
       - main
@@ -29,6 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -96,6 +103,8 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -152,6 +161,8 @@ jobs:
     name: Build FreeBSD
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Build
         id: build
         uses: cross-platform-actions/action@v0.32.0
@@ -219,6 +230,8 @@ jobs:
     runs-on: ${{ matrix.settings.host }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -262,6 +275,8 @@ jobs:
     runs-on: ${{ contains(matrix.target, 'aarch64') && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -316,6 +331,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -345,6 +362,7 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/node/v') || (github.event_name == 'workflow_dispatch' && github.event.inputs.tag != '') }}
     permissions:
       contents: write
       id-token: write
@@ -356,6 +374,8 @@ jobs:
       - test-wasi
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
       - name: Setup mise
         uses: jdx/mise-action@v4
         with:
@@ -381,32 +401,28 @@ jobs:
         shell: bash
         working-directory: node
       - name: Publish
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+        shell: bash
         working-directory: node
         run: |
+          set -euo pipefail
           npm config set provenance true
-          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+          if [[ "$RELEASE_TAG" != node/v* ]]; then
+            echo "Expected a node/v* release tag, got: $RELEASE_TAG" >&2
+            exit 1
+          fi
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          version="${RELEASE_TAG#node/v}"
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ "$version" != "$package_version" ]]; then
+            echo "Tag version $version does not match package.json version $package_version" >&2
+            exit 1
+          fi
+          if [[ "$version" == *-* ]]; then
+            npm publish --no-git-checks --tag next --access public
           else
-            echo "Not a release, skipping publish"
+            npm publish --no-git-checks --access public
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish
-        shell: bash
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        working-directory: node
-        run: |
-          npm config set provenance true
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          npm publish --no-git-checks --access public
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
