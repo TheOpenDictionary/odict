@@ -23,4 +23,4 @@ It is:
 <img src="terminal.png" width="1000" />
 </div>
 
-Wondering how to get started? Check out our [Quickstart](https://www.odict.org/docs/introduction/quickstart) or read our [official documentation](https://odict.org).
+Wondering how to get started? Check out our [Quickstart](https://odict.org/getting-started/introduction/) or read our [official documentation](https://odict.org).
