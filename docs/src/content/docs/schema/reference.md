@@ -8,18 +8,27 @@ description: Complete reference for the ODict XML (ODXML) schema.
 ```text
 dictionary
 └── entry
-    ├── pronunciation
-    │   └── url
-    └── ety
-        └── sense
-            ├── group
-            │   └── definition
-            │       ├── example
-            │       │   └── pronunciation …
-            │       └── note
-            │           └── example …
-            └── definition …
+    ├── ety
+    │   ├── pronunciation
+    │   │   └── url
+    │   └── sense
+    │       ├── group
+    │       │   └── definition …
+    │       ├── definition
+    │       │   ├── example
+    │       │   │   ├── translation …
+    │       │   │   └── pronunciation …
+    │       │   └── note
+    │       │       └── example …
+    │       ├── tag …
+    │       ├── translation …
+    │       └── form
+    │           └── tag …
+    └── media …
 ```
+
+Repeatable child elements can appear in any order. Unless otherwise noted,
+elements with a minimum of `0` can be omitted.
 
 ---
 
@@ -38,7 +47,7 @@ dictionary
 
 | Element             | Min | Max       |
 | ------------------- | --- | --------- |
-| [`<entry>`](#entry) | 1   | unbounded |
+| [`<entry>`](#entry) | 0   | unbounded |
 
 ---
 
@@ -46,56 +55,27 @@ dictionary
 
 #### Attributes
 
-| Attribute | Type     | Required |
-| --------- | -------- | -------- |
-| `term`    | `string` | Yes      |
-| `see`     | `string` | No       |
-
-#### Child elements
-
-| Element                             | Min | Max       |
-| ----------------------------------- | --- | --------- |
-| [`<pronunciation>`](#pronunciation) | 0   | unbounded |
-| [`<ety>`](#ety)                     | 0   | unbounded |
-
----
-
-### `<ety>`
-
-#### Attributes
-
-| Attribute       | Type     | Required |
-| --------------- | -------- | -------- |
-| `id`            | `string` | No       |
-| `pronunciation` | `string` | No       |
-| `description`   | `string` | No       |
+| Attribute | Type             | Required |
+| --------- | ---------------- | -------- |
+| `term`    | `string`         | Yes      |
+| `see`     | entry term       | No       |
+| `rank`    | unsigned integer | No       |
 
 #### Child elements
 
 | Element             | Min | Max       |
 | ------------------- | --- | --------- |
-| [`<sense>`](#sense) | 1   | unbounded |
+| [`<ety>`](#ety)     | 0   | unbounded |
+| [`<media>`](#media) | 0   | unbounded |
+
+`see` identifies another entry by its `term`. When redirect following is
+enabled, an entry without etymologies can use it to redirect lookup to the referenced
+entry. `rank` stores source-specific frequency or importance data; ODict does
+not prescribe whether larger or smaller numbers are more important.
 
 ---
 
-### `<sense>`
-
-#### Attributes
-
-| Attribute | Type     | Required |
-| --------- | -------- | -------- |
-| `pos`     | `string` | No       |
-
-#### Child elements
-
-| Element                       | Min | Max       |
-| ----------------------------- | --- | --------- |
-| [`<group>`](#group)           | 0   | unbounded |
-| [`<definition>`](#definition) | 0   | unbounded |
-
----
-
-### `<group>`
+### `<ety>`
 
 #### Attributes
 
@@ -106,9 +86,118 @@ dictionary
 
 #### Child elements
 
+| Element                             | Min | Max       |
+| ----------------------------------- | --- | --------- |
+| [`<pronunciation>`](#pronunciation) | 0   | unbounded |
+| [`<sense>`](#sense)                 | 0   | unbounded |
+
+---
+
+### `<sense>`
+
+#### Attributes
+
+| Attribute | Type     | Required |
+| --------- | -------- | -------- |
+| `pos`     | `string` | No       |
+| `lemma`   | `string` | No       |
+
+The `lemma` attribute identifies the headword that is the canonical form for this
+sense. Its value should match the `term` of another `<entry>`.
+
+Because `lemma` belongs to `<sense>`, a single entry can link different senses to
+different headwords. For example, the verb sense of “saw” is a form of “see”,
+while the noun sense is already its own lemma:
+
+```xml
+<entry term="saw">
+  <ety>
+    <sense pos="v" lemma="see">
+      <definition value="The past tense of see" />
+    </sense>
+    <sense pos="n">
+      <definition value="A tool with a toothed blade" />
+    </sense>
+  </ety>
+</entry>
+
+<entry term="see">
+  <ety>
+    <sense pos="v">
+      <form kind="past-tense" term="saw" />
+      <definition value="To perceive with the eyes" />
+    </sense>
+  </ety>
+</entry>
+```
+
+ODict preserves the lemma reference on the sense for applications to inspect. It
+does not redirect a lookup automatically. Use [`see` on `<entry>`](#entry) when
+one entry should redirect to another, and use `<form>` on the lemma's sense to
+describe the relationship in the other direction.
+
+#### Child elements
+
+| Element                         | Min | Max       |
+| ------------------------------- | --- | --------- |
+| [`<group>`](#group)             | 0   | unbounded |
+| [`<definition>`](#definition)   | 0   | unbounded |
+| [`<tag>`](#tag)                 | 0   | unbounded |
+| [`<translation>`](#translation) | 0   | unbounded |
+| [`<form>`](#form)               | 0   | unbounded |
+
+---
+
+### `<form>`
+
+Forms describe terms related to a particular sense, such as inflections,
+conjugations, plurals, comparatives, and superlatives.
+
+#### Attributes
+
+| Attribute | Type       | Required |
+| --------- | ---------- | -------- |
+| `term`    | entry term | Yes      |
+| `kind`    | `string`   | No       |
+
+#### Child elements
+
+| Element         | Min | Max       |
+| --------------- | --- | --------- |
+| [`<tag>`](#tag) | 0   | unbounded |
+
+ODict recognizes `conjugation`, `inflection`, `plural`, `singular`,
+`comparative`, and `superlative` as standard `kind` values. Custom strings are
+also accepted.
+
+```xml
+<sense pos="v">
+  <form kind="conjugation" term="ran">
+    <tag>past-tense</tag>
+  </form>
+  <form kind="conjugation" term="running">
+    <tag>present-participle</tag>
+  </form>
+  <definition value="To move swiftly on foot" />
+</sense>
+```
+
+---
+
+### `<group>`
+
+#### Attributes
+
+| Attribute     | Type     | Required |
+| ------------- | -------- | -------- |
+| `id`          | `string` | No       |
+| `description` | `string` | Yes      |
+
+#### Child elements
+
 | Element                       | Min | Max       |
 | ----------------------------- | --- | --------- |
-| [`<definition>`](#definition) | 1   | unbounded |
+| [`<definition>`](#definition) | 0   | unbounded |
 
 ---
 
@@ -143,7 +232,7 @@ dictionary
 
 | Element                 | Min | Max       |
 | ----------------------- | --- | --------- |
-| [`<example>`](#example) | 1   | unbounded |
+| [`<example>`](#example) | 0   | unbounded |
 
 ---
 
@@ -159,7 +248,38 @@ dictionary
 
 | Element                             | Min | Max       |
 | ----------------------------------- | --- | --------- |
+| [`<translation>`](#translation)     | 0   | unbounded |
 | [`<pronunciation>`](#pronunciation) | 0   | unbounded |
+
+---
+
+### `<translation>`
+
+Translations can be attached directly to a sense or to an example.
+
+#### Attributes
+
+| Attribute | Type     | Required |
+| --------- | -------- | -------- |
+| `lang`    | `string` | Yes      |
+| `value`   | `string` | Yes      |
+
+Use a language code such as `en`, `fr`, or `zh-Hant` for `lang`.
+
+---
+
+### `<tag>`
+
+A tag is a text-only child of `<sense>` or `<form>`. Tags are open-ended labels
+for grammatical features, register, dialect, usage, or other source-specific
+metadata.
+
+```xml
+<sense pos="n">
+  <tag>informal</tag>
+  <definition value="A person, especially a man" />
+</sense>
+```
 
 ---
 
@@ -169,7 +289,7 @@ dictionary
 
 | Attribute | Type     | Required |
 | --------- | -------- | -------- |
-| `kind`    | `string` | Yes      |
+| `kind`    | `string` | No       |
 | `value`   | `string` | Yes      |
 
 #### Child elements
@@ -178,9 +298,15 @@ dictionary
 | --------------- | --- | --------- |
 | [`<url>`](#url) | 0   | unbounded |
 
+ODict recognizes `ipa`, `pinyin`, `hiragana`, `romaji`, `katakana`, `yale`,
+`jyutping`, `bopomofo`, and `hepburn` as standard `kind` values. Custom strings
+are also accepted.
+
 ---
 
 ### `<url>`
+
+`<url>` attaches a media resource to a pronunciation.
 
 #### Attributes
 
@@ -189,6 +315,41 @@ dictionary
 | `src`         | `string` | Yes      |
 | `type`        | `string` | No       |
 | `description` | `string` | No       |
+
+---
+
+### `<media>`
+
+`<media>` attaches an image, audio file, video, or other resource directly to an
+entry. It has the same attributes as [`<url>`](#url), but is an entry child
+rather than a pronunciation child.
+
+#### Attributes
+
+| Attribute     | Type     | Required |
+| ------------- | -------- | -------- |
+| `src`         | `string` | Yes      |
+| `type`        | `string` | No       |
+| `description` | `string` | No       |
+
+For both `<media>` and `<url>`, `src` accepts an `http://` or `https://` URL, or
+a relative path beginning with `./` or `/`. The optional `type` value is a MIME
+type.
+
+```xml
+<entry term="cat">
+  <ety>
+    <sense pos="n">
+      <definition value="A small domesticated mammal" />
+    </sense>
+  </ety>
+  <media
+    src="./images/cat.jpg"
+    type="image/jpeg"
+    description="A domestic cat"
+  />
+</entry>
+```
 
 ---
 

@@ -1,5 +1,5 @@
 table {
-  @apply bg-(--sl-color-input) text-base rounded-lg border;
+  @apply bg-(--sl-color-input) text-base rounded-lg border lg:table lg:w-full;
 
   th,
   td {

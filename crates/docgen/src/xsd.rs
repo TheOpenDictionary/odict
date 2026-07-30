@@ -214,7 +214,13 @@ fn write_complex_type(
         xsd_type_name(name)
     );
 
-    if !child_fields.is_empty() {
+    if !child_fields.is_empty() && child_fields.iter().all(|field| is_repeated(&field.value)) {
+        output.push_str("    <xs:choice minOccurs=\"0\" maxOccurs=\"unbounded\">\n");
+        for field in child_fields {
+            write_unordered_child_field(output, field, registry)?;
+        }
+        output.push_str("    </xs:choice>\n");
+    } else if !child_fields.is_empty() {
         output.push_str("    <xs:sequence>\n");
         for field in child_fields {
             write_child_field(output, field, registry)?;
@@ -227,6 +233,39 @@ fn write_complex_type(
     }
 
     output.push_str("  </xs:complexType>\n\n");
+
+    Ok(())
+}
+
+fn write_unordered_child_field(
+    output: &mut String,
+    field: &Named<Format>,
+    registry: &Registry,
+) -> Result<()> {
+    if field.name == "$value" {
+        let (format, _, _) = element_occurrence(&field.value);
+        let Format::TypeName(type_name) = format else {
+            bail!("unsupported $value field format: {format:?}");
+        };
+        let Some(ContainerFormat::Enum(variants)) = registry.get(type_name) else {
+            bail!("unsupported $value type: {type_name}");
+        };
+
+        for variant in variants.values() {
+            write_choice_variant(output, variant, registry, "      ")?;
+        }
+
+        return Ok(());
+    }
+
+    let (format, _, _) = element_occurrence(&field.value);
+    let element_type = xsd_format_type(format, registry)?;
+
+    let _ = writeln!(
+        output,
+        "      <xs:element name=\"{}\" type=\"{}\"/>",
+        field.name, element_type
+    );
 
     Ok(())
 }
@@ -269,7 +308,7 @@ fn write_value_field(output: &mut String, format: &Format, registry: &Registry) 
     );
 
     for variant in variants.values() {
-        write_choice_variant(output, variant, registry)?;
+        write_choice_variant(output, variant, registry, "        ")?;
     }
 
     output.push_str("      </xs:choice>\n");
@@ -281,6 +320,7 @@ fn write_choice_variant(
     output: &mut String,
     variant: &Named<VariantFormat>,
     registry: &Registry,
+    indent: &str,
 ) -> Result<()> {
     let element_type = match &variant.value {
         VariantFormat::NewType(format) => xsd_format_type(format, registry)?,
@@ -289,8 +329,8 @@ fn write_choice_variant(
 
     let _ = writeln!(
         output,
-        "        <xs:element name=\"{}\" type=\"{}\"/>",
-        variant.name, element_type
+        "{indent}<xs:element name=\"{}\" type=\"{}\"/>",
+        variant.name, element_type,
     );
 
     Ok(())
@@ -343,6 +383,10 @@ fn strip_option(format: &Format) -> &Format {
         Format::Option(inner) => inner,
         _ => format,
     }
+}
+
+fn is_repeated(format: &Format) -> bool {
+    matches!(format, Format::Seq(_))
 }
 
 fn xsd_format_type(format: &Format, registry: &Registry) -> Result<String> {
@@ -416,12 +460,89 @@ mod tests {
     fn generated_schema_contains_current_xml_model() {
         let schema = render_schema().unwrap();
 
+        assert!(schema.contains("<xs:element name=\"entry\" type=\"entryType\""));
+        assert!(schema.contains("<xs:element name=\"ety\" type=\"etyType\""));
+        assert!(schema.contains("<xs:element name=\"pronunciation\" type=\"pronunciationType\""));
         assert!(schema.contains("<xs:element name=\"media\" type=\"urlType\""));
+        assert!(schema.contains("<xs:element name=\"sense\" type=\"senseType\""));
+        assert!(schema.contains("<xs:element name=\"group\" type=\"groupType\""));
+        assert!(schema.contains("<xs:element name=\"definition\" type=\"definitionType\""));
+        assert!(schema.contains("<xs:element name=\"example\" type=\"exampleType\""));
+        assert!(schema.contains("<xs:element name=\"note\" type=\"noteType\""));
+        assert!(schema.contains("<xs:element name=\"url\" type=\"urlType\""));
+        assert!(schema.contains("<xs:element name=\"tag\" type=\"xs:string\""));
         assert!(schema.contains("<xs:attribute name=\"rank\" type=\"xs:unsignedInt\""));
         assert!(schema.contains("<xs:attribute name=\"lemma\" type=\"xs:string\""));
         assert!(schema.contains("<xs:element name=\"translation\" type=\"translationType\""));
         assert!(schema.contains("<xs:element name=\"form\" type=\"formType\""));
         assert!(schema.contains("<xs:attribute name=\"id\" type=\"xs:string\"/>"));
         assert!(schema.contains("<xs:attribute name=\"pos\" type=\"xs:string\"/>"));
+        assert!(
+            schema.contains("<xs:attribute name=\"term\" type=\"xs:string\" use=\"required\"/>")
+        );
+        assert!(
+            schema.contains("<xs:attribute name=\"src\" type=\"xs:string\" use=\"required\"/>")
+        );
+        assert!(
+            schema.contains("<xs:attribute name=\"lang\" type=\"xs:string\" use=\"required\"/>")
+        );
+    }
+
+    #[test]
+    fn checked_in_schema_matches_generator() {
+        let schema_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/public/odict.xsd");
+        let checked_in = std::fs::read_to_string(schema_path).unwrap();
+
+        assert_eq!(checked_in, render_schema().unwrap());
+    }
+
+    #[test]
+    fn xml_reference_covers_current_model() {
+        let reference_path = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../docs/src/content/docs/schema/reference.md");
+        let reference = std::fs::read_to_string(reference_path).unwrap();
+
+        for element in [
+            "dictionary",
+            "entry",
+            "ety",
+            "sense",
+            "form",
+            "group",
+            "definition",
+            "note",
+            "example",
+            "translation",
+            "tag",
+            "pronunciation",
+            "url",
+            "media",
+        ] {
+            assert!(
+                reference.contains(&format!("### `<{element}>`")),
+                "XML reference is missing <{element}>"
+            );
+        }
+
+        for attribute in [
+            "id",
+            "name",
+            "term",
+            "see",
+            "rank",
+            "description",
+            "pos",
+            "lemma",
+            "kind",
+            "value",
+            "lang",
+            "src",
+            "type",
+        ] {
+            assert!(
+                reference.contains(&format!("| `{attribute}`")),
+                "XML reference is missing the {attribute} attribute"
+            );
+        }
     }
 }

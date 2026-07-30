@@ -9,9 +9,9 @@
   </xs:complexType>
 
   <xs:complexType name="pronunciationType">
-    <xs:sequence>
-      <xs:element name="url" type="urlType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="url" type="urlType"/>
+    </xs:choice>
     <xs:attribute name="kind" type="xs:string"/>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
@@ -22,83 +22,81 @@
   </xs:complexType>
 
   <xs:complexType name="exampleType">
-    <xs:sequence>
-      <xs:element name="translation" type="translationType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="pronunciation" type="pronunciationType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="translation" type="translationType"/>
+      <xs:element name="pronunciation" type="pronunciationType"/>
+    </xs:choice>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="noteType">
-    <xs:sequence>
-      <xs:element name="example" type="exampleType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="example" type="exampleType"/>
+    </xs:choice>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="definitionType">
-    <xs:sequence>
-      <xs:element name="example" type="exampleType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="note" type="noteType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="example" type="exampleType"/>
+      <xs:element name="note" type="noteType"/>
+    </xs:choice>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="value" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="groupType">
-    <xs:sequence>
-      <xs:element name="definition" type="definitionType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="definition" type="definitionType"/>
+    </xs:choice>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="description" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="formType">
-    <xs:sequence>
-      <xs:element name="tag" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="tag" type="xs:string"/>
+    </xs:choice>
     <xs:attribute name="kind" type="xs:string"/>
     <xs:attribute name="term" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="senseType">
-    <xs:sequence>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="group" type="groupType"/>
-        <xs:element name="definition" type="definitionType"/>
-      </xs:choice>
-      <xs:element name="tag" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="translation" type="translationType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="form" type="formType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="group" type="groupType"/>
+      <xs:element name="definition" type="definitionType"/>
+      <xs:element name="tag" type="xs:string"/>
+      <xs:element name="translation" type="translationType"/>
+      <xs:element name="form" type="formType"/>
+    </xs:choice>
     <xs:attribute name="pos" type="xs:string"/>
     <xs:attribute name="lemma" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="etyType">
-    <xs:sequence>
-      <xs:element name="pronunciation" type="pronunciationType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="sense" type="senseType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="pronunciation" type="pronunciationType"/>
+      <xs:element name="sense" type="senseType"/>
+    </xs:choice>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="description" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="entryType">
-    <xs:sequence>
-      <xs:element name="ety" type="etyType" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="media" type="urlType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="ety" type="etyType"/>
+      <xs:element name="media" type="urlType"/>
+    </xs:choice>
     <xs:attribute name="term" type="xs:string" use="required"/>
     <xs:attribute name="see" type="xs:string"/>
     <xs:attribute name="rank" type="xs:unsignedInt"/>
   </xs:complexType>
 
   <xs:complexType name="dictionaryType">
-    <xs:sequence>
-      <xs:element name="entry" type="entryType" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="entry" type="entryType"/>
+    </xs:choice>
     <xs:attribute name="id" type="xs:string"/>
     <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>

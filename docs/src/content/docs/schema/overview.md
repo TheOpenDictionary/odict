@@ -29,8 +29,9 @@ flowchart TB
   noteExample["`&lt;example&gt;`"]
 
   dictionary --> entry
-  entry --> pronunciation
   entry --> ety
+  entry --> media["`&lt;media&gt;`"]
+  ety --> pronunciation
   ety --> sense
   sense --> form
   sense --> tag
@@ -129,7 +130,11 @@ Within an etymology, `<sense>` elements group definitions by part of speech. The
 
 If the part of speech is unknown or not applicable, you can omit `pos` entirely.
 
-Use `lemma` on a sense when the sense should point back to another headword:
+### Lemma references
+
+Use the optional `lemma` attribute when a sense represents an inflected or
+otherwise derived form of another headword. The value is an entry reference: it
+should match the `term` of the canonical `<entry>`.
 
 ```xml
 <entry term="running">
@@ -141,9 +146,21 @@ Use `lemma` on a sense when the sense should point back to another headword:
 </entry>
 ```
 
+Lemmas belong to senses rather than entries because a headword can combine
+unrelated grammatical meanings. For example, the verb sense of “saw” can use
+`lemma="see"` while the noun sense remains under “saw” without a lemma
+reference.
+
+The reference is exposed as part of the sense data; it does not make lookup
+automatically return the lemma entry. This differs from an entry's `see`
+attribute, which redirects lookup when redirect following is enabled. A
+`<form>` records the inverse relationship from a lemma to one of its forms. See
+the [`<sense>` reference](/schema/reference/#sense) for a complete example.
+
 ## Forms
 
-Use `<form>` to describe inflections, conjugations, plurals, comparatives, and other related forms:
+Use `<form>` to describe inflections, conjugations, plurals, comparatives, and other related forms. Forms belong to a sense so homographs and words
+with multiple parts of speech can each have the correct set:
 
 ```xml
 <entry term="run">
@@ -164,6 +181,9 @@ Forms can also carry tags:
   <tag>archaic</tag>
 </form>
 ```
+
+The standard form kinds are `conjugation`, `inflection`, `plural`, `singular`, `comparative`, and `superlative`. You can also use a custom value when
+the standard kinds do not fit your source data.
 
 ## Tags
 
@@ -226,17 +246,19 @@ Definitions can have `<example>` and `<note>` children. Use notes for extra cont
 
 ## Pronunciations and media
 
-Pronunciations can be attached at the entry level and support any phonetic system. Media URLs can point to absolute URLs or relative paths:
+Pronunciations can be attached to etymologies and examples. This allows entries with distinct origins to carry different pronunciations, while
+examples can describe how a complete phrase is spoken. The `kind` attribute is optional and supports standard values such as `ipa`, `pinyin`,
+`hiragana`, and `romaji`, as well as custom strings.
 
 ```xml
 <entry term="hello">
-  <pronunciation kind="ipa" value="həˈləʊ">
-    <url src="./audio/hello_uk.mp3" type="audio/mpeg" description="British" />
-  </pronunciation>
-  <pronunciation kind="ipa" value="hɛˈloʊ">
-    <url src="./audio/hello_us.mp3" type="audio/mpeg" description="American" />
-  </pronunciation>
   <ety>
+    <pronunciation kind="ipa" value="həˈləʊ">
+      <url src="./audio/hello_uk.mp3" type="audio/mpeg" description="British" />
+    </pronunciation>
+    <pronunciation kind="ipa" value="hɛˈloʊ">
+      <url src="./audio/hello_us.mp3" type="audio/mpeg" description="American" />
+    </pronunciation>
     <sense pos="intj">
       <definition value="A greeting">
         <example value="Hello, how are you?">
@@ -245,16 +267,22 @@ Pronunciations can be attached at the entry level and support any phonetic syste
       </definition>
     </sense>
   </ety>
+  <media src="./images/hello.svg" type="image/svg+xml" />
 </entry>
 ```
 
-This is especially useful for non-Latin scripts:
+Entry-level `<media>` elements can point to images, audio, video, or other resources. Both `<media>` and the `<url>` children of pronunciations accept
+absolute HTTP(S) URLs or relative paths beginning with `./` or `/`.
+
+Pronunciation kinds are especially useful for non-Latin scripts:
 
 ```xml
 <entry term="你好">
-  <pronunciation kind="pinyin" value="nǐ hǎo" />
-  <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥" />
-  ...
+  <ety>
+    <pronunciation kind="pinyin" value="nǐ hǎo" />
+    <pronunciation kind="ipa" value="ni˨˩ xɑʊ̯˧˥" />
+    ...
+  </ety>
 </entry>
 ```
 
