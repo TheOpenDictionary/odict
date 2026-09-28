@@ -1,12 +1,12 @@
 [package]
-name = "docgen"
-version = "0.1.0"
 edition = "2024"
+name = "docgen"
 publish = false
+version = "0.1.0"
 
 [dependencies]
-anyhow = "1.0.102"
-clap = "4.6.1"
+anyhow = "1.0.104"
+clap = "4.6.7"
 odict = { path = "../odict", default-features = false }
 odict-cli = { path = "../../cli" }
 serde-reflection = "0.6.0"

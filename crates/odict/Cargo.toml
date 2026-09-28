@@ -1,18 +1,18 @@
 [package]
-name = "odict"
 description = "A blazingly-fast dictionary file format for human languages"
+edition = "2021"
+exclude = ["benches/*", "tests/*"]
 homepage = "https://odict.org"
+license = "MIT"
+name = "odict"
 repository = "https://github.com/TheOpenDictionary/odict"
 version = "3.3.0"
-edition = "2021"
-license = "MIT"
-exclude = ["benches/*", "tests/*"]
 
 [features]
-sql = ["dep:sea-query"]
-config = ["dep:dirs"]
-js = ["uuid/js"]
 alias = ["config"]
+config = ["dep:dirs"]
+default = ["sql", "config"]
+html = ["markdown"]
 http = [
   "dep:reqwest",
   "dep:reqwest-middleware",
@@ -21,10 +21,10 @@ http = [
   "dep:futures-util",
   "config",
 ]
-html = ["markdown"]
-search = ["dep:tantivy", "config"]
+js = ["uuid/js"]
 markdown = ["dep:pulldown-cmark"]
-default = ["sql", "config"]
+search = ["dep:tantivy", "config"]
+sql = ["dep:sea-query"]
 
 # Language-specific support
 charabia = ["dep:charabia"]
@@ -38,67 +38,60 @@ tokenize = [
   "tokenize-swedish",
   "tokenize-german",
 ]
-tokenize-latin = ["dep:charabia"]
 tokenize-chinese = ["tokenize-latin", "charabia/chinese-segmentation"]
-tokenize-japanese = ["tokenize-latin", "charabia/japanese"]
-tokenize-thai = ["tokenize-latin", "charabia/thai"]
-tokenize-korean = ["tokenize-latin", "charabia/korean"]
-tokenize-khmer = ["tokenize-latin", "charabia/khmer"]
-tokenize-swedish = ["tokenize-latin", "charabia/swedish-recomposition"]
 tokenize-german = ["tokenize-latin", "charabia/german-segmentation"]
+tokenize-japanese = ["tokenize-latin", "charabia/japanese"]
+tokenize-khmer = ["tokenize-latin", "charabia/khmer"]
+tokenize-korean = ["tokenize-latin", "charabia/korean"]
+tokenize-latin = ["dep:charabia"]
+tokenize-swedish = ["tokenize-latin", "charabia/swedish-recomposition"]
+tokenize-thai = ["tokenize-latin", "charabia/thai"]
 
 [[bench]]
-name = "lib"
 harness = false
+name = "lib"
 
 [dependencies]
+brotli = "9.0.0"
 byteorder = "1.5.0"
-quick-xml = { version = "0.40.1", features = ["serialize"] }
+charabia = { version = "0.10.0", optional = true, default-features = false }
+indexmap = { version = "2.14.2", features = ["serde", "rayon"] }
+quick-xml = { version = "0.42.0", features = ["serialize"] }
 rayon = "1.12.0"
-indexmap = { version = "2.14.0", features = ["serde", "rayon"] }
-charabia = { version = "0.9.9", optional = true, default-features = false }
-rkyv = { version = "0.8.16", features = ["indexmap-2", "uuid-1"] }
-serde = { version = "1.0.228", features = ["serde_derive"] }
-uuid = { version = "1.23.3", features = [
-  "v4",
-  "fast-rng",
-  "macro-diagnostics",
-] }
-url = "2.5.8"
-serde_json = "1.0.150"
-thiserror = "2.0.18"
-brotli = "8.0.4"
+rkyv = { version = "0.8.18", features = ["indexmap-2", "uuid-1"] }
+serde = { version = "1.0.229", features = ["serde_derive"] }
+serde_json = "1.0.151"
 structural-convert = { workspace = true }
+thiserror = "2.0.21"
+url = "2.5.8"
+uuid = { version = "1.26.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
 
 # feature=markdown
 pulldown-cmark = { version = "0.13.4", optional = true }
 # feature=http
-reqwest = { version = "0.13.4", optional = true, features = [
-  "rustls",
-  "stream",
-] }
-strum = { version = "0.28.0", features = ["derive"] }
+futures-util = { version = "0.3", optional = true }
+regex = { version = "1.13.1", optional = true }
+reqwest = { version = "0.13.5", optional = true, features = ["rustls", "stream"] }
 reqwest-middleware = { version = "0.5.2", optional = true }
 reqwest-retry = { version = "0.9.1", optional = true }
-futures-util = { version = "0.3", optional = true }
-regex = { version = "1.12.4", optional = true }
+strum = { version = "0.28.0", features = ["derive"] }
 # feature=search
-tantivy = { version = "0.26.1", optional = true }
+tantivy = { version = "0.26.2", optional = true }
 # feature=config
-dirs = { version = "6.0.0", optional = true }
+dirs = { version = "7.0.0", optional = true }
 # feature=sql
-sea-query = { version = "1.0.1", optional = true }
+sea-query = { version = "1.0.2", optional = true }
 
 
 [dev-dependencies]
 criterion = { version = "0.8.2", features = ["async_tokio", "html_reports"] }
 insta = "1.48.0"
 map-macro = { version = "0.3.0" }
-tokio = { version = "1.52.3", features = ["rt", "macros"] }
-wiremock = "0.6.5"
+regex = "1.13.1"
 tempfile = "3.27.0"
-regex = "1.12.4"
+tokio = { version = "1.53.1", features = ["rt", "macros"] }
+wiremock = "0.6.5"
 
 [lib]
-name = "odict"
 crate-type = ["cdylib", "staticlib", "lib"]
+name = "odict"
