@@ -344,7 +344,7 @@ jobs:
         run: mise --no-hooks install -C node node yarn
       - name: Install dependencies
         run: |
-          mise exec --no-deps -C node -- yarn config set supportedArchitectures.cpu "wasm32"
+          mise exec --no-deps -C node -- yarn config set --json supportedArchitectures.cpu '["current", "wasm32"]'
           mise exec --no-deps -C node -- yarn install --immutable
         env:
           MISE_EXEC_AUTO_INSTALL: "false"
@@ -359,7 +359,7 @@ jobs:
       - name: Test bindings
         run: mise run --skip-tools --no-deps //node:test
         env:
-          NAPI_RS_FORCE_WASI: 1
+          ODICT_TEST_WASI: 1
   publish:
     name: Publish
     runs-on: ubuntu-latest

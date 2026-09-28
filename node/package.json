@@ -32,14 +32,15 @@
     "prepublishOnly": "napi prepublish --no-gh-release"
   },
   "devDependencies": {
-    "@emnapi/core": "^1.11.3",
-    "@emnapi/runtime": "^1.11.3",
+    "@emnapi/core": "^2.0.0-alpha.4",
+    "@emnapi/runtime": "^2.0.0-alpha.4",
     "@napi-rs/cli": "3.10.5",
     "@napi-rs/wasm-runtime": "^1.2.4",
     "@oxc-node/core": "^0.1.3",
     "@tybys/wasm-util": "^0.10.4",
     "@types/node": "^26.6.3",
     "ava": "^8.0.1",
+    "emnapi": "^2.0.0-alpha.4",
     "husky": "^9.1.7",
     "tinybench": "^6.2.0"
   },
@@ -58,7 +59,10 @@
       "aarch64-unknown-linux-musl",
       "aarch64-pc-windows-msvc",
       "wasm32-wasip1-threads"
-    ]
+    ],
+    "wasm": {
+      "initialMemory": 8192
+    }
   },
   "ava": {
     "environmentVariables": {
