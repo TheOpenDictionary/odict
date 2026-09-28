@@ -5,6 +5,7 @@ env:
   MACOSX_DEPLOYMENT_TARGET: "10.13"
   CARGO_INCREMENTAL: "1"
   MISE_BACKENDS_YARN: "npm:@yarnpkg/cli-dist"
+  MISE_NPM_PACKAGE_MANAGER: "npm"
 "on":
   workflow_dispatch:
     inputs:

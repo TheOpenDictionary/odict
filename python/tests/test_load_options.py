@@ -2,16 +2,17 @@ import os
 import sys
 import tempfile
 import uuid
+
 import pytest
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from theopendictionary import (  # noqa: E402
-    OpenDictionary,
-    compile,
+from theopendictionary import (
     LoadOptions,
+    OpenDictionary,
     RemoteLoadOptions,
+    compile,
 )
 
 
@@ -152,7 +153,7 @@ async def test_load_with_invalid_config_dir():
 
     temp_dir = tempfile.gettempdir()
     temp_file = os.path.join(temp_dir, f"{uuid.uuid4()}.odict")
-    invalid_config_dir = "/nonexistent/path/to/config"
+    invalid_config_dir = os.path.join(temp_file, "config")
 
     try:
         # Create the dictionary file
@@ -160,18 +161,9 @@ async def test_load_with_invalid_config_dir():
         dictionary = OpenDictionary(compiled_bytes)
         dictionary.save(temp_file)
 
-        # Test load with invalid config directory - should either work or fail
-        # gracefully
-        try:
-            load_opts = LoadOptions(config_dir=invalid_config_dir)
-            loaded_dict = await OpenDictionary.load(temp_file, options=load_opts)
-            results = loaded_dict.lookup("invalid-config-test")
-            # If it succeeds, verify it still works
-            assert len(results) == 1
-            assert results[0].entry.term == "invalid-config-test"
-        except Exception:
-            # If it fails, that's also acceptable behavior
-            pass
+        load_opts = LoadOptions(config_dir=invalid_config_dir)
+        with pytest.raises(TypeError):
+            await OpenDictionary.load(temp_file, options=load_opts)
 
     finally:
         if os.path.exists(temp_file):

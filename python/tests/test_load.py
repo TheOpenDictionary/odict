@@ -1,9 +1,10 @@
-import pytest
-import tempfile
+import asyncio
 import os
+import tempfile
 from pathlib import Path
 
-from theopendictionary import OpenDictionary, LoadOptions, RemoteLoadOptions, compile
+import pytest
+from theopendictionary import LoadOptions, OpenDictionary, RemoteLoadOptions, compile
 
 
 class TestLoadOptions:
@@ -73,8 +74,9 @@ class TestLoadFunctionality:
             # Compile the XML and save as .odict file
             compiled_bytes = compile(dict_xml)
             dict_path = os.path.join(temp_dir, "test.odict")
-            with open(dict_path, "wb") as f:
-                f.write(compiled_bytes)
+            await asyncio.get_running_loop().run_in_executor(
+                None, Path(dict_path).write_bytes, compiled_bytes
+            )
 
             # Load the dictionary with custom config_dir
             config_dir = os.path.join(temp_dir, "custom_config")
@@ -102,7 +104,7 @@ class TestLoadFunctionality:
             load_options = LoadOptions(remote=remote_options)
 
             # Test with invalid remote dictionary name to verify configuration without network
-            with pytest.raises(Exception):
+            with pytest.raises(TypeError):
                 await OpenDictionary.load("not_a_remote_name", load_options)
 
     @pytest.mark.asyncio
@@ -125,14 +127,14 @@ class TestLoadFunctionality:
     @pytest.mark.asyncio
     async def test_default_load_without_options(self):
         """Test that default load (without options) still works."""
-        with pytest.raises(Exception):
+        with pytest.raises(TypeError):
             await OpenDictionary.load("non_existent_file.odict")
 
     @pytest.mark.asyncio
     async def test_empty_options_object(self):
         """Test behavior with empty options object."""
         empty_options = LoadOptions()
-        with pytest.raises(Exception):
+        with pytest.raises(TypeError):
             await OpenDictionary.load("non_existent_file.odict", empty_options)
 
     @pytest.mark.asyncio
