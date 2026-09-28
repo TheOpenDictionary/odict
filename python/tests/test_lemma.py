@@ -1,6 +1,6 @@
+import os
 import tempfile
 import unittest
-import os
 import uuid
 
 from theopendictionary import OpenDictionary, compile
@@ -66,8 +66,8 @@ class TestLemma(unittest.TestCase):
 
             # Get the first sense from each etymology (in Python
             # it's an ordered list of key-value pairs)
-            running_sense = list(running_etymology.senses)[0]
-            ran_sense = list(ran_etymology.senses)[0]
+            running_sense = next(iter(running_etymology.senses))
+            ran_sense = next(iter(ran_etymology.senses))
 
             # Verify lemma references are on the sense objects
             self.assertIsNotNone(running_sense.lemma)

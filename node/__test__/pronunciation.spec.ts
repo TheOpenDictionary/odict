@@ -1,5 +1,6 @@
 import test from "ava";
-import { compile, OpenDictionary, type Definition } from "../index";
+import type { Definition } from "../index.js";
+import { compile, OpenDictionary } from "./bindings.js";
 
 test("Pronunciation support - should parse entries with pronunciations", async (t) => {
   const xml = `

@@ -1,5 +1,6 @@
-import pytest
 from pathlib import Path
+
+import pytest
 from theopendictionary import OpenDictionary, compile
 
 
@@ -105,8 +106,8 @@ def test_tokenize_case_insensitive_with_follow():
     """
 
     # Create a temporary dictionary
-    import tempfile
     import os
+    import tempfile
 
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
@@ -149,8 +150,8 @@ def test_tokenize_follow_boolean_true():
     </dictionary>
     """
 
-    import tempfile
     import os
+    import tempfile
 
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
@@ -190,8 +191,8 @@ def test_tokenize_follow_boolean_false():
     </dictionary>
     """
 
-    import tempfile
     import os
+    import tempfile
 
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name
@@ -229,8 +230,8 @@ def test_tokenize_follow_number():
     </dictionary>
     """
 
-    import tempfile
     import os
+    import tempfile
 
     with tempfile.NamedTemporaryFile(suffix=".odict", delete=False) as temp_file:
         temp_path = temp_file.name

@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
 
-import { compile, OpenDictionary } from "../index.js";
+import { compile, OpenDictionary } from "./bindings.js";
 
 test("Form support - should handle entries with forms", async (t) => {
   const xmlContent = `

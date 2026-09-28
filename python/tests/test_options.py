@@ -3,18 +3,20 @@ import sys
 import tempfile
 import uuid
 
+import pytest
+
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from theopendictionary import (  # noqa: E402
-    OpenDictionary,
+from theopendictionary import (
     LookupOptions,
+    OpenDictionary,
     compile,
 )
 
 
-def test_lookup_options_object():
-    """Test using LookupOptions object instead of kwargs"""
+def test_lookup_options_values():
+    """Test using LookupOptions values with the lookup keyword arguments."""
     xml = """
     <dictionary>
       <entry term="lookup-options-test">
@@ -28,25 +30,19 @@ def test_lookup_options_object():
     </dictionary>
     """
 
-    try:
-        # Compile and create dictionary
-        compiled_bytes = compile(xml)
-        dictionary = OpenDictionary(compiled_bytes)
+    compiled_bytes = compile(xml)
+    dictionary = OpenDictionary(compiled_bytes)
+    lookup_opts = LookupOptions(follow=True, insensitive=True, split=3)
+    results = dictionary.lookup(
+        "LOOKUP-OPTIONS-TEST",
+        split=lookup_opts.split,
+        follow=lookup_opts.follow,
+        insensitive=lookup_opts.insensitive,
+    )
 
-        # Test with LookupOptions object
-        lookup_opts = LookupOptions(follow=True, insensitive=True, split=3)
-
-        results = dictionary.lookup("LOOKUP-OPTIONS-TEST", lookup_opts)
-
-        assert len(results) == 1
-        # Should find the redirected entry
-        assert results[0].entry.term == "lookup-options-test"
-        assert results[0].directed_from.term == "LOOKUP-OPTIONS-TEST"
-
-    except Exception as e:
-        # Some functionality might not be fully implemented yet
-        print(f"LookupOptions test failed: {e}")
-        pass
+    assert len(results) == 1
+    assert results[0].entry.term == "lookup-options-test"
+    assert results[0].directed_from.term == "LOOKUP-OPTIONS-TEST"
 
 
 def test_lookup_options_creation():
@@ -74,21 +70,11 @@ def test_lookup_options_creation():
 
 def test_constructor_with_empty_bytes():
     """Test constructor behavior with edge cases"""
-    try:
-        # Test with empty bytes - should fail gracefully
+    with pytest.raises(TypeError):
         OpenDictionary(b"")
-        raise AssertionError("Should have failed with empty bytes")
-    except Exception:
-        # Expected to fail
-        pass
 
-    try:
-        # Test with invalid bytes - should fail gracefully
+    with pytest.raises(TypeError):
         OpenDictionary(b"invalid dictionary data")
-        raise AssertionError("Should have failed with invalid bytes")
-    except Exception:
-        # Expected to fail
-        pass
 
 
 def test_from_bytes_round_trip():
@@ -182,12 +168,8 @@ def test_compile_with_invalid_xml():
       </entry>
     """
 
-    try:
+    with pytest.raises(TypeError):
         compile(invalid_xml)
-        raise AssertionError("Should have failed with invalid XML")
-    except Exception:
-        # Expected to fail
-        pass
 
 
 def test_multiple_dictionary_instances():

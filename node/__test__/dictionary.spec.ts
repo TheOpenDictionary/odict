@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "ava";
 
-import { compile, OpenDictionary } from "../index.js";
+import { compile, OpenDictionary } from "./bindings.js";
 
 async function getDictionary(name: string) {
   return new OpenDictionary(
@@ -243,8 +243,8 @@ test("should tokenize Japanese text", (t) => {
 });
 
 test.serial("can index and search a dictionary", async (t) => {
-  if (process.env.NAPI_RS_FORCE_WASI) {
-    t.pass("Skipped due to NAPI_RS_FORCE_WASI");
+  if (process.env.ODICT_TEST_WASI) {
+    t.pass("Skipped due to ODICT_TEST_WASI");
     return;
   }
 

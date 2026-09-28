@@ -18,15 +18,15 @@ name = "odict"
 path = "src/main.rs"
 
 [dependencies]
-actix-web = "4.13.0"
-anyhow = "1.0.102"
-clap = { version = "4.6.1", features = ["derive", "cargo"] }
-console = "0.16.3"
+actix-web = "4.15.0"
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive", "cargo"] }
+console = "0.16.6"
 derive_more = { version = "2", features = ["display", "error"] }
-env_logger = "0.11.10"
-indicatif = "0.18.4"
+env_logger = "0.11.11"
+indicatif = "0.18.6"
 internal = { path = "../crates/internal" }
-lru = "0.18.0"
+lru = "0.18.5"
 num-format = "0.4.4"
 odict = { path = "../crates/odict", features = [
   "sql",
@@ -37,5 +37,5 @@ odict = { path = "../crates/odict", features = [
   "tokenize",
 ] }
 pulldown-cmark = "0.13.4"
-serde = { version = "1.0.228", features = ["derive"] }
-tokio = { version = "1.52", features = ["full"] }
+serde = { version = "1.0.229", features = ["derive"] }
+tokio = { version = "1.53", features = ["full"] }
